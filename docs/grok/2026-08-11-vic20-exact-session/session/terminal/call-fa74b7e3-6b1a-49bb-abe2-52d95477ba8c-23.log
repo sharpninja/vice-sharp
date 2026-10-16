@@ -1,0 +1,121 @@
+ M build/Build.cs
+ M native/vice-shim-vic20.c
+ M native/vice-shim.h
+ M src/ViceSharp.Abstractions/IViceNative.cs
+ M src/ViceSharp.Architectures/Vic20/Vic20Descriptor.cs
+ M src/ViceSharp.Architectures/Vic20/Vic20Expansion.cs
+ M src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs
+ M src/ViceSharp.Avalonia/Views/SettingsView.axaml
+ M src/ViceSharp.Avalonia/Views/SettingsView.axaml.cs
+ M src/ViceSharp.Chips/Vic/Mos6561.cs
+ M src/ViceSharp.Core/ArchitectureBuilder.cs
+ M src/ViceSharp.Core/Vic20/Vic20MemoryLayout.cs
+ M src/ViceSharp.Core/Vic20/Vic20SystemRam.cs
+ M src/ViceSharp.Core/ViceNative.Xvic.cs
+ M src/ViceSharp.Core/ViceNative.cs
+ M src/ViceSharp.Host.InProcess/Runtime/ConsoleEmulatorHost.cs
+ M src/ViceSharp.Host.InProcess/Runtime/DefaultEmulatorRuntimeFactory.cs
+ M src/ViceSharp.Host.InProcess/Runtime/EmulatorRuntimeSession.cs
+ M src/ViceSharp.Host.InProcess/Services/HostProtocolMapper.cs
+ M src/ViceSharp.Host.InProcess/Services/MediaServiceHost.cs
+ M src/ViceSharp.Host.InProcess/Services/SettingsServiceHost.cs
+ M src/ViceSharp.Protocol/ProtocolContracts.cs
+ M src/ViceSharp.Protocol/SettingsOptionCatalog.cs
+ M src/ViceSharp.Xbox.ViewModels/AboutInfo.cs
+ M src/ViceSharp.Xbox.ViewModels/AboutViewModel.cs
+ M src/ViceSharp.Xbox.ViewModels/NavigationDestination.cs
+ M src/ViceSharp.Xbox.ViewModels/VideoFramePullViewModel.cs
+ M src/ViceSharp.Xbox.ViewModels/XboxSettingsViewModel.cs
+ M src/ViceSharp.Xbox/App.xaml.cs
+ M src/ViceSharp.Xbox/Views/SettingsPage.xaml
+ M src/ViceSharp.Xbox/Views/SettingsPage.xaml.cs
+ M tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs
+ M tests/ViceSharp.TestHarness/Vic20/Vic20MemoryMapTests.cs
+ M tests/ViceSharp.TestHarness/Vic20/Vic20VideoTests.cs
+ M tests/ViceSharp.TestHarness/Xbox/AboutViewModelTests.cs
+ M tests/ViceSharp.TestHarness/Xbox/Fakes/FakeXboxSettingsGateway.cs
+ M tests/ViceSharp.TestHarness/Xbox/VideoFramePullViewModelTests.cs
+ M tests/ViceSharp.TestHarness/Xbox/XboxComputerModelPickerTests.cs
+ M tests/ViceSharp.TestHarness/Xbox/XboxSettingsViewModelTests.cs
+?? docs/audit-vic20-vs-vice-2026-08-07.md
+?? docs/bccsta-focused-2026-08-06.log
+?? docs/beq-focused-2026-08-06.log
+?? docs/beqpla-focused-2026-08-06.log
+?? docs/bit-focused-2026-08-06.log
+?? docs/bit2-focused-2026-08-06.log
+?? docs/bit3-focused-2026-08-06.log
+?? docs/bit4-focused-2026-08-06.log
+?? docs/bit5-focused-2026-08-06.log
+?? docs/bitf-focused-2026-08-06.log
+?? docs/bitf2-focused-2026-08-06.log
+?? docs/bnehold-focused-2026-08-06.log
+?? docs/bpl-focused-2026-08-06.log
+?? docs/bpl2-focused-2026-08-06.log
+?? docs/bpl3-focused-2026-08-06.log
+?? docs/bpl4-focused-2026-08-06.log
+?? docs/bpl5-focused-2026-08-06.log
+?? docs/bpl6-focused-2026-08-06.log
+?? docs/bpl7-focused-2026-08-06.log
+?? docs/cmpzp-focused-2026-08-06.log
+?? docs/cmpzp2-focused-2026-08-06.log
+?? docs/focused-b1-beq-2026-08-06.log
+?? docs/focused-beq-hold-2026-08-06.log
+?? docs/focused-cpx-soft-2026-08-06.log
+?? docs/focused-final-2026-08-06.log
+?? docs/focused-gates-final-2026-08-06.log
+?? docs/focused-holdindy-2026-08-06.log
+?? docs/focused-incsticky-2026-08-06.log
+?? docs/focused-indy-nz-2026-08-06.log
+?? docs/focused-iny-fuse-2026-08-06.log
+?? docs/focused-irq-fuse-lda-2026-08-06.log
+?? docs/focused-irqb-2026-08-06.log
+?? docs/focused-irqfall-2026-08-06.log
+?? docs/focused-irqsuppress-2026-08-06.log
+?? docs/focused-jsr-irq-2026-08-06.log
+?? docs/focused-jsr-irq2-2026-08-06.log
+?? docs/focused-jsr-jump-2026-08-06.log
+?? docs/focused-jsr-ldy-2026-08-06.log
+?? docs/focused-lda-indy-2026-08-06.log
+?? docs/focused-ldy-fuse-2026-08-06.log
+?? docs/focused-ldy-plain-2026-08-06.log
+?? docs/focused-ora-2026-08-06.log
+?? docs/focused-revert-irq-2026-08-06.log
+?? docs/focused-ror-chain-2026-08-06.log
+?? docs/focused-ror-chain2-2026-08-06.log
+?? docs/focused-ror-rti-2026-08-06.log
+?? docs/focused-ror-zp-beq-2026-08-06.log
+?? docs/focused-rts-nonovl-2026-08-06.log
+?? docs/focused-rts-store-br-2026-08-06.log
+?? docs/focused-rts-trail-eq2-2026-08-06.log
+?? docs/focused-rts-trail2-2026-08-06.log
+?? docs/focused-shift-phase-2026-08-06.log
+?? docs/focused-sta-trail-2026-08-06.log
+?? docs/focused-stazp-2026-08-06.log
+?? docs/focused-store-2026-08-06.log
+?? docs/focused-store-hold-2026-08-06.log
+?? docs/focused-store-hold2-2026-08-06.log
+?? docs/focused-sty-trail-2026-08-06.log
+?? docs/focused-tax-chain-2026-08-06.log
+?? docs/focused-vbus-order-2026-08-06.log
+?? docs/inx-focused-2026-08-06.log
+?? docs/irqrmw-focused-2026-08-06.log
+?? docs/jmp-focused-2026-08-06.log
+?? docs/jmp2-focused-2026-08-06.log
+?? docs/jmp3-focused-2026-08-06.log
+?? docs/lda-focused-2026-08-06.log
+?? docs/lsrx-focused-2026-08-06.log
+?? docs/lsrzp-focused-2026-08-06.log
+?? docs/lsrzp2-focused-2026-08-06.log
+?? docs/ntsc-t1-phase.txt
+?? docs/pla-focused-2026-08-06.log
+?? docs/pla-late-focused-2026-08-06.log
+?? docs/pla2-focused-2026-08-06.log
+?? docs/receipts-lockstep-2s-bcc-2026-08-06.log
+?? docs/receipts-lockstep-2s-cmp-2026-08-06.log
+?? docs/receipts-lockstep-2s-imm-2026-08-06.log
+?? docs/receipts-lockstep-2s-jsr-2026-08-06.log
+?? docs/receipts-lockstep-2s-ldaabs-2026-08-06.log
+?? docs/receipts-lockstep-2s-ldax-2026-08-06.log
+?? docs/receipts-lockstep-2s-ldx-2026-08-06.log
+?? docs/receipts-lockstep-2s-ldx2-2026-08-06.log
+---UNTRACKED SRC---

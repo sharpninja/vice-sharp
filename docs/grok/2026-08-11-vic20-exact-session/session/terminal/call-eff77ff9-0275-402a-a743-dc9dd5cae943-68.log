@@ -1,0 +1,3 @@
+F:\GitHub\vice-sharp\native\vice\vice\src\mainviccpu.c:658:                CLK_INC();                                            \
+F:\GitHub\vice-sharp\native\vice-shim-vic20.c:746:VICE_SHIM_API void vice_machine_step_cycle(void *machine)
+F:\GitHub\vice-sharp\native\vice-shim-vic20.c:749:        fprintf(stderr, "xvic vice_machine_step_cycle call=%u machine=%p\n", ++g_debug_step_calls, machine);

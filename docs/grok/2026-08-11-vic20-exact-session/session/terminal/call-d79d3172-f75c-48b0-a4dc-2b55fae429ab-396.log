@@ -1,0 +1,23 @@
+
+native\patches\vice-shim-runtime.patch:3:--- a/vice/src/c64/c64cpusc.c
+native\patches\vice-shim-runtime.patch:4:+++ b/vice/src/c64/c64cpusc.c
+native\patches\vice-shim-runtime.patch:26:+   only expands inside the 6510dtvcore.c body, after those macros are 
+defined. */
+native\patches\vice-shim-runtime.patch:51:--- a/vice/src/drive/drive-snapshot.c
+native\patches\vice-shim-runtime.patch:52:+++ b/vice/src/drive/drive-snapshot.c
+native\patches\vice-shim-runtime.patch:72:--- a/vice/src/drive/drivecpu.c
+native\patches\vice-shim-runtime.patch:73:+++ b/vice/src/drive/drivecpu.c
+native\patches\vice-shim-runtime.patch:87:--- a/vice/src/drive/drivecpu65c02.c
+native\patches\vice-shim-runtime.patch:88:+++ b/vice/src/drive/drivecpu65c02.c
+native\patches\vice-shim-runtime.patch:100:diff --git a/vice/src/mainc64cpu.c b/vice/src/mainc64cpu.c
+native\patches\vice-shim-runtime.patch:102:--- a/vice/src/mainc64cpu.c
+native\patches\vice-shim-runtime.patch:103:+++ b/vice/src/mainc64cpu.c
+native\patches\vice-shim-runtime.patch:124:+       unit (6510dtvcore.c defines it below, inside the loop), so the 
+import is
+native\patches\vice-shim-runtime.patch:192:--- a/vice/src/resid/filter8580new.h
+native\patches\vice-shim-runtime.patch:193:+++ b/vice/src/resid/filter8580new.h
+native\patches\vice-shim-runtime.patch:229:--- a/vice/src/resid/sid.h
+native\patches\vice-shim-runtime.patch:230:+++ b/vice/src/resid/sid.h
+native\patches\vice-shim-runtime.patch:244:--- a/vice/src/sid/resid.cc
+native\patches\vice-shim-runtime.patch:245:+++ b/vice/src/sid/resid.cc
+

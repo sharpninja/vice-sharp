@@ -1,0 +1,28 @@
+
+Name                          LastWriteTime        LengthSelect-String: 
+
+----                          -------------        ------
+ViceSharp.Protocol.dll        8/7/2026 12:00:10 AM 585216
+ViceSharp.Xbox.ViewModels.dll 8/7/2026 12:00:12 AM 144896
+no unicode
+ascii: found markers
+
+
+Name                  : ViceSharp.Xbox.ViewModels
+Version               : 1.2.7.0
+CultureInfo           : 
+CultureName           : 
+CodeBase              : 
+EscapedCodeBase       : 
+ProcessorArchitecture : None
+ContentType           : Default
+Flags                 : None
+HashAlgorithm         : SHA1
+VersionCompatibility  : SameMachine
+KeyPair               : 
+FullName              : ViceSharp.Xbox.ViewModels, Version=1.2.7.0, Culture=neutral, PublicKeyToken=null
+
+Line |
+   4 |  . wModels.dll" -Pattern "TrySetBit|STATUS_STACK" -Encoding byte -ErrorA .
+     |                                                             ~~~~
+     | Cannot process argument transformation on parameter 'Encoding'. 'byte' is not a supported encoding name. For information on defining a custom encoding, see the documentation for the Encoding.RegisterProvider method. (Parameter 'name')

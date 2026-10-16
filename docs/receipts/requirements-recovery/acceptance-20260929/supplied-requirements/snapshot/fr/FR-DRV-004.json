@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRV-004",
+  "title": "Group Code Recording Encoding and Decoding",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The 1541 and 1571 drives use Group Code Recording (GCR) to encode data on disk. Each 4-bit nybble is encoded as a 5-bit GCR pattern to ensure sufficient flux transitions. The GCR codec handles encoding/decoding of data blocks, header blocks, and inter-sector gaps.\n\n## Acceptance Criteria\n- The 4-to-5-bit GCR encoding table matches the Commodore standard (16 valid nybble-to-GCR mappings).\n- Data blocks (256 bytes data + checksum) are correctly GCR-encoded to produce 325 GCR bytes on disk.\n- Header blocks (8 bytes: magic, checksum, sector, track, ID) are GCR-encoded to 10 GCR bytes.\n- Inter-sector gaps (SYNC marks of $FF bytes followed by gap bytes) are correctly generated.\n- The 4 speed zones (tracks 1-17: 3.25 speed, 18-24: 3.50, 25-30: 3.75, 31-35: 4.00) determine bits per track.\n- Decoding GCR data back to binary is bit-accurate.\n- Invalid GCR patterns (not in the standard table) are detectable for copy protection analysis.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

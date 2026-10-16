@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CPU-004",
+  "title": "6510 I/O Port at Addresses $0000/$0001",
+  "status": "pending",
+  "priority": "high",
+  "body": "The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction register) and $0001 (data port) shall be emulated. This port controls the PLA memory banking configuration (LORAM, HIRAM, CHAREN bits), the cassette motor, and the cassette sense line. The data port shall exhibit the correct behavior with pull-up/pull-down resistors and the capacitive discharge timing that affects reads of output pins.\n\n## Acceptance Criteria\n- Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.\n- Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.\n- Bit 3 controls the cassette motor (active low).\n- Bit 4 reads the cassette switch sense (active low).\n- Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.\n- When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.\n- The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

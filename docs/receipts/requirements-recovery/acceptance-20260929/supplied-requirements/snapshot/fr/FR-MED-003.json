@@ -1,0 +1,16 @@
+{
+  "kind": "fr",
+  "id": "FR-MED-003",
+  "title": "Audio Recording (WAV/FLAC)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall record audio output to WAV (uncompressed PCM) or FLAC (lossless compressed) format. The recording captures the SID audio output at the configured sample rate.\n\n## Acceptance Criteria\n- WAV format: 16-bit PCM, mono or stereo, at configurable sample rates (44100, 48000, 96000 Hz).\n- FLAC format: lossless compression of the same PCM data.\n- Recording captures the mixed SID output including all voices, filter, and volume.\n- For dual-SID configurations, stereo recording captures left/right channels independently.\n- Recording can be started, paused, resumed, and stopped independently of video recording.\n- Audio samples are buffered to prevent gaps during recording.\n- The recording includes digi playback ($D418) output at full fidelity.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Output parses as valid RIFF/WAVE with data-chunk size matching samples",
+      "isSatisfied": true
+    }
+  ]
+}

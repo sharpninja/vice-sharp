@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-012",
+  "title": "Dual-SID (Stereo SID) Configuration",
+  "status": "pending",
+  "priority": "low",
+  "body": "The emulator shall support configurations with two (or more) SID chips at configurable addresses, enabling stereo SID playback as used by many modern SID compositions. Common second-SID addresses are $D420, $D500, and $DE00.\n\n## Acceptance Criteria\n- A second SID chip can be enabled at a configurable address (default $D420).\n- The second SID operates independently with its own set of voices, filters, and envelope generators.\n- Each SID can be configured independently as 6581 or 8580 model.\n- Audio output from each SID can be routed to left/right stereo channels.\n- Third SID support at a third configurable address is available for 3SID tunes.\n- SID address ranges do not overlap with other I/O devices.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

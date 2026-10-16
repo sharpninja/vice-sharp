@@ -64,6 +64,10 @@ $tf/
 *.trx
 *.coverage
 *.coveragexml
+*.dmp
+
+# Raw Grok session stream is retained locally; commit its verified gzip archive.
+/docs/grok/2026-08-11-vic20-exact-session/session/updates.jsonl
 
 ## ROMs (user-provided, never committed)
 **/Roms/

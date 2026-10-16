@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XKBD-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Off-console facade + ViewModel test against a fake/spy keyboard input. Acceptance: SetRestoreState routes to NMI path keycode 0x31 distinct from SetKeyState.",
+  "acceptanceCriteria": []
+}

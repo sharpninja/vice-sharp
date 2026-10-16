@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-INPROC-003",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Gate zero-P/Invoke + inline-sleep-seam + no-thread-growth + Pause-unparks. Acceptance: no [DllImport]/[LibraryImport]; no new timer thread; Pause unparks.",
+  "acceptanceCriteria": []
+}

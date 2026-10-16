@@ -1,0 +1,24 @@
+
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:9:    private static readonly byte[] OpCycleCounts = new byte[256]
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:44:        byte cycles = OpCycleCounts[opcode];
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:51:    private partial int GetCycleCount(byte opcode) => 
+OpCycleCounts[opcode];
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:416:            case 0x10: BranchRelative((P & 0x80) == 0); break; // BPL
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:417:            case 0x30: BranchRelative((P & 0x80) != 0); break; // BMI
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:418:            case 0x50: BranchRelative((P & 0x40) == 0); break; // BVC
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:419:            case 0x70: BranchRelative((P & 0x40) != 0); break; // BVS
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:420:            case 0x90: BranchRelative((P & 0x01) == 0); break; // BCC
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:421:            case 0xB0: BranchRelative((P & 0x01) != 0); break; // BCS
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:422:            case 0xD0: BranchRelative((P & 0x02) == 0); break; // BNE
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:423:            case 0xF0: BranchRelative((P & 0x02) != 0); break; // BEQ
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:629:    private void BranchRelative(bool shouldBranch)
+11:        /* 00 */ 7, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 4, 4, 6, 6,
+13:        /* 20 */ 6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 4, 4, 6, 6,
+15:        /* 40 */ 6, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 3, 4, 6, 6,
+17:        /* 60 */ 6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 5, 4, 6, 6,
+19:        /* 80 */ 2, 6, 2, 6, 3, 3, 3, 3, 2, 2, 2, 2, 4, 4, 4, 4,
+21:        /* A0 */ 2, 6, 2, 6, 3, 3, 3, 3, 2, 2, 2, 2, 4, 4, 4, 4,
+23:        /* C0 */ 2, 6, 2, 8, 3, 3, 5, 5, 2, 2, 2, 2, 4, 4, 6, 6,
+25:        /* E0 */ 2, 6, 2, 8, 3, 3, 5, 5, 2, 2, 2, 2, 4, 4, 6, 6,
+422:            case 0xD0: BranchRelative((P & 0x02) == 0); break; // BNE
+

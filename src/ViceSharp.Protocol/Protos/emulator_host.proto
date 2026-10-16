@@ -14,6 +14,7 @@ service EmulatorHost {
   rpc ColdReset(SessionRequest) returns (EmulatorCommandResponse);
   rpc WarmReset(SessionRequest) returns (EmulatorCommandResponse);
   rpc ResetAndAutostartDrive8(ResetAndAutostartDrive8Request) returns (EmulatorCommandResponse);
+  rpc LoadProgram(LoadProgramRequest) returns (LoadProgramResponse);
   rpc StepCycle(StepCycleRequest) returns (EmulatorCommandResponse);
   rpc StepFrame(StepFrameRequest) returns (EmulatorCommandResponse);
   rpc RewindCycle(RewindCycleRequest) returns (EmulatorCommandResponse);
@@ -234,6 +235,21 @@ message ResetAndAutostartDrive8Request {
   string session_id = 1;
 }
 
+message LoadProgramRequest {
+  string session_id = 1;
+  string file_path = 2;
+  bytes payload = 3;
+  string display_name = 4;
+}
+
+message LoadProgramResponse {
+  RpcStatus status = 1;
+  uint32 load_address = 2;
+  uint32 byte_count = 3;
+  bool ran = 4;
+  EmulatorStatusDto emulator_status = 5;
+}
+
 message SetLimiterRateRequest {
   string session_id = 1;
   // 0 disables the limiter (VICE warp mode); positive values set and enable the limiter.
@@ -303,6 +319,12 @@ message SessionSettingsDto {
   InputSettingsDto input = 4;
   AudioSettingsDto audio = 5;
   ResourceSettingsDto resources = 6;
+  string vic20_memory_spec = 7;
+  string file_system_iec_root_path = 8;
+  int32 file_system_iec_unit = 9;
+  string vic20_expansion_cart_kind = 10;
+  bool vic20_expansion_write_back = 11;
+  string vic20_expansion_config_preset = 12;
 }
 
 message SettingApplyDiagnosticDto {
@@ -330,6 +352,12 @@ message UpdateSettingsRequest {
   bool restart_session = 6;
   AudioSettingsDto audio = 7;
   ResourceSettingsDto resources = 8;
+  optional string vic20_memory_spec = 9;
+  optional string file_system_iec_root_path = 10;
+  optional int32 file_system_iec_unit = 11;
+  optional string vic20_expansion_cart_kind = 12;
+  optional bool vic20_expansion_write_back = 13;
+  optional string vic20_expansion_config_preset = 14;
 }
 
 message ValidateSettingsResourcesRequest {

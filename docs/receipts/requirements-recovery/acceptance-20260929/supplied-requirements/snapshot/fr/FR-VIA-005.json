@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIA-005",
+  "title": "Disk Drive VIA Integration (1541/1571)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The 1541 and 1571 disk drives each contain two VIA 6522 chips. VIA1 ($1800-$180F) handles the IEC serial bus communication with the host computer. VIA2 ($1C00-$1C0F) controls the drive motor, head stepper, read/write head, and density selection.\n\n## Acceptance Criteria\n- Drive VIA1 handles IEC serial bus communication: ATN IN, CLK IN/OUT, DATA IN/OUT.\n- Drive VIA2 Port A reads data from the read head (GCR byte or bit stream).\n- Drive VIA2 Port B controls: stepper motor (bits 0-1), motor on/off (bit 2), LED (bit 3), write protect sense (bit 4), density select (bits 5-6), head step direction (bit 7 on 1571).\n- Drive VIA2 Timer 1 is used for byte-ready timing in the GCR read pipeline.\n- BYTE READY signal (VIA2 CA1) triggers when a complete byte has been shifted in from the disk.\n- Both VIAs generate interrupts to the drive's own CPU (6502 in the 1541).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

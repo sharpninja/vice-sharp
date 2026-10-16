@@ -1,0 +1,11 @@
+
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:24:    [Fact(Explicit = true)]
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:55:    [Fact(Explicit = true)]
+---
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\focused-holdindy-2026-08-06.log:27:Passed!  - 
+Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-holdindy-2026-08-06.log:6:   DIV first=522263 
+matchedCycles=522262 budget=2216810
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-holdindy-2026-08-06.log:27:Failed!  - Failed:  
+   1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+

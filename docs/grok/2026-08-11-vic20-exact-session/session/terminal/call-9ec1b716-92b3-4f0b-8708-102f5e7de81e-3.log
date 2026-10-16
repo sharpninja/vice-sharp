@@ -1,0 +1,7 @@
+ src/ViceSharp.Chips/Cpu/Mos6502.cs                 |  55 [32m++++[m[31m----[m
+ .../Vic20/Vic20NativeLockstepTests.cs              | 141 [32m+++++++++++++++++++[m[31m--[m
+ 2 files changed, 155 insertions(+), 41 deletions(-)
+ [31mM[m src/ViceSharp.Chips/Cpu/Mos6502.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs
+[31m??[m tests/ViceSharp.TestHarness/Vic20/BranchCycleCountTests.cs
+[31m??[m tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs

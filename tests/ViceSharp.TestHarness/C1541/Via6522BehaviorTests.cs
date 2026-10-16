@@ -84,8 +84,8 @@ public sealed class Via6522BehaviorTests
     /// FR/TR: ARCH-TRUEDRIVE-1541-001
     /// Use case: Timer 1 one-shot: write latch high triggers reload + count;
     /// underflow sets the T1 IFR bit and (with IER enabled) asserts the IRQ.
-    /// Acceptance: After loading T1 with N and ticking N+1 cycles, IFR bit 6
-    /// is set, IRQ is asserted (with IER bit 6 enabled).
+    /// Acceptance: After loading T1 with N and ticking N+1 cycles (one-shot
+    /// fires on the 0 sample), IFR bit 6 is set and IRQ is asserted.
     /// </summary>
     [Fact]
     public void Timer1_OneShot_UnderflowAssertsIrq_WithIerEnabled()
@@ -96,6 +96,7 @@ public sealed class Via6522BehaviorTests
         via.Write(0x1804, 0x03); // T1L-L = 3
         via.Write(0x1805, 0x00); // T1C-H = 0 -> reloads counter to 3 + starts
 
+        // One-shot: N+1 ticks (3,2,1,0-fire).
         for (int i = 0; i < 4; i++) via.Tick();
 
         var ifr = via.Read(0x180D);
@@ -117,6 +118,7 @@ public sealed class Via6522BehaviorTests
         via.Write(0x1804, 0x02);
         via.Write(0x1805, 0x00);
 
+        // N=2 one-shot -> N+1 = 3 ticks.
         for (int i = 0; i < 3; i++) via.Tick();
 
         (via.Read(0x180D) & 0x40).Should().Be(0x40);
@@ -136,6 +138,7 @@ public sealed class Via6522BehaviorTests
         via.Write(0x180E, 0xC0);
         via.Write(0x1804, 0x01);
         via.Write(0x1805, 0x00);
+        // N=1 one-shot -> N+1 = 2 ticks.
         via.Tick(); via.Tick();
 
         via.Read(0x1804); // T1C-L read clears T1 IFR
@@ -159,9 +162,10 @@ public sealed class Via6522BehaviorTests
         via.Write(0x1804, 0x01);
         via.Write(0x1805, 0x00);
 
-        for (int i = 0; i < 5; i++) via.Tick();
-        var counterAfter5 = (ushort)(via.Read(0x1804) | (via.Read(0x1805) << 8));
-        counterAfter5.Should().BeLessThanOrEqualTo(0x0001);
+        // N=1 period is N+2=3 ticks per underflow; 2 underflows need 6 ticks.
+        for (int i = 0; i < 6; i++) via.Tick();
+        var counterAfter = (ushort)(via.Read(0x1804) | (via.Read(0x1805) << 8));
+        counterAfter.Should().BeLessThanOrEqualTo(0x0001);
     }
 
     /// <summary>
@@ -178,7 +182,7 @@ public sealed class Via6522BehaviorTests
         via.Write(0x1808, 0x02);
         via.Write(0x1809, 0x00);
 
-        for (int i = 0; i < 3; i++) via.Tick();
+        for (int i = 0; i < 3; i++) via.Tick(); // N+1
 
         (via.Read(0x180D) & 0x20).Should().Be(0x20);
     }
@@ -195,7 +199,7 @@ public sealed class Via6522BehaviorTests
         via.Write(0x180E, 0xC0);
         via.Write(0x1804, 0x01);
         via.Write(0x1805, 0x00);
-        via.Tick(); via.Tick();
+        via.Tick(); via.Tick(); // N=1 one-shot N+1
         (via.Read(0x180D) & 0x40).Should().Be(0x40);
 
         via.Write(0x180D, 0x40); // clear T1 flag

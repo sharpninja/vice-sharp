@@ -456,4 +456,3 @@ public partial class Sid6581
         _sampleIndex = (_sampleIndex + 1) & RingMask;
     }
 }
-

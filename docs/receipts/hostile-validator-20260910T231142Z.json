@@ -1,0 +1,182 @@
+{
+  "TimestampUtc": "2026-09-10T23:11:42Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\vice-sharp",
+  "WorkClass": "project-implementation",
+  "WorkClassNote": "CLASS 1 PRG drag-drop load into current emulator RAM and RUN when load address is live BASIC start. Surface C scored. Not ops-only.",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "ReviewSession": {
+    "sessionId": "GrokCode-20260910T230600Z-hostile-prg-drop",
+    "requestId": "req-20260910T230600Z-001-hostile-validate-prg-drop",
+    "agent": "GrokCode",
+    "persistenceProof": "sessionlog_query agent=GrokCode text=hostile-prg-drop from=2026-09-10T23:00:00Z totalCount=1; turn status=completed lastUpdated=2026-09-10T23:15:48.8129589+00:00 actions=3 designDecisions=2 processingDialog=4 filesModified=2"
+  },
+  "ActivePlan": [
+    "PLAN-PRGLOAD-001"
+  ],
+  "AccuracyRating": 94,
+  "CompletenessRating": 93,
+  "OverallVerdict": "AGREE",
+  "FailList": [],
+  "Counts": {
+    "pass": 21,
+    "fail": 0,
+    "unknown": 0,
+    "na": 1
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "verdict": "PASS",
+      "surface": "A",
+      "claim": "Dropping *.prg accepted IsDropStartSupported DragOver Copy; DropAndStartFileAsync routes LoadProgramAsync without attach/reset"
+    },
+    {
+      "id": "A2",
+      "verdict": "PASS",
+      "surface": "A",
+      "claim": "Host LoadProgram writes PRG payload at little-endian load address into current session bus"
+    },
+    {
+      "id": "A3",
+      "verdict": "PASS",
+      "surface": "A",
+      "claim": "BASIC-start is live TXTTAB $2B/$2C not hardcoded $0801; VIC-20 configs when TXTTAB matches; C64 PRG on VIC-20 unexpanded does not RUN"
+    },
+    {
+      "id": "A4",
+      "verdict": "PASS",
+      "surface": "A",
+      "claim": "TXTTAB match updates VARTAB/ARYTAB/STREND and queues CreateBasicRun; READY scan HIBASE $0288 with $0400 fallback"
+    },
+    {
+      "id": "A5",
+      "verdict": "PASS",
+      "surface": "A",
+      "claim": "Focused Release 27/0/0; implementer TRX 27/0/0; hostile re-run 27/0/0 EXIT=0; git diff check EXIT=0"
+    },
+    {
+      "id": "A6",
+      "verdict": "PASS",
+      "surface": "A",
+      "claim": "MCP FR-UIDROP-002 TR-HOST-PRG-001 TEST-UIDROP-002 mapping and PLAN-PRGLOAD-001 done false"
+    },
+    {
+      "id": "A7",
+      "verdict": "PASS",
+      "surface": "A",
+      "claim": "Does not claim PLAN done, full-suite green, or live UI drag-drop"
+    },
+    {
+      "id": "B1",
+      "verdict": "PASS",
+      "surface": "B",
+      "claim": "Honesty vs artifacts"
+    },
+    {
+      "id": "B2",
+      "verdict": "PASS",
+      "surface": "B",
+      "claim": "Receipts re-verified independently"
+    },
+    {
+      "id": "B3",
+      "verdict": "PASS",
+      "surface": "B",
+      "claim": "MCP-only TODO/requirements reads"
+    },
+    {
+      "id": "B4",
+      "verdict": "PASS",
+      "surface": "B",
+      "claim": "PowerShell / no Python"
+    },
+    {
+      "id": "B5",
+      "verdict": "N/A",
+      "surface": "B",
+      "claim": "Look-before-delete (review-only, no deletions)"
+    },
+    {
+      "id": "B6",
+      "verdict": "PASS",
+      "surface": "B",
+      "claim": "Byrd tests exist and pass; not timestamp FAIL; plan not claimed done"
+    },
+    {
+      "id": "C1",
+      "verdict": "PASS",
+      "surface": "C",
+      "claim": "FR-UIDROP-002 MCP and canonical ACs"
+    },
+    {
+      "id": "C2",
+      "verdict": "PASS",
+      "surface": "C",
+      "claim": "TR-HOST-PRG-001 MCP and canonical ACs"
+    },
+    {
+      "id": "C3",
+      "verdict": "PASS",
+      "surface": "C",
+      "claim": "TEST-UIDROP-002 MCP and tests"
+    },
+    {
+      "id": "C4",
+      "verdict": "PASS",
+      "surface": "C",
+      "claim": "Mapping FR-UIDROP-002 to TR-HOST-PRG-001 plus TEST-UIDROP-002"
+    },
+    {
+      "id": "C5",
+      "verdict": "PASS",
+      "surface": "C",
+      "claim": "TR-MVVM-001 host-only RAM writes; FR-CFG-005 D64/CRT path still green"
+    },
+    {
+      "id": "D1",
+      "verdict": "PASS",
+      "surface": "D",
+      "claim": "No PLAN-PRGLOAD-001 done claim"
+    },
+    {
+      "id": "D2",
+      "verdict": "PASS",
+      "surface": "D",
+      "claim": "todo_get Done=false"
+    },
+    {
+      "id": "D3",
+      "verdict": "PASS",
+      "surface": "D",
+      "claim": "PLAN-GROK-COMPLETION-20260906 not this slice DoD"
+    }
+  ],
+  "Evidence": {
+    "todo": "PLAN-PRGLOAD-001 Done=false CompletedDate=null",
+    "fr": "MCP FR-UIDROP-002 pending AcCount=0 title Drop PRG into current session RAM and RUN at BASIC start; canonical 7 ACs",
+    "tr": "MCP TR-HOST-PRG-001 pending AcCount=0; canonical 4 ACs in TR-Host-Prg.md",
+    "test": "MCP TEST-UIDROP-002 pending Title empty AcCount=0 Condition 560 chars",
+    "mapping": "FR-UIDROP-002 TrIds TR-HOST-PRG-001 TestIds TEST-UIDROP-002; effective layer-1",
+    "implementerTrx": "validation-output/prg-drop-20260910/prg-drop-vic20-basic.trx 2026-09-10T23:05:31Z passed=27 failed=0 notExecuted=0",
+    "hostileTrx": "validation-output/hostile-prg-drop-20260910/hostile-prg-drop.trx 2026-09-10T23:09:53Z passed=27 failed=0 notExecuted=0 DOTNET_EXIT=0",
+    "testCommand": "dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release focused PRG drop filter",
+    "gitDiffCheck": "git diff --check touched PRG files DIFFCHECK_EXIT=0",
+    "traceability": "check_requirement_traceability.ps1 TRACE_EXIT=0 (informational; FailOnMissing not set)"
+  },
+  "Residuals": [
+    "MCP FR/TR/TEST AcceptanceCriteria arrays empty; numbered ACs live in canonical markdown",
+    "MCP TEST-UIDROP-002 Title blank",
+    "docs/Project wiki export does not mention FR-UIDROP-002 / TR-HOST-PRG-001 / TEST-UIDROP-002",
+    "No live running Avalonia drag-drop (explicitly not claimed)",
+    "No dedicated VIC-20 +8K HIBASE $1000 READY test",
+    "EmulatorHost file-path load untested; payload path tested",
+    "PLAN-PRGLOAD-001 remains open; do not flip done without later hostile AGREE on a done claim"
+  ]
+}

@@ -76,6 +76,7 @@
              TypicalDefault="install">
       <ComponentGroupRef Id="HarvestedFiles" />
       <ComponentRef Id="StartMenuShortcut" />
+      <ComponentRef Id="FileAssociations" />
       <?if $(var.EnableDebugGrpc) = "true" ?>
       <ComponentRef Id="DebugGrpcEnvironment" />
       <?endif?>
@@ -153,6 +154,99 @@
     </DirectoryRef>
   </Fragment>
   <?endif?>
+
+  <Fragment>
+    <!--
+      FR-INSTALL-001: per-machine Explorer Open verbs for Commodore media.
+      Generic .bin/.rom are not claimed. Target is the harvested exe path.
+    -->
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="FileAssociations" Guid="B7E4C1A2-9D5F-4B18-8E6A-3C2F0D91A447">
+        <RegistryValue Root="HKLM"
+                       Key="Software\$(Manufacturer)\$(ProductName)"
+                       Name="FileAssociations"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+        <RegistryValue Root="HKLM"
+                       Key="Software\$(Manufacturer)\$(ProductName)\Capabilities"
+                       Name="ApplicationName"
+                       Type="string"
+                       Value="$(ProductName)" />
+        <RegistryValue Root="HKLM"
+                       Key="Software\$(Manufacturer)\$(ProductName)\Capabilities"
+                       Name="ApplicationDescription"
+                       Type="string"
+                       Value="Commodore emulator" />
+        <RegistryValue Root="HKLM"
+                       Key="Software\$(Manufacturer)\$(ProductName)\Capabilities"
+                       Name="ApplicationIcon"
+                       Type="string"
+                       Value="[INSTALLFOLDER]$(EntryExe),0" />
+        <RegistryValue Root="HKLM"
+                       Key="Software\RegisteredApplications"
+                       Name="$(ProductName)"
+                       Type="string"
+                       Value="Software\$(Manufacturer)\$(ProductName)\Capabilities" />
+
+        <RegistryValue Root="HKLM" Key="Software\Classes\.d64" Value="ViceSharp.d64" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.d64\OpenWithProgids" Name="ViceSharp.d64" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d64" Value="Commodore disk image" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d64\DefaultIcon" Value="[INSTALLFOLDER]$(EntryExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d64\shell\open\command" Value="&quot;[INSTALLFOLDER]$(EntryExe)&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\$(Manufacturer)\$(ProductName)\Capabilities\FileAssociations" Name=".d64" Type="string" Value="ViceSharp.d64" />
+
+        <RegistryValue Root="HKLM" Key="Software\Classes\.g64" Value="ViceSharp.g64" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.g64\OpenWithProgids" Name="ViceSharp.g64" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.g64" Value="Commodore GCR disk image" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.g64\DefaultIcon" Value="[INSTALLFOLDER]$(EntryExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.g64\shell\open\command" Value="&quot;[INSTALLFOLDER]$(EntryExe)&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\$(Manufacturer)\$(ProductName)\Capabilities\FileAssociations" Name=".g64" Type="string" Value="ViceSharp.g64" />
+
+        <RegistryValue Root="HKLM" Key="Software\Classes\.d71" Value="ViceSharp.d71" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.d71\OpenWithProgids" Name="ViceSharp.d71" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d71" Value="Commodore 1571 disk image" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d71\DefaultIcon" Value="[INSTALLFOLDER]$(EntryExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d71\shell\open\command" Value="&quot;[INSTALLFOLDER]$(EntryExe)&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\$(Manufacturer)\$(ProductName)\Capabilities\FileAssociations" Name=".d71" Type="string" Value="ViceSharp.d71" />
+
+        <RegistryValue Root="HKLM" Key="Software\Classes\.d81" Value="ViceSharp.d81" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.d81\OpenWithProgids" Name="ViceSharp.d81" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d81" Value="Commodore 1581 disk image" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d81\DefaultIcon" Value="[INSTALLFOLDER]$(EntryExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.d81\shell\open\command" Value="&quot;[INSTALLFOLDER]$(EntryExe)&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\$(Manufacturer)\$(ProductName)\Capabilities\FileAssociations" Name=".d81" Type="string" Value="ViceSharp.d81" />
+
+        <RegistryValue Root="HKLM" Key="Software\Classes\.tap" Value="ViceSharp.tap" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.tap\OpenWithProgids" Name="ViceSharp.tap" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.tap" Value="Commodore tape image" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.tap\DefaultIcon" Value="[INSTALLFOLDER]$(EntryExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.tap\shell\open\command" Value="&quot;[INSTALLFOLDER]$(EntryExe)&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\$(Manufacturer)\$(ProductName)\Capabilities\FileAssociations" Name=".tap" Type="string" Value="ViceSharp.tap" />
+
+        <RegistryValue Root="HKLM" Key="Software\Classes\.t64" Value="ViceSharp.t64" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.t64\OpenWithProgids" Name="ViceSharp.t64" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.t64" Value="Commodore tape archive" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.t64\DefaultIcon" Value="[INSTALLFOLDER]$(EntryExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.t64\shell\open\command" Value="&quot;[INSTALLFOLDER]$(EntryExe)&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\$(Manufacturer)\$(ProductName)\Capabilities\FileAssociations" Name=".t64" Type="string" Value="ViceSharp.t64" />
+
+        <RegistryValue Root="HKLM" Key="Software\Classes\.crt" Value="ViceSharp.crt" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.crt\OpenWithProgids" Name="ViceSharp.crt" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.crt" Value="Commodore cartridge" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.crt\DefaultIcon" Value="[INSTALLFOLDER]$(EntryExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.crt\shell\open\command" Value="&quot;[INSTALLFOLDER]$(EntryExe)&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\$(Manufacturer)\$(ProductName)\Capabilities\FileAssociations" Name=".crt" Type="string" Value="ViceSharp.crt" />
+
+        <RegistryValue Root="HKLM" Key="Software\Classes\.prg" Value="ViceSharp.prg" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.prg\OpenWithProgids" Name="ViceSharp.prg" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.prg" Value="Commodore program" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.prg\DefaultIcon" Value="[INSTALLFOLDER]$(EntryExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\ViceSharp.prg\shell\open\command" Value="&quot;[INSTALLFOLDER]$(EntryExe)&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\$(Manufacturer)\$(ProductName)\Capabilities\FileAssociations" Name=".prg" Type="string" Value="ViceSharp.prg" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
 
   <Fragment>
     <!--

@@ -1,0 +1,41 @@
+xvic vice_machine_step_cycle call=14 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_create call=2 model=vic20
+xvic vice_machine_reset call=2 machine=000001bc9e390020
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.Mos6561_RenderWithZeroRegs_KeepsDefaultGeometry [24 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20NtscSession_Pump_CommitsViceNormalNtscGeometry [137 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20Session_Pump_CommitsFullGeometryFrame_Within3Seconds [103 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [546 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_FocusedWindow [1 s]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterBits_AreDoubleWidth_LikeXvic [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameIncludesBorderStrips_AroundCharacterArea [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderCyan_UsesVicePalettesVplRgb [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ColorBase_Uses9600_WhenScreenBankBitSet [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PixelAspect_MatchesViceVicGetPixelAspect [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_BankBitClear_Selects8000Bank [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PalAndNtsc_Profiles_ExposeDistinctTiming [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.Reg900F_BorderIsLowNibble_BackgroundIsHighNibble [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameCompleted_FiresAfterFullRaster [12 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Pal_FrameGeometry_MatchesViceNormalBorders [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ReadyStyle_PaperRegion_IsWhiteBand_NotShortCyanIsland [13 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_MatchesViceFormula_UnexpandedReadyLayout [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Ntsc_FrameGeometry_MatchesViceNormalBorders [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.RenderNow_UsesCycleDrawPath_FrameCompletedOnce [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderPixels_MatchBorderColor_NotBackground [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.Via1_IdlePortA_IsViceIec7E [3 ms]
+[xUnit.net 00:00:04.57]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.SystemRam_UninstalledBlk_DoesNotClaimBus [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.DualVia_BasesAndInterruptRoles_MatchViceBoard [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.ConsoleHost_TryGetVicIPixelAspect_UsesViceVicIFormulas [163 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.ColorRam_ReadCombinesNibbleWithVBusHigh_AsViceColorramRead [2 ms]
+
+Test Run Successful.
+Total tests: 26
+     Passed: 26
+ Total time: 5.0956 Seconds
+EXIT=0

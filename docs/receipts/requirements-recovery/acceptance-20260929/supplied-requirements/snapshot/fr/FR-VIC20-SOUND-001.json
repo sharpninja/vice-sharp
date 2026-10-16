@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC20-SOUND-001",
+  "title": "Deterministic VIC-I sound and live PCM delivery",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Writes to VIC-I sound registers update the managed sound engine. Machine execution advances the engine with the emulation clock and delivers fixed-size PCM16 mono batches without allocating on the silent register-write hot path.\n\n## Acceptance Criteria\n- VIC-I sound register writes update the corresponding managed oscillator state.\n- Equal initial state and writes produce byte-identical PCM batches across managed runs.\n- Focused silence and tone batches are byte-identical to native xvic.\n- Live hosts receive 256-sample batches through the configured audio backend.\n- Silent `Mos6561.Store` calls allocate no managed memory after warmup.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

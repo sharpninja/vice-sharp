@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INP-002",
+  "title": "Joystick Port 1 and Port 2 Emulation",
+  "status": "pending",
+  "priority": "high",
+  "body": "The C64 has two DE-9 joystick ports. Each port reads 5 digital signals: up, down, left, right, and fire. The emulator shall support mapping host input devices (keyboard keys, gamepads, analog sticks) to joystick port signals.\n\n## Acceptance Criteria\n- Each joystick port reports 5 independent digital signals (up, down, left, right, fire).\n- Host keyboard keys can be mapped to joystick directions and fire.\n- Host gamepad/controller input can be mapped to joystick signals via `IJoystickPort.SetState()`.\n- Analog stick input from host controllers is converted to digital signals with a configurable dead zone.\n- Joystick ports can be swapped at runtime (port 1 <-> port 2).\n- Autofire functionality is available with configurable rate (in frames between toggles).\n- Both ports can be active simultaneously with independent mappings.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

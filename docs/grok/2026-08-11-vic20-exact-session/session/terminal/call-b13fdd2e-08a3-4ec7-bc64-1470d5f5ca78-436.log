@@ -1,0 +1,43 @@
+tests/ViceSharp.TestHarness\C1541\TrueDriveFactoryTests.cs:28:        var builder = new ArchitectureBuilder(MachineTestFactory.CreateC64RomProvider());
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:7:using ViceSharp.RomFetch;
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:19:        var builder = new ArchitectureBuilder(CreateC64RomProvider());
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:23:    public static IMachine CreateVic20Machine()
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:24:        => CreateVic20Machine(new Vic20Descriptor());
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:26:    public static IMachine CreateVic20Machine(string modelSelector)
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:27:        => CreateVic20Machine(new Vic20Descriptor(modelSelector));
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:29:    public static IMachine CreateVic20Machine(Vic20Descriptor descriptor)
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:31:        var builder = new ArchitectureBuilder(CreateVic20RomProvider());
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:35:    public static IRomProvider CreateC64RomProvider()
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:40:            var provider = new RomProvider(dataRoot, dataRoots.Where(path => !string.Equals(path, dataRoot, StringComparison.OrdinalIgnoreCase)));
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:41:            if (new C64RomSet().IsComplete(provider))
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:52:            var provider = new RomProvider(repoData, []);
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:53:            if (new C64RomSet().IsComplete(provider))
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:61:    public static IRomProvider CreateVic20RomProvider()
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:66:            var provider = new RomProvider(dataRoot, dataRoots.Where(path => !string.Equals(path, dataRoot, StringComparison.OrdinalIgnoreCase)));
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:67:            if (new Vic20RomSet().IsComplete(provider))
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:74:            var provider = new RomProvider(repoData, []);
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:75:            if (new Vic20RomSet().IsComplete(provider))
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:97:    public static ReadOnlyMemory<byte> LoadC64Rom(string romName)
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:99:        return CreateC64RomProvider().LoadRom(romName, "C64");
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:102:    public static ReadOnlyMemory<byte> LoadVic20Rom(string romName)
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:104:        return CreateVic20RomProvider().LoadRom(romName, Vic20ViceRomNames.ArchitectureKey);
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:23:    public static IMachine CreateVic20Machine()
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:24:        => CreateVic20Machine(new Vic20Descriptor());
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:26:    public static IMachine CreateVic20Machine(string modelSelector)
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:27:        => CreateVic20Machine(new Vic20Descriptor(modelSelector));
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:29:    public static IMachine CreateVic20Machine(Vic20Descriptor descriptor)
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:31:        var builder = new ArchitectureBuilder(CreateVic20RomProvider());
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:61:    public static IRomProvider CreateVic20RomProvider()
+tests/ViceSharp.TestHarness\MachineTestFactory.cs:104:        return CreateVic20RomProvider().LoadRom(romName, Vic20ViceRomNames.ArchitectureKey);
+tests/ViceSharp.TestHarness\LockstepValidator.cs:69:                ? MachineTestFactory.CreateVic20Machine(modelSelector)
+tests/ViceSharp.TestHarness\Vic20\Vic20BootProofTests.cs:21:        var machine = MachineTestFactory.CreateVic20Machine();
+tests/ViceSharp.TestHarness\Vic20\Vic20BootProofTests.cs:40:        var machine = MachineTestFactory.CreateVic20Machine();
+tests/ViceSharp.TestHarness\Vic20\Vic20BootProofTests.cs:60:        var machine = MachineTestFactory.CreateVic20Machine(descriptor);
+tests/ViceSharp.TestHarness\Vic20\Vic20DeterminismTests.cs:16:        var a = MachineTestFactory.CreateVic20Machine();
+tests/ViceSharp.TestHarness\Vic20\Vic20DeterminismTests.cs:17:        var b = MachineTestFactory.CreateVic20Machine();
+tests/ViceSharp.TestHarness\Vic20\Vic20DeterminismTests.cs:53:        var m = MachineTestFactory.CreateVic20Machine();
+tests/ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:60:        var managed = MachineTestFactory.CreateVic20Machine("vic20");
+tests/ViceSharp.TestHarness\Vic20\Vic20HeadsTests.cs:29:    public void SessionFactory_CanCreateVic20Session()
+tests/ViceSharp.TestHarness\Vic20\Vic20HeadsTests.cs:31:        var romProvider = MachineTestFactory.CreateVic20RomProvider();
+tests/ViceSharp.TestHarness\Vic20\Vic20HeadsTests.cs:62:        var romProvider = MachineTestFactory.CreateVic20RomProvider();
+tests/ViceSharp.TestHarness\Vic20\Vic20HeadsTests.cs:88:        var romProvider = MachineTestFactory.CreateVic20RomProvider();

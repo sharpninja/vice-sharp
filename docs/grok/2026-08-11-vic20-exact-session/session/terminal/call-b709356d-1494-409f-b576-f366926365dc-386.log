@@ -1,0 +1,70 @@
+
+native\vice\vice\src\Makefile:96:	x64dtv$(EXEEXT) xscpu64$(EXEEXT) x128$(EXEEXT) xvic$(EXEEXT) \
+native\vice\vice\src\Makefile:290:am_xvic_OBJECTS = $(am__objects_1) $(am__objects_2)
+native\vice\vice\src\Makefile:291:xvic_OBJECTS = $(am_xvic_OBJECTS)
+native\vice\vice\src\Makefile:301:xvic_LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(xvic_LDFLAGS) $(LDFLAGS) \
+native\vice\vice\src\Makefile:359:	$(xplus4_SOURCES) $(xscpu64_SOURCES) $(xvic_SOURCES)
+native\vice\vice\src\Makefile:363:	$(xplus4_SOURCES) $(xscpu64_SOURCES) $(xvic_SOURCES)
+native\vice\vice\src\Makefile:680:#xvic_LDFLAGS =  -Wl,-Map=xvic.map
+native\vice\vice\src\Makefile:681:##xvic_LDFLAGS =  -Wl,-map -Wl,xvic.map
+native\vice\vice\src\Makefile:682:xvic_LDFLAGS = 
+native\vice\vice\src\Makefile:700:#XVIC_RES = $(top_builddir)/data/common/xvic.res
+native\vice\vice\src\Makefile:1472:# xvic
+native\vice\vice\src\Makefile:1473:xvic_libs = \
+native\vice\vice\src\Makefile:1507:xvic_SOURCES = $(base_sources) $(midi_sources)
+native\vice\vice\src\Makefile:1508:xvic_LDADD = $(xvic_libs) $(emu_extlibs) $(mascuerade_lib)   $(XVIC_RES)
+native\vice\vice\src\Makefile:1509:xvic_DEPENDENCIES = $(xvic_libs)
+native\vice\vice\src\Makefile:1862:xvic$(EXEEXT): $(xvic_OBJECTS) $(xvic_DEPENDENCIES) $(EXTRA_xvic_DEPENDENCIES) 
+native\vice\vice\src\Makefile:1863:	@rm -f xvic$(EXEEXT)
+native\vice\vice\src\Makefile:1864:	$(AM_V_CCLD)$(xvic_LINK) $(xvic_OBJECTS) $(xvic_LDADD) $(LIBS)
+native\vice\vice\src\Makefile:2449:.PHONY: xvic-all xvic-program
+native\vice\vice\src\Makefile:2450:xvic-all:
+
+Name : mainviccpu.c
+
+
+Name : vic-cmdline-options.c
+
+
+Name : vic-color.c
+
+
+Name : vic-cycle.c
+
+
+Name : vic-draw.c
+
+
+Name : vic-mem.c
+
+
+Name : vic-resources.c
+
+
+Name : vic-snapshot.c
+
+
+Name : vic-timing.c
+
+
+Name : vic.c
+
+
+Name : vic20-cmdline-options.c
+
+
+Name : vic20-resources.c
+
+
+Name : vic20-snapshot.c
+
+
+Name : vic20-stubs.c
+
+
+Name : vic20.c
+
+
+Name : vic20bus.c
+
+

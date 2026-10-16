@@ -1,0 +1,7 @@
+
+src\ViceSharp.Xbox\ViceSharp.Xbox.csproj:214:    <PackageReference Include="Microsoft.Extensions.Logging" />
+src\ViceSharp.Xbox\ViceSharp.Xbox.csproj:215:    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+src\ViceSharp.Xbox\ViceSharp.Xbox.csproj:216:    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+src\ViceSharp.Xbox\ViceSharp.Xbox.csproj:231:    PackageReference. Win2D.uwp was removed because its .winmd is 
+incompatible with modern
+

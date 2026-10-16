@@ -1,0 +1,38 @@
+type: result
+payload:
+  requestId: req-20260811T145620Z-eb53
+  result:
+    success: true
+    item:
+      id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV device-family behaviors, Store cert)'
+      section: xbox-uwp
+      priority: low
+      done: true
+      estimate: L
+      note: CANCELLED 2026-08-11. Microsoft Store work abandoned; emulators not allowed. Do not resume Partner Center, Store cert, or Store submission.
+      description:
+      - 'TIER C (DEFERRED to Microsoft Store submission; the genuinely console-only checks; NOT a development gate; tracked not dropped). Deps: S34 + S36-S41 (all dev-PC gates green). Tests-first: console/Store-submission checklist - actual console deploy of the AOT MSIX via Dev Mode; the AppContainer resource budget (~1GB RAM / 2-4 shared cores / 45% GPU headroom) and sustained PAL-50 perf ON the physical console; Xbox device-family behaviors (real-TV overscan, focus-engagement on the TV profile, Guide/Nexus shell reservation); Microsoft Store certification (behind a documented GPL section-6 no-further-restrictions vs Store Standard Application License Terms review). RED: not yet validated on a physical Dev-Mode console / not submitted. GREEN: console deploy runs within the resource budget at sustained PAL-50, TV device-family behaviors confirmed, Store cert passed (or GPL/Store legal review completed). Validation: on-console deploy (WinAppDeployCmd install -file <msix> -ip <console-ip> -pin <pin>) + on-console perf/telemetry capture + Partner Center submission. Acceptance: console deploy + resource budget + TV behaviors + Store cert recorded; this is the only console-required bucket. Requirements: TEST-XBOXDEPLOY-007, TEST-TESTGATE-010 (console-only subset); Store certification is a governance gate with no FR/TR mapping.'
+      technicalDetails: &o0 []
+      implementationTasks: []
+      doneSummary: 'CANCELLED 2026-08-11 by operator: Microsoft Store publication is abandoned. Emulators are not allowed on the Microsoft Store. No Partner Center submission, Store cert, store listing, or Store-gated S42 console-cert work. Local sideload/Dev-Mode Xbox UWP (non-Store) is separate and not this TODO.'
+      remaining: Cancelled - Microsoft Store path closed (emulators not allowed).
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+  deprecated: true
+
+---
+
+  requestId: req-20260811T145624Z-b599
+    id: IMPL-XBOXUWP-042
+    title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV 
+device-family behaviors, Store cert)'
+    done: true
+    note: CANCELLED 2026-08-11. Microsoft Store work abandoned; emulators not allowed. Do not resume Partner Center, 
+Store cert, or Store submission.
+    doneSummary: 'CANCELLED 2026-08-11 by operator: Microsoft Store publication is abandoned. Emulators are not 
+allowed on the Microsoft Store. No Partner Center submission, Store cert, store listing, or Store-gated S42 
+console-cert work. Local sideload/Dev-Mode Xbox UWP (non-Store) is separate and not this TODO.'
+    remaining: Cancelled - Microsoft Store path closed (emulators not allowed).
+

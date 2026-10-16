@@ -1,0 +1,67 @@
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:11.06
+xvic vice_machine_create call=8 model=vic20
+xvic vice_machine_reset call=7 machine=000002961e430960
+xvic vice_machine_reset call=8 machine=000002961e4306d0
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [104 ms]
+  Error Message:
+   CPU mismatch after 64 cycles model=vic20: native PC=$FD99 A=$00 X=$01 Y=$00 S=$FD P=$05; managed PC=$FD99 A=$00 X=$01 Y=$00 S=$FD P=$24
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 1024) [442 ms]
+  Error Message:
+   CPU mismatch after 1024 cycles model=vic20ntsc: native PC=$FD95 A=$00 X=$33 Y=$00 S=$FD P=$05; managed PC=$FD95 A=$00 X=$33 Y=$00 S=$FD P=$24
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 1024) [11 ms]
+  Error Message:
+   CPU mismatch after 1024 cycles model=vic20: native PC=$FD95 A=$00 X=$33 Y=$00 S=$FD P=$05; managed PC=$FD95 A=$00 X=$33 Y=$00 S=$FD P=$24
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [7 ms]
+  Error Message:
+   CPU mismatch after 256 cycles model=vic20ntsc: native PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$05; managed PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$24
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [17 ms]
+  Error Message:
+   CPU mismatch after 4096 cycles model=vic20: native PC=$FD92 A=$00 X=$D5 Y=$00 S=$FD P=$05; managed PC=$FD92 A=$00 X=$D5 Y=$00 S=$FD P=$A4
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [4 ms]
+  Error Message:
+   CPU mismatch after 256 cycles model=vic20: native PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$05; managed PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$24
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [11 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.ManagedVic20_TwoMachines_AgreeAfterFrames_UntilNativeXvicExists [295 ms]
+[xUnit.net 00:00:03.12]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "vic20") [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "vic20ntsc") [8 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "xvic") [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeXvic_StepAdvancesCycle_WhenOraclePresent [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent [8 ms]
+
+Test Run Failed.
+Total tests: 14
+     Passed: 8
+     Failed: 6
+ Total time: 3.6977 Seconds
+TEST_EXIT=1

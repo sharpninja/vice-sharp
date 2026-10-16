@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XAUDIO-001",
+  "title": "SID audio through console endpoint",
+  "status": "pending",
+  "priority": "medium",
+  "body": "SID audio plays through the console default endpoint when foreground and not muted. Acceptance (on-console): a known SID tune / $D418 tone is audible; matches desktop WinMm within resampling tolerance.\n\n## Acceptance Criteria\n- SID audio plays through the console default endpoint when foreground and not muted.\n- Acceptance (on-console): a known SID tune / $D418 tone is audible; matches desktop WinMm within resampling tolerance.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

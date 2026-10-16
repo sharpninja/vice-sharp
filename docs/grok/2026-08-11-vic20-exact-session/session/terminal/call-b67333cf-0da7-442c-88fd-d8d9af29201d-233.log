@@ -1,0 +1,8 @@
+ours: src/ViceSharp.Xbox/Views/AboutPage.xaml
+ours: src/ViceSharp.Xbox/Views/AboutPage.xaml.cs
+ours: src/ViceSharp.Xbox/Views/HomePage.xaml
+ours: src/ViceSharp.Xbox/Views/HomePage.xaml.cs
+ours: src/ViceSharp.Xbox/Views/InputMappingPage.xaml
+ours: src/ViceSharp.Xbox/Views/InputMappingPage.xaml.cs
+ours: src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml.cs
+ours: src/ViceSharp.Xbox/Views/SettingsPage.xaml

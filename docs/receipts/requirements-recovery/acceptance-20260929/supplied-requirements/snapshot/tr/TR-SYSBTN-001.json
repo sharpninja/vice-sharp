@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SYSBTN-001",
+  "title": "Portable lib, no WinRT/ASP.NET, zero reflection",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Portable lib (no WinRT/ASP.NET, IsAotCompatible, zero reflection). Acceptance: verified by TEST-SYSBTN-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

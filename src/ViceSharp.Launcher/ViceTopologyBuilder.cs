@@ -21,13 +21,14 @@ public sealed record ViceTopologyDescriptor
 ///
 /// Binary name -> topology kind:
 ///   x64 / x64sc      C64 host (+ optional drives + cart)
+///   xvic             VIC-20 host (Iteration 2; default drive 8 model 1540)
 ///   c1541            standalone 1541 (disk-only tool mode)
-///   x128 / xvic / ...  reserved; throws NotSupportedException for now
+///   x128 / ...       reserved; throws NotSupportedException for now
 ///
 /// True-drive flag controls whether drives attach via kind C1541 (true-
 /// drive substrate, default true when -8/-9 is set) or stay as a non-
 /// emulated cheap path (deferred; current implementation always uses
-/// kind C1541).
+/// kind C1541). VIC-20 default DOS is 1540 when a drive image is attached.
 /// </summary>
 public static class ViceTopologyBuilder
 {
@@ -36,11 +37,12 @@ public static class ViceTopologyBuilder
         return args.BinaryName switch
         {
             "x64" or "x64sc" => BuildC64Topology(args),
+            "xvic" => BuildVic20Topology(args),
             "c1541" => BuildC1541Standalone(args),
-            "x128" or "xvic" or "xpet" or "xplus4" or "xcbm2" or "xcbm5x0" or "vsid" or "petcat" or "cartconv"
+            "x128" or "xpet" or "xplus4" or "xcbm2" or "xcbm5x0" or "vsid" or "petcat" or "cartconv"
                 => throw new NotSupportedException(
                     $"Binary '{args.BinaryName}' is not yet supported by the ViceSharp substrate. " +
-                    "Supported: x64, x64sc, c1541."),
+                    "Supported: x64, x64sc, xvic, c1541."),
             _ when args.MachineYamlPath is not null => File.ReadAllText(args.MachineYamlPath),
             _ => throw new InvalidOperationException(
                 $"Unknown binary name '{args.BinaryName}' and no --machine-yaml supplied."),
@@ -141,15 +143,60 @@ public static class ViceTopologyBuilder
         return yaml.ToString();
     }
 
-    private static void AppendDrive(StringBuilder yaml, int deviceNumber, string imagePath)
+    private static void AppendDrive(StringBuilder yaml, int deviceNumber, string imagePath, string? dosRomName = null)
     {
         yaml.AppendLine($"    - id: drive-{deviceNumber}");
         yaml.AppendLine($"      kind: C1541");
         yaml.AppendLine($"      deviceNumber: {deviceNumber}");
+        if (!string.IsNullOrWhiteSpace(dosRomName))
+            yaml.AppendLine($"      dosRomName: {dosRomName}");
         yaml.AppendLine($"      diskImagePath: {imagePath.Replace('\\', '/')}");
         yaml.AppendLine($"      busAttachments:");
         yaml.AppendLine($"        - busId: IEC");
         yaml.AppendLine($"          endpointName: drive-{deviceNumber}");
+    }
+
+    /// <summary>
+    /// VIC-20 (xvic) host topology. Default drive 8 DOS is 1540 (FR-VIC20-006).
+    /// </summary>
+    private static string BuildVic20Topology(ViceArgs args)
+    {
+        if (args.MachineYamlPath is not null)
+            return File.ReadAllText(args.MachineYamlPath);
+
+        // VICE data name for 1540 DOS; keep literal to avoid Launcher -> Architectures coupling.
+        const string dos1540 = "dos1540-325302+3-01.bin";
+
+        var yaml = new StringBuilder();
+        yaml.AppendLine("schemaVersion: 1");
+        yaml.AppendLine("coordinator:");
+        yaml.AppendLine("  host:");
+        yaml.AppendLine("    id: xvic-host");
+        yaml.AppendLine("    kind: Vic20");
+        if (args.Drive8Image is not null || args.Drive9Image is not null)
+        {
+            yaml.AppendLine("    busAttachments:");
+            yaml.AppendLine("      - busId: IEC");
+            yaml.AppendLine("        endpointName: vic20");
+        }
+
+        var hasPeripherals = args.Drive8Image is not null || args.Drive9Image is not null;
+        if (hasPeripherals)
+        {
+            yaml.AppendLine("  peripherals:");
+            if (args.Drive8Image is not null)
+                AppendDrive(yaml, 8, args.Drive8Image, dos1540);
+            if (args.Drive9Image is not null)
+                AppendDrive(yaml, 9, args.Drive9Image, dos1540);
+        }
+        if (hasPeripherals)
+        {
+            yaml.AppendLine("  buses:");
+            yaml.AppendLine("    - id: IEC");
+            yaml.AppendLine("      signals: [ATN, CLK, DATA, SRQ]");
+        }
+
+        return yaml.ToString();
     }
 
     private static string BuildC1541Standalone(ViceArgs args)

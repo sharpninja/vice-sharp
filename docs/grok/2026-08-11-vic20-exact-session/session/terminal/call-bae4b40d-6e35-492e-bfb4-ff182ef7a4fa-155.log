@@ -1,0 +1,69 @@
+
+build\Build.cs:24:// - azure-pipelines.release.yml: PublishNuget/Winget/etc. on v* tags + Octopus.
+build\Build.cs:37:    // All package-manager publishers run on a v* tag. PublishChocolatey packs
+build\Build.cs:42:        nameof(PublishNuget),
+build\Build.cs:43:        nameof(PublishGitHubRelease),
+build\Build.cs:44:        nameof(PublishWinget),
+build\Build.cs:45:        nameof(PublishChocolatey),
+build\Build.cs:46:        nameof(PublishScoop),
+build\Build.cs:63:    Target Clean => _ => _
+build\Build.cs:72:    Target Restore => _ => _
+build\Build.cs:79:    Target Compile => _ => _
+build\Build.cs:89:    Target GitCommit => _ => _
+build\Build.cs:97:    Target Test => _ => _
+build\Build.cs:118:    /// every target its own job on a fresh agent and never moves artifacts
+build\Build.cs:133:    Target CiTest => _ => _
+build\Build.cs:198:            var target = romRoot / relativePath;
+build\Build.cs:228:    Target DeterminismTest => _ => _
+build\Build.cs:243:    Target ParityTest => _ => _
+build\Build.cs:267:    Target PackNuget => _ => _
+build\Build.cs:273:    /// version: PublishNuget's gate requires packed versions to equal the tag
+build\Build.cs:288:    /// The single "only publish a tagged v* commit" guard shared by every
+build\Build.cs:289:    /// Publish* target. Returns the vX.Y.Z version (without the leading 'v')
+build\Build.cs:291:    /// target performs any publishing side effect. Call it as the first line of
+build\Build.cs:292:    /// every publish target's Executes.
+build\Build.cs:300:        // A dry-run rehearses the flow without publishing, so it does not need a
+build\Build.cs:303:        if (PublishDryRun)
+build\Build.cs:310:            $"{targetName} only publishes a tagged release: HEAD must carry exactly one vX.Y.Z tag. 
+" +
+build\Build.cs:314:    // Shared by PackNuget (local flow, after Compile) and PublishNuget (the
+build\Build.cs:328:            // directly (PublishGitHubRelease on a fresh agent with no obj/) do
+build\Build.cs:427:                // libraries with real published-package dependencies (Protocol, and
+build\Build.cs:461:    [Parameter("NuGet feed for PublishNuget. Default nuget.org v3.")]
+build\Build.cs:465:    /// Publish the v-tagged release packages to the NuGet feed. Deliberately
+build\Build.cs:467:    /// single self-sufficient job (the generator gives every target its own
+build\Build.cs:474:    Target PublishNuget => _ => _
+build\Build.cs:479:            RequireReleaseTag(nameof(PublishNuget));
+build\Build.cs:482:            Assert.True(PublishDryRun || !string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY 
+environment variable is not set");
+build\Build.cs:490:            if (PublishDryRun)
+build\Build.cs:498:            // PUBLISH-GATE: packages ship only from a tagged release commit
+build\Build.cs:502:            // Guarantees published packages are exactly reproducible from a
+build\Build.cs:510:                $"PublishNuget requires HEAD to carry exactly one release tag (vX.Y.Z); found: 
+[{string.Join(", ", headTags)}]");
+build\Build.cs:523:                $"PublishNuget requires {releaseTag} to be the highest build of the 
+v{parts[0]}.{parts[1]}.* line; " +
+build\Build.cs:534:                // A push error fails the target (DotNetNuGetPush throws on
+build\Build.cs:549:            // publish failure).
+build\Build.cs:595:                    "Publish succeeded but {Count} package(s) not yet resolvable after 10 minutes 
+(indexing latency): {Ids}",
+build\Build.cs:602:            // log records the full published surface. Non-fatal on search
+build\Build.cs:625:                Serilog.Log.Warning("Package listing after publish failed (non-fatal): {Message}", 
+ex.Message);
+build\Build.cs:736:    Target RomFetch => _ => _
+build\Build.cs:739:            Serilog.Log.Information("RomFetch target - tool not yet implemented");
+build\Build.cs:742:    Target Pack => _ => _
+build\Build.cs:746:            Serilog.Log.Information("Pack target - reserved for future NuGet packaging");
+build\Build.cs:749:    Target RunConsole => _ => _
+build\Build.cs:759:    Target RunAvalonia => _ => _
+build\Build.cs:770:    /// REPO-MAINT-001 wiki publishing. Regenerates the wiki source set from
+build\Build.cs:772:    /// repos via tools/Publish-Wiki.ps1. Requires the ADO_PAT and
+build\Build.cs:773:    /// GITHUB_TOKEN environment variables (each target is skipped if its
+build\Build.cs:774:    /// token is absent so the target is safe to invoke without both).
+build\Build.cs:776:    Target PublishWiki => _ => _
+build\Build.cs:779:            var script = RootDirectory / "tools" / "Publish-Wiki.ps1";
+build\Build.cs:780:            Serilog.Log.Information("Invoking wiki publisher: {Script}", script);
+build\Build.cs:781:            var args = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"" + script + "\" 
+-Target both -RegenerateSource";
+build\Build.cs:797:    /// stays in PublishNuget's own job.
+

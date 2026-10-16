@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-CIA-001",
+  "title": "CIA and Keyboard Matrix Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "CIA timers, TOD, keyboard matrix, joystick interaction, serial shift register, IRQ, and NMI behavior are verified with unit and integration tests.",
+  "acceptanceCriteria": []
+}

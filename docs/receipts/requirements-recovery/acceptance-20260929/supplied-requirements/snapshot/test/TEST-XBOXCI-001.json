@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXCI-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "azure-pipelines.*.yml exclude device targets. Acceptance: no PublishXbox/DeployXbox in CI/release YAMLs.",
+  "acceptanceCriteria": []
+}

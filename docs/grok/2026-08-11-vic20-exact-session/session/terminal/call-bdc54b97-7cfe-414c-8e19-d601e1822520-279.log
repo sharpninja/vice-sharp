@@ -1,0 +1,21 @@
+http://payton-desktop:8065
+[
+  {
+    "Id": "Projects-1",
+    "Name": "AI Auto Repairman Service",
+    "Description": "Redeploys the repairs docker service on PAYTON-DESKTOP."
+NAME                       DESCRIPTION                                                                                                                TAGS
+AI Auto Repairman Service  Redeploys the repairs docker service on PAYTON-DESKTOP.                                                                    
+FunWasHad                  FunWasHad docker-compose stack deploy to PAYTON-DESKTOP                                                                    
+aiUnit                     Replicated from azure-pipelines.yml (full clone of Azure pipeline steps as scripts). Created by Grok remote/octopus plan.  
+Avalonia.RemoteControl     Replicated from azure-pipelines.yml (full clone of Azure pipeline steps as scripts). Created by Grok remote/octopus plan.  
+BitNet-b1.58-Sharp         Replicated from azure-pipelines.yml (full clone of Azure pipeline steps as scripts). Created by Grok remote/octopus plan.  
+EternalDiscord             Builds and deploys the EternalDiscord Blazor and LiteDB Docker Compose stack to PAYTON-DESKTOP.                            
+EternalReddit              EternalReddit: Blazor WASM Hosted historical-figures social feed. Docker container deploy.                                 
+EternalX                   EternalX site: deploys independently behind the EternalSocial gateway at /x.                                               
+EternalSocial              EternalSocial gateway (YARP proxy + ngrok tunnel) - deploys from github.com/sharpninja/EternalSocial                       
+RomM                       RomM + CSDb bridge on PAYTON-DESKTOP. Triggered by GitHub Release (RomM-GB64).                                             
+---
+
+ Open an issue: https://github.com/OctopusDeploy/cli/issues
+

@@ -1,0 +1,106 @@
+
+src\ViceSharp.Chips\Vic\Mos6561.cs:73:    /// sets <c>first_x = 48</c>; paper at full-line 96 maps to canvas x 48.
+src\ViceSharp.Chips\Vic\Mos6561.cs:75:    public const int BorderX = 48;
+src\ViceSharp.Chips\Vic\Mos6561.cs:91:    public static int ComputeViewportFirstX(
+src\ViceSharp.Chips\Vic\Mos6561.cs:652:        // Horizontal start is VICE viewport first_x (video_viewport_resize + 
+video_canvas_refresh),
+src\ViceSharp.Chips\Vic\Mos6561.cs:665:        var firstX = ComputeViewportFirstX(gfxX, gfxW, _frameWidth, lineW, 
+gfxAreaMoves: true);
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:11:    public static IFlashCartProfile Fe3 { get; } = new 
+FixedProfile(
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:12:        "fe3",
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:19:    /// <summary>VIC-20 Ultimem default image: 1 MiB, 8K 
+banks.</summary>
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:20:    public static IFlashCartProfile Ultimem { get; } = new 
+FixedProfile(
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:21:        "ultimem",
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:22:        "Ultimem (1MB image)",
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:23:        UltimemCartridge.DefaultImageSize,
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:29:    public static IFlashCartProfile MegaCart { get; } = new 
+FixedProfile(
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:30:        "megacart",
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:32:        MegaCartCartridge.LowRomSize,
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:35:        secondarySizeBytes: MegaCartCartridge.NvramSize);
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:38:    /// C64 EasyFlash-style banked flash layout (structure for 
+reuse).
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:39:    /// Default 1 MiB = 128 x 8K banks (UI for EasyFlash is out 
+of band).
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:41:    public static IFlashCartProfile EasyFlash { get; } = new 
+FixedProfile(
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:42:        "easyflash",
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:43:        "EasyFlash (C64 layout, 8K banks)",
+src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs:50:        [Fe3, Ultimem, MegaCart, EasyFlash];
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:28:                <!-- VIC-20 RAM (xvic) + expansion cart + uIEC; 
+IsVic20Selected gates visibility in code-behind if needed. -->
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:31:                <!-- UWP has no WrapPanel; VariableSizedWrapGrid is the 
+wrap layout (left-to-right, then next row). -->
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:32:                <VariableSizedWrapGrid Orientation="Horizontal"
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:37:                    <ToggleSwitch Header="BLK0 $0400" IsOn="{x:Bind 
+ViewModel.Vic20Blk0, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:38:                    <ToggleSwitch Header="BLK1 $2000" IsOn="{x:Bind 
+ViewModel.Vic20Blk1, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:39:                    <ToggleSwitch Header="BLK2 $4000" IsOn="{x:Bind 
+ViewModel.Vic20Blk2, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:40:                    <ToggleSwitch Header="BLK3 $6000" IsOn="{x:Bind 
+ViewModel.Vic20Blk3, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:41:                    <ToggleSwitch Header="BLK5 $A000" IsOn="{x:Bind 
+ViewModel.Vic20Blk5, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:42:                </VariableSizedWrapGrid>
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:43:                <TextBlock Text="Expansion cart (FE3 / Ultimem / 
+Mega-Cart)" FontSize="22" Foreground="White" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:44:                <ComboBox Header="Cart kind" ItemsSource="{x:Bind 
+ViewModel.ExpansionCartKinds, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedExpansionCartKind, Mode=TwoWay}" 
+Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:45:                <ComboBox Header="Cart preset" ItemsSource="{x:Bind 
+ViewModel.ExpansionCartPresets, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedExpansionCartPreset, 
+Mode=TwoWay}" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:46:                <ToggleSwitch Header="Write image on detach" 
+IsOn="{x:Bind ViewModel.ExpansionCartWriteBack, Mode=TwoWay}" Visibility="{x:Bind ViewModel.IsVic20Selected, 
+Mode=OneWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:48:                <TextBlock Text="{x:Bind 
+ViewModel.ExpansionCartImageStatus, Mode=OneWay}"
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:61:                            Click="OnAttachExpansionCartImage" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:64:                            IsEnabled="{x:Bind 
+ViewModel.HasExpansionCartImage, Mode=OneWay}"
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:65:                            Click="OnEjectExpansionCartImage" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:68:                            Click="OnOpenFlashCartBuilder" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:42:            <!-- VIC-20 system RAM (xvic -memory): presets + 
+BLK0/1/2/3/5 -->
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:47:                <WrapPanel Orientation="Horizontal">
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:48:                    <CheckBox Content="BLK0 $0400" 
+IsChecked="{Binding Vic20Blk0, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:49:                    <CheckBox Content="BLK1 $2000" 
+IsChecked="{Binding Vic20Blk1, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:50:                    <CheckBox Content="BLK2 $4000" 
+IsChecked="{Binding Vic20Blk2, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:51:                    <CheckBox Content="BLK3 $6000" 
+IsChecked="{Binding Vic20Blk3, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:52:                    <CheckBox Content="BLK5 $A000" 
+IsChecked="{Binding Vic20Blk5, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:53:                </WrapPanel>
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:58:                <TextBlock Classes="section" Text="VIC-20 expansion 
+cart" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:59:                <ComboBox Classes="row" ItemsSource="{Binding 
+ExpansionCartKinds}"
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:60:                          SelectedItem="{Binding 
+SelectedExpansionCartKind, Mode=TwoWay}" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:61:                <ComboBox Classes="row" ItemsSource="{Binding 
+ExpansionCartPresets}"
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:62:                          SelectedItem="{Binding 
+SelectedExpansionCartPreset, Mode=TwoWay}" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:63:                <CheckBox Content="Write image on detach/exit" 
+IsChecked="{Binding ExpansionCartWriteBack, Mode=TwoWay}" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:64:                <Button Content="Build cart image." 
+Click="OnOpenFlashCartBuilder" HorizontalAlignment="Left" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:164:            <WrapPanel Orientation="Horizontal">
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:171:            </WrapPanel>
+src\ViceSharp.Xbox.ViewModels\AboutInfo.cs:88:    /// The fallback version string used when the running assembly does 
+not carry a
+src\ViceSharp.Xbox.ViewModels\AboutInfo.cs:89:    /// resolvable product version (see <see 
+cref="AboutViewModel.Version"/>).
+src\ViceSharp.Xbox.ViewModels\AboutInfo.cs:90:    /// Matches <c>GitVersion.yml</c> <c>next-version</c> 
+major.minor.patch base;
+src\ViceSharp.Xbox.ViewModels\AboutInfo.cs:91:    /// stamped builds prefer <see 
+cref="System.Reflection.AssemblyInformationalVersionAttribute"/>.
+src\ViceSharp.Xbox.ViewModels\AboutInfo.cs:93:    public const string Version = "1.2.2";
+

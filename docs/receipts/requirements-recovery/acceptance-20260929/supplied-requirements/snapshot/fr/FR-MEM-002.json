@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MEM-002",
+  "title": "RAM Under ROM Access",
+  "status": "pending",
+  "priority": "high",
+  "body": "The CPU shall be able to write to RAM underlying any ROM region, and read from RAM underlying ROM via appropriate banking configuration. When BASIC ROM is mapped at $A000-$BFFF, writes go to the underlying RAM. When a cartridge ROM is mapped, writes to that region go to underlying RAM (not the cartridge ROM).\n\n## Acceptance Criteria\n- Writes to addresses $A000-$BFFF always store to underlying RAM regardless of whether BASIC ROM is banked in.\n- Writes to addresses $E000-$FFFF always store to underlying RAM regardless of whether KERNAL ROM is banked in.\n- Writes to addresses $D000-$DFFF when Character ROM is banked in store to underlying RAM.\n- Reading from a RAM-under-ROM address when ROM is banked out returns the previously written RAM value.\n- The VIC-II always reads from the \"VIC view\" of memory (it sees character ROM at $1000-$1FFF and $9000-$9FFF in the VIC address space, not RAM).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,15 @@
+
+   DIV first=5032
+c=5030 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$D1 
+bound=False trail=4 fullBr=False mis=False
+c=5031 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$D1 
+bound=False trail=4 fullBr=False mis=False
+c=5032 nPC=$FE98 mPC=$FE9A nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$25 dbgCyc=0 op=$D1 
+bound=True trail=4 fullBr=False mis=True
+c=5033 nPC=$FE9A mPC=$FE9A nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=1 op=$D0 
+bound=False trail=1 fullBr=False mis=False
+c=5034 nPC=$FE9A mPC=$FE9C nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=0 op=$D0 
+bound=False trail=1 fullBr=False mis=True
+c=5035 nPC=$FE9C mPC=$FEA4 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=1 op=$18 
+bound=False trail=1 fullBr=False mis=True
+

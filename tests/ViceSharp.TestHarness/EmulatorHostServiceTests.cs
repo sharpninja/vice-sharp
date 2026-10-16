@@ -27,6 +27,83 @@ using Xunit;
 public sealed class EmulatorHostServiceTests
 {
     /// <summary>
+    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: malformed or missing TrueDrive media returns its
+    /// actionable validation error, registers no broken session, and permits an empty-rig retry.
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task CreateSessionAsync_InvalidTrueDriveDisk_ReturnsErrorAndRecovers(bool missing)
+    {
+        var directory = Directory.CreateTempSubdirectory("vs-invalid-truedrive-");
+        try
+        {
+            string disk = Path.Combine(directory.FullName, "synthetic.d64");
+            if (!missing)
+                await File.WriteAllBytesAsync(disk, [1, 2, 3], TestContext.Current.CancellationToken);
+            var registry = new EmulatorRuntimeRegistry();
+            var service = new EmulatorHostService(registry, C64MediaTestHost.CreateRuntimeFactory());
+
+            var rejected = await service.CreateSessionAsync(
+                new CreateEmulatorSessionRequest("c64", TrueDrive: true, TrueDriveDiskImagePath: disk),
+                TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.InvalidArgument, rejected.Status.Code);
+            Assert.Contains(missing ? "D64 image not found" : "D64 disk image must be", rejected.Status.Message);
+            Assert.Empty(rejected.SessionId);
+            Assert.Null(rejected.EmulatorStatus);
+            Assert.Empty(registry.Snapshot());
+
+            var recovered = await service.CreateSessionAsync(
+                new CreateEmulatorSessionRequest("c64", TrueDrive: true), TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.Ok, recovered.Status.Code);
+            Assert.IsType<CoordinatorMachine>(Assert.Single(registry.Snapshot()).Machine);
+            await service.CloseSessionAsync(new SessionRequest(recovered.SessionId), TestContext.Current.CancellationToken);
+        }
+        finally
+        {
+            directory.Delete(recursive: true);
+        }
+    }
+
+    /// <summary>FR-DRVTRUE-001: expected media I/O and validation exceptions retain their reason over RPC.</summary>
+    [Theory]
+    [InlineData("Argument")]
+    [InlineData("IO")]
+    [InlineData("Unauthorized")]
+    public async Task CreateSessionAsync_MediaFactoryFailure_ReturnsInvalidArgument(string kind)
+    {
+        Exception failure = kind switch
+        {
+            "Argument" => new ArgumentException("Synthetic invalid disk."),
+            "IO" => new IOException("Synthetic disk read failed."),
+            _ => new UnauthorizedAccessException("Synthetic disk access denied."),
+        };
+        var registry = new EmulatorRuntimeRegistry();
+        var service = new EmulatorHostService(registry, new FailingRuntimeFactory(failure));
+
+        var response = await service.CreateSessionAsync(new CreateEmulatorSessionRequest("c64", TrueDrive: true),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);
+        Assert.Equal(failure.Message, response.Status.Message);
+        Assert.Empty(response.SessionId);
+        Assert.Empty(registry.Snapshot());
+    }
+
+    /// <summary>FR-DRVTRUE-001: unrelated factory defects must not be relabeled as bad user media.</summary>
+    [Fact]
+    public async Task CreateSessionAsync_UnexpectedFactoryFailure_RemainsException()
+    {
+        var service = new EmulatorHostService(new EmulatorRuntimeRegistry(),
+            new FailingRuntimeFactory(new NotSupportedException("Synthetic unrelated failure.")));
+
+        await Assert.ThrowsAsync<NotSupportedException>(async () =>
+            await service.CreateSessionAsync(new CreateEmulatorSessionRequest(), TestContext.Current.CancellationToken));
+    }
+
+    /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 EmulatorHostService).
     /// Use case: A client constructs <see cref="EmulatorHostService"/>
     /// without supplying a runtime registry (DI misconfiguration).
@@ -567,6 +644,11 @@ public sealed class EmulatorHostServiceTests
             [MinimalHostArchitectureDescriptor.Instance],
             MinimalHostArchitectureDescriptor.ArchitectureId);
         return new EmulatorHostService(new EmulatorRuntimeRegistry(), factory);
+    }
+
+    private sealed class FailingRuntimeFactory(Exception failure) : IEmulatorRuntimeFactory
+    {
+        public EmulatorRuntimeSession Create(CreateEmulatorSessionRequest request) => throw failure;
     }
 
     private static async Task<string> CreateSessionAsync(EmulatorHostService service)

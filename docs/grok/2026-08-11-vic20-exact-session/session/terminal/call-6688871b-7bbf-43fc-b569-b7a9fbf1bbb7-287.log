@@ -1,0 +1,11 @@
+
+---
+
+type         : 2
+yamlFilename : azure-pipelines.release.yml
+
+{
+  "path": "\\",
+  "queueStatus": "enabled",
+  "yamlFilename": "azure-pipelines.ci.yml"
+}

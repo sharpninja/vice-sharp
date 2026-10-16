@@ -1,0 +1,152 @@
+# FEAT-XSTOREPIPE-001 (PLAN-XBOXUWP S42): build the Xbox UWP head as a Microsoft Store
+# upload package and publish it to Partner Center (Microsoft Store for Xbox) through the
+# official Microsoft Store Developer CLI (msstore).
+#
+# REQUIRED SETUP (one-time, documented in docs/xbox-store-publishing.md):
+#   1. Variable group "xbox-store-publish" with:
+#        PARTNER_CENTER_TENANT_ID      (Entra tenant of the Partner Center account)
+#        PARTNER_CENTER_SELLER_ID      (Partner Center seller id)
+#        PARTNER_CENTER_CLIENT_ID      (Entra app registration associated in Partner Center)
+#        PARTNER_CENTER_CLIENT_SECRET  (SECRET variable - never a literal here)
+#        STORE_APP_ID                  (the Store product id of the reserved app)
+#        STORE_IDENTITY_NAME           (Package/Identity/Name from Partner Center)
+#        STORE_PUBLISHER               (Package/Identity/Publisher, the CN=... GUID form)
+#        STORE_PUBLISHER_DISPLAY_NAME  (Partner Center publisher display name)
+#   2. Environment "xbox-store" with a manual Approval check (the publish gate).
+#   3. A WINDOWS agent carrying the proven toolchain: Visual Studio 18 MSBuild with the
+#      UWP/XAML tooling + .NET SDK 10.0.3xx. The hosted windows-latest image does NOT
+#      currently carry it; register a self-hosted agent (the dev PC qualifies) in the
+#      pool named by agentPool.
+#
+# The upload package is intentionally UNSIGNED (UapAppxPackageBuildMode=StoreUpload,
+# AppxPackageSigningEnabled=false): the Store signs published packages itself.
+
+parameters:
+  - name: agentPool
+    displayName: Agent pool (needs VS 18 MSBuild + UWP tooling + .NET 10 SDK)
+    type: string
+    default: Default
+  - name: runWack
+    displayName: Run the WACK pre-flight (needs an INTERACTIVE agent session + admin; Store certification runs regardless)
+    type: boolean
+    default: false
+
+trigger: none # Publish runs are deliberate: run the pipeline manually (or add a tag trigger later).
+
+variables:
+  - group: xbox-store-publish
+  - name: buildConfiguration
+    value: Release-UWP
+  - name: buildPlatform
+    value: x64
+
+stages:
+  - stage: Build
+    displayName: Build + package (Store upload)
+    jobs:
+      - job: BuildStoreUpload
+        displayName: Release-UWP build, tests, msixupload
+        pool:
+          name: ${{ parameters.agentPool }}
+        steps:
+          - checkout: self
+            clean: true
+
+          # Gate: the portable test suite (headless net10.0 fallback).
+          - script: dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Debug --filter "Category=Xbox"
+            displayName: Xbox test suite (Category=Xbox)
+
+          # Stamp the Partner Center identity into the manifest (the repo carries the
+          # dev identity; the Store association values come from variables).
+          - powershell: |
+              ./build/Set-StoreIdentity.ps1 `
+                -ManifestPath "src/ViceSharp.Xbox/Package.appxmanifest" `
+                -IdentityName "$(STORE_IDENTITY_NAME)" `
+                -Publisher "$(STORE_PUBLISHER)" `
+                -PublisherDisplayName "$(STORE_PUBLISHER_DISPLAY_NAME)"
+            displayName: Stamp Store identity into Package.appxmanifest
+
+          # Build + package the UWP head as an UNSIGNED Store upload package with the
+          # proven VS MSBuild toolchain (located via vswhere).
+          - powershell: |
+              $msb = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
+                -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | Select-Object -First 1
+              if (-not $msb) { throw 'vswhere found no MSBuild with the required components.' }
+              & $msb src/ViceSharp.Xbox/ViceSharp.Xbox.csproj `
+                /p:Configuration=$(buildConfiguration) `
+                /p:Platform=$(buildPlatform) `
+                /t:Restore,Build `
+                /p:UapAppxPackageBuildMode=StoreUpload `
+                /p:GenerateAppxPackageOnBuild=true `
+                /p:AppxPackageSigningEnabled=false `
+                /p:AppxPackageDir="$(Build.ArtifactStagingDirectory)\AppxPackages\" `
+                /v:m /nologo
+              if ($LASTEXITCODE -ne 0) { throw "MSBuild failed with exit code $LASTEXITCODE." }
+            displayName: Build Release-UWP + produce Store upload package
+
+          - powershell: |
+              $upload = Get-ChildItem "$(Build.ArtifactStagingDirectory)\AppxPackages" -Recurse `
+                -Include *.msixupload, *.appxupload | Select-Object -First 1
+              if (-not $upload) { throw 'No .msixupload/.appxupload was produced.' }
+              Write-Host "Store upload package: $($upload.FullName)"
+            displayName: Verify the upload package exists
+
+          # OPT-IN Store-certification pre-flight (Nuke ValidateStorePackage -> WACK):
+          # fails the build on any verdict but PASS, ~an hour before Partner Center
+          # certification would. appcert.exe cannot run in Session0: the agent must run
+          # as an interactive process, not a Windows service.
+          - ${{ if eq(parameters.runWack, true) }}:
+              - powershell: |
+                  $upload = Get-ChildItem "$(Build.ArtifactStagingDirectory)\AppxPackages" -Recurse `
+                    -Include *.msixupload, *.appxupload | Select-Object -First 1
+                  if (-not $upload) { throw 'No upload package to validate.' }
+                  ./build.ps1 ValidateStorePackage --store-package-path "$($upload.FullName)"
+                  if ($LASTEXITCODE -ne 0) { throw "ValidateStorePackage failed with exit code $LASTEXITCODE." }
+                displayName: WACK pre-flight (Nuke ValidateStorePackage)
+
+          - publish: $(Build.ArtifactStagingDirectory)/AppxPackages
+            artifact: store-upload
+            displayName: Publish store-upload artifact
+
+          - ${{ if eq(parameters.runWack, true) }}:
+              - publish: artifacts/wack
+                artifact: wack-report
+                displayName: Publish WACK report
+                condition: succeededOrFailed()
+
+  - stage: PublishToStore
+    displayName: Publish to Microsoft Store (Xbox)
+    dependsOn: Build
+    jobs:
+      - deployment: PublishStore
+        displayName: msstore publish (manual approval)
+        pool:
+          name: ${{ parameters.agentPool }}
+        # The environment carries the manual Approval check: nothing reaches Partner
+        # Center until a human approves the run on the xbox-store environment.
+        environment: xbox-store
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                - download: current
+                  artifact: store-upload
+                  displayName: Download store-upload artifact
+
+                - task: UseMSStoreCLI@0
+                  displayName: Setup Microsoft Store Developer CLI
+
+                # The documented Azure DevOps msstore flow: credentials arrive ONLY as
+                # secret pipeline variables.
+                - script: msstore reconfigure --tenantId $(PARTNER_CENTER_TENANT_ID) --sellerId $(PARTNER_CENTER_SELLER_ID) --clientId $(PARTNER_CENTER_CLIENT_ID) --clientSecret $(PARTNER_CENTER_CLIENT_SECRET)
+                  displayName: Configure Microsoft Store Developer CLI
+
+                - powershell: |
+                    $upload = Get-ChildItem "$(Pipeline.Workspace)\store-upload" -Recurse `
+                      -Include *.msixupload, *.appxupload | Select-Object -First 1
+                    if (-not $upload) { throw 'No upload package in the store-upload artifact.' }
+                    msstore publish "src/ViceSharp.Xbox" -i "$($upload.FullName)" -id $(STORE_APP_ID) -v
+                    if ($LASTEXITCODE -ne 0) { throw "msstore publish failed with exit code $LASTEXITCODE." }
+                  displayName: Publish submission to the Microsoft Store

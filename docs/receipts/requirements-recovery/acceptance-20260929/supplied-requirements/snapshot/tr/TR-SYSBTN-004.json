@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SYSBTN-004",
+  "title": "State-mutating dispatch marshaled to session lock",
+  "status": "pending",
+  "priority": "medium",
+  "body": "State-mutating dispatch marshaled onto the session lock, not the input thread. Acceptance: verified by TEST-SYSBTN-002.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

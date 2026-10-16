@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-CPU-001",
+  "title": "CPU Execution Reference Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "CPU instruction, timing, interrupt, and port behavior is verified with unit tests and VICE/Lorenz-style reference comparisons.",
+  "acceptanceCriteria": []
+}

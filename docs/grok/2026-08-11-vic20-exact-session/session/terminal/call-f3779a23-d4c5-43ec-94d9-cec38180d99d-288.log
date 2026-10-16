@@ -1,0 +1,81 @@
+Starting baseline at 2026-08-05T03:40:51.4135143-05:00
+filter=Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy
+  Determining projects to restore...
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj (in 437 ms).
+  20 of 21 projects are up-to-date for restore.
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:33.39]     ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_SilentWarp_Measures_Core_Headroom [SKIP]
+[xUnit.net 00:00:33.39]     ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_UserConfig_LiveAudio_ViceGate_Sustains_RealTime [SKIP]
+  Skipped ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_SilentWarp_Measures_Core_Headroom [1 ms]
+  Skipped ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_UserConfig_LiveAudio_ViceGate_Sustains_RealTime [1 ms]
+[xUnit.net 00:00:33.52]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClockUnderPullLoad [SKIP]
+[xUnit.net 00:00:33.52]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureVicePacedClock [SKIP]
+[xUnit.net 00:00:33.53]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureGuiFramePumpThroughput [SKIP]
+[xUnit.net 00:00:33.53]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureC64ChipsetFrameCost [SKIP]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClockUnderPullLoad [1 ms]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureVicePacedClock [1 ms]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureGuiFramePumpThroughput [1 ms]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureC64ChipsetFrameCost [1 ms]
+[xUnit.net 00:00:33.53]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClock [SKIP]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClock [1 ms]
+[xUnit.net 00:00:34.40]     ViceSharp.TestHarness.LiveDeployedAppSpeedProbeTests.DeployedApp_Demo_Sustains_RealTime [SKIP]
+  Skipped ViceSharp.TestHarness.LiveDeployedAppSpeedProbeTests.DeployedApp_Demo_Sustains_RealTime [1 ms]
+[xUnit.net 00:00:34.62]     ViceSharp.TestHarness.LiveLimiterBandProbeTests.DeployedApp_LimiterBand_ReportsAchievedSpeeds [SKIP]
+  Skipped ViceSharp.TestHarness.LiveLimiterBandProbeTests.DeployedApp_LimiterBand_ReportsAchievedSpeeds [1 ms]
+[xUnit.net 00:00:50.11]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals [FAIL]
+  Failed ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals [39 ms]
+  Error Message:
+   Assert.DoesNotContain() Failure: Sub-string found
+                                      ↓ (pos 87815)
+String: ···"d;\n        var profile = ViceSharp.Architectures.C"···
+Found:  "ViceSharp.Architectures"
+  Stack Trace:
+     at ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\AvaloniaBoundaryTests.cs:line 60
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:50.36]     ViceSharp.TestHarness.Xbox.XboxCiConfigTests.CiPipelines_DeclareOptionalOctopusLegion2ReleaseStep [FAIL]
+  Failed ViceSharp.TestHarness.Xbox.XboxCiConfigTests.CiPipelines_DeclareOptionalOctopusLegion2ReleaseStep [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Sub-string not found
+String:    "# ------------------------------------------------"···
+Not found: "Octopus LEGION2 release"
+  Stack Trace:
+     at ViceSharp.TestHarness.Xbox.XboxCiConfigTests.CiPipelines_DeclareOptionalOctopusLegion2ReleaseStep() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Xbox\XboxCiConfigTests.cs:line 87
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:03:00.99]     ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal [SKIP]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal [1 ms]
+[xUnit.net 00:04:59.08]     ViceSharp.TestHarness.CaptureRunLogUtilityTests.CaptureBaselineRunLog_FromEnvironment [SKIP]
+  Skipped ViceSharp.TestHarness.CaptureRunLogUtilityTests.CaptureBaselineRunLog_FromEnvironment [1 ms]
+[xUnit.net 00:05:10.56]     ViceSharp.TestHarness.SnapshotRunLogParityTests.SnapshotRun_MatchesViceRunLog [SKIP]
+  Skipped ViceSharp.TestHarness.SnapshotRunLogParityTests.SnapshotRun_MatchesViceRunLog [1 ms]
+[xUnit.net 00:05:38.13]     ViceSharp.TestHarness.LiveDeployedAppSettingsBisectTests.DeployedApp_SettingsBisect_ReportsPhaseSpeeds [SKIP]
+  Skipped ViceSharp.TestHarness.LiveDeployedAppSettingsBisectTests.DeployedApp_SettingsBisect_ReportsPhaseSpeeds [1 ms]
+Results File: F:\GitHub\vice-sharp\TestResults\baseline-20260805\baseline.trx
+
+Failed!  - Failed:     2, Passed:  3208, Skipped:    13, Total:  3223, Duration: 8 h 46 m - ViceSharp.TestHarness.dll (net10.0)
+EXIT=1

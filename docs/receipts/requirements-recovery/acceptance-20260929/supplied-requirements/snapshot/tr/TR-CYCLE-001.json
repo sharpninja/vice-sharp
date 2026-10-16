@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-CYCLE-001",
+  "title": "Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior",
+  "status": "closed",
+  "priority": "high",
+  "body": "The emulation core shall operate at sub-cycle granularity, modeling the two phases of the system clock (PHI1 and PHI2) and the bus ownership arbitration between the CPU and VIC-II. This level of accuracy is required to correctly emulate cycle-exact tricks used by C64 demos and games. The reference implementation for correctness is VICE x64sc (the cycle-exact VICE variant).\n\n## Acceptance Criteria\n- All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.\n- The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle.\n- CIA timer countdown occurs at the correct bus phase (PHI2 falling edge).\n- CPU memory accesses occur only during PHI2 when AEC is asserted.\n- The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).\n- The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.\n- Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

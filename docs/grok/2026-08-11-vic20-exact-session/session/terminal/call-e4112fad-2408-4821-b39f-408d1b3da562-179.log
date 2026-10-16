@@ -1,0 +1,31 @@
+
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:19:    public const int TwoSecondPalCycles = 2_216_810;
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:22:    public const int TenSecondPalCycles = 11_084_050;
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:25:    public const int TenSecondNtscCycles = 10_227_270;
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:31:    [Fact]
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:46:    [Fact]
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:47:    public void EveryCycle_CpuRegs_Match_TwoSecondPal()
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:54:        var matched = RunEveryCycle(TwoSecondPalCycles);
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:55:        Assert.True(matched == TwoSecondPalCycles,
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:56:            $"expected full match for {TwoSecondPalCycles} 
+cycles, matched={matched}");
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:63:    [Fact]
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:64:    public void EveryCycle_CpuRegs_Match_TenSecondPal()
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:71:        var matched = RunEveryCycle(TenSecondPalCycles, 
+"vic20");
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:72:        Assert.True(matched == TenSecondPalCycles,
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:73:            $"expected full match for {TenSecondPalCycles} 
+cycles, matched={matched}");
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:79:    [Fact]
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:80:    public void EveryCycle_CpuRegs_Match_TenSecondNtsc()
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:87:        var matched = RunEveryCycle(TenSecondNtscCycles, 
+"vic20ntsc");
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:88:        Assert.True(matched == TenSecondNtscCycles,
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:89:            $"expected full match for {TenSecondNtscCycles} 
+cycles (vic20ntsc), matched={matched}");
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:102:        var managed = 
+MachineTestFactory.CreateVic20Machine(modelSelector);
+
+Name : Vic20KeyboardTests.cs
+
+

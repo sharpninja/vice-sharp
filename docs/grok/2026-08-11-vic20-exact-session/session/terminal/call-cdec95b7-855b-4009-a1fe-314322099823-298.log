@@ -1,0 +1,3 @@
+OK /api/collections 200 body=[]
+OK /api/collections/smart 200 body=[]
+FAIL /api/collections/virtual code=422

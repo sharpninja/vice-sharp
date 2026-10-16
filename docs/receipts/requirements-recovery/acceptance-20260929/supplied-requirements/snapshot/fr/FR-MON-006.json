@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MON-006",
+  "title": "Watch Expressions",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The monitor shall support watch expressions that continuously evaluate and display values from memory, registers, or computed expressions. Watch values update whenever the emulation state changes (single-step, breakpoint hit, or periodic refresh).\n\n## Acceptance Criteria\n- Watch expressions can reference memory addresses: `[$D020]`, `[$0400:$0427]` (range).\n- Watch expressions can reference registers: `A`, `X`, `Y`, `SP`, `PC`.\n- Watch expressions support arithmetic: `[$FB] + [$FC] * 256` (constructs a 16-bit pointer).\n- Watch values are displayed in configurable formats: hex, decimal, binary, ASCII/PETSCII.\n- Array watches display a contiguous range of bytes.\n- Watches can be added, removed, and reordered.\n- A watch that reads a side-effect register (like SID OSC3 at $D41B) is marked as potentially disruptive.\n- The watch list persists across monitor open/close within a session.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

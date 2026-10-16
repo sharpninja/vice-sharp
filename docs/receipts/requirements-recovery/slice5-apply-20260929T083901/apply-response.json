@@ -1,0 +1,14 @@
+
+{
+  "type": "https://httpstatuses.io/503",
+  "title": "backend_unavailable",
+  "status": 503,
+  "detail": "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+  "code": "backend_unavailable",
+  "error": "backend_unavailable",
+  "message": "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+  "retryable": true,
+  "details": {
+    "reason": "backend_unavailable"
+  }
+}

@@ -1,0 +1,12 @@
+[feat/xbox-uwp-app 4160fb0] feat(xbox): wire Settings ROM readiness at composition [FEAT-XROMPICK-001]
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+[33m4160fb0[m feat(xbox): wire Settings ROM readiness at composition [FEAT-XROMPICK-001]
+[33m611b36e[m feat(xbox): model picker ROM readiness status [FEAT-XROMPICK-001]
+[33mda70ec0[m feat(xbox): remappable Controls page bindings [FEAT-XCTRLBIND-001]
+[33m1678f4e[m fix(core): wire RESTORE press to CPU NMI edge [FIX-XKBDNMI-001]
+[33m1f19bb9[m feat(xbox): finish AOT-safe x:Bind migration [FEAT-XAOTBIND-001]
+[33m71e843b[m ci: finish optional Octopus LEGION2 release steps [FEAT-XOCTOPUS-001]
+[33ma199063[m feat(xbox): B steps back on menu subpages; subpages expand to the full window [PLAN-XBOXUWP FEAT-XMENUSUBPAGE-001]
+[33m8ec2137[m feat(xbox): F9/F11 shell toggles, keyboard-panel receipts, BindingFailed logging [PLAN-XBOXUWP FIX-XKBDPANEL-001]
+To https://github.com/sharpninja/vice-sharp.git
+   1678f4e..4160fb0  feat/xbox-uwp-app -> feat/xbox-uwp-app

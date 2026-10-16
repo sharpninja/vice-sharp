@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-CFG-001",
+  "title": "Configuration and Resource Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Resource files, ROM/romset selection, palettes, hotkeys, autostart, peripherals, RAM init, debug resources, and limiter settings are verified with configuration and host service tests.",
+  "acceptanceCriteria": []
+}

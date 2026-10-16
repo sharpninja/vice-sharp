@@ -1,0 +1,22 @@
+{"status":"available","agent":"GrokCode","namespaces":["workflow.sessionlog","workflow.todo","workflow.requirements","workflow.triage","workflow.graphrag","workflow.memory","workflow.failsafe"],"requirementMethods":["workflow.requirements.listLayers","workflow.requirements.createLayer","workflow.requirements.updateLayer","workflow.requirements.effective"],"requirementClientMethods":["client.Requirements.ListRequirementLayersAsync","client.Requirements.CreateRequirementLayerAsync","client.Requirements.UpdateRequirementLayerAsync","client.Requirements.GetEffectiveRequirementsAsync"],"cacheDir":"F:\\GitHub\\vice-sharp\\.mcpServer\\grok","hasSession":true,"hasCurrentTurn":true,"pendingCount":0,"pendingTurnCount":0,"failsafeDir":"F:\\GitHub\\vice-sharp\\.mcpServer\\grok\\failsafe","failsafeCount":0,"failsafeQuarantineCount":0}
+
+type: result
+payload:
+  requestId: req-20260805T083523Z-11c8
+  result:
+    id: FIX-XKBDNMI-001
+    title: Wire C64 RESTORE trigger (IsRestorePressed) to the CPU NMI edge
+    section: xbox-uwp
+    priority: medium
+    done: false
+    description:
+    - "Deferred from PLAN-XBOXUWP S24 (commit 9e48f36). S24 added the dedicated RESTORE seam (IMachineKeyboardInput.SetRestoreState -> C64KeyboardMatrix.SetRestore, sets IKeyboardMatrix.IsRestorePressed) and decoupled the spurious \"*\"/0x31 -> RESTORE coupling. GAP: IsRestorePressed currently has NO consumer - it is not wired to assert the CPU NMI line, so pressing RESTORE does not generate an actual NMI edge in the managed core (SystemClock's NMI edge latch reads only _nmiLine; grep shows IsRestorePressed unconsumed). WORK: wire the RESTORE trigger to the CPU NMI line edge (VICE: RESTORE is directly on the NMI line via the CIA/keyboard, edge-triggered), tests-first: pressing RESTORE on a running C64 generates an NMI (observe via CPU NMI line / interrupt source / pub-sub) and RUN/STOP+RESTORE resets to BASIC; \"*\" still does not fire RESTORE; determinism preserved. Cite VICE keyboard/NMI source."
+    technicalDetails: &o0 []
+    implementationTasks: []
+    dependsOn: *o0
+    functionalRequirements: *o0
+    technicalRequirements: *o0
+  deprecated: true
+
+---
+

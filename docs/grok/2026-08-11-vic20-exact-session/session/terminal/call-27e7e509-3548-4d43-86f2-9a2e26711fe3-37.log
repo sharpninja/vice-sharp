@@ -1,0 +1,27 @@
+=== xvic 610x569 ===
+cyanRegion x=16..608 y=40..558
+paper x=16..608 y=40..558 w=593 h=519 pts=116460
+borders L=0 R=0 T=0 B=0 (px in scaled window)
+borderFrac L=0 R=0 T=0 B=0
+paperFrac W=1 H=1
+displayAspect=1.143 paperAspect=1.143
+borderRGB=116,167,167 paperRGB=94,250,249
+borderRowDeltaG=2.48
+=== ViceSharp 2000x1073 ===
+cyanRegion x=324..1676 y=42..1062
+paper x=613..1676 y=216..883 w=1064 h=668 pts=692955
+borders L=289 R=0 T=174 B=179 (px in scaled window)
+borderFrac L=0.214 R=0 T=0.17 B=0.175
+paperFrac W=0.786 H=0.654
+displayAspect=1.325 paperAspect=1.593
+borderRGB=100,227,222 paperRGB=255,255,255
+borderRowDeltaG=0
+=== ViceSharp-full 3840x2060 ===
+cyanRegion x=36..3670 y=40..2048
+paper x=36..3670 y=40..1697 w=3635 h=1658 pts=2564608
+borders L=0 R=0 T=0 B=351 (px in scaled window)
+borderFrac L=0 R=0 T=0 B=0.175
+paperFrac W=1 H=0.825
+displayAspect=1.809 paperAspect=2.192
+borderRGB=0,0,0 paperRGB=255,255,255
+borderRowDeltaG=2

@@ -1,0 +1,6 @@
+API: The request was canceled due to the configured HttpClient.Timeout of 5 seconds elapsing.
+OCTOPUS_API_KEY is set (len=36)
+2.20.1
+OCTOPUS_API_KEY=len 36
+OCTOPUS_SPACE=len 7
+OCTOPUS_URL=len 26

@@ -1,0 +1,5 @@
+ParserError: 
+Line |
+   1 |  . SilentlyContinue | Where-Object { $_.Id -in 1000,1001,1026 OR $_.Prov .
+     |                                                               ~~
+     | Unexpected token 'OR' in expression or statement.

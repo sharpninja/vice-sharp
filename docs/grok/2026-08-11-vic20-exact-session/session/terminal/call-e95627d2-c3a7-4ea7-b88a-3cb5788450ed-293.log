@@ -1,0 +1,1 @@
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\MainWindow.axaml.cs:182:        var profile = ViceSharp.Architectures.C64.C64MachineProfiles.All.FirstOrDefault(

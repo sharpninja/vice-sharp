@@ -1,0 +1,36 @@
+{
+  "kind": "fr",
+  "id": "FR-NATIVE-LIFECYCLE-001",
+  "title": "Bounded and isolated native oracle lifecycle",
+  "status": "pending",
+  "priority": "high",
+  "body": "Native VIC-20 sound-oracle reset preserves the live mixer timing and clocks.\nCreate and step finish or fail within 5000 ms; stop finishes or fails within 2000 ms.\nDispose is idempotent; a live worker never observes freed state. Failed stop poisons shared native-library state and all later operations fail immediately.\nReset, destroy, snapshot read and snapshot write apply the same shutdown-failure policy.\nNormal audio, dual-VIA, reset, snapshot and dispose work repeatedly in one process for PAL and NTSC.\n\n## Acceptance Criteria\n- **ac-01**: Native VIC-20 sound-oracle reset preserves the live mixer timing and clocks.\n- **ac-02**: Create and step finish or fail within 5000 ms; stop finishes or fails within 2000 ms.\n- **ac-03**: Dispose is idempotent; a live worker never observes freed state. Failed stop poisons shared native-library state and all later operations fail immediately.\n- **ac-04**: Reset, destroy, snapshot read and snapshot write apply the same shutdown-failure policy.\n- **ac-05**: Normal audio, dual-VIA, reset, snapshot and dispose work repeatedly in one process for PAL and NTSC.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Native VIC-20 sound-oracle reset preserves the live mixer timing and clocks.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Create and step finish or fail within 5000 ms; stop finishes or fails within 2000 ms.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Dispose is idempotent; a live worker never observes freed state. Failed stop poisons shared native-library state and all later operations fail immediately.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Reset, destroy, snapshot read and snapshot write apply the same shutdown-failure policy.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Normal audio, dual-VIA, reset, snapshot and dispose work repeatedly in one process for PAL and NTSC.",
+      "isSatisfied": false
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:05.53]     ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20Session_Pump_CommitsFrame_Within2Seconds [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20Session_Pump_CommitsFrame_Within2Seconds [3 s]
+  Error Message:
+   samples=50:208x216@3234186,51:208x216@3322794,52:208x216@3389250,53:208x216@3455706,54:208x216@3522162,55:208x216@3588618,56:208x216@3655074,57:208x216@3743682,58:208x216@3810138,59:208x216@3876594 RunState=Running Cycle=3900681 Frames=176 PC=E5EC A=00
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20Session_Pump_CommitsFrame_Within2Seconds() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoPumpSmokeTests.cs:line 31
+   at ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20Session_Pump_CommitsFrame_Within2Seconds() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoPumpSmokeTests.cs:line 31
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll (net10.0)

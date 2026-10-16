@@ -1,0 +1,86 @@
+nearWhiteCount=31086
+paperBBox x=16..608 y=28..568 w=592 h=540
+Lborder=16 Rborder=1 topFrom0=28 bot=0
+sample: {"X":88,"Y":28,"R":255,"G":255,"B":255}
+paperBoxFracOfWindow=0.924
+L/R border ratio=16
+maxLum=255 at (459,330) rgb=255,255,255
+R histogram (content):
+  R~0: 320
+  R~16: 3
+  R~32: 38
+  R~48: 42
+  R~64: 2825
+  R~80: 2944
+  R~96: 43
+  R~112: 31
+  R~128: 110
+  R~144: 39
+  R~160: 79
+  R~176: 118
+  R~192: 49
+  R~208: 174
+  R~224: 274
+  R~240: 2671
+
+Name          : image-c0236104-dfda-495b-a2c5-9abe246de3e3.png
+Length        : 4003192
+LastWriteTime : 8/5/2026 4:11:51 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-c0236104-dfda-495b-a2c5-9abe246de3e3.png
+
+Name          : image-b1340a67-17de-437e-8855-3268f0f8d90b.png
+Length        : 3714263
+LastWriteTime : 8/5/2026 4:35:51 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-b1340a67-17de-437e-8855-3268f0f8d90b.png
+
+Name          : image-5cc45683-0907-419a-8966-5803a896acec.png
+Length        : 3505537
+LastWriteTime : 8/5/2026 4:14:09 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-5cc45683-0907-419a-8966-5803a896acec.png
+
+Name          : image-be4c8867-eafc-400d-b269-6ef61a0d634c.png
+Length        : 667801
+LastWriteTime : 8/7/2026 8:39:27 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-be4c8867-eafc-400d-b269-6ef61a0d634c.png
+
+Name          : image-07135e11-2aec-486a-b44a-46d69e6da139.jpg
+Length        : 465169
+LastWriteTime : 8/5/2026 4:20:29 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-07135e11-2aec-486a-b44a-46d69e6da139.jpg
+
+Name          : image-84f244fd-761c-40e8-8369-c1db67983cb3.jpg
+Length        : 463904
+LastWriteTime : 8/5/2026 4:21:22 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-84f244fd-761c-40e8-8369-c1db67983cb3.jpg
+
+Name          : image-fb20b517-03f7-4c00-ac2d-1f5106549d0b.png
+Length        : 451997
+LastWriteTime : 8/5/2026 6:11:38 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-fb20b517-03f7-4c00-ac2d-1f5106549d0b.png
+
+Name          : image-dfca8198-4eb7-4e0a-976d-e10990abb662.png
+Length        : 438879
+LastWriteTime : 8/5/2026 1:08:21 PM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-dfca8198-4eb7-4e0a-976d-e10990abb662.png
+
+Name          : image-9ab69978-46da-4dbc-8a30-1cb705c4b674.jpg
+Length        : 433135
+LastWriteTime : 8/5/2026 4:37:12 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-9ab69978-46da-4dbc-8a30-1cb705c4b674.jpg
+
+Name          : image-a37d6fe2-7807-478f-8c14-1395f6fcfe33.png
+Length        : 346233
+LastWriteTime : 8/5/2026 3:58:02 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-a37d6fe2-7807-478f-8c14-1395f6fcfe33.png
+
+Name          : image-8b2c042e-3efe-40de-8d4c-579a965a8a19.jpg
+Length        : 268120
+LastWriteTime : 8/5/2026 1:15:37 PM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-8b2c042e-3efe-40de-8d4c-579a965a8a19.jpg
+
+Name          : image-46cf52fd-d56a-4713-a629-e4c9d1811453.png
+Length        : 257828
+LastWriteTime : 8/5/2026 5:26:59 AM
+Path          : C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-46cf52fd-d56a-4713-a629-e4c9d1811453.png
+
+

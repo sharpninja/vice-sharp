@@ -1,0 +1,33 @@
+
+A total of 1 test files matched the specified pattern.
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_FocusedWindow [25 ms]
+   DIV first=5513 matchedCycles=5512 budget=500000
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [28 ms]
+   DIV first=5513 matchedCycles=5512 budget=2216810
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [21 ms]
+   DIV first=4955 matchedCycles=4954 budget=10227270
+Failed!  - Failed:     3, Passed:     1, Skipped:     0, Total:     4, Duration: 1 m 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:31:   DIV first=5513 
+matchedCycles=5512 budget=500000
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:43:c=5513 nPC=$FE91 mPC=$FE91 
+nA=$22 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$B1 trail=3 nonOvlR=True 
+nonOvlF=True dly=False stg=False irq=0 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:45:irqdiag: nLastOp=0xB1 
+nDelays=False nPend=0x0 nIrqClk=0 nClk=5519 mDelays=False mBound=False mIrqSeq=0
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:55:   DIV first=5513 
+matchedCycles=5512 budget=2216810
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:67:c=5513 nPC=$FE91 mPC=$FE91 
+nA=$22 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$B1 trail=3 nonOvlR=True 
+nonOvlF=True dly=False stg=False irq=0 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:69:irqdiag: nLastOp=0xB1 
+nDelays=False nPend=0x0 nIrqClk=0 nClk=5519 mDelays=False mBound=False mIrqSeq=0
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:79:   DIV first=4955 
+matchedCycles=4954 budget=10227270
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:91:c=4955 nPC=$FE91 mPC=$FE91 
+nA=$FF mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=1 op=$B1 trail=4 nonOvlR=False 
+nonOvlF=False dly=False stg=True irq=0 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-soft-irq.log:93:irqdiag: nLastOp=0xB1 
+nDelays=False nPend=0x0 nIrqClk=0 nClk=4961 mDelays=False mBound=False mIrqSeq=0
+

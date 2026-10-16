@@ -1,0 +1,8 @@
+HomePage.xaml:31: Text="{Binding Title}"
+
+                    Text="{Binding Title}"
+--- x:Bind count dirty ---
+31
+--- Binding count dirty ---
+1
+

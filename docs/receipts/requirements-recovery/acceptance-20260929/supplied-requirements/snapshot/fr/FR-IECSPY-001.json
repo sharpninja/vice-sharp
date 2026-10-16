@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-IECSPY-001",
+  "title": "IEC bus snapshot / spy",
+  "status": "pending",
+  "priority": "high",
+  "body": "At any instant the IEC bus can be snapshotted to read each line's level (ATN/CLK/DATA/SRQ), which endpoints are pulling each line low, and which devices are talking. Read-only; never perturbs bus state. DONE.\n\n## Acceptance Criteria\n- At any instant the IEC bus can be snapshotted to read each line's level (ATN/CLK/DATA/SRQ), which endpoints are pulling each line low, and which devices are talking.\n- Read-only; never perturbs bus state.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

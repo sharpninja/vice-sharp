@@ -1,0 +1,13 @@
+MajorMinorPatch=1.3.3
+SemVer=1.3.3-13
+FullSemVer=1.3.3-13
+Major=1 Minor=3 Patch=3
+CommitsSinceVersionSource=13
+MsiProductVersion=1.3.13
+InformationalVersion=1.3.3-13+Branch.main.Sha.85396c84fd5e5dffc2654080ca7676a56ae977a5
+# GitVersion configuration. The MSI/winget ProductVersion is derived in
+# build/Build.cs as {Major}.{Minor}.{CommitsSinceVersionSource}, e.g. 0.1.356.
+# next-version pins the major.minor base so the build field auto-increments with
+# history. Windows Installer compares major.minor.build for upgrades; the WiX
+# MajorUpgrade (AllowSameVersionUpgrades) makes every redeploy reinstall.
+next-version: 1.3.3

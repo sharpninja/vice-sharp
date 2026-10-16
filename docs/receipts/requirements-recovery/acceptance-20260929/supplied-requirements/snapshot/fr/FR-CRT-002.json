@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CRT-002",
+  "title": "Ocean Type 1 Bank-Switching Cartridge",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The Ocean Type 1 cartridge uses bank switching to map up to 512KB of ROM into the ROML region. Bank selection is performed by writing to the $DE00 I/O area. This cartridge type is used by many commercial games.\n\n## Acceptance Criteria\n- Writing to $DE00 selects the active ROM bank (bits 0-5 select from up to 64 banks of 8KB each).\n- The selected bank is mapped at ROML ($8000-$9FFF).\n- ROMH can optionally be present (some Ocean carts use both ROML and ROMH).\n- Maximum size is 512KB (64 x 8KB banks).\n- The EXROM/GAME line configuration follows the Ocean Type 1 specification.\n- The cartridge CRT file chip packets correctly identify bank numbers.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

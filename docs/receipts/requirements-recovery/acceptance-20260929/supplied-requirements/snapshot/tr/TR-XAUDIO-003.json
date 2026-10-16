@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XAUDIO-003",
+  "title": "MasterAudioControl + AudioSampleConverter in Abstractions",
+  "status": "pending",
+  "priority": "medium",
+  "body": "MasterAudioControl + AudioSampleConverter relocated to Abstractions, one master gain / one float->PCM16 shared by both backends, no behavior change. Acceptance: verified by TEST-XAUDIO-003, PortableAudioTypesLocationTests.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

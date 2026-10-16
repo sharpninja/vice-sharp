@@ -1,0 +1,14 @@
+# Logo attribution (CC BY-SA 4.0)
+
+File: Commodore C= logo.svg
+Source: https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg
+Author: Alien426 (Wikimedia Commons)
+License: Creative Commons Attribution-ShareAlike 4.0 International
+         https://creativecommons.org/licenses/by-sa/4.0/
+
+This file is used as the product logo mark in Microsoft Store / Xbox marketing
+assets under docs/xbox/store-screenshots/. Derived works (posters, box art, tiles)
+are distributed under the same license terms as required by ShareAlike.
+
+Changes: rasterized and composited onto solid backgrounds with "Vice#" title
+text (Pet Me 64 font) where noted.

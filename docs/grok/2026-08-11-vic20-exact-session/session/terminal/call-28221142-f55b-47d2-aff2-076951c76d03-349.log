@@ -1,0 +1,19 @@
+[feat/xbox-uwp-app 0c83627] fix(xbox): restore RomM Library/Lists/CSDb on home menu [PLAN-ROMM-001]
+ 3 files changed, 54 insertions(+)
+To https://github.com/sharpninja/vice-sharp.git
+   3ba3068..0c83627  feat/xbox-uwp-app -> feat/xbox-uwp-app
+04:04:21 [DBG] 
+04:04:21 [INF] Deployed Release-UWP build into the registered layout: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+04:04:21 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').PackageFamilyName""
+04:04:22 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""Start-Process 'shell:AppsFolder\sharpninja.ViceSharp.Xbox_wbxy578d68v3y!App'""
+04:04:22 [INF] Launched sharpninja.ViceSharp.Xbox_wbxy578d68v3y. Log: %LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+DeployXboxLocal    Succeeded       0:24
+───────────────────────────────────────
+Total                              0:24
+═══════════════════════════════════════
+​
+Build succeeded on 8/5/2026 4:04:22 AM. ＼（＾ᴗ＾）／

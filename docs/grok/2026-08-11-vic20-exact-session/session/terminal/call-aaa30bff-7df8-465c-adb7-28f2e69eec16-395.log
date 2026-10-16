@@ -1,0 +1,5 @@
+
+native\patches\vice-shim-runtime.patch:25:+   EXPORT_REGISTERS()/IMPORT_REGISTERS() are in scope here because CLK_INC()
+native\patches\vice-shim-runtime.patch:27:+#define CLK_INC()                                      \
+native\patches\vice-shim-runtime.patch:40: #define CLK_INC()                                  \
+

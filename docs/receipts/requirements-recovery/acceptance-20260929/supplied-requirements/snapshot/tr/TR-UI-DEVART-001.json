@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-UI-DEVART-001",
+  "title": "Device art SVG-to-XAML pipeline and resource-key contract",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Device art is authored as constrained SVGs in assets-src/device-art/ (viewBox required; svg/g/path/rect/circle/ellipse only; no transforms/gradients/filters/text; fills from 6 placeholder hexes) and shipped exclusively as one generated merged ResourceDictionary src/ViceSharp.Avalonia/Assets/DeviceArt/DeviceArt.axaml of DrawingImage resources under the DeviceArt.* key contract, produced by tools/generate-device-art.py (Python stdlib only, deterministic output, per-source sha256 sync comments over CRLF-normalized bytes). No runtime SVG dependency; normal builds and CI never invoke Python; generated output must stay hash-synced to its sources (test-enforced). Placeholder colors map to shared DeviceArt*Brush resources tuned to the dark palette.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

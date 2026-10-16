@@ -1,0 +1,31 @@
+╬═════════════
+​
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\avalonia\12.0.5\lib\net10.0\Avalonia.DesignerSupport.dll : warning IL2104: Assembly 'Avalonia.DesignerSupport' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\grpc.aspnetcore.server.reflection\2.80.0\lib\net10.0\Grpc.AspNetCore.Server.Reflection.dll : warning IL2104: Assembly 'Grpc.AspNetCore.Server.Reflection' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Components.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Components' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Components.Endpoints.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Components.Endpoints' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Components.Server.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Components.Server' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.Core.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.Core' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.DataAnnotations.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.DataAnnotations' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.Formatters.Xml.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.Formatters.Xml' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.Razor.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.Razor' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.RazorPages.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.RazorPages' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.TagHelpers.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.TagHelpers' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.ViewFeatures' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.JSInterop.dll : warning IL2104: Assembly 'Microsoft.JSInterop' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\sharpninja.avalonia.remotecontrol.runtime\0.7.4\lib\net10.0\Avalonia.RemoteControl.Runtime.dll : warning IL2104: Assembly 'Avalonia.RemoteControl.Runtime' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\yamldotnet\18.1.0\lib\net10.0\YamlDotNet.dll : warning IL2104: Assembly 'YamlDotNet' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:03
+PublishMsi         Succeeded       1:44
+InstallMsi         Succeeded       0:04
+───────────────────────────────────────
+Total                              1:51
+═══════════════════════════════════════
+​
+Build succeeded on 8/5/2026 11:15:29 AM. ＼（＾ᴗ＾）／
+EXIT: 0

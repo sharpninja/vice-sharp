@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-CHIPSTATE-001",
+  "title": "Per-tick chip-state capture tests",
+  "status": "completed",
+  "priority": "medium",
+  "body": null,
+  "condition": "Recorder tests with a fake stateful device verify per-tick chip-state capture and that Snapshot deep-copies (a later capture does not corrupt an earlier snapshot). VIC/SID/CIA/PLA CaptureState/DecodeState round-trip exercised end to end via GetChipStateAtTick.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "OnInstructionCompleted captures the device state into the tick",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Snapshot deep-copies chip state across ring rotation",
+      "isSatisfied": true
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-GAMEPAD-004",
+  "title": "Device add/remove drained inside Tick",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Device add/remove drained on the emulation thread inside Tick. Acceptance: verified by TEST-GAMEPAD-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

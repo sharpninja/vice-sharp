@@ -1,0 +1,28 @@
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.43
+=== focused ===
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+=== 2s+10s PAL ===
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:01:05.75]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [26 ms]
+   DIV first=5513 matchedCycles=5512 budget=2216810
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget, String modelSelector) in 
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 224
+   at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal() in 
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 54
+Failed!  - Failed:     1, Passed:     1, Skipped:     0, Total:     2, Duration: 1 m 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+=== 10s NTSC ===
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [3 s]
+   DIV first=521027 matchedCycles=521026 budget=10227270
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+DONE
+

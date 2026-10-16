@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SNP-001",
+  "title": "Save Complete Machine State to Snapshot",
+  "status": "pending",
+  "priority": "high",
+  "body": "The emulator shall capture the complete machine state at any point during execution and serialize it to a snapshot file. The snapshot includes CPU registers, all RAM, all I/O chip registers and internal state, VIC-II raster state, SID oscillator/envelope state, CIA timer state, and peripheral state.\n\n## Acceptance Criteria\n- CPU state: all registers (A, X, Y, SP, PC, P), interrupt pending flags, and pipeline phase.\n- Memory: complete 64KB RAM contents, Color RAM (1KB nybbles), and any expansion RAM.\n- VIC-II: all 47 registers, raster position, sprite state (DMA, counters, data buffers), display state, badline state.\n- SID: all registers, oscillator phase accumulators, envelope state (phase, counter, rate), filter state, noise LFSR state.\n- CIA1 and CIA2: all registers, timer counters and latches, TOD clock state, shift register state, interrupt flags.\n- 6510 I/O port: DDR value, port value, capacitive charge state.\n- Peripherals: disk drive state (if true drive emulation), tape position, cartridge banking state.\n- Snapshot files use a versioned binary format with integrity checksums.\n- The `ISnapshotManager.Save()` method returns a snapshot handle or writes to a specified path.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

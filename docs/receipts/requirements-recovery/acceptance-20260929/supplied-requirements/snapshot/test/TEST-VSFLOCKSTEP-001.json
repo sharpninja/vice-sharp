@@ -1,0 +1,16 @@
+{
+  "kind": "test",
+  "id": "TEST-VSFLOCKSTEP-001",
+  "title": "External x64sc .vsf full-resume acceptance",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "SnapshotResumeSpikeTests.ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot loads the supplied ready-c64sc-truedrive.vsf through the shim and asserts rc==0 and that the resumed MAINCPU registers equal the snapshot's MAINCPU module. Evidence: PASS (rc=0, snapshot_last_error=0, A=C2 X=02 Y=00 SP=FA PC=5769 both sides); ShimRoundTrip + SID parity 8/8; X64ScVariantLockstep 306 pass / 0 fail / 1 skip.",
+  "acceptanceCriteria": [
+    {
+      "id": "test-vsflockstep-001-ac-1",
+      "text": "dotnet test ...TestHarness --filter ExternalX64ScVsf_FullyResumes => passed; rc=0, err=0, MAINCPU regs match.",
+      "isSatisfied": false
+    }
+  ]
+}

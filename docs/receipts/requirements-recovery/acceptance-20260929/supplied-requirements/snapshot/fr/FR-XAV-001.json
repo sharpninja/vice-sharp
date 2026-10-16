@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XAV-001",
+  "title": "Headless stays silent + deterministic",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Headless/test stays silent and deterministic. Acceptance: XboxAudioBackendFactory.CreateDefault() returns null headless; SID built null-backend has IsAudioTimingSource==false and emits no samples; parity/pacing suite unchanged.\n\n## Acceptance Criteria\n- XboxAudioBackendFactory.CreateDefault() returns null headless; SID built null-backend has IsAudioTimingSource==false and emits no samples; parity/pacing suite unchanged.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

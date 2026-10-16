@@ -1,0 +1,30 @@
+05:29:49 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\x64\Release-UWP\net10.0\ViceSharp.Host.InProcess.dll
+05:29:49 [DBG]   ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\x64\Release-UWP\net10.0\ViceSharp.Xbox.Input.dll
+05:29:49 [DBG]   ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\x64\Release-UWP\net10.0\ViceSharp.Xbox.ViewModels.dll
+05:29:49 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\x64\Release-UWP\net10.0\ViceSharp.Library.ViewModels.dll
+05:29:49 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\x64\Release-UWP\net10.0\ViceSharp.RomM.dll
+05:30:01 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(15,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+05:30:01 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(16,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+05:30:01 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(17,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+05:30:01 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(18,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+05:30:01 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(19,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+05:30:01 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(20,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+05:30:01 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\HomePage.xaml(33,21): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+05:30:03 [DBG]   ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\ViceSharp.Xbox.dll
+05:30:04 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').InstallLocation""
+05:30:05 [INF] > C:\Windows\System32\Robocopy.exe "F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64" "C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout" /S /XF AppxManifest.xml /XD AppX /NJH /NJS /NDL /NFL /NP
+05:30:05 [DBG] 
+05:30:05 [INF] Deployed Release-UWP build into the registered layout: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+05:30:05 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').PackageFamilyName""
+05:30:05 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""Start-Process 'shell:AppsFolder\sharpninja.ViceSharp.Xbox_wbxy578d68v3y!App'""
+05:30:06 [INF] Launched sharpninja.ViceSharp.Xbox_wbxy578d68v3y. Log: %LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+DeployXboxLocal    Succeeded       0:20
+───────────────────────────────────────
+Total                              0:20
+═══════════════════════════════════════
+​
+Build succeeded on 8/5/2026 5:30:06 AM. ＼（＾ᴗ＾）／

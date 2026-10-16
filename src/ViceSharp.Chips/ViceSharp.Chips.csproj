@@ -9,6 +9,10 @@
          (per-voice noise shift registers, envelope pipelines, VIC fetch
          counters) directly instead of only through register readback. -->
     <InternalsVisibleTo Include="ViceSharp.TestHarness" />
+    <!-- FIX-XSNAPWARP-001: the in-process host's machine snapshot stager drives
+         the same internal chip injectors the VSF lockstep rig proved
+         (Mos6502.InjectSnapshotResumeState, Mos6526.InjectSnapshotState). -->
+    <InternalsVisibleTo Include="ViceSharp.Host.InProcess" />
   </ItemGroup>
 
   <PropertyGroup>

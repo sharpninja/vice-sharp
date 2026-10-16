@@ -2,6 +2,11 @@ namespace ViceSharp.RomFetch;
 
 public static class ViceDataPathResolver
 {
+    /// <summary>Writable per-user cache for ROMs acquired by the desktop host.</summary>
+    public static string DefaultDownloadDirectory => Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData,
+            Environment.SpecialFolderOption.DoNotVerify), "ViceSharp", "roms");
+
     private static readonly string[] EnvironmentVariableNames =
     [
         "VICESHARP_ROM_PATH",
@@ -82,7 +87,12 @@ public static class ViceDataPathResolver
                 yield return candidate;
         }
 
-        yield break;
+        // FR-CFG-002: downloaded ROMs are a fallback; explicit VICE installations win.
+        yield return DefaultDownloadDirectory;
+
+        // FR-INP-006: desktop installations ship GPL keymaps next to the app.
+        // Keep packaged resources last so configured and per-user data take priority.
+        yield return Path.Combine(AppContext.BaseDirectory, "data");
     }
 
     private static IEnumerable<string> FindExecutablesOnPath(string fileName)

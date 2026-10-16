@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UIMENUBAR-001",
+  "title": "VICE-style menu bar",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "VM: menu commands invoke the existing actions/host services (attach/eject, reset, snapshot, warp, true-drive toggle, swap joysticks). App-launch: menu structure matches the plan and commands work.",
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSBTN-008",
+  "title": "Bindings remappable + persisted + reset",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Bindings remappable and persisted with reset-to-defaults. Acceptance: Save then Load round-trips an edited profile byte-for-byte; ResetToDefaults yields Default.\n\n## Acceptance Criteria\n- Save then Load round-trips an edited profile byte-for-byte; ResetToDefaults yields Default.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

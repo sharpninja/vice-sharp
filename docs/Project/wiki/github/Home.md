@@ -10,8 +10,10 @@
 - Getting Started
   - [Project Overview](Project-Overview)
   - [User Guide](User-Guide)
+  - [Flash Cart Image Builder](Flash-Cart-Builder)
   - [Migrating from Classic VICE](VICE-Migration)
   - [ROM Setup and Legal Sources](ROM-Setup)
+  - [Privacy Policy](Privacy-Policy)
 - Architecture
   - [Architecture](Architecture)
   - [Public API Reference](Public-API)
@@ -19,6 +21,7 @@
   - [Video and Audio Decoupling](Video-Audio-Decoupling)
   - [State Window (Design Proposal)](State-Window)
   - [Iteration Roadmap](Iteration-Roadmap)
+  - [VIC-20 vs VICE Implementation Audit](VIC20-vs-VICE-Audit)
   - [AI Code and Project Review (aiUnit)](AI-Review)
   - [Registry of Lore](Registry-of-Lore)
 - Requirements
@@ -29,6 +32,10 @@
   - [x64sc Requirement Coverage](X64sc-Requirement-Coverage)
   - [Classic VICE Edge-Case TR Backfill](Classic-VICE-Edge-Case-TR-Backfill)
   - [VICE Source Manifest](VICE-Source-Manifest)
+  - [VIC-20 Functional Requirements](FR-VIC20)
+  - [VIC-20 Technical Requirements](TR-VIC20)
+  - [RomM Security Requirements](TR-RomM-Security)
+  - [Host-owned PRG Memory Load](TR-Host-Prg)
 - Reference
   - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
   - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)

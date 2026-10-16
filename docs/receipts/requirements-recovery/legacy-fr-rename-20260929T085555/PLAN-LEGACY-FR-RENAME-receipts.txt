@@ -1,0 +1,58 @@
+﻿================================================================================
+PLAN-LEGACY-FR-RENAME EXECUTION RECEIPT - vice-sharp requirements recovery
+Generated: 2026-09-29 08:56:40 CT
+Machine: PAYTON-LEGION2
+McpServer: 1.0.0+deda7d6a (Healthy) live - NO UpdateService / redeploy used
+Workspace: F:\GitHub\vice-sharp
+Plan commit (this session): 6785f33c8d7fedb020cad9d67b77cfec1bc77f24 (PLAN only; NO push)
+Exec HEAD at receipt write: 6785f33c8d7fedb020cad9d67b77cfec1bc77f24
+Run dir: docs/receipts/requirements-recovery/legacy-fr-rename-20260929T085555/
+================================================================================
+
+APPROVAL / APPROACH
+  Operator authorized create + remap + delete for the four legacy FR ids.
+  Live CRUD + mapping API only (POST/PUT/DELETE /mcpserver/requirements/...).
+  Auth: X-Api-Key + X-Workspace-Path from AGENTS-README-FIRST.yaml marker.
+  Title/body/status/priority/tags/AC copied verbatim from live GET snapshots.
+
+STEP 0 PRECHECK
+  Pre-counts: FR=232 TR=138 TEST=140 MAP=231
+  All 4 legacy FRs readable; all 4 proposed FR-* ids 404 (not live).
+  All 4 legacy mapping rows present (including RUNTIME-TAPE-002).
+  Gate: anyNewAlreadyLive=false anyLegacyMissing=false anyLegacyUnmapped=false
+
+RENAMES (4/4 SUCCESS)
+  ARCH-TRUEDRIVE-1541-002  -> FR-ARCH-TRUEDRIVE-1541-002  CREATE_OK MAP_OK DELETE_OK MUTATION_OK
+  BACKFILL-MEDIA-001       -> FR-BACKFILL-MEDIA-001       CREATE_OK MAP_OK DELETE_OK MUTATION_OK
+  BACKFILL-VIDEO-001       -> FR-BACKFILL-VIDEO-001       CREATE_OK MAP_OK DELETE_OK MUTATION_OK
+  RUNTIME-TAPE-002         -> FR-RUNTIME-TAPE-002         CREATE_OK MAP_OK DELETE_OK MUTATION_OK
+
+MAPPING SETS (copied verbatim)
+  FR-ARCH-TRUEDRIVE-1541-002: TR-DRV-EDGE-001, TR-IEC-EDGE-001 | TEST-DRV-MOTOR-001, TEST-IEC-TIMING-001
+  FR-BACKFILL-MEDIA-001: TR-DRV-EDGE-001, TR-TAP-EDGE-001, TR-TAPE-EDGE-001 | TEST-DRV-MOTOR-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001
+  FR-BACKFILL-VIDEO-001: 7 TRs (from snapshot) | TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001
+  FR-RUNTIME-TAPE-002: 2 TRs / 2 TESTs (from Step 0 live extract)
+
+DELETE ORDER
+  Per FR: DELETE /mapping/{legacy} (200) then DELETE /fr/{legacy} (ok); legacy GET=404; new GET=200; mapping has new id only.
+
+EFFECTIVE COUNTS AFTER
+  FR=232 TR=138 TEST=140 MAP=231  (net 0; matchExpected=true)
+  Mutation spot-check PUT /fr on each new id: 4/4 MUTATION_OK (unblocks permanent-skip-mutation)
+
+GIT
+  Plan committed earlier: 6785f33c8d7fedb020cad9d67b77cfec1bc77f24 on main, NO push.
+  Post-exec receipts LEFT UNCOMMITTED (operator pause gate).
+  Dirty expected under:
+    docs/receipts/requirements-recovery/legacy-fr-rename-20260929T085555/
+    docs/receipts/requirements-recovery/PLAN-LEGACY-FR-RENAME-receipts.txt
+
+ARTIFACTS
+  snapshot/{legacy}.json, snapshot/mappings-legacy.json, snapshot/mappings-full.json
+  precheck.json, count-probe.json, exec-log.txt
+  create-results.json, mapping-migrate-results.json, delete-results.json
+  verify-rows.json, mutation-checks.json, mappings-new-after.json
+  effective-counts-after.json
+  PLAN-LEGACY-FR-RENAME-receipts.txt (this file)
+
+================================================================================

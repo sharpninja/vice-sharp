@@ -1,0 +1,24 @@
+{
+  "scope": "Slice0 requirements preparation only",
+  "files": [
+    "docs/plans/PLAN-GROK-COMPLETION-20260906.md",
+    "HANDOFF.md",
+    "docs/requirements/functional/FR-Grok-Completion.md",
+    "docs/requirements/technical/TR-Grok-Completion.md",
+    "docs/requirements/test/TEST-Requirements.md",
+    "docs/requirements/traceability/Grok-Completion-AC-Matrix-2026-09-06.md",
+    "validation-output/codex-grok-completion-20260906/requirements-readback.json",
+    "validation-output/codex-grok-completion-20260906/requirements-traceability-initial.txt",
+    "validation-output/codex-grok-completion-20260906/sol-slice0-inventory.md",
+    "validation-output/codex-grok-completion-20260906/worktree-requirements-phase.json"
+  ],
+  "preExistingDirtyFilesChanged": [
+    "HANDOFF.md",
+    "docs/requirements/test/TEST-Requirements.md"
+  ],
+  "rules": [
+    "Preserve preexisting content and stage only reviewed changes after final gates.",
+    "Add later approved-slice files explicitly before final commit; this initial manifest is not the final work inventory.",
+    "No generated wiki/export file is implicitly owned by this manifest."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-UI-COREBOUNDARY-001",
+  "title": "Avalonia flash-cart builder abstraction boundary",
+  "status": "pending",
+  "priority": "high",
+  "body": "Own flash-cart builder interfaces in Abstractions and supply a Host composition factory/private adapter; Avalonia C# and AXAML do not depend on Core flash-cart types.\nPreserve existing Core/Xbox public APIs and observable collection/property-change behavior.\n\n## Acceptance Criteria\n- **ac-01**: Own flash-cart builder interfaces in Abstractions and supply a Host composition factory/private adapter; Avalonia C# and AXAML do not depend on Core flash-cart types.\n- **ac-02**: Preserve existing Core/Xbox public APIs and observable collection/property-change behavior.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Own flash-cart builder interfaces in Abstractions and supply a Host composition factory/private adapter; Avalonia C# and AXAML do not depend on Core flash-cart types.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Preserve existing Core/Xbox public APIs and observable collection/property-change behavior.",
+      "isSatisfied": false
+    }
+  ]
+}

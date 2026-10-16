@@ -1,0 +1,30 @@
+
+> C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:42:## 
+Task checklist
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:43:- [x] 
+Map remaining Mos6561/VIC-20 gaps to VICE symbols (`vic-cycle`, `vic-draw`, `vic-timing`, `vic-mem`, `vic20mem`, 
+via1/via2, colorram); list invent-vs-port items.
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:44:- [x] 
+Align VIC-I frame geometry, pixel width, color base, draw rules, and palette with VICE sources on the shipped chip; 
+delete invented constants that disagree.
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:45:- [x] 
+Align dual-VIA board + RAM/color open-bus with VICE wiring; keep Via6522 machine-agnostic.
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:46:- [x] 
+Wire host present aspect for VIC-I PAR (VICE formulas) when session is VIC-20.
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:47:- [x] 
+Extend/fix tests that drive shipped types for geometry, palette, color base, double-width bits, PAR, BLK/open-bus, VIA 
+roles; run and capture under `{SCRATCH}`.
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:48:- [x] 
+Run PAL and NTSC frame-geometry checks on shipped create path; capture logs; fix until green.
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:49:
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:50:## 
+Risks / Contradictions
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:51:- 
+"Exact same logic as all of xvic" is multi-module and multi-week; this goal gates on the defining machine identity 
+(VIC-I present rules, memory/color bus, VIA board) verifiable by tests. Sound, full carts, tape, IEEE remain deferred 
+so the gate is finishable.
+  C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\goal\plan.md:52:- Full 
+cycle-accurate line draw parity may exceed one implementation pass; if so, shipped present path must still apply VICE 
+tables only (no invented pixel shape/color/base), and residual cycle-draw gap must be explicit in Non-goals/handoff, 
+not silent.
+

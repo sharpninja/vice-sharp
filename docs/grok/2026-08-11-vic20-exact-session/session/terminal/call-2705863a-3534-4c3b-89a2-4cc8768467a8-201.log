@@ -1,0 +1,52 @@
+
+    Id StartTime             CPU
+    -- ---------             ---
+  9196 8/5/2026 5:59:09 AM 37.17
+ 11212 8/5/2026 5:59:09 AM 36.19
+ 16644 8/5/2026 6:34:13 AM  6.91
+ 20412 8/5/2026 5:04:24 AM 37.97
+ 22708 8/5/2026 5:34:48 AM 24.92
+ 24272 8/5/2026 6:34:13 AM  5.58
+ 27988 8/5/2026 5:59:09 AM 19.48
+ 32376 8/5/2026 6:34:13 AM  4.73
+ 36632 8/5/2026 6:34:13 AM  5.34
+ 37508 8/5/2026 5:04:26 AM 25.91
+ 39584 8/5/2026 6:34:13 AM  5.53
+ 40000 8/5/2026 6:34:13 AM  5.31
+ 40340 8/5/2026 5:59:09 AM 16.67
+ 40908 8/5/2026 6:34:13 AM  6.30
+ 46612 8/5/2026 5:59:09 AM 17.23
+ 50772 8/5/2026 6:34:13 AM  5.95
+ 50792 8/5/2026 6:34:15 AM  4.97
+ 53984 8/5/2026 6:34:13 AM  9.20
+ 54176 8/5/2026 6:34:13 AM  6.77
+ 54592 8/5/2026 5:59:09 AM 16.48
+ 54688 8/5/2026 6:34:12 AM 13.20
+ 59824 8/5/2026 6:34:13 AM  5.70
+ 60408 8/5/2026 6:34:13 AM  9.05
+ 65168 8/5/2026 6:34:25 AM  0.80
+ 70676 8/5/2026 5:04:26 AM 19.55
+ 73648 8/5/2026 6:34:13 AM  6.50
+ 84412 8/5/2026 5:59:09 AM  8.91
+ 89028 8/5/2026 6:34:13 AM  5.73
+ 91696 8/5/2026 5:04:26 AM 12.66
+ 96324 8/5/2026 5:59:09 AM  8.05
+ 96668 8/5/2026 5:34:48 AM 11.95
+112860 8/5/2026 5:59:09 AM  8.19
+
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.55
+BUILD 0

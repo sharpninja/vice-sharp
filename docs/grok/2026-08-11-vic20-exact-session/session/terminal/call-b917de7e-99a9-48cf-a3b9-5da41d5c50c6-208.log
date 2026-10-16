@@ -1,0 +1,8 @@
+
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:24:    [Fact(Explicit = true)]
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:55:    [Fact(Explicit = true)]
+---
+docs\2s-delay1-2026-08-06.log:6:   DIV first=577682 matchedCycles=577681 budget=2216810
+docs\2s-delay1-2026-08-06.log:20:irqdiag: nLastOp=0x85 nDelays=False nPend=0x2 nIrqClk=577682 nClk=577688 
+mDelays=False mBound=False mIrqSeq=0
+

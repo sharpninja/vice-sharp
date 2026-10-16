@@ -1,0 +1,9 @@
+died: Unknown option '-VICFilter'.
+Error parsing command-line options, bailing out. For help use '-help'
+
+alive=True hwnd=1445110
+window 610 x 569
+PrintWindow=True
+maxLum=255 at 466,319 color=255,255,255
+lum buckets dark=717 mid-dark=1195 mid=11394 bright=61919
+file=75265

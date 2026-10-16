@@ -1,0 +1,6 @@
+ClientApiToken
+Basic
+OAuthPassword
+has Client
+has Authorization
+has X-

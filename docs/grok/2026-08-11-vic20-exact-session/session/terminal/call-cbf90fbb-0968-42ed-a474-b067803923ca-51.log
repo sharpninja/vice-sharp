@@ -1,0 +1,7 @@
+palette_entries=16 match=True
+status_Exact = 20
+status_Partial = 39
+status_Stub = 6
+status_Missing = 29
+status_Invented = 0
+audit_bytes=15671

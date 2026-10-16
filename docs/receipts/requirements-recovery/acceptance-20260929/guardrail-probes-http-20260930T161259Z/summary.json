@@ -1,0 +1,51 @@
+{
+  "generatedUtc": "2026-09-30T16:13:00.6352991Z",
+  "directory": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\acceptance-20260929\\guardrail-probes-http-20260930T161259Z",
+  "method": "POST /mcpserver/requirements/recovery/dry-run",
+  "beforeGetStatus": 200,
+  "afterGetStatus": 200,
+  "descriptionEqual": true,
+  "descriptionLength": 1105,
+  "probes": [
+    {
+      "Name": "empty-body",
+      "Status": 400,
+      "Code": "validation_error",
+      "Retryable": "False",
+      "Message": "Requirement 'FR-GUARD-EMPTY-001' requires body."
+    },
+    {
+      "Name": "placeholder-body",
+      "Status": 400,
+      "Code": "validation_error",
+      "Retryable": "False",
+      "Message": "Requirement 'FR-GUARD-PLACEHOLDER-001' body is a placeholder."
+    },
+    {
+      "Name": "malformed-id",
+      "Status": 400,
+      "Code": "validation_error",
+      "Retryable": "False",
+      "Message": "Requirement id 'NOT-AN-ID' is not valid for kind 'fr'."
+    },
+    {
+      "Name": "type-prefix",
+      "Status": 400,
+      "Code": "validation_error",
+      "Retryable": "False",
+      "Message": "Requirement id 'TEST-GUARD-TYPE-001' is not valid for kind 'tr'."
+    },
+    {
+      "Name": "ac-removal",
+      "Status": 400,
+      "Code": "validation_error",
+      "Retryable": "False",
+      "Message": "Requirement 'FR-VIC-001' removes acceptance criteria."
+    }
+  ],
+  "bodyLength": 1105,
+  "bodySha256": "f2c678e7e25411e612c37686ff65fe489553ec13300297a68163eb54faf97b7e",
+  "acceptanceHeadingPresent": true,
+  "acceptanceCriteriaCount": 8,
+  "readbackFile": "FR-VIC-001-after-get.json"
+}

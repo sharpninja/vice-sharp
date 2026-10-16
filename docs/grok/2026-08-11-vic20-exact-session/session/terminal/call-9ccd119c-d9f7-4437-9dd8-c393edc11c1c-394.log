@@ -1,0 +1,12 @@
+
+native\vice\vice\src\mainviccpu.c:626:                CLK_INC();                                            \
+native\vice\vice\src\mainc64cpu.c:59:#ifdef VICE_SHIM_HOSTED
+native\vice\vice\src\mainc64cpu.c:759:#ifdef VICE_SHIM_HOSTED
+native\vice\vice\src\mainc64cpu.c:767:    if (vice_shim_take_bootstrap_maincpu()) {
+native\vice\vice\src\mainc64cpu.c:833:                CLK_INC();                                            \
+Select-String: 
+
+Line |
+   5 |  . vice\src" -Pattern "vice_shim_cycle_checkpoint|CLK_INC" -glob "*.h" | .
+     |                                                            ~~~~~
+     | A parameter cannot be found that matches parameter name 'glob'.

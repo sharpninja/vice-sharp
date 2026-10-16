@@ -1,0 +1,7 @@
+True
+True
+src\ViceSharp.Protocol\SettingsOptionCatalog.cs:225:    public static string ToVic20MemoryId(string preset) => preset switch
+src\ViceSharp.Protocol\ProtocolContracts.cs:237:    string Vic20MemorySpec = "");
+src\ViceSharp.Protocol\ProtocolContracts.cs:425:    string Vic20MemorySpec = "");
+src\ViceSharp.Protocol\ProtocolContracts.cs:451:    string? Vic20MemorySpec = null);
+SCRATCH=C:\Users\kingd\AppData\Local\Temp\grok-goal-c660a9d0ca87\implementer

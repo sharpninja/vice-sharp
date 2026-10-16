@@ -1,0 +1,42 @@
+[08:47:06] CREATE_OK TR-AOT-001
+[08:47:07] CREATE_OK TR-BUILD-001
+[08:47:07] CREATE_OK TR-LIB-001
+[08:47:07] CREATE_OK TR-MEDIA-001
+[08:47:07] CREATE_OK TR-PLAT-001
+[08:47:07] CREATE_OK TR-PUBSUB-001
+[08:47:07] CREATE_OK TR-SIMD-001
+[08:47:07] CREATE_OK TR-STATE-001
+[08:47:28] MAP applied ok=140 fail=0 total=140
+[08:47:28] MAP live count now=231
+[08:47:48] FR_UPDATE_FAIL ARCH-TRUEDRIVE-1541-002 : Response status code does not indicate success: 400 (Bad Request). 
+{
+  "error": "Requirement ID \u0027ARCH-TRUEDRIVE-1541-002\u0027 must match the FR identifier shape. (Parameter \u0027Id\u0027)"
+}
+[08:47:48] FR_UPDATE_FAIL BACKFILL-MEDIA-001 : Response status code does not indicate success: 400 (Bad Request). 
+{
+  "error": "Requirement ID \u0027BACKFILL-MEDIA-001\u0027 must match the FR identifier shape. (Parameter \u0027Id\u0027)"
+}
+[08:47:48] FR_UPDATE_FAIL BACKFILL-VIDEO-001 : Response status code does not indicate success: 400 (Bad Request). 
+{
+  "error": "Requirement ID \u0027BACKFILL-VIDEO-001\u0027 must match the FR identifier shape. (Parameter \u0027Id\u0027)"
+}
+[08:47:48] FR_UPDATE_FAIL RUNTIME-TAPE-002 : Response status code does not indicate success: 400 (Bad Request). 
+{
+  "error": "Requirement ID \u0027RUNTIME-TAPE-002\u0027 must match the FR identifier shape. (Parameter \u0027Id\u0027)"
+}
+[08:47:48] TR_UPDATE_OK TR-ALLOC-001
+[08:47:49] TR_UPDATE_OK TR-CYCLE-001
+[08:47:49] TR_UPDATE_OK TR-DET-001
+[08:47:49] TR_UPDATE_OK TR-MVVM-001
+[08:47:49] MISSING_TB TR-ROMM-SEC-001 titleLen=72 bodyLen=0 beforeTitleLen=32 beforeBodyLen=383
+[08:47:49] MISSING_TB_FIXED TR-ROMM-SEC-001
+[08:47:49] MISSING_TB TR-VIC20-FLASH-001 titleLen=62 bodyLen=0 beforeTitleLen=48 beforeBodyLen=295
+[08:47:49] MISSING_TB_FIXED TR-VIC20-FLASH-001
+[08:47:49] MISSING_TB TR-VIC20-PIXEL-001 titleLen=42 bodyLen=0 beforeTitleLen=42 beforeBodyLen=378
+[08:47:49] MISSING_TB_FIXED TR-VIC20-PIXEL-001
+[08:47:49] MISSING_TB TR-VIC20-SOUND-001 titleLen=85 bodyLen=0 beforeTitleLen=40 beforeBodyLen=239
+[08:47:50] MISSING_TB_FIXED TR-VIC20-SOUND-001
+[08:47:50] DEL_TR_OK TEST-DRV-001
+[08:47:50] DEL_TR_OK TEST-UI-001
+[08:47:50] DEL_TR_OK TEST-VIC-001
+[08:47:50] ID chase rows=23 ok=19 fail=4 perm=0

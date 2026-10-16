@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UIPERIPHERAL-001",
+  "title": "Reusable peripheral card UserControl",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "VM: AttachSlotViewModel exposes status/RO/activity/TrueDrive/SupportsTrueDrive and Attach/Eject route to host. App-launch: Drive8/Drive9/Tape/Cartridge all render via the one PeripheralCardView with correct per-slot controls.",
+  "acceptanceCriteria": []
+}

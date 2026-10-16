@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-TESTGATE-010",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console device checklists. Acceptance: device slices marked onConsole; checklists recorded.",
+  "acceptanceCriteria": []
+}

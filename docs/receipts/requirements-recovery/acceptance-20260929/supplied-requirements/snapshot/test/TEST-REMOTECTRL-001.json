@@ -1,0 +1,31 @@
+{
+  "kind": "test",
+  "id": "TEST-REMOTECTRL-001",
+  "title": "RemoteControl server gating + root provider",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Tests prove the RemoteControl integration is off by default (no host started when VICESHARP_REMOTECONTROL_ENABLE is unset) and fails closed when enabled without a token; and that, when enabled with a token, the configured IRemoteControlRootProvider returns the live MainWindow. App-launch gate: connect the RemoteControl client tool and confirm the visual tree is readable.\n\n## Acceptance Criteria\n- **ac-01**: Test unset enable switch and enabled-without-token startup; both expose no usable control host.\n- **ac-02**: Launch the owned app with explicit valid enable/token settings; read capabilities and the live MainWindow tree over gRPC.\n- **ac-03**: Verify missing/wrong bearer token rejection, loopback policy and separate denied/enabled action/frame permissions.\n- **ac-04**: Retain the two fresh final-binary live passes and real gRPC CLI contract evidence required by TEST-REMOTECTRL-CLI-001 and TEST-COMPLETION-001.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Test unset enable switch and enabled-without-token startup; both expose no usable control host.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Launch the owned app with explicit valid enable/token settings; read capabilities and the live MainWindow tree over gRPC.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Verify missing/wrong bearer token rejection, loopback policy and separate denied/enabled action/frame permissions.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Retain the two fresh final-binary live passes and real gRPC CLI contract evidence required by TEST-REMOTECTRL-CLI-001 and TEST-COMPLETION-001.",
+      "isSatisfied": false
+    }
+  ]
+}

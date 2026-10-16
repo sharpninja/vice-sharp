@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-IECELEC-001",
+  "title": "Faithful IEC serial electrical model with native parity",
+  "status": "pending",
+  "priority": "high",
+  "body": "CIA2 reads the live open-collector IEC bus through the C64 inverting buffers; idle DATA-low is supplied by the true-drive 1541 holding DATA. C64GS (no IEC) keeps disconnected->low. Idle reads match native ($47 normal C64 / $07 C64GS) and native CIA2-IO lockstep stays green.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

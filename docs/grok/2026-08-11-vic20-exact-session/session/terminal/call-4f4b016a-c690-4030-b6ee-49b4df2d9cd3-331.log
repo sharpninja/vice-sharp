@@ -1,0 +1,44 @@
+=== Logging started: 8/11/2026  16:27:30 ===
+Action start 16:27:30: INSTALL.
+Action start 16:27:30: FindRelatedProducts.
+Action ended 16:27:30: FindRelatedProducts. Return value 1.
+Action start 16:27:30: LaunchConditions.
+MSI (s) (3C:D0) [16:27:30:591]: Product: ViceSharp -- A newer version of ViceSharp is already installed.
+
+A newer version of ViceSharp is already installed.
+Action ended 16:27:30: LaunchConditions. Return value 3.
+Action ended 16:27:30: INSTALL. Return value 3.
+Property(S): ALLUSERS = 1
+Property(S): ARPPRODUCTICON = ProductIcon.ico
+Property(S): Manufacturer = sharpninja
+Property(S): ProductCode = {C75D1246-F20C-4090-952E-C9B45A23AA94}
+Property(S): ProductLanguage = 0
+Property(S): ProductName = ViceSharp
+Property(S): ProductVersion = 1.2.13
+Property(S): UpgradeCode = {6F8B1C4E-7A2D-4E5B-9F3A-1C8E5B7D9F2A}
+Property(S): SecureCustomProperties = WIX_DOWNGRADE_DETECTED;WIX_UPGRADE_DETECTED
+Property(S): WIX_DOWNGRADE_DETECTED = {E09486F5-A078-4EFB-9D6B-A937F07A9F51}
+Property(S): ProgramFiles64Folder = C:\Program Files\
+Property(S): ProgramMenuFolder = C:\ProgramData\Microsoft\Windows\Start Menu\Programs\
+Property(S): MsiLogFileLocation = F:\GitHub\vice-sharp\artifacts\installer\install-redeploy.log
+Property(S): PackageCode = {2860998B-6E8C-4F54-8279-040709AD7D98}
+Property(S): ProductState = -1
+Property(S): PackagecodeChanging = 1
+Property(S): REBOOT = ReallySuppress
+Property(S): CURRENTDIRECTORY = F:\GitHub\vice-sharp
+Property(S): CLIENTUILEVEL = 3
+Property(S): CLIENTPROCESSID = 16460
+
+artifacts\installer\install-redeploy.log:5:Action start 16:27:30: LaunchConditions.
+artifacts\installer\install-redeploy.log:6:MSI (s) (3C:D0) [16:27:30:591]: Product: ViceSharp -- A newer version of 
+ViceSharp is already installed.
+artifacts\installer\install-redeploy.log:8:A newer version of ViceSharp is already installed.
+artifacts\installer\install-redeploy.log:9:Action ended 16:27:30: LaunchConditions. Return value 3.
+artifacts\installer\install-redeploy.log:17:Property(S): ProductVersion = 1.2.13
+artifacts\installer\install-redeploy.log:35:Property(S): VersionNT = 603
+artifacts\installer\install-redeploy.log:36:Property(S): VersionNT64 = 603
+artifacts\installer\install-redeploy.log:103:MSI (s) (3C:D0) [16:27:30:613]: Windows Installer installed the product. 
+Product Name: ViceSharp. Product Version: 1.2.13. Product Language: 0. Manufacturer: sharpninja. Installation success 
+or error status: 1603.
+F:\GitHub\vice-sharp\installer\ViceSharp.wxs
+

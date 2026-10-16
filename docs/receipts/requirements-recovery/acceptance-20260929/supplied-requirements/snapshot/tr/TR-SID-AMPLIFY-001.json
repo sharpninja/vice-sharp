@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SID-AMPLIFY-001",
+  "title": "SID output amplify/clip + external-filter enable (float host seam)",
+  "status": "pending",
+  "priority": "high",
+  "body": "PLAN-VICEPARITY-001 S12 aligns the managed SID audio-output stage with reSID. GenerateSample now applies reSID amplify(input, scaleFactor) = clip((scaleFactor*input)/2) (sid.cc:54-57) on the pre-amplify external-filter output SID::output() (=extfilt.output(), sid.h:190-194), then scales by 1/2^15 for the float [-1,1] host contract - lossless (every short is exact in float, /2^15 is exact) and C# int division truncates toward zero exactly like C++. The 6581 amplify scaleFactor is 3 and the 8580 is 5 (set_chip_model, sid.cc:86,121), so the 6581 mixes 1.5x louder, matching VICE. ClipPcm16 saturates to signed 16-bit [-32768,32767]. The external filter gained an enable flag (default true, mirroring VICE resid.cc:200 enable_external_filter(true)); the disabled branch passes through (Vlp=Vi<<11, Vhp=0, extfilt.h:100-105) and exists only to lock FR-SID-OUTPUT AC-03 (VICE always enables). CaptureAudioTap is unchanged (the amplify is on the float host path, not the capture tee). Verified: OUTPUT-01 composite lockstep vs the c64 oracle (SID::output() bit-exact + amplified-float identity); SidDigiPlaybackTests (range/relative assertions) survive the 1.5x change; LockstepValidation + audio suites + Category=Determinism green.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

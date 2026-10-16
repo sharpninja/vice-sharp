@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXGPL-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "License/vkm/no-ROM/source-URL staging. Acceptance: Licenses/ contents + vkm present + no ROM *.bin + compiled SourceUrl.",
+  "acceptanceCriteria": []
+}

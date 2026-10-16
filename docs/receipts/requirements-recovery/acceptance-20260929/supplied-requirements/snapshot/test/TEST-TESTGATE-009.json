@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-TESTGATE-009",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "DesktopRegressionGuard. Acceptance: Determinism pass-count == baseline; AvaloniaBoundaryTests green; AOT 0 warnings.",
+  "acceptanceCriteria": []
+}

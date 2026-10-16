@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-VIC20-FLASH-001",
+  "title": "VIC-20 flash timing and expansion write-back regression suite",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "`Flash040EraseLatencyTests` verifies the VICE TYPE_B sector timeout, sector/chip cycle budgets, busy status, cancel, suspend, and resume behavior. `Vic20ExpansionCartTests`, `UltimemParityTests`, `MegaCartParityTests`, and `MediaServiceHostVic20ExpansionTests` verify mapping, dirty-state separation, and atomic detach persistence.",
+  "acceptanceCriteria": []
+}

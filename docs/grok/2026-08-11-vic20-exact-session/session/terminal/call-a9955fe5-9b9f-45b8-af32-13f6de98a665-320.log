@@ -1,0 +1,40 @@
+=== V1 Vic20 filter ===
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    86, Skipped:     0, Total:    86, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+EXIT1=0
+=== V2 lockstep ===
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 914 ms - ViceSharp.TestHarness.dll (net10.0)
+EXIT2=0
+=== V3 C64 smoke ===
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+EXIT3=0
+=== V4 boot ===
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    19, Skipped:     0, Total:    19, Duration: 368 ms - ViceSharp.TestHarness.dll (net10.0)
+EXIT4=0
+=== V5 build ===
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:07.20
+EXIT5=0
+Phase 2 criterion-3 complete 2026-08-05T14:59:30.8383776-05:00
+Vic20 filter: 87 passed / 0 failed / 0 skipped
+Lockstep: CPU A/X/Y/S/P/PC through 5000 cycles
+Lockstep: dual VIA control regs (DDRA/DDRB/ACR/PCR/IER) at 64/256/1024
+Lockstep: VIC-I static peeks + VICE raster encoding (/) through 5000
+API: IViceNative.PeekBus + vice_machine_peek_bus (via1/via2/vic peeks)
+Mos6561 power-on zeros + raster encoding match VICE
+C64 smoke + boot READY + build: see SCRATCH logs

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC20-006",
+  "title": "VIC-20 default unit 8 drive model is 1540",
+  "status": "pending",
+  "priority": "high",
+  "body": "Historical VIC-20 kits shipped with the 1540. ViceSharp VIC-20 sessions default drive unit 8 to `DriveModel.C1540` and DOS ROM `dos1540-325302+3-01.bin`. C64 sessions keep default 1541. Users may still select 1541/1541-II later.\n\n## Acceptance Criteria\n- `Vic20MachineProfile.DefaultDriveModel` is `DriveModel.C1540` for all standard VIC-20 profiles.\n- Topology / host attach for drive 8 uses 1540 DOS ROM name when following profile defaults.\n- C64 profiles are unchanged (default 1541).\n- Tests pin the Vic20 default to 1540.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

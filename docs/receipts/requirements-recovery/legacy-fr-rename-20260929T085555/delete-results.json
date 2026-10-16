@@ -1,0 +1,30 @@
+﻿[
+    {
+        "legacy":  "ARCH-TRUEDRIVE-1541-002",
+        "neu":  "FR-ARCH-TRUEDRIVE-1541-002",
+        "status":  "DELETE_OK",
+        "delMapStatus":  200,
+        "delFrStatus":  200
+    },
+    {
+        "legacy":  "BACKFILL-MEDIA-001",
+        "neu":  "FR-BACKFILL-MEDIA-001",
+        "status":  "DELETE_OK",
+        "delMapStatus":  200,
+        "delFrStatus":  200
+    },
+    {
+        "legacy":  "BACKFILL-VIDEO-001",
+        "neu":  "FR-BACKFILL-VIDEO-001",
+        "status":  "DELETE_OK",
+        "delMapStatus":  200,
+        "delFrStatus":  200
+    },
+    {
+        "legacy":  "RUNTIME-TAPE-002",
+        "neu":  "FR-RUNTIME-TAPE-002",
+        "status":  "DELETE_OK",
+        "delMapStatus":  200,
+        "delFrStatus":  200
+    }
+]

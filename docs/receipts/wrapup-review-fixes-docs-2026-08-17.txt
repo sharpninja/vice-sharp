@@ -1,0 +1,52 @@
+ViceSharp review-fix and documentation wrap-up receipt
+Date: 2026-08-17
+Branch: main
+Base HEAD before wrap-up: e0664375c5bc007c6946e61bd13072ee465af6be
+
+Scope
+- Complete the non-Xbox review fixes.
+- Xbox/UWP and Microsoft Store remain out of product scope.
+- Refresh current docs and GitHub wiki output, reconcile MCP requirements, validate, commit, and push origin.
+
+Validation
+1. dotnet build .\ViceSharp.slnx --no-restore -v minimal -maxcpucount:1 /p:UseSharedCompilation=false
+   Result: PASS. 0 warnings, 0 errors.
+
+2. dotnet test .\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-restore --filter "FullyQualifiedName~Flash040EraseLatencyTests|FullyQualifiedName~Vic20ExpansionCartTests|FullyQualifiedName~UltimemParityTests|FullyQualifiedName~MegaCartParityTests|FullyQualifiedName~MediaServiceHostVic20ExpansionTests|FullyQualifiedName~Vic20SoundLockstep|FullyQualifiedName~Vic20AudioWiringTests"
+   Result: PASS. 35 passed, 0 failed, 0 skipped.
+
+3. dotnet test .\tests\ViceSharp.Library.Tests\ViceSharp.Library.Tests.csproj -c Release --no-build
+   Result: PASS. 95 passed, 0 failed, 0 skipped.
+
+4. Pixel lockstep combined diagnostic
+   Filter: FullyQualifiedName~ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.
+   Result: 3 assertions passed (Busy PAL index, READY NTSC index, READY PAL BGRA), then the fourth native-machine instance remained CPU-bound for more than 17 minutes. The test process tree was stopped. This is not counted as a passing combined run.
+
+5. Pixel lockstep process-isolated completion
+   Filter: FullyQualifiedName=ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyPal_SequenceEqual
+   Result: PASS. 1 passed, 0 failed, 0 skipped in 9.0 seconds.
+   Combined evidence: all four pixel assertions pass when process-isolated; the known multi-NativeVice same-process hang remains.
+
+6. .\native\build-vice-shim.ps1
+   Result: PASS.
+
+7. SidFilter8580DivergentParityTests process-isolated native lockstep
+   Methods: SetW0_8580_CutoffSweep_FilterProbeLockstep; SolveIntegrate8580_LpProgram_FilterProbeLockstep; PerCycleOrder_8580_ExtFilterOutputLockstep.
+   Result: PASS. Each fresh-process invocation passed 1/1 with 0 failed and 0 skipped.
+
+8. .\tools\check_requirement_traceability.ps1
+   Result: PASS (exit 0). Canonical IDs 190; referenced canonical IDs in src/tests 120.
+
+9. MCP requirements_generate doc=all format=wiki
+   Result: PASS. 39 generated files: 37 GitHub files plus two Azure metadata/order placeholders.
+   Archive: docs/requirements/requirements-wiki-documents.zip, 175947 bytes, 39 entries.
+   Archive contains github/Home.md and no Xbox Store page.
+
+10. git diff --check and git diff --cached --check
+   Result: PASS.
+
+Known broad-suite baseline
+- The review-fix diagnostic full TestHarness run produced 1,155 passed, 10 skipped, 6 failed, then hung in native lockstep.
+- The XMLDocs failure was fixed afterward.
+- Remaining unrelated defects: three C64 performance assertions, Avalonia/Core boundary assertion, snapshot divergence, and the native dual-VIA/multi-machine hang.
+- Do not report the full TestHarness as green.

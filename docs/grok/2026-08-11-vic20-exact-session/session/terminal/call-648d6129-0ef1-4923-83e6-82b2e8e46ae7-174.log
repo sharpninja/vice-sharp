@@ -1,0 +1,11 @@
+
+> A total of 1 test files matched the specified pattern.
+  [xUnit.net 00:00:02.74]     
+ViceSharp.TestHarness.Vic20.Vic20NativeAudioExportTests.RenderVic20Samples_AfterReset_ReturnsSamples [FAIL]
+>   Failed ViceSharp.TestHarness.Vic20.Vic20NativeAudioExportTests.RenderVic20Samples_AfterReset_ReturnsSamples [4 ms]
+>   Error Message:
+     System.DivideByZeroException : Attempted to divide by zero.
+    Stack Trace:
+> Failed!  - Failed:     1, Passed:     2, Skipped:     0, Total:     3, Duration: 527 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+

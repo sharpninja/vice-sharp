@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXUI-006",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "RETURN tile emits SetKeyState(\"Return\",true) then false; shift-latch+F1 emits \"F2\"; every KeyName in known-good list; RESTORE tile calls SetRestoreState.",
+  "acceptanceCriteria": []
+}

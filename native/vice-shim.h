@@ -19,14 +19,24 @@ VICE_SHIM_API void* vice_machine_create_model(const char* model);
 VICE_SHIM_API void vice_machine_destroy(void* machine);
 VICE_SHIM_API void vice_machine_reset(void* machine);
 VICE_SHIM_API void vice_machine_step_cycle(void* machine);
+VICE_SHIM_API void vice_machine_step_cycles(void* machine, unsigned int cycles);
+VICE_SHIM_API int vice_machine_autostart(void* machine, const char* path);
+VICE_SHIM_API int vice_machine_autostart_in_progress(void* machine);
 VICE_SHIM_API int vice_machine_attach_cartridge(void* machine, const uint8_t* image, int length, int mapping_mode);
 VICE_SHIM_API int vice_machine_attach_disk(void* machine, unsigned int unit, unsigned int drive, const char* path);
 VICE_SHIM_API int vice_machine_detach_disk(void* machine, unsigned int unit, unsigned int drive);
 VICE_SHIM_API uint8_t vice_machine_peek_ram(void* machine, uint16_t address);
+// Side-effect-free full-space peek (RAM/ROM/I/O). Used by Vic20 lockstep for
+// VIA ($9110/$9120) and VIC-I ($9000) samples. Prefer over peek_ram for I/O.
+VICE_SHIM_API uint8_t vice_machine_peek_bus(void* machine, uint16_t address);
 VICE_SHIM_API uint8_t vice_machine_read(void* machine, uint16_t address);
 VICE_SHIM_API void vice_machine_write(void* machine, uint16_t address, uint8_t value);
 VICE_SHIM_API int vice_machine_get_model(void* machine);
 VICE_SHIM_API int vice_machine_set_keyboard_matrix_key(void* machine, int row, int column, int pressed);
+// Queue PETSCII into VICE's kernal keyboard buffer (kbdbuf_feed). length bytes,
+// no need for a trailing NUL in the caller; the shim copies and terminates.
+VICE_SHIM_API int vice_machine_kbdbuf_feed(void* machine, const uint8_t* petscii, int length);
+VICE_SHIM_API void vice_machine_kbdbuf_flush(void* machine);
 VICE_SHIM_API void vice_machine_cia1_store(void* machine, uint8_t register_index, uint8_t value);
 VICE_SHIM_API uint8_t vice_machine_cia1_read(void* machine, uint8_t register_index);
 
@@ -122,6 +132,31 @@ struct vice_vic_state {
 
 VICE_SHIM_API void vice_vic_get_state(void* machine, struct vice_vic_state* state);
 
+/* VIC-I (VIC-20) every-cycle video pipeline export for lockstep vs managed Mos6561.
+ * Mirrors vic.area / fetch_state / memptr / cbuf / gbuf / regs from victypes.h.
+ * Not used by C64SC (zeros if called on wrong machine). */
+struct vice_vic20_video_state {
+    uint32_t cycle;
+    uint16_t raster_line;
+    uint8_t raster_cycle;
+    uint8_t area;
+    uint8_t fetch_state;
+    uint8_t text_cols;
+    uint8_t text_lines;
+    uint8_t ycounter;
+    uint8_t row_counter;
+    uint8_t blank_this_line;
+    uint8_t line_was_blank;
+    uint8_t char_height;
+    uint16_t memptr;
+    uint16_t memptr_inc;
+    uint8_t regs[16];
+    uint8_t cbuf[32];
+    uint8_t gbuf[32];
+};
+
+VICE_SHIM_API void vice_vic20_get_video_state(void* machine, struct vice_vic20_video_state* state);
+
 // Visible frame capture (for native visible raster/pixel checkpoints under display-mode effects, e.g. invalid ECM COL_NONE black per vicii-draw-cycle.c:133-141 etc.).
 // Returns non-zero on success; fills buffer with BGRA (320x200 recommended). Authentic from native VICE vicii state.
 VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buffer, int length, int* width, int* height);
@@ -151,13 +186,13 @@ struct vice_cia_state {
     uint8_t cra;
     uint8_t crb;
     uint8_t interrupt_flag;
-    /* TR-LOCKSTEP-VSF-001: .vsf CIA resume context beyond the live counters -
-       the timer latches (ciat_read_latch; reload values on underflow) and the
-       ICR interrupt-enable mask (cia_context->irq_enabled, saved by the CIA
-       snapshot module). Required to stage a managed CIA from a snapshot. */
+    /* TR-LOCKSTEP-VSF-001: .vsf CIA resume context beyond the live counters.
+       The actual ICR interrupt-enable mask is the low seven bits of icr above.
+       irq_line_active mirrors cia_context->irq_enabled, which upstream uses
+       for the live IRQ-output state. */
     uint16_t timer_a_latch;
     uint16_t timer_b_latch;
-    uint8_t irq_mask;
+    uint8_t irq_line_active;
     uint8_t reserved;
 };
 
@@ -180,6 +215,12 @@ VICE_SHIM_API void vice_sid_get_state(void* machine, struct vice_sid_state* stat
 // (fastsid or reSID) with the current siddata register state. It does not
 // require sound_open() to have succeeded.
 VICE_SHIM_API size_t vice_sid_render_samples(void* machine, int16_t* buffer, size_t n, int delta_t_cycles);
+
+// VIC-20 VIC-I audio capture (FR-VIC20-SOUND-001 / AC-SD-01). Mono int16 PCM.
+// speed = sample rate (e.g. 44100), cycles_per_sec = CPU clock (PAL 1108405).
+// Returns samples written. Resets oracle filter state when machine is reset via
+// vice_machine_reset (see shim).
+VICE_SHIM_API int vice_vic20_render_samples(void* machine, int16_t* buffer, int length, int speed, int cycles_per_sec, int delta_t_cycles);
 
 // Read a register straight from the shim's private, clocked reSID instance.
 // Returns engine-computed values such as OSC3 ($1b) and ENV3 ($1c) that only

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SID-EDGE-004",
+  "title": "reSID waveform DAC centering and normalized mix scale",
+  "status": "completed",
+  "priority": "high",
+  "body": "Sid6581 and Sid8580 subtract the model-specific waveform zero level before ADSR envelope application, preserve no-waveform silence relative to the D418 baseline, and normalize mixed output before host audio submission.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

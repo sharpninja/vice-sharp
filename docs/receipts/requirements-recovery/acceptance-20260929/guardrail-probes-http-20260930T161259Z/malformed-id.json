@@ -1,0 +1,1 @@
+{"type":"https://httpstatuses.io/400","title":"validation_error","status":400,"detail":"Requirement id 'NOT-AN-ID' is not valid for kind 'fr'.","code":"validation_error","error":"validation_error","message":"Requirement id 'NOT-AN-ID' is not valid for kind 'fr'.","retryable":false,"details":{"reason":"validation"}}

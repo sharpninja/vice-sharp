@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-SNDREG-GATE-001",
+  "title": "Sound back-pressure regulator in ViceEmulationGate",
+  "status": "completed",
+  "priority": "high",
+  "body": "IAudioChip exposes QueuedSampleCount and IsAudioTimingSource (Sid6581 overrides). ViceEmulationGate.EvaluateSound decides NotTimingSource/Advance/BackPressure; Tick applies warp->sound->vsync precedence and reports LastRegulator; HighWaterSamples is about 46 ms.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "EvaluateSound returns BackPressure at or over high-water, Advance below, NotTimingSource when inactive",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Gate Tick selects Sound/Vsync/Warp and exposes it via LastRegulator",
+      "isSatisfied": true
+    }
+  ]
+}

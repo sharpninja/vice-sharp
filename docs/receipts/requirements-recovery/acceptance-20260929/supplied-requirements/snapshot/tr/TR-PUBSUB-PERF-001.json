@@ -1,0 +1,53 @@
+{
+  "kind": "tr",
+  "id": "TR-PUBSUB-PERF-001",
+  "title": "High-Performance Zero-Allocation Pub/Sub",
+  "status": "completed",
+  "priority": "critical",
+  "body": "ViceSharp shall implement the internal Pub/Sub interconnect with fixed-capacity message storage, 64-byte inline payloads, a MessageKind discriminant, preallocated subscriber route arrays, synchronous publish/delivery, no boxing, and zero managed heap allocation on the steady-state hot path.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-tr-pubsub-perf-001-publish",
+      "text": "Publishing one million typed messages to one subscriber is below 50ns per publish operation.",
+      "isSatisfied": true,
+      "evidence": "dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000 => publish-one=43.78ns"
+    },
+    {
+      "id": "ac-tr-pubsub-perf-001-delivery",
+      "text": "Publishing one million typed messages to three subscribers is below 100ns per publish/delivery operation.",
+      "isSatisfied": true,
+      "evidence": "dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000 => publish-three=58.14ns"
+    },
+    {
+      "id": "ac-tr-pubsub-perf-001-pool",
+      "text": "Message pool rent/return is below 20ns and uses fixed-capacity slot handles.",
+      "isSatisfied": true,
+      "evidence": "src/ViceSharp.Core/LockFreePubSub.cs; PubSubPerfProbe => pool-rent-return=16.80ns"
+    },
+    {
+      "id": "ac-tr-pubsub-perf-001-arena",
+      "text": "PayloadArena allocation is below 10ns and supports frame reset semantics.",
+      "isSatisfied": true,
+      "evidence": "src/ViceSharp.Core/LockFreePubSub.cs; PubSubPerfProbe => arena-alloc=3.20ns"
+    },
+    {
+      "id": "ac-tr-pubsub-perf-001-zero-alloc",
+      "text": "The typed publish hot path performs zero managed allocations after warmup.",
+      "isSatisfied": true,
+      "evidence": "tests/ViceSharp.TestHarness/LockFreePubSubTests.cs Publish_TypedPayload_HotPathDoesNotAllocate; PubSubPerfProbe => allocated=0 bytes"
+    },
+    {
+      "id": "ac-tr-pubsub-perf-001-capacity",
+      "text": "Default message pool capacity is 8192 slots and does not resize during emulation.",
+      "isSatisfied": true,
+      "evidence": "src/ViceSharp.Core/LockFreePubSub.cs DefaultMessageCapacity = 8192 and LockFreeMessagePool(capacity = 8192)"
+    },
+    {
+      "id": "ac-tr-pubsub-perf-001-order",
+      "text": "Delivery order is deterministic in registration order and preserved when subscriber route arrays grow.",
+      "isSatisfied": true,
+      "evidence": "tests/ViceSharp.TestHarness/LockFreePubSubTests.cs Publish_DeliversSubscribersInRegistrationOrder and Subscribe_WhenRouteSubscriberArrayGrows_PreservesDeliveryOrder"
+    }
+  ]
+}

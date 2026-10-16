@@ -1,0 +1,18 @@
+
+Name
+----
+.nomedia
+octopus-legion2.cred.xml
+octopus-payton.cred.xml
+paytondesktop.cred.xml
+setup-payton-desktop-cred.ps1
+truckmate-preproduction-generated-secrets.cred.xml
+truckmate-preproduction-pki.cred.xml
+truckmate-preproduction-provisioning.partial.cred.xml
+truckmate-preproduction-root.cer
+truckmate-tomtom-credential.cred.xml
+.env
+
+local heartbeat fail: The request was canceled due to the configured HttpClient.Timeout of 3 seconds elapsing.
+127 heartbeat fail: No connection could be made because the target machine actively refused it.
+

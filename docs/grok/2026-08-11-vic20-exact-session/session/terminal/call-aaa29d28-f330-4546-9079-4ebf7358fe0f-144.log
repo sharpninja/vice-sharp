@@ -1,0 +1,16 @@
+
+FullNameSelect-String: 
+
+--------
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\Via6522.cs
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\Via6522.cs
+
+Line |
+   4 |  . iceSharp.Chips -Pattern "Assert\(|SetIrq|timer1|Timer1" -Glob "*Via*" .
+     |                                                            ~~~~~
+     | A parameter cannot be found that matches parameter name 'Glob'.
+Select-String: 
+Line |
+   5 |  . ing -Path src/ViceSharp.Chips -Pattern "Assert\(|timer" -Glob "*6522* .
+     |                                                            ~~~~~
+     | A parameter cannot be found that matches parameter name 'Glob'.

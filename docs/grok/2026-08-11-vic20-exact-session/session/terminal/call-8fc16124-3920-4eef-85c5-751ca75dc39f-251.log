@@ -1,0 +1,15 @@
+azure	https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp (fetch)
+azure	https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp (push)
+origin	https://github.com/sharpninja/vice-sharp.git (fetch)
+origin	https://github.com/sharpninja/vice-sharp.git (push)
+
+  "AssemblySemVer": "1.2.0.0",
+  "CommitsSinceVersionSource": 0,
+  "FullSemVer": "1.2.0",
+  "MajorMinorPatch": "1.2.0",
+  "SemVer": "1.2.0",
+  "VersionSourceDistance": 0,
+  "VersionSourceIncrement": "None",
+  "VersionSourceSemVer": "1.2.0",
+  "VersionSourceSha": "7442c1d4c0cd6c7ab653328b4f99c89ba7bd05b1",
+

@@ -1,0 +1,20 @@
+
+LineNumber Line
+---------- ----
+       437             // (STATUS_STACK_OVERFLOW 0xc00000fd when selecting RAM preset "All").
+       438             if (!_vic20Memory.SetFromPresetLabel(value ?? "Unexpanded"))
+       447         set { if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk0Bit, value)) NotifyVic20Memory(); }
+       453         set { if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk1Bit, value)) NotifyVic20Memory(); }
+       459         set { if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk2Bit, value)) NotifyVic20Memory(); }
+       465         set { if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk3Bit, value)) NotifyVic20Memory(); }
+       471         set { if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk5Bit, value)) NotifyVic20Memory(); }
+        35         set => _ = TrySetBit(Blk0Bit, value);
+        41         set => _ = TrySetBit(Blk1Bit, value);
+        47         set => _ = TrySetBit(Blk2Bit, value);
+        53         set => _ = TrySetBit(Blk3Bit, value);
+        59         set => _ = TrySetBit(Blk5Bit, value);
+        67             return false;
+        80             return false;
+        85     public bool TrySetBit(int bit, bool enabled)
+        89             return false;
+

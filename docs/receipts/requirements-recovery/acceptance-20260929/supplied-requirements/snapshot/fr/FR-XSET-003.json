@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XSET-003",
+  "title": "Validation without applying",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Validation runs without applying and surfaces per-resource results. Acceptance: Validate sends ValidateSettingsResourcesRequest, populates results, sends no UpdateSettings; editing clears stale results.\n\n## Acceptance Criteria\n- Validate sends ValidateSettingsResourcesRequest, populates results, sends no UpdateSettings; editing clears stale results.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

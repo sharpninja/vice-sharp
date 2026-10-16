@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-INPROC-005",
+  "title": "One managed pacing gate; audio decoupled ring",
+  "status": "pending",
+  "priority": "medium",
+  "body": "One managed pacing gate; audio decoupled via ring buffer, SubmitSamples non-blocking, Pause() unparks the worker (supersedes TR-XPACE; single gate). Acceptance: verified by TEST-INPROC-003, TEST-XAUDIO-004.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

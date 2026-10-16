@@ -1,0 +1,155 @@
+{
+  "appendCommitMessageToRunName": true,
+  "buildNumber": "20260805.1",
+  "buildNumberRevision": 1,
+  "controller": null,
+  "definition": {
+    "createdDate": null,
+    "drafts": [],
+    "id": 16,
+    "name": "VICE-Sharp-Release",
+    "path": "\\",
+    "project": {
+      "abbreviation": null,
+      "defaultTeamImageUrl": null,
+      "description": "C# port of VICE (Versatile Commodore Emulator) - cycle-accurate, AoT-compiled, .NET 10",
+      "id": "3ca5a0e9-1589-454e-b762-343056e0a17c",
+      "lastUpdateTime": "2026-07-11T02:46:26.207Z",
+      "name": "VICE-Sharp",
+      "revision": 86,
+      "state": "wellFormed",
+      "url": "https://dev.azure.com/McpServer/_apis/projects/3ca5a0e9-1589-454e-b762-343056e0a17c",
+      "visibility": "private"
+    },
+    "queueStatus": "enabled",
+    "revision": 4,
+    "type": "build",
+    "uri": "vstfs:///Build/Definition/16",
+    "url": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_apis/build/Definitions/16?revision=4"
+  },
+  "deleted": null,
+  "deletedBy": null,
+  "deletedDate": null,
+  "deletedReason": null,
+  "demands": null,
+  "finishTime": null,
+  "id": 1252,
+  "keepForever": false,
+  "lastChangedBy": {
+    "descriptor": "aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl",
+    "directoryAlias": null,
+    "displayName": "Payton Byrd",
+    "id": "11ee288f-d7e0-6a37-89d6-327cbaf79bce",
+    "imageUrl": "https://dev.azure.com/McpServer/_apis/GraphProfile/MemberAvatars/aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl",
+    "inactive": null,
+    "isAadIdentity": null,
+    "isContainer": null,
+    "isDeletedInOrigin": null,
+    "profileUrl": null,
+    "uniqueName": "ninja@thesharp.ninja",
+    "url": "https://spsprodcus6.vssps.visualstudio.com/A22204b28-9730-42da-a78e-d8485f84edba/_apis/Identities/11ee288f-d7e0-6a37-89d6-327cbaf79bce"
+  },
+  "lastChangedDate": "2026-08-05T16:30:55.327000+00:00",
+  "logs": {
+    "id": 0,
+    "type": "Container",
+    "url": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_apis/build/builds/1252/logs"
+  },
+  "orchestrationPlan": {
+    "orchestrationType": null,
+    "planId": "bf77faf4-59de-4ab1-9e9d-b8debcbe3142"
+  },
+  "parameters": null,
+  "plans": [
+    {
+      "orchestrationType": null,
+      "planId": "bf77faf4-59de-4ab1-9e9d-b8debcbe3142"
+    }
+  ],
+  "priority": "normal",
+  "project": {
+    "abbreviation": null,
+    "defaultTeamImageUrl": null,
+    "description": "C# port of VICE (Versatile Commodore Emulator) - cycle-accurate, AoT-compiled, .NET 10",
+    "id": "3ca5a0e9-1589-454e-b762-343056e0a17c",
+    "lastUpdateTime": "2026-07-11T02:46:26.207Z",
+    "name": "VICE-Sharp",
+    "revision": 86,
+    "state": "wellFormed",
+    "url": "https://dev.azure.com/McpServer/_apis/projects/3ca5a0e9-1589-454e-b762-343056e0a17c",
+    "visibility": "private"
+  },
+  "properties": {},
+  "quality": null,
+  "queue": {
+    "id": 10,
+    "name": "Default",
+    "pool": {
+      "id": 1,
+      "isHosted": null,
+      "name": "Default"
+    },
+    "url": null
+  },
+  "queueOptions": null,
+  "queuePosition": null,
+  "queueTime": "2026-08-05T16:30:54.850185+00:00",
+  "reason": "manual",
+  "repository": {
+    "checkoutSubmodules": false,
+    "clean": null,
+    "defaultBranch": null,
+    "id": "sharpninja/vice-sharp",
+    "name": null,
+    "properties": null,
+    "rootFolder": null,
+    "type": "GitHub",
+    "url": "https://github.com:443/sharpninja/vice-sharp"
+  },
+  "requestedBy": {
+    "descriptor": "aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl",
+    "directoryAlias": null,
+    "displayName": "Payton Byrd",
+    "id": "11ee288f-d7e0-6a37-89d6-327cbaf79bce",
+    "imageUrl": "https://dev.azure.com/McpServer/_apis/GraphProfile/MemberAvatars/aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl",
+    "inactive": null,
+    "isAadIdentity": null,
+    "isContainer": null,
+    "isDeletedInOrigin": null,
+    "profileUrl": null,
+    "uniqueName": "ninja@thesharp.ninja",
+    "url": "https://spsprodcus6.vssps.visualstudio.com/A22204b28-9730-42da-a78e-d8485f84edba/_apis/Identities/11ee288f-d7e0-6a37-89d6-327cbaf79bce"
+  },
+  "requestedFor": {
+    "descriptor": "aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl",
+    "directoryAlias": null,
+    "displayName": "Payton Byrd",
+    "id": "11ee288f-d7e0-6a37-89d6-327cbaf79bce",
+    "imageUrl": "https://dev.azure.com/McpServer/_apis/GraphProfile/MemberAvatars/aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl",
+    "inactive": null,
+    "isAadIdentity": null,
+    "isContainer": null,
+    "isDeletedInOrigin": null,
+    "profileUrl": null,
+    "uniqueName": "ninja@thesharp.ninja",
+    "url": "https://spsprodcus6.vssps.visualstudio.com/A22204b28-9730-42da-a78e-d8485f84edba/_apis/Identities/11ee288f-d7e0-6a37-89d6-327cbaf79bce"
+  },
+  "result": null,
+  "retainedByRelease": false,
+  "sourceBranch": "refs/tags/v1.2.1",
+  "sourceVersion": "3b20c4fb50e8439609a92ba3c9a0393f2a6181ee",
+  "startTime": null,
+  "status": "notStarted",
+  "tags": [],
+  "triggerInfo": {},
+  "triggeredByBuild": null,
+  "uri": "vstfs:///Build/Build/1252",
+  "url": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_apis/build/Builds/1252",
+  "validationResults": []
+}
+---
+{
+  "name": "VICE-Sharp-Release",
+  "type": "GitHub",
+  "url": "https://github.com/sharpninja/vice-sharp.git"
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MON-004",
+  "title": "CPU Register Inspection and Manipulation",
+  "status": "pending",
+  "priority": "high",
+  "body": "The monitor shall display and allow modification of all CPU registers (A, X, Y, SP, PC) and the processor status flags (N, V, -, B, D, I, Z, C). Register changes take effect on the next instruction execution.\n\n## Acceptance Criteria\n- All registers are displayed: A (accumulator), X, Y (index registers), SP (stack pointer), PC (program counter).\n- All status flags are individually displayed and modifiable: N (negative), V (overflow), B (break), D (decimal), I (interrupt disable), Z (zero), C (carry).\n- Registers can be set to arbitrary values via the monitor interface.\n- Setting the PC to a new address causes execution to continue from that address.\n- Setting SP adjusts the effective stack pointer (addresses $0100+SP).\n- Register display includes both hexadecimal and decimal/binary representations.\n- The `ICpu` interface exposes `GetRegisters()` and `SetRegisters()` for programmatic access.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

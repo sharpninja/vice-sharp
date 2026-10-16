@@ -1,0 +1,56 @@
+Detecting DLL based HardSID boards.
+Cannot open hardsid.dll.
+LoadLibrary WPCAP.DLL failed!
+Detecting PCI CatWeasel boards.
+No PCI CatWeasel found.
+Warning -  Config file version mismatch (is '3.8', expected '3.10').
+
+Reading configuration file `C:\Users\kingd\AppData\Roaming\vice\vice.ini'.
+archdep_register_cbmfont(): Registering CBM fonts using Pango 1.56.4
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\C64_Pro_Mono-STYLE.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe1282Y.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe128.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe2X.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe2Y.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe642Y.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe64.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe.ttf.
+registered 8 font(s) total.
+ 
+*** VICE Version 3.10 ***
+ 
+This is the condensed log, for the full log use --verbose or --debug.
+ 
+Main:  random seed was: 0x6a76ebe9
+Main:  command line was: C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe -directory F:\GitHub\vice-sharp\native\vice\vice\data -default +sound
+Main:  VICE system file directory: 'C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..'.
+Main:  VICE system file search path: 'C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin;C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..'.
+Sysfile:  Loading `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\VIC20\kernal.901486-07.bin'.
+Sysfile:  Loading `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\VIC20\basic-901486-01.bin'.
+Sysfile:  Loading `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\VIC20\chargen-901460-03.bin'.
+DriveROM: Error -  2000 ROM image not found. Hardware-level 2000 emulation is not available.
+DriveROM: Error -  4000 ROM image not found. Hardware-level 4000 emulation is not available.
+DriveROM: Error -  CMDHD ROM image not found. Hardware-level CMDHD emulation is not available.
+Sysfile:  Loading `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\DRIVES\dos1540-325302+3-01.bin'.
+Window:  Chip 'VIC' using GTK3 backend 'DirectX'.
+Sound:  Available sound devices: dx wmm dummy dump fs wav voc iff aiff mp3 flac ogg soundmovie
+Joystick:  Initializing DirectInput8:
+Joystick:  OK.
+Joystick:  Obtaining devices list:
+Joystick: Warning -  Failed to open `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\gtk3-joymap-VIC20.vjm'.
+Joystick: Warning -  using minimal default mapping.
+EthernetARCH:  LoadLibrary WPCAP.DLL failed!
+MIDIdrv:  init driver
+MIDIdrv:  found 0 sources
+MIDIdrv:  found 1 destinations
+MIDIdrv:  destination #0: Microsoft GS Wavetable Synth
+Keymap:  Loading keymap `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\VIC20\gtk3_sym.vkm'.
+Hotkeys:  parsing default file 'C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\hotkeys\hotkeys.vhk' for machine VIC20
+
+Main CPU:  starting at ($FFFC).
+Main CPU:  RESET.
+Unit 8:  RESET.
+Main CPU:  RESET.
+VSync:  Sync reset
+Unit 8:  RESET.
+Warning -  geometry->screen_size.width (568) does not match actual rendered width (448.000000)

@@ -1,0 +1,103 @@
+id=142 name=3D Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=3-D Breakout (En) (E) (PAL) (NTSC-maybe) (rev-01) (gb64-34) (Trainers-1) (Cracked) (CHR).D64 slug= igdb= moby= ss= region=Europe lang=English rev=01
+id=262 name=64 Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=64 Breakout (Sv) (W) (PAL) (NTSC) (rev-01) (gb64-26738).T64 slug= igdb= moby= ss= region=World lang=Swedish rev=01
+id=261 name=64 Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=64 Breakout (Sv) (E) (PAL) (NTSC-maybe) (rev-01) (gb64-11030).T64 slug= igdb= moby= ss= region=Europe lang=Swedish rev=01
+id=260 name=64 Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=64 Breakout (Fi) (W) (PAL) (NTSC) (rev-01) (gb64-29855).T64 slug= igdb= moby= ss= region=World lang=Finnish rev=01
+id=259 name=64 Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=64 Breakout (En) (E) (PAL) (NTSC-maybe) (rev-02) (gb64-70).T64 slug= igdb= moby= ss= region=Europe lang=English rev=02
+id=807 name=Alfredo Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=Alfredo Break (It) (E) (PAL) (NTSC-maybe) (rev-02) (gb64-16329) (Cracked) (ASS).T64 slug= igdb= moby= ss= region=Europe lang=Italian rev=02
+id=3810 name=Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=Breakout (En) (W) (PAL) (NTSC) (rev-01) (gb64-28513).T64 slug= igdb= moby= ss= region=World lang=English rev=01
+id=3802 name=Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=Breakout (En) (E) (PAL) (NTSC-maybe) (rev-01) (gb64-17600).T64 slug= igdb= moby= ss= region=Europe lang=English rev=01
+id=3809 name=Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=Breakout (En) (W) (PAL) (NTSC) (rev-01) (gb64-27331).T64 slug= igdb= moby= ss= region=World lang=English rev=01
+id=3801 name=Breakout
+  keys: id,igdb_id,sgdb_id,moby_id,ss_id,ra_id,launchbox_id,hasheous_id,tgdb_id,flashpoint_id,hltb_id,gamelist_id,libretro_id,platform_id,platform_slug,platform_fs_slug,platform_custom_name,platform_display_name,fs_name,fs_name_no_tags,fs_name_no_ext,fs_extension,fs_path,fs_size_bytes,name,name_sort_key,slug,summary,alternative_names,youtube_video_id,metadatum,igdb_metadata,moby_metadata,ss_metadata,launchbox_metadata,hasheous_metadata,flashpoint_metadata,hltb_metadata,gamelist_metadata,manual_metadata,path_cover_small,path_cover_large,url_cover,has_manual,has_soundtrack,path_manual,url_manual,path_video,is_identifying,is_unidentified,is_identified,revision,regions,languages,tags,crc_hash,md5_hash,sha1_hash,ra_hash,has_simple_single_file,has_nested_single_file,has_multiple_files,full_path,created_at,updated_at,missing_from_fs,has_notes,rom_user,merged_screenshots,merged_ra_metadata,files,sibling_roms,screenshot_path
+  fs=Breakout (En) (E) (PAL) (NTSC-maybe) (rev-01) (gb64-14776).T64 slug= igdb= moby= ss= region=Europe lang=English rev=01
+id=142
+igdb_id=
+sgdb_id=
+moby_id=
+ss_id=
+ra_id=
+launchbox_id=
+hasheous_id=22898
+tgdb_id=
+flashpoint_id=
+hltb_id=
+gamelist_id=
+libretro_id=
+platform_id=4
+platform_slug=c64
+platform_fs_slug=c64
+platform_custom_name=
+platform_display_name=Commodore C64/128/MAX
+fs_name=3-D Breakout (En) (E) (PAL) (NTSC-maybe) (rev-01) (gb64-34) (Trainers-1) (Cracked) (CHR).D64
+fs_name_no_tags=3-D Breakout
+fs_name_no_ext=3-D Breakout (En) (E) (PAL) (NTSC-maybe) (rev-01) (gb64-34) (Trainers-1) (Cracked) (CHR)
+fs_extension=D64
+fs_path=roms/c64
+fs_size_bytes=174848
+name=3D Breakout
+name_sort_key=000000000003d breakout
+slug=
+summary=
+alternative_names=
+youtube_video_id=
+metadatum=@{rom_id=142; genres=System.Object[]; franchises=System.Object[]; collections=System.Object[]; companies=System.Object[]; game_modes=System.Object[]; age_ratings=System.Object[]; player_count=1; first_release_date=; average_rating=}
+igdb_metadata=
+moby_metadata=
+ss_metadata=
+launchbox_metadata=
+hasheous_metadata=@{tosec_match=True; mame_arcade_match=False; mame_mess_match=False; nointro_match=False; redump_match=False; whdload_match=False; ra_match=False; fbneo_match=False; puredos_match=False}
+flashpoint_metadata=
+hltb_metadata=
+gamelist_metadata=
+manual_metadata=
+path_cover_small=/assets/romm/resources/roms/4/142/cover/small.png?ts=2026-07-16 13:14:16
+path_cover_large=/assets/romm/resources/roms/4/142/cover/big.png?ts=2026-07-16 13:14:16
+url_cover=https://hasheous.org/api/v1/images/3432537E2F81CD06BC7295C0207D5B5B72DFC7B5
+has_manual=False
+has_soundtrack=False
+path_manual=
+url_manual=
+path_video=
+is_identifying=False
+is_unidentified=False
+is_identified=True
+revision=01
+regions=Europe
+languages=English
+tags=PAL NTSC-maybe gb64-34 Trainers-1 Cracked CHR
+crc_hash=4720187f
+md5_hash=e2815d7267685c7d4f15feb4008ec248
+sha1_hash=2c71f65ee0723b6926e17b9e207e70a77805fdf0
+ra_hash=
+has_simple_single_file=True
+has_nested_single_file=False
+has_multiple_files=False
+full_path=roms/c64/3-D Breakout (En) (E) (PAL) (NTSC-maybe) (rev-01) (gb64-34) (Trainers-1) (Cracked) (CHR).D64
+created_at=07/16/2026 08:14:14
+updated_at=07/16/2026 08:14:16
+missing_from_fs=False
+has_notes=False
+rom_user=@{id=-1; user_id=-1; rom_id=-1; created_at=08/05/2026 04:21:53; updated_at=08/05/2026 04:21:53; last_played=; is_main_sibling=False; backlogged=False; now_playing=False; hidden=False; rating=0; difficulty=0; completion=0; status=}
+merged_screenshots=
+merged_ra_metadata=
+files=
+sibling_roms=
+screenshot_path=

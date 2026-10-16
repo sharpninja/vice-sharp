@@ -1,0 +1,73 @@
+{
+  "timestampUtc": "2026-08-11T20:46:39Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "phase": "G",
+  "overallVerdict": "AGREE",
+  "claims": [
+    {
+      "id": "G1",
+      "summary": "Process-isolated umbrella Vic20 gate Passed=46 Failed=0 Skipped=0 anyNonZeroExit=0",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/receipts/vic20-umbrella-gate-2026-08-11.log",
+        "C:/Users/kingd/AppData/Local/Temp/grok-goal-a8b508754f9e/implementer/vic20-umbrella-gate.log",
+        "SHA256 match 520AE0742CF557B24A4F15E4B80846C7F8F03E0478C0BDAF4AC934545F12C09D",
+        "part sum 1+1+1+1+1+2+8+12+7+1+1+4+6=46 all EXIT=0"
+      ]
+    },
+    {
+      "id": "G2",
+      "summary": "Umbrella 2s non-idle PAL+NTSC VICESHARP_LOCKSTEP_2S=1 real wall time",
+      "verdict": "PASS",
+      "evidence": [
+        "umbrella footer Duration 27s PAL / 11s NTSC",
+        "implementer/umb-2s-pal.log Duration 27s",
+        "implementer/umb-2s-ntsc.log Duration 11s",
+        "lockstep-2s-pal.log TwoSecondPal [19 s]",
+        "lockstep-2s-ntsc.log TwoSecondNtsc [11 s]",
+        "Vic20WorkloadLockstep.cs env gate + TwoSecond cycle budgets"
+      ]
+    },
+    {
+      "id": "G3",
+      "summary": "MCP PLAN-VIC20-EXACT-001 done=true 7/7 tasks; doneSummary SCOPED not whole-machine",
+      "verdict": "PASS",
+      "evidence": [
+        "GET http://PAYTON-LEGION2:7147/mcpserver/todo/PLAN-VIC20-EXACT-001 HTTP 200",
+        "done=true completedDate=2026-08-11",
+        "implementationTasks 7/7 done=true",
+        "doneSummary contains Scoped and NOT whole-machine Exact"
+      ]
+    },
+    {
+      "id": "G4",
+      "summary": "HANDOFF.md and audit mention Phase G closeout scoped with residuals",
+      "verdict": "PASS",
+      "evidence": [
+        "HANDOFF.md lines 8-16 Phase G closeout + residuals",
+        "docs/audit-vic20-vs-vice-2026-08-07.md lines 207-209 Phase G closeout + residuals"
+      ]
+    },
+    {
+      "id": "G5",
+      "summary": "Claim language does not overclaim whole-machine Exact",
+      "verdict": "PASS",
+      "evidence": [
+        "HANDOFF not whole-machine Exact",
+        "audit Whole-machine Exact not claimed",
+        "closeout Claim SCOPED Exact only",
+        "MCP doneSummary NOT whole-machine Exact"
+      ],
+      "nonFailCaveats": [
+        "MCP title and Phase G task string still say whole; body scopes",
+        "HANDOFF line 32 awkward Whole-machine Exact remains scoped phrasing"
+      ]
+    }
+  ],
+  "failList": [],
+  "receipts": [
+    "docs/receipts/hostile-validator-20260811T204639Z.md",
+    "docs/receipts/hostile-validator-20260811T204639Z.json"
+  ]
+}

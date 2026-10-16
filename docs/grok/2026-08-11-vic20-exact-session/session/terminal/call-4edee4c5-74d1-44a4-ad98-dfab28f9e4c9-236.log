@@ -1,0 +1,75 @@
+mtime=08/07/2026 08:44:30 len=4416
+2026-08-07 08:44:09.321 [Information] App: App starting; log file: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+2026-08-07 08:44:09.658 [Information] App: OnLaunched entry; c64Directory=C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64
+2026-08-07 08:44:09.669 [Information] App: ROM assessment: State=Complete IsBootBlocked=False
+2026-08-07 08:44:09.669 [Information] App: Boot not blocked: building host and session at launch
+2026-08-07 08:44:09.804 [Information] App: BuildHostAndSession: composing in-process host
+2026-08-07 08:44:10.227 [Information] App: BuildHostAndSession: session started id=emulator-4591d689aa0048c2b5f5a2e713e5b7c3 (persisted profile: vic20ntsc)
+2026-08-07 08:44:10.255 [Information] App: persisted settings re-applied: success=True profile=vic20ntsc
+2026-08-07 08:44:10.262 [Information] App: boot cartridge: none configured
+2026-08-07 08:44:10.306 [Information] App: BuildHostAndSession: built VideoPull=True gamepad=True keyboardVm=False audio=True
+2026-08-07 08:44:10.427 [Information] App: Boot branch: emulator (VideoPull present) -> starting surface + gamepad
+2026-08-07 08:44:10.430 [Information] App: video aspect applied: standard=Ntsc pixelAspect=0.75 clockHz=1022727 contentRows=0 refreshHz=60.284526967285586 surface=True
+2026-08-07 08:44:10.431 [Information] App: video surface started
+2026-08-07 08:44:10.431 [Information] App: gamepad started (present=True)
+2026-08-07 08:44:10.443 [Information] App: menu closed: emulation resumed
+2026-08-07 08:44:10.569 [Information] Video: tick 1: EnsureDevice: D3D11CreateDevice(HW) hr=0x00000000 device=0x220F3F728B0 context=0x22CA8734108
+2026-08-07 08:44:10.570 [Information] Video: tick 1: EnsureDevice: CreateDXGIFactory2 hr=0x00000000 factory=0x22CA8CA4920
+2026-08-07 08:44:10.571 [Information] Video: tick 1: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x22CA8623518
+2026-08-07 08:44:10.572 [Information] Video: tick 1: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-07 08:44:10.588 [Information] Video: tick 1: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:44:10.589 [Information] Video: tick 1: EnsureSwapChain: created + bound 3840x1980
+2026-08-07 08:44:10.592 [Information] Video: tick 1: paint geometry: target 3840x1980, src 208x216, draw 1430x1980+1205+0, PAR 0.75
+2026-08-07 08:44:10.611 [Information] Video: tick 1: OK: first frame presented (target 3840x1980, src 208x216, 179712 bytes)
+2026-08-07 08:44:10.633 [Information] Gamepad: poll thread=4
+2026-08-07 08:44:10.635 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-07 08:44:15.636 [Information] Video: perf: FPS 60.2 EMU 58.2 SPD 99.7% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:44:20.709 [Information] Video: perf: FPS 59.3 EMU 57.3 SPD 101.4% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:44:24.239 [Information] App: menu open: emulation paused
+2026-08-07 08:44:24.241 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-07 08:44:24.271 [Information] Video: tick 787: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:44:24.272 [Information] Video: tick 787: paint geometry: target 2940x1980, src 208x216, draw 1430x1980+755+0, PAR 0.75
+2026-08-07 08:44:25.818 [Information] Video: perf: FPS 61.4 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:44:26.430 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-07 08:44:26.481 [Information] App: perf HUD visibility set: True
+2026-08-07 08:44:26.516 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=2 renderers=2 selComputer='VIC-20' selModel='Commodore VIC-20 NTSC' selRenderer='Host direct' volume=100
+2026-08-07 08:44:26.622 [Information] Video: tick 919: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:44:26.624 [Information] Video: tick 919: paint geometry: target 3840x1980, src 208x216, draw 1430x1980+1205+0, PAR 0.75
+2026-08-07 08:44:30.859 [Information] Settings: apply: begin restart=True profile='vic20' dirty=True
+---settings---
+{
+  "ProfileId": "vic20",
+  "Limiter": {
+    "RatePercent": 100,
+    "IsEnabled": true,
+    "PacingStrategy": "vice"
+  },
+  "Display": {
+    "Renderer": "host",
+    "Palette": "vice",
+    "ShowBorder": true,
+    "MaintainAspectRatio": true,
+    "Scale": "fit-window",
+    "CropMode": "visible-area",
+    "AspectMode": "vice-pixel-aspect"
+  },
+  "Input": {
+    "KeyboardMapId": "c64:gtk3_pos",
+    "PrimaryJoystickPort": 1,
+    "SwapJoystickPorts": false,
+    "Mode": "keyboard-joystick"
+  },
+  "Audio": {
+    "Mode": "enabled"
+  },
+  "Resources": {
+    "Mode": "auto-detect"
+  },
+  "Vic20MemorySpec": "none",
+  "FileSystemIecRootPath": "",
+  "FileSystemIecUnit": 9,
+  "Vic20ExpansionCartKind": "none",
+  "Vic20ExpansionWriteBack": false,
+  "Vic20ExpansionConfigPreset": "start"
+}
+---WER---

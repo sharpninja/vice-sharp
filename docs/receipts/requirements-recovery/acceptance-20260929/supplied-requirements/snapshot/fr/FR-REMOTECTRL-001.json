@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-REMOTECTRL-001",
+  "title": "Live Avalonia visual-tree inspection over gRPC",
+  "status": "pending",
+  "priority": "medium",
+  "body": "ViceSharp.Avalonia can expose its live Avalonia visual tree for remote inspection and (optionally) interaction over gRPC via the SharpNinja.Avalonia.RemoteControl embeddable server, to support UI development/validation. The server is disabled by default and only starts when explicitly enabled via environment switches, and then only with a bearer token on a loopback transport (interaction and live frames remain deny-by-default opt-ins).\n\n## Acceptance Criteria\n- **ac-01**: RemoteControl is disabled when VICESHARP_REMOTECONTROL_ENABLE is unset; enabled startup without a bearer token fails closed.\n- **ac-02**: Explicitly enabled, authenticated loopback gRPC exposes the current live MainWindow visual tree.\n- **ac-03**: Interaction and live-frame access remain denied unless their separate opt-ins permit them; authentication and action failures are explicit.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "RemoteControl is disabled when VICESHARP_REMOTECONTROL_ENABLE is unset; enabled startup without a bearer token fails closed.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Explicitly enabled, authenticated loopback gRPC exposes the current live MainWindow visual tree.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Interaction and live-frame access remain denied unless their separate opt-ins permit them; authentication and action failures are explicit.",
+      "isSatisfied": false
+    }
+  ]
+}

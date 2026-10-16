@@ -1,0 +1,131 @@
+mtime=08/07/2026 08:24:39 len=6241
+2026-08-07 08:23:29.533 [Information] App: App starting; log file: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+2026-08-07 08:23:29.637 [Information] App: OnLaunched entry; c64Directory=C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64
+2026-08-07 08:23:29.645 [Information] App: ROM assessment: State=Complete IsBootBlocked=False
+2026-08-07 08:23:29.645 [Information] App: Boot not blocked: building host and session at launch
+2026-08-07 08:23:29.649 [Information] App: BuildHostAndSession: composing in-process host
+2026-08-07 08:23:30.380 [Information] App: BuildHostAndSession: session started id=emulator-d580bbc8dba14c7a84d4206363d6b6c3 (persisted profile: vic20ntsc)
+2026-08-07 08:23:30.401 [Information] App: persisted settings re-applied: success=True profile=vic20ntsc
+2026-08-07 08:23:30.407 [Information] App: boot cartridge: none configured
+2026-08-07 08:23:30.441 [Information] App: BuildHostAndSession: built VideoPull=True gamepad=True keyboardVm=False audio=True
+2026-08-07 08:23:30.539 [Information] App: Boot branch: emulator (VideoPull present) -> starting surface + gamepad
+2026-08-07 08:23:30.542 [Information] App: video aspect applied: standard=Ntsc pixelAspect=0.75 clockHz=1022727 contentRows=0 refreshHz=60.284526967285586 surface=True
+2026-08-07 08:23:30.543 [Information] App: video surface started
+2026-08-07 08:23:30.543 [Information] App: gamepad started (present=True)
+2026-08-07 08:23:30.570 [Information] Video: tick 1: bail: panel not sized (ActualW=0 ActualH=0 scaleX=2.5 scaleY=2.5)
+2026-08-07 08:23:30.602 [Information] Gamepad: poll thread=4
+2026-08-07 08:23:30.603 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-07 08:23:30.604 [Information] App: menu closed: emulation resumed
+2026-08-07 08:23:30.688 [Information] Video: tick 2: EnsureDevice: D3D11CreateDevice(HW) hr=0x00000000 device=0x18CE0B9DD70 context=0x198957A1108
+2026-08-07 08:23:30.689 [Information] Video: tick 2: EnsureDevice: CreateDXGIFactory2 hr=0x00000000 factory=0x198957766A0
+2026-08-07 08:23:30.690 [Information] Video: tick 2: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x198955F65C8
+2026-08-07 08:23:30.690 [Information] Video: tick 2: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-07 08:23:30.693 [Information] Video: tick 2: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:23:30.693 [Information] Video: tick 2: EnsureSwapChain: created + bound 3840x1980
+2026-08-07 08:23:30.695 [Information] Video: tick 2: paint geometry: target 3840x1980, src 208x216, draw 1430x1980+1205+0, PAR 0.75
+2026-08-07 08:23:30.711 [Information] Video: tick 2: OK: first frame presented (target 3840x1980, src 208x216, 179712 bytes)
+2026-08-07 08:23:35.635 [Information] Video: perf: FPS 61.2 EMU 57.2 SPD 98.1% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:23:40.731 [Information] Video: perf: FPS 59.3 EMU 57.3 SPD 101.4% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:23:45.814 [Information] Video: perf: FPS 58.8 EMU 56.9 SPD 100.6% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:23:50.895 [Information] Video: perf: FPS 59.4 EMU 55.4 SPD 98.0% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:23:55.976 [Information] Video: perf: FPS 60.1 EMU 60.1 SPD 102.8% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:01.057 [Information] Video: perf: FPS 61.2 EMU 55.3 SPD 104.4% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:05.927 [Information] App: menu open: emulation paused
+2026-08-07 08:24:05.948 [Information] Video: tick 2090: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:24:05.949 [Information] Video: tick 2090: paint geometry: target 2940x1980, src 208x216, draw 1430x1980+755+0, PAR 0.75
+2026-08-07 08:24:05.960 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-07 08:24:06.139 [Information] Video: perf: FPS 56.6 EMU 35.1 SPD 103.8% NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:07.549 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-07 08:24:07.605 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=2 renderers=2 selComputer='VIC-20' selModel='Commodore VIC-20 NTSC' selRenderer='Host direct' volume=100
+2026-08-07 08:24:07.677 [Information] Video: tick 2187: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:24:07.678 [Information] Video: tick 2187: paint geometry: target 3840x1980, src 208x216, draw 1430x1980+1205+0, PAR 0.75
+2026-08-07 08:24:11.248 [Information] Video: perf: FPS 59.2 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:16.334 [Information] Video: perf: FPS 58.3 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:21.407 [Information] Video: perf: FPS 59.4 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:26.513 [Information] Video: perf: FPS 59.8 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:31.616 [Information] Video: perf: FPS 59.3 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:31.932 [Information] App: perf HUD visibility set: True
+2026-08-07 08:24:33.583 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-07 08:24:33.603 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-07 08:24:33.604 [Information] Video: tick 3743: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:24:33.604 [Information] Video: tick 3743: paint geometry: target 2940x1980, src 208x216, draw 1430x1980+755+0, PAR 0.75
+2026-08-07 08:24:36.699 [Information] Video: perf: FPS 58.9 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.3ms)
+2026-08-07 08:24:39.883 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-07 08:24:39.889 [Information] App: perf HUD visibility set: True
+---WER---
+
+Time : 8/7/2026 8:24:43 AM
+Id   : 1001
+Msg  : Fault bucket 1823406715322121053, type 5
+       Event Name: MoAppCrash
+       Response: Not available
+       Cab Id: 0
+       
+       Problem signature:
+       P1: sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+       P2: praid:App
+       P3: 1.2.7.0
+       P4: 6a3e0000
+       P5: ntdll.dll
+       P6: 10.0.26100.8875
+       P7: ba65e4a2
+       P8: c00000fd
+       P9: 000000000005361c
+       P10: 
+       
+       Attached files:
+       \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.36c92f11-5170-4690-998b-c081c08d5849.tmp.dmp
+       \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.12883f46-8568-437a-93bd-a3deb6df79e0.tmp.WERInternalMetadata.x
+       ml
+       \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.28
+
+Time : 8/7/2026 8:24:40 AM
+Id   : 1000
+Msg  : Faulting application name: ViceSharp.Xbox.exe, version: 1.2.7.0, time stamp: 0x6a3e0000
+       Faulting module name: ntdll.dll, version: 10.0.26100.8875, time stamp: 0xba65e4a2
+       Exception code: 0xc00000fd
+       Fault offset: 0x000000000005361c
+       Faulting process id: 0x8B0
+       Faulting application start time: 0x1DD266FEF59348B
+       Faulting application path: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout\ViceSharp.Xbox.exe
+       Faulting module path: C:\WINDOWS\SYSTEM32\ntdll.dll
+       Report Id: c9597bd5-4954-48b1-9b33-e25feb4426b5
+       Faulting package full name: sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+       
+
+---settings---
+{
+  "ProfileId": "vic20ntsc",
+  "Limiter": {
+    "RatePercent": 100,
+    "IsEnabled": true,
+    "PacingStrategy": "vice"
+  },
+  "Display": {
+    "Renderer": "host",
+    "Palette": "vice",
+    "ShowBorder": true,
+    "MaintainAspectRatio": true,
+    "Scale": "fit-window",
+    "CropMode": "visible-area",
+    "AspectMode": "vice-pixel-aspect"
+  },
+  "Input": {
+    "KeyboardMapId": "c64:gtk3_pos",
+    "PrimaryJoystickPort": 1,
+    "SwapJoystickPorts": false,
+    "Mode": "keyboard-joystick"
+  },
+  "Audio": {
+    "Mode": "enabled"
+  },
+  "Resources": {
+    "Mode": "auto-detect"
+  },
+  "Vic20MemorySpec": "none",
+  "FileSystemIecRootPath": "",
+  "FileSystemIecUnit": 9,
+  "Vic20ExpansionCartKind": "none",
+  "Vic20ExpansionWriteBack": false,
+  "Vic20ExpansionConfigPreset": "start"
+}

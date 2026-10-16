@@ -1,0 +1,23 @@
+{
+  "kind": "tr",
+  "id": "TR-PERF-ALLOC-001",
+  "title": "Zero Managed Allocations Per RunFrame Hot Path",
+  "status": "completed",
+  "priority": "critical",
+  "body": "Sustained managed C64 PAL RunFrame execution must avoid per-frame managed allocations so 50 Hz operation does not create GC pressure.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-runframe-zero-alloc",
+      "text": "The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window.",
+      "isSatisfied": true,
+      "evidence": "RunFramePerfProbe 60 600: allocated=0 bytes"
+    },
+    {
+      "id": "ac-benchmark-no-alloc",
+      "text": "BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark.",
+      "isSatisfied": true,
+      "evidence": "BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation"
+    }
+  ]
+}

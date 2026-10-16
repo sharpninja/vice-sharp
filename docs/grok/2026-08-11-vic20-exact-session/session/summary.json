@@ -1,0 +1,30 @@
+{
+  "info": {
+    "id": "019fd0df-383d-7fc0-9f0a-69785afd78ed",
+    "cwd": "F:\\GitHub\\vice-sharp"
+  },
+  "session_summary": "New Session Start",
+  "created_at": "2026-08-05T07:41:57.703273200Z",
+  "updated_at": "2026-08-11T23:43:48.219622Z",
+  "num_messages": 42038,
+  "num_chat_messages": 54,
+  "current_model_id": "grok-4.5",
+  "next_trace_turn": 176,
+  "chat_format_version": 1,
+  "git_root_dir": "F:/GitHub/vice-sharp/",
+  "git_remotes": [
+    "https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp",
+    "https://github.com/sharpninja/vice-sharp.git"
+  ],
+  "head_commit": "e5203f94c69511ce3dbbf69eee7a4f038cd53d7a",
+  "head_branch": "main",
+  "request_id": "0a74cf96-a244-4fa6-973e-5fdb987219e9",
+  "grok_home": "C:\\Users\\kingd\\.grok",
+  "last_active_at": "2026-08-11T23:43:48.219622Z",
+  "generated_title": "New Session Start",
+  "agent_name": "grok-build-plan",
+  "sandbox_profile": "off",
+  "reasoning_effort": "high",
+  "last_turn_summary": "Goal plan already in archive; Grok → f45bbc2",
+  "last_turn_summary_prompt_id": "0311cea8-6587-4aca-9e7b-7c6a2984fbfe"
+}

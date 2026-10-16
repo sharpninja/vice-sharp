@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SYSBTN-002",
+  "title": "Edge-triggered activation (Press/Hold/Toggle)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Edge-triggered activation (Press once/Hold paired/Toggle). Acceptance: verified by TEST-SYSBTN-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

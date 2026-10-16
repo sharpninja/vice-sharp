@@ -1,0 +1,41 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	[31mmodified:   HANDOFF.md[m
+	[31mmodified:   docs/xbox/ado-store-setup.md[m
+	[31mmodified:   docs/xbox/store-listing-copy.md[m
+	[31mmodified:   docs/xbox/store-next-steps-guide.md[m
+	[31mmodified:   native/vice-shim-vic20.c[m
+	[31mmodified:   native/vice-shim.h[m
+	[31mmodified:   src/ViceSharp.Abstractions/IViceNative.cs[m
+	[31mmodified:   src/ViceSharp.Chips/Cpu/Mos6502.cs[m
+	[31mmodified:   src/ViceSharp.Chips/Vic/Mos6561.cs[m
+	[31mmodified:   src/ViceSharp.Core/ViceNative.Xvic.cs[m
+	[31mmodified:   src/ViceSharp.Core/ViceNative.cs[m
+	[31mmodified:   src/ViceSharp.Xbox/Package.appxmanifest[m
+	[31mmodified:   tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs[m
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	[31mdocs/S-Blox/[m
+	[31mdocs/receipts-lockstep-10s-2026-08-05.txt[m
+	[31mdocs/receipts-phase2-lockstep-certification-2026-08-05.txt[m
+	[31mdocs/receipts-vic20-phase2-verify-2026-08-05.txt[m
+	[31mdocs/reviews/code-review-20260714T001056552Z.md[m
+	[31mdocs/reviews/code-review-20260714T004256563Z.md[m
+	[31mdocs/romless-vic-badline-fix.md[m
+	[31mdocs/xbox/store-product-identity.md[m
+	[31mdocs/xbox/store-screenshots/[m
+	[31mmanifests/[m
+	[31mtests/ViceSharp.TestHarness/Vic20/BranchCycleCountTests.cs[m
+	[31mtests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (077fde2f8cf497f038ca4599c2dfc130f5957f70)
+
+src\ViceSharp.Chips\Cpu\Mos6502.cs:362:            if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode))
+src\ViceSharp.Chips\Cpu\Mos6502.cs:372:            // Retire lag-compensation that assumed 2-cycle taken branches.
+

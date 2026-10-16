@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXPKG-002",
+  "title": "Conditional-TFM fallback + head-only UWP guarded",
+  "status": "pending",
+  "priority": "medium",
+  "body": "ViceSharpXboxUwp conditional-TFM fallback + head-only UWP/XAML/manifest/MSIX guarded so a workload-less agent builds slnx. Acceptance: verified by TEST-XBOXPKG-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

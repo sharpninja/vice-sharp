@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-PRF-001",
+  "title": "Commodore 64 (Original NMOS) Machine Profile",
+  "status": "pending",
+  "priority": "high",
+  "body": "The primary machine profile for the original Commodore 64 with NMOS chips: MOS 6510 CPU, MOS 6567 (NTSC) or MOS 6569 (PAL) VIC-II, MOS 6581 SID, two MOS 6526 CIAs. This is the baseline profile and the first target for full compatibility.\n\n## Acceptance Criteria\n- CPU: MOS 6510 with all undocumented opcodes exhibiting NMOS behavior.\n- VIC-II: MOS 6569R3 (PAL) or MOS 6567R8 (NTSC) with correct timing per variant.\n- SID: MOS 6581 with characteristic analog filter curve and combined waveform behavior.\n- CIA: Two MOS 6526 with correct timer and TOD behavior.\n- RAM: 64KB main RAM + 1KB Color RAM.\n- ROM: BASIC V2 ($A000), KERNAL ($E000), Character Generator ($D000).\n- System clock: 985248 Hz (PAL) or 1022727 Hz (NTSC).\n- The profile is selectable via `IMachineProfile.LoadProfile(\"c64\")`.\n- PAL/NTSC variant is configurable within the C64 profile.\n- Passes the VICE test suite for x64sc accuracy level.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

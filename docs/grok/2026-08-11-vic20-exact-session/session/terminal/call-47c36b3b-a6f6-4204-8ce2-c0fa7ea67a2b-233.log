@@ -1,0 +1,6 @@
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_Reset_DoesNotApplyC64InitPattern [5 ms]
+  Error Message:
+Failed!  - Failed:     1, Passed:    77, Skipped:     0, Total:    78, Duration: 135 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+

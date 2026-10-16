@@ -1,0 +1,99 @@
+namespace ViceSharp.Xbox.ViewModels;
+
+/// <summary>
+/// PLAN-XBOXUWP S25 (IMPL-XBOXUWP-025) + PLAN-XKEYBOARD-001 K1, area XBOXUI/XKBD. One
+/// tile on the on-screen virtual C64 keyboard: the exact key-map string it injects, the
+/// glyph shown on it, its width, and which machine seam it drives
+/// (<see cref="AppKeyKind"/>).
+/// </summary>
+/// <param name="KeyName">
+/// The EXACT string the ViewModel passes to
+/// <see cref="ViceSharp.Abstractions.IMachineKeyboardInput.SetKeyState(string, bool)"/>
+/// for an ordinary (<see cref="AppKeyKind.Key"/>) tile, or the SHIFT key name
+/// ("LeftShift"/"RightShift") a momentary tile wraps the next key in. It MUST be a name
+/// the C64 keyboard map resolves. The ViewModels project cannot reference the engine, so
+/// these strings are hardcoded here and validated against the real map by the tests. For
+/// the <see cref="AppKeyKind.Restore"/> tile this value is not injected as a key (the
+/// tile drives the RESTORE/NMI seam instead) and need not be a map key.
+/// </param>
+/// <param name="DisplayLabel">The glyph or caption rendered on the tile in the 10-foot UI.</param>
+/// <param name="IsWide">
+/// <c>true</c> for keys wider than one unit (RETURN, SPACE) so simple layouts can size
+/// them; <see cref="EffectiveWidthUnits"/> carries the precise width.
+/// </param>
+/// <param name="Kind">
+/// Which machine seam pressing the tile drives: an ordinary matrix key, the SHIFT-LOCK
+/// latch, a momentary SHIFT, or the RESTORE/NMI trigger. Defaults to
+/// <see cref="AppKeyKind.Key"/>.
+/// </param>
+/// <param name="WidthUnits">
+/// The tile's width in key units for the authentic layout (PLAN-XKEYBOARD-001: RETURN 2,
+/// SPACE ~9, ordinary keys 1). Values not greater than zero mean "derive from
+/// <paramref name="IsWide"/>" (2 when wide, else 1); read <see cref="EffectiveWidthUnits"/>.
+/// </param>
+/// <param name="ShiftedLabel">
+/// FEAT-XKEYCAPSHIFT-001: the PRINTABLE character this key inserts while SHIFT is
+/// effective (the legend printed on the physical keycap top, e.g. "1" -&gt; "!",
+/// ":" -&gt; "["). <c>null</c> means the keycap does not change (letters and most keys
+/// produce mode-dependent PETSCII graphics under SHIFT/C=; showing nothing beats
+/// showing something wrong).
+/// </param>
+/// <param name="IsFunctionCap">
+/// FEAT-XKEYCAPMODEL-001: <c>true</c> for the F1/F3/F5/F7 function keys, so a head that
+/// skins the keycaps per emulated model (the breadbin's dark-brown function keys vs the
+/// beige main keys) can pick the function palette without hard-coding key names in the view.
+/// </param>
+public sealed record VirtualKeyEntry(
+    string KeyName,
+    string DisplayLabel,
+    bool IsWide,
+    AppKeyKind Kind = AppKeyKind.Key,
+    double WidthUnits = 0,
+    string? ShiftedLabel = null,
+    bool IsFunctionCap = false)
+{
+    /// <summary>
+    /// The tile's width in key units: <see cref="WidthUnits"/> when positive, otherwise
+    /// derived from <see cref="IsWide"/> (2 for wide tiles, 1 for ordinary ones).
+    /// </summary>
+    public double EffectiveWidthUnits => WidthUnits > 0 ? WidthUnits : (IsWide ? 2.0 : 1.0);
+
+    /// <summary>
+    /// FEAT-XKEYCAPMODEL-001 (operator 2026-07-18 "reconcile with real C64 keyboard"): the
+    /// legend point size for this cap, scaled to the longest label line so single-character
+    /// legends sit LARGE like the machine, while multi-character legends (RESTORE, RETURN,
+    /// CLR/HOME, ...) shrink to fit their cap instead of clipping.
+    /// </summary>
+    public double DisplayFontSize
+    {
+        get
+        {
+            var longest = 0;
+            var current = 0;
+            foreach (var ch in DisplayLabel)
+            {
+                if (ch == '\n')
+                {
+                    current = 0;
+                    continue;
+                }
+
+                current++;
+                if (current > longest)
+                    longest = current;
+            }
+
+            if (longest < 1)
+                longest = 1;
+
+            // Fit the longest label LINE to the cap WIDTH: one key unit renders at ~52 px and
+            // the PetMe64 face is monospace, so a glyph's advance is ~= its point size. The
+            // 0.82 factor leaves margin/bevel room; the clamp keeps single-char legends large
+            // without letting a wide cap blow the legend up, and never shrinks below readable.
+            const double unitPixels = 52.0;
+            double capWidth = EffectiveWidthUnits * unitPixels;
+            double fit = capWidth * 0.82 / longest;
+            return System.Math.Clamp(System.Math.Floor(fit), 9.0, 22.0);
+        }
+    }
+}

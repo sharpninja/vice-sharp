@@ -1,0 +1,21 @@
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 333 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj (in 351 ms).
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:08.85
+BUILD EXIT 0

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CTX-004",
+  "title": "One-shot neutralizing push on context entry",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Entering any non-Gameplay context emits a one-shot neutralizing push to both ports. Acceptance: Gameplay->MainMenu edge -> Joy1=Joy2 neutral push (an emitted neutral, not a suppressed no-op).\n\n## Acceptance Criteria\n- Gameplay->MainMenu edge -> Joy1=Joy2 neutral push (an emitted neutral, not a suppressed no-op).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

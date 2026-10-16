@@ -1,0 +1,23 @@
+/mcpserver/requirements/{kind}/{id}/acceptance-criteria/copy-from-todo
+/mcpserver/todo
+/mcpserver/todo/{id}
+/mcpserver/todo/{id}/audit
+/mcpserver/todo/projection/status
+/mcpserver/todo/projection/repair
+/mcpserver/todo/{id}/close
+/mcpserver/todo/{id}/move
+/mcpserver/todo/{id}/requirements
+/mcpserver/todo/{id}/prompt/status
+/mcpserver/todo/{id}/prompt/implement
+/mcpserver/todo/{id}/prompt/plan
+/mcpserver/todo/{id}/prompt/status/queue
+/mcpserver/todo/{id}/prompt/implement/queue
+/mcpserver/todo/{id}/prompt/plan/queue
+/mcpserver/todo-execution/phases
+/mcpserver/todo-execution/phases/{phaseId}/todos
+/mcpserver/todo-execution/active
+/mcpserver/todo-execution/next-ready
+/mcpserver/todo-execution/todos/{todoId}
+PUT_FAIL Response status code does not indicate success: 405 (Method Not Allowed).
+PATCH_FAIL Response status code does not indicate success: 405 (Method Not Allowed).
+WR_FAIL Response status code does not indicate success: 405 (Method Not Allowed).

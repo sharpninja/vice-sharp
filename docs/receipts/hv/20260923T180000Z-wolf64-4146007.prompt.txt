@@ -1,0 +1,60 @@
+You are Codex acting as an independent HOSTILE VALIDATOR (not the implementer).
+
+Model: gpt-6-astra. Reasoning effort: xhigh.
+Workspace: F:\GitHub\vice-sharp
+Scope: Wolf64 lockstep identity vs x64sc. Current implementer work around FirstMismatch 4146007 / 4147654 / live 4147669.
+
+FIRST ACTION: read every non-skill markdown file under C:\Users\kingd\.claude\profile\ in full (exclude add-profile*.md). Then validate.
+
+Default every claim to FAIL until YOU re-verify from the tree, VICE source, dumps, and tests. Do not trust chat. Do not modify product source. You MAY run tests. You MAY write the report file named at the end.
+
+Plan: C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\01a08d73-78bf-74c1-8a34-7b758e98bcaa\goal\plan.md
+Prior Astra HV (2026-09-16) REJECTED implied-opcode previous-opcode BPL hold. Do not recommend restoring it.
+
+READ before scoring:
+- src/ViceSharp.Chips/Cpu/Mos6502.cs (FETCH IRQ sample around TrySampleInterruptBeforeFetch, _skipIrqSampleAtNextFetch, OnStolenCycle STA zp cycle 0, _notTakenBranchHoldFinalPc)
+- src/ViceSharp.Core/SystemClock.cs TryDispatchInterrupts / irq_delay
+- native/vice/vice/src/6510dtvcore.c DO_INTERRUPT, BRANCH, FETCH loop
+- native/vice/vice/src/mainc64cpu.c interrupt_check_irq_delay
+- tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs BplAfterLdaAbsY_ElapsedIrq_PushesBeforeBplJump and NotTakenBeqAfterSbcAbsYPageCross_LastClk_HoldsOpcodePc
+- tests/ViceSharp.TestHarness/LockstepValidator.cs
+- git diff of Mos6502.cs SystemClock.cs CpuVisiblePcTimingTests.cs vs HEAD
+- dump C:\Users\kingd\AppData\Local\Temp\grok-goal-3adb9b7119f3\implementer\wolf64-lockstep\wolf64-after-4139089-pbcskip.txt (4146007)
+- dump C:\Users\kingd\AppData\Local\Temp\grok-goal-3adb9b7119f3\implementer\wolf64-lockstep\wolf64-after-4146007-stazp0.txt (4147654 after 4146007 restore)
+- dump C:\Users\kingd\AppData\Local\Temp\grok-goal-3adb9b7119f3\implementer\wolf64-lockstep\wolf64-after-4147654.txt (4147669)
+- dump C:\Users\kingd\AppData\Local\Temp\grok-goal-3adb9b7119f3\implementer\wolf64-lockstep\wolf64-after-4147669.txt (regression 4138197 after reverted INY-after-INC defer)
+
+CLAIMS TO ATTACK:
+
+C1. DIAGNOSIS 4146007: After LDA abs,Y $B9 at $A5FA, taken BPL $10 at $A5FD. Native already pushing IRQ (nS=$F8 nPC=$A5FD nLastOp=$B9 nIrqDelay=7). Managed JUMPed to $A5F9 with irqSeq=6 S=$F9 mDelays=True. VICE DO_INTERRUPT is before FETCH of BPL (previous opcode $B9 does not DELAYS). Managed FETCHed BPL dummy then JUMP extra tick armed IRQ.
+
+C2. SOLUTION 4146007: Sample IRQ before every FETCH (not only when DELAYS is set). Stolen STA abs write / stolen STA zp apply / stolen LDA zp data-read are not DO_INTERRUPT: skip that following FETCH sample (_skipIrqSampleAtNextFetch) so wait-loop BEQ/STA still run (2520240 / 3899688 / 3505560). STA zp cycle-0 last-CLK steal also notifies and sets the skip. Pin BplAfterLdaAbsY_ElapsedIrq_PushesBeforeBplJump. Implementer claims this is VICE-faithful for 4146007 and does not claim first-scene lockstep.
+
+C3. DIAGNOSIS 4147654: After page-cross SBC abs,Y last CLK held opcode PC, not-taken BEQ last CLK native still opcode $A5BF. Managed exported fall-through $A5C1. Sticky _fuseImpliedAfterIndyLoad skipped not-taken hold.
+
+C4. SOLUTION 4147654: _notTakenBranchHoldFinalPc still holds when previous is absolute ALU (SBC abs,Y $F9) even if fuseImplied is set. Pin NotTakenBeqAfterSbcAbsYPageCross_LastClk_HoldsOpcodePc. After this, Wolf64 advanced to 4147669.
+
+C5. LIVE mismatch 4147669: INY $C8 at $A5F9 after INC zp. Native last CLK pre-op Y=$CD nPC=$A5F9. Managed fused Y=$CE mPC=$A5FA. Implementer tried defer INY after INC following full-length taken BNE. That REGRESSED FirstMismatch to 4138197. That defer was reverted. Implementer does NOT claim 4147669 closed.
+
+C6. Implementer does NOT claim lockstep reached first in-game scene ($D015=$20). Screen still LOAD"*",8,1 with Return releasing. $D015=00.
+
+C7. Prior Astra HV rejected IsImpliedRegisterOrFlagOpcode as a previous-opcode BPL-PC special case. It is not restored. Do not recommend restoring it.
+
+C8. CpuVisiblePcTimingTests and idle First10000/First100000 are green after the 4146007/4147654 restores (without the reverted 4147669 INY-after-INC patch). Re-run them. Do not count skipped tests as passing.
+
+Also score workspace rules (honesty, receipts, Byrd tests-first for this CPU slice), requirements FR-CPU-002 / TR-CYCLE-001 / TR-LOCKSTEP-VSF-001 coverage by the named pins, and the plan holistically (first-scene DoD is NOT met).
+
+OUTPUT:
+## Hostile validation
+Per-claim PASS|FAIL|UNKNOWN with evidence (commands, paths, line anchors).
+OverallVerdict AGREE only if ALL applicable PASS else DISAGREE.
+Accuracy percent and completeness percent (both must be numeric). OverallVerdict DISAGREE if either is below 98.
+Explicit FAIL list (none if empty).
+State whether 4146007 diagnosis/solution is VICE-faithful.
+State whether 4147654 diagnosis/solution is VICE-faithful.
+State the live FirstMismatchCycle you independently observe if you re-run Wolf64Disk_ReportsFirstMismatchCycle with VICESHARP_WOLF64_LOCKSTEP=1.
+State a VICE-faithful next fix for 4147669 without implementing it.
+Then === VERDICT JSON ===
+{"verdict":"AGREE|DISAGREE","accuracy":N,"completeness":N,"fail_list":[],"c4146007":"AGREE|DISAGREE|INCOMPLETE","c4147654":"AGREE|DISAGREE|INCOMPLETE","live_mismatch":N,"implied_opcode_patch":"REJECT","first_scene":"NOT-REACHED"}
+
+Write the same report to docs/receipts/hv/20260923T180000Z-wolf64-4146007-report.md

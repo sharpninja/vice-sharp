@@ -1,0 +1,83 @@
+
+C:\Users\kingd\AppData\Local\Temp\romm-process.json:29:            "GitUrl": null,
+C:\Users\kingd\AppData\Local\Temp\romm-process.json:45:          "GitDependencies": [
+C:\Users\kingd\AppData\Local\Temp\romm-process.json:48:              "RepositoryUri": 
+"https://github.com/sharpninja/RomM-GB64.git",
+C:\Users\kingd\AppData\Local\Temp\romm-process.json:53:              "GitHubConnectionId": null,
+C:\Users\kingd\AppData\Local\Temp\romm-process.json:61:            "Octopus.Action.Script.ScriptBody": 
+"$ErrorActionPreference = \"Stop\"\n\nfunction Invoke-External([string]$Command, [string]$FailureMessage) {\n  
+Write-Host \">> $Command\"\n  cmd /c \"$Command 2>&1\"\n  if ($LASTEXITCODE -ne 0) { throw \"$FailureMessage (exit 
+$LASTEXITCODE)\" }\n}\n\n$deployPath = $OctopusParameters[\"RomM.DeployPath\"]\nif 
+([string]::IsNullOrWhiteSpace($deployPath)) { $deployPath = \"C:\\deploy\\RomM\" }\n$gitUrl = 
+$OctopusParameters[\"RomM.GitUrl\"]\nif ([string]::IsNullOrWhiteSpace($gitUrl)) { $gitUrl = 
+\"https://github.com/sharpninja/RomM-GB64.git\" }\n$gitBranch = $OctopusParameters[\"RomM.GitBranch\"]\nif 
+([string]::IsNullOrWhiteSpace($gitBranch)) { $gitBranch = \"master\" }\n$releaseNumber = 
+$OctopusParameters[\"Octopus.Release.Number\"]\n$gitRefOverride = $OctopusParameters[\"RomM.GitRef\"]\n\nWrite-Host 
+\"RomM deploy path: $deployPath\"\nWrite-Host \"Git URL: $gitUrl branch: $gitBranch release: $releaseNumber 
+gitRefOverride: $gitRefOverride\"\nWrite-Host \"Machine: $env:COMPUTERNAME\"\n\n$parent = Split-Path -Parent 
+$deployPath\nif ($parent -and -not (Test-Path -LiteralPath $parent -PathType Container)) {\n  New-Item -ItemType 
+Directory -Path $parent -Force | Out-Null\n}\n\n# Snapshot operator state before git operations (preserve across 
+checkout)\n$preserveRel = @(\n  \".env\",\n  \"runtime\\config\",\n  \"runtime\\assets\",\n  \"runtime\\library\",\n  
+\"runtime\\csdb\",\n  \"runtime\\hvsc\",\n  \"hvsc\",\n  \"gb64\"\n)\n$stashRoot = Join-Path $env:TEMP 
+(\"romm-deploy-preserve-\" + [guid]::NewGuid().ToString(\"N\"))\nNew-Item -ItemType Directory -Path $stashRoot -Force 
+| Out-Null\nfunction Save-Preserved([string]$Rel) {\n  $src = Join-Path $deployPath $Rel\n  if (-not (Test-Path 
+-LiteralPath $src)) { return }\n  $dst = Join-Path $stashRoot $Rel\n  $dstParent = Split-Path -Parent $dst\n  if 
+($dstParent -and -not (Test-Path -LiteralPath $dstParent)) {\n    New-Item -ItemType Directory -Path $dstParent -Force 
+| Out-Null\n  }\n  Write-Host \"Stashing $Rel\"\n  if (Test-Path -LiteralPath $src -PathType Container) {\n    
+Copy-Item -LiteralPath $src -Destination $dst -Recurse -Force\n  } else {\n    Copy-Item -LiteralPath $src 
+-Destination $dst -Force\n  }\n}\nfunction Restore-Preserved([string]$Rel) {\n  $src = Join-Path $stashRoot $Rel\n  if 
+(-not (Test-Path -LiteralPath $src)) { return }\n  $dst = Join-Path $deployPath $Rel\n  $dstParent = Split-Path 
+-Parent $dst\n  if ($dstParent -and -not (Test-Path -LiteralPath $dstParent)) {\n    New-Item -ItemType Directory 
+-Path $dstParent -Force | Out-Null\n  }\n  Write-Host \"Restoring $Rel\"\n  if (Test-Path -LiteralPath $src -PathType 
+Container) {\n    if (Test-Path -LiteralPath $dst) { Remove-Item -LiteralPath $dst -Recurse -Force }\n    Copy-Item 
+-LiteralPath $src -Destination $dst -Recurse -Force\n  } else {\n    Copy-Item -LiteralPath $src -Destination $dst 
+-Force\n  }\n}\n\nif ((Test-Path -LiteralPath $deployPath) -and -not (Test-Path -LiteralPath (Join-Path $deployPath 
+\"docker-compose.yml\"))) {\n  Write-Host \"Removing incomplete deploy path $deployPath\"\n  Remove-Item -LiteralPath 
+$deployPath -Recurse -Force\n}\n\nif (Test-Path -LiteralPath $deployPath -PathType Container) {\n  foreach ($r in 
+$preserveRel) { Save-Preserved $r }\n}\n\nif (-not (Test-Path -LiteralPath $deployPath -PathType Container)) {\n  
+Write-Host \"Cloning $gitUrl -> $deployPath\"\n  Invoke-External \"git clone `\"$gitUrl`\" `\"$deployPath`\"\" \"git 
+clone\"\n}\n\nSet-Location $deployPath\nInvoke-External \"git fetch --prune --tags origin\" \"git 
+fetch\"\n\n$checkoutRef = $null\nif (-not [string]::IsNullOrWhiteSpace($gitRefOverride)) {\n  $checkoutRef = 
+$gitRefOverride\n} elseif (-not [string]::IsNullOrWhiteSpace($releaseNumber)) {\n  foreach ($candidate in 
+@(\"v$releaseNumber\", $releaseNumber, \"refs/tags/v$releaseNumber\", \"refs/tags/$releaseNumber\")) {\n    cmd /c 
+\"git rev-parse --verify `\"$candidate`\" >nul 2>&1\"\n    if ($LASTEXITCODE -eq 0) { $checkoutRef = $candidate; break 
+}\n  }\n}\nif ([string]::IsNullOrWhiteSpace($checkoutRef)) {\n  $checkoutRef = \"origin/$gitBranch\"\n}\n\nWrite-Host 
+\"Checking out $checkoutRef\"\n# Never delete operator data via git clean\nInvoke-External \"git clean -fd -e .env -e 
+runtime/ -e gb64/ -e hvsc/\" \"git clean\"\nInvoke-External \"git checkout -f $checkoutRef\" \"git 
+checkout\"\n$deployedCommit = (git rev-parse HEAD).Trim()\nWrite-Host \"deploy checkout at $deployedCommit 
+($checkoutRef)\"\n\n# Restore stashed operator state (wins over empty tree from clone)\nforeach ($r in $preserveRel) { 
+Restore-Preserved $r }\nRemove-Item -LiteralPath $stashRoot -Recurse -Force -ErrorAction SilentlyContinue\n\nif (-not 
+(Test-Path -LiteralPath \".\\docker-compose.yml\" -PathType Leaf)) {\n  throw \"docker-compose.yml not found under 
+$deployPath\"\n}\n\n# .env: only create from example if missing; never overwrite\nif (-not (Test-Path -LiteralPath 
+\".\\.env\" -PathType Leaf)) {\n  if (Test-Path -LiteralPath \".\\.env.example\" -PathType Leaf) {\n    Write-Host 
+\"WARNING: .env missing; copying .env.example (first deploy only)\"\n    Copy-Item \".\\.env.example\" \".\\.env\"\n  
+} else {\n    throw \".env missing under $deployPath\"\n  }\n} else {\n  Write-Host \"Preserving existing 
+.env\"\n}\n\n# config.yml: never overwrite non-empty\n$configPath = \".\\runtime\\config\\config.yml\"\nif (-not 
+(Test-Path -LiteralPath \".\\runtime\\config\")) {\n  New-Item -ItemType Directory -Path \".\\runtime\\config\" -Force 
+| Out-Null\n}\nif (Test-Path -LiteralPath $configPath -PathType Leaf) {\n  $cfgLen = (Get-Item -LiteralPath 
+$configPath).Length\n  Write-Host \"Preserving RomM config.yml ($cfgLen bytes)\"\n} else {\n  New-Item -ItemType File 
+-Path $configPath -Force | Out-Null\n  Write-Host \"Created empty runtime/config/config.yml\"\n}\n\n# Platform dirs + 
+conditional GB64 library prepare (skip if library data present)\n$prepare = 
+\".\\scripts\\Prepare-RomMLibrary.ps1\"\nif (Test-Path -LiteralPath $prepare) {\n  Write-Host \"Running 
+Prepare-RomMLibrary.ps1 (library build only if GB64 library data missing)\"\n  & pwsh -NoProfile -File $prepare 
+-RepoRoot $deployPath\n  if ($LASTEXITCODE -ne 0) {\n    & powershell -NoProfile -File $prepare -RepoRoot 
+$deployPath\n  }\n  if ($LASTEXITCODE -ne 0) { throw \"Prepare-RomMLibrary.ps1 failed (exit $LASTEXITCODE)\" }\n} else 
+{\n  Write-Host \"WARNING: Prepare-RomMLibrary.ps1 missing; ensuring platform dirs only\"\n  @(\n    
+\"runtime\\library\\roms\\c64\",\n    \"runtime\\library\\roms\\c128\",\n    \"runtime\\library\\roms\\c-plus-4\",\n   
+ \"runtime\\library\\roms\\vic-20\",\n    \"hvsc\",\n    \"runtime\\assets\",\n    \"runtime\\csdb\"\n  ) | 
+ForEach-Object {\n    $rp = Join-Path $deployPath $_\n    if (-not (Test-Path -LiteralPath $rp)) { New-Item -ItemType 
+Directory -Path $rp -Force | Out-Null }\n  }\n}\n\nWrite-Host \"Freeing ports / prior containers\"\n$prevEap = 
+$ErrorActionPreference\n$ErrorActionPreference = \"Continue\"\ncmd /c \"docker compose down --remove-orphans 
+2>&1\"\nforeach ($name in @(\"csdb-bridge\",\"romm\",\"romm-db\")) {\n  cmd /c \"docker rm -f $name 
+2>&1\"\n}\n$holders = @(docker ps -q --filter \"publish=8090\" 2>$null)\nforeach ($id in $holders) {\n  if ($id) { cmd 
+/c \"docker rm -f $id 2>&1\" }\n}\n$ErrorActionPreference = $prevEap\n\nWrite-Host \"Building and starting compose 
+stack\"\nInvoke-External \"docker compose up -d --build\" \"docker compose up\"\nInvoke-External \"docker compose ps\" 
+\"docker compose ps\"\n\nStart-Sleep -Seconds 8\ntry {\n  $port = 8080\n  $line = Select-String -Path \".\\.env\" 
+-Pattern \"^\\s*ROMM_PORT\\s*=\" | Select-Object -First 1\n  if ($line) { $port = ($line.Line -split 
+\"=\",2)[1].Trim() }\n  $r = Invoke-WebRequest -Uri \"http://127.0.0.1:$port/\" -UseBasicParsing -TimeoutSec 30\n  
+Write-Host \"RomM HTTP $port status $($r.StatusCode)\"\n} catch { Write-Host \"RomM HTTP probe: 
+$($_.Exception.Message)\" }\ntry {\n  $b = Invoke-RestMethod -Uri \"http://127.0.0.1:8090/health\" -TimeoutSec 20\n  
+Write-Host \"csdb-bridge health: $($b | ConvertTo-Json -Compress)\"\n} catch { Write-Host \"csdb-bridge health probe: 
+$($_.Exception.Message)\" }\n\nWrite-Host \"RomM stack redeployed on $env:COMPUTERNAME from $deployPath @ 
+$deployedCommit (config preserved; library build conditional)\"",
+

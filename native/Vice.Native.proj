@@ -3,7 +3,6 @@
     <TargetFramework>net10.0</TargetFramework>
     <NativeLibs>$(OutDir)native</NativeLibs>
     <BuildNativeCommand Condition="'$(OS)' == 'Windows_NT'">pwsh.exe -NoProfile -ExecutionPolicy Bypass -File .\build-vice-shim.ps1</BuildNativeCommand>
-    <BuildNativeCommand Condition="'$(OS)' != 'Windows_NT'">bash ./build-vice-shim.sh</BuildNativeCommand>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +24,13 @@
     <None Include="vice\vice\src\**\*.*" />
   </ItemGroup>
 
+  <Target Name="ValidateNativeBuildPlatform">
+    <Error Condition="'$(OS)' != 'Windows_NT'"
+           Text="The hosted native VICE oracle currently requires Windows and MSYS2 (Win32 APIs in vice-shim.c). Managed test builds are supported on this platform; run native parity validation on Windows." />
+  </Target>
+
   <Target Name="BuildNative"
+          DependsOnTargets="ValidateNativeBuildPlatform"
           BeforeTargets="Build"
           Inputs="@(NativeBuildInputs)"
           Outputs="$(MSBuildProjectDirectory)\vice_x64.dll"

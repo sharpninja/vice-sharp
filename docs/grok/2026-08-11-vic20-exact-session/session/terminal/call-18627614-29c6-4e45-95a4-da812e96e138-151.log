@@ -1,0 +1,20 @@
+make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+make: Nothing to be done for 'all'.
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c: In function 'vice_shim_set_current_thread_description':
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c:265:30: warning: cast between incompatible function types from 'FARPROC' {aka 'long long int (*)(void)'} to 'HRESULT (*)(void *, const WCHAR *)' {aka 'long int (*)(void *, const short unsigned int *)'} [-Wcast-function-type]
+  265 |     set_thread_description = (vice_shim_set_thread_description_fn)GetProcAddress(kernel32, "SetThreadDescription");
+      |                              ^
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c: In function 'vice_shim_vic20_visible_window_locked':
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c:1175:29: error: invalid use of undefined type 'struct video_canvas_s'
+ 1175 |         || vic.raster.canvas->draw_buffer == NULL
+      |                             ^~
+compilation terminated due to -Wfatal-errors.
+make: *** [/tmp/tmp.v3SmBscT41:8: /f/GitHub/vice-sharp/native/vice-shim-vic20-hosted.o] Error 1
+EXIT 2
+True
+
+Saturday, August 8, 2026 2:51:10 AM
+

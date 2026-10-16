@@ -1,0 +1,11 @@
+
+src\ViceSharp.Core\ViceNative.cs:92:    private static partial byte PeekRamNative(IntPtr instance, ushort address);
+src\ViceSharp.Core\ViceNative.cs:95:    public static partial byte ReadMemory(IntPtr instance, ushort address);
+src\ViceSharp.Core\ViceNative.cs:282:    public static byte PeekRam(IntPtr instance, ushort address) => 
+PeekRamNative(instance, address);
+src\ViceSharp.Core\ViceNative.cs:736:        public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
+src\ViceSharp.Core\ViceNative.Xvic.cs:64:    private static partial byte PeekRamNative(IntPtr instance, ushort 
+address);
+src\ViceSharp.Core\ViceNative.Xvic.cs:319:        public byte PeekRam(ushort address) => PeekRamNative(_instance, 
+address);
+

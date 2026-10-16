@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DEVCARDART-001",
+  "title": "Device-card vector art backgrounds",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Every peripheral card in the Avalonia sidebar renders model-appropriate vector device art as a dimmed (opacity 0.20), right-anchored, hit-test-invisible background layer behind the card content. Drives select art by drive model (breadbin for 1540/1541/unknown, 1541-II, 1571, 1581, SFD-1001, CMD-HD, CMD-FD); Tape shows the datasette; Cartridge shows a cartridge. Card content, LED, bindings, and automation ids are unchanged.\n\n## Acceptance Criteria\n- Every peripheral card in the Avalonia sidebar renders model-appropriate vector device art as a dimmed (opacity 0.20), right-anchored, hit-test-invisible background layer behind the card content.\n- Drives select art by drive model (breadbin for 1540/1541/unknown, 1541-II, 1571, 1581, SFD-1001, CMD-HD, CMD-FD); Tape shows the datasette; Cartridge shows a cartridge.\n- Card content, LED, bindings, and automation ids are unchanged.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

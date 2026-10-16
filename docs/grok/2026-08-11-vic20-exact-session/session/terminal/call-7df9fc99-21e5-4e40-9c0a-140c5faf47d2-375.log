@@ -1,0 +1,9 @@
+
+A total of 1 test files matched the specified pattern.
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_FocusedWindow [1 s]
+   DIV first=195405 matchedCycles=195404 budget=500000
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 1 s - ViceSharp.TestHarness.dll 
+(net10.0)
+

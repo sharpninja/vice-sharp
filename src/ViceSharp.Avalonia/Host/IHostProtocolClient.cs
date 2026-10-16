@@ -40,6 +40,9 @@ public interface IHostProtocolClient
 
     ValueTask<EmulatorCommandResponse> ResetAndAutostartDrive8Async(CancellationToken cancellationToken = default);
 
+    /// <summary>Load a PRG into current session RAM and RUN it when it starts at BASIC.</summary>
+    ValueTask<LoadProgramResponse> LoadProgramAsync(string filePath, CancellationToken cancellationToken = default);
+
     ValueTask<EmulatorCommandResponse> SetLimiterRateAsync(double ratePercent, CancellationToken cancellationToken = default);
 
     ValueTask<ListSettingsProfilesResponse> ListSettingsProfilesAsync(CancellationToken cancellationToken = default);

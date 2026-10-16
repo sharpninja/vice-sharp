@@ -1,0 +1,11 @@
+{
+  "sourceAssistantMessageUtc": "2026-09-07T01:29:33Z",
+  "comparison": "Approved proposed_plan body vs persisted prefix, normalized line endings and trailing newlines, after removing exactly one operator-cancelled historical-token cleanup bullet",
+  "sourceHash": "EC35B7545417F160DA44CA64BFB4AC7499B7CB8EF8DFB58E17A8545353B01121",
+  "persistedPrefixHash": "EC35B7545417F160DA44CA64BFB4AC7499B7CB8EF8DFB58E17A8545353B01121",
+  "match": true,
+  "independentReviewer": "GPT-6 Astra xhigh",
+  "independentObservedHash": "EC35B7545417F160DA44CA64BFB4AC7499B7CB8EF8DFB58E17A8545353B01121",
+  "capturedAt": "2026-09-06T22:18:03.8639470-05:00",
+  "handoffEvidence": "Recorded Add-LinesToFile at line1 and current text; no pre-prepend hash was captured, so no byte-preservation claim is made."
+}

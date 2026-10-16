@@ -1,0 +1,7 @@
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-vbus-dump.log:29:   DIV first=2055609 
+matchedCycles=2055608 budget=2216810
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-vbus-dump.log:41:c=2055609 nPC=$EAE0 mPC=$EAE0 
+nA=$21 mA=$91 nX=$01 mX=$01 nY=$00 mY=$00 nS=$ED mS=$ED nP=$A4 mP=$A4 dbgCyc=1 op=$B1 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=True irq=0 mis=True
+

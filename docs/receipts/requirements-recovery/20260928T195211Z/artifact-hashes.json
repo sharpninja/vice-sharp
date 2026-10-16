@@ -1,0 +1,97 @@
+[
+  {
+    "Name": "audit-evidence.json",
+    "Length": 898947,
+    "Sha256": "F4CEB6A0E7EBE67E13FC4477BCA56C5C9ABBE5FCF05E87F98607A9EF0691FE6E"
+  },
+  {
+    "Name": "current-canonical-requirements.zip",
+    "Length": 123777,
+    "Sha256": "4CB536B034FF27EA00F8C418C3FB99EC937A6D148331A53CA00FAF44C7252FD9"
+  },
+  {
+    "Name": "d1f7175-docs-requirements.tar",
+    "Length": 256000,
+    "Sha256": "7422D35C7939D6428A368E306A8B4F187B6300623A8B037DEAE190ED759F17F3"
+  },
+  {
+    "Name": "d28493a-docs-requirements.tar",
+    "Length": 1822720,
+    "Sha256": "1B3D9A718478A20670AFB55894B7894D4598F93E010BF419115D5EAFD0838954"
+  },
+  {
+    "Name": "live-effective-local-layer-1.json",
+    "Length": 264352,
+    "Sha256": "54EE2FD8A109435ACEA8052BC6AFA93F24640C62BA9161E7779DA70C6F196C2A"
+  },
+  {
+    "Name": "live-effective-product-layer-1.json",
+    "Length": 264352,
+    "Sha256": "54EE2FD8A109435ACEA8052BC6AFA93F24640C62BA9161E7779DA70C6F196C2A"
+  },
+  {
+    "Name": "live-layers.yaml",
+    "Length": 1071,
+    "Sha256": "10D254954AF0D6BD51963CA94125F783990E7C351116E9E556F90262EFD0AF1D"
+  },
+  {
+    "Name": "live-mappings.json",
+    "Length": 16024,
+    "Sha256": "A025C01A7475C61026EFFE8214DCBD196D9E29A8AE48C196F1EA3894AE370BF9"
+  },
+  {
+    "Name": "live-raw-requirements.json",
+    "Length": 284142,
+    "Sha256": "28E9D994689B3213A76249271F49E2E1C97382B2F10B867A2538BEA269F3190F"
+  },
+  {
+    "Name": "native-vice-working-tree.patch",
+    "Length": 22404,
+    "Sha256": "90604E39B827F850A382DC13DD921141290EF2C34E1483CDC6C612A07803E9E2"
+  },
+  {
+    "Name": "New-RequirementsRecoveryLedger.ps1",
+    "Length": 52604,
+    "Sha256": "9D0B12735230B8F8097D616505AB58431955933EDA6E608723CEA7DCB5793439"
+  },
+  {
+    "Name": "recovery-ledger.csv",
+    "Length": 51475,
+    "Sha256": "AA21561F127614662ED1214797FE85EDEA12DA4A56198DA679E9F28EA40A4D8F"
+  },
+  {
+    "Name": "recovery-ledger.json",
+    "Length": 1105998,
+    "Sha256": "851B431311A3CEA882A1B8ED0D2F520FED6ABB44B9B4FFC79F657110AECEBD4E"
+  },
+  {
+    "Name": "repository-oracle-state.json",
+    "Length": 5075,
+    "Sha256": "E6956A3A6F250984BD7554A35FF619491504268DFA7D04E20F5ABAE7D48832DD"
+  },
+  {
+    "Name": "rollback-manifest.json",
+    "Length": 315616,
+    "Sha256": "45219E4BB70432BFABA0DE38EFF2D3B18013810EB9A99D91AA593227D67CE6FA"
+  },
+  {
+    "Name": "root-index.patch",
+    "Length": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Name": "root-working-tree.patch",
+    "Length": 1116870,
+    "Sha256": "D449A58F5E35CC26DCAD953CEE440DFF810734B47779EF24BA2A18C196F52747"
+  },
+  {
+    "Name": "staged-recovery-preview.json",
+    "Length": 1003791,
+    "Sha256": "EDF04592B2BD66CAB67019F926844ADA715EA677408DC5B3810DE6A3ACDA0D9E"
+  },
+  {
+    "Name": "staged-recovery-preview.md",
+    "Length": 27207,
+    "Sha256": "537ED2846EF6FF4D8B5267ADA330528A7D51055F57773215F4A92E8C648C4EB8"
+  }
+]

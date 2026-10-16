@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MED-005",
+  "title": "Output Format Selection and Configuration",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The media capture system shall support multiple output formats with configurable encoding parameters. Format selection is exposed through the `IMediaCapture` interface.\n\n## Acceptance Criteria\n- Video formats: MP4 (H.264), AVI (uncompressed or MJPEG), GIF (animated, for short clips).\n- Audio formats: WAV (PCM 16-bit), FLAC (lossless), MP3 (lossy, for smaller files).\n- Image formats: PNG (lossless), BMP (uncompressed), JPEG (lossy).\n- Each format exposes its available quality/compression parameters.\n- Format availability is reported by `IMediaCapture.GetSupportedFormats()`.\n- Unavailable formats (e.g., if the external `ffmpeg` executable is not present) are gracefully reported as unsupported without crashing.\n- The default format for each capture type is configurable via `IMediaCapture.SetDefaultFormat()`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

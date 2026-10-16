@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-IECLOAD-001",
+  "title": "True-drive 1541 LOAD over IEC",
+  "status": "pending",
+  "priority": "high",
+  "body": "A single-system C64 with a true-drive 1541 attached completes LOAD\"*\",8,1, LOAD\"$\",8 and SAVE over the IEC bus, talking to the drive's DOS ROM via the faithful serial electrical model.\n\n## Acceptance Criteria\n- A single-system C64 with a true-drive 1541 attached completes LOAD\"*\",8,1, LOAD\"$\",8 and SAVE over the IEC bus, talking to the drive's DOS ROM via the faithful serial electrical model.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

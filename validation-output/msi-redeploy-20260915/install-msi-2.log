@@ -1,0 +1,136 @@
+ΓÇï
+ΓûêΓûêΓûêΓòù┬á┬á┬áΓûêΓûêΓòùΓûêΓûêΓòù┬á┬á┬áΓûêΓûêΓòùΓûêΓûêΓòù┬á┬áΓûêΓûêΓòùΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓòù
+ΓûêΓûêΓûêΓûêΓòù┬á┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬áΓûêΓûêΓòöΓò¥ΓûêΓûêΓòöΓòÉΓòÉΓòÉΓòÉΓò¥
+ΓûêΓûêΓòöΓûêΓûêΓòù┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓûêΓûêΓûêΓòöΓò¥┬áΓûêΓûêΓûêΓûêΓûêΓòù┬á┬á
+ΓûêΓûêΓòæΓòÜΓûêΓûêΓòùΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓòöΓòÉΓûêΓûêΓòù┬áΓûêΓûêΓòöΓòÉΓòÉΓò¥┬á┬á
+ΓûêΓûêΓòæ┬áΓòÜΓûêΓûêΓûêΓûêΓòæΓòÜΓûêΓûêΓûêΓûêΓûêΓûêΓòöΓò¥ΓûêΓûêΓòæ┬á┬áΓûêΓûêΓòùΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓòù
+ΓòÜΓòÉΓò¥┬á┬áΓòÜΓòÉΓòÉΓòÉΓò¥┬áΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥┬áΓòÜΓòÉΓò¥┬á┬áΓòÜΓòÉΓò¥ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
+ΓÇï
+NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+ΓÇï
+15:03:15 [WRN] Exception was suppressed
+Microsoft.Build.Exceptions.InvalidProjectFileException: The expression "[MSBuild]::GetTargetFrameworkIdentifier(net10.0)" cannot be evaluated. Could not load file or assembly 'NuGet.Frameworks, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'. The located assembly's manifest definition does not match the assembly reference. (0x80131040)  C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.TargetFrameworkInference.targets
+   at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject(String errorSubCategoryResourceName, IElementLocation elementLocation, String resourceName, Object[] args)
+   at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject[T1,T2](IElementLocation elementLocation, String resourceName, T1 arg0, T2 arg1)
+   at Microsoft.Build.Evaluation.Expander`2.Function.Execute(Object objectInstance, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation)
+   at Microsoft.Build.Evaluation.Expander`2.PropertyExpander.ExpandPropertyBody(String propertyBody, Object propertyValue, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation, PropertiesUseTracker propertiesUseTracker, IFileSystem fileSystem)
+   at Microsoft.Build.Evaluation.Expander`2.PropertyExpander.ExpandPropertiesLeaveTypedAndEscaped(String expression, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation, PropertiesUseTracker propertiesUseTracker, IFileSystem fileSystem)
+   at Microsoft.Build.Evaluation.Expander`2.ExpandIntoStringLeaveEscaped(String expression, ExpanderOptions options, IElementLocation elementLocation)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluatePropertyElement(ProjectPropertyElement propertyElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluatePropertyGroupElement(ProjectPropertyGroupElement propertyGroupElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.Evaluate()
+   at Microsoft.Build.Evaluation.Evaluator`4.Evaluate(IEvaluatorData`4 data, Project project, ProjectRootElement root, ProjectLoadSettings loadSettings, Int32 maxNodeCount, PropertyDictionary`1 environmentProperties, ICollection`1 propertiesFromCommandLine, ILoggingService loggingService, IItemFactory`2 itemFactory, IToolsetProvider toolsetProvider, IDirectoryCacheFactory directoryCacheFactory, ProjectRootElementCacheBase projectRootElementCache, BuildEventContext buildEventContext, ISdkResolverService sdkResolverService, Int32 submissionId, EvaluationContext evaluationContext, Boolean interactive)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.Reevaluate(ILoggingService loggingServiceForEvaluation, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.ReevaluateIfNecessary(ILoggingService loggingServiceForEvaluation, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.Initialize(IDictionary`2 globalProperties, String toolsVersion, String subToolsetVersion, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext, Boolean interactive)
+   at Microsoft.Build.Evaluation.Project.FromProjectRootElement(ProjectRootElement rootElement, ProjectOptions options)
+   at Nuke.Common.ProjectModel.ProjectModelTasks.ParseProject(String projectFile, String configuration, String targetFramework) in /_/source/Nuke.ProjectModel/ProjectModelTasks.cs:line 97
+   at Nuke.Common.Execution.Telemetry.CheckAwareness() in /_/source/Nuke.Build/Telemetry/Telemetry.cs:line 73
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ Restore
+Γò¼ΓòÉΓòÉΓòÉ
+ΓÇï
+15:03:15 [INF] > "C:\Program Files\dotnet\dotnet.exe" restore F:\GitHub\vice-sharp\ViceSharp.slnx
+15:03:17 [DBG]   Determining projects to restore...
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj (in 268 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 268 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj (in 268 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 268 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj (in 264 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 331 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 331 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomM\ViceSharp.RomM.csproj (in 268 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj (in 268 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj (in 331 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 267 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 331 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host\ViceSharp.Host.csproj (in 269 ms).
+15:03:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj (in 339 ms).
+15:03:18 [DBG]   16 of 30 projects are up-to-date for restore.
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ PublishMsi
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ΓÇï
+15:03:18 [INF] Publishing ViceSharp.Avalonia (Release, self-contained ReadyToRun+single-file+trimmed JIT, DebugGrpc=False, win-x64) -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\publish
+15:03:18 [INF] > C:\Users\kingd\.dotnet\tools\dotnet-gitversion.exe /targetpath "F:\GitHub\vice-sharp" /output json
+15:03:19 [INF] MSI version from GitVersion: 1.3.20
+15:03:19 [INF] > "C:\Program Files\dotnet\dotnet.exe" publish F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj --configuration Release --runtime win-x64 --property:Version=1.3.20 --property:ILLinkTreatWarningsAsErrors=false --property:DebugType=none --property:DebugSymbols=false --property:GenerateDocumentationFile=false --property:CopyDocumentationFilesFromPackages=false --property:PublishAot=false --property:PublishTrimmed=true --property:TrimMode=partial --property:PublishReadyToRun=true --property:PublishSingleFile=true --property:IncludeNativeLibrariesForSelfExtract=true --self-contained true
+15:03:19 [DBG]   Determining projects to restore...
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj (in 521 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 522 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj (in 521 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 520 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 520 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj (in 520 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj (in 520 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 520 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj (in 520 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 520 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomM\ViceSharp.RomM.csproj (in 533 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 523 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host\ViceSharp.Host.csproj (in 525 ms).
+15:03:21 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj (in 573 ms).
+15:03:22 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+15:03:22 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+15:03:22 [DBG]   ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+15:03:22 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+15:03:22 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+15:03:22 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+15:03:22 [DBG]   ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+15:03:22 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+15:03:22 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+15:03:23 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+15:03:23 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+15:03:23 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+15:03:23 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+15:03:24 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\ViceSharp.Avalonia.dll
+15:03:48 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\publish\
+15:03:49 [INF] Pruned 2 debug/doc files from publish dir (104,951,808 bytes / 100.1 MB)
+15:03:49 [INF] Building installer wixproj with PublishedRoot=F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\publish, DebugGrpc=False, RemoteControlPort=53535
+15:03:49 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\vice-sharp\installer\ViceSharp.Installer.wixproj --configuration Release --property:ProductVersion=1.3.20 --property:PublishedRoot=F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\publish --property:EnableDebugGrpc=false
+15:03:49 [DBG]   Determining projects to restore...
+15:03:49 [DBG]   All projects are up-to-date for restore.
+15:04:36 [DBG]   ViceSharp.Installer -> F:\GitHub\vice-sharp\installer\bin\x64\Release\ViceSharp.msi
+15:04:36 [DBG] 
+15:04:36 [DBG] Build succeeded.
+15:04:36 [DBG]     0 Warning(s)
+15:04:36 [DBG]     0 Error(s)
+15:04:36 [DBG] 
+15:04:36 [DBG] Time Elapsed 00:00:47.43
+15:04:36 [INF] MSI ready: F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi (40,407,040 bytes)
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ InstallMsi
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ΓÇï
+15:04:36 [INF] Installing F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi via gsudo.exe -> msiexec /qn (will trigger UAC prompt)
+15:04:41 [INF] InstallMsi complete (exit 0)
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ Errors & Warnings
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ΓÇï
+[WRN] : Exception was suppressed
+ΓÇï
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Target┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬áStatus┬á┬á┬á┬á┬á┬áDuration
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Restore┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬áSucceeded┬á┬á┬á┬á┬á┬á┬á0:03
+PublishMsi┬á┬á┬á┬á┬á┬á┬á┬á┬áSucceeded┬á┬á┬á┬á┬á┬á┬á1:18
+InstallMsi┬á┬á┬á┬á┬á┬á┬á┬á┬áSucceeded┬á┬á┬á┬á┬á┬á┬á0:04
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Total┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á1:26
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ΓÇï
+Build succeeded on 9/15/2026 3:04:41 PM. ∩╝╝∩╝ê∩╝╛ß┤ù∩╝╛∩╝ë∩╝Å

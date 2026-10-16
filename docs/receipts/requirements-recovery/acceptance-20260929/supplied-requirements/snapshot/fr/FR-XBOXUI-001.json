@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXUI-001",
+  "title": "Six destinations + overlays, non-destructive back stack",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Six navigable destinations + quick-menu/virtual-keyboard overlays reachable from any state; back stack never recreates/pauses the running video surface. Acceptance: push Settings->DeviceSetup, GoBack twice returns to Home in order; opening overlays pushes no stack entry.\n\n## Acceptance Criteria\n- MSIX deploys clean; menu focus-navigable; C64 frame visible.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

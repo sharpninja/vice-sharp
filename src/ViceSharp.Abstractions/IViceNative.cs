@@ -36,9 +36,39 @@ public interface IViceNative : IDisposable
     void SetKeyboardMatrixKey(int row, int column, bool pressed);
 
     /// <summary>
+    /// Queue PETSCII into VICE's kernal keyboard buffer (kbdbuf_feed). Return 0 on success.
+    /// </summary>
+    int FeedKeyboardBuffer(ReadOnlySpan<byte> petscii);
+
+    /// <summary>Flush queued kbdbuf characters into the kernal buffer (vsync equivalent).</summary>
+    void FlushKeyboardBuffer();
+
+    /// <summary>VICE autostart_autodetect(path, RUN). Returns 0 on success.</summary>
+    int Autostart(string path);
+
+    /// <summary>True while VICE autostart is still loading or typing.</summary>
+    bool AutostartInProgress();
+
+    /// <summary>Run the native CPU for <paramref name="cycles"/> master cycles without per-cycle host waits.</summary>
+    void StepCycles(uint cycles);
+
+    /// <summary>
     /// Read a byte from native physical C64 RAM without bus side effects.
     /// </summary>
     byte PeekRam(ushort address);
+
+    /// <summary>
+    /// Side-effect-free peek of the full native address space (RAM/ROM/I/O).
+    /// Used for Vic20 lockstep samples of VIA ($9110/$9120) and VIC-I ($9000).
+    /// C64 implementations may fall back to <see cref="PeekRam"/>.
+    /// </summary>
+    byte PeekBus(ushort address);
+
+    /// <summary>
+    /// Side-effecting store into the native address space (mem_store).
+    /// Used for lockstep fixtures that poke VIC-I regs on both machines.
+    /// </summary>
+    void WriteBus(ushort address, byte value);
 
     /// <summary>
     /// Load a VICE snapshot (.vsf) into the native machine, resuming it from the
@@ -62,6 +92,32 @@ public interface IViceNative : IDisposable
     /// Get current native VIC-II timing state for lockstep diagnostics.
     /// </summary>
     NativeVicState GetVicState();
+
+    /// <summary>
+    /// VIC-I video pipeline snapshot for every-cycle lockstep (xvic only).
+    /// C64 native implementations throw <see cref="NotSupportedException"/>.
+    /// </summary>
+    Vic20VideoLockstepState GetVic20VideoState();
+
+    /// <summary>
+    /// Capture the visible framebuffer as BGRA (presentation surface).
+    /// VIC-20 (xvic): normal-border canvas (PAL 448x284). C64 may support full
+    /// 384x272. Returns false when the shim has no canvas or the buffer is too small.
+    /// </summary>
+    bool TryCaptureVisibleFrame(byte[] bgraBuffer, out int width, out int height);
+
+    /// <summary>
+    /// Capture the visible framebuffer as palette indices (one byte per pixel).
+    /// Primary Exact path for VIC-20 pixel lockstep (FR-VIC20-001 / AC-PX-02).
+    /// Returns false when unsupported or buffer too small.
+    /// </summary>
+    bool TryCaptureFrameIndices(byte[] indexBuffer, out int width, out int height);
+
+    /// <summary>
+    /// VIC-20 VIC-I audio: render mono int16 PCM samples for a CPU cycle budget
+    /// (FR-VIC20-SOUND-001 / AC-SD-01). Returns samples written, or 0 if unsupported.
+    /// </summary>
+    int RenderVic20Samples(short[] buffer, int sampleRate, int cyclesPerSec, int deltaTCycles);
 
     /// <summary>
     /// Get the main-CPU resume/pipeline state (TR-LOCKSTEP-VSF-001): the
@@ -88,8 +144,8 @@ public interface IViceNative : IDisposable
 /// everything a managed MOS 6526 needs to resume a .vsf mid-run - the port
 /// output latches and data directions, the LIVE timer counters (ciat_read_timer)
 /// with their reload latches (ciat_read_latch), the control registers, the
-/// latched interrupt flags and the ICR interrupt-enable mask (ciacore
-/// irq_enabled).
+/// latched interrupt flags, and the ICR interrupt-enable mask from the low
+/// seven bits of the CIA ICR register.
 /// </summary>
 public readonly struct NativeCiaState
 {
@@ -224,4 +280,36 @@ public readonly struct NativeVicState
     /// state (vicii.idle_state).
     /// </summary>
     public byte IdleState { get; init; }
+}
+
+/// <summary>
+/// VIC-I (VIC-20) video pipeline snapshot for every-cycle lockstep vs xvic
+/// (<c>vice_vic20_get_video_state</c> / managed <c>Mos6561.CaptureVideoLockstepState</c>).
+/// Tracks video the same way CPU lockstep tracks A/X/Y/S/P/PC: per phi2 after
+/// <c>vic_cycle</c>, not end-of-frame pixels alone.
+/// </summary>
+public readonly struct Vic20VideoLockstepState
+{
+    public uint Cycle { get; init; }
+    public ushort RasterLine { get; init; }
+    public byte RasterCycle { get; init; }
+    /// <summary>VICE <c>vic.area</c> (IDLE/PENDING/DISPLAY/DONE).</summary>
+    public byte Area { get; init; }
+    /// <summary>VICE <c>vic.fetch_state</c>.</summary>
+    public byte FetchState { get; init; }
+    public byte TextCols { get; init; }
+    public byte TextLines { get; init; }
+    public byte YCounter { get; init; }
+    public byte RowCounter { get; init; }
+    public byte BlankThisLine { get; init; }
+    public byte LineWasBlank { get; init; }
+    public byte CharHeight { get; init; }
+    public ushort Memptr { get; init; }
+    public ushort MemptrInc { get; init; }
+    /// <summary>Raw $9000-$900F store (16 bytes); not bus peeks with live raster bits.</summary>
+    public byte[]? Regs { get; init; }
+    /// <summary>VICE <c>vic.cbuf</c> color nybbles for the current line (up to 32).</summary>
+    public byte[]? Cbuf { get; init; }
+    /// <summary>VICE <c>vic.gbuf</c> glyph bytes for the current line (up to 32).</summary>
+    public byte[]? Gbuf { get; init; }
 }

@@ -1,0 +1,30 @@
+
+native\vice\vice\src\crtc\crtc-color.h:30:struct video_canvas_s;
+native\vice\vice\src\crtc\crtc-color.h:32:int crtc_color_update_palette(struct video_canvas_s *canvas);
+native\vice\vice\src\crtc\crtc.h:47:struct video_canvas_s *crtc_get_canvas(void);
+native\vice\vice\src\plus4\ted-color.h:34:struct video_canvas_s;
+native\vice\vice\src\plus4\ted-color.h:36:int ted_color_update_palette(struct video_canvas_s *canvas);
+native\vice\vice\src\plus4\ted.h:50:struct video_canvas_s *ted_get_canvas(void);
+native\vice\vice\src\raster\raster.h:55:struct video_canvas_s;
+native\vice\vice\src\raster\raster.h:75:    struct video_canvas_s *canvas;
+native\vice\vice\src\raster\raster.h:81:    uint8_t *draw_buffer_ptr;
+native\vice\vice\src\raster\raster.h:85:    uint8_t *fake_draw_buffer_line;
+native\vice\vice\src\raster\raster.h:211:void raster_draw_buffer_ptr_update(raster_t *raster);
+native\vice\vice\src\vdc\vdc-color.h:30:struct video_canvas_s;
+native\vice\vice\src\vdc\vdc-color.h:32:int vdc_color_update_palette(struct video_canvas_s *canvas);
+native\vice\vice\src\vdc\vdc.h:50:struct video_canvas_s *vdc_get_canvas(void);
+native\vice\vice\src\vic20\vic-color.h:34:struct video_canvas_s;
+native\vice\vice\src\vic20\vic-color.h:36:int vic_color_update_palette(struct video_canvas_s *canvas);
+native\vice\vice\src\vic20\vic.h:51:struct video_canvas_s *vic_get_canvas(void);
+native\vice\vice\src\vicii\vicii-color.h:34:struct video_canvas_s;
+native\vice\vice\src\vicii\vicii-color.h:36:int vicii_color_update_palette(struct video_canvas_s *canvas);
+native\vice\vice\src\viciisc\vicii-color.h:34:struct video_canvas_s;
+native\vice\vice\src\viciisc\vicii-color.h:36:int vicii_color_update_palette(struct video_canvas_s *canvas);
+native\vice\vice\src\viciisc\viciitypes.h:60:#define VICII_DRAW_BUFFER_SIZE (65 * 8)
+native\vice\vice\src\viciisc\viciitypes.h:156:    uint8_t dbuf[VICII_DRAW_BUFFER_SIZE];
+native\vice\vice\src\video\video-canvas.h:30:struct video_canvas_s;
+native\vice\vice\src\video\video-canvas.h:33:int video_canvas_palette_set(struct video_canvas_s *canvas, struct 
+palette_s *palette);
+native\vice\vice\src\video\video-render.h:36:struct video_canvas_s;
+native\vice\vice\src\video\video-render.h:59:void video_render_update_palette(struct video_canvas_s *canvas);
+

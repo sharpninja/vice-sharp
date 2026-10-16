@@ -310,7 +310,7 @@ public sealed class NativeResidueDiagTests
             ViceNativeBridge.GetCiaState(machine, ciaIndex, ref cia);
             state[$"{label}.cia{ciaIndex + 1}"] =
                 $"PA={cia.PortA:X2} PB={cia.PortB:X2} DDRA={cia.DdrA:X2} DDRB={cia.DdrB:X2} TA={cia.TimerA:X4} TB={cia.TimerB:X4} " +
-                $"ICR={cia.Icr:X2} CRA={cia.Cra:X2} CRB={cia.Crb:X2} IFLAG={cia.InterruptFlag:X2} LA={cia.TimerALatch:X4} LB={cia.TimerBLatch:X4} MASK={cia.IrqMask:X2}";
+                $"ICR={cia.Icr:X2} CRA={cia.Cra:X2} CRB={cia.Crb:X2} IFLAG={cia.InterruptFlag:X2} LA={cia.TimerALatch:X4} LB={cia.TimerBLatch:X4} MASK={cia.IrqMask:X2} IRQACTIVE={cia.IrqLineActive:X2}";
         }
 
         state[$"{label}.dd00"] = ViceNativeBridge.ReadMemory(machine, 0xDD00).ToString("X2");

@@ -1,0 +1,46 @@
+{
+  "ProfileId": "vic20",
+  "Limiter": {
+    "RatePercent": 100,
+    "IsEnabled": true,
+    "PacingStrategy": "vice"
+  },
+  "Display": {
+    "Renderer": "host",
+    "Palette": "vice",
+    "ShowBorder": true,
+    "MaintainAspectRatio": true,
+    "Scale": "fit-window",
+    "CropMode": "visible-area",
+    "AspectMode": "vice-pixel-aspect"
+  },
+  "Input": {
+    "KeyboardMapId": "c64:gtk3_pos",
+    "PrimaryJoystickPort": 1,
+    "SwapJoystickPorts": false,
+    "Mode": "keyboard-joystick"
+  },
+  "Audio": {
+    "Mode": "enabled"
+  },
+  "Resources": {
+    "Mode": "auto-detect"
+  },
+  "Vic20MemorySpec": "none",
+  "FileSystemIecRootPath": "",
+  "FileSystemIecUnit": 9,
+  "Vic20ExpansionCartKind": "none",
+  "Vic20ExpansionWriteBack": false,
+  "Vic20ExpansionConfigPreset": "start"
+}
+---
+
+Name                 Length LastWriteTime
+----                 ------ -------------
+romm-connection.json    436 8/6/2026 11:30:53 PM
+romm-recents.json      1300 8/5/2026 5:55:28 AM
+settings.json           813 8/6/2026 11:52:05 PM
+vice-sharp.ini            0 8/5/2026 5:55:28 AM
+vice.ini                 38 8/5/2026 5:55:28 AM
+vicesharp.log          4860 8/6/2026 11:53:11 PM
+

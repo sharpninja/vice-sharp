@@ -1,0 +1,11 @@
+
+  Failed ViceSharp.TestHarness.FlashCart.Fe3Flash040Tests.ModeFlash_ChipErase_FillsFlashFf [23 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+  Failed ViceSharp.TestHarness.Vic20.UltimemParityTests.PowerUp_RegistersDefault_AndBlk5Readable [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Failed!  - Failed:     2, Passed:    41, Skipped:     0, Total:    43, Duration: 438 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+

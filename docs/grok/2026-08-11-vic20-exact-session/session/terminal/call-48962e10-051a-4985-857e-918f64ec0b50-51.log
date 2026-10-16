@@ -1,0 +1,20 @@
+native/vice/vice/src/vic20/vic20cpu.c:53:   only expands inside the 6510dtvcore.c body, after those macros are defined. */
+native/vice/vice/src/vic20/vic20cpu.c:188:#include "../mainviccpu.c"
+native/vice/vice/src/mainviccpu.c:2: * mainviccpu.c - Emulation of the VIC 6510 processor.
+native/vice/vice/src/mainviccpu.c:33:#include "6510core.h"
+native/vice/vice/src/mainviccpu.c:591:       unit (6510dtvcore.c defines it below, inside the loop), so the import is
+native/vice/vice/src/mainviccpu.c:668:#include "6510dtvcore.c"
+2016:static const uint8_t fetch_tab[] = {
+2040:static const uint8_t rewind_fetch_tab[] = {
+2068:            if (rewind_fetch_tab[o & 0xff]) {                          \
+2078:            if (fetch_tab[o & 0xff]) {                                 \
+2084:            if (rewind_fetch_tab[o & 0xff]) {                          \
+2102:            if (fetch_tab[o & 0xff]) {                                 \
+2129:            if (rewind_fetch_tab[(o).ins]) {                                              \
+2139:            if (fetch_tab[(o).ins]) {                                                     \
+2145:            if (rewind_fetch_tab[(o).ins]) {                                              \
+2163:            if (fetch_tab[(o).ins]) {                                                     \
+2192:            if (fetch_tab[o & 0xff]) {                         \
+2200:            if (fetch_tab[o & 0xff]) {                         \
+2228:            if (fetch_tab[(o).ins]) {                                                     \
+2236:            if (fetch_tab[(o).ins]) {                                                     \

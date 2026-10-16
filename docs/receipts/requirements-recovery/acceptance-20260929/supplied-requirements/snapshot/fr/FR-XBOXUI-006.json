@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXUI-006",
+  "title": "On-screen C64 keyboard exact key strings",
+  "status": "pending",
+  "priority": "medium",
+  "body": "On-screen controller-navigable C64 keyboard maps every key to the exact SetKeyState string incl RETURN/RUNSTOP/F1-F8. Acceptance: RETURN tile emits SetKeyState(\"Return\",true) then false; shift-latch+F1 emits \"F2\"; every KeyName is in the known-good list.\n\n## Acceptance Criteria\n- exact key strings; shift-latch swaps F1->F2; RESTORE drives the NMI seam.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

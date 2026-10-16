@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-IECTRACE-001",
+  "title": "IEC trace recorder (edge + step marks)",
+  "status": "pending",
+  "priority": "high",
+  "body": "IecBusTraceRecorder subscribes to bus.LineChanged, cycle-stamps each edge from SystemClock plus a sample per step boundary, into a bounded ring; re-derives deterministically after rewind; inactive unless the monitor is open.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

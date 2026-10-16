@@ -1,0 +1,4 @@
+
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:249:            // TAX - Transfer Accumulator to X
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:250:            case 0xAA: X = A; UpdateNZ(X); break;
+

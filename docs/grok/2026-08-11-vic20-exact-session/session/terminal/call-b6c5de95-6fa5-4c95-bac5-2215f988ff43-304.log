@@ -1,0 +1,30 @@
+[feat/xbox-uwp-app f67eeb9] fix: restore Octopus CI steps; drop Avalonia Architectures/Chips refs
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+To https://github.com/sharpninja/vice-sharp.git
+   6b875b6..f67eeb9  feat/xbox-uwp-app -> feat/xbox-uwp-app
+[xUnit.net 00:00:47.37]     ViceSharp.TestHarness.LiveDeployedAppSpeedProbeTests.DeployedApp_Demo_Sustains_RealTime [SKIP]
+  Skipped ViceSharp.TestHarness.LiveDeployedAppSpeedProbeTests.DeployedApp_Demo_Sustains_RealTime [1 ms]
+[xUnit.net 00:00:52.51]     ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_SilentWarp_Measures_Core_Headroom [SKIP]
+[xUnit.net 00:00:52.51]     ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_UserConfig_LiveAudio_ViceGate_Sustains_RealTime [SKIP]
+  Skipped ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_SilentWarp_Measures_Core_Headroom [1 ms]
+  Skipped ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_UserConfig_LiveAudio_ViceGate_Sustains_RealTime [1 ms]
+[xUnit.net 00:02:55.89]     ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal [SKIP]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal [1 ms]
+[xUnit.net 00:04:45.83]     ViceSharp.TestHarness.CaptureRunLogUtilityTests.CaptureBaselineRunLog_FromEnvironment [SKIP]
+  Skipped ViceSharp.TestHarness.CaptureRunLogUtilityTests.CaptureBaselineRunLog_FromEnvironment [1 ms]
+[xUnit.net 00:04:57.57]     ViceSharp.TestHarness.SnapshotRunLogParityTests.SnapshotRun_MatchesViceRunLog [SKIP]
+  Skipped ViceSharp.TestHarness.SnapshotRunLogParityTests.SnapshotRun_MatchesViceRunLog [1 ms]
+[xUnit.net 00:05:06.75]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClockUnderPullLoad [SKIP]
+[xUnit.net 00:05:06.75]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureVicePacedClock [SKIP]
+[xUnit.net 00:05:06.75]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureGuiFramePumpThroughput [SKIP]
+[xUnit.net 00:05:06.75]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureC64ChipsetFrameCost [SKIP]
+[xUnit.net 00:05:06.75]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClock [SKIP]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClockUnderPullLoad [1 ms]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureVicePacedClock [1 ms]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureGuiFramePumpThroughput [1 ms]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureC64ChipsetFrameCost [1 ms]
+  Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClock [1 ms]
+Results File: F:\GitHub\vice-sharp\TestResults\baseline-20260805-rerun\baseline.trx
+
+Passed!  - Failed:     0, Passed:  3211, Skipped:    13, Total:  3224, Duration: 8 h 53 m - ViceSharp.TestHarness.dll (net10.0)
+EXIT=0

@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-DRV-005",
+  "title": "IEC Serial Bus Protocol",
+  "status": "in_progress",
+  "priority": "medium",
+  "body": "The IEC (IEEE-488 derived) serial bus connects the C64 to disk drives, printers, and other peripherals. The bus uses three signal lines (ATN, CLK, DATA) in an active-low open-collector configuration. The protocol includes LISTEN, TALK, UNLISTEN, UNTALK, and secondary address commands.\n\n## Acceptance Criteria\n- The three-wire serial bus (ATN, CLK, DATA) operates with correct timing.\n- The ATN line is controlled by the computer; asserting ATN forces all devices to listen.\n- LISTEN (command $20+device) puts a device in receive mode.\n- TALK (command $40+device) puts a device in send mode.\n- UNLISTEN ($3F) and UNTALK ($5F) release devices.\n- Secondary addresses ($60-$6F for OPEN, $E0-$EF for CLOSE, $F0-$FF for channel) are supported.\n- Byte transfer uses the standard Commodore serial protocol timing (EOI signaling for last byte).\n- Bus turnaround (switching from computer-transmit to device-transmit after TALK) follows correct timing.\n- Multiple devices on the bus (up to device #30) are supported simultaneously.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "fr-drv-005-ac-1",
+      "text": "IEC bus endpoints resolve ATN, CLK, DATA, and SRQ as active-low wired-OR lines.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-drv-005-ac-2",
+      "text": "Mounted D64 directory and file operations generate observable IEC line activity from the bus signal source.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-drv-005-ac-3",
+      "text": "Mounted D64 directory and file operations complete with correct data through the IEC path.",
+      "isSatisfied": false
+    }
+  ]
+}

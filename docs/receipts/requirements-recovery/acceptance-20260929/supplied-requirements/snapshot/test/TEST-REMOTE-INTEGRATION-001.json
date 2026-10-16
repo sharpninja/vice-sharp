@@ -1,0 +1,26 @@
+{
+  "kind": "test",
+  "id": "TEST-REMOTE-INTEGRATION-001",
+  "title": "Existing RomM and CSDb integration gate",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.\nVerify optional bridge authentication is sent consistently by the caller-owned client for connection and search.\nVerify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.\n\n## Acceptance Criteria\n- **ac-01**: Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.\n- **ac-02**: Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.\n- **ac-03**: Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.",
+      "isSatisfied": false
+    }
+  ]
+}

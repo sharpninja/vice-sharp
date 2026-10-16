@@ -1,0 +1,18 @@
+{
+  "fetchedUtc": "2026-09-30T00:35:23.6000798Z",
+  "httpStatus": 200,
+  "source": "parent HTTP GET because the reviewer has no MCP access",
+  "route": "/mcpserver/requirements/tr/TR-VIC20-SOUND-001",
+  "record": {
+    "id": "TR-VIC20-SOUND-001",
+    "title": "VIC-I sound advances on the machine clock and batches PCM without hot-path allocation",
+    "body": "Mos6561 owns one machine-agnostic Vic20Sound engine. System-clock advancement produces deterministic PCM16 mono and dispatches 256-sample batches without per-store allocation. Native parity is scoped to the covered silence and tone inputs.",
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "priority": "medium",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null
+  }
+}

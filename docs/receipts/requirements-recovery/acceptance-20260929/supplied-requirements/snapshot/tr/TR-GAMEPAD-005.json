@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-GAMEPAD-005",
+  "title": "Delta emission only on change",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Delta emission only on change. Acceptance: verified by TEST-GAMEPAD-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

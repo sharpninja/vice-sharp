@@ -1,0 +1,26 @@
+﻿[
+    {
+        "id":  "FR-ARCH-TRUEDRIVE-1541-002",
+        "status":  "CREATE_OK",
+        "http":  201,
+        "title":  "True-Drive 1541 IEC timing and motor ramp"
+    },
+    {
+        "id":  "FR-BACKFILL-MEDIA-001",
+        "status":  "CREATE_OK",
+        "http":  201,
+        "title":  "Media devices (D64, tape) I/O functional parity"
+    },
+    {
+        "id":  "FR-BACKFILL-VIDEO-001",
+        "status":  "CREATE_OK",
+        "http":  201,
+        "title":  "VIC-II visible-frame parity (RC window, DMA checkpoints, screen-RAM)"
+    },
+    {
+        "id":  "FR-RUNTIME-TAPE-002",
+        "status":  "CREATE_OK",
+        "http":  201,
+        "title":  "Datasette motor ramp + sense line + record mode"
+    }
+]

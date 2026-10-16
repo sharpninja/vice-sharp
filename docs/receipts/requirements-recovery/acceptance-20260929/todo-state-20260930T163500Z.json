@@ -1,0 +1,630 @@
+{
+  "generatedUtc": "2026-09-30T16:36:20.8273303Z",
+  "total": 120,
+  "done": 84,
+  "open": 36,
+  "completedOn20260930": 0,
+  "planC64Set001": [
+    {
+      "Id": "PLAN-C64SET-001",
+      "Done": false,
+      "CompletedDate": ""
+    }
+  ],
+  "completedDateCounts": [
+    {
+      "CompletedDate": "",
+      "Count": 82
+    },
+    {
+      "CompletedDate": "2026-06-12",
+      "Count": 1
+    },
+    {
+      "CompletedDate": "2026-08-11",
+      "Count": 1
+    }
+  ],
+  "records": [
+    {
+      "Id": "PLAN-ARCHVIC20-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "BUG-SIDAUDIO-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-AUDIOEQ-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-C64SET-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-IECDEBUG-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-REMOTECTRL-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-UIREDESIGN-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "QA-TESTAC-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-DRVTRUE-002",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-CARTRAMLINK-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "BUG-DRV1540-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-NATIVERESIDUE-003",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-DRIVE1540-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-DRIVE1541II-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-DRIVE1571-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-DRIVE1581-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-DRIVECMDHD-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-PAUSEMUTE-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-GRAPHRAG-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-ZIPMEDIA-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-WINGET-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-VICBA-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-VICRENDER-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-LSP-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-GROKCOMPLETION-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-RASPBIAN-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-REQAUDIT-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "BUG-THROTTLE-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "BUG-DRVTRUE-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-SYSBUILDER-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-UIDOCK-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-UIEVENTSUB-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-DEVCARDART-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-FULLSCREEN-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-PLAYLIST-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-MONFRAME-001",
+      "Done": false,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "ARCH-CHIPGLUE-001",
+      "Done": true,
+      "CompletedDate": "2026-06-12"
+    },
+    {
+      "Id": "ARCH-ROM-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "ISSUE-1",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "BUG-LOCKSTEP-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "FIX-ROMLESSVIC-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-ITER1COMPLETE-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-NATIVERESIDUE-002",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-VICEPARITY-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-SIDCHAMBERLIN-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-PRGLOAD-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "ARCH-TESTBENCH-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "CLI-LAUNCHER-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "ISSUE-2",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-002",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-003",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-004",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-ROMM-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-005",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-006",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-007",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-008",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-009",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-010",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-011",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-012",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-014",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-015",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-016",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-013",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-ROMM-017",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "BUG-TESTDEBT-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-NATIVERESIDUE-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-XBOXCLIENT-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "TEST-VICICACHE-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-VIC20-EXACT-001",
+      "Done": true,
+      "CompletedDate": "2026-08-11"
+    },
+    {
+      "Id": "BACKFILL-VIDEO-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-000",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-002",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-003",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-004",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-005",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-006",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-007",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-008",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-009",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-XKEYBOARD-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "FIX-XKBDNMI-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "FIX-XWIN2D-001",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-010",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-011",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-012",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-013",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-014",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-015",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-016",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-017",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-018",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-019",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-020",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-021",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-022",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-023",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-024",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-025",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-026",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-027",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-028",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-029",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-030",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-031",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-032",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-033",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-034",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-035",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-036",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-037",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-038",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-039",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-040",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-041",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "IMPL-XBOXUWP-042",
+      "Done": true,
+      "CompletedDate": ""
+    },
+    {
+      "Id": "PLAN-XBOXUWP-END-001",
+      "Done": true,
+      "CompletedDate": ""
+    }
+  ]
+}

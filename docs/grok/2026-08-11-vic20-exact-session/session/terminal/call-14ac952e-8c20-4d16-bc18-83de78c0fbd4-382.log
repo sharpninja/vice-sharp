@@ -1,0 +1,22 @@
+
+Pwd            : C:\deploy\RomM
+HasCompose     : False
+HasEnv         : False
+Before         : romm Up 6 days
+                 romm-db Up 6 days (healthy)
+UpOutput       : docker.exe : no configuration file provided: not found
+                 At line:12 char:9
+                 +   $up = & docker compose up -d 2>&1 | Out-String
+                 +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     + CategoryInfo          : NotSpecified: (no configuratio...ided: not found:String) [], 
+                 RemoteException
+                     + FullyQualifiedErrorId : NativeCommandError
+AfterRomm      : romm Up 6 days
+                 romm-db Up 6 days (healthy)
+AfterBridge    : csdb-bridge Up 6 days
+AfterDb        : romm-db Up 6 days (healthy)
+Http8080       : status=200 len=5826
+Http8090       : error: The remote server returned an error: (404) Not Found.
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 494d9e30-61dc-4a40-9881-db16f2a787b7
+

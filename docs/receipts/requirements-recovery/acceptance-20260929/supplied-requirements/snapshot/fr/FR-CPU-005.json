@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CPU-005",
+  "title": "8502 2MHz Mode Support for C128",
+  "status": "pending",
+  "priority": "low",
+  "body": "For C128 machine profile support, the CPU shall implement the MOS 8502 processor's ability to switch between 1MHz and 2MHz operation. In 2MHz mode, the VIC-II cannot access the bus, so the display shows a static pattern. The clock speed is controlled by bit 0 of the VIC-II register at $D030.\n\n## Acceptance Criteria\n- Writing bit 0 of $D030 switches the CPU clock between 1MHz (0) and 2MHz (1).\n- In 2MHz mode, the CPU executes instructions at double speed (halved cycle duration).\n- In 2MHz mode, VIC-II DMA does not occur and the screen displays the characteristic \"static\" pattern.\n- I/O chip access (CIAs, SID, VIC-II registers) forces the clock back to 1MHz for the duration of the access.\n- The `IClockController` interface exposes the current clock rate and allows mode transitions.\n- CIA timers and SID continue to operate at their expected rates relative to the system clock.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

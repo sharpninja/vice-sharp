@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSBTN-001",
+  "title": "Ship default gameplay binding set",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Ship the default gameplay binding set. Acceptance: BindingProfile.Default enumerates the locked table by value.\n\n## Acceptance Criteria\n- BindingProfile.Default enumerates the locked table by value.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

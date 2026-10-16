@@ -1,0 +1,14 @@
+
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:3:using System.Linq;
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:4:using System.Threading.Tasks;
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:5:using ViceSharp.Protocol;
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:6:using ViceSharp.TestHarness.Xbox.Fakes;
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:7:using ViceSharp.Xbox.ViewModels;
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:8:using Xunit;
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:55:    public async Task 
+ExpansionCartImage_AttachAndEject_UpdatesStatusAndMediaSlot()
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:83:        Assert.Equal(MediaSlot.Cartridge, 
+fake.AttachedSlot);
+tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs:89:        Assert.Equal(MediaSlot.Cartridge, 
+fake.DetachedSlot);
+

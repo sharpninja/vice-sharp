@@ -1,0 +1,24 @@
+  ViceSharp.Host.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Host.Xbox\bin\Release\net10.0\ViceSharp.Host.Xbox.dll
+  ViceSharp.Host.iOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.iOS\bin\Release\net10.0\ViceSharp.Host.iOS.dll
+  ViceSharp.Host.Android -> F:\GitHub\vice-sharp\src\ViceSharp.Host.Android\bin\Release\net10.0\ViceSharp.Host.Android.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.Heads.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\bin\Release\net10.0\ViceSharp.Heads.Tests.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.39
+vic20-gate.log: Passed!  - Failed:     0, Passed:    52, Skipped:     0, Total:    52, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+vic20-c64-smoke.log: Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+boot-proof.log: Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 633 ms - ViceSharp.TestHarness.dll (net10.0)
+drive1540.log: Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5, Duration: 87 ms - ViceSharp.TestHarness.dll (net10.0)
+heads.log: Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 189 ms - ViceSharp.TestHarness.dll (net10.0)
+lockstep-env.txt: Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 583 ms - ViceSharp.TestHarness.dll (net10.0)
+build.log: Build succeeded.
+build.log: 0 Error(s)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    61, Skipped:     0, Total:    61, Duration: 160 ms - ViceSharp.TestHarness.dll (net10.0)

@@ -1,0 +1,80 @@
+2026-08-05 05:43:05.508 [Information] Video: perf: FPS 59.0 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:10.415 [Information] App: menu closed: emulation resumed
+2026-08-05 05:43:10.432 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 05:43:10.590 [Information] Video: perf: FPS 60.2 EMU 13.6 SPD 99.9% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:15.671 [Information] Video: perf: FPS 60.6 EMU 48.8 SPD 99.8% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:20.751 [Information] Video: perf: FPS 60.7 EMU 50.9 SPD 100.8% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:25.830 [Information] Video: perf: FPS 60.8 EMU 51.0 SPD 101.0% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:30.910 [Information] Video: perf: FPS 61.9 EMU 47.9 SPD 98.7% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:36.012 [Information] Video: perf: FPS 60.5 EMU 50.7 SPD 100.6% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:41.102 [Information] Video: perf: FPS 59.2 EMU 47.4 SPD 97.5% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:45.969 [Information] App: menu open: emulation paused
+2026-08-05 05:43:45.980 [Information] Video: tick 14268: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 05:43:45.981 [Information] Video: tick 14268: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 05:43:45.993 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 05:43:46.199 [Information] Video: perf: FPS 61.1 EMU 27.6 SPD 103.5% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:48.820 [Information] App: menu closed: emulation resumed
+2026-08-05 05:43:48.833 [Information] Video: tick 14439: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 05:43:48.834 [Information] Video: tick 14439: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 05:43:48.848 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 05:43:51.275 [Information] Video: perf: FPS 57.5 EMU 47.6 SPD 103.9% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:43:56.359 [Information] Video: perf: FPS 59.3 EMU 45.9 SPD 101.5% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:01.442 [Information] Video: perf: FPS 59.3 EMU 49.5 SPD 97.8% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:06.548 [Information] Video: perf: FPS 60.8 EMU 45.1 SPD 100.0% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:11.627 [Information] Video: perf: FPS 59.5 EMU 49.6 SPD 102.1% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:16.735 [Information] Video: perf: FPS 59.3 EMU 45.5 SPD 103.6% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:21.857 [Information] Video: perf: FPS 60.6 EMU 48.8 SPD 99.6% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:26.977 [Information] Video: perf: FPS 60.9 EMU 47.1 SPD 100.1% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:32.067 [Information] Video: perf: FPS 58.7 EMU 45.0 SPD 99.7% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:37.151 [Information] Video: perf: FPS 61.1 EMU 45.3 SPD 100.3% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:42.239 [Information] Video: perf: FPS 58.9 EMU 49.1 SPD 100.2% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:47.348 [Information] Video: perf: FPS 58.8 EMU 47.0 SPD 99.9% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:52.446 [Information] Video: perf: FPS 60.5 EMU 48.8 SPD 102.4% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:44:57.586 [Information] Video: perf: FPS 61.0 EMU 47.2 SPD 100.2% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:02.679 [Information] Video: perf: FPS 61.3 EMU 49.4 SPD 100.8% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:07.788 [Information] Video: perf: FPS 60.5 EMU 48.8 SPD 100.4% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:12.861 [Information] Video: perf: FPS 58.8 EMU 51.0 SPD 101.0% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:17.943 [Information] Video: perf: FPS 59.1 EMU 51.2 SPD 101.5% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:23.036 [Information] Video: perf: FPS 60.8 EMU 45.1 SPD 100.9% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:28.119 [Information] Video: perf: FPS 60.9 EMU 47.2 SPD 101.2% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:33.214 [Information] Video: perf: FPS 60.1 EMU 46.6 SPD 102.4% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:38.294 [Information] Video: perf: FPS 59.1 EMU 47.3 SPD 101.4% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:43.372 [Information] Video: perf: FPS 59.3 EMU 47.4 SPD 101.1% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:48.470 [Information] Video: perf: FPS 59.2 EMU 47.3 SPD 103.9% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:53.586 [Information] Video: perf: FPS 58.9 EMU 45.2 SPD 100.2% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:45:58.670 [Information] Video: perf: FPS 58.6 EMU 46.9 SPD 100.7% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:03.773 [Information] Video: perf: FPS 60.7 EMU 47.0 SPD 100.7% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:08.840 [Information] Video: perf: FPS 58.9 EMU 49.1 SPD 101.1% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:13.921 [Information] Video: perf: FPS 61.0 EMU 45.2 SPD 103.4% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:19.032 [Information] Video: perf: FPS 58.9 EMU 47.1 SPD 101.0% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:24.112 [Information] Video: perf: FPS 60.8 EMU 45.1 SPD 99.9% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:24.961 [Information] App: menu open: emulation paused
+2026-08-05 05:46:24.969 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 05:46:24.970 [Information] Video: tick 23808: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 05:46:24.971 [Information] Video: tick 23808: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 05:46:26.447 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 05:46:26.477 [Information] Video: tick 23897: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 05:46:26.478 [Information] Video: tick 23897: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 05:46:27.681 [Information] App: menu closed: emulation resumed
+2026-08-05 05:46:27.684 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 05:46:28.912 [Information] App: menu open: emulation paused
+2026-08-05 05:46:28.923 [Information] Video: tick 24043: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 05:46:28.925 [Information] Video: tick 24043: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 05:46:28.939 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 05:46:29.209 [Information] Video: perf: FPS 59.2 EMU 23.7 SPD 99.7% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:31.383 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 05:46:31.409 [Information] Video: tick 24191: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 05:46:31.411 [Information] Video: tick 24191: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 05:46:34.281 [Information] Video: perf: FPS 53.7 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:39.371 [Information] Video: perf: FPS 59.8 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:44.467 [Information] Video: perf: FPS 58.9 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:49.546 [Information] Video: perf: FPS 59.0 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:54.626 [Information] Video: perf: FPS 59.2 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:46:59.744 [Information] Video: perf: FPS 60.7 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:47:04.837 [Information] Video: perf: FPS 60.9 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:47:09.921 [Information] Video: perf: FPS 60.3 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:47:15.008 [Information] Video: perf: FPS 61.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:47:20.094 [Information] Video: perf: FPS 60.8 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:47:25.174 [Information] Video: perf: FPS 61.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:47:30.256 [Information] Video: perf: FPS 61.2 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 05:47:35.369 [Information] Video: perf: FPS 60.7 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)

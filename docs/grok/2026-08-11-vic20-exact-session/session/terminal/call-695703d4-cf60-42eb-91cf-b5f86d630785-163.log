@@ -1,0 +1,112 @@
+Desktop log: docs\_deploy-desktop-2026-08-08_045445.log
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════
+║ Restore
+╬═══
+​
+04:54:50 [INF] > "C:\Program Files\dotnet\dotnet.exe" restore F:\GitHub\vice-sharp\ViceSharp.slnx
+04:54:52 [DBG]   Determining projects to restore...
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 441 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj (in 584 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj (in 448 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 583 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomM\ViceSharp.RomM.csproj (in 416 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj (in 586 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj (in 461 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 585 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 439 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 585 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj (in 458 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 585 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj (in 586 ms).
+04:54:55 [DBG]   17 of 30 projects are up-to-date for restore.
+​
+╬═══════════════
+║ PublishMsi
+╬══════
+​
+04:54:56 [ERR] Target PublishMsi has thrown an exception
+System.InvalidOperationException: PublishMsi with Configuration=Debug produces an unoptimized emulator. Pass --configuration Release (recommended) or --msi-allow-debug true to package a Debug build deliberately.
+   at Build.<get_PublishMsi>b__103_1() in F:\GitHub\vice-sharp\build\Build.cs:line 1215
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] PublishMsi: Target PublishMsi has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:05
+PublishMsi         Failed        < 1sec   // InvalidOperationException: PublishMsi with Configuration=Debug produces an unoptimized emulator. Pass --configuration Release (recommended) or --msi-allow-debug true to package a Debug build deliberately.
+InstallMsi         NotRun              
+───────────────────────────────────────
+Total                              0:05
+═══════════════════════════════════════
+​
+Build failed on 8/8/2026 4:54:56 AM. (╯°□°）╯︵ ┻━┻
+EXIT=0
+​
+╬════════════
+║ Restore
+╬═══
+​
+04:54:50 [INF] > "C:\Program Files\dotnet\dotnet.exe" restore F:\GitHub\vice-sharp\ViceSharp.slnx
+04:54:52 [DBG]   Determining projects to restore...
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 441 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj (in 584 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj (in 448 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 583 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomM\ViceSharp.RomM.csproj (in 416 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj (in 586 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj (in 461 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 585 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 439 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 585 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj (in 458 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 585 ms).
+04:54:55 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj (in 586 ms).
+04:54:55 [DBG]   17 of 30 projects are up-to-date for restore.
+​
+╬═══════════════
+║ PublishMsi
+╬══════
+​
+04:54:56 [ERR] Target PublishMsi has thrown an exception
+System.InvalidOperationException: PublishMsi with Configuration=Debug produces an unoptimized emulator. Pass --configuration Release (recommended) or --msi-allow-debug true to package a Debug build deliberately.
+   at Build.<get_PublishMsi>b__103_1() in F:\GitHub\vice-sharp\build\Build.cs:line 1215
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] PublishMsi: Target PublishMsi has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:05
+PublishMsi         Failed        < 1sec   // InvalidOperationException: PublishMsi with Configuration=Debug produces an unoptimized emulator. Pass --configuration Release (recommended) or --msi-allow-debug true to package a Debug build deliberately.
+InstallMsi         NotRun              
+───────────────────────────────────────
+Total                              0:05
+═══════════════════════════════════════
+​
+Build failed on 8/8/2026 4:54:56 AM. (╯°□°）╯︵ ┻━┻

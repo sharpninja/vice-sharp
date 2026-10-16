@@ -1,0 +1,144 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views/SettingsView.axaml(69,18,69,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.31]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:01.92]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.20]   Starting:    ViceSharp.TestHarness
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Joystick_Right_ClearsVia2PortBBit7 [63 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Machine_KeyboardInject_VisibleOnVia2PortA [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Matrix_SetKey_AppearsInScanRowsForColumns [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.DualVia_Windows_RemainAt9110And9120 [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk3 | Blk5, address: 24576, installed: True) [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: All, address: 1024, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: None, address: 8192, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk5, address: 49151, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk5, address: 40960, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: None, address: 1024, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: None, address: 4096, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk1, address: 16384, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk1, address: 8192, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk3, address: 24576, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk0, address: 8192, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk0, address: 1024, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk2, address: 16384, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk0, address: 4095, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk3 | Blk5, address: 40960, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk3 | Blk5, address: 8192, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: Blk1, address: 16383, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: All, address: 40960, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.IsInstalledRam_Blocks(blocks: None, address: 0, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "3k,8k", expected: Blk0 | Blk1) [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "A0", expected: Blk5) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "8k", expected: Blk1) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "16k", expected: Blk1 | Blk2) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "2", expected: Blk2) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "", expected: None) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "0,1,2,3,5", expected: All) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "60,a0", expected: Blk3 | Blk5) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "20", expected: Blk1) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "04", expected: Blk0) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "5", expected: Blk5) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "0", expected: Blk0) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "all", expected: All) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "a0", expected: Blk5) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "40", expected: Blk2) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "3", expected: Blk3) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "60", expected: Blk3) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "1", expected: Blk1) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "24k", expected: Blk1 | Blk2 | Blk3) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "none", expected: None) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_MatchesXvic(spec: "3k", expected: Blk0) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.FormatMemorySpec_CanonicalXvicForm(blocks: All, expected: "all") [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.FormatMemorySpec_CanonicalXvicForm(blocks: Blk0 | Blk5, expected: "04,a0") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.FormatMemorySpec_CanonicalXvicForm(blocks: Blk0, expected: "3k") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.FormatMemorySpec_CanonicalXvicForm(blocks: Blk1, expected: "8k") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.FormatMemorySpec_CanonicalXvicForm(blocks: Blk1 | Blk2 | Blk3, expected: "24k") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.FormatMemorySpec_CanonicalXvicForm(blocks: None, expected: "none") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.FormatMemorySpec_CanonicalXvicForm(blocks: Blk1 | Blk2, expected: "16k") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.FormatMemorySpec_CanonicalXvicForm(blocks: Blk3 | Blk5, expected: "60,a0") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_RejectsUnknownToken(spec: "30") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_RejectsUnknownToken(spec: "all,bogus") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_RejectsUnknownToken(spec: "bogus") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseMemorySpec_RejectsUnknownToken(spec: "7") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ExpansionKind_ToBlocks_Presets(kind: Exp8K, expected: Blk1) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ExpansionKind_ToBlocks_Presets(kind: Exp3K, expected: Blk0) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ExpansionKind_ToBlocks_Presets(kind: Exp24K, expected: Blk1 | Blk2 | Blk3) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ExpansionKind_ToBlocks_Presets(kind: Exp32K, expected: All) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ExpansionKind_ToBlocks_Presets(kind: Unexpanded, expected: None) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ExpansionKind_ToBlocks_Presets(kind: Exp16K, expected: Blk1 | Blk2) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.SystemRam_CustomBlocks_Blk3AndBlk5Writable [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20RamBlocksTests.ParseBoardModel_StillSupportsLegacyExpLabels [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.Via1_IdlePortA_IsViceIec7E [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.SystemRam_UninstalledBlk_DoesNotClaimBus [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.DualVia_BasesAndInterruptRoles_MatchViceBoard [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.ConsoleHost_TryGetVicIPixelAspect_UsesViceVicIFormulas [250 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.ColorRam_ReadCombinesNibbleWithVBusHigh_AsViceColorramRead [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.Mos6561_RenderWithZeroRegs_KeepsDefaultGeometry [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20NtscSession_Pump_CommitsViceNormalNtscGeometry [87 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20Session_Pump_CommitsFullGeometryFrame_Within3Seconds [85 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20Via1IecPortTests.Via1_PortA_Idle_MatchesViceIecPaRead_7E [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp32K, address: 1024, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 4096, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp8K, address: 8192, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 8192, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp8K, address: 16383, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp3K, address: 8192, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp16K, address: 16384, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp32K, address: 40960, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp8K, address: 16384, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp3K, address: 1024, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 1024, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp24K, address: 24576, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 0, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Exp8KMachine_Blk1IsWritable_Blk2OpenBusNonSticky [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.IoWindow_ViaAndVicStillMapped [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_OpenBus_IgnoresRomFetches_MatchesViceLastData [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_Reset_DoesNotApplyC64InitPattern [8 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_OpenBusExpansion_WriteDoesNotStick [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterBits_AreDoubleWidth_LikeXvic [10 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameIncludesBorderStrips_AroundCharacterArea [14 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderCyan_UsesVicePalettesVplRgb [10 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ColorBase_Uses9600_WhenScreenBankBitSet [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PixelAspect_MatchesViceVicGetPixelAspect [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_BankBitClear_Selects8000Bank [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PalAndNtsc_Profiles_ExposeDistinctTiming [16 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.Reg900F_BorderIsLowNibble_BackgroundIsHighNibble [< 1 ms]
+[xUnit.net 00:00:03.08]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameCompleted_FiresAfterFullRaster [21 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Pal_FrameGeometry_MatchesViceNormalBorders [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_MatchesViceFormula_UnexpandedReadyLayout [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Ntsc_FrameGeometry_MatchesViceNormalBorders [8 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.RenderNow_UsesCycleDrawPath_FrameCompletedOnce [8 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderPixels_MatchBorderColor_NotBackground [10 ms]
+
+Test Run Successful.
+Total tests: 106
+     Passed: 106
+ Total time: 3.7705 Seconds
+EXIT=0

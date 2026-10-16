@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC-007",
+  "title": "Border Behavior Including Open Border Tricks",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The VIC-II border unit shall accurately emulate both the main border (top/bottom) and side borders (left/right), including the ability to \"open\" borders using well-known VIC tricks (toggling the RSEL/CSEL bits at specific raster positions).\n\n## Acceptance Criteria\n- With RSEL=1 (25 rows), the upper border ends at line 51 and lower border begins at line 251.\n- With RSEL=0 (24 rows), the upper border ends at line 55 and lower border begins at line 247.\n- With CSEL=1 (40 columns), side borders are at pixels 24-343.\n- With CSEL=0 (38 columns), side borders are at pixels 31-334.\n- Opening the top/bottom border: if RSEL is cleared before the border comparison line and set after, the vertical border flip-flop is not set, allowing sprites to display in the border area.\n- Opening the side borders: toggling CSEL at the correct cycle prevents the horizontal border flip-flop from being set.\n- On PAL x64sc timing, the horizontal border clear check occurs at cycle 17 when CSEL=1 and cycle 18 when CSEL=0; the horizontal border set check occurs at cycle 57 when CSEL=1 and cycle 56 when CSEL=0.\n- Changing CSEL from 1 to 0 at cycle 56 skips the right-border set check for that line, leaving the side border open until the next line's border checks.\n- Border color is set by $D020; background color by $D021.\n- Closed vertical or side borders mask sprite output in the border area; sprites are visible in border pixels only when the corresponding border flip-flop is open.\n- Sprite-background visibility and collision checks treat closed border pixels as border pixels, not as foreground character or bitmap pixels.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

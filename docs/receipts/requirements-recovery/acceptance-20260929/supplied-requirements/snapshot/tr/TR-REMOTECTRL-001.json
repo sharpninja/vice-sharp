@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-REMOTECTRL-001",
+  "title": "Embeddable RemoteControl server integration + vendored feed",
+  "status": "pending",
+  "priority": "medium",
+  "body": "ViceSharp.Avalonia references SharpNinja.Avalonia.RemoteControl.Server (0.7.3), vendored into a repo-local NuGet feed (nuget-local/ + NuGet.config package source mapping) so restore is reproducible on Azure DevOps/CI without the sibling source repo. The Avalonia App builds a DI ServiceCollection, calls AddAvaloniaRemoteControl, registers an IRemoteControlRootProvider returning the desktop MainWindow, and attaches the host to the classic-desktop lifetime. Startup is gated behind VICESHARP_REMOTECONTROL_ENABLE and fails closed without a bearer token. Requires Avalonia >= 12.0.3 and Grpc >= 2.80.0 (central package versions bumped accordingly).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

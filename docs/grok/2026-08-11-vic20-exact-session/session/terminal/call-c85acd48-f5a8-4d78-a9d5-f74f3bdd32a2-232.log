@@ -1,0 +1,11 @@
+src/ViceSharp.Xbox.ViewModels/VirtualKeyboardLayout.cs
+src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml
+src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml.cs
+src/ViceSharp.Xbox/Views/AboutPage.xaml
+src/ViceSharp.Xbox/Views/AboutPage.xaml.cs
+src/ViceSharp.Xbox/Views/HomePage.xaml
+src/ViceSharp.Xbox/Views/HomePage.xaml.cs
+src/ViceSharp.Xbox/Views/InputMappingPage.xaml
+src/ViceSharp.Xbox/Views/InputMappingPage.xaml.cs
+src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml.cs
+src/ViceSharp.Xbox/Views/SettingsPage.xaml

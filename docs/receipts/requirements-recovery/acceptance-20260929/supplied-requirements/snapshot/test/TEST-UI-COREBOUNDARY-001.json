@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-UI-COREBOUNDARY-001",
+  "title": "Avalonia flash-cart builder abstraction boundary",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.\nExercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.\n\n## Acceptance Criteria\n- **ac-01**: Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.\n- **ac-02**: Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.",
+      "isSatisfied": false
+    }
+  ]
+}

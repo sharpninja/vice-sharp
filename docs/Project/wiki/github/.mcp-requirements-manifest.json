@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "github",
-  "generatedAtUtc": "2026-07-11T02:14:26.9087239+00:00",
+  "generatedAtUtc": "2026-09-10T23:30:12.0399041+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -13,12 +13,15 @@
     "User-Guide.md",
     "VICE-Migration.md",
     "ROM-Setup.md",
+    "Flash-Cart-Builder.md",
+    "Privacy-Policy.md",
     "Architecture.md",
     "Public-API.md",
     "PubSub.md",
     "Video-Audio-Decoupling.md",
     "State-Window.md",
     "Iteration-Roadmap.md",
+    "VIC20-vs-VICE-Audit.md",
     "AI-Review.md",
     "Registry-of-Lore.md",
     "Functional-Requirements-Overview.md",
@@ -30,6 +33,10 @@
     "VICE-Source-Manifest.md",
     "Machine-Architecture-Schema.md",
     "Cross-Platform-Wireframes.md",
-    "Desktop-Windows-UI.md"
+    "Desktop-Windows-UI.md",
+    "FR-VIC20.md",
+    "TR-VIC20.md",
+    "TR-RomM-Security.md",
+    "TR-Host-Prg.md"
   ]
 }

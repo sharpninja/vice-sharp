@@ -1,0 +1,2 @@
+?? docs/receipts/requirements-recovery/slice5-apply-20260929T083901/
+?? docs/receipts/requirements-recovery/slice5-apply-receipts.txt

@@ -1,0 +1,2 @@
+Get-ChildItem: Cannot convert 'System.Object[]' to the type 'System.String' required by parameter 'Filter'. Specified method is not supported.
+Get-ChildItem: Cannot convert 'System.Object[]' to the type 'System.String' required by parameter 'Filter'. Specified method is not supported.

@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-SIDEBARUI-001",
+  "title": "Collapse expander dock and glyph track the anchor",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "AttachPanelViewModelTests.CollapseExpander_DockAndGlyph_TrackAnchorSide asserts the expander dock side and chevron glyph follow the panel anchor and raise PropertyChanged.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Anchored Left yields CollapseExpanderDock Right and glyph the left chevron",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Anchored Right yields CollapseExpanderDock Left and glyph the right chevron, with PropertyChanged raised for both",
+      "isSatisfied": true
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-007",
+  "title": "Ring Modulation",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Ring modulation replaces the triangle waveform output of a voice with the product of that voice's triangle output and the MSB of the preceding voice's oscillator (voice 1 modulated by voice 3, voice 2 by voice 1, voice 3 by voice 2).\n\n## Acceptance Criteria\n- Ring modulation is enabled by bit 2 of the control register ($D404/$D40B/$D412).\n- When enabled, the triangle output is XORed with the MSB of the modulating voice's phase accumulator.\n- Ring mod only affects the triangle waveform; other selected waveforms are not modified.\n- The modulating voice does not need to be gated or have its output enabled for ring mod to work.\n- Ring mod and hard sync can be combined on the same voice.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

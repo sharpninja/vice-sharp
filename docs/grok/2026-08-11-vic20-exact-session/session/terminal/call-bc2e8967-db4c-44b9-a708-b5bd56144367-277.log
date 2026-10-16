@@ -1,0 +1,6 @@
+title=VICE (VIC20) hwnd=658800 exit=False
+size 610 x 569
+avg(20,40)-(80,120)=R33G33B33 n=1200
+avg(214,142)-(458,313)=R55G55B55 n=10492
+avg(61,398)-(183,512)=R20G20B20 n=3477
+saved F:\GitHub\vice-sharp\docs\xvic-ready-nofilter-2026-08-08.png 8909

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-ROMM-THREAD-001",
+  "title": "Captured-SynchronizationContext PropertyChanged dispatch",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. LibraryObservableObject posts PropertyChanged off-context to the captured UI SynchronizationContext and raises inline when already on-context, preventing RPC_E_WRONG_THREAD in UWP XAML binding. Verified by LibraryObservableObjectTests.Dispatch (covers AC-BROWSE-08).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

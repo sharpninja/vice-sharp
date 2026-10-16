@@ -1,0 +1,28 @@
+3 slug=c16 fs=c16 name=Commodore 16 count=0
+2 slug=c128 fs=c128 name=Commodore 64 count=0
+4 slug=c64 fs=c64 name=Commodore C64/128/MAX count=6772
+1 slug=c-plus-4 fs=c-plus-4 name=Commodore Plus/4 count=0
+=== c64 candidates ===
+2 slug=c128 count=0
+4 slug=c64 count=6772
+=== limit=3&offset=0&platform_ids=2&order_by=name&order_dir=asc === total=0 items=0 ci={}
+=== limit=3&offset=0&platform_id=2&order_by=name&order_dir=asc === total=6772 items=3 ci={"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":671
+  - .gb64-import-state
+  - '04 Lucky Poker Game, The
+  - 'Twas the Night Before Christmas
+=== limit=3&offset=0&platform_ids=2&order_by=name&order_dir=asc&with_char_index=true === total=0 items=0 ci={}
+PROP SearchTerm
+PROP PlatformIds
+PROP Limit
+PROP Offset
+PROP OrderBy
+PROP OrderDir
+PROP Matched
+PROP Favorite
+PROP Missing
+PROP WithFiles
+dll MISSING: with_char_index
+dll MISSING: platform_ids
+dll MISSING: search_term
+dll MISSING: char_index
+dll MISSING: order_by

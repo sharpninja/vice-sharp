@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXPKG-003",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Manifest XML + capability rule. Acceptance: Windows.Xbox device family, x64, internetClient-iff-download-kept.",
+  "acceptanceCriteria": []
+}

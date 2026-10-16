@@ -1,0 +1,42 @@
+
+[xUnit.net 00:00:01.82]       t1: PC=$1000 cyc=5 op=00 bound=False
+[xUnit.net 00:00:01.82]       t2: PC=$1000 cyc=4 op=00 bound=False
+[xUnit.net 00:00:01.82]       t3: PC=$1000 cyc=3 op=00 bound=False
+[xUnit.net 00:00:01.82]       t4: PC=$1000 cyc=2 op=00 bound=False
+[xUnit.net 00:00:01.82]       t5: PC=$1000 cyc=1 op=00 bound=False
+[xUnit.net 00:00:01.82]       t6: PC=$0000 cyc=0 op=00 bound=True
+[xUnit.net 00:00:01.82]       t7: PC=$0000 cyc=6 op=00 bound=False
+[xUnit.net 00:00:01.82]       t8: PC=$0000 cyc=5 op=00 bound=False
+[xUnit.net 00:00:01.82]       t9: PC=$0000 cyc=4 op=00 bound=False
+[xUnit.net 00:00:01.82]       t10: PC=$0000 cyc=3 op=00 bound=False
+[xUnit.net 00:00:01.84]       t1: PC=$0000 cyc=0 op=00 bound=True
+[xUnit.net 00:00:01.84]       t2: PC=$0000 cyc=6 op=00 bound=False
+[xUnit.net 00:00:01.84]       t3: PC=$0000 cyc=5 op=00 bound=False
+[xUnit.net 00:00:01.84]       t4: PC=$0000 cyc=4 op=00 bound=False
+[xUnit.net 00:00:01.84]       t5: PC=$0000 cyc=3 op=00 bound=False
+[xUnit.net 00:00:01.84]       t6: PC=$0000 cyc=2 op=00 bound=False
+[xUnit.net 00:00:01.84]       t7: PC=$0000 cyc=1 op=00 bound=False
+[xUnit.net 00:00:01.84]       t8: PC=$0000 cyc=0 op=00 bound=True
+[xUnit.net 00:00:01.84]       t9: PC=$0000 cyc=6 op=00 bound=False
+[xUnit.net 00:00:01.84]       t10: PC=$0000 cyc=5 op=00 bound=False
+  Failed ViceSharp.TestHarness.Vic20.BranchCycleCountTests.TakenBne_CycleTrace [19 ms]
+  Error Message:
+   t1: PC=$1000 cyc=5 op=00 bound=False
+t2: PC=$1000 cyc=4 op=00 bound=False
+t3: PC=$1000 cyc=3 op=00 bound=False
+t4: PC=$1000 cyc=2 op=00 bound=False
+t5: PC=$1000 cyc=1 op=00 bound=False
+t6: PC=$0000 cyc=0 op=00 bound=True
+t7: PC=$0000 cyc=6 op=00 bound=False
+t8: PC=$0000 cyc=5 op=00 bound=False
+t9: PC=$0000 cyc=4 op=00 bound=False
+t10: PC=$0000 cyc=3 op=00 bound=False
+  Failed ViceSharp.TestHarness.Vic20.BranchCycleCountTests.NotTakenBne_CycleTrace [< 1 ms]
+  Error Message:
+   t1: PC=$0000 cyc=0 op=00 bound=True
+t2: PC=$0000 cyc=6 op=00 bound=False
+t3: PC=$0000 cyc=5 op=00 bound=False
+t4: PC=$0000 cyc=4 op=00 bound=False
+t5: PC=$0000 cyc=3 op=00 bound=False
+t6: PC=$0000 cyc=2 op=00 bound=False
+

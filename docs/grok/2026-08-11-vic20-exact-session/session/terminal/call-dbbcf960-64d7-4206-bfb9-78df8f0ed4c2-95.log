@@ -1,0 +1,9 @@
+
+A total of 1 test files matched the specified pattern.
+  Failed ViceSharp.TestHarness.FlashCart.Fe3Flash040Tests.ModeFlash_ChipErase_FillsFlashFf [8 ms]
+  Error Message:
+Expected: 255
+Actual:   8
+Failed!  - Failed:     1, Passed:     1, Skipped:     0, Total:     2, Duration: 64 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-HOST-DIAG-001",
+  "title": "Diagnostics Host Attach Tests",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Diagnostics protocol descriptors, session enumeration, host info, current UI session resolution, performance snapshots, streaming snapshots, attach file lifecycle, and development-scoped reflection are verified with red-first unit and in-process gRPC tests.",
+  "acceptanceCriteria": []
+}

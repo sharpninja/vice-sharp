@@ -1,0 +1,12 @@
+size=1500x1410
+cyan x=4..1494 y=94..1348
+paper x=4..1494 y=94..1348 w=1491 h=1255 whitePts=573182
+BORDERS L=0 R=0 T=0 B=0
+frac L=0 R=0 T=0 B=0
+paperFrac W=1 H=1
+L/R ratio=0 T/B ratio=0
+displayAspect=1.188 paperAspect=1.188
+
+=== ViceSharp ===
+BORDERS L=289 R=0 T=175 B=179
+frac L=0.214 R=0 T=0.171 B=0.175

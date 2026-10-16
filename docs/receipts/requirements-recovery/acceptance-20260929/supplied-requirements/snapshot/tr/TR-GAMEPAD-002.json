@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-GAMEPAD-002",
+  "title": "XboxJoystickMapper pure, hysteresis threaded",
+  "status": "pending",
+  "priority": "medium",
+  "body": "XboxJoystickMapper pure, no static mutable state/IO/clock, hysteresis threaded. Acceptance: verified by TEST-GAMEPAD-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

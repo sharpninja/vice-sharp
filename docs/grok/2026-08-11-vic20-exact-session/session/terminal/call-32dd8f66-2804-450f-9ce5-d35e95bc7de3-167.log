@@ -1,0 +1,105 @@
+mtime=08/07/2026 08:18:22 len=4845
+2026-08-07 08:17:45.494 [Information] App: App starting; log file: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+2026-08-07 08:17:46.005 [Information] App: OnLaunched entry; c64Directory=C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64
+2026-08-07 08:17:46.039 [Information] App: ROM assessment: State=Complete IsBootBlocked=False
+2026-08-07 08:17:46.039 [Information] App: Boot not blocked: building host and session at launch
+2026-08-07 08:17:46.247 [Information] App: BuildHostAndSession: composing in-process host
+2026-08-07 08:17:47.142 [Information] App: BuildHostAndSession: session started id=emulator-a6c59c8fe82a481e8faee91057423003 (persisted profile: vic20)
+2026-08-07 08:17:47.164 [Information] App: persisted settings re-applied: success=True profile=vic20
+2026-08-07 08:17:47.178 [Information] App: boot cartridge: none configured
+2026-08-07 08:17:47.215 [Information] App: BuildHostAndSession: built VideoPull=True gamepad=True keyboardVm=False audio=True
+2026-08-07 08:17:47.320 [Information] App: Boot branch: emulator (VideoPull present) -> starting surface + gamepad
+2026-08-07 08:17:47.322 [Information] App: video aspect applied: standard=Pal pixelAspect=0.93650794 clockHz=1108405 contentRows=0 refreshHz=50.03633983387505 surface=True
+2026-08-07 08:17:47.323 [Information] App: video surface started
+2026-08-07 08:17:47.323 [Information] App: gamepad started (present=True)
+2026-08-07 08:17:47.333 [Information] App: menu closed: emulation resumed
+2026-08-07 08:17:47.348 [Information] Video: tick 1: bail: panel not sized (ActualW=0 ActualH=0 scaleX=2.5 scaleY=2.5)
+2026-08-07 08:17:47.365 [Information] Gamepad: poll thread=4
+2026-08-07 08:17:47.366 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-07 08:17:47.458 [Information] Video: tick 2: EnsureDevice: D3D11CreateDevice(HW) hr=0x00000000 device=0x18294959940 context=0x18294993108
+2026-08-07 08:17:47.459 [Information] Video: tick 2: EnsureDevice: CreateDXGIFactory2 hr=0x00000000 factory=0x18294D156A0
+2026-08-07 08:17:47.460 [Information] Video: tick 2: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x182945E13D8
+2026-08-07 08:17:47.460 [Information] Video: tick 2: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-07 08:17:47.463 [Information] Video: tick 2: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:17:47.464 [Information] Video: tick 2: EnsureSwapChain: created + bound 3840x1980
+2026-08-07 08:17:47.466 [Information] Video: tick 2: paint geometry: target 3840x1980, src 208x216, draw 1786x1980+1027+0, PAR 0.93650794
+2026-08-07 08:17:47.482 [Information] Video: tick 2: OK: first frame presented (target 3840x1980, src 208x216, 179712 bytes)
+2026-08-07 08:17:52.468 [Information] Video: perf: FPS 60.6 EMU 50.8 SPD 101.0% PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 08:17:57.563 [Information] Video: perf: FPS 60.2 EMU 50.5 SPD 100.2% PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 08:18:02.639 [Information] Video: perf: FPS 59.1 EMU 45.3 SPD 99.9% PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 08:18:07.725 [Information] Video: perf: FPS 61.2 EMU 49.3 SPD 101.9% PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 08:18:12.786 [Information] Video: perf: FPS 58.8 EMU 51.0 SPD 101.0% PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 08:18:16.831 [Information] App: menu open: emulation paused
+2026-08-07 08:18:16.859 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-07 08:18:16.860 [Information] Video: tick 1738: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:18:16.861 [Information] Video: tick 1738: paint geometry: target 2940x1980, src 208x216, draw 1786x1980+577+0, PAR 0.93650794
+2026-08-07 08:18:17.879 [Information] Video: perf: FPS 61.2 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 08:18:20.738 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-07 08:18:20.814 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=2 renderers=2 selComputer='VIC-20' selModel='Commodore VIC-20 PAL' selRenderer='Host direct' volume=100
+2026-08-07 08:18:20.909 [Information] Video: tick 1972: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 08:18:20.909 [Information] Video: tick 1972: paint geometry: target 3840x1980, src 208x216, draw 1786x1980+1027+0, PAR 0.93650794
+2026-08-07 08:18:22.961 [Information] Video: perf: FPS 59.3 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+---settings---
+{
+  "ProfileId": "vic20ntsc",
+  "Limiter": {
+    "RatePercent": 100,
+    "IsEnabled": true,
+    "PacingStrategy": "vice"
+  },
+  "Display": {
+    "Renderer": "host",
+    "Palette": "vice",
+    "ShowBorder": true,
+    "MaintainAspectRatio": true,
+    "Scale": "fit-window",
+    "CropMode": "visible-area",
+    "AspectMode": "vice-pixel-aspect"
+  },
+  "Input": {
+    "KeyboardMapId": "c64:gtk3_pos",
+    "PrimaryJoystickPort": 1,
+    "SwapJoystickPorts": false,
+    "Mode": "keyboard-joystick"
+  },
+  "Audio": {
+    "Mode": "enabled"
+  },
+  "Resources": {
+    "Mode": "auto-detect"
+  },
+  "Vic20MemorySpec": "none",
+  "FileSystemIecRootPath": "",
+  "FileSystemIecUnit": 9,
+  "Vic20ExpansionCartKind": "none",
+  "Vic20ExpansionWriteBack": false,
+  "Vic20ExpansionConfigPreset": "start"
+}
+---WER---
+
+Time     : 8/7/2026 8:19:04 AM
+Id       : 0
+Provider : McpServer
+Msg      : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+           EventId: 0
+           
+           MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 210.43ms (RequestId: 
+           "0HNN89RCBK0T5:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+           User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=3304; 
+           X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+           ResponseHeaders: "Content-Type=application/json; charset=utf-8; Date=Fri, 07 Aug 2026 13:19:03 GMT; 
+           Server=Kestrel; Location=/mcpserver/sessionlog?agent=ClaudeCode&sessionId=ClaudeCode-20260807T0
+
+Time     : 8/7/2026 8:18:56 AM
+Id       : 0
+Provider : McpServer
+Msg      : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+           EventId: 0
+           
+           MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 248.97ms (RequestId: 
+           "0HNN89RCBK0T2:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+           User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=3214; 
+           X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+           ResponseHeaders: "Content-Type=application/json; charset=utf-8; Date=Fri, 07 Aug 2026 13:18:55 GMT; 
+           Server=Kestrel; Location=/mcpserver/sessionlog?agent=GrokCode&sessionId=GrokCode-20260807T04551
+

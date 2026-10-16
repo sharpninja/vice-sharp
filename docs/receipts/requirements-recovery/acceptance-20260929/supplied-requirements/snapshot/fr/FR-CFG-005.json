@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CFG-005",
+  "title": "Autostart and Program Launch Handling",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall support autostarting programs from disk, tape, cartridge, or supported archive/image sources by attaching required media and injecting the appropriate machine commands.\n\n## Acceptance Criteria\n- Autostart can identify supported media/image sources and select an applicable launch path.\n- Autostart attaches required media through host media services.\n- Autostart injects launch commands through host input/control services at deterministic boundaries.\n- Autostart failures leave existing media and machine state unchanged unless explicitly committed.\n- Reset-plus-drive-8 autorun succeeds for a readable drive 8 D64 containing a runnable PRG and reports an explicit failed-precondition status when required host, media, runtime, or keyboard automation prerequisites are missing.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

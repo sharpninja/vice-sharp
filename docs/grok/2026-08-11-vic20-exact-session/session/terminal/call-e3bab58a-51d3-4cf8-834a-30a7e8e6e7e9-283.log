@@ -1,0 +1,130 @@
+{
+  "Id": "Projects-7",
+  "SpaceId": "Spaces-1",
+  "VariableSetId": "variableset-Projects-7",
+  "DeploymentProcessId": "deploymentprocess-Projects-7",
+  "ClonedFromProjectId": null,
+  "DiscreteChannelRelease": false,
+  "IncludedLibraryVariableSetIds": [],
+  "DefaultToSkipIfAlreadyInstalled": false,
+  "TenantedDeploymentMode": "Untenanted",
+  "DefaultGuidedFailureMode": "EnvironmentDefault",
+  "VersioningStrategy": {
+    "Template": "#{Octopus.Version.LastMajor}.#{Octopus.Version.LastMinor}.#{Octopus.Version.NextPatch}",
+    "DonorPackage": null
+  },
+  "ReleaseCreationStrategy": {
+    "ChannelId": null,
+    "ReleaseCreationPackage": null,
+    "ReleaseCreationPackageStepId": null
+  },
+  "Templates": [],
+  "AutoDeployReleaseOverrides": [],
+  "ReleaseNotesTemplate": null,
+  "DeploymentChangesTemplate": null,
+  "ForcePackageDownload": false,
+  "Icon": null,
+  "AllowIgnoreChannelRules": false,
+  "ExecuteDeploymentsOnResilientPipeline": null,
+  "ProvisioningRunbookId": null,
+  "DeprovisioningRunbookId": null,
+  "CombineHealthAndSyncStatusInDashboardLiveStatus": false,
+  "DefaultPowerShellEdition": null,
+  "ProjectTags": [],
+  "ExtensionSettings": [],
+  "Name": "RomM",
+  "Slug": "romm",
+  "Description": "RomM + CSDb bridge on PAYTON-DESKTOP. Triggered by GitHub Release (RomM-GB64).",
+  "IsDisabled": false,
+  "ProjectGroupId": "ProjectGroups-1",
+  "LifecycleId": "Lifecycles-5",
+  "AutoCreateRelease": false,
+  "IsVersionControlled": false,
+  "PersistenceSettings": {
+    "Type": "Database"
+  },
+  "ProjectTemplateDetails": null,
+  "ProjectConnectivityPolicy": {
+    "SkipMachineBehavior": "None",
+    "TargetRoles": [],
+    "AllowDeploymentsToNoTargets": false,
+    "ExcludeUnhealthyTargets": false
+  },
+  "Links": {
+    "Self": "/api/Spaces-1/projects/Projects-7",
+    "Variables": "/api/Spaces-1/projects/Projects-7/variables",
+    "Releases": "/api/Spaces-1/projects/Projects-7/releases{/version}{?skip,take,searchByVersion}",
+    "Channels": "/api/Spaces-1/projects/Projects-7/channels{/id}{?skip,take,partialName}",
+    "Triggers": "/api/Spaces-1/projects/Projects-7/triggers{?skip,take,partialName,triggerActionType,triggerActionCategory,runbooks,runbookTags}",
+    "ScheduledTriggers": "/api/Spaces-1/projects/Projects-7/triggers/scheduled{?skip,take,partialName,ids}",
+    "OrderChannels": "/api/Spaces-1/projects/Projects-7/channels/order",
+    "Progression": "/api/Spaces-1/projects/Projects-7/progression{?releaseHistoryCount}",
+    "RunbookTaskRunDashboardItemsTemplate": "/api/Spaces-1/progression/runbooks/taskRuns{?skip,take,ids,projectIds,runbookIds,environmentIds,tenantIds,tenantTags,runbookTags,taskIds}",
+    "DeploymentProcess": "/api/Spaces-1/projects/Projects-7/deploymentprocesses",
+    "DeploymentSettings": "/api/Spaces-1/projects/Projects-7/deploymentsettings",
+    "Web": "/app#/Spaces-1/projects/Projects-7",
+    "Logo": "/api/Spaces-1/projects/Projects-7/logo?cb=2026.2.13190",
+    "Metadata": "/api/Spaces-1/projects/Projects-7/metadata",
+    "Runbooks": "/api/Spaces-1/projects/Projects-7/runbooks{?skip,take,partialName}",
+    "RunbookSnapshots": "/api/Spaces-1/projects/Projects-7/runbookSnapshots{/name}{?skip,take,searchByName}",
+    "Summary": "/api/Spaces-1/projects/Projects-7/summary",
+    "GitConnectionTest": "/api/Spaces-1/projects/Projects-7/git/connectivity-test",
+    "InsightsMetrics": "/api/Spaces-1/projects/Projects-7/insights/metrics{?channelId,environmentId,tenantId,tenantFilter,timeRange,granularity,timeZone}",
+    "GitCompatibilityReport": "/api/Spaces-1/projects/Projects-7/git/compatibility-report",
+    "ConvertToGit": "/api/Spaces-1/projects/Projects-7/git/convert",
+    "ConvertToVcs": "/api/Spaces-1/projects/Projects-7/git/convert"
+  }
+}
+==== TRIGGERS ====
+{
+  "ItemType": "ProjectTrigger",
+  "TotalResults": 1,
+  "ItemsPerPage": 30,
+  "NumberOfPages": 1,
+  "LastPageNumber": 0,
+  "Items": [
+    {
+      "Id": "ProjectTriggers-7",
+      "Name": "GitHub Release / git create release",
+      "ProjectId": "Projects-7",
+      "IsDisabled": false,
+      "Filter": {
+        "FilterType": "GitFilter",
+        "Sources": [
+          {
+            "DeploymentActionSlug": "redeploy-romm-docker-stack",
+            "GitDependencyName": "romm",
+            "IncludeFilePaths": null,
+            "ExcludeFilePaths": null
+          }
+        ],
+        "Id": null,
+        "LastModifiedOn": null,
+        "LastModifiedBy": null,
+        "Links": {}
+      },
+      "Action": {
+        "ActionType": "CreateRelease",
+        "ChannelId": "Channels-7",
+        "Id": null,
+        "LastModifiedOn": null,
+        "LastModifiedBy": null,
+        "Links": {}
+      },
+      "SpaceId": "Spaces-1",
+      "Description": "Create Octopus release when the RomM-GB64 git dependency changes. Prefer GitHub Actions on release published for versioned tags.",
+      "Links": {
+        "Self": "/api/Spaces-1/projects/Projects-7/triggers/ProjectTriggers-7",
+        "Project": "/api/Spaces-1/projects/Projects-7"
+      }
+    }
+  ],
+  "Links": {
+    "Self": "/api/Spaces-1/projects/Projects-7/triggers?skip=0&take=30",
+    "Template": "/api/Spaces-1/projects/Projects-7/triggers{?skip,take,partialName,triggerActionType,triggerActionCategory,runbooks,runbookTags}",
+    "Page.All": "/api/Spaces-1/projects/Projects-7/triggers?skip=0&take=2147483647",
+    "Page.Current": "/api/Spaces-1/projects/Projects-7/triggers?skip=0&take=30",
+    "Page.Last": "/api/Spaces-1/projects/Projects-7/triggers?skip=0&take=30"
+  }
+}
+Redeploy RomM docker stack

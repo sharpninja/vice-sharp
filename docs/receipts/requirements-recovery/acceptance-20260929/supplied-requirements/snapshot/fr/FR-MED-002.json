@@ -1,0 +1,21 @@
+{
+  "kind": "fr",
+  "id": "FR-MED-002",
+  "title": "Video Recording (MP4 via FFmpeg)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall record video output to MP4 (H.264) format by streaming raw frames to an external `ffmpeg` process (mirroring VICE's `ffmpegexedrv`; discovery via `PATH` or `VICESHARP_FFMPEG`, no libav P/Invoke bindings). Recording captures consecutive frames at the native frame rate (PAL: 50fps, NTSC: approximately 59.94fps) and encodes them in real-time.\n\n## Acceptance Criteria\n- Video is encoded to H.264 in an MP4 container.\n- Frame rate matches the emulated system (50fps PAL, 59.94fps NTSC).\n- Resolution options include native (403x284 PAL) and integer-scaled variants.\n- Recording can be started, paused, resumed, and stopped via `IMediaCapture`.\n- The encoding does not drop frames during real-time recording on the reference hardware (a modern desktop CPU).\n- Quality presets (low/medium/high) are configurable, mapping to CRF values.\n- The recording pipeline uses zero managed allocations per frame on the hot path.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Unique mode skips consecutive byte-identical frames",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Frame files are written off the emulation worker thread",
+      "isSatisfied": true
+    }
+  ]
+}

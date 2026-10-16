@@ -1,0 +1,58 @@
+
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:32:            <TextBox x:Name="SearchBox" Grid.Column="1" 
+Margin="28,0,28,0" MaxWidth="560" HorizontalAlignment="Stretch"
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:36:                    <TextBlock x:Name="MachineText" Text="Machine ú C64" 
+Foreground="White" FontSize="18" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:38:                <TextBlock x:Name="CountText" Text="" 
+Foreground="#FFB8B8B8" FontSize="18" VerticalAlignment="Center" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:43:        <Grid x:Name="BrowseArea" Grid.Row="1" Visibility="Collapsed">
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:49:            <GridView x:Name="TilesView" Grid.Column="0" 
+SelectionMode="Single" IsItemClickEnabled="True"
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:50:                      ItemClick="OnTileClick" 
+SelectionChanged="OnSelectionChanged"
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:64:                                    <Image x:Name="CoverImage" 
+Stretch="UniformToFill" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:77:                <StackPanel x:Name="AzStrip" Orientation="Vertical" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:82:        <Border x:Name="ConnectPanel" Grid.Row="1" Background="#CC141414" 
+CornerRadius="12" Padding="28"
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:86:                <TextBox x:Name="UrlBox" 
+PlaceholderText="http://host:8080/" Text="http://localhost:8080/" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:87:                <PasswordBox x:Name="TokenBox" PlaceholderText="Client 
+API token (optional when a bridge is present)" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:89:                    <Button Content="Scan LAN" Style="{StaticResource 
+TenFootButtonStyle}" Click="OnScan" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:90:                    <Button Content="Connect" Style="{StaticResource 
+TenFootButtonStyle}" Click="OnConnect" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:92:                <TextBlock x:Name="ConnectStatus" Text="Scanning the 
+local network for RomM..." Foreground="#FFDDDDDD" TextWrapping="Wrap" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:104:                    <TextBlock x:Name="SelectedText" Text="No game 
+selected" Foreground="White" FontSize="18" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:105:                    <TextBlock x:Name="StatusText" Text="" 
+Foreground="#FFCFCFCF" FontSize="14" Margin="0,2,0,0" TextWrapping="Wrap" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:109:                    <ComboBox x:Name="SlotBox" Width="150" 
+SelectionChanged="OnSlotChanged" />
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:110:                    <ProgressBar x:Name="DownloadBar" Width="220" 
+Minimum="0" Maximum="1" Value="0" VerticalAlignment="Center" />
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\CoverRef.cs:10:public sealed record CoverRef(string? Url, string? Path);
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ILibraryImageLoader.cs:4:/// FR-ROMM-COVER-001. Opens a cover image stream for a <see cref="CoverRef"/>, applying the correct
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ILibraryImageLoader.cs:5:/// auth rule (unauthenticated for <see cref="CoverRef.Url"/>, bearer for <see cref="CoverRef.Path"/>).
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ILibraryImageLoader.cs:13:    Task<Stream> OpenCoverAsync(CoverRef cover, CancellationToken cancellationToken = default);
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:77:                OnPropertyChanged(nameof(HasMore));
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:83:    public bool HasMore => Items.Count < _total;
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:86:    public string SearchText
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:106:    public double DownloadProgress
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:120:                OnPropertyChanged(nameof(CanAttach));
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:121:                SelectedSlot = value is null ? null : MediaExtensionMap.Resolve(value.FileName)?.Slot;
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:127:    public MediaSlot? SelectedSlot
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:134:    public bool CanAttach => _selectedTile?.Launchable == true;
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:165:        if (!HasMore)
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:178:    public async Task JumpToLetterAsync(char letter, CancellationToken cancellationToken = default)
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:219:        MediaSlot slot = SelectedSlot
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:225:            DownloadProgress = fraction;
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs:287:        OnPropertyChanged(nameof(HasMore));
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\RomDetail.cs:8:/// <param name="Cover">The cover art reference, or <c>null</c>.</param>
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\RomDetail.cs:16:    CoverRef? Cover,
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\RomTile.cs:12:/// <param name="Cover">The cover art reference, or <c>null</c> when the ROM has no cover.</param>
+F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\RomTile.cs:20:    CoverRef? Cover,
+F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ProtocolContracts.cs:49:public enum MediaSlot
+

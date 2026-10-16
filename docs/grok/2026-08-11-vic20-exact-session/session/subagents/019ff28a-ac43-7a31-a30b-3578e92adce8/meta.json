@@ -1,0 +1,17 @@
+{
+  "subagent_id": "019ff28a-ac43-7a31-a30b-3578e92adce8",
+  "parent_session_id": "019fd0df-383d-7fc0-9f0a-69785afd78ed",
+  "child_session_id": "019ff28a-ac43-7a31-a30b-3578e92adce8",
+  "subagent_type": "general-purpose",
+  "description": "Hostile validate VIC20 Exact",
+  "prompt": "You are the HOSTILE VALIDATOR for workspace F:\\GitHub\\vice-sharp.\nYou are adversarial. Your job is to disprove the implementer's claims.\nDefault every claim to FAIL or UNKNOWN until YOU re-verify with tools.\n\nRules:\n1. Do not trust plan checkboxes, agent chat, or old implementer receipts without re-checking.\n2. Independently inspect files and re-run or re-read gate logs under C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-a8b508754f9e\\implementer and docs/receipts/vic20-*-2026-08-11*.\n3. PowerShell only. No em-dashes.\n4. Write durable receipt to docs/receipts/hostile-validator-YYYYMMDDTHHMMSSZ.md with matching .json twin if possible.\n5. Receipt MUST include: TimestampUtc, ValidatorIdentity: GrokSubagentHostile, Claims reviewed, Per-claim PASS|FAIL|UNKNOWN + evidence, OverallVerdict AGREE only if ALL claims PASS else DISAGREE, Explicit FAIL list.\n6. Do not implement product features. Review only. Write receipt only.\n7. End response with receipt path and OverallVerdict.\n\nImplementer claims to attack:\nA) Vic20Pixel gate green 8/0/0 (index READY PAL/NTSC/busy + BGRA + frame tests). Evidence: C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-a8b508754f9e\\implementer\\vic20-pixel-gate.log and docs/receipts/vic20-pixel-gate-2026-08-11.log\nB) Bgra_ReadyPal uses TryCaptureVisibleFrame native path (not pure tautology only) - verify source in tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs\nC) Cart+sound gate 31/0/0 - vic20-cart-sound-gate.log\nD) Lockstep 2s non-idle PAL and NTSC green with VICESHARP_LOCKSTEP_2S=1 - vic20-lockstep-gate.log (TwoSecondPal/Ntsc)\nE) Snapshot tests are real (managed blob round-trip + resume lockstep after ZP restore), not inventory theater - Vic20SnapshotRoundTripTests.cs + vic20-snapshot-gate.log 4/0/0\nF) Scoped Exact language is honest: index pixel Exact; BGRA canvas RGB may Partial with shared-palette alignment; residuals listed (niche carts, IEEE, WriteSnapshot hang)\n\nRe-verify by reading logs for Failed=0 Skipped=0 / Test Run Successful counts. Spot-check code for BGRA TryCaptureVisibleFrame. If 2s tests only pass via early return without env, FAIL claim D.\nWorkspace: F:\\GitHub\\vice-sharp\n",
+  "status": "completed",
+  "started_at": "2026-08-11T20:36:42.198172400Z",
+  "completed_at": "2026-08-11T20:40:03.354027400Z",
+  "duration_ms": 201161,
+  "tool_calls": 25,
+  "turns": 1,
+  "effective_context_source": "new",
+  "child_cwd": "F:\\GitHub\\vice-sharp",
+  "effective_model_id": "grok-4.5"
+}

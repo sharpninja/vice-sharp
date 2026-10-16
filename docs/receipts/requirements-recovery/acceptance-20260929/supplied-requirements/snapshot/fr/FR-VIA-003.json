@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIA-003",
+  "title": "VIA Port A and Port B with Handshake Protocols",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The VIA's two 8-bit I/O ports (Port A and Port B) support handshaking protocols for interfacing with external devices. Port A uses CA1/CA2 control lines; Port B uses CB1/CB2. Handshake modes include pulse output and independent interrupt control.\n\n## Acceptance Criteria\n- Port A Data Direction Register (DDRA) controls which bits are input (0) and output (1).\n- Port B Data Direction Register (DDRB) controls which bits are input (0) and output (1).\n- CA1 active edge (rising or falling) is selected by PCR bit 0.\n- CA2 can operate as: negative edge input, positive edge input, handshake output, or pulse output (PCR bits 1-3).\n- CB1/CB2 control operates identically to CA1/CA2 with PCR bits 4-7.\n- Reading Port A (ORA) or Port B (ORB) clears the corresponding CA1/CB1 interrupt flags.\n- Latching mode (ACR bits 0-1) can latch port input data on the active CA1/CB1 edge.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

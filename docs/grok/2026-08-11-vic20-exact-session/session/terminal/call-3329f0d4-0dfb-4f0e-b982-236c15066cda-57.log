@@ -1,0 +1,11 @@
+USER XVIC (true oracle image):
+  frame x=0..1499 y=90..1359 (1500x1270)
+  paper x=166..1333 y=90..1359 (1168x1270)
+  BORDERS L=166 R=166 T=0 B=0
+  frac L=0.111 R=0.111 T=0 B=0
+  L/R=1 paperW/frame=0.779
+
+VICESHARP (prior crop):
+  BORDERS L=289 R=0 T=175 B=179
+  frac L=0.214 R=0.000 T=0.171 B=0.175
+  BUG: right border missing (0 vs xvic ~0.111)

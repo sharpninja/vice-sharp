@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-UIAXAML-001",
+  "title": "All Avalonia views authored in AXAML + MVVM",
+  "status": "pending",
+  "priority": "high",
+  "body": "Every Avalonia view in ViceSharp.Avalonia is authored declaratively in AXAML with MVVM bindings (no imperative control-tree construction in code-behind), to ease maintenance. The shell window, the sidebar, each per-peripheral control, and the settings panel are AXAML UserControls/Windows bound to view models; code-behind is limited to InitializeComponent and thin glue.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

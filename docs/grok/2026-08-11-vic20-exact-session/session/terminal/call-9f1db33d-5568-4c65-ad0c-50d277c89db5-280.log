@@ -1,0 +1,110 @@
+
+Name                                                      Mode  Length
+----                                                      ----  ------
+Assets                                                    d---- 
+Controls                                                  d---- 
+Licenses                                                  d---- 
+publish                                                   d---- 
+Styles                                                    d---- 
+Views                                                     d---- 
+App.xbf                                                   -a--- 588
+AppxManifest.xml                                          -a--- 3937
+Google.Protobuf.dll                                       -a--- 501400
+Grpc.Core.Api.dll                                         -a--- 70296
+Microsoft.Extensions.Configuration.Abstractions.dll       -a--- 28496
+Microsoft.Extensions.Configuration.Binder.dll             -a--- 43344
+Microsoft.Extensions.Configuration.dll                    -a--- 44880
+Microsoft.Extensions.DependencyInjection.Abstractions.dll -a--- 65872
+Microsoft.Extensions.DependencyInjection.dll              -a--- 95568
+Microsoft.Extensions.Diagnostics.Abstractions.dll         -a--- 31056
+Microsoft.Extensions.Diagnostics.dll                      -a--- 36624
+Microsoft.Extensions.FileProviders.Abstractions.dll       -a--- 23376
+Microsoft.Extensions.Hosting.Abstractions.dll             -a--- 54096
+Microsoft.Extensions.Http.dll                             -a--- 93456
+Microsoft.Extensions.Logging.Abstractions.dll             -a--- 66896
+Microsoft.Extensions.Logging.Configuration.dll            -a--- 28496
+Microsoft.Extensions.Logging.Console.dll                  -a--- 76112
+Microsoft.Extensions.Logging.Debug.dll                    -a--- 19792
+Microsoft.Extensions.Logging.dll                          -a--- 51536
+Microsoft.Extensions.Options.ConfigurationExtensions.dll  -a--- 21840
+Microsoft.Extensions.Options.dll                          -a--- 65360
+Microsoft.Extensions.Primitives.dll                       -a--- 44880
+Microsoft.Windows.SDK.NET.dll                             -a--- 26341408
+Microsoft.Windows.UI.Xaml.dll                             -a--- 7330360
+resources.pri                                             -a--- 28568
+RomM.Client.Csdb.dll                                      -a--- 56832
+RomM.Client.dll                                           -a--- 121344
+ViceSharp.Abstractions.dll                                -a--- 58368
+ViceSharp.Abstractions.pdb                                -a--- 27036
+ViceSharp.Architectures.dll                               -a--- 128000
+ViceSharp.Architectures.pdb                               -a--- 52004
+ViceSharp.Chips.dll                                       -a--- 238080
+ViceSharp.Chips.pdb                                       -a--- 81932
+ViceSharp.Core.dll                                        -a--- 221696
+ViceSharp.Core.pdb                                        -a--- 84120
+ViceSharp.Host.InProcess.dll                              -a--- 176128
+ViceSharp.Host.InProcess.pdb                              -a--- 60440
+ViceSharp.Library.ViewModels.dll                          -a--- 62464
+ViceSharp.Library.ViewModels.pdb                          -a--- 24320
+ViceSharp.Monitor.dll                                     -a--- 26112
+ViceSharp.Monitor.pdb                                     -a--- 16888
+ViceSharp.Protocol.dll                                    -a--- 576000
+ViceSharp.Protocol.pdb                                    -a--- 263516
+ViceSharp.RomFetch.dll                                    -a--- 39936
+ViceSharp.RomFetch.pdb                                    -a--- 18076
+ViceSharp.RomM.dll                                        -a--- 90624
+ViceSharp.RomM.pdb                                        -a--- 52964
+ViceSharp.Xbox.build.appxrecipe                           -a--- 25456
+ViceSharp.Xbox.deps.json                                  -a--- 26575
+ViceSharp.Xbox.dll                                        -a--- 240128
+ViceSharp.Xbox.exe                                        -a--- 162816
+ViceSharp.Xbox.Input.dll                                  -a--- 51712
+ViceSharp.Xbox.Input.pdb                                  -a--- 33136
+ViceSharp.Xbox.pdb                                        -a--- 162772
+ViceSharp.Xbox.runtimeconfig.json                         -a--- 398
+ViceSharp.Xbox.ViewModels.dll                             -a--- 130560
+ViceSharp.Xbox.ViewModels.pdb                             -a--- 57168
+WinRT.Runtime.dll                                         -a--- 528944
+YamlDotNet.dll                                            -a--- 300032
+
+
+Bookmark             : System.Diagnostics.Eventing.Reader.EventBookmark
+LevelDisplayName     : Information
+OpcodeDisplayName    : Info
+TaskDisplayName      : 
+KeywordsDisplayNames : {AppXDeploymentServer Keyword}
+Properties           : {System.Diagnostics.Eventing.Reader.EventProperty, 
+                       System.Diagnostics.Eventing.Reader.EventProperty}
+
+Message              : There were 5 additional files that failed to be deleted under the folder \\?\C:\Program 
+                       Files\WindowsApps\Deleted.
+Id                   : 493
+Version              : 0
+Qualifiers           : 
+Level                : 3
+Task                 : 5
+Opcode               : 0
+Keywords             : 4611686018427387905
+RecordId             : 55645
+ProviderName         : Microsoft-Windows-AppXDeployment-Server
+ProviderId           : 3f471139-acb7-4a01-b7a7-ff5da4ba2d43
+LogName              : Microsoft-Windows-AppXDeploymentServer/Operational
+ProcessId            : 7696
+ThreadId             : 3688
+MachineName          : PAYTON-LEGION2
+UserId               : S-1-5-18
+TimeCreated          : 8/5/2026 3:39:10 AM
+ActivityId           : 8c6041a4-1a14-0009-645c-0d9b141add01
+RelatedActivityId    : 
+ContainerLog         : Microsoft-Windows-AppXDeploymentServer/Operational
+MatchedQueryIds      : {}
+Bookmark             : System.Diagnostics.Eventing.Reader.EventBookmark
+LevelDisplayName     : Warning
+OpcodeDisplayName    : Info
+TaskDisplayName      : 
+KeywordsDisplayNames : {AppXDeploymentServer Keyword}
+Properties           : {System.Diagnostics.Eventing.Reader.EventProperty, 
+                       System.Diagnostics.Eventing.Reader.EventProperty}
+
+
+

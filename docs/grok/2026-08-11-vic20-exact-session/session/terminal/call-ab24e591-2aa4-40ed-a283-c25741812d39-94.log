@@ -1,0 +1,30 @@
+azure	https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp (fetch)
+azure	https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp (push)
+origin	https://github.com/sharpninja/vice-sharp.git (fetch)
+origin	https://github.com/sharpninja/vice-sharp.git (push)
+## [32mfeat/xbox-uwp-app[m
+ [31mM[m HANDOFF.md
+ [31mM[m azure-pipelines.ci.yml
+ [31mM[m azure-pipelines.release.yml
+ [31mM[m src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml
+ [31mM[m src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/AboutPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/AboutPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/DeviceSetupPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/DeviceSetupPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/InputMappingPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/InputMappingPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/SettingsPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/SettingsPage.xaml.cs
+ [31mM[m tests/ViceSharp.AiReview.Tests/appsettings.aiunit.json
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+  develop                          aaa53e3 test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+  feat/drive-family-and-device-art b6b7753 docs(requirements): regenerate wiki requirement exports (drive-family FR/TR/TEST + BUG-DRV1540-001)
++ feat/romm-integration            978b5a6 (F:/GitHub/vice-sharp-romm) fix(xbox): OnLaunched composed the shell twice, leaking an unarmed gamepad pump
+* feat/xbox-uwp-app                a199063 feat(xbox): B steps back on menu subpages; subpages expand to the full window [PLAN-XBOXUWP FEAT-XMENUSUBPAGE-001]
++ fix/romless-vic-content          7f57f92 (F:/GitHub/vice-sharp-romless) [azure/fix/romless-vic-content] test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]

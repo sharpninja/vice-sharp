@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XAUDIO-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Factory-null + SID inert. Acceptance: headless CreateDefault() null; SID null-backend IsAudioTimingSource==false, no samples.",
+  "acceptanceCriteria": []
+}

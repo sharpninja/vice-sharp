@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC-EDGE-004",
+  "title": "VIC-II non-PAL sprite DMA window native checkpoint",
+  "status": "closed",
+  "priority": "medium",
+  "body": "All 5 non-PAL VIC-II models (Mos6567, Mos8562, Mos6567R56A, Mos6572, Mos8565) fire sprite-3 DMA near line 0x50. Managed IsCpuCycleStolen true at (SpriteY+1, rasterX 0). VICE vicii-chip-model.c:272-403/437-566.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-GAMEPAD-003",
+  "title": "Explicit Joystick1/Joystick2 only",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Explicit InputPort.Joystick1/Joystick2 only, never PrimaryJoystick. Acceptance: verified by TEST-GAMEPAD-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

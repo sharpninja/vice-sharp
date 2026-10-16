@@ -1,0 +1,79 @@
+
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:9:/// machine: five physical rows plus the four function keys 
+that sit in a column on the
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:30:        IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> rows,
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:33:        Rows = rows;
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:35:        AllKeys = rows.SelectMany(row => 
+row).Concat(functionKeys).ToArray();
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:45:    /// The tiles grouped into their display rows, top to 
+bottom, left to right. The
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:46:    /// function keys are NOT part of the rows: they live in 
+<see cref="FunctionKeys"/>
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:49:    public IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> 
+Rows { get; }
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:53:    /// (PLAN-XKEYBOARD-001). Empty on layouts that fold the 
+function keys into the rows.
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:58:    /// Every tile flattened: the rows in row-major order 
+followed by the function column.
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:74:        var rows = new List<IReadOnlyList<VirtualKeyEntry>>
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:113:                    // RUN/STOP and SHIFT LOCK are 1u; only 
+RETURN is wide in this row, so rows 3-4
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:114:                    // finish slightly LEFT of rows 1-2 
+(operator 2026-07-18).
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:136:                    // finishing LEFT of the full-width 
+rows 1-2 as on the real machine (operator
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:137:                    // 2026-07-18: "first two rows ... 
+slightly longer than the next two rows").
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardLayout.cs:171:        return new VirtualKeyboardLayout(rows, 
+functionKeys);
+namespace ViceSharp.Xbox.ViewModels;
+
+using System.Collections.Generic;
+using System.Linq;
+
+/// <summary>
+/// PLAN-XBOXUWP S25 (IMPL-XBOXUWP-025) + PLAN-XKEYBOARD-001 K1, area XBOXUI/XKBD. The
+/// layout of the on-screen virtual C64 keyboard. The default is the AUTHENTIC 66-key
+/// machine: five physical rows plus the four function keys that sit in a column on the
+/// RIGHT of the real keyboard (operator constraint 2026-07-14). Every ordinary tile's
+/// <see cref="VirtualKeyEntry.KeyName"/> is a string the real C64 keyboard map resolves
+/// (validated by the tests, since this project cannot reference the engine).
+/// </summary>
+/// <remarks>
+/// <para>
+/// Physical reference (66 keys): row 1 = left-arrow 1..0 + - pound CLR/HOME INST/DEL;
+/// row 2 = CTRL Q..P @ * up-arrow RESTORE; row 3 = RUN/STOP SHIFT-LOCK A..L : ; = RETURN;
+/// row 4 = C= SHIFT Z..M , . / SHIFT CRSR-down CRSR-right; row 5 = SPACE; function column
+/// = F1 F3 F5 F7 (shifted twins F2/F4/F6/F8 are produced in place by the shift latch or a
+/// momentary shift).
+/// </para>
+/// <para>
+/// This type holds no engine, host, or XAML reference (TR-MVVM-001): it is pure data the
+/// <see cref="VirtualKeyboardViewModel"/> walks and the XAML focus layer renders.
+/// </para>
+/// </remarks>
+public sealed class VirtualKeyboardLayout
+{
+    private VirtualKeyboardLayout(
+        IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> rows,
+        IReadOnlyList<VirtualKeyEntry> functionKeys)
+    {
+        Rows = rows;
+        FunctionKeys = functionKeys;
+        AllKeys = rows.SelectMany(row => row).Concat(functionKeys).ToArray();
+    }
+
+    /// <summary>
+    /// The shared default layout: the authentic 66-key C64 keyboard. Immutable and safe
+    /// to reuse across every <see cref="VirtualKeyboardViewModel"/> instance.
+    /// </summary>
+    public static VirtualKeyboardLayout Default { get; } = CreateAuthentic();
+
+    /// <summary>
+    /// The tiles grouped into their display rows, top to bottom, left to right. The
+    /// function keys are NOT part of the rows: they live in <see cref="FunctionKeys"/>
+    /// and render as a column on the right, as on the physical machine.
+    /// </summary>
+    public IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> Rows { get; }
+
+

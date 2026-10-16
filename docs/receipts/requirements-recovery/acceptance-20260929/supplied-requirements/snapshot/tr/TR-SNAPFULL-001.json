@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SNAPFULL-001",
+  "title": "Complete machine snapshot/restore with deterministic round-trip",
+  "status": "pending",
+  "priority": "high",
+  "body": "GetState()+restore capture all execution-affecting state (CPU incl. pending IRQ/NMI + pipeline, VIC sequencer, CIA timer pipelines + TOD, SID, PLA/processor port, memory, and the 1541 drive + IEC bus when present). Invariant: restore then run N cycles equals continuous run N (full MachineState + memory equality).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

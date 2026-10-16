@@ -1,0 +1,64 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    20, Skipped:     0, Total:    20, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+FOCUSED_EXIT=0
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.89]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [2 s]
+  Error Message:
+   DIV first=522430 matchedCycles=522429 budget=2216810
+c=522419 nPC=$EB2A mPC=$EB2A nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$25 mP=$25 dbgCyc=0 op=$8D trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522420 nPC=$EB2A mPC=$EB2A nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$25 mP=$25 dbgCyc=3 op=$AE trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522421 nPC=$EB2A mPC=$EB2A nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$25 mP=$25 dbgCyc=2 op=$AE trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522422 nPC=$EB2A mPC=$EB2A nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$25 mP=$25 dbgCyc=1 op=$AE trail=1 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=False
+c=522423 nPC=$EB2A mPC=$EB2A nA=$00 mA=$00 nX=$FF mX=$FF nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$25 mP=$25 dbgCyc=0 op=$AE trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522424 nPC=$EB2D mPC=$EB2D nA=$00 mA=$00 nX=$FF mX=$FF nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=1 op=$E0 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522425 nPC=$EB2D mPC=$EB2D nA=$00 mA=$00 nX=$FF mX=$FF nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=0 op=$E0 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522426 nPC=$EB2F mPC=$EB2F nA=$00 mA=$00 nX=$FF mX=$FF nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$27 mP=$27 dbgCyc=2 op=$F0 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522427 nPC=$EB2F mPC=$EB2F nA=$00 mA=$00 nX=$FF mX=$FF nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$27 mP=$27 dbgCyc=1 op=$F0 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522428 nPC=$EB31 mPC=$EB31 nA=$00 mA=$00 nX=$FF mX=$FF nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$27 mP=$27 dbgCyc=0 op=$F0 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522429 nPC=$EB8F mPC=$EB8F nA=$00 mA=$00 nX=$FF mX=$FF nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$27 mP=$27 dbgCyc=1 op=$F0 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=522430 nPC=$EB8F mPC=$EB91 nA=$00 mA=$00 nX=$FF mX=$FF nY=$40 mY=$40 nS=$E6 mS=$E6 nP=$27 mP=$27 dbgCyc=0 op=$F0 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 123
+   at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 47
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+TWOSEC_EXIT=1
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\bit2-focused-2026-08-06.log:27:Passed!  - Failed: 
+    0, Passed:    20, Skipped:     0, Total:    20, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-bit2-2026-08-06.log:6:   DIV first=522430 
+matchedCycles=522429 budget=2216810
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-bit2-2026-08-06.log:27:Failed!  - Failed:     
+1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+

@@ -1,0 +1,50 @@
+[feat/xbox-uwp-app 71e843b] ci: finish optional Octopus LEGION2 release steps [FEAT-XOCTOPUS-001]
+ 4 files changed, 339 insertions(+), 110 deletions(-)
+ create mode 100644 tests/ViceSharp.TestHarness/RomlessBadLineTests.cs
+On branch feat/xbox-uwp-app
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	[31mmodified:   HANDOFF.md[m
+	[31mmodified:   src/ViceSharp.Xbox.ViewModels/VirtualKeyboardLayout.cs[m
+	[31mmodified:   src/ViceSharp.Xbox.ViewModels/VirtualKeyboardViewModel.cs[m
+	[31mmodified:   src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml[m
+	[31mmodified:   src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml.cs[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/AboutPage.xaml[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/AboutPage.xaml.cs[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/DeviceSetupPage.xaml[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/DeviceSetupPage.xaml.cs[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/HomePage.xaml[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/HomePage.xaml.cs[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/InputMappingPage.xaml[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/InputMappingPage.xaml.cs[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml.cs[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/SettingsPage.xaml[m
+	[31mmodified:   src/ViceSharp.Xbox/Views/SettingsPage.xaml.cs[m
+	[31mmodified:   tests/ViceSharp.AiReview.Tests/appsettings.aiunit.json[m
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	[31mdocs/S-Blox/[m
+	[31mdocs/reviews/code-review-20260714T001056552Z.md[m
+	[31mdocs/reviews/code-review-20260714T004256563Z.md[m
+	[31mdocs/romless-vic-badline-fix.md[m
+	[31msrc/ViceSharp.Xbox.ViewModels/VirtualKeyRow.cs[m
+	[31mtests/ViceSharp.TestHarness/Xbox/XboxAotBindingConventionTests.cs[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[feat/xbox-uwp-app 1f19bb9] feat(xbox): finish AOT-safe x:Bind migration [FEAT-XAOTBIND-001]
+ 18 files changed, 263 insertions(+), 70 deletions(-)
+ create mode 100644 src/ViceSharp.Xbox.ViewModels/VirtualKeyRow.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Xbox/XboxAotBindingConventionTests.cs
+## [32mfeat/xbox-uwp-app[m
+ [31mM[m HANDOFF.md
+ [31mM[m tests/ViceSharp.AiReview.Tests/appsettings.aiunit.json
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+[33m1f19bb9[m feat(xbox): finish AOT-safe x:Bind migration [FEAT-XAOTBIND-001]
+[33m71e843b[m ci: finish optional Octopus LEGION2 release steps [FEAT-XOCTOPUS-001]
+[33ma199063[m feat(xbox): B steps back on menu subpages; subpages expand to the full window [PLAN-XBOXUWP FEAT-XMENUSUBPAGE-001]

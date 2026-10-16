@@ -1,3 +1,4 @@
+using System.IO;
 using Google.Protobuf;
 using Grpc.Net.Client;
 using ViceSharp.Protocol;
@@ -41,18 +42,23 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
 
     public bool TrueDrive => _trueDrive;
 
-    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
+    public async ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var disk = diskImagePath ?? string.Empty;
         if (_trueDrive == enabled && _trueDriveDevice == driveDevice && _trueDriveDiskImagePath == disk)
-            return ValueTask.CompletedTask;
+        {
+            // A prior transport failure may have left this selection without a session.
+            await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+            return;
+        }
 
         _trueDrive = enabled;
         _trueDriveDevice = driveDevice;
         _trueDriveDiskImagePath = disk;
 
-        // True-drive is a machine-config choice: drop the current session so the
-        // next EnsureSessionAsync rebuilds the rig with the new selection.
+        // True-drive is a machine-config choice: recreate the rig as part of the
+        // awaited user action so attach-only reports creation errors immediately.
         if (!string.IsNullOrWhiteSpace(_sessionId))
         {
             try
@@ -67,7 +73,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             SetSessionId(string.Empty);
         }
 
-        return ValueTask.CompletedTask;
+        await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public async ValueTask<GetEmulatorStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
@@ -143,6 +149,26 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             cancellationToken).ConfigureAwait(false);
     }
 
+    public async ValueTask<LoadProgramResponse> LoadProgramAsync(string filePath, CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _hostClient.LoadProgramAsync(
+            new GrpcContracts.LoadProgramRequest
+            {
+                SessionId = sessionId,
+                FilePath = filePath ?? string.Empty,
+                DisplayName = string.IsNullOrWhiteSpace(filePath) ? string.Empty : Path.GetFileName(filePath)
+            },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new LoadProgramResponse(
+            MapStatus(response.Status),
+            (int)response.LoadAddress,
+            (int)response.ByteCount,
+            response.Ran,
+            MapStatusDto(response.EmulatorStatus));
+    }
+
     public async ValueTask<EmulatorCommandResponse> SetLimiterRateAsync(double ratePercent, CancellationToken cancellationToken = default)
     {
         var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
@@ -179,18 +205,32 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         CancellationToken cancellationToken = default)
     {
         var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var grpcRequest = new GrpcContracts.UpdateSettingsRequest
+        {
+            SessionId = sessionId,
+            Limiter = request.Limiter is null ? null : MapLimiter(request.Limiter),
+            Display = request.Display is null ? null : MapDisplay(request.Display),
+            Input = request.Input is null ? null : MapInput(request.Input),
+            Audio = request.Audio is null ? null : MapAudio(request.Audio),
+            Resources = request.Resources is null ? null : MapResources(request.Resources),
+            ProfileId = request.ProfileId,
+            RestartSession = request.RestartSession
+        };
+        if (request.Vic20MemorySpec is not null)
+            grpcRequest.Vic20MemorySpec = request.Vic20MemorySpec;
+        if (request.FileSystemIecRootPath is not null)
+            grpcRequest.FileSystemIecRootPath = request.FileSystemIecRootPath;
+        if (request.FileSystemIecUnit is not null)
+            grpcRequest.FileSystemIecUnit = request.FileSystemIecUnit.Value;
+        if (request.Vic20ExpansionCartKind is not null)
+            grpcRequest.Vic20ExpansionCartKind = request.Vic20ExpansionCartKind;
+        if (request.Vic20ExpansionWriteBack is not null)
+            grpcRequest.Vic20ExpansionWriteBack = request.Vic20ExpansionWriteBack.Value;
+        if (request.Vic20ExpansionConfigPreset is not null)
+            grpcRequest.Vic20ExpansionConfigPreset = request.Vic20ExpansionConfigPreset;
+
         var response = await _settingsClient.UpdateSettingsAsync(
-            new GrpcContracts.UpdateSettingsRequest
-            {
-                SessionId = sessionId,
-                Limiter = request.Limiter is null ? null : MapLimiter(request.Limiter),
-                Display = request.Display is null ? null : MapDisplay(request.Display),
-                Input = request.Input is null ? null : MapInput(request.Input),
-                Audio = request.Audio is null ? null : MapAudio(request.Audio),
-                Resources = request.Resources is null ? null : MapResources(request.Resources),
-                ProfileId = request.ProfileId,
-                RestartSession = request.RestartSession
-            },
+            grpcRequest,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return new UpdateSettingsResponse(
@@ -576,19 +616,28 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             if (!string.IsNullOrWhiteSpace(_sessionId))
                 return _sessionId;
 
+            var diskImagePath = _trueDriveDiskImagePath;
             var response = await _hostClient.CreateSessionAsync(
                 new GrpcContracts.CreateEmulatorSessionRequest
                 {
                     ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty,
                     TrueDrive = _trueDrive,
                     TrueDriveDevice = _trueDriveDevice,
-                    TrueDriveDiskImagePath = _trueDriveDiskImagePath
+                    TrueDriveDiskImagePath = diskImagePath
                 },
                 cancellationToken: cancellationToken).ConfigureAwait(false);
 
             var status = MapStatus(response.Status);
             if (!status.IsSuccess)
+            {
+                // FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: reject this disk once, then permit
+                // an empty rig for the next attach. Keep TrueDrive intent and never discard
+                // media on a transport error/cancellation or overwrite a newer selection.
+                if (status.Code == RpcStatusCode.InvalidArgument
+                    && string.Equals(_trueDriveDiskImagePath, diskImagePath, StringComparison.Ordinal))
+                    _trueDriveDiskImagePath = string.Empty;
                 throw new InvalidOperationException(status.Message);
+            }
 
             SetSessionId(response.SessionId);
             var started = await _hostClient.StartAsync(
@@ -832,7 +881,13 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             settings.Display is null ? new DisplaySettingsDto() : MapDisplay(settings.Display),
             settings.Input is null ? new InputSettingsDto() : MapInput(settings.Input),
             settings.Audio is null ? new AudioSettingsDto() : MapAudio(settings.Audio),
-            settings.Resources is null ? new ResourceSettingsDto() : MapResources(settings.Resources));
+            settings.Resources is null ? new ResourceSettingsDto() : MapResources(settings.Resources),
+            settings.Vic20MemorySpec,
+            settings.FileSystemIecRootPath,
+            settings.FileSystemIecUnit,
+            settings.Vic20ExpansionCartKind,
+            settings.Vic20ExpansionWriteBack,
+            settings.Vic20ExpansionConfigPreset);
     }
 
     private static LimiterSettingsDto MapLimiter(GrpcContracts.LimiterSettingsDto limiter)

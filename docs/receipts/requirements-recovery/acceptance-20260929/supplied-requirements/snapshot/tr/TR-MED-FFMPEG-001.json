@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-MED-FFMPEG-001",
+  "title": "FfmpegVideoRecorder over two loopback TCP sockets",
+  "status": "pending",
+  "priority": "high",
+  "body": "External ffmpeg process fed raw BGRA + s16le via BackgroundByteWriter; mirrors VICE ffmpegexedrv. Pre-connect audio buffered + flushed.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-TESTGATE-001",
+  "title": "Category=Xbox tests are non-skipping",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Xbox off-console tests use plain [Fact]/[Theory] + [Trait(\"Category\",\"Xbox\")], never [ViceFact]/Assert.Skip, so Category=Xbox is genuinely non-skipping. Acceptance: verified by XboxTestConventionTests.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

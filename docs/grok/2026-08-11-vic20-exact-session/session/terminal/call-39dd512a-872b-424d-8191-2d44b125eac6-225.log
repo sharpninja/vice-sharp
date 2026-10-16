@@ -1,0 +1,48 @@
+
+docs\2s-delay1-2026-08-06.log:6:   DIV first=577682 matchedCycles=577681 budget=2216810
+docs\2s-delays-final-2026-08-06.log:6:   DIV first=577679 matchedCycles=577678 budget=2216810
+docs\2s-delays-irq-2026-08-06.log:6:   DIV first=577679 matchedCycles=577678 budget=2216810
+docs\2s-irqdelay0-2026-08-06.log:6:   DIV first=577679 matchedCycles=577678 budget=2216810
+docs\2s-irqdiag-2026-08-06.log:6:   DIV first=577679 matchedCycles=577678 budget=2216810
+docs\2s-irqfall-2026-08-06.log:17:c=4976 nPC=$FEA5 mPC=$FEA5 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB 
+nP=$24 mP=$24 dbgCyc=1 op=$8A trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqfall-2026-08-06.log:18:c=4977 nPC=$FEA5 mPC=$FEA6 nA=$55 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB 
+nP=$24 mP=$24 dbgCyc=0 op=$8A trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=True
+docs\2s-post-store-rts-2026-08-06.log:6:   DIV first=577679 matchedCycles=577678 budget=2216810
+docs\2s-rts-store-br-2026-08-06.log:6:   DIV first=577679 matchedCycles=577678 budget=2216810
+docs\2s-store-irq-2026-08-06.log:6:   DIV first=577692 matchedCycles=577691 budget=2216810
+docs\2s-store-irq-2026-08-06.log:17:c=577691 nPC=$FF73 mPC=$FF73 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EF 
+mS=$EF nP=$26 mP=$26 dbgCyc=1 op=$8A trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-store-irq-2026-08-06.log:18:c=577692 nPC=$FF74 mPC=$FF73 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EF 
+mS=$EF nP=$26 mP=$26 dbgCyc=0 op=$8A trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=True
+docs\2s-via-cont-2026-08-06.log:6:   DIV first=577682 matchedCycles=577681 budget=2216810
+docs\2s-via-t1-2026-08-06.log:6:   DIV first=577682 matchedCycles=577681 budget=2216810
+src\ViceSharp.Chips\Cpu\Mos6502.cs:28:        get => (!_suppressBootstrapBoundary && _cycle == 0 && 
+_interruptSequenceRemaining == 0)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:46:        _cycle == 0
+src\ViceSharp.Chips\Cpu\Mos6502.cs:86:            if (_cycle == 0)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:118:            if (_cycle == 0)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:533:        if (_cycle == 0)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:575:                ExecuteOpcode(softOp);
+src\ViceSharp.Chips\Cpu\Mos6502.cs:775:            _deferImpliedRegisterCompletionAfterBranch = armAfterBranchLag && 
+IsImpliedRegisterOrFlagOpcode(_opcode);
+src\ViceSharp.Chips\Cpu\Mos6502.cs:881:        if (_cycle == 0)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:938:                    // fall through to ExecuteOpcode (fused commit)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:978:                    // fall through to ExecuteOpcode (fused)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1001:            if (IsImpliedRegisterOrFlagOpcode(_opcode)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1009:                // fall through to ExecuteOpcode (fused)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1011:            else if (IsImpliedRegisterOrFlagOpcode(_opcode)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1129:            ExecuteOpcode(_opcode);
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1135:    /// N/V/Z + INC_PC apply with no extra CLK (soft on next tick via 
+ExecuteOpcode).
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1433:                            && IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1474:                    && IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1506:        if (_cycle == 0 && _deferImmediateLoadAfterBranch)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1836:                // Keep flag set until cycle 0 so ExecuteOpcode is skipped
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1857:                        || (IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2304:    /// Unstaged absolute/indexed compares (ExecuteOpcode path, not CD/D1
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2323:    /// Absolute ALU ops executed via unstaged ExecuteOpcode (not cycle-staged
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2336:    private static bool IsImpliedRegisterOrFlagOpcode(byte opcode)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2617:        ExecuteOpcode(_opcode);
+src\ViceSharp.Chips\Cpu\Mos6502.cs:3036:    private partial void ExecuteOpcode(byte opcode);
+

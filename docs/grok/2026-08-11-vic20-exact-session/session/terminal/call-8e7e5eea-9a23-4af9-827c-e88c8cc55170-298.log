@@ -1,0 +1,49 @@
+
+AGENTS-README-FIRST.yaml:14:  todo: /mcpserver/todo
+AGENTS-README-FIRST.yaml:31:  verifier: workspace_api_key
+AGENTS-README-FIRST.yaml:52:  - endpoints.todo
+AGENTS-README-FIRST.yaml:60:  - agentPlugins.policy
+AGENTS-README-FIRST.yaml:61:  - agentPlugins.contractDigest
+AGENTS-README-FIRST.yaml:73:  recommended_usage: Use /sessionlog, /todo, /context, and other MCP endpoints only after 
+both signature and nonce verification succeed.
+AGENTS-README-FIRST.yaml:74:agent_plugins:
+AGENTS-README-FIRST.yaml:80:      plugin_name: mcpserver-codex-plugin
+AGENTS-README-FIRST.yaml:81:      plugin_version: 1.85.0
+AGENTS-README-FIRST.yaml:82:      activation: Codex hook lifecycle through .codex-plugin/plugin.json.
+AGENTS-README-FIRST.yaml:84:      unavailable_failure: MCP_PLUGIN_UNAVAILABLE:Codex
+AGENTS-README-FIRST.yaml:86:      - CODEX_PLUGIN_ROOT
+AGENTS-README-FIRST.yaml:87:      - PLUGIN_AGENT_NAME=Codex
+AGENTS-README-FIRST.yaml:95:      - workflow.todo.*
+AGENTS-README-FIRST.yaml:99:      - F:\GitHub\mcpserver-codex-plugin
+AGENTS-README-FIRST.yaml:100:      - $CODEX_PLUGIN_ROOT
+AGENTS-README-FIRST.yaml:103:      plugin_name: mcpserver-claude-code-plugin
+AGENTS-README-FIRST.yaml:104:      plugin_version: 1.85.0
+AGENTS-README-FIRST.yaml:105:      activation: Claude Code plugin hooks and .mcp.json mcpserver entry.
+AGENTS-README-FIRST.yaml:107:      unavailable_failure: MCP_PLUGIN_UNAVAILABLE:Claude
+AGENTS-README-FIRST.yaml:109:      - CLAUDE_PLUGIN_ROOT
+AGENTS-README-FIRST.yaml:110:      - PLUGIN_AGENT_NAME=Claude
+AGENTS-README-FIRST.yaml:118:      - mcpserver todo tools
+AGENTS-README-FIRST.yaml:122:      - F:\GitHub\mcpserver-claude-code-plugin
+AGENTS-README-FIRST.yaml:123:      - $CLAUDE_PLUGIN_ROOT
+AGENTS-README-FIRST.yaml:126:      plugin_name: mcpserver-copilot-plugin
+AGENTS-README-FIRST.yaml:127:      plugin_version: 1.85.0
+AGENTS-README-FIRST.yaml:128:      activation: Copilot plugin hooks and .mcp.json mcpserver entry.
+AGENTS-README-FIRST.yaml:130:      unavailable_failure: MCP_PLUGIN_UNAVAILABLE:Copilot
+AGENTS-README-FIRST.yaml:132:      - COPILOT_PLUGIN_ROOT
+
+Name   : Restart-MCPServer
+Source : PowerShell.MCP
+
+
+Name   : mcpserver-repl.exe
+Source : C:\Users\kingd\.dotnet\tools\mcpserver-repl.exe
+
+
+Name   : ShellMcpServers.Packaging.exe
+Source : C:\Users\kingd\AppData\Local\Microsoft\WindowsApps\ShellMcpServers.Packaging.exe
+
+
+Name   : WindowsPackageManagerMCPServer.exe
+Source : C:\Users\kingd\AppData\Local\Microsoft\WindowsApps\WindowsPackageManagerMCPServer.exe
+
+

@@ -1,0 +1,41 @@
+type: result
+payload:
+  requestId: req-20260811T145303Z-3bfc
+  result:
+    id: PLAN-ZIPMEDIA-001
+    title: Zip archives as virtual folders for disk/tape/cart media
+    section: Media
+    priority: high
+    done: false
+    estimate: 3d
+    description:
+    - Support zip archives of disk, tape, and cartridge media as a virtual folder so users can run software without extracting zips to disk.
+    - Attach/browse path accepts a .zip (or entry path inside a zip) and presents contained media as a read-only virtual directory.
+    - Host attach UX (Avalonia/Xbox/console) and MediaService paths should resolve zip-backed entries the same as loose files where possible.
+    - Prefer zero-copy or stream-based open of D64/G64/TAP/CRT/PRG/raw cart images from zip entries; avoid permanent extract to temp when feasible.
+    - Document limitations (write-back, nested zips, multi-file loaders) and add focused tests with sample zip fixtures.
+    technicalDetails:
+    - Byrd TDD; red tests first for path resolution and stream open.
+    - Do not invent media formats; zip is a container only over existing image types.
+    - Determinism and lockstep hosts must still accept plain filesystem paths.
+    - Write-back into zip is out of scope for v1 unless explicitly scoped later.
+    implementationTasks:
+    - task: Capture FR/TR/TEST for zip virtual media folder and attach path
+      done: false
+    - task: Design IMediaSource / virtual folder abstraction over zip entries
+      done: false
+    - task: Implement zip entry stream open for disk, tape, and cart attach
+      done: false
+    - task: Wire Avalonia and Xbox attach UI to accept .zip and entry pick
+      done: false
+    - task: Add unit/integration tests with fixture zips (no extract required)
+      done: false
+    - task: Update USER-GUIDE and handoff with usage and limits
+      done: false
+    remaining: Not started
+    dependsOn: &o0 []
+    functionalRequirements: *o0
+    technicalRequirements: *o0
+  deprecated: true
+
+---

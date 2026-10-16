@@ -1,0 +1,90 @@
+{
+  "TimestampUtc": "2026-09-04T21:37:02Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\vice-sharp",
+  "WorkClass": "project-implementation",
+  "WorkClassNote": "VIC-20 Settings RemoteControl remaining plan ACs 1-4. Surface C scored. Not ops-only.",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "ReviewSession": {
+    "sessionId": "GrokCode-20260904T211500Z-hostile-vic20-rc",
+    "requestId": "req-20260904T212437Z-001-hostile-vic20-rc-completion",
+    "agent": "GrokCode",
+    "persistenceProof": "sessionlog_query text Hostile review remaining VIC-20 Settings RemoteControl ACs totalCount=1 turn status=completed lastUpdated=2026-09-04T21:41:46.7103699+00:00 actions=5 designDecisions=3 processingDialog=5 filesModified=2 blockers=2"
+  },
+  "ActivePlan": [
+    "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a06a23-81e8-7b41-8fa0-4773aa19757c\\goal\\plan.md"
+  ],
+  "AccuracyRating": 88,
+  "CompletenessRating": 92,
+  "OverallVerdict": "DISAGREE",
+  "FailList": [
+    {
+      "id": "C4",
+      "rule": "Requirements tracking: FR/TR must exist for material claimed-complete behavior",
+      "evidence": "TEST-UISET-002.ac-warp and WarpModeTests cite FR-WARP-001 and TR-WARP-STATUS-001. MCP requirements_list fr/tr and docs/requirements have neither ID. Mappings exist only for FR-UISETTINGS-001 and FR-VIC20-002, which do not specify warp CLOCK."
+    },
+    {
+      "id": "D5",
+      "rule": "Plan gating verification 4: do not skip a control",
+      "evidence": "inventory2.log skips ExpansionCartPreset. Older rc-inventory.log claims flash; rc-inventory-dump.txt text=start SelectedIndex=0. Live hostile-dump.txt still expansion fe3 preset start writeBack=False. Goal remaining-inventory checkbox still open."
+    }
+  ],
+  "Counts": {
+    "pass": 24,
+    "fail": 2,
+    "unknown": 0,
+    "na": 1
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "ACs 1-4 evidenced; not PLAN-REMOTECTRL-001 done; not Exact" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "CLI System.CommandLine 2.0.11, tiny Program.cs, parser tests 6/0/0" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "WarpModeTests 13/0/0 including three named Facts" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "pid 57852 :47100; warp dumps LIMITER WARP CLOCK 198-200% CYCLE 5280088->14073699" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "claim": "inventory2.log SET subset plus Revert restore Renderer Host direct, Revert disabled" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "claim": "caps twice click=True mutate=True frames=True" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "claim": "git diff --check exit 0" },
+    { "id": "A8", "surface": "A", "verdict": "PASS", "claim": "MCP TEST-UISET-001/002 structured ACs; mappings FR-VIC20-002 and FR-UISETTINGS-001" },
+    { "id": "A9", "surface": "A", "verdict": "PASS", "claim": "scheduler 01a06e3d06ed7bb09b18ea2ba500c00e 1h prompt; not deleted" },
+    { "id": "A10", "surface": "A", "verdict": "PASS", "claim": "PLAN-REMOTECTRL-001 not claimed done" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "Honesty vs dump numbers; not Exact; not PLAN done" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "Receipts re-verified" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only TODO/requirements reads" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell / no Python" },
+    { "id": "B5", "surface": "B", "verdict": "N/A", "claim": "Look-before-delete (no deletions; scheduler preserved)" },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "claim": "Byrd tests exist and pass; no timestamp phase-order FAIL" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "FR-UISETTINGS-001 exists in MCP" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "FR-VIC20-002 AC4 All expansions + 28159 BYTES FREE" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "claim": "TEST-UISET-001 ACs + host round-trip tests + live BYTES FREE" },
+    { "id": "C4", "surface": "C", "verdict": "FAIL", "claim": "FR-WARP-001 / TR-WARP-STATUS-001 missing from MCP and docs while warp CLOCK AC claimed complete" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "No PLAN-REMOTECTRL-001 or Exact completion claim" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "claim": "PLAN-REMOTECTRL-001 remaining TEST-REMOTECTRL-001 and app-launch tasks false" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "claim": "CLI/Warp/inventory tests re-run green" },
+    { "id": "D4", "surface": "D", "verdict": "PASS", "claim": "All+Restart and PAL/NTSC live evidence" },
+    { "id": "D5", "surface": "D", "verdict": "FAIL", "claim": "Verification 4 skips ExpansionCartPreset; older flash log still false" },
+    { "id": "D6", "surface": "D", "verdict": "PASS", "claim": "Warp CLOCK well above 100 now evidenced in dumps and WarpModeTests" }
+  ],
+  "Evidence": {
+    "planRemoteCtrl": "PLAN-REMOTECTRL-001 Done=false; TEST-REMOTECTRL-001 task false; app-launch task false",
+    "cliTests": "ViceSharp.RemoteControlCli.Tests.exe Total 6 Failed 0 Skipped 0 exit 0",
+    "warpTests": "ViceSharp.TestHarness.exe -class ViceSharp.TestHarness.WarpModeTests -parallel none Total 13 Failed 0 Skipped 0 exit 0",
+    "inventoryTests": "ViceSharp.TestHarness.exe -class ViceSharp.TestHarness.Ui.Vic20SettingsRemoteControlInventoryTests Total 8 Failed 0 Skipped 0 exit 0",
+    "vic20SettingsTests": "ViceSharp.TestHarness.exe -class *Vic20Settings* Total 18 Failed 0 Skipped 0 exit 0",
+    "gitDiffCheck": "git diff --check exit 0",
+    "livePid": "57852 ViceSharp.Avalonia Listen 127.0.0.1:47100",
+    "warpFix1": "rc-warp-fix1.txt text=WARP CLOCK 2.195 MHz (198%) CYCLE 5280088 WarpToggle IsChecked=True",
+    "warpFix2": "rc-warp-fix2.txt text=WARP CLOCK 2.221 MHz (200%) CYCLE 14073699",
+    "limiter200": "rc-200-dump.txt LIMITER 200% CLOCK 2.226 MHz (201%)",
+    "revert": "rc-inv-tmp.txt Renderer SelectedIndex=0 Host direct; Revert IsEnabled=False",
+    "allRam": "rc-all-ram.png 28159 BYTES FREE READY; BLK0-5 IsChecked=True; ContentHeight=284",
+    "palNtsc": "PAL ContentHeight=284 CLOCK 1.111 MHz; NTSC ContentHeight=234 CLOCK 1.013 then PNG 1.025 MHz READY",
+    "caps": "rc-caps-1b.log / rc-caps-2b.log and independent CLI caps click=True mutate=True frames=True",
+    "scheduler": "01a06e3d06ed7bb09b18ea2ba500c00e interval 1h prompt Continue to plan completion using background agents as appropriate.",
+    "mcpMappings": "FR-UISETTINGS-001 -> TEST-UISET-002; FR-VIC20-002 -> TEST-UISET-001,TEST-UISET-002",
+    "mcpTestAcs": "TEST-UISET-001 ac-all-spec,ac-bytes-free; TEST-UISET-002 ac-inventory,ac-warp,ac-palntsc,ac-revert; isSatisfied false",
+    "hostileLiveDump": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-c6e8b45ea2fd\\hostile\\hostile-dump.txt LIMITER 100% CLOCK 1.110 MHz (100%) expansion fe3 preset start"
+  }
+}

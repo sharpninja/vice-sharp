@@ -1,0 +1,30 @@
+
+  requestId: req-20260811T172300Z-f646
+    success: true
+      id: PLAN-VIC20-EXACT-001
+payload:
+  requestId: req-20260811T172303Z-863b
+  code: schema_validation_failed
+  message: YAML request failed schema validation.
+  details:
+    methodName: workflow.requirements.createFr
+    errors:
+    - payload.params.acceptanceCriteria[0] must be an object.
+    - payload.params.acceptanceCriteria[1] must be an object.
+    - payload.params.acceptanceCriteria[2] must be an object.
+    - payload.params.acceptanceCriteria[3] must be an object.
+    - payload.params.acceptanceCriteria[4] must be an object.
+    - payload.params.acceptanceCriteria[5] must be an object.
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260811T172303Z-863b   code:
+     | schema_validation_failed   message: YAML request failed schema validation.   details:     methodName:
+     | workflow.requirements.createFr     errors:     - payload.params.acceptanceCriteria[0] must be an object.     -
+     | payload.params.acceptanceCriteria[1] must be an object.     - payload.params.acceptanceCriteria[2] must be an
+     | object.     - payload.params.acceptanceCriteria[3] must be an object.     - payload.params.acceptanceCriteria[4]
+     | must be an object.     - payload.params.acceptanceCriteria[5] must be an object.  ---
+

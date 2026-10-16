@@ -1,0 +1,14 @@
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondPal [12 s]
+   DIV first=3533371 matchedCycles=3533370 budget=11084050
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 12 s - ViceSharp.TestHarness.dll 
+(net10.0)
+DUMP c=1 nA=$00 mA=$00 mVBus=$FF mRast=0 nRast=0 mCyc=1 nCyc=7 mFetch=0 nFetch=0 nArea=1 mBuf=0 mCols=22 mis=False
+DUMP c=6 nA=$00 mA=$00 mVBus=$FF mRast=0 nRast=0 mCyc=6 nCyc=12 mFetch=0 nFetch=0 nArea=1 mBuf=0 mCols=22 mis=False
+DUMP c=65 nA=$00 mA=$00 mVBus=$00 mRast=0 nRast=1 mCyc=65 nCyc=0 mFetch=0 nFetch=1 nArea=2 mBuf=0 mCols=22 mis=False
+DUMP c=71 nA=$00 mA=$00 mVBus=$00 mRast=1 nRast=1 mCyc=0 nCyc=6 mFetch=0 nFetch=4 nArea=2 mBuf=0 mCols=22 mis=False
+DUMP c=3533369 nA=$96 mA=$96 mVBus=$20 mRast=157 nRast=157 mCyc=54 nCyc=60 mFetch=3 nFetch=4 nArea=2 mBuf=19 mCols=22 mis=False
+DUMP c=3533370 nA=$96 mA=$96 mVBus=$00 mRast=157 nRast=157 mCyc=55 nCyc=61 mFetch=2 nFetch=4 nArea=2 mBuf=20 mCols=22 mis=False
+DUMP c=3533371 nA=$91 mA=$01 mVBus=$20 mRast=157 nRast=157 mCyc=56 nCyc=62 mFetch=3 nFetch=4 nArea=2 mBuf=20 mCols=22 mis=True
+EXIT=1
+

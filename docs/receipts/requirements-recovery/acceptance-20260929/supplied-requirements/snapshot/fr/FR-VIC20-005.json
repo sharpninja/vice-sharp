@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC20-005",
+  "title": "VIC-20 FE3, Ultimem, and Mega-Cart runtime behavior",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The supported VIC-20 expansion set attaches through the architecture cartridge path. FE3 MODE_FLASH follows the AM29F040B TYPE_B command and erase timing model. Writable cartridge state survives detach through host-managed atomic write-back.\n\n## Acceptance Criteria\n- FE3, Ultimem, Mega-Cart, and standard BLK images mount into their documented address regions.\n- FE3 byte programming uses AND semantics; sector/chip erases complete only after the 50 / 1,000,000 / 8,000,000 VICE cycle budgets, including busy status and sector suspend/resume behavior.\n- Dirty FE3 and Ultimem flash images are returned for write-back, and dirty Mega-Cart NVRAM is returned separately.\n- Detach persists dirty state with a same-directory temporary file and atomic replacement without modifying clean images.\n- The machine builds and boots without a cartridge attached.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

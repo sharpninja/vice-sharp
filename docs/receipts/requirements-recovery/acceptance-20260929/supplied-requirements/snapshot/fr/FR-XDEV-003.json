@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XDEV-003",
+  "title": "Single true-drive rig at a time",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Only one true-drive rig at a time. Acceptance: enabling Drive9 true-drive sets Drive8.TrueDrive=false with one rebuild; disabling all issues SetTrueDriveAsync(false).\n\n## Acceptance Criteria\n- enabling Drive9 true-drive sets Drive8.TrueDrive=false with one rebuild; disabling all issues SetTrueDriveAsync(false).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

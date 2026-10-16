@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TESTGATE-002",
+  "title": "0 failed AND 0 skipped per slice scope",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Every gate enforces 0 failed AND 0 skipped within that slice's filter scope. Acceptance: each slice trx within its --filter reports Failed=0 and Skipped=0.\n\n## Acceptance Criteria\n- Determinism pass-count == baseline; AvaloniaBoundaryTests green; AOT 0 warnings; Category=Xbox Skipped=0.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

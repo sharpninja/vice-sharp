@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXUI-002b",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console focus-visual smoke. Acceptance: high-visibility focus in TV-safe rect.",
+  "acceptanceCriteria": []
+}

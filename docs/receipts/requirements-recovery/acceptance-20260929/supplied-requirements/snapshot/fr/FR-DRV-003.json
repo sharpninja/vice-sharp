@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRV-003",
+  "title": "Commodore 1581 3.5\" Floppy Disk Drive Emulation",
+  "status": "pending",
+  "priority": "low",
+  "body": "The 1581 is a 3.5-inch disk drive using MFM encoding with 80 tracks, double-sided, providing approximately 800KB of storage. It uses a WD1772 floppy disk controller instead of the VIA-based approach of the 1541/1571.\n\n## Acceptance Criteria\n- The 1581 is emulated with its own CPU and WD1772 FDC controller.\n- D81 disk images are supported (80 tracks, 2 sides, 10 sectors per track, 256 bytes per sector).\n- MFM encoding is used throughout.\n- Partitioning and subdirectory support (CMD-style) is available.\n- The IEC serial bus interface operates at the higher transfer rates supported by the 1581.\n- The drive can be mounted/ejected at runtime.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

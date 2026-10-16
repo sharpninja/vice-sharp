@@ -1,0 +1,42 @@
+Target Clean => _ => _
+Target Restore => _ => _
+Target Compile => _ => _
+Target GitCommit => _ => _
+Target Test => _ => _
+/// every target its own job on a fresh agent and never moves artifacts
+Target CiTest => _ => _
+var target = romRoot / relativePath;
+Target DeterminismTest => _ => _
+Target ParityTest => _ => _
+Target PackNuget => _ => _
+/// target performs any publishing side effect. Call it as the first line of
+/// single self-sufficient job (the generator gives every target its own
+Target PublishNuget => _ => _
+// A push error fails the target (DotNetNuGetPush throws on
+Target RomFetch => _ => _
+Serilog.Log.Information("RomFetch target - tool not yet implemented");
+Target Pack => _ => _
+Serilog.Log.Information("Pack target - reserved for future NuGet packaging");
+Target RunConsole => _ => _
+Target RunAvalonia => _ => _
+/// GITHUB_TOKEN environment variables (each target is skipped if its
+/// token is absent so the target is safe to invoke without both).
+Target PublishWiki => _ => _
+var args = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"" + script + "\" -Target both -RegenerateSource";
+Target PublishGitHubRelease => _ => _
+// runs (the generated release job invokes this target with --skip, so
+Target DeployXboxLocal => _ => _
+/// certification on every upload; this target merely fails the same checks about an
+Target ValidateStorePackage => _ => _
+Target PublishMsi => _ => _
+/// not already running as Administrator the target self-elevates via
+Target InstallMsi => _ => _
++ "(`winget install gerardog.gsudo`) or run this target from an already "
+/// `wingetcreate` is available on PATH the target also runs
+Target PublishWinget => _ => _
+Target PublishChocolatey => _ => _
+Target PublishScoop => _ => _
+/// net10.0-windows UWP TFM); on a workload-less agent this target is simply
+Target PublishXbox => _ => _
+Target DeployXbox => _ => _
+Target ValidateXbox => _ => _

@@ -1,0 +1,59 @@
+
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:27:                <TextBlock Text="{x:Bind 
+ViewModel.SelectedModelRomStatus, Mode=OneWay}" FontSize="18" Foreground="#FF88CCFF" />
+## feat/xbox-uwp-app...origin/feat/xbox-uwp-app
+M  Directory.Packages.props
+M  HANDOFF.md
+M  ViceSharp.slnx
+M  build/Build.cs
+A  docs/S-Blox/Readme.txt
+A  docs/S-Blox/sblox.CRT
+A  docs/S-Blox/sblox.bin
+A  docs/plans/PLAN-ROMM-BDPv4.md
+A  docs/plans/PLAN-ROMM-phase-e-validation.md
+A  docs/reviews/code-review-20260714T001056552Z.md
+A  docs/reviews/code-review-20260714T004256563Z.md
+A  docs/romless-vic-badline-fix.md
+A  docs/wireframes/romm-avalonia-details.svg
+A  docs/wireframes/romm-avalonia-library.svg
+A  docs/wireframes/romm-avalonia-lists.svg
+A  docs/wireframes/romm-csdb-pairing.svg
+A  docs/wireframes/romm-xbox-details.svg
+A  docs/wireframes/romm-xbox-library.svg
+A  docs/wireframes/romm-xbox-lists.svg
+A  docs/xbox/microsoft-store-publishing-checklist.md
+M  src/ViceSharp.Avalonia/MainWindow.axaml.cs
+M  src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj
+M  src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs
+A  src/ViceSharp.Avalonia/ViewModels/AvaloniaGameLauncher.cs
+A  src/ViceSharp.Avalonia/ViewModels/IGameLaunchTarget.cs
+A  src/ViceSharp.Avalonia/ViewModels/RomMLibraryViewModel.cs
+M  src/ViceSharp.Avalonia/ViewModels/ShellViewModel.cs
+M  src/ViceSharp.Avalonia/Views/AttachPanelView.cs
+A  src/ViceSharp.Avalonia/Views/CsdbView.cs
+A  src/ViceSharp.Avalonia/Views/LibraryView.cs
+A  src/ViceSharp.Avalonia/Views/ListsView.cs
+M  src/ViceSharp.Host.InProcess/Audio/XAudio2SourceVoiceBackend.cs
+A  src/ViceSharp.Library.ViewModels/AcquiredGame.cs
+A  src/ViceSharp.Library.ViewModels/CollectionsViewModel.cs
+A  src/ViceSharp.Library.ViewModels/CoverRef.cs
+A  src/ViceSharp.Library.ViewModels/CsdbDiscoveryViewModel.cs
+A  src/ViceSharp.Library.ViewModels/CsdbHit.cs
+A  src/ViceSharp.Library.ViewModels/CsdbIngestResult.cs
+A  src/ViceSharp.Library.ViewModels/CsdbKind.cs
+  Determining projects to restore...
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 237 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj (in 237 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj (in 237 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj (in 237 ms).
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.17
+

@@ -1,0 +1,30 @@
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(338,13): error CS1501: No overload for method 'GetVicState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(358,13): error CS1501: No overload for method 'GetCiaState' takes 3 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(379,13): error CS1501: No overload for method 'GetCpuPipelineState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(406,13): error CS1501: No overload for method 'GetVicState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+
+Build FAILED.
+
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(338,13): error CS1501: No overload for method 'GetVicState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(358,13): error CS1501: No overload for method 'GetCiaState' takes 3 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(379,13): error CS1501: No overload for method 'GetCpuPipelineState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(406,13): error CS1501: No overload for method 'GetVicState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+    0 Warning(s)
+    4 Error(s)
+
+Time Elapsed 00:00:06.07
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(338,13): error CS1501: No overload for method 'GetVicState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(358,13): error CS1501: No overload for method 'GetCiaState' takes 3 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(379,13): error CS1501: No overload for method 'GetCpuPipelineState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(406,13): error CS1501: No overload for method 'GetVicState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+
+Build FAILED.
+
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(338,13): error CS1501: No overload for method 'GetVicState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(358,13): error CS1501: No overload for method 'GetCiaState' takes 3 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(379,13): error CS1501: No overload for method 'GetCpuPipelineState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(406,13): error CS1501: No overload for method 'GetVicState' takes 2 arguments [F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj]
+    0 Warning(s)
+    4 Error(s)
+
+Time Elapsed 00:00:07.72

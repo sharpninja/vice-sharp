@@ -1,8 +1,11 @@
+using System;
+using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ViceSharp.Avalonia.Host;
@@ -28,13 +31,21 @@ public partial class MainWindow : Window
     private readonly VideoSurface _video;
     private IDisposable? _warpModeSubscription;
     private bool _videoRecordingHotkeyActive;
+    private bool _isEmulatorFullscreen;
+    private WindowState _windowStateBeforeFullscreen = WindowState.Normal;
+    private bool _paneOpenBeforeFullscreen = true;
     private DockPanel? _contentPanel;
     private ContentControl? _sidebarHost;
     private ContentControl? _videoHost;
+    private Control? _menuBar;
+    private Control? _statusBar;
+    private Control? _iecMonitor;
+    private readonly string? _startupFile;
 
     public MainWindow()
     {
         InitializeComponent();
+        _startupFile = DesktopFileAssociations.TryGetOpenPath(Environment.GetCommandLineArgs());
 
         // Opt-in UI-thread pinning (TR-HOST-AFFINITY-001): VICESHARP_UI_CPU names the
         // logical CPU the Avalonia UI thread runs on, complementing VICESHARP_EMU_CPU
@@ -55,22 +66,24 @@ public partial class MainWindow : Window
         _shell = new ShellViewModel(_hostClient, _attachViewModel);
         DataContext = _attachViewModel;
 
-        _attachPanel = new AttachPanelView(_attachViewModel)
+        // PLAN-ROMM-001 (A2/A3): the desktop RomM library tab. The launcher drives the shell; downloads
+        // land in the per-user cache. Runtime browse/attach against a live server is the [V] E2E step.
+        var romMLibrary = new RomMLibraryViewModel(_shell, RomMCacheDirectory());
+
+        _attachPanel = new AttachPanelView(_attachViewModel, romMLibrary)
         {
             PickFileAsync = PickMediaFileAsync,
             PickKeyboardMapFileAsync = PickKeyboardMapFileAsync,
             PopOutMonitorRequested = OpenMonitorWindow
         };
-        // Fixed natural size; a Viewbox (set on PART_VideoHost below) scales it uniformly so
-        // the display control wraps the image tightly (no internal letterbox) and the sidebar
-        // can fill right up to it.
-        _video = new VideoSurface
-        {
-            Width = VideoSurface.SourceWidth,
-            Height = VideoSurface.SourceHeight
-        };
+        // VideoSurface measures itself to fill available height (and grow width by display
+        // aspect). No Viewbox: a fixed natural size + Uniform Viewbox locked height to ~272px
+        // and left black chrome under NTSC.
+        _video = new VideoSurface();
         _video.KeyDown += OnVideoKeyDown;
         _video.KeyUp += OnVideoKeyUp;
+        // Autoplay (drop, Library attach+play, Lists attach+play, Run 8) focuses the video surface.
+        _shell.FocusEmulator = FocusEmulatorSurface;
         AddHandler(KeyDownEvent, OnGlobalKeyDown, RoutingStrategies.Tunnel);
 
         // Inject the live views into the declarative shell's named hosts. The
@@ -79,25 +92,32 @@ public partial class MainWindow : Window
         if (this.FindControl<Panel>("PART_StatusHost") is { } statusHost)
             statusHost.DataContext = _statusBarViewModel;
 
+        _menuBar = this.FindControl<Control>("PART_Menu");
+        _statusBar = this.FindControl<Control>("PART_StatusBar");
         if (this.FindControl<Views.IecMonitorView>("PART_IecMonitor") is { } iecMonitor)
+        {
             iecMonitor.DataContext = _iecMonitorViewModel;
+            _iecMonitor = iecMonitor;
+        }
+
         _sidebarHost = this.FindControl<ContentControl>("PART_SidebarHost");
         if (_sidebarHost is not null)
             _sidebarHost.Content = _attachPanel;
         _videoHost = this.FindControl<ContentControl>("PART_VideoHost");
         if (_videoHost is not null)
         {
-            _videoHost.Content = new Viewbox
-            {
-                Stretch = global::Avalonia.Media.Stretch.Uniform,
-                Child = _video
-            };
+            _videoHost.HorizontalContentAlignment = HorizontalAlignment.Left;
+            _videoHost.VerticalContentAlignment = VerticalAlignment.Stretch;
+            _videoHost.Content = _video;
             ConfigureVideoDropSurface(_videoHost);
         }
         _contentPanel = this.FindControl<DockPanel>("PART_ContentPanel");
 
         // The sidebar stretches to fill the width the aspect-sized display does not use.
         // Re-flow when the sidebar is collapsed/opened or flipped to the other edge.
+        // FIX-XASPECT-002: also re-feed the video surface's display aspect whenever the
+        // machine profile (PAL <-> NTSC) or the aspect-mode setting changes; both are raised
+        // by the picker AND by settings adopt-back after Apply/restart.
         _attachViewModel.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName is nameof(AttachPanelViewModel.IsPaneOpen)
@@ -106,10 +126,17 @@ public partial class MainWindow : Window
             {
                 ApplyContentLayout();
             }
+
+            if (e.PropertyName is nameof(AttachPanelViewModel.SelectedMachineProfile)
+                or nameof(AttachPanelViewModel.SelectedAspectMode))
+            {
+                UpdateVideoAspect();
+            }
         };
+        UpdateVideoAspect();
         ApplyContentLayout();
 
-        Opened += (_, _) => _video.Focus();
+        Opened += OnWindowOpened;
 
         _ = InitializeViewModelAsync();
 
@@ -155,14 +182,71 @@ public partial class MainWindow : Window
         return plus >= 0 ? rawVersion[..plus] : rawVersion;
     }
 
+    // FIX-XASPECT-002 (operator 2026-07-14: PAL -> NTSC switch did not change the pixel size):
+    // feed the video surface the ACTIVE machine profile's composite pixel aspect (VICE vicii.c
+    // vicii_get_pixel_aspect via the Chips VideoRenderer table) and the aspect-mode setting.
+    // FIX-XNTSCFILL-001: crop NTSC to written rows (246) so the in-frame black band does not
+    // waste vertical space; MeasureOverride then fills available panel height.
+    private void UpdateVideoAspect()
+    {
+        // TR-MVVM-001 / AvaloniaBoundaryTests: do not reference Architectures or Chips
+        // from the Avalonia head. PAR / content-height literals mirror VICE + VideoRenderer
+        // (PAL 0.93650794 / 272, PAL-N 0.90769231 / 272, NTSC 0.75 / 246).
+        // Profile id is the host-canonical selector
+        // already on the attach panel.
+        var profileId = _attachViewModel.SelectedMachineProfile?.Id ?? string.Empty;
+        // Vic20 aliases: vic20, vic20pal, vic20ntsc, xvic-ntsc (not bare C64 "pal"/"ntsc").
+        var isVic20 = profileId.Contains("vic20", StringComparison.OrdinalIgnoreCase)
+            || profileId.Contains("xvic", StringComparison.OrdinalIgnoreCase);
+        // Regional models such as the Japanese C64 and Ultimax are NTSC even
+        // though their canonical ids do not contain a video-standard suffix.
+        var canonicalProfileId = profileId.ToLowerInvariant();
+        var isNtsc = canonicalProfileId is "ntsc" or "newntsc" or "oldntsc"
+            or "sx64ntsc" or "pet64ntsc" or "ultimax" or "c64jap";
+
+        // VIC-I is near-square pixels; C64 VIC-II uses classic PAL/NTSC PAR tables.
+        var pixelAspect = isVic20 ? 1.0
+            : isNtsc ? 0.75
+            : canonicalProfileId == "paln" ? 0.90769231
+            : 0.93650794;
+
+        _video.PixelAspect = pixelAspect;
+        _video.AspectMode = _attachViewModel.SelectedAspectMode;
+        // C64 NTSC crops the unused black rows in the fixed 272-high buffer.
+        // VIC-20 publishes its own canvas (NTSC 400x234, PAL 448x284); 0 means use that height.
+        _video.ContentHeight = isVic20
+            ? 0
+            : (isNtsc ? VideoSurface.NtscContentHeight : VideoSurface.SourceHeight);
+        _video.InvalidateMeasure();
+        _video.InvalidateVisual();
+    }
+
     // Lay out the content panel: the emulator display is docked to an edge and aspect-sized
     // (VideoSurface.MeasureOverride), and the sidebar is the stretched fill (last) child that
     // consumes the rest. Flipping DockSide moves the display's dock edge; collapsing hides the
     // sidebar and reorders so the display becomes the fill child and covers the window.
+    // Emulator fullscreen (F11 / Alt+Enter): chrome hidden, video fills and is centered.
     private void ApplyContentLayout()
     {
         if (_contentPanel is null || _sidebarHost is null || _videoHost is null)
             return;
+
+        if (_isEmulatorFullscreen)
+        {
+            _sidebarHost.IsVisible = false;
+            _videoHost.ClearValue(DockPanel.DockProperty);
+            MoveToEnd(_videoHost); // undocked last child fills the content area
+            _videoHost.HorizontalContentAlignment = HorizontalAlignment.Center;
+            _videoHost.VerticalContentAlignment = VerticalAlignment.Center;
+            _video.HorizontalAlignment = HorizontalAlignment.Center;
+            _video.VerticalAlignment = VerticalAlignment.Center;
+            return;
+        }
+
+        _videoHost.HorizontalContentAlignment = HorizontalAlignment.Left;
+        _videoHost.VerticalContentAlignment = VerticalAlignment.Stretch;
+        _video.HorizontalAlignment = HorizontalAlignment.Left;
+        _video.VerticalAlignment = VerticalAlignment.Stretch;
 
         if (_attachViewModel.IsPaneOpen)
         {
@@ -174,8 +258,91 @@ public partial class MainWindow : Window
         else
         {
             _sidebarHost.IsVisible = false;
-            MoveToFront(_sidebarHost); // display is last => fills the window
+            _videoHost.ClearValue(DockPanel.DockProperty);
+            MoveToEnd(_videoHost); // display is last => fills the window
         }
+    }
+
+    /// <summary>
+    /// True for F11 (no Ctrl/Alt/Shift) or Alt+Enter / Alt+Return. Used by the shell hotkeys
+    /// that toggle emulator-only fullscreen.
+    /// </summary>
+    public static bool IsEmulatorFullscreenHotkey(Key key, KeyModifiers modifiers)
+    {
+        var relevant = modifiers & (KeyModifiers.Alt | KeyModifiers.Control | KeyModifiers.Shift);
+        if (key == Key.F11)
+            return relevant == KeyModifiers.None;
+
+        return (key is Key.Return or Key.Enter)
+            && (relevant & KeyModifiers.Alt) != 0
+            && (relevant & (KeyModifiers.Control | KeyModifiers.Shift)) == 0;
+    }
+
+    /// <summary>
+    /// Toggle emulator-only fullscreen: full-screen window, chrome (menu/status/sidebar) hidden,
+    /// video surface centered. F11 and Alt+Enter both toggle.
+    /// </summary>
+    public void ToggleEmulatorFullscreen()
+    {
+        if (_isEmulatorFullscreen)
+            ExitEmulatorFullscreen();
+        else
+            EnterEmulatorFullscreen();
+    }
+
+    private void EnterEmulatorFullscreen()
+    {
+        if (_isEmulatorFullscreen)
+            return;
+
+        _isEmulatorFullscreen = true;
+        _windowStateBeforeFullscreen = WindowState == WindowState.FullScreen
+            ? WindowState.Normal
+            : WindowState;
+        _paneOpenBeforeFullscreen = _attachViewModel.IsPaneOpen;
+
+        if (_menuBar is not null)
+            _menuBar.IsVisible = false;
+        if (_statusBar is not null)
+            _statusBar.IsVisible = false;
+        if (_iecMonitor is not null)
+            _iecMonitor.IsVisible = false;
+
+        ApplyContentLayout();
+        WindowState = WindowState.FullScreen;
+        FocusEmulatorSurface();
+    }
+
+    private void ExitEmulatorFullscreen()
+    {
+        if (!_isEmulatorFullscreen)
+            return;
+
+        _isEmulatorFullscreen = false;
+
+        if (_menuBar is not null)
+            _menuBar.IsVisible = true;
+        if (_statusBar is not null)
+            _statusBar.IsVisible = true;
+        // IEC monitor visibility is driven by true-drive presence elsewhere; restore visible
+        // so its own bindings can re-collapse if unused.
+        if (_iecMonitor is not null)
+            _iecMonitor.IsVisible = true;
+
+        WindowState = _windowStateBeforeFullscreen;
+        if (_paneOpenBeforeFullscreen != _attachViewModel.IsPaneOpen)
+            _attachViewModel.IsPaneOpen = _paneOpenBeforeFullscreen;
+
+        ApplyContentLayout();
+        FocusEmulatorSurface();
+    }
+
+    private void MoveToEnd(Control child)
+    {
+        var children = _contentPanel!.Children;
+        var index = children.IndexOf(child);
+        if (index >= 0 && index < children.Count - 1)
+            children.Move(index, children.Count - 1);
     }
 
     private void MoveToFront(Control child)
@@ -213,6 +380,25 @@ public partial class MainWindow : Window
         catch
         {
             // Restoring persisted state must never break startup.
+        }
+
+        await TryOpenStartupFileAsync().ConfigureAwait(true);
+    }
+
+    private void OnWindowOpened(object? sender, EventArgs e) => _video.Focus();
+
+    private async Task TryOpenStartupFileAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_startupFile))
+            return;
+
+        try
+        {
+            await _shell.DropAndStartFileAsync(_startupFile).ConfigureAwait(true);
+        }
+        catch
+        {
+            // Explorer Open must not crash startup if the image fails to attach.
         }
     }
 
@@ -252,6 +438,12 @@ public partial class MainWindow : Window
         base.OnClosed(e);
     }
 
+    /// <summary>PLAN-ROMM-001: the per-user cache directory RomM downloads land in.</summary>
+    private static string RomMCacheDirectory() => System.IO.Path.Combine(
+        System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+        "ViceSharp",
+        "romm-cache");
+
     private static HostConnection CreateHostClient()
     {
         var endpoint = Environment.GetEnvironmentVariable("VICESHARP_HOST_URI");
@@ -263,7 +455,7 @@ public partial class MainWindow : Window
 
         try
         {
-            var localHost = InProcessGrpcHost.StartAsync().GetAwaiter().GetResult();
+            var localHost = InProcessGrpcHost.StartAsync(provisionDefaultRoms: true).GetAwaiter().GetResult();
             return new HostConnection(new GrpcHostProtocolClient(localHost.Endpoint), localHost, localHost.VideoFrameSource);
         }
         catch (Exception ex)
@@ -289,6 +481,9 @@ public partial class MainWindow : Window
     // ---- Menu + transport commands ------------------------------------------
 
     private void OnMenuExit(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => Close();
+
+    private void OnMenuToggleFullscreen(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => ToggleEmulatorFullscreen();
 
     private void OnMenuPause(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => _ = RunCommandAsync(() => _shell.PauseAsync().AsTask());
@@ -316,6 +511,17 @@ public partial class MainWindow : Window
 
     private void OnRunDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => _ = RunCommandAsync(() => _shell.AutostartDrive8Async().AsTask());
+
+    /// <summary>Focus the emulator display so autoplay leaves keyboard/gamepad on the machine.</summary>
+    private void FocusEmulatorSurface()
+    {
+        void focus() => _video.Focus();
+
+        if (Dispatcher.UIThread.CheckAccess())
+            focus();
+        else
+            Dispatcher.UIThread.Post(focus);
+    }
 
     private void OnMenuToggleWarp(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => _ = _shell.ToggleWarpAsync();
@@ -592,9 +798,9 @@ public partial class MainWindow : Window
 
     private void OnVideoHostDragOver(object? sender, DragEventArgs e)
     {
-        e.DragEffects = string.IsNullOrWhiteSpace(GetDroppedLocalFilePath(e))
-            ? DragDropEffects.None
-            : DragDropEffects.Copy;
+        e.DragEffects = _shell.IsDropStartSupported(GetDroppedLocalFilePath(e))
+            ? DragDropEffects.Copy
+            : DragDropEffects.None;
         e.Handled = true;
     }
 
@@ -676,19 +882,44 @@ public partial class MainWindow : Window
 
     private void OnMenuAbout(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
+        var closeButton = new Button
+        {
+            Content = "Close",
+            MinWidth = 80,
+            Margin = new global::Avalonia.Thickness(16),
+            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Right,
+            IsDefault = true,
+            IsCancel = true
+        };
+        DockPanel.SetDock(closeButton, Dock.Bottom);
+        var content = new DockPanel();
+        content.Children.Add(closeButton);
+        // Legal text shared with the Xbox About surface (AboutInfo) so attributions
+        // cannot drift between heads.
         var about = new Window
         {
             Title = "About ViceSharp",
-            Width = 360,
-            Height = 180,
-            CanResize = false,
+            Width = 520,
+            Height = 360,
+            CanResize = true,
+            Content = content
+        };
+        content.Children.Add(new ScrollViewer
+        {
             Content = new TextBlock
             {
                 Margin = new global::Avalonia.Thickness(16),
                 TextWrapping = global::Avalonia.Media.TextWrapping.Wrap,
-                Text = "ViceSharp\nA C# .NET 10 port of the VICE Commodore 64 emulator."
+                Text =
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.ProjectName + "\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.LicenseIdentifier + "\n\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.AttributionText + "\n\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.LogoAttributionText + "\n\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.SourceOfferText + "\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.SourceUrl
             }
-        };
+        });
+        closeButton.Click += (_, _) => about.Close();
         about.ShowDialog(this);
     }
 
@@ -806,6 +1037,14 @@ public partial class MainWindow : Window
 
     private async void OnVideoKeyDown(object? sender, KeyEventArgs e)
     {
+        // Fullscreen before host key inject so Alt+Enter / F11 never reach the C64.
+        if (IsEmulatorFullscreenHotkey(e.Key, e.KeyModifiers))
+        {
+            e.Handled = true;
+            ToggleEmulatorFullscreen();
+            return;
+        }
+
         // Warp toggle: Alt+W (or Ctrl+W as fallback), like classic VICE
         if ((e.Key == Key.W) && (e.KeyModifiers.HasFlag(KeyModifiers.Alt) || e.KeyModifiers.HasFlag(KeyModifiers.Control)))
         {
@@ -820,6 +1059,13 @@ public partial class MainWindow : Window
 
     private async void OnGlobalKeyDown(object? sender, KeyEventArgs e)
     {
+        if (IsEmulatorFullscreenHotkey(e.Key, e.KeyModifiers))
+        {
+            e.Handled = true;
+            ToggleEmulatorFullscreen();
+            return;
+        }
+
         if (!IsVideoRecordingHotkey(e))
             return;
 
@@ -852,6 +1098,15 @@ public partial class MainWindow : Window
 
     private async void OnVideoKeyUp(object? sender, KeyEventArgs e)
     {
+        // Do not inject F11 / Alt+Enter release into the emulated keyboard.
+        if (IsEmulatorFullscreenHotkey(e.Key, e.KeyModifiers)
+            || e.Key is Key.F11
+            || ((e.Key is Key.Return or Key.Enter) && e.KeyModifiers.HasFlag(KeyModifiers.Alt)))
+        {
+            e.Handled = true;
+            return;
+        }
+
         await SendKeyStateAsync(e, false).ConfigureAwait(true);
     }
 

@@ -1,0 +1,56 @@
+=== VERIFY 1: Vic20 filter ===
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+  Building VICE native library
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    80, Skipped:     0, Total:    80, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+EXIT1=0
+=== VERIFY 2: Vic20 lockstep ===
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    17, Skipped:     0, Total:    17, Duration: 839 ms - ViceSharp.TestHarness.dll (net10.0)
+EXIT2=0
+=== VERIFY 3: C64 smoke ===
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+EXIT3=0
+=== VERIFY 4: Boot proof ===
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_FirstThousandCycles_DoNotThrow_AndAdvanceClock [58 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_BaseRam_IsWritable [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "vic20pal") [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "xvic") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "pal") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "vic20") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Default_IsPal_With6561TimingAnd1540Drive [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_Builds_WithCpuVideoDualViaAndRoms [15 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_AfterReset_CpuPcMatchesKernalResetVector [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_NtscAliases(selector: "vic20ntsc") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_NtscAliases(selector: "ntsc") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20RomSet_IsComplete_AgainstViceDataRoot [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Launcher_Xvic_BuildsTopologyYaml_WithVic20HostAnd1540DriveDefaultComment [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_DevicesList_IncludesExpectedRoles [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_WithoutRomProvider_ThrowsClearError [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.DefaultDrive_Is1540_Not1541 [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_CartPrg_MapsIntoBlkRegion [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_AfterReset_RomsAndResetVector_FromProductionBuilder [5 ms]
+[xUnit.net 00:00:02.36]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_Boot_Reaches_Ready_Prompt [238 ms]
+
+Test Run Successful.
+Total tests: 19
+     Passed: 19
+ Total time: 2.8533 Seconds
+EXIT4=0

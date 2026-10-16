@@ -1,0 +1,41 @@
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000002a31e450830
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:02.28]       DIV at cycle 25: native PC=$FD47 A=$CD X=$05 Y=$00 S=$FD P=$A5 | managed PC=$FD47 A=$CD X=$05 Y=$00 S=$FD P=$A4
+[xUnit.net 00:00:02.28]     ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence [FAIL]
+[xUnit.net 00:00:02.28]       Stack Trace:
+[xUnit.net 00:00:02.28]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PdivProbe.cs(22,0): at ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence()
+[xUnit.net 00:00:02.28]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:02.28]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.29]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Failed ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence [134 ms]
+  Error Message:
+   DIV at cycle 25: native PC=$FD47 A=$CD X=$05 Y=$00 S=$FD P=$A5 | managed PC=$FD47 A=$CD X=$05 Y=$00 S=$FD P=$A4
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PdivProbe.cs:line 22
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Test Run Failed.
+Total tests: 1
+     Failed: 1
+ Total time: 2.8351 Seconds
+EXIT=1

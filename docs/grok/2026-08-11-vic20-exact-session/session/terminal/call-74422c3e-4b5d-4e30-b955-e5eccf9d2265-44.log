@@ -1,0 +1,8 @@
+copied F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\vice_xvic.dll 10923841 08/11/2026 12:46:50
+copied F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\native\vice_xvic.dll 10923841 08/11/2026 12:46:50
+copied F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\vice_xvic.dll 10923841 08/11/2026 12:46:50
+
+Passed!  - Failed:     0, Passed:     8, Skipped:     0, Total:     8, Duration: 32 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=0
+

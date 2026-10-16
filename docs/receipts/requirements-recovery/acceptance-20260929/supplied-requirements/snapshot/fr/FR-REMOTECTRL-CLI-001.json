@@ -1,0 +1,36 @@
+{
+  "kind": "fr",
+  "id": "FR-REMOTECTRL-CLI-001",
+  "title": "Portable RemoteControl gRPC command line",
+  "status": "pending",
+  "priority": "high",
+  "body": "CLI restores and builds from a standalone ViceSharp checkout without a sibling repository.\nSupport grpc transport and its environment default; reject unsupported transports explicitly.\nProvide machine-readable capabilities and tree results suitable for retained validation evidence.\nResolve exact automation IDs first; reject ambiguous matches, malformed trees and ancestor-hidden controls.\nAuthentication, disabled control, denied actions, failed mutations, cancellation, timeout and invalid frames produce accurate failures and exit codes.\n\n## Acceptance Criteria\n- **ac-01**: CLI restores and builds from a standalone ViceSharp checkout without a sibling repository.\n- **ac-02**: Support grpc transport and its environment default; reject unsupported transports explicitly.\n- **ac-03**: Provide machine-readable capabilities and tree results suitable for retained validation evidence.\n- **ac-04**: Resolve exact automation IDs first; reject ambiguous matches, malformed trees and ancestor-hidden controls.\n- **ac-05**: Authentication, disabled control, denied actions, failed mutations, cancellation, timeout and invalid frames produce accurate failures and exit codes.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "CLI restores and builds from a standalone ViceSharp checkout without a sibling repository.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Support grpc transport and its environment default; reject unsupported transports explicitly.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Provide machine-readable capabilities and tree results suitable for retained validation evidence.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Resolve exact automation IDs first; reject ambiguous matches, malformed trees and ancestor-hidden controls.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Authentication, disabled control, denied actions, failed mutations, cancellation, timeout and invalid frames produce accurate failures and exit codes.",
+      "isSatisfied": false
+    }
+  ]
+}

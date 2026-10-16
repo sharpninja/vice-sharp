@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-CTX-001",
+  "title": "Resolve is pure/deterministic",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Resolve is pure/deterministic. Acceptance: verified by TEST-CTX-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

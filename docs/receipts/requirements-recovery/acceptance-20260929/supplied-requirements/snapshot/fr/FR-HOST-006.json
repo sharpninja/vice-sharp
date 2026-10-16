@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-HOST-006",
+  "title": "Host Runtime Status and Control Telemetry",
+  "status": "in_progress",
+  "priority": "high",
+  "body": "The host shall expose runtime telemetry and machine-control state needed by emulator shells without requiring UI clients to read emulator internals directly.\n\n## Acceptance Criteria\n- Host status reports power state, run state, limiter target, measured frames per second, frame count, cycle count, program counter, nominal clock, effective clock Hz, and effective clock percent.\n- Effective clock speed is measured from emulated cycles per real second and remains distinct from the requested limiter target.\n- Pause, resume, step one cycle, step one frame, cold reset, and warm reset commands are exposed through the host boundary.\n- Rewind controls return explicit unsupported status until backing host history support exists.\n- Reset-plus-drive-8 autorun returns `Ok` for supported drive 8 D64/PRG launches and explicit failed-precondition status when backing host or media prerequisites are missing.\n- Telemetry responses are safe for polling by UI clients and do not mutate emulator state.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "fr-host-006-ac-1",
+      "text": "Host status responses include existing runtime fields including session, run state, cycle, frame, model, limiter, and automation status.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-host-006-ac-2",
+      "text": "Host status responses include IEC activity derived from emulator bus traffic and safe for UI polling.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-host-006-ac-3",
+      "text": "Status polling does not mutate emulator, drive, or bus state.",
+      "isSatisfied": false
+    }
+  ]
+}

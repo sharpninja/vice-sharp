@@ -1,0 +1,108 @@
+
+Time     : 8/6/2026 11:55:48 PM
+Id       : 1001
+Provider : Windows Error Reporting
+Msg      : Fault bucket , type 0
+           Event Name: BlueScreen
+           Response: Not available
+           Cab Id: 0
+           
+           Problem signature:
+           P1: 7e
+           P2: ffffffffc0000005
+           P3: fffff8015f1ad26f
+           P4: ffff9184f47f72f8
+           P5: ffff9184f47f6b00
+           P6: 10_0_26200
+           P7: 0_0
+           P8: 256_1
+           P9: 
+           P10: 
+           
+           Attached files:
+           \\?\C:\WINDOWS\Minidump\070626-12015-01.dmp
+           \\?\C:\WINDOWS\SystemTemp\WER-12078-0.sysdata.xml
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.a49598f4-9d10-420d-a7c6-ceea6c06e76c.tmp.xml
+           
+           These files may be available here:
+           \\?\C:\ProgramData\Microsoft\Windows\WER\ReportQueue\Kernel_7e_487f61d313f0827b27f2ed55bacf9cbac969b4
+
+Time     : 8/6/2026 11:53:18 PM
+Id       : 1001
+Provider : Windows Error Reporting
+Msg      : Fault bucket 2227112147677846019, type 5
+           Event Name: MoAppCrash
+           Response: Not available
+           Cab Id: 0
+           
+           Problem signature:
+           P1: sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+           P2: praid:App
+           P3: 1.2.7.0
+           P4: 6a3e0000
+           P5: Windows.UI.Xaml.dll
+           P6: 10.0.26100.8875
+           P7: de7cc7c7
+           P8: c00000fd
+           P9: 00000000000b59e6
+           P10: 
+           
+           Attached files:
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.d89bee6e-0f1e-48fc-a682-2375b603d413.tmp.dmp
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.9a81d35e-0a91-477f-998e-cd98a07df9e4.tmp.WERInternalMetada
+           ta.xml
+           \\?\C:\ProgramData\Microsoft\Windows\WER\T
+
+Time     : 8/6/2026 11:53:14 PM
+Id       : 1000
+Provider : Application Error
+Msg      : Faulting application name: ViceSharp.Xbox.exe, version: 1.2.7.0, time stamp: 0x6a3e0000
+           Faulting module name: Windows.UI.Xaml.dll, version: 10.0.26100.8875, time stamp: 0xde7cc7c7
+           Exception code: 0xc00000fd
+           Fault offset: 0x00000000000b59e6
+           Faulting process id: 0x17B3C
+           Faulting application start time: 0x1DD26287DB4DDCB
+           Faulting application path: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout\ViceSharp.Xbox.exe
+           Faulting module path: C:\Windows\System32\Windows.UI.Xaml.dll
+           Report Id: 0e26b882-f698-4b47-9db2-0ea4f828c429
+           Faulting package full name: sharpninja.ViceSharp.Xbox_1.0.0.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 1042
+Provider : MsiInstaller
+Msg      : Ending a Windows Installer transaction: F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi. Client 
+           Process Id: 96132.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 1033
+Provider : MsiInstaller
+Msg      : Windows Installer installed the product. Product Name: ViceSharp. Product Version: 1.2.7. Product Language: 
+           0. Manufacturer: sharpninja. Installation success or error status: 1603.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 11708
+Provider : MsiInstaller
+Msg      : Product: ViceSharp -- Installation failed.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 10005
+Provider : MsiInstaller
+Msg      : Product: ViceSharp -- A newer version of ViceSharp is already installed.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 1040
+Provider : MsiInstaller
+Msg      : Beginning a Windows Installer transaction: F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi. Client 
+           Process Id: 96132.
+
+Time     : 8/6/2026 11:51:22 PM
+Id       : 1033
+Provider : MsiInstaller
+Msg      : Windows Installer installed the product. Product Name: ViceSharp. Product Version: 1.2.7. Product Language: 
+           0. Manufacturer: sharpninja. Installation success or error status: 0.
+
+Time     : 8/6/2026 11:51:22 PM
+Id       : 11707
+Provider : MsiInstaller
+Msg      : Product: ViceSharp -- Installation completed successfully.
+

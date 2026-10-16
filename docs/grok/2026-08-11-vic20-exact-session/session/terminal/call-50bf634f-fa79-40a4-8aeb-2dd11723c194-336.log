@@ -1,0 +1,38 @@
+FDA8: 81
+FDA9: 02
+FDAA: A8
+FDAB: A9
+FDAC: 04
+FDAD: 85
+FDAE: C2
+FDAF: E6
+FDB0: C1
+FDB1: D0
+FDB2: 02
+FDB3: E6
+FDB4: C2
+FDB5: 20
+FDB6: 91
+FDB7: FE
+FDB8: A5
+FDB9: 97
+FDBA: F0
+FDBB: 22
+FDBC: B0
+FDBD: F1
+FDBE: A4
+FDBF: C2
+FDC0: A6
+
+native\vice\vice\src\6510dtvcore.c:960:#define BRANCH(cond)                                              \
+native\vice\vice\src\6510dtvcore.c:986:#define BRANCH(cond)                                          \
+native\vice\vice\src\6510dtvcore.c:1879:                BRANCH(1);
+native\vice\vice\src\6510dtvcore.c:1947:                BRANCH(!LOCAL_SIGN());
+native\vice\vice\src\6510dtvcore.c:2079:                BRANCH(LOCAL_SIGN());
+native\vice\vice\src\6510dtvcore.c:2183:                BRANCH(!LOCAL_OVERFLOW());
+native\vice\vice\src\6510dtvcore.c:2287:                BRANCH(LOCAL_OVERFLOW());
+native\vice\vice\src\6510dtvcore.c:2395:                BRANCH(!LOCAL_CARRY());
+native\vice\vice\src\6510dtvcore.c:2523:                BRANCH(LOCAL_CARRY());
+native\vice\vice\src\6510dtvcore.c:2643:                BRANCH(!LOCAL_ZERO());
+native\vice\vice\src\6510dtvcore.c:2744:                BRANCH(LOCAL_ZERO());
+

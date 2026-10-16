@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-DRV-EDGE-001",
+  "title": "1541 drive motor 300,000-cycle ramp before rotation",
+  "status": "closed",
+  "priority": "medium",
+  "body": "IecDrive.Tick() enforces 300,000-cycle motor ramp-up (300ms at 1MHz drive clock) before MotorRotationCycles advances. Motor off resets ramp. VICE drive/drive.c.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

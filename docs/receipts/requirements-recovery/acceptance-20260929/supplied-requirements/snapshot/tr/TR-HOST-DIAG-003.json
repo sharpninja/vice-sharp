@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-HOST-DIAG-003",
+  "title": "Debug Attach File Lifecycle",
+  "status": "pending",
+  "priority": "high",
+  "body": "The desktop app shall publish deterministic local attach metadata at `%LOCALAPPDATA%\\ViceSharp\\debug-attach.json` for the running in-process host.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-IECTRACE-001",
+  "title": "IEC trace recorder",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Edge capture order + cycle stamps; step-boundary marks; ring bound; rewind re-derivation equals original trace.",
+  "acceptanceCriteria": []
+}

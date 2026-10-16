@@ -1,0 +1,3 @@
+src/ViceSharp.Core\CoordinatorMachine.cs:86:    public MachineState GetState() => _host.GetState();rg: 
+native/vice-shim*.c: IO error for operation on native/vice-shim*.c: The filename, directory name, or volume label syntax is incorrect. (os error 123)
+rg: src/ViceSharp.Core/ViceNative*.cs: IO error for operation on src/ViceSharp.Core/ViceNative*.cs: The filename, directory name, or volume label syntax is incorrect. (os error 123)

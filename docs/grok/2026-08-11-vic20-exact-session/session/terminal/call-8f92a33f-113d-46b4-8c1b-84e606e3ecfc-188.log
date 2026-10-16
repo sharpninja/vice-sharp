@@ -1,0 +1,7 @@
+
+LineNumber Line
+---------- ----
+       268     raster_reset(raster);
+       301 void raster_reset(raster_t *raster)
+       320     raster->blank_this_line = 0;
+

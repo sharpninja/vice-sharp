@@ -1,0 +1,46 @@
+ViceSharp VIC-20 every-cycle lockstep vs xvic - 10s PAL
+Date: 2026-08-06
+
+Budget
+------
+TenSecondPalCycles = 10 * 1_108_405 = 11_084_050
+Test: Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondPal
+Env: VICESHARP_LOCKSTEP_10S=1
+
+Result: GREEN
+-------------
+Passed 1 / Failed 0 / Skipped 0
+matchedCycles = 11_084_050 (full budget)
+wall ~36-40 s
+Log: docs/10s-lockstep-2026-08-06.log
+
+Also green
+----------
+Focused 500_000 and TwoSecondPal 2_216_810 with raster_cycle reset=6.
+
+Where 10s first diverged (before fix)
+-------------------------------------
+DIV first=3533371 (~3.19 s PAL) LDA (zp),Y color $966E
+  nA=$91 mA=$01
+  nCyc=61 mCyc=55 (native +6), nFetch=DONE mFetch=chargen
+
+How diverged from VICE
+----------------------
+1. Mos6561 reset _cycleInLine=0; VICE vic_reset sets raster_cycle=6
+   (maincpu_clk=6). Permanent +6 nCyc lead: at late open-H columns native
+   was already FETCH_DONE (open-bus high from pointer $96) while managed
+   still ran chargen (high 0).
+2. open_v required reg1!=0; VICE opens when regs[1]==(raster_line>>1)
+   including reg1==0 on line 0.
+
+How realigned
+-------------
+- Reset CycleInLine = 6
+- open_v: (_rasterLine >> 1) == reg1 without reg1!=0 guard
+Dump after fix at former residual: nA=mA=$91, mCyc=nCyc=62, both FETCH_DONE.
+
+Run
+---
+$env:VICESHARP_LOCKSTEP_10S='1'
+dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release `
+  --filter "FullyQualifiedName~Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondPal"

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XVIDEO-002",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "GC.GetAllocatedBytes delta==0 steady-state render tick. Acceptance: zero-allocation over steady-state window.",
+  "acceptanceCriteria": []
+}

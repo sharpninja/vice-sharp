@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XAUDIO-DEVICE",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console audio smoke. Acceptance: SID audible; mute silences; suspend/resume clean.",
+  "acceptanceCriteria": []
+}

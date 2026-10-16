@@ -1,0 +1,43 @@
+
+FullName
+--------
+C:\Users\kingd\octopus.xml
+C:\Users\kingd\.codex\memories\rollout_summaries\2026-07-12T05-16-35-PX4u-eternaldiscord_clean_room_implementation_oct.
+C:\Users\kingd\.creds\octopus-legion2.cred.xml
+C:\Users\kingd\.creds\octopus-payton.cred.xml
+C:\Users\kingd\Downloads\octopus-deploy-integration-prompt.md
+C:\Users\kingd\OneDrive\Documents\3d\octopus.stl
+{
+  "defaultBranch": "refs/heads/main",
+  "name": "VICE-Sharp-Release",
+  "repository": {
+    "checkoutSubmodules": false,
+    "clean": null,
+    "defaultBranch": "refs/heads/main",
+    "id": "2811a936-7e4f-4410-8b4f-1987350e0a04",
+    "name": "VICE-Sharp",
+    "properties": null,
+    "rootFolder": null,
+    "type": "TfsGit",
+    "url": "https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp"
+  },
+  "repositoryType": "TfsGit",
+  "url": "https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp"
+}
+{
+  "name": "VICE-Sharp-CI",
+  "repository": {
+    "checkoutSubmodules": false,
+    "clean": null,
+    "defaultBranch": "refs/heads/main",
+    "id": "2811a936-7e4f-4410-8b4f-1987350e0a04",
+    "name": "VICE-Sharp",
+    "properties": null,
+    "rootFolder": null,
+    "type": "TfsGit",
+    "url": "https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp"
+  },
+  "repositoryType": "TfsGit",
+  "url": "https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp"
+}
+

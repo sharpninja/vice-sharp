@@ -87,6 +87,7 @@ public sealed class CiaFlagPinTests
         cia.Write(0xDC0D, 0x90);
 
         cia.TriggerFlagPin();
+        cia.Tick();
 
         irq.IsAsserted.Should().BeTrue("FLG IRQ enable + FLG transition must drive the IRQ output");
         cia.Read(0xDC0D).Should().Be(0x90, "ICR read returns IR master bit plus FLG bit");

@@ -1,0 +1,46 @@
+ViceSharp VIC-20 every-cycle lockstep vs xvic - VICE realign session
+Date: 2026-08-06 (post-compaction continuation)
+Method: always ask (1) where did we diverge from VICE? (2) how do we get back in line?
+
+Skeptic gaps (machine-verified on disk)
+---------------------------------------
+1. NotTakenBne / TakenBne: BOTH [Fact(Explicit = true)]
+2. Focused every-cycle gate: EveryCycle_CpuRegs_Match_FocusedWindow (500_000)
+3. Residual honesty: matchedCycles below - NOT multi-second, NOT 1.1e6
+
+Gates (machine-verified)
+------------------------
+Focused 500k + Via1Iec + Vic20NativeLockstepTests:
+  FOCUSED_EXIT=0, Passed 20 / Failed 0
+  latest: docs/focused-revert-irq-2026-08-06.log
+
+2s (VICESHARP_LOCKSTEP_2S=1):
+  matchedCycles=577678  DIV first=577679  budget=2216810
+  ~0.521 s PAL (577678/1108405) - NOT multi-second, NOT 1.1e6
+  receipt: docs/2s-post-store-rts-2026-08-06.log
+
+Progress
+--------
+Skeptic residual:       matchedCycles=517828
+Prior session residual: matchedCycles=554365 (CMP abs,X / stale receipt)
+Peak before store fix:  matchedCycles=559295 (STA after not-taken BNE over-hold)
+Current residual:       matchedCycles=577678
+Net vs skeptic:         +59850 every-cycle matches
+Net this continuation:  +23313 from 554365
+
+VICE realignments this continuation
+-----------------------------------
+1. NonOvl plain store write-sample PC hold (FinishStagedMemoryWrite):
+   - trail==0: hold (VICE ST INC_PC after both FETCH CLKs)
+   - trail==1 after store: hold (c=522418 STA abs after STY)
+   - trail==1 after taken-branch target: hold (c=553377 STX after BCS)
+   - trail==1 after load: advance (c=557339 STA after LDA zp)
+   - trail==1 after not-taken branch: advance (c=559296 STA after BNE)
+   - trail>=2: advance
+2. RTS overlapped first PULL (TryExecuteCycleStagedRtsOpcode arm):
+---
+Select-String: 
+Line |
+  90 |  Select-String -Path tests/ViceSharp.TestHarness/Cpu/BranchCycleCountT .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Cpu\BranchCycleCountTests.cs' because it does not exist.

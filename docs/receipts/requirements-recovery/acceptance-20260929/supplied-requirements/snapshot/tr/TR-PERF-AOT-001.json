@@ -1,0 +1,23 @@
+{
+  "kind": "tr",
+  "id": "TR-PERF-AOT-001",
+  "title": "NativeAOT-Compatible RunFrame Hot Path",
+  "status": "completed",
+  "priority": "critical",
+  "body": "RunFrame hot-path implementation must remain compatible with NativeAOT constraints: no new reflection, expression trees, dynamic code generation, or LINQ allocations on the hot call graph.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-no-dynamic-code",
+      "text": "Performance optimizations introduce no reflection, expression trees, or dynamic code generation in the RunFrame call graph.",
+      "isSatisfied": true,
+      "evidence": "Code review of PR #3 optimized BasicBus and VideoRenderer with direct/static paths only"
+    },
+    {
+      "id": "ac-no-hot-linq",
+      "text": "Performance optimizations avoid LINQ and closure allocation in the measured RunFrame hot path.",
+      "isSatisfied": true,
+      "evidence": "PR #3 uses loops and span fills in hot path; RunFramePerfProbe reports allocated=0 bytes"
+    }
+  ]
+}

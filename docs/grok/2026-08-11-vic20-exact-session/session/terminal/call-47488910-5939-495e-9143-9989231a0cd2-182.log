@@ -1,0 +1,77 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.80]     ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_WriteHi_Reloads_AndClearsIfrBit5 [FAIL]
+[xUnit.net 00:00:01.80]     ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_Underflow_AssertsIrq_WhenIerBit5Enabled [FAIL]
+[xUnit.net 00:00:01.80]     ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_CountdownToUnderflow_SetsIfrBit5 [FAIL]
+[xUnit.net 00:00:01.80]     ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_OneShot_DoesNotReFireAfterUnderflowAndClear [FAIL]
+  Failed ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_WriteHi_Reloads_AndClearsIfrBit5 [37 ms]
+  Error Message:
+   Expected (via.Read(Base + 0x0D) & IfrT2) to be 32, but found 0 (difference of -32).
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_WriteHi_Reloads_AndClearsIfrBit5() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\Via6522Timer2Tests.cs:line 134
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_Underflow_AssertsIrq_WhenIerBit5Enabled [3 ms]
+  Error Message:
+   Expected irq.IsAsserted to be True, but found False.
+  Stack Trace:
+     at FluentAssertions.Primitives.BooleanAssertions`1.BeTrue(String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_Underflow_AssertsIrq_WhenIerBit5Enabled() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\Via6522Timer2Tests.cs:line 75
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_CountdownToUnderflow_SetsIfrBit5 [< 1 ms]
+  Error Message:
+   Expected (via.Read(Base + 0x0D) & IfrT2) to be 32, but found 0 (difference of -32).
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_CountdownToUnderflow_SetsIfrBit5() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\Via6522Timer2Tests.cs:line 53
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_OneShot_DoesNotReFireAfterUnderflowAndClear [< 1 ms]
+  Error Message:
+   Expected (via.Read(Base + 0x0D) & IfrT2) to be 32, but found 0 (difference of -32).
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.C1541.Via6522Timer2Tests.T2Phi2_OneShot_DoesNotReFireAfterUnderflowAndClear() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\Via6522Timer2Tests.cs:line 105
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:04.35]     ViceSharp.TestHarness.C1541.Via6522T2Pb6Tests.T2PulseCount_SwitchBackToPhi2Mode_ResumesPhi2Countdown [FAIL]
+  Failed ViceSharp.TestHarness.C1541.Via6522T2Pb6Tests.T2PulseCount_SwitchBackToPhi2Mode_ResumesPhi2Countdown [1 ms]
+  Error Message:
+   Expected (via.Read(Base + 0x0D) & IfrT2) to be 32, but found 0 (difference of -32).
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.C1541.Via6522T2Pb6Tests.T2PulseCount_SwitchBackToPhi2Mode_ResumesPhi2Countdown() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\Via6522T2Pb6Tests.cs:line 128
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:04.35]     ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.Acr7And6Set_Pb7TogglesOnEachT1Underflow [FAIL]
+[xUnit.net 00:00:04.36]     ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.Acr7SetAcr6Clear_Pb7OneShotMode_GoesHighOnFirstUnderflowAndStays [FAIL]
+[xUnit.net 00:00:04.36]     ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.ContinuousMode_PiB7TogglesAcrossManyUnderflows [FAIL]
+  Failed ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.Acr7And6Set_Pb7TogglesOnEachT1Underflow [1 ms]
+  Error Message:
+   Did not expect afterFirst to be 0x00.
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.NotBe(T unexpected, String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.Acr7And6Set_Pb7TogglesOnEachT1Underflow() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\Via6522Timer1Pb7Tests.cs:line 76
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.Acr7SetAcr6Clear_Pb7OneShotMode_GoesHighOnFirstUnderflowAndStays [2 ms]
+  Error Message:
+   Expected value to be 128, but found 0 (difference of -128).
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.Acr7SetAcr6Clear_Pb7OneShotMode_GoesHighOnFirstUnderflowAndStays() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\Via6522Timer1Pb7Tests.cs:line 166
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.ContinuousMode_PiB7TogglesAcrossManyUnderflows [2 ms]
+  Error Message:
+   Expected value to be 0x00, but found 0x80 (difference of 128).
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.C1541.Via6522Timer1Pb7Tests.ContinuousMode_PiB7TogglesAcrossManyUnderflows() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\Via6522Timer1Pb7Tests.cs:line 110
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     8, Passed:    60, Skipped:     0, Total:    68, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+EXIT=1

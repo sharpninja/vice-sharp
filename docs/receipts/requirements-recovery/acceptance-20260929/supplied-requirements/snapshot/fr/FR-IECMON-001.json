@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-IECMON-001",
+  "title": "IEC bus monitor (scope view)",
+  "status": "pending",
+  "priority": "high",
+  "body": "Dedicated logic-analyzer panel showing a timing diagram of the IEC lines over emulator time, colored by which device drives each segment, with decoded IEC protocol bands, cursor/zoom/scroll, synced to forward step and reverse step.\n\n## Acceptance Criteria\n- Dedicated logic-analyzer panel showing a timing diagram of the IEC lines over emulator time, colored by which device drives each segment, with decoded IEC protocol bands, cursor/zoom/scroll, synced to forward step and reverse step.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

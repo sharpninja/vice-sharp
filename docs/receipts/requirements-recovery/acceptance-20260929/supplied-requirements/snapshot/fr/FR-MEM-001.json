@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MEM-001",
+  "title": "Address Decoding and PLA Banking Configuration",
+  "status": "pending",
+  "priority": "high",
+  "body": "The memory subsystem shall implement the C64 PLA (Programmable Logic Array) address decoding, which maps the 64KB address space to RAM, ROM, and I/O regions based on the 6510 I/O port bits (LORAM, HIRAM, CHAREN) and the cartridge GAME/EXROM lines. All 32 possible PLA configurations shall be supported.\n\n## Acceptance Criteria\n- The address decoder consults the 5 input bits (LORAM, HIRAM, CHAREN, GAME, EXROM) to select from all 32 banking configurations.\n- Each configuration correctly maps the following regions: $0000-$0FFF (RAM), $1000-$7FFF (RAM), $8000-$9FFF (RAM/ROML), $A000-$BFFF (RAM/BASIC/ROMH), $C000-$CFFF (RAM), $D000-$DFFF (RAM/CHARROM/IO), $E000-$FFFF (RAM/KERNAL/ROMH).\n- Banking changes take effect on the cycle following the write to $0001.\n- The `IBankController` publishes a `BankConfigChanged` event when the active configuration changes.\n- The address decoder is stateless relative to its inputs -- the same 5-bit input always produces the same mapping.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

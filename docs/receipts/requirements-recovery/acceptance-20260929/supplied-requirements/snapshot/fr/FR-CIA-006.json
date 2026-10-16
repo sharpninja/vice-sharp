@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CIA-006",
+  "title": "NMI Generation from CIA2",
+  "status": "pending",
+  "priority": "high",
+  "body": "CIA2 generates Non-Maskable Interrupts (NMI) to the CPU. NMI sources include Timer A underflow, Timer B underflow, TOD alarm, serial port completion, and the FLAG pin (directly active-low edge from the IEC bus).\n\n## Acceptance Criteria\n- CIA2 interrupt output is connected to the CPU NMI line.\n- Any enabled interrupt source in CIA2 ICR/IMR triggers an NMI.\n- The NMI is edge-triggered: it fires on the transition from no-interrupt to interrupt-pending.\n- Reading the CIA2 ICR ($DD0D) clears all interrupt flags and deasserts the NMI line.\n- The FLAG pin (directly from IEC ATN) can trigger NMI when enabled.\n- Multiple NMI sources can be pending simultaneously; reading ICR reveals which sources fired.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

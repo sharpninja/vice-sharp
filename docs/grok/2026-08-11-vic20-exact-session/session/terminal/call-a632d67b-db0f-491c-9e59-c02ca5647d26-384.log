@@ -1,0 +1,25 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   104, Skipped:     0, Total:   104, Duration: 269 ms - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 109 ms - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     8, Skipped:     0, Total:     8, Duration: 172 ms - ViceSharp.TestHarness.dll (net10.0)
+---
+
+Name                     Length LastWriteTime
+----                     ------ -------------
+build-fix.log               574 8/6/2026 11:40:07 PM
+build.log                    82 8/6/2026 11:32:45 PM
+cart-attach-fe3.log         322 8/6/2026 11:41:27 PM
+cart-attach-megacart.log    322 8/6/2026 11:41:27 PM
+cart-attach-ultimem.log     322 8/6/2026 11:41:27 PM
+focused-gates.log           322 8/6/2026 11:41:34 PM
+uiec-fsdevice.log           322 8/6/2026 11:41:31 PM
+vic20-memory-restart.log    322 8/6/2026 11:41:09 PM
+

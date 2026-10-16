@@ -1,0 +1,13 @@
+
+FullName
+--------
+F:\GitHub\vice-sharp\.nuke\temp\wingetcreate.exe
+F:\GitHub\vice-sharp\artifacts\winget
+F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\Packaging\NuGetConfigTests.cs
+F:\GitHub\vice-sharp\NuGet.config
+Select-String: 
+
+Line |
+   2 |  Select-String -Path F:\GitHub\vice-sharp\azure-pipelines*.yml,F:\GitH .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'F:\GitHub\vice-sharp\.github\workflows' because it does not exist.

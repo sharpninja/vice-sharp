@@ -1,0 +1,91 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:04.30]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [2 s]
+  Error Message:
+   DIV first=522263 matchedCycles=522262 budget=2216810
+c=522252 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=2 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=522253 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=True irq=0 mis=False
+c=522254 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=522255 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$88 trail=5 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=522256 nPC=$EA9E mPC=$EA9E nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$88 trail=5 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=522257 nPC=$EA9E mPC=$EA9E nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$10 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=522258 nPC=$EAA0 mPC=$EAA0 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$10 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=522259 nPC=$EA95 mPC=$EA95 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=522260 nPC=$EA95 mPC=$EA95 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=522261 nPC=$EA97 mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=6 mis=False
+c=522262 nPC=$EA97 mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=5 mis=False
+c=522263 nPC=$EA99 mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$ED nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=4 mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 105
+   at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 47
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+EXIT=1
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:29:   DIV first=522263 
+matchedCycles=522262 budget=2216810
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:30:c=522252 nPC=$EA9D 
+mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=2 op=$91 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:31:c=522253 nPC=$EA9D 
+mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$91 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=True irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:32:c=522254 nPC=$EA9D 
+mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$91 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:33:c=522255 nPC=$EA9D 
+mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$88 trail=5 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:34:c=522256 nPC=$EA9E 
+mPC=$EA9E nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$88 trail=5 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:35:c=522257 nPC=$EA9E 
+mPC=$EA9E nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$10 trail=0 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:36:c=522258 nPC=$EAA0 
+mPC=$EAA0 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$10 trail=0 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:37:c=522259 nPC=$EA95 
+mPC=$EA95 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$A9 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:38:c=522260 nPC=$EA95 
+mPC=$EA95 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:39:c=522261 nPC=$EA97 
+mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=6 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:40:c=522262 nPC=$EA97 
+mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=5 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\2s-irqdiag-2026-08-06.log:41:c=522263 nPC=$EA99 
+mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$ED nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=4 mis=True
+

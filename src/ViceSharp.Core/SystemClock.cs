@@ -3,7 +3,7 @@ using ViceSharp.Chips.Cpu;
 
 namespace ViceSharp.Core;
 
-public sealed class SystemClock : IClock
+public sealed partial class SystemClock : IClock
 {
     // PERF-CLOCK-001: pre-sorted dispatch arrays eliminate per-cycle Phase/ClockDivisor
     // virtual property reads and long modulo from the hot TickPhase path.
@@ -28,6 +28,37 @@ public sealed class SystemClock : IClock
     private long _cycle;
     private bool _nmiWasAsserted;
     private bool _nmiPending;
+    /// <summary>
+    /// VICE <c>INTERRUPT_DELAY</c> (interrupt.h): x64sc
+    /// <c>interrupt_check_irq_delay</c> (mainc64cpu.c) dispatches when
+    /// <c>irq_delay_cycles &gt;= INTERRUPT_DELAY</c> (+1 when last opcode
+    /// DELAYS_INTERRUPT). <c>interrupt_delay</c> increments that counter on
+    /// CLK_INC while <c>irq_clk &lt;= maincpu_clk</c>.
+    /// </summary>
+    private const int InterruptDelayCycles = 2;
+    /// <summary>Cycle when IRQ line last rose; <see cref="long.MaxValue"/> when clear.</summary>
+    private long _irqAssertCycle = long.MaxValue;
+    /// <summary>
+    /// VICE <c>irq_delay_cycles</c>: incremented on CPU <c>CLK_INC</c> while
+    /// <c>irq_clk &lt;= maincpu_clk</c>. Not incremented on extra JUMP/RTS
+    /// host ticks (no VICE CLK) or on the latch tick itself (Wolf64 2109675).
+    /// </summary>
+    private int _irqDelayCycles;
+
+    /// <summary>
+    /// Host cycle of the last nirq 0 to 1 (VICE <c>irq_clk</c>).
+    /// <see cref="long.MaxValue"/> when the IRQ line is clear.
+    /// </summary>
+    public long DebugIrqAssertCycle => _irqAssertCycle;
+
+    /// <summary>VICE <c>irq_delay_cycles</c> (CLK_INC count since nirq 0 to 1).</summary>
+    public int DebugIrqDelayCycles => _irqDelayCycles;
+
+    /// <summary>
+    /// Last IRQ sample taken while the CPU was at cycle 0 (FETCH or last CLK).
+    /// Post-tick samples after FETCH (cycle &gt; 0) do not overwrite this.
+    /// </summary>
+    public string DebugFetchIrqNote { get; private set; } = "";
 
     public long TotalCycles => _cycle;
     public long FrequencyHz { get; }
@@ -64,6 +95,12 @@ public sealed class SystemClock : IClock
         _cpu = cpu;
         _irqLine = irqLine;
         _nmiLine = nmiLine;
+        // Soft-deferred imm commits on the same host tick as the next FETCH;
+        // VICE DO_INTERRUPT runs before that FETCH. CPU invokes this after the
+        // soft commit and before reading the next opcode (NTSC c=520829).
+        // Phi2 order is VIA then CPU (IRQ line updated); timer CPU reads use
+        // Via6522 pre-Tick bus-visible counters (VICE LOAD before CLK_INC).
+        cpu.TrySampleInterruptBeforeFetch = TryDispatchInterrupts;
     }
 
     public void Step()
@@ -81,21 +118,146 @@ public sealed class SystemClock : IClock
             mandatoryCpuSkip: cpuCycleStealMandatory);
 
         UpdateNmiEdgeLatch();
+        UpdateIrqAssertClock();
+
+        // VICE interrupt_delay increments on CLK_INC, including stolen
+        // clocks (mainc64cpu.c steal_cycles / CLK still advances). Extra
+        // JUMP/RTS host ticks are not CLK_INC (ConsumedViceClockThisTick).
+        var viceClock = cpuSkipped
+            || (_cpu is not null && _cpu.ConsumedViceClockThisTick);
+        if (_irqLine is not null
+            && _irqLine.IsAsserted
+            && _irqAssertCycle != long.MaxValue)
+        {
+            if (viceClock && _irqAssertCycle < _cycle)
+            {
+                var clocks = 1;
+                if (!cpuSkipped && _cpu is not null && _cpu.ViceClocksThisTick > 1)
+                    clocks = _cpu.ViceClocksThisTick;
+                _irqDelayCycles += clocks;
+            }
+            else if (!cpuSkipped
+                && _cpu is not null
+                && !_cpu.ConsumedViceClockThisTick
+                && _irqAssertCycle == _cycle - 1)
+            {
+                // Previous tick was the IRQ latch on a real STORE CLK
+                // (VICE irq_clk <= clk increments on that CLK). Managed
+                // skipped the latch tick (assert == cycle). Count it on
+                // the following apply host tick, which is not a CLK_INC
+                // of its own (Wolf64 2865090 STA abs write at 2865084).
+                // Latch on the apply tick itself (2175366) has
+                // assert == cycle, so this does not fire.
+                _irqDelayCycles++;
+            }
+        }
 
         if (cpuSkipped)
             return;
 
         // Check for pending interrupts after all devices have ticked.
-        // This allows CIA/VIC to assert interrupt lines during their Tick().
-        if (_cpu != null && _nmiPending && _cpu.IsInstructionBoundary)
+        // Soft-deferred imm may also sample mid-CPU-tick via TrySampleInterruptBeforeFetch.
+        TryDispatchInterrupts();
+    }
+
+    private void TryDispatchInterrupts()
+    {
+        if (_cpu is null)
+            return;
+
+        // Pre-FETCH samples run inside the CPU tick, after CIA Phi2 but before
+        // the post-Phi2 UpdateIrqAssertClock. Latch the rising edge here so a
+        // fresh irq_clk is not treated as already elapsed (Wolf64 2191785:
+        // native STA zp nPC=$E5D1 nIrqClk=2191788 vs managed IRQ push).
+        UpdateIrqAssertClock();
+
+        // VICE interrupt_check_irq_delay: fire when cpu_clk >= irq_clk +
+        // INTERRUPT_DELAY (2), plus one when last opcode DELAYS_INTERRUPT.
+        if (_nmiPending && _cpu.IsInstructionBoundary)
         {
             _nmiPending = false;
             _cpu.Nmi();
+            return;
         }
-        else if (_cpu != null && _irqLine != null && _irqLine.IsAsserted && _cpu.IsInstructionBoundary)
+
+        if (_irqLine != null
+            && _irqLine.IsAsserted
+            && _cpu.IsInstructionBoundary
+            && IsIrqDelayElapsed())
         {
+            // VICE interrupt_check_irq_delay: OPINFO_ENABLES_IRQ (CLI) must
+            // not dispatch; it sets IK_IRQPEND so the next instruction runs.
+            // OPCODE_DELAYS_INTERRUPT is not skip-all: IsIrqDelayElapsed already
+            // adds +1 to the threshold (need 3 instead of 2). Skipping here
+            // blocked the KERNAL CIA IRQ after taken BEQ (Wolf64 2208208).
+            if (_cpu.LastOpcodeEnablesIrq)
+            {
+                NoteFetchIrqSample("enables");
+                return;
+            }
             _cpu.Irq();
+            NoteFetchIrqSample("irq");
+            return;
         }
+
+        NoteFetchIrqSample("skip");
+    }
+
+    private void NoteFetchIrqSample(string result)
+    {
+        if (_cpu is null || _cpu.DebugCycle != 0)
+            return;
+        var need = InterruptDelayCycles;
+        if (_cpu.LastOpcodeDelaysInterrupt)
+            need++;
+        DebugFetchIrqNote =
+            $"{result} bound={_cpu.IsInstructionBoundary} delay={_irqDelayCycles}/{need} line={_irqLine?.IsAsserted} delays={_cpu.LastOpcodeDelaysInterrupt} en={_cpu.LastOpcodeEnablesIrq} seq={_cpu.DebugInterruptSequenceRemaining} supp={_cpu.DebugSuppressBootstrapBoundary}";
+    }
+
+    private bool UpdateIrqAssertClock()
+    {
+        if (_irqLine is null)
+            return false;
+
+        // VICE interrupt_set_irq: irq_clk latches only on nirq 0 to 1.
+        // Polling IsAsserted misses a same-cycle Release then Assert
+        // (Wolf64 2208208 nIrqClk=2208210 vs stale elapsed pre-FETCH IRQ).
+        if (_irqLine is InterruptLine line && line.ConsumeRisingEdge())
+        {
+            _irqAssertCycle = _cycle;
+            _irqDelayCycles = 0;
+            return true;
+        }
+
+        if (_irqLine.IsAsserted)
+        {
+            if (_irqAssertCycle == long.MaxValue)
+            {
+                _irqAssertCycle = _cycle;
+                return true;
+            }
+        }
+        else
+        {
+            _irqAssertCycle = long.MaxValue;
+        }
+
+        return false;
+    }
+
+    private bool IsIrqDelayElapsed()
+    {
+        if (_irqAssertCycle == long.MaxValue || _cpu is null)
+            return false;
+
+        // VICE interrupt_check_irq_delay: irq_delay_cycles >= INTERRUPT_DELAY
+        // (2), plus one when last opcode DELAYS_INTERRUPT. Do not use
+        // wall-clock _cycle: extra JUMP host ticks are not CLK_INC
+        // (Wolf64 2175366). Do not increment every Step (regressed 2109675).
+        var need = InterruptDelayCycles;
+        if (_cpu.LastOpcodeDelaysInterrupt)
+            need++;
+        return _irqDelayCycles >= need;
     }
 
     // PERF-CLOCK-001: iterate pre-sorted phase arrays directly instead of the
@@ -116,6 +278,10 @@ public sealed class SystemClock : IClock
             {
                 if (device is ICpu)
                     cpuSkipped = true;
+                if (device is ICpuCycleStealTarget stealTarget
+                    && (stealTarget.NotifyOnStolenCycle
+                        || (mandatoryCpuSkip && stealTarget.CanForceStealCurrentCycle)))
+                    stealTarget.OnStolenCycle();
                 continue;
             }
             device.Tick();
@@ -133,6 +299,10 @@ public sealed class SystemClock : IClock
             {
                 if (entry.Device is ICpu)
                     cpuSkipped = true;
+                if (entry.Device is ICpuCycleStealTarget stealTarget
+                    && (stealTarget.NotifyOnStolenCycle
+                        || (mandatoryCpuSkip && stealTarget.CanForceStealCurrentCycle)))
+                    stealTarget.OnStolenCycle();
                 continue;
             }
             entry.Device.Tick();
@@ -212,6 +382,8 @@ public sealed class SystemClock : IClock
             nmi.Clear();
         _nmiWasAsserted = false;
         _nmiPending = false;
+        _irqAssertCycle = long.MaxValue;
+        _irqDelayCycles = 0;
     }
 
     // PERF-CLOCK-001: rebuild dispatch arrays whenever the device set changes.

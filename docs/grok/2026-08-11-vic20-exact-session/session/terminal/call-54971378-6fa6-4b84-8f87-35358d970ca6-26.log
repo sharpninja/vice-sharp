@@ -1,0 +1,2432 @@
+Size=610x569
+x0=0,0,0 | x20=74,227,224 | x40=74,227,224 | x60=74,227,224 | x80=74,227,224 | x100=74,227,224 | x120=74,227,224 | x140=74,227,224 | x160=74,227,224 | x180=74,227,224 | x200=74,227,224 | x220=74,227,224 | x240=74,227,224 | x260=74,227,224 | x280=74,227,224 | x300=74,227,224 | x320=74,227,224 | x340=74,227,224 | x360=74,227,224 | x380=74,227,224 | x400=74,227,224 | x420=74,227,224 | x440=74,227,224 | x460=74,227,224 | x480=74,227,224 | x500=74,227,224 | x520=74,227,224 | x540=74,227,224 | x560=74,227,224 | x580=74,227,224 | x600=74,227,224
+maxR=110 at x=16 y=300
+paper x -1..-1 w=1 Lborder=-1 Rborder=610
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exceptpaper y -1..-1 h=1ion calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive
+border=74,227,224 paper=,,
+avgAdjacentRowLumaDelta=0
+ and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  3
+Name                                            Length LastWriteTime       FullName
+----                                            ------ -------------       --------
+image-4638ac58-4e2b-4cf5-9b3b-227a14232843.png   80395 8/8/2026 3:31:23 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-4638ac58-4e2b-4cf.
+image-6a6a01e8-3395-46b7-b816-bdd38fba8b34.png  183318 8/8/2026 3:31:10 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-6a6a01e8-3395-46b.
+image-50c3a6d9-80aa-44ec-9dda-f645dc72a540.png   82530 8/8/2026 1:59:45 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-50c3a6d9-80aa-44e.
+image-832179fd-c1aa-49c9-ad1f-d616be584081.png  183845 8/8/2026 1:59:11 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-832179fd-c1aa-49c.
+image-916feac0-a993-4e19-951f-50b253ae38bb.jpg  128141 8/7/2026 8:39:44 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-916feac0-a993-4e1.
+image-be4c8867-eafc-400d-b269-6ef61a0d634c.png  667801 8/7/2026 8:39:27 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-be4c8867-eafc-400.
+image-6990b548-dc73-4632-8ce0-f26de83992c8.png   83669 8/5/2026 1:32:52 PM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-6990b548-dc73-463.
+image-76ac2d91-1f38-45bb-b23e-30bf3450ce18.png  182467 8/5/2026 1:32:13 PM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-76ac2d91-1f38-45b.
+image-8b2c042e-3efe-40de-8d4c-579a965a8a19.jpg  268120 8/5/2026 1:15:37 PM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-8b2c042e-3efe-40d.
+image-dfca8198-4eb7-4e0a-976d-e10990abb662.png  438879 8/5/2026 1:08:21 PM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-dfca8198-4eb7-4e0.
+image-11f0c577-3d7f-483c-a8f8-cf51f606af7f.jpg  206182 8/5/2026 6:14:43 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-11f0c577-3d7f-483.
+image-fb20b517-03f7-4c00-ac2d-1f5106549d0b.png  451997 8/5/2026 6:11:38 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-fb20b517-03f7-4c0.
+image-e1a19158-6650-4ca6-a40d-125b009d1d9f.jpg  116797 8/5/2026 5:27:30 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-e1a19158-6650-4ca.
+image-46cf52fd-d56a-4713-a629-e4c9d1811453.png  257828 8/5/2026 5:26:59 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-46cf52fd-d56a-471.
+image-0d7d75df-e76d-49ef-ae22-ef315e424af3.jpg  112424 8/5/2026 5:21:18 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-0d7d75df-e76d-49e.
+image-d9782243-87dd-423b-a034-c445074a29c5.png  240494 8/5/2026 5:21:06 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-d9782243-87dd-423.
+image-3f413bf4-708d-4d72-833e-c52d9ecf3d66.png   87475 8/5/2026 5:17:58 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-3f413bf4-708d-4d7.
+image-de59db94-6f27-4d93-8579-9966a220171b.png  207738 8/5/2026 5:17:34 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-de59db94-6f27-4d9.
+image-9ab69978-46da-4dbc-8a30-1cb705c4b674.jpg  433135 8/5/2026 4:37:12 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\assets\image-9ab69978-46da-4db.
+image-b1340a67-17de-437e-8855-3268f0f8d90b.png 3714263 8/5/2026 4:35:51 AM C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-b1340a67-17de-437.
+
+
+6 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  36 |    $c=$bmp.GetPixel($xMid,$yy)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"
+MethodInvocationException: 
+Line |
+  42 |  $b=$bmp.GetPixel(40,$y); $p=$bmp.GetPixel($xMid,$y)
+     |                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "GetPixel" with "2" argument(s): "Parameter must be positive and < Width. (Parameter 'x')"

@@ -1,0 +1,79 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+  Building VICE native library
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  F:/GitHub/vice-sharp/native/vice-shim.c: In function 'vice_shim_set_current_thread_description':
+F:/GitHub/vice-sharp/native/vice-shim.c(303,30): warning G190D311F: cast between incompatible function types from 'FARPROC' {aka 'long long int (*)(void)'} to 'HRESULT (*)(void *, const WCHAR *)' {aka 'long int (*)(void *, const short unsigned int *)'} [-Wcast-function-type] [F:\GitHub\vice-sharp\native\Vice.Native.proj]
+    303 |     set_thread_description = (vice_shim_set_thread_description_fn)GetProcAddress(kernel32, "SetThreadDescription");
+        |                              ^
+  F:/GitHub/vice-sharp/native/vice-shim.c: At top level:
+F:/GitHub/vice-sharp/native/vice-shim.c(1682,39): warning GB3D0E953: '/*' within comment [-Wcomment] [F:\GitHub\vice-sharp\native\Vice.Native.proj]
+   1682 |  * (frame buffer row width) and *out_w/*out_h. Caller must hold g_state_lock.
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.36]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:02.34]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.63]   Starting:    ViceSharp.TestHarness
+[xUnit.net 00:00:03.04]     ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [FAIL]
+[xUnit.net 00:00:03.04]       System.DllNotFoundException : Unable to load DLL 'C:\Users\kingd\AppData\Local\Temp\ViceSharpNative\73BB3ED1869DD846\vice_xvic.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)
+[xUnit.net 00:00:03.04]       Stack Trace:
+[xUnit.net 00:00:03.04]            at System.Runtime.InteropServices.NativeLibrary.Load(String libraryPath)
+[xUnit.net 00:00:03.04]         F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.cs(47,0): at ViceSharp.Core.ViceNative.ResolveLibraryCombined(String libraryName, Assembly assembly, Nullable`1 searchPath)
+[xUnit.net 00:00:03.04]            at System.Runtime.InteropServices.NativeLibrary.LoadLibraryCallbackStub(String libraryName, Assembly assembly, Boolean hasDllImportSearchPathFlags, UInt32 dllImportSearchPathFlags)
+[xUnit.net 00:00:03.04]            at ViceSharp.Core.ViceNativeXvic.<CreateModel>g____PInvoke|11_0(Byte* __modelSelector_native)
+[xUnit.net 00:00:03.04]         F:\GitHub\vice-sharp\src\ViceSharp.Core\obj\Release\net10.0\Microsoft.Interop.LibraryImportGenerator\Microsoft.Interop.LibraryImportGenerator\LibraryImports.g.cs(747,0): at ViceSharp.Core.ViceNativeXvic.CreateModel(String modelSelector)
+[xUnit.net 00:00:03.04]         F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs(127,0): at ViceSharp.Core.ViceNativeXvic.CreateInstance(String modelSelector)
+[xUnit.net 00:00:03.04]         F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.cs(238,0): at ViceSharp.Core.ViceNative.CreateInstance(String modelSelector)
+[xUnit.net 00:00:03.04]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs(49,0): at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.RunEveryCycleVideo(Int32 budget, String modelSelector)
+[xUnit.net 00:00:03.04]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs(40,0): at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k()
+[xUnit.net 00:00:03.04]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:03.04]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.06]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [263 ms]
+  Error Message:
+   System.DllNotFoundException : Unable to load DLL 'C:\Users\kingd\AppData\Local\Temp\ViceSharpNative\73BB3ED1869DD846\vice_xvic.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)
+  Stack Trace:
+     at System.Runtime.InteropServices.NativeLibrary.Load(String libraryPath)
+   at ViceSharp.Core.ViceNative.ResolveLibraryCombined(String libraryName, Assembly assembly, Nullable`1 searchPath) in F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.cs:line 47
+   at System.Runtime.InteropServices.NativeLibrary.LoadLibraryCallbackStub(String libraryName, Assembly assembly, Boolean hasDllImportSearchPathFlags, UInt32 dllImportSearchPathFlags)
+   at ViceSharp.Core.ViceNativeXvic.<CreateModel>g____PInvoke|11_0(Byte* __modelSelector_native)
+   at ViceSharp.Core.ViceNativeXvic.CreateModel(String modelSelector) in F:\GitHub\vice-sharp\src\ViceSharp.Core\obj\Release\net10.0\Microsoft.Interop.LibraryImportGenerator\Microsoft.Interop.LibraryImportGenerator\LibraryImports.g.cs:line 747
+   at ViceSharp.Core.ViceNativeXvic.CreateInstance(String modelSelector) in F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs:line 127
+   at ViceSharp.Core.ViceNative.CreateInstance(String modelSelector) in F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.cs:line 238
+   at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.RunEveryCycleVideo(Int32 budget, String modelSelector) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs:line 49
+   at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs:line 40
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Total tests: 1
+Test Run Failed.
+     Failed: 1
+ Total time: 3.7816 Seconds
+EXIT=1

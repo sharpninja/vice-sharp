@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXCI-005",
+  "title": "Nuke Xbox targets absent from CI/release YAMLs",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Nuke PublishXbox/DeployXbox/ValidateXbox exist and are absent from both CI/release YAMLs; ValidateXbox runs off-console. Acceptance: verified by TEST-XBOXCI-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

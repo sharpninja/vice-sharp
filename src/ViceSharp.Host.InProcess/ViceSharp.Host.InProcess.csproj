@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- winmm waveOut + kernel32 waitable-timer / thread-affinity P/Invoke
+         (WinMmAudioBackend, SemaphoreEmulationGate, ViceEmulationGate,
+         ThreadAffinity) use [LibraryImport] over pinned native buffers. They are
+         Windows-guarded and never invoked on the UWP/Xbox path (that head uses
+         XboxManagedFrameGate + XAudio2); an uncalled LibraryImport is AOT-safe. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
+    <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
+    <ProjectReference Include="..\ViceSharp.Chips\ViceSharp.Chips.csproj" />
+    <ProjectReference Include="..\ViceSharp.Core\ViceSharp.Core.csproj" />
+    <ProjectReference Include="..\ViceSharp.Monitor\ViceSharp.Monitor.csproj" />
+    <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+    <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ViceSharp.Host" />
+    <InternalsVisibleTo Include="ViceSharp.TestHarness" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+native/vice/vice/src\arch\sdl\menu_ram.c:68:UI_MENU_DEFINE_RADIO(RAMInitValueInvert)
+native/vice/vice/src\arch\sdl\menu_ram.c:77:static const ui_menu_entry_t RAMInitValueInvert_menu[] = {
+native/vice/vice/src\arch\sdl\menu_ram.c:80:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:85:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:90:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:95:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:100:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:105:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:110:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:115:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:120:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:125:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:130:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:135:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:141:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:146:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:151:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:156:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:161:        .callback = radio_RAMInitValueInvert_callback,
+native/vice/vice/src\arch\sdl\menu_ram.c:381:        .data     = (ui_callback_data_t)RAMInitValueInvert_menu
+native/vice/vice/src\c64\cart\georam.c:250:void georam_powerup(void)
+native/vice/vice/src\c64\cart\georam.c:257:        ram_init_with_pattern(georam_ram, georam_size, &ramparam);
+native/vice/vice/src\c64\cart\georam.c:272:        ram_init_with_pattern(&georam_ram[old_georam_ram_size],
+native/vice/vice/src\c64\cart\georam.c:539:void georam_init(void)
+native/vice/vice/src\c64\cart\georam.h:34:void georam_init(void);
+native/vice/vice/src\c64\cart\georam.h:43:void georam_powerup(void);
+native/vice/vice/src\ram.c:51:    .value_invert = 128,        /* RAMInitValueInvert - number of bytes until start value is inverted */
+native/vice/vice/src\ram.c:52:    .value_offset = 0,          /* RAMInitValueOffset - offset of first pattern in bytes */
+native/vice/vice/src\ram.c:145:    { "RAMInitValueOffset", 2, RES_EVENT_SAME, NULL,
+native/vice/vice/src\ram.c:149:    { "RAMInitValueInvert", 4, RES_EVENT_SAME, NULL,

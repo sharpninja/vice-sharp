@@ -1,0 +1,18 @@
+
+src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj:57:    <ProjectReference 
+Include="..\ViceSharp.Host\ViceSharp.Host.csproj" />
+src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj:58:    <ProjectReference 
+Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj:60:    <ProjectReference 
+Include="..\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj" />
+src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj:64:    <ProjectReference 
+Include="..\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
+src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj:67:    <ProjectReference 
+Include="..\ViceSharp.RomM\ViceSharp.RomM.csproj" />
+src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj:26:    <ProjectReference 
+Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
+src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj:27:    <ProjectReference 
+Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj:28:    <ProjectReference 
+Include="..\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj" />
+

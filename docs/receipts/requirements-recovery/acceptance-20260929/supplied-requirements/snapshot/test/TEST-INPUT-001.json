@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-INPUT-001",
+  "title": "Input and VKM Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Keyboard, joystick, mouse, lightpen, paddle, and VICE VKM behavior is verified with parser, matrix, protocol, and machine integration tests.",
+  "acceptanceCriteria": []
+}

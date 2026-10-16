@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-IEC-EDGE-001",
+  "title": "IEC bus ATN-response within 985-cycle spec window",
+  "status": "closed",
+  "priority": "high",
+  "body": "IecBus.Tick() asserts CLK and DATA low within 985 cycles (Tat=1ms at PAL 985,248Hz) of ATN falling edge. Releases both on ATN rising edge. VICE iecbus/iecbus.c:247-266.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

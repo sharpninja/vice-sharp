@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" />
+    <ProjectReference Include="..\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj" />
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
     <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
     <ProjectReference Include="..\ViceSharp.Chips\ViceSharp.Chips.csproj" />

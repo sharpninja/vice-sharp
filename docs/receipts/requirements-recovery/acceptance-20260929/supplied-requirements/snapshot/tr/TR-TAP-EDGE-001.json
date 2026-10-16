@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-TAP-EDGE-001",
+  "title": "Datasette sense line and record mode",
+  "status": "closed",
+  "priority": "medium",
+  "body": "Datasette.SenseLine = false when PlayPressed or RecordPressed (CIA1  bit 4 active-low). TryWritePulse stores pulse when MotorEnabled && RecordPressed. RecordedPulseCount tracks stored pulses.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

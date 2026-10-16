@@ -1,0 +1,5 @@
+ParserError: 
+Line |
+   4 |  @Test-Path native/vice_xvic.dll
+     |       ~~~~~
+     | Unexpected token '-Path' in expression or statement.

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-CPUTICK-001",
+  "title": "Per-CPU tick counter and rate tests",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Unit tests covering ExecutedCycles increments per executed (non-stolen) cycle, per-CPU rate = executed/elapsed/target, reset zeroes counters, and the status surface lists host and peripheral CPU rates distinctly.",
+  "acceptanceCriteria": []
+}

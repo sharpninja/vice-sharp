@@ -1,0 +1,235 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    PLAN-XBOXUWP S4 (IMPL-XBOXUWP-004): the true UWP-on-Xbox-console head.
+
+    ViceSharpXboxUwp toggles the target framework between the real UWP target
+    (net10.0-windows10.0.26100.0, which needs the windows-app / UWP workload)
+    and a workload-free net10.0 fallback. The fallback is the DEFAULT so the
+    whole solution still builds on CI agents that lack the UWP workload. This
+    mirrors the Host.Android fallback precedent (ViceSharpHostAndroidFallback).
+
+    This head reuses the managed C64 core plus the in-process host facade
+    (ViceSharp.Host.InProcess) only. It takes no desktop-UI, wire-protocol,
+    monitor, gRPC, or web-host dependency. The wire protocol arrives
+    transitively through the in-process host facade, which is intentional.
+
+    Program.cs (the trivial fallback entry point) compiles ONLY on the
+    net10.0 fallback: when ViceSharpXboxUwp=='true' the build defines the
+    HAS_UWP constant, which #if's Program.cs out so it cannot collide with the
+    real XAML App entry point that slice S34 will add later.
+  -->
+  <PropertyGroup>
+    <!--
+      PLAN-XBOXUWP: the Visual Studio "Debug-UWP" solution configuration flips this
+      head to the real UWP TFM so the operator can select "Debug-UWP | x64" and F5
+      it. A .slnx solution config CANNOT inject an MSBuild property per project
+      (vs-solutionpersistence#128); the only signal it delivers is the mapped
+      $(Configuration) name, so the single ViceSharpXboxUwp chokepoint is derived
+      from $(Configuration)=='Debug-UWP'. This line MUST precede the empty->false
+      default below (MSBuild evaluates top-to-bottom), and an explicit
+      -p:ViceSharpXboxUwp from build/Build.cs (non-empty) still short-circuits both.
+    -->
+    <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'=='' and '$(Configuration)'=='Debug-UWP'">true</ViceSharpXboxUwp>
+    <!--
+      Release-UWP (operator 2026-07-14): the Xbox-compliant release build of the same UWP
+      head - identical chokepoint flip, but with release code-gen and the plan's Native-AOT
+      posture (see the Release-UWP PropertyGroup and the PublishAot condition below).
+    -->
+    <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'=='' and '$(Configuration)'=='Release-UWP'">true</ViceSharpXboxUwp>
+    <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'==''">false</ViceSharpXboxUwp>
+
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ViceSharp.Xbox</RootNamespace>
+    <AssemblyName>ViceSharp.Xbox</AssemblyName>
+
+    <!--
+      The VS Configuration Manager validates the ViceSharp.slnx "Debug-UWP|x64" mapping
+      against this project's DECLARED configurations/platforms. SDK projects expose only
+      Debug/Release + AnyCPU by default, so VS rejects Debug-UWP|x64 as nonexistent, refuses
+      to switch, and keeps loading the head as the net10.0 fallback (which is why App.xaml's
+      Windows.UI.Xaml.Application does not resolve in the editor). Declaring Debug-UWP and x64
+      here makes the IDE accept the solution mapping. CLI MSBuild treats Configuration/Platform
+      as free-form and does not need this; only the IDE does.
+    -->
+    <Configurations>Debug;Release;Debug-UWP;Release-UWP</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
+
+    <TargetFramework Condition="'$(ViceSharpXboxUwp)'=='true'">net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetFramework Condition="'$(ViceSharpXboxUwp)'!='true'">net10.0</TargetFramework>
+
+    <!-- HAS_UWP guards Program.cs out of the real UWP build (see header). -->
+    <DefineConstants Condition="'$(ViceSharpXboxUwp)'=='true'">$(DefineConstants);HAS_UWP</DefineConstants>
+
+    <!--
+      FIX-XWIN2D-001: the video surface (VideoSurfaceHost) now renders through a raw Direct3D 11
+      composition swap chain hosted by a XAML SwapChainPanel - NO Win2D. Win2D.uwp was dropped
+      because its Microsoft.Graphics.Canvas.winmd is a Windows Metadata component that modern
+      .NET (UseUwp) cannot reference (build error NETSDK1130). The DX11 interop is [LibraryImport]
+      + blittable delegate* unmanaged vtable calls (mirrors XAudio2SourceVoiceDevice), so it needs
+      no NuGet/winmd dependency and stays Native-AOT clean. AllowUnsafeBlocks enables that interop;
+      it only affects the UWP build because VideoSurfaceHost.cs is entirely #if HAS_UWP-guarded.
+    -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!--
+    Release-UWP code-gen: the SDK grants CUSTOM configuration names debug-ish defaults
+    (Optimize=false, no TRACE constant), so the Xbox-compliant release semantics are set
+    explicitly. DEBUG is deliberately NOT defined.
+  -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release-UWP'">
+    <Optimize>true</Optimize>
+    <DebugType>portable</DebugType>
+    <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+
+  <!-- UWP-on-Xbox-console-only knobs; inert on the net10.0 fallback build. -->
+  <PropertyGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
+    <UseUwp>true</UseUwp>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Platform>x64</Platform>
+    <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
+    <!--
+      Native AOT is an EXPLICIT OPT-IN (FIX-XKBDPANEL-001): PublishAot=true at BUILD
+      time flips CsWinRT into its AOT binding mode and reflection {Binding} dies
+      app-wide (empty virtual keyboard, blank Settings pickers, missing menu title;
+      device A/B receipts 2026-07-14). Release-UWP BUILDS therefore stay JIT with
+      working bindings; publish flows that really AOT pass ViceSharpPublishAot=true
+      (or set PublishAot globally) once the bindings are AOT-safe (x:Bind /
+      generated bindable metadata).
+    -->
+    <PublishAot Condition="'$(ViceSharpPublishAot)'=='true'">true</PublishAot>
+    <AppxPackage>true</AppxPackage>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>MSIX</WindowsPackageType>
+  </PropertyGroup>
+
+  <!--
+    PLAN-XBOXUWP S31 (IMPL-XBOXUWP-031): the Package.appxmanifest is fed to the
+    MSIX tooling ONLY on the real UWP build. Guarding the AppxManifest include
+    behind ViceSharpXboxUwp=='true' keeps it out of the workload-free net10.0
+    fallback build, which has no MSIX tooling and must stay green without the
+    windows-app / UWP workload.
+  -->
+  <ItemGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+
+  <!--
+    PLAN-XBOXUWP S32 (IMPL-XBOXUWP-032), areas XBOXPKG / XBOXGPL (R8): GPL
+    compliance packaging, head-only so the workload-free net10.0 fallback never
+    packs MSIX content (guarded by ViceSharpXboxUwp==true, mirroring the manifest).
+
+    - The GPL VICE *.vkm keymap data is VENDORED under Assets/vice-data/C64/ and
+      packaged into the MSIX at that same relative path, so first-run
+      XboxDataPathBridge seeding from InstalledLocation\Assets\vice-data\C64\*.vkm
+      has files to copy (FR-XROM-003). These are verbatim GPL-2.0-or-later VICE
+      data (attributed in THIRD_PARTY_NOTICES.md).
+    - COPYING (GPL-2.0 text) + THIRD_PARTY_NOTICES.md are bundled under Licenses/
+      to satisfy GPL section-1 (FR-XBOXGPL-006).
+
+    No Commodore ROM binary globs appear here: ROM images are Commodore-copyrighted
+    and are user-imported / fetched over HTTPS at runtime, never packaged.
+  -->
+  <ItemGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
+    <None Remove="Assets/vice-data/C64/*.vkm" />
+    <Content Include="Assets/vice-data/C64/*.vkm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\COPYING" Link="Licenses\COPYING">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\THIRD_PARTY_NOTICES.md" Link="Licenses\THIRD_PARTY_NOTICES.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!--
+    UWP app visual assets. Package.appxmanifest references StoreLogo / Square150x150Logo /
+    Square44x44Logo / Wide310x150Logo / SplashScreen under Assets\; MSIX registration
+    (DEP0700 / 0x80073CF6) fails if any is missing from the package. Head-only (guarded), and
+    copied into the win-x64 layout so the register-from-layout F5 deploy finds them.
+  -->
+  <ItemGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
+    <None Remove="Assets/*.png" />
+    <Content Include="Assets/*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!--
+      FEAT-XC64FONT-001: the PetMe64 C64 charset font for the virtual keyboard's keycaps,
+      vendored verbatim from VICE data/common with its Kreative Relay Fonts Free Use
+      License (redistribution requires the license text shipped verbatim + credit; see
+      THIRD_PARTY_NOTICES.md).
+    -->
+    <None Remove="Assets/Fonts/*.*" />
+    <Content Include="Assets/Fonts/*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
+    <ProjectReference Include="..\ViceSharp.Core\ViceSharp.Core.csproj" />
+    <ProjectReference Include="..\ViceSharp.Chips\ViceSharp.Chips.csproj" />
+    <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
+    <ProjectReference Include="..\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj" />
+
+    <!--
+      FR-XROM-002 (S40): the first-run ROM acquirer (RomProvisioning/RomFetchRomAcquirer) uses
+      RomFetch's RomProvider.DownloadRom directly. RomFetch already arrives transitively through
+      Host.InProcess; this makes the direct dependency explicit.
+    -->
+    <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
+
+    <!--
+      PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the head now consumes the two portable UI
+      libraries. Both are net10.0 with no XAML/UWP/Grpc/Avalonia dependency, so the
+      references are UNCONDITIONAL and never perturb the workload-free fallback restore
+      (they carry the navigation/focus/keyboard/settings/device/ROM ViewModels + the
+      pure input state machine the XAML head binds to; TR-MVVM-001).
+    -->
+    <ProjectReference Include="..\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj" />
+    <ProjectReference Include="..\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj" />
+    <!-- PLAN-ROMM-001 X1: the portable RomM library ViewModels (Protocol-only); the
+         XboxGameLauncher implements its IGameLauncher seam over the in-process facade. -->
+    <ProjectReference Include="..\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
+    <!-- PLAN-ROMM-001 X3: the RomM adapter (RomMLibraryGateway over RomM.Client) the
+         LibraryPage constructs on Connect. -->
+    <ProjectReference Include="..\ViceSharp.RomM\ViceSharp.RomM.csproj" />
+  </ItemGroup>
+
+  <!--
+    PLAN-XBOXUWP (area diagnostics): ILogger-based logging + global crash capture for the
+    UWP head. The deployed head boots to a black screen and exits with code 1 ~13s after
+    launch (unhandled exception on a background/timer thread); Debug.WriteLine is invisible in
+    a packaged UWP app. These bring in the Microsoft.Extensions.Logging factory plus the Debug
+    and Console sinks; a portable FileLoggerProvider (Logging\FileLoggerProvider.cs) writes a
+    readable LocalState\vicesharp.log. UNCONDITIONAL: net10.0 API surface that never perturbs
+    the workload-free fallback restore (the App/VideoSurfaceHost consumers are #if HAS_UWP).
+  -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+  </ItemGroup>
+
+  <!--
+    FEAT-XDEFAULTCART-001: the S-Blox cartridge ships EMBEDDED (operator requirement) and
+    is extracted + recorded in vice.ini on first boot (DefaultCartridgeBoot). Unconditional:
+    the embedded stream is also what the headless fallback tests read.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="Assets/Cartridges/sblox.CRT" />
+  </ItemGroup>
+
+  <!--
+    FIX-XWIN2D-001: the video surface uses raw Direct3D 11 (d3d11.dll / dxgi.dll, part of
+    Windows) via [LibraryImport] + vtable interop, so the head carries NO video-rendering
+    PackageReference. Win2D.uwp was removed because its .winmd is incompatible with modern
+    .NET UseUwp (NETSDK1130). No package to restore keeps the UWP build free of that blocker
+    and the workload-free net10.0 fallback restore unchanged.
+  -->
+</Project>

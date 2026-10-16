@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XPATH-001",
+  "title": "Startup path bridge to AppContainer writable root",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Startup path bridge makes the unmodified ViceDataPathResolver resolve the AppContainer writable root; keymap writes land in LocalFolder. Acceptance: verified by TEST-XSET-001, XboxDataPathBridgeTests.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

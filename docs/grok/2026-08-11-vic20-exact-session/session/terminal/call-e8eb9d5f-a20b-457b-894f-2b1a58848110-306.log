@@ -1,0 +1,48 @@
+
+## [32mfeat/xbox-uwp-app[m...[31morigin/feat/xbox-uwp-app[m
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+[33mf67eeb9[m fix: restore Octopus CI steps; drop Avalonia Architectures/Chips refs
+[33m6b875b6[m fix(build): bump Cryptography.Xml 10.0.10; nullable RomProvisioning ViewModel
+[33md24eb49[m docs: handoff snapshot after Xbox residuals + RomM merge [PLAN-XBOXUWP PLAN-ROMM]
+Filename                    LineNumber Line
+--------                    ---------- ----
+azure-pipelines.ci.yml              44           # FEAT-XOCTOPUS-001: optional LEGION2 Octopus release after green CiT.
+azure-pipelines.ci.yml              45           # No-ops without OCTOPUS_API_KEY; skip with SkipOctopus=true.
+azure-pipelines.ci.yml              47               if (-not $env:OCTOPUS_API_KEY) {
+azure-pipelines.ci.yml              48                 Write-Host 'OCTOPUS_API_KEY not set; skipping Octopus LEGION2 r.
+azure-pipelines.ci.yml              51               $url = if ($env:OCTOPUS_URL) { $env:OCTOPUS_URL.TrimEnd('/') } el.
+azure-pipelines.ci.yml              52               $env:OCTOPUS_URL = $url
+azure-pipelines.ci.yml              53               $env:OCTOPUS_SPACE = if ($env:OCTOPUS_SPACE) { $env:OCTOPUS_SPACE.
+azure-pipelines.ci.yml              57               $octo = 'C:\Program Files\Octopus CLI\octopus.exe'
+azure-pipelines.ci.yml              58               if (-not (Test-Path $octo)) { throw "octopus CLI missing: $octo" }
+azure-pipelines.ci.yml              59               Write-Host "Octopus $url project=$project version=$version"
+azure-pipelines.ci.yml              61               if ($LASTEXITCODE -ne 0) { throw "octopus release create failed e.
+azure-pipelines.ci.yml              63               if ($LASTEXITCODE -ne 0) { Write-Warning "octopus deploy Developm.
+azure-pipelines.ci.yml              64             displayName: Octopus LEGION2 release
+azure-pipelines.ci.yml              65             condition: and(succeeded(), ne(variables['SkipOctopus'], 'true'))
+azure-pipelines.ci.yml              67               OCTOPUS_API_KEY: $(OCTOPUS_API_KEY)
+azure-pipelines.ci.yml              68               OCTOPUS_URL: $(OCTOPUS_URL)
+azure-pipelines.ci.yml              69               OCTOPUS_SPACE: $(OCTOPUS_SPACE)
+azure-pipelines.release.yml         70       # FEAT-XOCTOPUS-001: optional LEGION2 Octopus release after package publi.
+azure-pipelines.release.yml         71       # No-ops without OCTOPUS_API_KEY; skip with SkipOctopus=true.
+azure-pipelines.release.yml         72       - job: OctopusLegion2
+azure-pipelines.release.yml         73         displayName: 'Octopus LEGION2 release'
+azure-pipelines.release.yml         79         condition: and(succeeded(), ne(variables['SkipOctopus'], 'true'))
+azure-pipelines.release.yml         82               if (-not $env:OCTOPUS_API_KEY) {
+azure-pipelines.release.yml         83                 Write-Host 'OCTOPUS_API_KEY not set; skipping Octopus LEGION2 r.
+azure-pipelines.release.yml         86               $url = if ($env:OCTOPUS_URL) { $env:OCTOPUS_URL.TrimEnd('/') } el.
+azure-pipelines.release.yml         87               $env:OCTOPUS_URL = $url
+azure-pipelines.release.yml         88               $env:OCTOPUS_SPACE = if ($env:OCTOPUS_SPACE) { $env:OCTOPUS_SPACE.
+azure-pipelines.release.yml         92               $octo = 'C:\Program Files\Octopus CLI\octopus.exe'
+azure-pipelines.release.yml         93               if (-not (Test-Path $octo)) { throw "octopus CLI missing: $octo" }
+azure-pipelines.release.yml         94               Write-Host "Octopus $url project=$project version=$version"
+azure-pipelines.release.yml         96               if ($LASTEXITCODE -ne 0) { throw "octopus release create failed e.
+azure-pipelines.release.yml         98               if ($LASTEXITCODE -ne 0) { Write-Warning "octopus deploy Developm.
+azure-pipelines.release.yml         99             displayName: Octopus LEGION2 release
+azure-pipelines.release.yml        101               OCTOPUS_API_KEY: $(OCTOPUS_API_KEY)
+azure-pipelines.release.yml        102               OCTOPUS_URL: $(OCTOPUS_URL)
+azure-pipelines.release.yml        103               OCTOPUS_SPACE: $(OCTOPUS_SPACE)
+

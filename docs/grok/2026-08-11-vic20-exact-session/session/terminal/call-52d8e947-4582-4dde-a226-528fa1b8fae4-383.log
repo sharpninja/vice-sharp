@@ -1,0 +1,18 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+The following Tests are available:
+    ViceSharp.TestHarness.Vic20.MediaServiceHostVic20ExpansionTests.AttachMedia_Fe3_512K_Bin_AppliesViaMediaServiceHost
+    ViceSharp.TestHarness.Vic20.MediaServiceHostVic20ExpansionTests.AttachMedia_Ultimem_1MB_Bin_AppliesViaMediaServiceHost
+    ViceSharp.TestHarness.Vic20.MediaServiceHostVic20ExpansionTests.AttachMedia_MegaCart_64K_Bin_AppliesViaMediaServiceHost
+    ViceSharp.TestHarness.Vic20.MediaServiceHostVic20ExpansionTests.DetachMedia_Fe3_EjectsVic20ExpansionPort
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 109 ms - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     8, Skipped:     0, Total:     8, Duration: 172 ms - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   104, Skipped:     0, Total:   104, Duration: 269 ms - ViceSharp.TestHarness.dll (net10.0)

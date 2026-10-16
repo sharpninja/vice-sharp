@@ -1,0 +1,49 @@
+
+FullName                                                                                    Length LastWriteTime
+--------                                                                                    ------ -------------
+F:\GitHub\vice-sharp\native\vice_xvic.dll                                                 10923841 8/11/2026 12:46:50 .
+F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\vice_xvic.dll                 10920691 8/11/2026 9:41:23 AM
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\vice_xvic.dll        10922825 8/11/2026 12:42:21 .
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\native\vice_xvic.dll 10922825 8/11/2026 12:37:34 .
+
+
+src\ViceSharp.Core\ViceNative.Xvic.cs:11:/// Native VICE xvic (VIC-20) library interop binding (vice_xvic.dll).
+src\ViceSharp.Core\ViceNative.Xvic.cs:17:    private const string LibraryName = "vice_xvic";
+src\ViceSharp.Core\ViceNative.Xvic.cs:18:    private static readonly string[] AlternateLibraryNames = ["vice_xvic"];
+src\ViceSharp.Core\ViceNative.Xvic.cs:32:    // (combined vice_x64 + vice_xvic). Do not call SetDllImportResolver here.
+src\ViceSharp.Core\ViceNative.Xvic.cs:36:    /// <summary>Absolute path of the resolved vice_xvic library, or 
+null.</summary>
+src\ViceSharp.Core\ViceNative.Xvic.cs:40:        : "Native VICE xvic library not found. Build 'vice_xvic' via 
+native/build-vice-shim-xvic.sh into the test output or a searched native directory.";
+src\ViceSharp.Core\ViceNative.Xvic.cs:42:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_create")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:45:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_create_model", 
+StringMarshalling = StringMarshalling.Utf8)]
+src\ViceSharp.Core\ViceNative.Xvic.cs:48:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_destroy")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:51:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_reset")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:54:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_step_cycle")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:57:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_read_snapshot", 
+StringMarshalling = StringMarshalling.Utf8)]
+src\ViceSharp.Core\ViceNative.Xvic.cs:60:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_write_snapshot", 
+StringMarshalling = StringMarshalling.Utf8)]
+src\ViceSharp.Core\ViceNative.Xvic.cs:63:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_peek_ram")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:66:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_peek_bus")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:69:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_write")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:72:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_disk", 
+StringMarshalling = StringMarshalling.Utf8)]
+src\ViceSharp.Core\ViceNative.Xvic.cs:75:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_detach_disk")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:78:    [LibraryImport(LibraryName, EntryPoint = 
+"vice_machine_set_keyboard_matrix_key")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:81:    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_a")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:84:    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_x")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:87:    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_y")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:90:    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_p")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:93:    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_sp")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:96:    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_pc")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:99:    [LibraryImport(LibraryName, EntryPoint = "vice_vic_get_state")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:102:    [LibraryImport(LibraryName, EntryPoint = "vice_vic20_get_video_state")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:109:    [LibraryImport(LibraryName, EntryPoint = 
+"vice_machine_capture_visible_frame")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:113:    [LibraryImport(LibraryName, EntryPoint = 
+"vice_vic_capture_frame_indices")]
+src\ViceSharp.Core\ViceNative.Xvic.cs:116:    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_pipeline_state")]
+

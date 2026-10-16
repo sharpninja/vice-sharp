@@ -1,0 +1,22 @@
+
+> src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:9:    private static readonly byte[] OpCycleCounts = new byte[256]
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:10:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:11:        /* 00 */ 7, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 4, 4, 6, 6,
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:12:        /* 10 */ 2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:13:        /* 20 */ 6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 4, 4, 6, 6,
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:14:        /* 30 */ 2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,
+> src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:44:        byte cycles = OpCycleCounts[opcode];
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:45:
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:46:        ExecuteOpcode(opcode);
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:47:
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:48:        return cycles;
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:49:    }
+> src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:51:    private partial int GetCycleCount(byte opcode) => 
+OpCycleCounts[opcode];
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:52:    
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:53:    private partial AddressingMode GetAddressingMode(byte opcode)
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:54:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:55:        // Addressing mode lookup table implementation
+  src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:56:        return (opcode & 0x03) switch
+8
+

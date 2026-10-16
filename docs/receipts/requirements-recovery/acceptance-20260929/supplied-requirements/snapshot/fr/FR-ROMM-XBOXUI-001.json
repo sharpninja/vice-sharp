@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-ROMM-XBOXUI-001",
+  "title": "Xbox Game Pass UI and navigation",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. 10-foot gamepad-first library, details, and lists pages on the UWP head.\nAC-XUI-01: Library in NavigationDestination, a HomePage button, and Push route -> XboxNavigationTests.Library_Routable.\nAC-XUI-02 [V]: LibraryPage builds Debug-UWP, binds LibraryBrowseViewModel (grid tiles, search, read-only machine indicator, slot picker, A/Y actions, A-Z strip; no source/platform picker).\nAC-XUI-03 [V]: A=Attach, Y=Attach+Autostart via the input command path.\nAC-XUI-04 [V]: no RPC_E_WRONG_THREAD on async tile/cover load (guarded by AC-BROWSE-08).\nAC-XUI-05 [V]: GameDetailsPage builds Debug-UWP, binds RomDetailViewModel (cover, screenshots, metadata, files, slot picker, A/Y/X); VM logic in RomDetailViewModelTests.\nAC-XUI-06 [V]: ListsPage builds Debug-UWP, binds CollectionsViewModel (rail, selected-list games, X=remove/Y=rename/Menu=delete/+New list); VM logic in CollectionsViewModelTests.\n\n## Acceptance Criteria\n- `Library` in `NavigationDestination`, a HomePage button, and `Push` route ->\n- `LibraryPage` builds `Debug-UWP`, binds `LibraryBrowseViewModel` (grid tiles, search,\n- A = Attach, Y = Attach+Autostart via the input command path `[V]` (dev-PC E2E; command\n- no `RPC_E_WRONG_THREAD` on async tile/cover load `[V]` (dev-PC E2E; guarded by AC-BROWSE-08).\n- `GameDetailsPage` builds `Debug-UWP`, binds `RomDetailViewModel` (cover, screenshots,\n- `ListsPage` builds `Debug-UWP`, binds `CollectionsViewModel` (collections rail, selected-list",
+  "condition": null,
+  "acceptanceCriteria": []
+}

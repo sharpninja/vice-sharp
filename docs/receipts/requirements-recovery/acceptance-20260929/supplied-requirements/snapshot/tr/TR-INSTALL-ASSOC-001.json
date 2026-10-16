@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-INSTALL-ASSOC-001",
+  "title": "HKLM file association registry for MSI",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Per-machine HKLM Software\\Classes ProgIds, DefaultIcon, shell\\open\\command with quoted exe and %1, OpenWithProgids, Capabilities FileAssociations, and RegisteredApplications. Do not claim .bin or .rom.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

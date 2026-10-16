@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-LIB-001",
+  "title": "Emulator Core as a Reusable Library with UI Shells as Thin Consumers",
+  "status": "pending",
+  "priority": "high",
+  "body": "The ViceSharp emulator core shall be packaged as a standalone .NET library (NuGet package) with no dependencies on any UI framework, windowing system, or platform-specific API. UI applications (desktop, web, headless test harness, embedded) consume the library and provide their own rendering, audio output, and input handling through well-defined abstractions.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

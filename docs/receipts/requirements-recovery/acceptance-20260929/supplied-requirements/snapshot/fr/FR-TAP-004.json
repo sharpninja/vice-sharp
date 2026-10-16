@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TAP-004",
+  "title": "Tape Write Support",
+  "status": "pending",
+  "priority": "low",
+  "body": "The emulator shall support writing data to tape images via the datasette write line. The write signal from the VIA/CIA generates pulses that are recorded to the TAP file with correct timing.\n\n## Acceptance Criteria\n- The tape write line output generates pulses whose timing is captured.\n- Written pulses are stored in TAP format with correct timing values.\n- The standard Commodore SAVE routine produces valid tape data.\n- Writes can be appended to existing TAP files or written to new files.\n- The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -30,6 +30,23 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-AIREVIEW-ROUTING-001
+
+**Auditable Astra xhigh AI review routing** — Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.
+Support AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.
+Remove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.
+Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.
+Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.
+**Covered by:** FR: FR-AIREVIEW-ROUTING-001; TEST: TEST-AIREVIEW-ROUTING-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.
+- [ ] Support AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.
+- [ ] Remove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.
+- [ ] Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.
+- [ ] Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.
+
 ## TR-ALLOC-001
 
 **Zero Managed Allocations Per Emulation Cycle on Hot Path** — Sustained managed emulation hot paths, including IMachine.RunFrame for C64 PAL, must avoid per-frame managed allocations so 50 Hz operation does not create GC pressure.
@@ -38,6 +55,21 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes)
 - [x] BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark. (evidence: BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation)
+
+## TR-BASELINE-CORRECTNESS-001
+
+**Approved baseline regression repairs** — BasicBus unregister and unmapped-write tests preserve the intentional open-bus latch values 0x55 and 0xBB. Native-shim users follow the NativeVice collection convention.
+Repair cycle-2078 snapshot branch-timing divergence using a minimal pinned-VICE-referenced instruction sequence for taken, untaken and page-crossing branches on C64 and VIC-20.
+Keep the 5000-cycle snapshot fixture unchanged and require standalone and post-native-lifecycle success. Preserve passing performance/prefetch behavior.
+Trace acceptance coverage before removing obsolete prefetch quarantine. Replace obsolete renderer assertions with equivalent cycle-aware tests before retirement. Move intentionally failing manual diagnostics to an explicit diagnostic tool, never hide actual product failures.
+**Covered by:** FR: FR-COMPLETION-001, FR-NATIVERESIDUE-001, FR-VIC20-002; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-COMPLETION-001, TEST-REMOTE-INTEGRATION-001, TEST-UI-COREBOUNDARY-001, TEST-DEPS-202607-001, TEST-NATIVERESIDUE-001, TEST-UISET-001, TEST-UISET-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] BasicBus unregister and unmapped-write tests preserve the intentional open-bus latch values 0x55 and 0xBB. Native-shim users follow the NativeVice collection convention.
+- [ ] Repair cycle-2078 snapshot branch-timing divergence using a minimal pinned-VICE-referenced instruction sequence for taken, untaken and page-crossing branches on C64 and VIC-20.
+- [ ] Keep the 5000-cycle snapshot fixture unchanged and require standalone and post-native-lifecycle success. Preserve passing performance/prefetch behavior.
+- [ ] Trace acceptance coverage before removing obsolete prefetch quarantine. Replace obsolete renderer assertions with equivalent cycle-aware tests before retirement. Move intentionally failing manual diagnostics to an explicit diagnostic tool, never hide actual product failures.
 
 ## TR-CHIPSTATE-CAPTURE-001
 
@@ -48,6 +80,25 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A captured tick carries each device's StateSize bytes; capture allocates nothing on the hot path
 - [x] Snapshot deep-copies chip state so ring reuse cannot corrupt an earlier snapshot
+
+## TR-COMPLETION-MANIFEST-001
+
+**Exhaustive approved-work completion evidence** — Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.
+Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.
+Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.
+Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.
+Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.
+Prove actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only validation processes started by this work.
+**Covered by:** FR: FR-COMPLETION-001; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-COMPLETION-001, TEST-REMOTE-INTEGRATION-001, TEST-UI-COREBOUNDARY-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.
+- [ ] Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.
+- [ ] Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.
+- [ ] Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.
+- [ ] Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.
+- [ ] Prove actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only validation processes started by this work.
 
 ## TR-CORE-CYCLE-001
 
@@ -79,6 +130,13 @@ Scope: layer-1+
 - [ ] ICpu exposes a per-instance ExecutedCycles counter and TargetClockHz.
 - [ ] MachineState carries a per-CPU breakdown (id, executedCycles, targetHz) for host and peripheral CPUs.
 
+## TR-CTX-001
+
+**Resolve is pure/deterministic** — Resolve is pure/deterministic. Acceptance: verified by TEST-CTX-001.
+**Covered by:** FR: FR-CTX-001, FR-CTX-002, FR-CTX-003, FR-CTX-004, FR-SYSBTN-002, FR-SYSBTN-003, FR-SYSBTN-007; TEST: TEST-CTX-001
+**Status:** pending
+Scope: layer-1+
+
 ## TR-CYCLE-001
 
 **VIC-II cycle counter frame-periodic** — Managed VIC-II CycleCounter advances by exactly 19,656 per PAL frame. VICE vicii-cycle.c:576-598.
@@ -89,7 +147,7 @@ Scope: layer-1+
 ## TR-DEPS-202607-001
 
 **Dependency currency policy (2026-07 upgrade wave)** — Every NuGet dependency tracks the highest STABLE version mutually compatible with net10.0 and all other dependencies; Directory.Packages.props (CPM) is the single version source for all projects including tests/ViceSharp.AiReview.Tests; all packages resolve from nuget.org when published there (vendored nuget-local feed retires once SharpNinja.aiUnit and SharpNinja.Avalonia.RemoteControl.* map to nuget.org). Prereleases excluded. Locked targets and ceiling evidence recorded in the approved 2026-07-08 upgrade plan.
-**Covered by:** FR: FR-NATIVERESIDUE-001; TEST: TEST-DEPS-202607-001, TEST-NATIVERESIDUE-001
+**Covered by:** FR: FR-NATIVERESIDUE-001; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-DEPS-202607-001, TEST-NATIVERESIDUE-001
 **Status:** completed
 Scope: layer-1+
 
@@ -109,10 +167,62 @@ Scope: layer-1+
 **Status:** closed
 Scope: layer-1+
 
+## TR-DRV-FDD-001
+
+**MFM floppy drive model port** — MfmFloppyDrive.cs ports native fdd.c: init state write_protect=1, disk_change=1, rate=2, tracks=83 (:92-115); CRC-1021 table (:117-135); raw-track build (:435-557: 6250-byte track, D81 ISO layout gap2=22 gap3=35 sector_size=2 head_invert=1 image_sectors=40 per :192-209); flush-back parser (:265-433); Rotate (:559-576); Read/Write with the 0x100 sync-mark ninth bit (:626-680); SeekPulse clamped 0..83 with current_half_track=(track+1)*2 (:690-727). Buffers allocated once at image attach; Read/Write/Rotate zero-allocation. IMfmDiskImage span-based sector access implemented by D81Image.
+**Status:** pending
+Scope: layer-1+
+
 ## TR-DRVLIFE-001
 
 **Drive attach/detach lifecycle** — Enabling a drive creates/starts the drive instance, registers it on the clock and connects it to the always-on IEC bus; disabling stops it, unregisters from the clock and disconnects from the bus.
 **Covered by:** FR: FR-DRVLED-001, FR-DRVTRUE-001, FR-IECLOAD-001; TEST: TEST-DRVLED-001, TEST-DRVTRUE-001, TEST-DRVLIFE-001, TEST-IECELEC-001, TEST-IECLOAD-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-DRV-PACE-001
+
+**Drive pacing via native 16.16 accumulator** — SystemCoordinator.SynchronizePeripheralSystemsToHost replaces the linear hostCycles*driveHz/hostRate target with native drivecpu.c:381-394 semantics: per peripheral (lastHostCycles, ulong cycleAccum); cycleAccum += syncFactor*delta; target += cycleAccum>>16; cycleAccum &= 0xFFFF; syncFactor = multiplier * floor(65536*driveHz/hostHz) per drivesync.c:41-57. The 1571 exposes a runtime clock multiplier (IDriveClockMultiplier, VIA1 PA bit 5) applied at the next sync; the 1581 runs at its fixed 2 MHz descriptor frequency. Reset re-anchors the accumulator to 0. Witness: managed pacer target equals native vice_drivecpu_get_clk at every 19,656-cycle sample.
+**Status:** pending
+Scope: layer-1+
+
+## TR-DRV-WD1770-001
+
+**WD1770 FDC statement-for-statement port** — New chip directory src/ViceSharp.Chips/Fdc/. Wd1770.cs ports native wd1770.c exactly: commands/status (:68-140), state (:142-167), lazy catch-up Execute() microcode (:204-817) that runs only at register access (no per-cycle tick), store/read/peek (:821-922), reset (:931-941), SetSide/SetMotor/DiskChange (:983-996), register decode & 3. Constants: clock_frequency=2 always, is1772=0, dden=0 (no runtime setter in native). Timing: PREPARE=48, BYTE_RATE=64 drive-cycles/byte, SETTLING=60000, STEP_RATE table per :54-63. The IRQ output stays internal state (native never wires it to the drive CPU). POCO state mirroring the native snapshot list; IStatefulDevice; zero-allocation hot ops.
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-001
+
+**Portable input lib, zero Windows.*** — Portable net10.0 lib, zero Windows.* reference, IsAotCompatible/TreatWarningsAsErrors clean. Acceptance: verified by TEST-GAMEPAD-001 / harness build.
+**Covered by:** FR: FR-GAMEPAD-009; TEST: TEST-CTX-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-002
+
+**XboxJoystickMapper pure, hysteresis threaded** — XboxJoystickMapper pure, no static mutable state/IO/clock, hysteresis threaded. Acceptance: verified by TEST-GAMEPAD-001.
+**Covered by:** FR: FR-GAMEPAD-001, FR-GAMEPAD-002, FR-GAMEPAD-003, FR-GAMEPAD-004, FR-GAMEPAD-005, FR-GAMEPAD-006; TEST: TEST-GAMEPAD-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-003
+
+**Explicit Joystick1/Joystick2 only** — Explicit InputPort.Joystick1/Joystick2 only, never PrimaryJoystick. Acceptance: verified by TEST-GAMEPAD-001.
+**Covered by:** FR: FR-GAMEPAD-007; TEST: TEST-GAMEPAD-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-004
+
+**Device add/remove drained inside Tick** — Device add/remove drained on the emulation thread inside Tick. Acceptance: verified by TEST-GAMEPAD-001.
+**Covered by:** FR: FR-GAMEPAD-008; TEST: TEST-GAMEPAD-001, TEST-GAMEPAD-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-005
+
+**Delta emission only on change** — Delta emission only on change. Acceptance: verified by TEST-GAMEPAD-001.
 **Status:** pending
 Scope: layer-1+
 
@@ -126,6 +236,13 @@ Scope: layer-1+
 - [ ] Status, media, command, monitor, and settings requests remain DTO-only across the host protocol boundary.
 - [ ] The status DTO includes IEC activity telemetry without removing existing status fields.
 - [ ] gRPC service adapters and the Avalonia gRPC client preserve IEC activity telemetry on status round trips.
+
+## TR-HOST-PRG-001
+
+**Host-owned PRG memory load over the gRPC emulator host contract** — PRG drop loading belongs to the emulator host, not Avalonia ViewModels. EmulatorHost.LoadProgram is the versioned RPC. The host reads the PRG (file path and/or payload), writes the payload through the session machine bus, decides BASIC-start from live TXTTAB ($2B/$2C) for the current machine and VIC-20 memory config (not a hardcoded C64 $0801), updates BASIC pointers only on that match, and queues HostKeyboardAutomation BASIC RUN (KERNAL keyboard buffer) when RUN is required. READY is scanned from KERNAL HIBASE ($0288) so VIC-20 unexpanded $1E00 and +8K $1000 work as well as C64 $0400. UI shells call IHostProtocolClient.LoadProgramAsync and must not poke Core devices.
+**Covered by:** FR: FR-UIDROP-002; TEST: TEST-UIDROP-002
+**Status:** pending
+Scope: layer-1+
 
 ## TR-HOST-STATUS-001
 
@@ -173,6 +290,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-INPROC-001
+
+**Portable lib, no ASP.NET FrameworkReference** — Portable net10.0 lib, IsAotCompatible, no ASP.NET FrameworkReference. Acceptance: verified by TEST-INPROC-001.
+**Covered by:** FR: FR-INPROC-001; TEST: TEST-INPROC-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-002
+
+**XboxManagedFrameGate zero P/Invoke, idempotent** — XboxManagedFrameGate zero P/Invoke, no aux timer thread, idempotent Start/Stop. Acceptance: verified by TEST-INPROC-003.
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-003
+
+**Pacing does not affect emulated cycle results** — Pacing does not affect emulated cycle results; deterministic advance bit-exact. Acceptance: verified by TEST-INPROC-002.
+**Covered by:** FR: FR-INPROC-002, FR-INPROC-003; TEST: TEST-INPROC-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-004
+
+**Single unpinned pump worker** — Single unpinned pump worker, VICESHARP_EMU_CPU unset -> AppliedWorkerAffinityMask==null. Acceptance: verified by TEST-INPROC-002.
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-005
+
+**One managed pacing gate; audio decoupled ring** — One managed pacing gate; audio decoupled via ring buffer, SubmitSamples non-blocking, Pause() unparks the worker (supersedes TR-XPACE; single gate). Acceptance: verified by TEST-INPROC-003, TEST-XAUDIO-004.
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MED-FFMPEG-001
 
 **FfmpegVideoRecorder over two loopback TCP sockets** — External ffmpeg process fed raw BGRA + s16le via BackgroundByteWriter; mirrors VICE ffmpegexedrv. Pre-connect audio buffered + flushed.
@@ -199,6 +348,23 @@ Scope: layer-1+
 **TR-MVVM-001** — Placeholder requirement backfilled for TODO link TR-MVVM-001.
 **Status:** pending
 Scope: layer-1+
+
+## TR-NATIVE-LIFECYCLE-001
+
+**Bounded and isolated native oracle lifecycle** — Oracle sound state is separate from live mixer state; no reset memset clears playback timing.
+Use absolute monotonic deadlines for create/step 5000 ms and stop 2000 ms; remove infinite waits and propagate native failure to managed callers.
+Poison belongs to the shared loaded native library, not only one wrapper instance; retain memory if its worker is still alive.
+Capture all required modified native source in the supported patch against the pinned clean native gitlink; retain patch/build and loaded-DLL SHA256 receipts.
+Audio comparisons require identical sample counts and complete PCM sequences; truncated Math.Min comparisons cannot establish parity.
+**Covered by:** FR: FR-NATIVE-LIFECYCLE-001, FR-VIC20-SOUND-001; TEST: TEST-NATIVE-LIFECYCLE-001, TEST-VIC20-SOUND-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Oracle sound state is separate from live mixer state; no reset memset clears playback timing.
+- [ ] Use absolute monotonic deadlines for create/step 5000 ms and stop 2000 ms; remove infinite waits and propagate native failure to managed callers.
+- [ ] Poison belongs to the shared loaded native library, not only one wrapper instance; retain memory if its worker is still alive.
+- [ ] Capture all required modified native source in the supported patch against the pinned clean native gitlink; retain patch/build and loaded-DLL SHA256 receipts.
+- [ ] Audio comparisons require identical sample counts and complete PCM sequences; truncated Math.Min comparisons cannot establish parity.
 
 ## TR-PACESEL-STRAT-001
 
@@ -257,12 +423,50 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
-## TR-REMOTECTRL-SERVER-001
+## TR-REMOTECTRL-CLI-001
 
-**Embeddable RemoteControl server integration + vendored feed** — ViceSharp.Avalonia references SharpNinja.Avalonia.RemoteControl.Server (0.7.3), vendored into a repo-local NuGet feed (nuget-local/ + NuGet.config package source mapping) so restore is reproducible on Azure DevOps/CI without the sibling source repo. The Avalonia App builds a DI ServiceCollection, calls AddAvaloniaRemoteControl, registers an IRemoteControlRootProvider returning the desktop MainWindow, and attaches the host to the classic-desktop lifetime. Startup is gated behind VICESHARP_REMOTECONTROL_ENABLE and fails closed without a bearer token. Requires Avalonia >= 12.0.3 and Grpc >= 2.80.0 (central package versions bumped accordingly).
-**Covered by:** FR: FR-REMOTECTRL-001; TEST: TEST-REMOTECTRL-001
+**Portable RemoteControl gRPC command line** — Use published SharpNinja Avalonia RemoteControl Protocol 0.7.4 matching the embedded Server 0.7.4, its generated gRPC client and the existing Grpc.Net.Client dependency.
+Own and dispose the channel; propagate bearer metadata and cancellation with bounded calls.
+Add CLI and test projects to ViceSharp.slnx and the exhaustive CompletionTest manifest.
+Calculate effective visibility through ancestors and validate malformed references/cycles rather than assuming a matching node is actionable.
+Validate frame data before writing PNG output and retain machine-readable response/error contracts.
+**Covered by:** FR: FR-REMOTECTRL-001, FR-REMOTECTRL-CLI-001; TEST: TEST-COMPLETION-001, TEST-REMOTECTRL-001, TEST-REMOTECTRL-CLI-001
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Use published SharpNinja Avalonia RemoteControl Protocol 0.7.4 matching the embedded Server 0.7.4, its generated gRPC client and the existing Grpc.Net.Client dependency.
+- [ ] Own and dispose the channel; propagate bearer metadata and cancellation with bounded calls.
+- [ ] Add CLI and test projects to ViceSharp.slnx and the exhaustive CompletionTest manifest.
+- [ ] Calculate effective visibility through ancestors and validate malformed references/cycles rather than assuming a matching node is actionable.
+- [ ] Validate frame data before writing PNG output and retain machine-readable response/error contracts.
+
+## TR-REMOTECTRL-SERVER-001
+
+**Embeddable RemoteControl 0.7.4 integration** — Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.
+Use AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.
+Preserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.
+**Covered by:** FR: FR-REMOTECTRL-001; TEST: TEST-COMPLETION-001, TEST-REMOTECTRL-001, TEST-REMOTECTRL-CLI-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.
+- [ ] Use AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.
+- [ ] Preserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.
+
+## TR-REMOTE-INTEGRATION-001
+
+**Existing RomM and CSDb integration gate** — Use existing RomM http://192.168.0.148:8080/ and CSDb bridge http://192.168.0.148:8090/; do not substitute or start the stopped local stack.
+Provision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service.
+Fixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests.
+Authenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests.
+**Covered by:** FR: FR-COMPLETION-001, FR-CSDB-001, FR-ROMM-BROWSE-001, FR-ROMM-COLLECT-001, FR-ROMM-CONN-001, FR-ROMM-LAUNCH-001; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-COMPLETION-001, TEST-REMOTE-INTEGRATION-001, TEST-UI-COREBOUNDARY-001, TEST-ROMM-SEC-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Use existing RomM http://192.168.0.148:8080/ and CSDb bridge http://192.168.0.148:8090/; do not substitute or start the stopped local stack.
+- [ ] Provision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service.
+- [ ] Fixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests.
+- [ ] Authenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests.
 
 ## TR-REVEXEC-001
 
@@ -270,6 +474,56 @@ Scope: layer-1+
 **Covered by:** FR: FR-REVEXEC-001; TEST: TEST-REVEXEC-001, TEST-SNAPFULL-001
 **Status:** pending
 Scope: layer-1+
+
+## TR-ROMM-BOUNDARY-001
+
+**Adapter isolates HTTP from the VM library** — PLAN-ROMM-001. All HTTP/RomM.Client access lives in ViceSharp.RomM; ViceSharp.Library.ViewModels has no System.Net.Http reference and references only ViceSharp.Protocol. Verified by LibraryViewModelsBoundaryTests.NoHttp (covers AC-PKG-03).
+**Status:** pending
+Scope: layer-1+
+
+## TR-ROMM-JSON-001
+
+**Source-gen JSON for all new adapter DTOs** — PLAN-ROMM-001. 100% of new adapter DTOs (Collections/Search/cover/char_index/pairing) serialize and deserialize reflection-free via RomMJsonContext (satisfies IsAotCompatible/EnableTrimAnalyzer/TreatWarningsAsErrors). Verified by RomMJsonContextTests.AllTypes_SourceGen.
+**Status:** pending
+Scope: layer-1+
+
+## TR-ROMM-NUGET-001
+
+**nuget.org-only package resolution** — PLAN-ROMM-001. RomM.Client 1.0.0 and RomM.Client.Csdb 1.0.0 resolve from nuget.org only; NuGet.config stays clear + nuget.org; packages pinned in Directory.Packages.props (CPM). Verified by NuGetConfigTests + DirectoryPackagesTests.RommPinned.
+**Status:** pending
+Scope: layer-1+
+
+## TR-ROMM-SEC-001
+
+**RomM trusted-boundary protection** — Public covers use an anonymous client; bearer auth is restricted to server-relative RomM cover paths. ROM filenames and resolved cache destinations are contained, downloaded through a temporary file, expected-size validated, and atomically published. Windows file-backed tokens use current-user DPAPI with atomic legacy-plaintext migration; unsupported operating systems fail closed.
+**Covered by:** FR: FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001; TEST: TEST-REMOTE-INTEGRATION-001, TEST-ROMM-SEC-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-ROMM-THREAD-001
+
+**Captured-SynchronizationContext PropertyChanged dispatch** — PLAN-ROMM-001. LibraryObservableObject posts PropertyChanged off-context to the captured UI SynchronizationContext and raises inline when already on-context, preventing RPC_E_WRONG_THREAD in UWP XAML binding. Verified by LibraryObservableObjectTests.Dispatch (covers AC-BROWSE-08).
+**Status:** pending
+Scope: layer-1+
+
+## TR-SETTINGS-TXN-001
+
+**Truthful transactional Settings state** — Add SettingsStateDto(Active, Accepted) and optional State on settings responses; preserve existing DTO fields and protobuf tags, using GetSettingsResponse.state=3 and UpdateSettingsResponse.state=4.
+Prepare a fully configured replacement with media restored before publication; candidate cleanup produces no writeback or success notifications.
+Commit under existing synchronization, defer publication until success, and roll back runtime/session/pump state on failure. Do not swallow attachment exceptions.
+UpdateSettings honors Limiter.IsEnabled=false atomically and the view model makes no second Warp RPC for Apply.
+A single synchronization path handles initial state, refresh, Apply response, Revert and persistence; perform field-wise three-way merge against Accepted.
+Preserve existing field and standalone-control compatibility. Detect absent State explicitly rather than fabricating Active/Accepted truth.
+**Covered by:** FR: FR-MACHINEPICKER-001, FR-SETTINGS-TXN-001, FR-UISETVIS-001, FR-VIC20-002, FR-VIC20-005, FR-WARP-001; TEST: TEST-SETTINGS-TXN-001, TEST-UISET-003, TEST-BASELINE-CORRECTNESS-001, TEST-UISET-001, TEST-UISET-002, TEST-VIC20-FLASH-001, TEST-COMPLETION-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Add SettingsStateDto(Active, Accepted) and optional State on settings responses; preserve existing DTO fields and protobuf tags, using GetSettingsResponse.state=3 and UpdateSettingsResponse.state=4.
+- [ ] Prepare a fully configured replacement with media restored before publication; candidate cleanup produces no writeback or success notifications.
+- [ ] Commit under existing synchronization, defer publication until success, and roll back runtime/session/pump state on failure. Do not swallow attachment exceptions.
+- [ ] UpdateSettings honors Limiter.IsEnabled=false atomically and the view model makes no second Warp RPC for Apply.
+- [ ] A single synchronization path handles initial state, refresh, Apply response, Revert and persistence; perform field-wise three-way merge against Accepted.
+- [ ] Preserve existing field and standalone-control compatibility. Detect absent State explicitly rather than fabricating Active/Accepted truth.
 
 ## TR-SID-AMPLIFY-001
 
@@ -333,6 +587,34 @@ Scope: layer-1+
 - [x] EvaluateSound returns BackPressure at or over high-water, Advance below, NotTimingSource when inactive
 - [x] Gate Tick selects Sound/Vsync/Warp and exposes it via LastRegulator
 
+## TR-SYSBTN-001
+
+**Portable lib, no WinRT/ASP.NET, zero reflection** — Portable lib (no WinRT/ASP.NET, IsAotCompatible, zero reflection). Acceptance: verified by TEST-SYSBTN-001.
+**Covered by:** FR: FR-SYSBTN-001; TEST: TEST-SYSBTN-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-SYSBTN-002
+
+**Edge-triggered activation (Press/Hold/Toggle)** — Edge-triggered activation (Press once/Hold paired/Toggle). Acceptance: verified by TEST-SYSBTN-001.
+**Covered by:** FR: FR-SYSBTN-005; TEST: TEST-SYSBTN-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-SYSBTN-003
+
+**Source-gen JsonSerializerContext persistence** — Source-gen JsonSerializerContext persistence, no reflection. Acceptance: verified by TEST-SYSBTN-003.
+**Covered by:** FR: FR-SYSBTN-008; TEST: TEST-SYSBTN-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-SYSBTN-004
+
+**State-mutating dispatch marshaled to session lock** — State-mutating dispatch marshaled onto the session lock, not the input thread. Acceptance: verified by TEST-SYSBTN-002.
+**Covered by:** FR: FR-SYSBTN-004, FR-SYSBTN-006; TEST: TEST-SYSBTN-002
+**Status:** pending
+Scope: layer-1+
+
 ## TR-SYS-SCHED-001
 
 **Single-worker interleave scheduling with IEC bus-event sync** — One emulation worker interleaves systems with per-system deficit pacing and resynchronizes at InterSystemBus.LineChanged; lazy sync-on-IEC-access retained as the fine-grained backstop.
@@ -355,6 +637,27 @@ Scope: layer-1+
 **Datasette motor 32,000-cycle ramp before pulse delivery** — Datasette.Tick() enforces 32,000-cycle motor ramp (MOTOR_DELAY=32000, datasette/datasette.c:62) before TryReadNextPulse delivers pulses. Ramp only activates when Tick() is used as timing. Motor off resets ramp.
 **Covered by:** FR: BACKFILL-MEDIA-001, RUNTIME-TAPE-002; TEST: TEST-DRV-MOTOR-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001
 **Status:** closed
+Scope: layer-1+
+
+## TR-TESTGATE-001
+
+**Category=Xbox tests are non-skipping** — Xbox off-console tests use plain [Fact]/[Theory] + [Trait("Category","Xbox")], never [ViceFact]/Assert.Skip, so Category=Xbox is genuinely non-skipping. Acceptance: verified by XboxTestConventionTests.
+**Covered by:** FR: FR-TESTGATE-002; TEST: TEST-TESTGATE-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-TESTGATE-003
+
+**Documented gate command set** — The gate command set is dotnet build slnx + scoped dotnet test + dotnet publish AOT + a documented on-console checklist. Acceptance: verified by TEST-TESTGATE-009.
+**Covered by:** FR: FR-TESTGATE-001, FR-TESTGATE-003; TEST: TEST-TESTGATE-008, TEST-TESTGATE-009
+**Status:** pending
+Scope: layer-1+
+
+## TR-TESTGATE-004
+
+**Head validated by raw-file-read** — Head validated by raw-file-read (harness references the portable libs, not the head). Acceptance: verified by slice audit / TEST-TESTGATE-010.
+**Covered by:** FR: FR-TESTGATE-004; TEST: TEST-TESTGATE-010
+**Status:** pending
 Scope: layer-1+
 
 ## TR-TICKHIST-CAPTURE-001
@@ -404,9 +707,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-UIAXAML-PICKER-001
+
+**Avalonia Computer/Model picker binds like Xbox** — AttachPanelViewModel mirrors XboxSettingsViewModel Computers/Models/SelectedComputer/SelectedModel using host SettingsProfileDto.Machine as family key (x64sc, xvic). SettingsView.axaml replaces the single Settings.MachineProfile ComboBox with Settings.Computer and Settings.MachineVariant. IsVic20Selected remains family xvic.
+**Covered by:** FR: FR-MACHINEPICKER-001, FR-UISETVIS-001; TEST: TEST-SETTINGS-TXN-001, TEST-UISET-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] ViewModel tests cover Computers list, Models filter, family switch default profile, PAL/NTSC keeps Models instance.
+
 ## TR-UIAXAML-VIEWS-001
 
 **All Avalonia views authored in AXAML + MVVM** — Every Avalonia view in ViceSharp.Avalonia is authored declaratively in AXAML with MVVM bindings (no imperative control-tree construction in code-behind), to ease maintenance. The shell window, the sidebar, each per-peripheral control, and the settings panel are AXAML UserControls/Windows bound to view models; code-behind is limited to InitializeComponent and thin glue.
+**Covered by:** FR: FR-UISETTINGS-001; TEST: TEST-UI-COREBOUNDARY-001, TEST-UISET-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-UI-COREBOUNDARY-001
+
+**Avalonia flash-cart builder abstraction boundary** — Own flash-cart builder interfaces in Abstractions and supply a Host composition factory/private adapter; Avalonia C# and AXAML do not depend on Core flash-cart types.
+Preserve existing Core/Xbox public APIs and observable collection/property-change behavior.
+**Covered by:** FR: FR-COMPLETION-001, FR-UISETTINGS-001; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-COMPLETION-001, TEST-REMOTE-INTEGRATION-001, TEST-UI-COREBOUNDARY-001, TEST-UISET-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Own flash-cart builder interfaces in Abstractions and supply a Host composition factory/private adapter; Avalonia C# and AXAML do not depend on Core flash-cart types.
+- [ ] Preserve existing Core/Xbox public APIs and observable collection/property-change behavior.
+
+## TR-UI-DEVART-001
+
+**Device art SVG-to-XAML pipeline and resource-key contract** — Device art is authored as constrained SVGs in assets-src/device-art/ (viewBox required; svg/g/path/rect/circle/ellipse only; no transforms/gradients/filters/text; fills from 6 placeholder hexes) and shipped exclusively as one generated merged ResourceDictionary src/ViceSharp.Avalonia/Assets/DeviceArt/DeviceArt.axaml of DrawingImage resources under the DeviceArt.* key contract, produced by tools/generate-device-art.py (Python stdlib only, deterministic output, per-source sha256 sync comments over CRLF-normalized bytes). No runtime SVG dependency; normal builds and CI never invoke Python; generated output must stay hash-synced to its sources (test-enforced). Placeholder colors map to shared DeviceArt*Brush resources tuned to the dark palette.
 **Status:** pending
 Scope: layer-1+
 
@@ -420,6 +750,31 @@ Scope: layer-1+
 - [ ] The shell has status bar and peripherals sidebar surfaces that display IEC activity.
 - [ ] ViewModels consume host client abstractions and DTOs rather than emulator internals.
 - [ ] ViewModel tests cover peripherals and status active-to-idle IEC transitions.
+
+## TR-VIC20-FLASH-001
+
+**Cycle-driven TYPE_B flash and atomic persistence** — Flash040Core exposes AdvanceCycles and the VIC-20 machine clock advances it. TYPE_B timeout/sector/chip budgets, busy reads, cancel, suspend, and resume are deterministic. Expansion-cart dirty payloads remain type-correct; host detach uses a same-directory temporary file and atomic replacement.
+**Covered by:** FR: FR-VIC20-005; TEST: TEST-SETTINGS-TXN-001, TEST-VIC20-FLASH-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-VIC20-PIXEL-001
+
+**Pixel compare path index-primary then BGRA** — Managed and xvic expose normal-border index/BGRA buffers at a common sync point. READY PAL/NTSC/busy index SequenceEqual is Exact-scoped. READY PAL, READY NTSC, and busy PAL native BGRA SequenceEqual vs xvic capture_visible_frame is also Exact-scoped (canvas RGB, opaque alpha; NTSC unpainted clamp rows opaque black). Other border modes remain Partial. Not whole-machine Exact.
+**Covered by:** FR: FR-VIC20-001, FR-VIC20-002; TEST: TEST-VIC20-001, TEST-BASELINE-CORRECTNESS-001, TEST-UISET-001, TEST-UISET-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Managed index and BGRA buffers match xvic canvas geometry (evidence: Vic20PixelLockstep geometry)
+- [x] Compare sync point defined and used by all pixel tests (evidence: TryCaptureVisibleFrame + FrameBuffer SequenceEqual)
+- [x] Index compare is Exact-scoped for READY PAL/NTSC/busy; BGRA SequenceEqual is Exact-scoped for the same named captures after canvas palette match (evidence: six isolated Vic20PixelLockstep facts)
+
+## TR-VIC20-SOUND-001
+
+**Deterministic clocked VIC-I PCM batching** — Mos6561 owns one machine-agnostic Vic20Sound engine. System-clock advancement produces deterministic PCM16 mono and dispatches 256-sample batches without per-store allocation. Native parity is scoped to the covered silence and tone inputs.
+**Covered by:** FR: FR-VIC20-SOUND-001; TEST: TEST-NATIVE-LIFECYCLE-001, TEST-VIC20-SOUND-001
+**Status:** pending
+Scope: layer-1+
 
 ## TR-VIC-EDGE-001
 
@@ -466,10 +821,202 @@ Scope: layer-1+
 ## TR-VSFLOCKSTEP-RESUME-001
 
 **Backward-compatible snapshot module read and VIC-II model alignment** — maincpu_snapshot_read_module (mainc64cpu.c, the single-cycle reader used by x64sc) version-guards ane_log_level/lxa_log_level (module >= v1.3) and maincpu_jammed (>= v1.4) so v1.2 MAINCPU modules from an older x64sc resume without overrunning; ba_low_flags stays the last field before the interrupt sub-modules. The shim (vice-shim.c) pre-scans the snapshot's VIC-II model byte and sets the VICIIModel resource before machine_read_snapshot (6569 vs 8565 are both PAL, so SID type is unchanged) and normalises snapshot_last_error to 0 on a successful read. The mainc64cpu.c change is carried in native/patches/vice-shim-runtime.patch so it survives a fresh submodule checkout.
-**Covered by:** FR: FR-NATIVERESIDUE-001, FR-VSFLOCKSTEP-001; TEST: TEST-DEPS-202607-001, TEST-NATIVERESIDUE-001, TEST-VSFLOCKSTEP-001
+**Covered by:** FR: FR-NATIVERESIDUE-001, FR-VSFLOCKSTEP-001; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-DEPS-202607-001, TEST-NATIVERESIDUE-001, TEST-VSFLOCKSTEP-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] A v1.2 MAINCPU module resumes (ane/lxa/jammed skipped by version) and a current v1.4 module is unaffected; verified by full external-.vsf load and the unchanged round-trip test.
 - [ ] The fix is reproduced by build-vice-shim.sh applying vice-shim-runtime.patch (reverse-apply check passes against the working tree).
+
+## TR-WARP-STATUS-001
+
+**Host status DTO emits warp as rate 0 and live CLOCK percent** — ToStatusDto emits LimiterRatePercent 0 when LimiterEnabled is false so the status bar can show WARP. EffectiveClockPercent is computed from sampled EffectiveClockHz over MasterClockHz. Warp must push audio relative speed to the live-audio ceiling so VIC-I sound render does not pin CLOCK at 100 percent.
+**Covered by:** FR: FR-WARP-001; TEST: TEST-COMPLETION-001, TEST-SETTINGS-TXN-001, TEST-UISET-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] ToStatusDto emits LimiterRatePercent 0 when LimiterEnabled is false.
+- [ ] GetStatus after warp reports EffectiveClockPercent greater than 150 in WarpModeTests and live RC dumps.
+
+## TR-XAUDIO-001
+
+**XAudio2 backend Native-AOT + AppContainer safe** — XAudio2 backend Native-AOT + AppContainer safe (no winmm/kernel32/reflection, DisableRuntimeMarshalling-compatible blittable interop). Acceptance: verified by TEST-XAUDIO-001/002.
+**Covered by:** FR: FR-XAUDIO-001, FR-XAV-001; TEST: TEST-XAUDIO-DEVICE, TEST-XAUDIO-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XAUDIO-002
+
+**Audio decoupled via lock-free ring buffer** — Audio decoupled via lock-free ring buffer; SubmitSamples non-blocking; no audio-as-clock back-pressure; Pause unblocks. Acceptance: verified by TEST-XAUDIO-004.
+**Covered by:** FR: FR-XAUDIO-003; TEST: TEST-XAUDIO-004, TEST-XAUDIO-DEVICE
+**Status:** pending
+Scope: layer-1+
+
+## TR-XAUDIO-003
+
+**MasterAudioControl + AudioSampleConverter in Abstractions** — MasterAudioControl + AudioSampleConverter relocated to Abstractions, one master gain / one float->PCM16 shared by both backends, no behavior change. Acceptance: verified by TEST-XAUDIO-003, PortableAudioTypesLocationTests.
+**Covered by:** FR: FR-XAUDIO-002; TEST: TEST-XAUDIO-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXAOT-001
+
+**Core+Host.InProcess graph links clean under AOT** — Core+Host.InProcess graph links clean under Native AOT, 0 IL2xxx/IL3xxx. Acceptance: verified by TEST-XBOXAOT-001.
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXAOT-002
+
+**MSIX manifest declares Windows.Xbox** — ViceSharpXboxUwp=true emits an MSIX whose manifest declares Windows.Xbox. Acceptance: verified by XboxManifestTests / device.
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXAOT-003
+
+**No shipped Xbox path invokes ViceNative/WinMm P/Invoke** — No shipped Xbox path invokes ViceNative/WinMm/winmm-kernel32 P/Invoke. Acceptance: verified by TEST-XBOXAOT-001.
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXCI-005
+
+**Nuke Xbox targets absent from CI/release YAMLs** — Nuke PublishXbox/DeployXbox/ValidateXbox exist and are absent from both CI/release YAMLs; ValidateXbox runs off-console. Acceptance: verified by TEST-XBOXCI-001.
+**Covered by:** FR: FR-XBOXGPL-006; TEST: TEST-XBOXGPL-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXGPL-BRAND-001
+
+**C= logo provenance and multi-surface attribution plumbing** — Branding assets under docs/xbox/store-screenshots must derive from the Wikimedia
+Commons Commodore C= logo.svg (local SVG + rasterization). Attribution must be
+centralized in THIRD_PARTY_NOTICES.md and AboutInfo.LogoAttributionText /
+LogoSourceUrl / LogoLicenseUrl, packed into NuGet via Directory.Build.props,
+mirrored in package README files, and bound on Xbox AboutPage and Avalonia About.
+**Covered by:** FR: FR-XBOXGPL-007; TEST: TEST-XBOXGPL-002
+**Status:** completed
+Scope: layer-1+
+
+## TR-XBOXPKG-002
+
+**Conditional-TFM fallback + head-only UWP guarded** — ViceSharpXboxUwp conditional-TFM fallback + head-only UWP/XAML/manifest/MSIX guarded so a workload-less agent builds slnx. Acceptance: verified by TEST-XBOXPKG-001.
+**Covered by:** FR: FR-XBOXPKG-001, FR-XBOXPKG-003; TEST: TEST-XBOXPKG-001, TEST-XBOXPKG-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXTOPO-001
+
+**TFM-conditional fallback (default net10.0)** — TFM-conditional fallback (ViceSharpXboxUwp default false=net10.0) so slnx builds with no UWP workload. Acceptance: verified by TEST-XBOXTOPO-002.
+**Covered by:** FR: FR-XBOXTOPO-001; TEST: TEST-XBOXTOPO-001, TEST-XBOXTOPO-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXTOPO-002
+
+**Head references only core + Host.InProcess** — Head references only Abstractions/Core/Chips/Architectures + Host.InProcess (R2 amendment); bans Host/Avalonia/Protocol-Grpc/Monitor and Grpc.*/AspNetCore.*/Avalonia.*. Acceptance: verified by TEST-XBOXTOPO-001.
+**Covered by:** FR: FR-XBOXTOPO-001; TEST: TEST-XBOXTOPO-001, TEST-XBOXTOPO-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXTOPO-003
+
+**Desktop-intact regression guard** — Regression / desktop-intact guard: existing desktop + Host.Xbox scaffold + tests stay green. Acceptance: verified by TEST-TESTGATE-009.
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-001
+
+**Explicit navigation stack independent of Frame journal** — Explicit navigation stack independent of the Frame journal; overlays tracked separately. Acceptance: verified by TEST-XBOXUI-001.
+**Covered by:** FR: FR-XBOXUI-001; TEST: TEST-XBOXUI-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-002
+
+**RequiresPointer=Never + XYFocus + safe-area margin** — RequiresPointer=Never shared style + explicit XYFocus from FocusMap + 90% safe-area root margin. Acceptance: verified by TEST-XBOXUI-002a/002b.
+**Covered by:** FR: FR-XBOXUI-002; TEST: TEST-XBOXUI-002a, TEST-XBOXUI-002b
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-003
+
+**InputContext observer over single authority** — InputContext observer over the single XboxInputContext authority. Acceptance: verified by TEST-XBOXUI-003.
+**Covered by:** FR: FR-XBOXUI-003; TEST: TEST-XBOXUI-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-004
+
+**VideoSurfaceHost + pull timer constructed once** — VideoSurfaceHost + pull timer constructed once at shell level, never disposed by navigation. Acceptance: verified by TEST-XBOXUI-004.
+**Covered by:** FR: FR-XBOXUI-004; TEST: TEST-XBOXUI-004
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-005
+
+**SwapChainPanel + Win2D pull into pinned buffer** — SwapChainPanel + Win2D pull into a pinned buffer, nearest-neighbor into the TV-safe rect. Acceptance: verified by TEST-XBOXUI-005a/005b.
+**Covered by:** FR: FR-XBOXUI-005; TEST: TEST-XBOXUI-005a, TEST-XBOXUI-005b
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-006
+
+**VirtualKeyboardLayout names from C64KeyboardMap** — VirtualKeyboardLayout names from the C64KeyboardMap alias set. Acceptance: verified by TEST-XBOXUI-006.
+**Covered by:** FR: FR-XBOXUI-006; TEST: TEST-XBOXUI-006
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-007
+
+**TR-MVVM-001 applied (Abstractions + Protocol)** — = TR-MVVM-001 applied (ViewModels reference Abstractions + Protocol). Acceptance: verified by TEST-XBOXUI-007.
+**Covered by:** FR: FR-XBOXUI-007; TEST: TEST-XBOXUI-007
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-008
+
+**Fixed disclosure strings from one constants file** — Fixed disclosure strings from one constants file. Acceptance: verified by TEST-XBOXUI-008.
+**Covered by:** FR: FR-XBOXUI-008; TEST: TEST-XBOXUI-008
+**Status:** pending
+Scope: layer-1+
+
+## TR-XKBD-001
+
+**RESTORE trigger is a distinct seam path** — The RESTORE trigger is a distinct seam path; determinism preserved (pushed through the same input seam), no change to per-cycle advance. Acceptance: verified by TEST-XKBD-001.
+**Covered by:** FR: FR-XKBD-001; TEST: TEST-XKBD-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XMVVM-001
+
+**Xbox ViewModels reference only Abstractions + Protocol** — Xbox ViewModels reference only Abstractions + Protocol; UWP APIs isolated behind the head. Acceptance: verified by TEST-XBOXUI-007, boundary tests.
+**Covered by:** FR: FR-XDEV-001, FR-XDEV-002, FR-XDEV-003, FR-XSET-002, FR-XSET-003, FR-XSET-004; TEST: TEST-XSET-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XPATH-001
+
+**Startup path bridge to AppContainer writable root** — Startup path bridge makes the unmodified ViceDataPathResolver resolve the AppContainer writable root; keymap writes land in LocalFolder. Acceptance: verified by TEST-XSET-001, XboxDataPathBridgeTests.
+**Covered by:** FR: FR-XROM-001, FR-XROM-002, FR-XROM-003; TEST: TEST-XSET-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XPERSIST-001
+
+**Xbox prefs persist via ViceSettings INI** — Xbox prefs persist via the portable ViceSettings INI [ViceSharpXbox], not Avalonia SessionPersistence. Acceptance: verified by TEST-XSET-001, XboxUiStateStoreTests.
+**Covered by:** FR: FR-XSET-005; TEST: TEST-XSET-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XSET-002
+
+**SettingsOptionCatalog single-sourced in Protocol** — SettingsOptionCatalog single-sourced in Protocol, byte-identical to desktop. Acceptance: verified by TEST-XSET-001, SettingsOptionCatalogTests.
+**Covered by:** FR: FR-XSET-001; TEST: TEST-XSET-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XVIDEO-001
+
+**Win2D SwapChainPanel pure read-only sink** — Win2D SwapChainPanel pure read-only sink, BGRA passthrough, zero per-frame allocation, FrameGeometry-sized. Acceptance: verified by TEST-XVIDEO-001/002.
+**Covered by:** FR: FR-XVIDEO-001, FR-XVIDEO-002; TEST: TEST-XVIDEO-DEVICE, TEST-XVIDEO-001, TEST-XVIDEO-002
+**Status:** pending
+Scope: layer-1+
 

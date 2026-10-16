@@ -1,0 +1,39 @@
+<svg width="100%" viewBox="0 0 680 462" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Xbox game details wireframe</title>
+<desc>Ten-foot game details page: cover, metadata, description, files, slot picker and gamepad actions.</desc>
+<style>
+:root{--fg:#1a1a1a;--muted:#6a6a6a;--line:#8a8a8a;--blue:#2f6fed;--amber:#d08700;}
+@media (prefers-color-scheme:dark){:root{--fg:#f0f0f0;--muted:#9aa0a6;--line:#5a5f66;--blue:#5b8cff;--amber:#e0a200;}}
+svg{font-family:'Segoe UI',system-ui,sans-serif;}
+.c-gray rect,.c-gray circle{fill:none;stroke:var(--line);}
+.c-blue rect,.c-blue circle{fill:none;stroke:var(--blue);}
+.c-amber rect,.c-amber circle{fill:none;stroke:var(--amber);}
+text{fill:var(--fg);}
+.t{font-size:13px;fill:var(--fg);}
+.ts{font-size:11px;fill:var(--muted);}
+.th{font-size:18px;font-weight:600;fill:var(--fg);}
+</style>
+<g class="c-gray"><rect x="6" y="6" width="668" height="450" rx="12" stroke-width="0.5"/></g>
+<text class="th" x="24" y="40">Boulder Dash</text>
+<text class="ts" x="24" y="60">C64 · 1984 · Disk · First Star Software</text>
+<g class="c-gray"><rect x="24" y="76" width="200" height="200" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="124" y="180" text-anchor="middle">cover</text>
+<text class="ts" x="24" y="298">Screens</text>
+<g class="c-gray"><rect x="24" y="306" width="60" height="40" rx="6" stroke-width="0.5"/></g>
+<g class="c-gray"><rect x="94" y="306" width="60" height="40" rx="6" stroke-width="0.5"/></g>
+<g class="c-gray"><rect x="164" y="306" width="60" height="40" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="244" y="96">Genre    Action / dig</text>
+<text class="ts" x="244" y="120">Players  1-2</text>
+<text class="ts" x="244" y="144">Rating   4.6 / 5  (1,204)</text>
+<text class="ts" x="244" y="168">Size     170 KB · 1 file</text>
+<text class="ts" x="244" y="192">Added    2024-03-11</text>
+<text class="t" x="244" y="224">About</text>
+<text class="ts" x="244" y="246">Dig through caves collecting diamonds,</text>
+<text class="ts" x="244" y="264">outrun falling boulders, beat the timer.</text>
+<text class="t" x="244" y="298">Files</text>
+<g class="c-gray"><rect x="244" y="308" width="412" height="30" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="256" y="327">boulderdash.d64 · 170 KB · -> Drive 8</text>
+<g class="c-gray"><rect x="24" y="360" width="632" height="44" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="36" y="387">Slot  Drive 8 v        Status  Ready to attach</text>
+<text class="ts" x="24" y="436">(A) Attach     (Y) Attach + autostart     (X) Add to list     (B) Back</text>
+</svg>

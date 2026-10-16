@@ -1,0 +1,1 @@
+{"type":"https://httpstatuses.io/400","title":"validation_error","status":400,"detail":"Requirement id 'TEST-GUARD-TYPE-001' is not valid for kind 'tr'.","code":"validation_error","error":"validation_error","message":"Requirement id 'TEST-GUARD-TYPE-001' is not valid for kind 'tr'.","retryable":false,"details":{"reason":"validation"}}

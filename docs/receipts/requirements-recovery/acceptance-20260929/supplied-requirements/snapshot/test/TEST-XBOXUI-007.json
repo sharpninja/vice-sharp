@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXUI-007",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Boundary: ViewModels reference only Abstractions+Protocol+Xbox.Input; forbidden-identifier scan (no Core/Chips/Architectures/Host/Avalonia/Grpc/XAML).",
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,43 @@
+{"status":"available","agent":"ClaudeCode","namespaces":["workflow.sessionlog","workflow.todo","workflow.requirements","workflow.triage","workflow.graphrag","workflow.memory","workflow.failsafe"],"requirementMethods":["workflow.requirements.listLayers","workflow.requirements.createLayer","workflow.requirements.updateLayer","workflow.requirements.effective"],"requirementClientMethods":["client.Requirements.ListRequirementLayersAsync","client.Requirements.CreateRequirementLayerAsync","client.Requirements.UpdateRequirementLayerAsync","client.Requirements.GetEffectiveRequirementsAsync"],"cacheDir":"F:\\GitHub\\vice-sharp\\.mcpServer\\claude","hasSession":true,"hasCurrentTurn":true,"pendingCount":0,"pendingTurnCount":0,"failsafeDir":"F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\failsafe","failsafeCount":0,"failsafeQuarantineCount":4}
+---SESSION---
+status: verified
+sessionId: GrokCode-20260703T131501Z-mousekeyproxy-sync
+agent: GrokCode
+started: 2026-07-03T13:16:16Z
+lastUpdated: 2026-07-09T05:53:46Z
+markerFilePath: F:\GitHub\MouseKeyProxy\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-07-08T20:54:31.3402936Z
+---TURN---
+turnRequestId: req-20260703T131620Z-001-sync-logs-goal-resume
+queryTitle: /sync-logs and /goal resume for MouseKeyProxy impl
+openedAt: 2026-07-03T13:16:20Z
+status: completed
+codeEdits: 28
+lastBuildStatus: unknown
+auditActions: 25
+auditFiles: 28
+auditDialog: 0
+auditDecisions: 6
+queryText: |
+  /sync-logs and /goal resume. Reconcile the session log with work on FR-MKP-007, bidi Commands+transport, mock-only tests, commit ee767c7, then resume verification.
+auditCommits: 7
+sessionId: GrokCode-20260703T131501Z-mousekeyproxy-sync
+markerFilePath: F:\GitHub\MouseKeyProxy\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-07-08T20:54:31.3402936Z
+---INVOKE-STATUS---
+
+Name
+----
+agent-runtime-header.ps1
+cache-manager.ps1
+ensure-repl.ps1
+final-response.ps1
+Invoke-McpPlugin.ps1
+marker-resolver.ps1
+mcp-status.ps1
+plugin-env.ps1
+plugin-hook.ps1
+repl-invoke.ps1
+resolve-cache-dir.ps1
+yaml-object-mutation.ps1
+

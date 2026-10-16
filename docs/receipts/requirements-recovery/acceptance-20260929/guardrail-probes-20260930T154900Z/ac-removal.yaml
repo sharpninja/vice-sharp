@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20260930T154856Z-09d4
+  code: validation_error
+  message: Requirement 'FR-VIC-001' removes acceptance criteria.
+  retryable: false
+  details:
+    methodName: workflow.requirements.planRecovery
+    exceptionType: System.ArgumentException
+    reason: validation
+
+---
+

@@ -1,0 +1,686 @@
+v1.2.1
+HEAD is now at 3b20c4f release: bump patch to 1.2.1 on main
+=== PublishNuget ===
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬═════════════════
+║ PublishNuget
+╬════════
+​
+11:34:03 [INF] > "C:\Program Files\Git\cmd\git.exe" tag --points-at HEAD
+11:34:03 [INF] > "C:\Program Files\Git\cmd\git.exe" tag --points-at HEAD
+11:34:03 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\vice-sharp\src\ViceSharp.Core.Package\ViceSharp.Core.Package.csproj --configuration Debug
+11:34:04 [DBG]   Determining projects to restore...
+11:34:06 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 773 ms).
+11:34:06 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 773 ms).
+11:34:06 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 773 ms).
+11:34:06 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 773 ms).
+11:34:06 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 773 ms).
+11:34:06 [DBG]   1 of 6 projects are up-to-date for restore.
+11:34:07 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:07 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:07 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:08 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:09 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:09 [DBG]   ViceSharp.Core.Package -> F:\GitHub\vice-sharp\src\ViceSharp.Core.Package\bin\Debug\net10.0\ViceSharp.Core.Package.dll
+11:34:09 [DBG] 
+11:34:09 [DBG] Build succeeded.
+11:34:09 [DBG]     0 Warning(s)
+11:34:09 [DBG]     0 Error(s)
+11:34:09 [DBG] 
+11:34:09 [DBG] Time Elapsed 00:00:05.07
+11:34:09 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Core.Package\ViceSharp.Core.Package.csproj --configuration Debug --no-restore --property:PackageId=ViceSharp.Core --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:10 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:10 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:10 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:10 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:10 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:10 [DBG]   ViceSharp.Core.Package -> F:\GitHub\vice-sharp\src\ViceSharp.Core.Package\bin\Debug\net10.0\ViceSharp.Core.Package.dll
+11:34:11 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Core.1.2.1.nupkg'.
+11:34:11 [INF] ViceSharp.Core 1.2.1: five core assemblies verified, dependencies present -> F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Core.1.2.1.nupkg
+11:34:11 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:12 [DBG]   Determining projects to restore...
+11:34:12 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj (in 256 ms).
+11:34:14 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:34:14 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Protocol.1.2.1.nupkg'.
+11:34:14 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:15 [DBG]   Determining projects to restore...
+11:34:15 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj (in 237 ms).
+11:34:15 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 237 ms).
+11:34:15 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 237 ms).
+11:34:15 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 237 ms).
+11:34:15 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 237 ms).
+11:34:16 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:16 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:16 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:16 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:16 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:34:17 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Monitor.1.2.1.nupkg'.
+11:34:17 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Launcher\ViceSharp.Launcher.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:17 [DBG]   Determining projects to restore...
+11:34:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Launcher\ViceSharp.Launcher.csproj (in 250 ms).
+11:34:18 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 250 ms).
+11:34:18 [DBG]   4 of 6 projects are up-to-date for restore.
+11:34:18 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:18 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:18 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:19 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:19 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:19 [DBG]   ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Debug\net10.0\ViceSharp.Launcher.dll
+11:34:19 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Launcher.1.2.1.nupkg'.
+11:34:19 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\ViceSharp.AdhocHelper.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:20 [DBG]   Determining projects to restore...
+11:34:20 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\ViceSharp.AdhocHelper.csproj (in 311 ms).
+11:34:20 [DBG]   5 of 6 projects are up-to-date for restore.
+11:34:21 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:21 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:21 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:21 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:21 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:22 [DBG]   ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Debug\net10.0\ViceSharp.AdhocHelper.dll
+11:34:23 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.AdhocHelper.1.2.1.nupkg'.
+11:34:23 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host\ViceSharp.Host.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:23 [DBG]   Determining projects to restore...
+11:34:25 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host\ViceSharp.Host.csproj (in 253 ms).
+11:34:25 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 253 ms).
+11:34:25 [DBG]   7 of 9 projects are up-to-date for restore.
+11:34:25 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:34:25 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:25 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:25 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:25 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:26 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:26 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:34:26 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:34:26 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:34:27 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.1.2.1.nupkg'.
+11:34:27 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.SourceGen\ViceSharp.SourceGen.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:28 [DBG]   Determining projects to restore...
+11:34:28 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.SourceGen\ViceSharp.SourceGen.csproj (in 254 ms).
+11:34:29 [DBG]   ViceSharp.SourceGen -> F:\GitHub\vice-sharp\src\ViceSharp.SourceGen\bin\Debug\netstandard2.0\ViceSharp.SourceGen.dll
+11:34:29 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.SourceGen.1.2.1.nupkg'.
+11:34:29 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:30 [DBG]   Determining projects to restore...
+11:34:31 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomM\ViceSharp.RomM.csproj (in 323 ms).
+11:34:31 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj (in 323 ms).
+11:34:31 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj (in 327 ms).
+11:34:31 [DBG]   9 of 12 projects are up-to-date for restore.
+11:34:32 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:32 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:34:32 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:34:33 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:33 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:33 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:34:33 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:33 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:33 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:34:33 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:34:33 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:34:36 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:34:36 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:34:37 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\publish\
+11:34:46 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Avalonia.1.2.1.nupkg'.
+11:34:46 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Console\ViceSharp.Console.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:46 [DBG]   Determining projects to restore...
+11:34:47 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Console\ViceSharp.Console.csproj (in 295 ms).
+11:34:47 [DBG]   7 of 8 projects are up-to-date for restore.
+11:34:48 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:48 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:48 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:48 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:48 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:48 [DBG]   ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Debug\net10.0\ViceSharp.Launcher.dll
+11:34:48 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:34:48 [DBG]   ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Debug\net10.0\ViceSharp.Console.dll
+11:34:49 [DBG]   ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Debug\net10.0\ViceSharp.Console.dll
+11:34:49 [DBG]   ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Debug\net10.0\publish\
+11:34:49 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Console.1.2.1.nupkg'.
+11:34:49 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\ViceSharp.Host.MacOS.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:50 [DBG]   Determining projects to restore...
+11:34:51 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\ViceSharp.Host.MacOS.csproj (in 399 ms).
+11:34:51 [DBG]   12 of 13 projects are up-to-date for restore.
+11:34:52 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:52 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:34:52 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:52 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:52 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:34:52 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:52 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:52 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:34:52 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:34:52 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:34:52 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:34:53 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:34:53 [DBG]   ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Debug\net10.0\ViceSharp.Host.MacOS.dll
+11:34:54 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.MacOS.1.2.1.nupkg'.
+11:34:54 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host.Android\ViceSharp.Host.Android.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:55 [DBG]   Determining projects to restore...
+11:34:56 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.Android\ViceSharp.Host.Android.csproj (in 388 ms).
+11:34:56 [DBG]   12 of 13 projects are up-to-date for restore.
+11:34:56 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:34:56 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:34:56 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:34:56 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:34:56 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:34:56 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:34:56 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:34:57 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:34:57 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:34:57 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:34:57 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:34:57 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:34:58 [DBG]   ViceSharp.Host.Android -> F:\GitHub\vice-sharp\src\ViceSharp.Host.Android\bin\Debug\net10.0\ViceSharp.Host.Android.dll
+11:34:58 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.Android.1.2.1.nupkg'.
+11:34:58 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host.iOS\ViceSharp.Host.iOS.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:34:59 [DBG]   Determining projects to restore...
+11:35:00 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.iOS\ViceSharp.Host.iOS.csproj (in 384 ms).
+11:35:00 [DBG]   12 of 13 projects are up-to-date for restore.
+11:35:00 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:35:00 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:35:00 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:35:00 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:35:01 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:35:01 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:35:01 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:35:01 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:35:01 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:35:01 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:35:01 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:35:01 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:35:02 [DBG]   ViceSharp.Host.iOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.iOS\bin\Debug\net10.0\ViceSharp.Host.iOS.dll
+11:35:03 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.iOS.1.2.1.nupkg'.
+11:35:03 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host.Xbox\ViceSharp.Host.Xbox.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:35:04 [DBG]   Determining projects to restore...
+11:35:04 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.Xbox\ViceSharp.Host.Xbox.csproj (in 381 ms).
+11:35:04 [DBG]   12 of 13 projects are up-to-date for restore.
+11:35:05 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:35:05 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:35:05 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:35:05 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:35:05 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:35:05 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:35:05 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:35:05 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:35:05 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:35:05 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:35:05 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:35:06 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:35:06 [DBG]   ViceSharp.Host.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Host.Xbox\bin\Debug\net10.0\ViceSharp.Host.Xbox.dll
+11:35:07 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.Xbox.1.2.1.nupkg'.
+11:35:07 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:35:08 [DBG]   Determining projects to restore...
+11:35:08 [DBG]   All projects are up-to-date for restore.
+11:35:08 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:35:08 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:35:09 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Library.ViewModels.1.2.1.nupkg'.
+11:35:09 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.RomM\ViceSharp.RomM.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:35:10 [DBG]   Determining projects to restore...
+11:35:10 [DBG]   All projects are up-to-date for restore.
+11:35:10 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:35:11 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:35:11 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:35:11 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.RomM.1.2.1.nupkg'.
+11:35:11 [INF] Packed 14 individual packages + ViceSharp.Core bundle 1.2.1 -> F:\GitHub\vice-sharp\artifacts\packages
+11:35:11 [INF] > "C:\Program Files\Git\cmd\git.exe" tag --points-at HEAD
+11:35:11 [INF] > "C:\Program Files\Git\cmd\git.exe" tag --list v1.2.*
+11:35:11 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.AdhocHelper.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:12 [DBG] Pushing ViceSharp.AdhocHelper.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:12 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:12 [DBG]   Created https://www.nuget.org/api/v2/package/ 560ms
+11:35:12 [DBG] Your package was pushed.
+11:35:12 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Avalonia.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:13 [DBG] Pushing ViceSharp.Avalonia.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:13 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:26 [DBG]   Created https://www.nuget.org/api/v2/package/ 13167ms
+11:35:26 [DBG] Your package was pushed.
+11:35:26 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Console.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:26 [DBG] Pushing ViceSharp.Console.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:26 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:27 [DBG]   Created https://www.nuget.org/api/v2/package/ 678ms
+11:35:27 [DBG] Your package was pushed.
+11:35:27 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Core.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:27 [DBG] Pushing ViceSharp.Core.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:27 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:28 [DBG]   Created https://www.nuget.org/api/v2/package/ 519ms
+11:35:28 [DBG] Your package was pushed.
+11:35:28 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:28 [DBG] Pushing ViceSharp.Host.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:28 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:29 [DBG]   Created https://www.nuget.org/api/v2/package/ 424ms
+11:35:29 [DBG] Your package was pushed.
+11:35:29 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.Android.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:29 [DBG] Pushing ViceSharp.Host.Android.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:29 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:30 [DBG]   Created https://www.nuget.org/api/v2/package/ 988ms
+11:35:30 [DBG] Your package was pushed.
+11:35:30 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.iOS.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:31 [DBG] Pushing ViceSharp.Host.iOS.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:31 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:31 [DBG]   Created https://www.nuget.org/api/v2/package/ 923ms
+11:35:31 [DBG] Your package was pushed.
+11:35:32 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.MacOS.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:32 [DBG] Pushing ViceSharp.Host.MacOS.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:32 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:33 [DBG]   Created https://www.nuget.org/api/v2/package/ 655ms
+11:35:33 [DBG] Your package was pushed.
+11:35:33 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.Xbox.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:33 [DBG] Pushing ViceSharp.Host.Xbox.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:33 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:34 [DBG]   Created https://www.nuget.org/api/v2/package/ 671ms
+11:35:34 [DBG] Your package was pushed.
+11:35:34 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Launcher.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:34 [DBG] Pushing ViceSharp.Launcher.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:34 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:34 [DBG]   Created https://www.nuget.org/api/v2/package/ 394ms
+11:35:34 [DBG] Your package was pushed.
+11:35:35 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Library.ViewModels.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:35 [DBG] Pushing ViceSharp.Library.ViewModels.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:35 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:36 [DBG]   Created https://www.nuget.org/api/v2/package/ 758ms
+11:35:36 [DBG] Your package was pushed.
+11:35:36 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Monitor.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:36 [DBG] Pushing ViceSharp.Monitor.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:36 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:37 [DBG]   Created https://www.nuget.org/api/v2/package/ 416ms
+11:35:37 [DBG] Your package was pushed.
+11:35:37 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Protocol.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:37 [DBG] Pushing ViceSharp.Protocol.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:37 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:38 [DBG]   Created https://www.nuget.org/api/v2/package/ 530ms
+11:35:38 [DBG] Your package was pushed.
+11:35:38 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.RomM.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:38 [DBG] Pushing ViceSharp.RomM.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:38 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:39 [DBG]   Created https://www.nuget.org/api/v2/package/ 831ms
+11:35:39 [DBG] Your package was pushed.
+11:35:39 [INF] > "C:\Program Files\dotnet\dotnet.exe" nuget push F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.SourceGen.1.2.1.nupkg --source https://api.nuget.org/v3/index.json --api-key [REDACTED] --skip-duplicate
+11:35:39 [DBG] Pushing ViceSharp.SourceGen.1.2.1.nupkg to 'https://www.nuget.org/api/v2/package'...
+11:35:39 [DBG]   PUT https://www.nuget.org/api/v2/package/
+11:35:40 [DBG]   Created https://www.nuget.org/api/v2/package/ 379ms
+11:35:40 [DBG] Your package was pushed.
+11:35:40 [INF] Pushed 15 packages to https://api.nuget.org/v3/index.json; monitoring indexing
+11:39:49 [INF] Resolved on nuget.org: ViceSharp.Core 1.2.1
+11:39:49 [INF] Resolved on nuget.org: ViceSharp.Host 1.2.1
+11:39:49 [INF] Resolved on nuget.org: ViceSharp.Host.Android 1.2.1
+11:39:49 [INF] Resolved on nuget.org: ViceSharp.Host.iOS 1.2.1
+11:39:49 [INF] Resolved on nuget.org: ViceSharp.Host.Xbox 1.2.1
+11:39:49 [INF] Resolved on nuget.org: ViceSharp.Launcher 1.2.1
+11:39:49 [INF] Resolved on nuget.org: ViceSharp.Library.ViewModels 1.2.1
+11:39:49 [INF] Resolved on nuget.org: ViceSharp.Monitor 1.2.1
+11:39:50 [INF] Resolved on nuget.org: ViceSharp.Protocol 1.2.1
+11:39:50 [INF] Resolved on nuget.org: ViceSharp.RomM 1.2.1
+11:39:50 [INF] Resolved on nuget.org: ViceSharp.SourceGen 1.2.1
+11:40:50 [INF] Resolved on nuget.org: ViceSharp.AdhocHelper 1.2.1
+11:40:50 [INF] Resolved on nuget.org: ViceSharp.Console 1.2.1
+11:40:50 [INF] Resolved on nuget.org: ViceSharp.Host.MacOS 1.2.1
+11:42:51 [INF] Resolved on nuget.org: ViceSharp.Avalonia 1.2.1
+11:42:51 [INF] All 15 packages resolved on nuget.org at 1.2.1
+11:42:51 [INF] nuget.org lists 15 ViceSharp package(s):
+11:42:51 [INF]   ViceSharp.AdhocHelper 1.2.1 (downloads: 612)
+11:42:51 [INF]   ViceSharp.Avalonia 1.1.0 (downloads: 693)
+11:42:51 [INF]   ViceSharp.Console 1.2.1 (downloads: 612)
+11:42:51 [INF]   ViceSharp.Core 1.2.1 (downloads: 902)
+11:42:51 [INF]   ViceSharp.Host 1.2.1 (downloads: 596)
+11:42:51 [INF]   ViceSharp.Host.Android 1.2.1 (downloads: 598)
+11:42:51 [INF]   ViceSharp.Host.iOS 1.2.1 (downloads: 620)
+11:42:51 [INF]   ViceSharp.Host.MacOS 1.2.1 (downloads: 622)
+11:42:51 [INF]   ViceSharp.Host.Xbox 1.2.1 (downloads: 589)
+11:42:51 [INF]   ViceSharp.Launcher 1.2.1 (downloads: 581)
+11:42:51 [INF]   ViceSharp.Library.ViewModels 1.2.1 (downloads: 0)
+11:42:51 [INF]   ViceSharp.Monitor 1.2.1 (downloads: 666)
+11:42:51 [INF]   ViceSharp.Protocol 1.2.1 (downloads: 675)
+11:42:51 [INF]   ViceSharp.RomM 1.2.1 (downloads: 0)
+11:42:51 [INF]   ViceSharp.SourceGen 1.2.1 (downloads: 608)
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+PublishNuget       Succeeded       8:47
+───────────────────────────────────────
+Total                              8:47
+═══════════════════════════════════════
+​
+Build succeeded on 8/5/2026 11:42:51 AM. ＼（＾ᴗ＾）／
+NUGET EXIT: 0
+=== PublishWinget (includes PublishGitHubRelease) ===
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬═════════════════════════
+║ PublishGitHubRelease
+╬════════════════
+​
+11:42:55 [INF] > "C:\Program Files\Git\cmd\git.exe" tag --points-at HEAD
+11:42:56 [WRN] Everything up-to-date
+11:42:56 [INF] > "C:\Program Files\Git\cmd\git.exe" tag --points-at HEAD
+11:42:56 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\vice-sharp\src\ViceSharp.Core.Package\ViceSharp.Core.Package.csproj --configuration Debug
+11:42:57 [DBG]   Determining projects to restore...
+11:42:57 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 215 ms).
+11:42:57 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 215 ms).
+11:42:57 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 215 ms).
+11:42:57 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 215 ms).
+11:42:57 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 216 ms).
+11:42:57 [DBG]   1 of 6 projects are up-to-date for restore.
+11:42:58 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:42:58 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:42:58 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:42:58 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:42:58 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:42:58 [DBG]   ViceSharp.Core.Package -> F:\GitHub\vice-sharp\src\ViceSharp.Core.Package\bin\Debug\net10.0\ViceSharp.Core.Package.dll
+11:42:58 [DBG] 
+11:42:58 [DBG] Build succeeded.
+11:42:58 [DBG]     0 Warning(s)
+11:42:58 [DBG]     0 Error(s)
+11:42:58 [DBG] 
+11:42:58 [DBG] Time Elapsed 00:00:01.62
+11:42:58 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Core.Package\ViceSharp.Core.Package.csproj --configuration Debug --no-restore --property:PackageId=ViceSharp.Core --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:42:59 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:42:59 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:42:59 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:42:59 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:42:59 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:42:59 [DBG]   ViceSharp.Core.Package -> F:\GitHub\vice-sharp\src\ViceSharp.Core.Package\bin\Debug\net10.0\ViceSharp.Core.Package.dll
+11:43:00 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Core.1.2.1.nupkg'.
+11:43:00 [INF] ViceSharp.Core 1.2.1: five core assemblies verified, dependencies present -> F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Core.1.2.1.nupkg
+11:43:00 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:01 [DBG]   Determining projects to restore...
+11:43:01 [DBG]   All projects are up-to-date for restore.
+11:43:01 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:02 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Protocol.1.2.1.nupkg'.
+11:43:02 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:02 [DBG]   Determining projects to restore...
+11:43:03 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 219 ms).
+11:43:03 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 219 ms).
+11:43:03 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 219 ms).
+11:43:03 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 219 ms).
+11:43:03 [DBG]   1 of 5 projects are up-to-date for restore.
+11:43:03 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:03 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:03 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:03 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:03 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:43:04 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Monitor.1.2.1.nupkg'.
+11:43:04 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Launcher\ViceSharp.Launcher.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:04 [DBG]   Determining projects to restore...
+11:43:05 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 224 ms).
+11:43:05 [DBG]   5 of 6 projects are up-to-date for restore.
+11:43:05 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:05 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:05 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:05 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:05 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:05 [DBG]   ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Debug\net10.0\ViceSharp.Launcher.dll
+11:43:06 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Launcher.1.2.1.nupkg'.
+11:43:06 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\ViceSharp.AdhocHelper.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:06 [DBG]   Determining projects to restore...
+11:43:07 [DBG]   All projects are up-to-date for restore.
+11:43:07 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:07 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:07 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:07 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:07 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:08 [DBG]   ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Debug\net10.0\ViceSharp.AdhocHelper.dll
+11:43:08 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.AdhocHelper.1.2.1.nupkg'.
+11:43:08 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host\ViceSharp.Host.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:08 [DBG]   Determining projects to restore...
+11:43:09 [DBG]   All projects are up-to-date for restore.
+11:43:09 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:09 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:09 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:09 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:10 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:10 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:10 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:43:10 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:43:10 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:43:10 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.1.2.1.nupkg'.
+11:43:10 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.SourceGen\ViceSharp.SourceGen.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:11 [DBG]   Determining projects to restore...
+11:43:11 [DBG]   All projects are up-to-date for restore.
+11:43:11 [DBG]   ViceSharp.SourceGen -> F:\GitHub\vice-sharp\src\ViceSharp.SourceGen\bin\Debug\netstandard2.0\ViceSharp.SourceGen.dll
+11:43:12 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.SourceGen.1.2.1.nupkg'.
+11:43:12 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:12 [DBG]   Determining projects to restore...
+11:43:13 [DBG]   All projects are up-to-date for restore.
+11:43:13 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:13 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:13 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:43:13 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:13 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:13 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:43:13 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:13 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:14 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:43:14 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:43:14 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:43:14 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:43:14 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:43:14 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\publish\
+11:43:23 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Avalonia.1.2.1.nupkg'.
+11:43:23 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Console\ViceSharp.Console.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:23 [DBG]   Determining projects to restore...
+11:43:24 [DBG]   All projects are up-to-date for restore.
+11:43:24 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:24 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:24 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:24 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:24 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:25 [DBG]   ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Debug\net10.0\ViceSharp.Launcher.dll
+11:43:25 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:43:25 [DBG]   ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Debug\net10.0\ViceSharp.Console.dll
+11:43:25 [DBG]   ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Debug\net10.0\ViceSharp.Console.dll
+11:43:25 [DBG]   ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Debug\net10.0\publish\
+11:43:25 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Console.1.2.1.nupkg'.
+11:43:25 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\ViceSharp.Host.MacOS.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:26 [DBG]   Determining projects to restore...
+11:43:26 [DBG]   All projects are up-to-date for restore.
+11:43:27 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:27 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:27 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:27 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:43:27 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:27 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:27 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:43:27 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:27 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:43:27 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:43:27 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:43:27 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:43:27 [DBG]   ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Debug\net10.0\ViceSharp.Host.MacOS.dll
+11:43:28 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.MacOS.1.2.1.nupkg'.
+11:43:28 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host.Android\ViceSharp.Host.Android.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:29 [DBG]   Determining projects to restore...
+11:43:29 [DBG]   All projects are up-to-date for restore.
+11:43:29 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:30 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:30 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:30 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:43:30 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:43:30 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:30 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:30 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:43:30 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:30 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:43:30 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:43:30 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:43:30 [DBG]   ViceSharp.Host.Android -> F:\GitHub\vice-sharp\src\ViceSharp.Host.Android\bin\Debug\net10.0\ViceSharp.Host.Android.dll
+11:43:31 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.Android.1.2.1.nupkg'.
+11:43:31 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host.iOS\ViceSharp.Host.iOS.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:31 [DBG]   Determining projects to restore...
+11:43:32 [DBG]   All projects are up-to-date for restore.
+11:43:32 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:32 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:32 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:32 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:43:32 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:43:33 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:33 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:33 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:43:33 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:33 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:43:33 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:43:33 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:43:33 [DBG]   ViceSharp.Host.iOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.iOS\bin\Debug\net10.0\ViceSharp.Host.iOS.dll
+11:43:33 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.iOS.1.2.1.nupkg'.
+11:43:34 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Host.Xbox\ViceSharp.Host.Xbox.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:34 [DBG]   Determining projects to restore...
+11:43:35 [DBG]   All projects are up-to-date for restore.
+11:43:35 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Debug\net10.0\ViceSharp.Abstractions.dll
+11:43:35 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:35 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Debug\net10.0\ViceSharp.Chips.dll
+11:43:35 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Debug\net10.0\ViceSharp.RomFetch.dll
+11:43:35 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:43:35 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Debug\net10.0\ViceSharp.Core.dll
+11:43:35 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:43:35 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+11:43:35 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+11:43:36 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+11:43:36 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+11:43:36 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+11:43:36 [DBG]   ViceSharp.Host.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Host.Xbox\bin\Debug\net10.0\ViceSharp.Host.Xbox.dll
+11:43:36 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Host.Xbox.1.2.1.nupkg'.
+11:43:36 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:37 [DBG]   Determining projects to restore...
+11:43:37 [DBG]   All projects are up-to-date for restore.
+11:43:38 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:38 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:43:38 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.Library.ViewModels.1.2.1.nupkg'.
+11:43:38 [INF] > "C:\Program Files\dotnet\dotnet.exe" pack F:\GitHub\vice-sharp\src\ViceSharp.RomM\ViceSharp.RomM.csproj --configuration Debug --property:PackageVersion=1.2.1 --output F:\GitHub\vice-sharp\artifacts\packages
+11:43:39 [DBG]   Determining projects to restore...
+11:43:39 [DBG]   All projects are up-to-date for restore.
+11:43:39 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Debug\net10.0\ViceSharp.Protocol.dll
+11:43:40 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Debug\net10.0\ViceSharp.Library.ViewModels.dll
+11:43:40 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+11:43:40 [DBG]   Successfully created package 'F:\GitHub\vice-sharp\artifacts\packages\ViceSharp.RomM.1.2.1.nupkg'.
+11:43:40 [INF] Packed 14 individual packages + ViceSharp.Core bundle 1.2.1 -> F:\GitHub\vice-sharp\artifacts\packages
+11:43:42 [INF] The process cannot access the file 'F:\GitHub\vice-sharp\.nuke\temp\build.log' because it is being used by another process.
+11:43:43 [WRN] release not found
+11:43:58 [INF] https://github.com/sharpninja/vice-sharp/releases/tag/v1.2.1
+11:43:58 [INF] https://github.com/sharpninja/vice-sharp/releases/tag/v1.2.1
+11:43:58 [INF] GitHub release v1.2.1 published to sharpninja/vice-sharp (16 asset(s)).
+​
+╬══════════════════
+║ PublishWinget
+╬═════════
+​
+11:43:58 [INF] > "C:\Program Files\Git\cmd\git.exe" tag --points-at HEAD
+11:43:59 [INF] Downloading released MSI: https://github.com/sharpninja/vice-sharp/releases/download/v1.2.1/ViceSharp.msi
+11:44:02 [INF] Downloaded 40,194,048 bytes.
+11:44:02 [INF] Released MSI SHA256: 849B9660439ECAE2FCCA2E390E32FEAF57A252CFA3256997593EC7A9E1C77380
+11:44:02 [INF] Winget manifests staged at F:\GitHub\vice-sharp\artifacts\winget\manifests\s\sharpninja\ViceSharp\1.2.1
+11:44:02 [INF] wingetcreate not found; downloading the current standalone build.
+11:44:05 [INF] winget-pkgs manifests/s/sharpninja/ViceSharp -> exists (update).
+11:44:05 [INF] sharpninja.ViceSharp -> update.
+11:44:06 [INF] Warning: Using the --token argument may result in the token being logged. Consider an alternative approach https://aka.ms/winget-create-token.
+11:44:07 [INF] Retrieving latest manifest for sharpninja.ViceSharp
+11:44:09 [INF] Downloading and parsing: https://github.com/sharpninja/vice-sharp/releases/download/v1.2.1/ViceSharp.msi...
+11:44:13 [INF] GitHub URL detected. The CLI has automatically filled some manifest fields.
+11:44:13 [INF] Generating a preview of your manifests...
+11:44:13 [INF] Version manifest preview:
+11:44:13 [INF] # Created using wingetcreate 1.12.13.0
+11:44:13 [INF] # yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.12.0.schema.json
+11:44:13 [INF] 
+11:44:13 [INF] PackageIdentifier: sharpninja.ViceSharp
+11:44:13 [INF] PackageVersion: 1.2.1
+11:44:13 [INF] DefaultLocale: en-US
+11:44:13 [INF] ManifestType: version
+11:44:13 [INF] ManifestVersion: 1.12.0
+11:44:13 [INF] 
+11:44:13 [INF] Installer manifest preview:
+11:44:13 [INF] # Created using wingetcreate 1.12.13.0
+11:44:13 [INF] # yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.12.0.schema.json
+11:44:13 [INF] 
+11:44:13 [INF] PackageIdentifier: sharpninja.ViceSharp
+11:44:13 [INF] PackageVersion: 1.2.1
+11:44:13 [INF] InstallerType: wix
+11:44:13 [INF] Scope: machine
+11:44:13 [INF] InstallModes:
+11:44:13 [INF] - silent
+11:44:13 [INF] - silentWithProgress
+11:44:13 [INF] UpgradeBehavior: install
+11:44:13 [INF] ProductCode: '{4605FF92-E1D6-4C44-BD1D-E8F06F07FA55}'
+11:44:13 [INF] Installers:
+11:44:13 [INF] - Architecture: x64
+11:44:13 [INF]   InstallerUrl: https://github.com/sharpninja/vice-sharp/releases/download/v1.2.1/ViceSharp.msi
+11:44:13 [INF]   InstallerSha256: 849B9660439ECAE2FCCA2E390E32FEAF57A252CFA3256997593EC7A9E1C77380
+11:44:13 [INF] ManifestType: installer
+11:44:13 [INF] ManifestVersion: 1.12.0
+11:44:13 [INF] ReleaseDate: 2026-08-05
+11:44:13 [INF] 
+11:44:13 [INF] Default locale manifest preview:
+11:44:13 [INF] # Created using wingetcreate 1.12.13.0
+11:44:13 [INF] # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.12.0.schema.json
+11:44:13 [INF] 
+11:44:13 [INF] PackageIdentifier: sharpninja.ViceSharp
+11:44:13 [INF] PackageVersion: 1.2.1
+11:44:13 [INF] PackageLocale: en-US
+11:44:13 [INF] Publisher: sharpninja
+11:44:13 [INF] PublisherUrl: https://github.com/sharpninja
+11:44:13 [INF] PublisherSupportUrl: https://github.com/sharpninja/vice-sharp/issues
+11:44:13 [INF] PackageName: ViceSharp
+11:44:13 [INF] PackageUrl: https://github.com/sharpninja/vice-sharp
+11:44:13 [INF] License: GPL-2.0-or-later
+11:44:13 [INF] ShortDescription: VICE-compatible Commodore 64 emulator (Avalonia GUI).
+11:44:13 [INF] Description: |
+11:44:13 [INF]   ViceSharp is a .NET 10 Commodore 64 emulator with VICE compatibility.
+11:44:13 [INF]   This package installs the ViceSharp Avalonia desktop GUI: a full host
+11:44:13 [INF]   with monitor, drive / tape attach, debug stepping, snapshot, frame
+11:44:13 [INF]   capture, and cycle-accurate VIC-II / SID / CIA emulation.
+11:44:13 [INF] Moniker: vicesharp
+11:44:13 [INF] Tags:
+11:44:13 [INF] - commodore
+11:44:13 [INF] - c64
+11:44:13 [INF] - emulator
+11:44:13 [INF] - vice
+11:44:13 [INF] ReleaseNotesUrl: https://github.com/sharpninja/vice-sharp/releases/tag/v1.2.1
+11:44:13 [INF] Documentations:
+11:44:13 [INF] - DocumentLabel: Wiki
+11:44:13 [INF]   DocumentUrl: https://github.com/sharpninja/vice-sharp/wiki
+11:44:13 [INF] ManifestType: defaultLocale
+11:44:13 [INF] ManifestVersion: 1.12.0
+11:44:13 [INF] 
+11:44:13 [INF] 
+11:44:13 [INF] Manifest saved to F:\GitHub\vice-sharp\manifests\s\sharpninja\ViceSharp\1.2.1
+11:44:13 [INF] 
+11:44:13 [INF] Manifest validation succeeded: True
+11:44:13 [INF] 
+11:44:14 [INF] Submitting pull request for manifest...
+11:44:14 [INF] 
+11:44:24 [INF] Pull request can be found here: https://github.com/microsoft/winget-pkgs/pull/412774
+11:44:24 [INF] 
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[WRN] PublishGitHubRelease: Everything up-to-date
+[WRN] PublishGitHubRelease: release not found
+​
+════════════════════════════════════════════
+Target                  Status      Duration
+────────────────────────────────────────────
+PublishGitHubRelease    Succeeded       1:03
+PublishWinget           Succeeded       0:25
+────────────────────────────────────────────
+Total                                   1:29
+════════════════════════════════════════════
+​
+Build succeeded on 8/5/2026 11:44:24 AM. ＼（＾ᴗ＾）／
+WINGET EXIT: 0

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ARCH-TRUEDRIVE-1541-002",
+    "kind": "fr",
+    "status": "permanent-skip-mutation",
+    "reason": "Live under legacy id without FR- prefix. Recovery FrIdPattern and PUT /fr both reject. Remains readable/mapped. Migration to FR-ARCH-TRUEDRIVE-1541-002 requires operator-approved create+remap+delete (not done; would not invent product scope but renames id)."
+  },
+  {
+    "id": "BACKFILL-MEDIA-001",
+    "kind": "fr",
+    "status": "permanent-skip-mutation",
+    "reason": "Same legacy FR shape; live+mapped; PUT/recovery reject."
+  },
+  {
+    "id": "BACKFILL-VIDEO-001",
+    "kind": "fr",
+    "status": "permanent-skip-mutation",
+    "reason": "Same legacy FR shape; live+mapped; PUT/recovery reject."
+  },
+  {
+    "id": "RUNTIME-TAPE-002",
+    "kind": "fr",
+    "status": "permanent-skip-mutation",
+    "reason": "Same legacy FR shape; live+mapped; PUT/recovery reject."
+  }
+]

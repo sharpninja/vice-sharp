@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXUI-002",
+  "title": "RequiresPointer=Never + XYFocus + safe-area margin",
+  "status": "pending",
+  "priority": "medium",
+  "body": "RequiresPointer=Never shared style + explicit XYFocus from FocusMap + 90% safe-area root margin. Acceptance: verified by TEST-XBOXUI-002a/002b.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

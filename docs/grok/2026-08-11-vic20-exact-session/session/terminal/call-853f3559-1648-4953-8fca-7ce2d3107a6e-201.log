@@ -1,0 +1,50 @@
+=== section: xbox-uwp
+done: false ===
+
+  requestId: req-20260811T145542Z-ea69
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV 
+device-family behaviors, Store cert)'
+    totalCount: 1
+=== keyword: Partner
+done: false ===
+  requestId: req-20260811T145545Z-df3f
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV 
+device-family behaviors, Store cert)'
+    totalCount: 1
+=== keyword: submission
+done: false ===
+  requestId: req-20260811T145548Z-65fc
+    - id: IMPL-WINGET-001
+      title: Integrate Winget manifest validation into the publishing pipeline
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV 
+device-family behaviors, Store cert)'
+    totalCount: 2
+=== keyword: listing
+done: false ===
+  requestId: req-20260811T145552Z-b827
+    totalCount: 0
+=== keyword: certif
+done: false ===
+  requestId: req-20260811T145555Z-d83c
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV 
+device-family behaviors, Store cert)'
+    totalCount: 1
+=== keyword: MSIX
+done: false ===
+  requestId: req-20260811T145559Z-9cdc
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV 
+device-family behaviors, Store cert)'
+    totalCount: 1
+=== keyword: GPL
+done: false ===
+  requestId: req-20260811T145602Z-403c
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV 
+device-family behaviors, Store cert)'
+    totalCount: 1
+

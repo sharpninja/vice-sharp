@@ -1,0 +1,54 @@
+
+Name
+----
+libgcc_s_seh-1.dll
+libiconv-2.dll
+libstdc++-6.dll
+libwinpthread-1.dll
+
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.28]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:02.13]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.36]   Starting:    ViceSharp.TestHarness
+xvic vice_machine_create call=1 model=vic20
+xvic vice_machine_reset call=1 machine=0000018c9e3b0680
+xvic vice_machine_step_cycle call=1 machine=0000018c9e3b0680
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:02.71]     ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [FAIL]
+[xUnit.net 00:00:02.71]       VIDEO DIV first=1 matchedCycles=0 budget=2000
+c=1 nR=0 mR=0 nCyc=7 mCyc=7 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=1 mis=True
+[xUnit.net 00:00:02.71]       BlankThisLine n=0 m=1
+[xUnit.net 00:00:02.71]       nRegs= 0=00 1=00 2=00 3=00 4=00 5=00 6=00 7=00 8=00 9=00 A=00 B=00 C=00 D=00 E=00 F=00
+[xUnit.net 00:00:02.71]       mRegs= 0=00 1=00 2=00 3=00 4=00 5=00 6=00 7=00 8=00 9=00 A=00 B=00 C=00 D=00 E=00 F=00
+[xUnit.net 00:00:02.71]       peek $9003 n=$00 m=$00 $9004 n=$00 m=$00
+[xUnit.net 00:00:02.71]       
+[xUnit.net 00:00:02.71]       Stack Trace:
+[xUnit.net 00:00:02.71]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs(95,0): at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.RunEveryCycleVideo(Int32 budget, String modelSelector)
+[xUnit.net 00:00:02.71]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs(40,0): at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k()
+[xUnit.net 00:00:02.71]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:02.71]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.72]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [240 ms]
+  Error Message:
+   VIDEO DIV first=1 matchedCycles=0 budget=2000
+c=1 nR=0 mR=0 nCyc=7 mCyc=7 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=1 mis=True
+BlankThisLine n=0 m=1
+nRegs= 0=00 1=00 2=00 3=00 4=00 5=00 6=00 7=00 8=00 9=00 A=00 B=00 C=00 D=00 E=00 F=00
+mRegs= 0=00 1=00 2=00 3=00 4=00 5=00 6=00 7=00 8=00 9=00 A=00 B=00 C=00 D=00 E=00 F=00
+peek $9003 n=$00 m=$00 $9004 n=$00 m=$00
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.RunEveryCycleVideo(Int32 budget, String modelSelector) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs:line 95
+   at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs:line 40
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Test Run Failed.
+Total tests: 1
+     Failed: 1
+ Total time: 3.3155 Seconds
+EXIT=1
+

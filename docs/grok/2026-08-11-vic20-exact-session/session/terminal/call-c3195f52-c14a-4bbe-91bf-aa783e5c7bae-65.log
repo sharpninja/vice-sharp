@@ -1,0 +1,34 @@
+
+Line
+----                                                                                                                   
+#define VIC20_PAL_CYCLES_PER_SEC        1108405                                                                        
+#define VIC20_PAL_CYCLES_PER_LINE       71                                                                             
+#define VIC20_PAL_CYCLES_PER_RFSH (VIC20_PAL_SCREEN_LINES * VIC20_PAL_CYCLES_PER_LINE)                                 
+#define VIC20_PAL_RFSH_PER_SEC    (1.0 / ((double)VIC20_PAL_CYCLES_PER_RFSH / (double)VIC20_PAL_CYCLES_PER_SEC))       
+#define VIC20_NTSC_CYCLES_PER_SEC       1022727                                                                        
+#define VIC20_NTSC_CYCLES_PER_LINE      65                                                                             
+#define VIC20_NTSC_CYCLES_FIRST_LINE    32                                                                             
+#define VIC20_NTSC_CYCLES_LAST_LINE     33                                                                             
+#define VIC20_NTSC_CYCLES_PER_RFSH (VIC20_NTSC_SCREEN_LINES * VIC20_NTSC_CYCLES_PER_LINE)                              
+#define VIC20_NTSC_RFSH_PER_SEC    (1.0 / ((double)VIC20_NTSC_CYCLES_PER_RFSH / (double)VIC20_NTSC_CYCLES_PER_SEC))    
+#define VIC20_NTSC_INTERLACE_FIELD1_CYCLES_FIRST_LINE    32     /* adds up to 65 with field2 last line */              
+#define VIC20_NTSC_INTERLACE_FIELD1_CYCLES_LAST_LINE     65                                                            
+#define VIC20_NTSC_INTERLACE_FIELD2_CYCLES_FIRST_LINE    65                                                            
+#define VIC20_NTSC_INTERLACE_FIELD2_CYCLES_LAST_LINE     33     /* adds up to 65 with field1 first line */             
+#define VIC20_NTSC_INTERLACE_CYCLES_PER_RFSH \                                                                         
+      * VIC20_NTSC_CYCLES_PER_LINE) / 2)                                                                               
+#define VIC20_NTSC_INTERLACE_RFSH_PER_SEC    (1.0 / ((double)VIC20_NTSC_INTERLACE_CYCLES_PER_RFSH / (double)VIC20_NTSC.
+#define VIC_PAL_SCREEN_WIDTH            284     /* 71 cycles * 4 pixels */                                             
+#define VIC_NTSC_SCREEN_WIDTH           260     /* 65 cycles * 4 pixels */                                             
+    unsigned int screen_width;  /* max width of video (different for PAL/NTSC) */                                      
+    xstart = MIN((unsigned int)(vic.raster_cycle * 4), vic.screen_width);                                              
+    if (xstop >= (int)vic.screen_width) {                                                                              
+        xstop = vic.screen_width - 1;                                                                                  
+    interlace_enable_flag = (vic.cycles_per_line == VIC20_NTSC_CYCLES_PER_LINE) ? (vic.regs[0] & 0x80) >> 7 : 0;       
+                if ((vic.cycles_per_line == VIC20_NTSC_CYCLES_PER_LINE) &&                                             
+    if (vic.cycles_per_line == VIC20_NTSC_CYCLES_PER_LINE) {                                                           
+                    if (VIC_RASTER_CYCLE(maincpu_clk + vic.cycle_offset) < VIC20_NTSC_INTERLACE_FIELD2_CYCLES_LAST_LIN.
+                if (VIC_RASTER_CYCLE(maincpu_clk + vic.cycle_offset) < VIC20_NTSC_CYCLES_LAST_LINE) {                  
+            vic.screen_width = VIC_NTSC_SCREEN_WIDTH;                                                                  
+            vic.cycles_per_line = VIC20_NTSC_CYCLES_PER_LINE;                                                          
+

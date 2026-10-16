@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-PRF-002",
+  "title": "Commodore 64C Machine Profile",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The C64C (cost-reduced revision) uses the MOS 8580 SID (which has a different filter and combined waveform behavior) and a revised VIC-II (MOS 8562/8565). The C64C profile configures the emulator with these variant chips.\n\n## Acceptance Criteria\n- SID: MOS 8580 with linear filter curve and revised combined waveform tables.\n- VIC-II: MOS 8562 (NTSC) or MOS 8565 (PAL) -- functionally equivalent to earlier revisions but with different luminance levels.\n- All other components are identical to the C64 NMOS profile.\n- The difference in SID filter behavior is audible and matches real hardware comparisons.\n- Selectable via `IMachineProfile.LoadProfile(\"c64c\")`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -44,6 +44,12 @@ public enum DeviceRole
     
     /// <summary>Complex Interface Adapter 2</summary>
     Cia2,
+
+    /// <summary>Host VIA 6522 instance 1 (for example VIC-20 at $9110).</summary>
+    Via1,
+
+    /// <summary>Host VIA 6522 instance 2 (for example VIC-20 at $9120).</summary>
+    Via2,
     
     /// <summary>Programmable Logic Array</summary>
     Pla,

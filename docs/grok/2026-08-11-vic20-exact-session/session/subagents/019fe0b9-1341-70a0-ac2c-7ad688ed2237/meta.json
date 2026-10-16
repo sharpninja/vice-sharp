@@ -1,0 +1,17 @@
+{
+  "subagent_id": "019fe0b9-1341-70a0-ac2c-7ad688ed2237",
+  "parent_session_id": "019fd0df-383d-7fc0-9f0a-69785afd78ed",
+  "child_session_id": "019fe0b9-1341-70a0-ac2c-7ad688ed2237",
+  "subagent_type": "explore",
+  "description": "Hostile validate border fix",
+  "prompt": "You are a HOSTILE VALIDATOR (read-only) for ViceSharp VIC-20 present/border vs VICE.\n\nWorkspace: F:\\GitHub\\vice-sharp\n\n## Contract\n- Assume overclaim until proven with VICE file+function + matching managed control flow.\n- Screenshots are not acceptance.\n- Statuses: Exact | Partial | Stub | Missing | Invented\n- Scope THIS RUN: present/border horizontal window only (normal READY PAL). Not full machine Exact.\n\n## Prior FAIL (must re-check)\nManaged crop was `src=0` → L96+paper352+R0. VICE READY normal window is first_x=48 → L48+paper352+R48.\n\n## Verify now\n1. Read `src/ViceSharp.Chips/Vic/Mos6561.cs`:\n   - `ComputeViewportFirstX` vs `native/vice/vice/src/video/video-viewport.c` (lines ~93-120)\n   - DrawRasterLine crop uses first_x, not src=0\n   - BorderX / FullLineOriginXKernalPal meanings\n2. Read `tests/ViceSharp.TestHarness/Vic20/Vic20VideoTests.cs` for ReadyPal first_x + left/right border tests\n3. Confirm math: ComputeViewportFirstX(96,352,448,568)=48\n4. Confirm READY frame oracle: paper origin 48, right [400..447] border\n5. C64 contrast: do not require C64 pattern for VIC-I; require VICE VIC-I present match\n\n## Pass criteria for THIS scope only\nVERDICT PASS only if:\n- Crop is VICE first_x formula (not invent src=0)\n- Tests assert right border present and paper at 48\n- No remaining claim that missing right border is normal\n- Code comments/constants do not encode the old invent\n\nIf chip-level draw still Partial (paper strip, half-char) that does NOT fail this scoped present/border gate UNLESS it breaks the READY side-border geometry tests.\n\n## Output\n1. VERDICT: PASS or FAIL (scoped present/border)\n2. Evidence anchors (file:line)\n3. Remaining Partial items (out of scope list)\n4. If FAIL: exact fix required\n\nDo NOT edit files. Read-only. Hostile. End with VERDICT: PASS or VERDICT: FAIL.\n",
+  "status": "completed",
+  "started_at": "2026-08-08T09:34:13.322501Z",
+  "completed_at": "2026-08-08T09:35:41.125316100Z",
+  "duration_ms": 87804,
+  "tool_calls": 20,
+  "turns": 1,
+  "effective_context_source": "new",
+  "child_cwd": "F:\\GitHub\\vice-sharp",
+  "effective_model_id": "grok-4.5"
+}

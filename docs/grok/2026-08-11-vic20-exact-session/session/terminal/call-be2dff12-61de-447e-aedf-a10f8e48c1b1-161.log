@@ -1,0 +1,8 @@
+Select-String: Cannot find path 'F:\GitHub\vice-sharp\native\vice-shim-runtime.h' because it does not exist.
+
+FullName
+--------
+F:\GitHub\vice-sharp\native\vice\vice\src\arch\gtk3\videoarch.h
+F:\GitHub\vice-sharp\native\vice\vice\src\arch\headless\videoarch.h
+F:\GitHub\vice-sharp\native\vice\vice\src\arch\sdl\videoarch.h
+

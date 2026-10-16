@@ -1,0 +1,99 @@
+
+FullName
+--------
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\SettingsView.axaml
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\SettingsView.axaml.cs
+src\ViceSharp.Console\Program.cs:176:// Must register after C64MemoryMap (which always claims IO) so it is checked first on writes.
+src\ViceSharp.Avalonia\Views\TickHistoryView.axaml.cs:42:        vm.SearchMemory();
+src\ViceSharp.Avalonia\Views\TickHistoryView.axaml.cs:43:        if (vm.MatchLineIndex >= 0 && this.FindControl<ListBox>("MemoryDumpList") is { } list)
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:605:    public override async Task<GrpcContracts.MonitorMemoryResponse> ReadMemory(
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:606:        GrpcContracts.MonitorReadMemoryRequest request,
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:609:        var response = await _inner.ReadMemoryAsync(
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:610:            new MonitorReadMemoryRequest(request.SessionId, (int)request.Address, (int)request.Length),
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:613:        return new GrpcContracts.MonitorMemoryResponse
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:622:    public override async Task<GrpcContracts.MonitorMemoryWriteResponse> WriteMemory(
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:623:        GrpcContracts.MonitorWriteMemoryRequest request,
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:626:        var response = await _inner.WriteMemoryAsync(
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:627:            new MonitorWriteMemoryRequest(request.SessionId, (int)request.Address, request.Data.ToByteArray()),
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:630:        return new GrpcContracts.MonitorMemoryWriteResponse
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:649:    public override async Task<GrpcContracts.MonitorMemoryResponse> ReadMemoryAtTick(
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:650:        GrpcContracts.ReadMemoryAtTickRequest request,
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:653:        var response = await _inner.ReadMemoryAtTickAsync(
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:654:            new ReadMemoryAtTickRequest(request.SessionId, request.TickIndex, request.Address, request.Length),
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:657:        return new GrpcContracts.MonitorMemoryResponse
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:1033:            PrivateMemoryBytes = value.PrivateMemoryBytes,
+src\ViceSharp.Host\Services\GrpcHostServiceAdapters.cs:1034:            ManagedMemoryBytes = value.ManagedMemoryBytes,
+src\ViceSharp.RomFetch\RomProvider.cs:27:    public ReadOnlyMemory<byte> LoadRom(string romName, string architecture)
+src\ViceSharp.RomFetch\RomProvider.cs:44:    public async Task<ReadOnlyMemory<byte>> DownloadRom(string romName, string architecture, CancellationToken cancellationToken)
+src\ViceSharp.Monitor\Views\MemoryInspectorView.cs:5:public sealed class MemoryInspectorView
+src\ViceSharp.Monitor\Views\MemoryInspectorView.cs:9:    public MemoryInspectorView(IBus bus)
+src\ViceSharp.Monitor\Monitor.cs:23:            "mem" or "m" => DumpMemory(parts),
+src\ViceSharp.Monitor\Monitor.cs:91:    private string DumpMemory(string[] parts)
+src\ViceSharp.RomM\RomMLibraryGateway.cs:148:                await target.WriteAsync(buffer.AsMemory(0, read), cancellationToken).ConfigureAwait(false);
+src\ViceSharp.Xbox.Input\InMemoryBindingStore.cs:15:public sealed class InMemoryBindingStore : IBindingStore
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:42:    Vic20Expansion Expansion = Vic20Expansion.Unexpanded,
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:55:    public string BoardModel => Expansion == Vic20Expansion.Unexpanded
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:57:        : $"Exp{(int)Expansion}K";
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:1:using CoreLayout = ViceSharp.Core.Vic20.Vic20MemoryLayout;
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:2:using CoreExpansion = ViceSharp.Core.Vic20.Vic20ExpansionKind;
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:10:public enum Vic20Expansion
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:23:public static class Vic20MemoryLayout
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:27:    public static bool IsInstalledRam(Vic20Expansion expansion, ushort address)
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:28:        => CoreLayout.IsInstalledRam((CoreExpansion)(int)expansion, address);
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:30:    public static IReadOnlyList<(ushort Start, ushort End)> ExpansionRegions(Vic20Expansion expansion)
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:31:        => CoreLayout.ExpansionRegions((CoreExpansion)(int)expansion);
+src\ViceSharp.Architectures\Vic20\Vic20Descriptor.cs:67:    public Vic20Descriptor WithExpansion(Vic20Expansion expansion)
+src\ViceSharp.Architectures\Vic20\Vic20Descriptor.cs:68:        => new(Profile with { Expansion = expansion }, Cartridge);
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:39:    public ObservableCollection<string> MemoryDump { get; } = new();
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:45:    public IReadOnlyList<string> MemorySearchKinds { get; } =
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:178:        var response = await _host.ReadMemoryAtTickAsync(tick.Index, 0x0000, 0x10000, cancellationToken).ConfigureAwait(true);
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:179:        MemoryDump.Clear();
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:192:            MemoryDump.Add(line);
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:245:    public void SearchMemory()
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:254:        if (!MemorySearch.TryParsePattern(SearchQuery, SelectedSearchKind, out var pattern))
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:261:        var offset = MemorySearch.IndexOf(_memoryImage, pattern);
+src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs:277:        MemoryDump.Clear();
+102:    // EasyFlash (CRT type 32) state. Up to 1024K image, banked 8K ROML.
+248:        if (_attachedCartridgeMappingMode == CartridgeMappingMode.EasyFlash)
+999:        if (TryStoreEasyFlashBankRegister(address, value))
+1180:    /// EasyFlash (CRT type 32) $DE00 bank-select. Bits 0-5 = bank mod
+1182:    /// deferred to a follow-up EasyFlash slice.
+1184:    private bool TryStoreEasyFlashBankRegister(ushort address, byte value)
+1186:        if (_attachedCartridgeMappingMode != CartridgeMappingMode.EasyFlash ||
+1364:            // EasyFlash up to 1024K (128 banks of 8K); require at least 64K
+1365:            // (8 banks) since smaller images are unusual for EasyFlash.
+1366:            CartridgeMappingMode.EasyFlash =>
+1413:                // EasyFlash: 8K ROML banks.
+1414:                CartridgeMappingMode.EasyFlash
+1500:            CartridgeMappingMode.EasyFlash
+docs\schemas\machine-architecture.schema.md:13:The schema deliberately models only the surface area that the existing C64 builder uses today; future iterations can extend it (cartridges, expansion ports, datasette, etc.) without breaking v1.
+docs\schemas\machine-architecture.schema.md:140:| board                 | string | no       | `Breadbox`, `BreadboxOld`, `C64C`, `Drean`, `SX64`, `PET64`, `Ultimax`, `C64GS`, `Japanese` |
+docs\schemas\machine-architecture.schema.md:143:| keyboardConnected     | bool   | no       | Keyboard matrix present (false on C64GS)                                               |
+docs\schemas\machine-architecture.schema.md:147:| cartridgeBootExpected | bool   | no       | Machine boots from cartridge (Ultimax / C64GS)                                         |
+docs\samples\machines\c64c.machine.yaml:9:  board: C64C
+docs\samples\machines\c64c.machine.yaml:12:  keyboardConnected: true
+docs\samples\machines\c64c.machine.yaml:16:  cartridgeBootExpected: false
+docs\samples\machines\c64gs.machine.yaml:9:  board: C64GS
+docs\samples\machines\c64gs.machine.yaml:12:  keyboardConnected: false
+docs\samples\machines\c64gs.machine.yaml:16:  cartridgeBootExpected: true
+docs\samples\machines\c64.machine.yaml:9:  board: Breadbox
+docs\samples\machines\c64.machine.yaml:12:  keyboardConnected: true
+docs\samples\machines\c64.machine.yaml:16:  cartridgeBootExpected: false
+docs\samples\machines\c64jap.machine.yaml:9:  board: Japanese
+docs\samples\machines\c64jap.machine.yaml:12:  keyboardConnected: true
+docs\samples\machines\c64jap.machine.yaml:16:  cartridgeBootExpected: false
+docs\samples\machines\c64old.machine.yaml:9:  board: BreadboxOld
+docs\samples\machines\c64old.machine.yaml:12:  keyboardConnected: true
+docs\samples\machines\c64old.machine.yaml:16:  cartridgeBootExpected: false
+docs\samples\machines\oldntsc.machine.yaml:9:  board: BreadboxOld
+docs\samples\machines\oldntsc.machine.yaml:12:  keyboardConnected: true
+docs\samples\machines\oldntsc.machine.yaml:16:  cartridgeBootExpected: false
+docs\samples\machines\newntsc.machine.yaml:9:  board: C64C
+docs\samples\machines\newntsc.machine.yaml:12:  keyboardConnected: true
+docs\samples\machines\newntsc.machine.yaml:16:  cartridgeBootExpected: false
+docs\samples\machines\pet64ntsc.machine.yaml:9:  board: PET64
+docs\samples\machines\pet64ntsc.machine.yaml:12:  keyboardConnected: true
+docs\samples\machines\pet64ntsc.machine.yaml:16:  cartridgeBootExpected: false
+docs\samples\machines\ntsc.machine.yaml:9:  board: Breadbox
+docs\samples\machines\ntsc.machine.yaml:12:  keyboardConnected: true
+

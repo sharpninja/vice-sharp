@@ -47,41 +47,49 @@ public sealed class CiaForceLoadTests
 
     /// <summary>
     /// FR/TR: FR-CIA-TIMER (BACKFILL-CIA force-load).
-    /// Use case: A demo programs Timer A latch and starts the timer; after
-    /// the counter has decremented a few cycles, software writes CRA with
-    /// bit 4 = 1 to retrigger the countdown without changing other CRA
-    /// bits. The counter must reload from the latch immediately so the
-    /// next tick observes the loaded-minus-one value.
-    /// Acceptance: latch = 16; after 5 ticks of decrement, write CRA = 0x11
-    /// (start + force-load). Counter reloads to 16 before any subsequent
-    /// tick; one tick later the counter reads 15.
+    /// Use case: Wolf64 cycle 2060404. KERNAL writes CRA=$11 (start +
+    ///   force-load). VICE ciatimer FLOAD-&gt;LOAD1-&gt;LOAD reloads two phi2
+    ///   clocks later; managed reloaded on the write so TA was $4024 vs
+    ///   native $0913.
+    /// Acceptance: latch = 16; after the timer has been running, write
+    ///   CRA = 0x11. The counter is still the pre-write value on the write
+    ///   cycle; after two Ticks it equals 16; the Tick after that is 15.
     /// </summary>
     [Fact]
-    public void CraBit4_ReloadsTimerAFromLatchImmediately()
+    public void CraBit4_RunningTimer_ReloadsTwoCyclesLater_MatchesViceLoadPipeline()
     {
         var (cia, _) = BuildCiaWithIrq();
 
-        // Timer A latch = 16 (0x0010).
         cia.Write(0xDC04, 0x10);
         cia.Write(0xDC05, 0x00);
-
-        // Start Timer A. CRA = 0x01: start only, no force-load.
         cia.Write(0xDC0E, 0x01);
 
-        // Let the timer count down a few cycles.
         for (var i = 0; i < 5; i++)
             cia.Tick();
 
-        // Force-load: CRA = 0x11 (start + force-load bit 4).
+        var before = ReadTimerACounter(cia);
+        before.Should().NotBe((ushort)16, "the running counter must have left the latch before force-load");
+
         cia.Write(0xDC0E, 0x11);
 
-        ReadTimerACounter(cia).Should().Be((ushort)16,
-            "force-load reloads counter from latch immediately on the CRA write");
+        ReadTimerACounter(cia).Should().Be(before,
+            "VICE FLOAD does not reload on the CRA write cycle");
 
         cia.Tick();
+        ReadTimerACounter(cia).Should().NotBe((ushort)16,
+            "VICE LOAD1 cycle still has the old counter");
 
+        cia.Tick();
+        ReadTimerACounter(cia).Should().Be((ushort)16,
+            "VICE LOAD reloads from the latch two phi2 clocks after FLOAD");
+
+        cia.Tick();
+        ReadTimerACounter(cia).Should().Be((ushort)16,
+            "VICE LOAD clears COUNT3; the next clock does not decrement");
+
+        cia.Tick();
         ReadTimerACounter(cia).Should().Be((ushort)15,
-            "after one tick post-load, counter has decremented by one");
+            "counting resumes from the latched value after COUNT3 re-primes");
     }
 
     /// <summary>
@@ -136,10 +144,12 @@ public sealed class CiaForceLoadTests
         // CRA = 0x10: force-load only, NOT started.
         cia.Write(0xDC0E, 0x10);
 
-        ReadTimerACounter(cia).Should().Be((ushort)0x1234,
-            "force-load reloads stopped Timer A counter from latch");
+        cia.Tick();
+        cia.Tick();
 
-        // Tick a few cycles; counter must NOT decrement (timer stopped).
+        ReadTimerACounter(cia).Should().Be((ushort)0x1234,
+            "force-load reloads stopped Timer A counter from latch after VICE LOAD pipeline");
+
         for (var i = 0; i < 4; i++)
             cia.Tick();
 
@@ -150,11 +160,10 @@ public sealed class CiaForceLoadTests
     /// <summary>
     /// FR/TR: FR-CIA-TIMER (BACKFILL-CIA force-load).
     /// Use case: The same FORCE_LOAD semantics apply to CRB bit 4 for
-    /// Timer B: writing 1 reloads Timer B counter from the Timer B latch
-    /// ($DC06 / $DC07) immediately.
+    /// Timer B: writing 1 starts the VICE FLOAD-&gt;LOAD1-&gt;LOAD pipeline.
     /// Acceptance: Timer B latch = 16; after 5 ticks of decrement,
-    /// writing CRB = 0x11 reloads counter to 16 and a subsequent tick
-    /// drops it to 15.
+    /// writing CRB = 0x11 reloads counter to 16 two ticks later and a
+    /// subsequent tick drops it to 15.
     /// </summary>
     [Fact]
     public void CrbBit4_ReloadsTimerBFromLatchImmediately()
@@ -175,13 +184,23 @@ public sealed class CiaForceLoadTests
         // Force-load: CRB = 0x11.
         cia.Write(0xDC0F, 0x11);
 
+        ReadTimerBCounter(cia).Should().NotBe((ushort)16,
+            "VICE FLOAD does not reload Timer B on the CRB write cycle");
+
+        cia.Tick();
+        cia.Tick();
+
         ReadTimerBCounter(cia).Should().Be((ushort)16,
-            "force-load reloads Timer B counter from latch immediately on the CRB write");
+            "VICE LOAD reloads Timer B two phi2 clocks after FLOAD");
+
+        cia.Tick();
+        ReadTimerBCounter(cia).Should().Be((ushort)16,
+            "VICE LOAD clears COUNT3; the next clock does not decrement");
 
         cia.Tick();
 
         ReadTimerBCounter(cia).Should().Be((ushort)15,
-            "after one tick post-load, Timer B counter has decremented by one");
+            "counting resumes from the latched value after COUNT3 re-primes");
     }
 
     /// <summary>
@@ -213,6 +232,9 @@ public sealed class CiaForceLoadTests
 
         // Add force-load by writing CRA = 0x91 (same flags + bit 4).
         cia.Write(0xDC0E, 0x91);
+
+        cia.Tick();
+        cia.Tick();
 
         ReadTimerACounter(cia).Should().Be((ushort)16,
             "force-load reloads the counter regardless of other CRA bits");

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-HOST-004",
+  "title": "Host-Normalized Keyboard, Joystick, and Machine Control",
+  "status": "pending",
+  "priority": "high",
+  "body": "The host shall accept normalized input events and machine control commands from UI clients and inject or apply them at deterministic boundaries.\n\n## Acceptance Criteria\n- Keyboard key-down, key-up, RESTORE, and SHIFT LOCK events can be submitted through the host boundary.\n- Joystick port 1 and port 2 direction/fire state can be submitted through the host boundary.\n- Start, pause, resume, reset, and shutdown controls are submitted through the host boundary.\n- Input events preserve client order through a monotonically increasing sequence number.\n- Unknown mappings, invalid port numbers, and stale sequence numbers are rejected with structured errors.\n- The same normalized input event stream can be recorded for deterministic replay.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

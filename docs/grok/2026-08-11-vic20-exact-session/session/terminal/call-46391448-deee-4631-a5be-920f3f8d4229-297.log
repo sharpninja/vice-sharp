@@ -1,0 +1,63 @@
+make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+make: Nothing to be done for 'all'.
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c: In function 'vice_shim_set_current_thread_description':
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c:265:30: warning: cast between incompatible function types from 'FARPROC' {aka 'long long int (*)(void)'} to 'HRESULT (*)(void *, const WCHAR *)' {aka 'long int (*)(void *, const short unsigned int *)'} [-Wcast-function-type]
+  265 |     set_thread_description = (vice_shim_set_thread_description_fn)GetProcAddress(kernel32, "SetThreadDescription");
+      |                              ^
+Built: /f/GitHub/vice-sharp/native/vice_xvic.dll
+-rwxr-xr-x 1 kingd kingd 10911412 Aug  5 14:54 /f/GitHub/vice-sharp/native/vice_xvic.dll
+NATIVE_EXIT=0
+[xUnit.net 00:00:02.54]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:02.54]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.55]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [FAIL]
+[xUnit.net 00:00:02.55]       VIC-I $9000 mismatch after 1024 cycles: native=$00 managed=$05
+[xUnit.net 00:00:02.55]       Stack Trace:
+[xUnit.net 00:00:02.55]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs(155,0): at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles)
+[xUnit.net 00:00:02.55]            at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+[xUnit.net 00:00:02.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:02.56]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged [FAIL]
+[xUnit.net 00:00:02.57]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:02.57]       Expected: 1
+[xUnit.net 00:00:02.57]       Actual:   2
+[xUnit.net 00:00:02.57]       Stack Trace:
+[xUnit.net 00:00:02.57]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs(194,0): at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged()
+[xUnit.net 00:00:02.57]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:02.57]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.58]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [11 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [4 ms]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256) [7 ms]
+  Error Message:
+   VIC-I $9000 mismatch after 256 cycles: native=$00 managed=$05
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 155
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [6 ms]
+  Error Message:
+   VIC-I $9000 mismatch after 1024 cycles: native=$00 managed=$05
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 155
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [6 ms]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged [9 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 1
+Actual:   2
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 194
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [5 ms]
+
+Test Run Failed.
+Total tests: 16
+     Passed: 13
+     Failed: 3
+ Total time: 3.1074 Seconds
+TEST_EXIT=1

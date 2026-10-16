@@ -670,6 +670,17 @@ public sealed class AvaloniaBoundaryTests
         public ValueTask<EmulatorCommandResponse> ResetAndAutostartDrive8Async(CancellationToken cancellationToken = default)
             => CommandAsync(cancellationToken, RpcStatus.NotImplemented("No autostart support."));
 
+        public ValueTask<LoadProgramResponse> LoadProgramAsync(string filePath, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new LoadProgramResponse(
+                RpcStatus.NotImplemented("No program load support."),
+                0,
+                0,
+                false,
+                CreateStatus()));
+        }
+
         public ValueTask<EmulatorCommandResponse> SetLimiterRateAsync(double ratePercent, CancellationToken cancellationToken = default)
         {
             LimiterRatePercent = ratePercent;

@@ -36,17 +36,17 @@ partial class Build
     readonly string? CommitMessage;
 
     Target SyncAzure => _ => _
-        .Description("Push current branch to origin (Azure DevOps)")
+        .Description("Retired: Azure DevOps is not used. Do not push azure.")
         .Executes(() =>
         {
-            Git($"push origin");
+            Git($"push azure");
         });
 
     Target SyncGithub => _ => _
-        .Description("Push current branch to github remote (downstream mirror)")
+        .Description("Push current branch to origin (GitHub; primary for CI/release)")
         .Executes(() =>
         {
-            Git($"push github");
+            Git($"push origin");
         });
 
     Target RebuildAzure => _ => _

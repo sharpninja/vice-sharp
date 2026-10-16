@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-PRF-001",
+  "title": "Machine Profile Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for required devices, ROMs, clocks, and address maps.",
+  "acceptanceCriteria": []
+}

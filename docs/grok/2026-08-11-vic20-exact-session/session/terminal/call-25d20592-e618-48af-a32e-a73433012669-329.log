@@ -1,0 +1,34 @@
+PAL 10s cycles = 11084050
+NTSC 10s cycles = 10227270
+
+xvic vice_machine_create call=1 model=vic20ntsc
+xvic vice_machine_create call=2 model=vic20
+[xUnit.net 00:00:02.47]       model=vic20ntsc hz=1022727 targetCycles=10227270 seconds=10
+[xUnit.net 00:00:02.47]       wallMs=409 matchedCycles=5004
+[xUnit.net 00:00:02.47]       RESULT=DIVERGE firstCpu=5005 machineSec=0.004894
+[xUnit.net 00:00:02.47]       c=5005 t=0.004894s nPC=$FDB1 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD 
+mS=$FD nP=$24 mP=$24
+[xUnit.net 00:00:02.51]       model=vic20 hz=1108405 targetCycles=11084050 seconds=10
+[xUnit.net 00:00:02.51]       wallMs=31 matchedCycles=5004
+[xUnit.net 00:00:02.51]       RESULT=DIVERGE firstCpu=5005 machineSec=0.004515
+[xUnit.net 00:00:02.51]       c=5005 t=0.004515s nPC=$FDB1 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD 
+mS=$FD nP=$24 mP=$24
+  Failed ViceSharp.TestHarness.Vic20.Vic20LockstepTenSecondProbe.Lockstep_TenSeconds_MachineTime(model: "vic20ntsc", 
+hz: 1022727) [514 ms]
+  Error Message:
+   model=vic20ntsc hz=1022727 targetCycles=10227270 seconds=10
+wallMs=409 matchedCycles=5004
+RESULT=DIVERGE firstCpu=5005 machineSec=0.004894
+c=5005 t=0.004894s nPC=$FDB1 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24
+  Failed ViceSharp.TestHarness.Vic20.Vic20LockstepTenSecondProbe.Lockstep_TenSeconds_MachineTime(model: "vic20", hz: 
+1108405) [42 ms]
+  Error Message:
+   model=vic20 hz=1108405 targetCycles=11084050 seconds=10
+wallMs=31 matchedCycles=5004
+RESULT=DIVERGE firstCpu=5005 machineSec=0.004515
+c=5005 t=0.004515s nPC=$FDB1 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24
+Test Run Failed.
+Total tests: 2
+     Failed: 2
+EXIT=1
+

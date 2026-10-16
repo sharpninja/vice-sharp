@@ -1,0 +1,115 @@
+{
+  "CapturedAtUtc": "2026-09-28T19:56:12.0488052Z",
+  "RootHead": "687b03a75c1971bdb4bcbe07f2b5ea2d94f47b0d",
+  "RootBranch": "main",
+  "RootOrigin": "https://github.com/sharpninja/vice-sharp.git",
+  "RootDirtyCount": 612,
+  "RootDirtyInventorySha256": "F024D2894A32AC95D18FF28EF493CA456AE4C346754F72A30FAA29C94D0F072F",
+  "RootUntrackedCount": 540,
+  "RootUntrackedPathSha256": "D632A1CB161139B3F84343A2B33E973CB60D9DC095971B8D3D7F340294735576",
+  "NativeHead": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "NativeDirtyCount": 2539,
+  "NativeDirtyInventorySha256": "985F36DAABD9FFD2B3796D2A2A633B459BC928C06769D01F9B7EECF4D52CF757",
+  "NativeUntrackedCount": 2527,
+  "NativeUntrackedPathSha256": "F45ABE9C35011E30F1713DD41D99A33D9717B8E04BB1603BF39908DD0AA38B6E",
+  "OracleBinaries": [
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\167A717D44EAD9A4\\libiconv-2.dll",
+      "Length": 1136529,
+      "Sha256": "FF31FA811F9C07CC7FDAA68C9E8BCA3A7B4FDF6E0A079A58175EA58BA139C7AE",
+      "LastWriteTimeUtc": "2026-09-25T17:46:33.8482737Z"
+    },
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\167A717D44EAD9A4\\vice_x64.dll",
+      "Length": 14581663,
+      "Sha256": "E5B076517136813C589258A0550256C7A244EA34431687E4DBC72201A4F4557B",
+      "LastWriteTimeUtc": "2026-09-25T17:46:33.7928601Z"
+    },
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\167A717D44EAD9A4\\vice_xvic.dll",
+      "Length": 10930779,
+      "Sha256": "F03A7A3545C5964FBAB863D3F3D1AB7A2EB99C2543ED94071F80F07648513886",
+      "LastWriteTimeUtc": "2026-08-11T18:10:36.4494845Z"
+    },
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\167A717D44EAD9A4\\zlib1.dll",
+      "Length": 120814,
+      "Sha256": "CB7AB3788D10940DF874ACD97B1821BBB5EE4A91F3EEC11982BB5BF7A3C96443",
+      "LastWriteTimeUtc": "2026-09-25T17:46:33.8685279Z"
+    },
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\58959ABFBD235466\\libiconv-2.dll",
+      "Length": 1136529,
+      "Sha256": "FF31FA811F9C07CC7FDAA68C9E8BCA3A7B4FDF6E0A079A58175EA58BA139C7AE",
+      "LastWriteTimeUtc": "2026-09-16T13:22:19.4282621Z"
+    },
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\58959ABFBD235466\\vice_x64.dll",
+      "Length": 14583843,
+      "Sha256": "049F0B1B19EF51B91B2368B65D13E954A13DD6D08F6B9B19CB546B1A2B9946AC",
+      "LastWriteTimeUtc": "2026-08-11T18:03:55.6902280Z"
+    },
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\58959ABFBD235466\\vice_xvic.dll",
+      "Length": 10930779,
+      "Sha256": "F03A7A3545C5964FBAB863D3F3D1AB7A2EB99C2543ED94071F80F07648513886",
+      "LastWriteTimeUtc": "2026-08-11T18:10:36.4494845Z"
+    },
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\58959ABFBD235466\\zlib1.dll",
+      "Length": 120814,
+      "Sha256": "CB7AB3788D10940DF874ACD97B1821BBB5EE4A91F3EEC11982BB5BF7A3C96443",
+      "LastWriteTimeUtc": "2026-09-16T13:22:19.4556734Z"
+    },
+    {
+      "Path": ".mcpServer\\tmp\\ViceSharpNative\\E5A7FCF96488DD00\\vice_xvic.dll",
+      "Length": 10930779,
+      "Sha256": "F03A7A3545C5964FBAB863D3F3D1AB7A2EB99C2543ED94071F80F07648513886",
+      "LastWriteTimeUtc": "2026-08-11T18:10:36.4494845Z"
+    },
+    {
+      "Path": "native\\libiconv-2.dll",
+      "Length": 1136529,
+      "Sha256": "FF31FA811F9C07CC7FDAA68C9E8BCA3A7B4FDF6E0A079A58175EA58BA139C7AE",
+      "LastWriteTimeUtc": "2026-09-25T17:46:33.8482737Z"
+    },
+    {
+      "Path": "native\\vice_x64.dll",
+      "Length": 14581663,
+      "Sha256": "E5B076517136813C589258A0550256C7A244EA34431687E4DBC72201A4F4557B",
+      "LastWriteTimeUtc": "2026-09-25T17:46:33.7928601Z"
+    },
+    {
+      "Path": "native\\vice_xvic.dll",
+      "Length": 10930779,
+      "Sha256": "F03A7A3545C5964FBAB863D3F3D1AB7A2EB99C2543ED94071F80F07648513886",
+      "LastWriteTimeUtc": "2026-08-11T18:10:36.4494845Z"
+    },
+    {
+      "Path": "native\\zlib1.dll",
+      "Length": 120814,
+      "Sha256": "CB7AB3788D10940DF874ACD97B1821BBB5EE4A91F3EEC11982BB5BF7A3C96443",
+      "LastWriteTimeUtc": "2026-09-25T17:46:33.8685279Z"
+    },
+    {
+      "Path": "src\\ViceSharp.Core\\bin\\Release\\net10.0\\vice_xvic.dll",
+      "Length": 10927648,
+      "Sha256": "5CF50663711488A241A6826499D3C1D85231EE8B59D9655B523309405AB9F4E0",
+      "LastWriteTimeUtc": "2026-08-11T18:03:19.8199338Z"
+    },
+    {
+      "Path": "tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\vice_xvic.dll",
+      "Length": 10930779,
+      "Sha256": "F03A7A3545C5964FBAB863D3F3D1AB7A2EB99C2543ED94071F80F07648513886",
+      "LastWriteTimeUtc": "2026-08-11T18:10:36.4494845Z"
+    },
+    {
+      "Path": "tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\native\\vice_xvic.dll",
+      "Length": 10930779,
+      "Sha256": "F03A7A3545C5964FBAB863D3F3D1AB7A2EB99C2543ED94071F80F07648513886",
+      "LastWriteTimeUtc": "2026-08-11T18:10:36.4494845Z"
+    }
+  ],
+  "RomFiles": [],
+  "RomStatus": "No ROM files found under repo rom/roms directories; external ROM hashes must be captured when parity execution begins."
+}

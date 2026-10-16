@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC-003",
+  "title": "Bitmap Display Modes (Standard, Multicolor)",
+  "status": "pending",
+  "priority": "high",
+  "body": "The VIC-II shall support Standard Bitmap Mode and Multicolor Bitmap Mode. In bitmap modes, the display is a 320x200 (standard) or 160x200 (multicolor, double-wide pixels) bitmap with color data from the screen matrix and Color RAM.\n\n## Acceptance Criteria\n- Standard bitmap mode (BMM=1, MCM=0) displays 320x200 pixels; each 8x8 cell has a foreground/background pair from the screen matrix byte.\n- Multicolor bitmap mode (BMM=1, MCM=1) displays 160x200 double-wide pixels; each 4x8 cell uses up to 4 colors from screen matrix, Color RAM, and background register.\n- The bitmap base address is selected by bit 3 of $D018 (either $0000 or $2000 relative to VIC bank).\n- BMM + ECM combination is invalid for visible graphics output and renders as color 0, but x64sc still derives the hidden foreground/priority bit from the underlying standard-bitmap one-bits.\n- BMM + MCM + ECM combination is invalid for visible graphics output and renders as color 0, but x64sc still derives the hidden foreground/priority bit from multicolor bitmap pairs %10/%11.\n- Bitmap data fetch timing matches hardware (g-access reads bitmap data instead of character generator).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

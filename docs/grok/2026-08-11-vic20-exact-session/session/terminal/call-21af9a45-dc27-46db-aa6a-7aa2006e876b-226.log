@@ -1,0 +1,39 @@
+feat/iteration2-vic20
+## feat/iteration2-vic20
+ M HANDOFF.md
+ M README.md
+ M docs/Iteration-Roadmap.md
+ M docs/requirements/functional/FR-Machine-Profiles.md
+ M src/ViceSharp.Abstractions/IDeviceRegistry.cs
+ M src/ViceSharp.Core/ArchitectureBuilder.cs
+ M src/ViceSharp.Host.InProcess/Runtime/DefaultEmulatorRuntimeFactory.cs
+ M src/ViceSharp.Launcher/ViceTopologyBuilder.cs
+ M src/ViceSharp.Xbox.ViewModels/XboxSettingsViewModel.cs
+ M tests/ViceSharp.TestHarness/Launcher/ViceTopologyBuilderTests.cs
+ M tests/ViceSharp.TestHarness/MachineTestFactory.cs
+ M tests/ViceSharp.TestHarness/Xbox/XboxComputerModelPickerTests.cs
+?? docs/S-Blox/
+?? docs/requirements/functional/FR-VIC20.md
+?? docs/reviews/code-review-20260714T001056552Z.md
+?? docs/reviews/code-review-20260714T004256563Z.md
+?? docs/romless-vic-badline-fix.md
+?? manifests/
+?? src/ViceSharp.Architectures/Vic20/
+/// target performs any publishing side effect. Call it as the first line of
+$"{targetName} only publishes a tagged release: HEAD must carry exactly one vX.Y.Z tag. " +
+Target PublishNuget => _ => _
+Target PublishWiki => _ => _
+Target PublishGitHubRelease => _ => _
+Target DeployXboxLocal => _ => _
+//    (dotnet) restore the stale nuget.g.targets does not import the MSIX
+Target PublishMsi => _ => _
+Target InstallMsi => _ => _
+Target PublishWinget => _ => _
+// targets DependsOn(PublishGitHubRelease) and download the released MSI.
+Target PublishChocolatey => _ => _
+Target PublishScoop => _ => _
+// Three targets for the ViceSharp.Xbox head, split by where they can run:
+Target PublishXbox => _ => _
+Target DeployXbox => _ => _
+/// eligible half of the Xbox build; the DEVICE targets (PublishXbox/DeployXbox)
+Target ValidateXbox => _ => _

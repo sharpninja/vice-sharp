@@ -1,0 +1,49 @@
+
+Path                              LineNumber LineGet-ChildItem: 
+
+----                              ---------- ----
+F:\GitHub\vice-sharp\README.md             5 > **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-e.
+F:\GitHub\vice-sharp\README.md            49 - [docs/](docs/README.md) - full documentation index (architecture, publi.
+F:\GitHub\vice-sharp\README.md            53 ? **Iteration 0 (Foundations)**: Complete. All core primitives implemente.
+F:\GitHub\vice-sharp\README.md            54 ? **Iteration 1 (C64 Bringup)**: **Complete (Phase 1 closed 2026-05-31; d.
+F:\GitHub\vice-sharp\README.md            57   - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNIN.
+F:\GitHub\vice-sharp\README.md            73 Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the .
+F:\GitHub\vice-sharp\README.md            77 ### Iteration 0: Foundations
+F:\GitHub\vice-sharp\README.md            81 | .NET 10 + Nuke build pipeline | ? | 100% | iteration0 batch 1 |
+F:\GitHub\vice-sharp\README.md            82 | MCP Server + TODO workspace integration | ? | 100% | iteration0 batch 2.
+F:\GitHub\vice-sharp\README.md            83 | Documentation set (Architecture, Public API, Roadmap) | ? | 100% | iter.
+F:\GitHub\vice-sharp\README.md            84 | GraphRAG ingest | ? | 100% | iteration0 batch 4 |
+F:\GitHub\vice-sharp\README.md            86 ### Iteration 1: C64 Bringup
+F:\GitHub\vice-sharp\README.md            92 | MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite .
+F:\GitHub\vice-sharp\README.md           100 | 1541 / IEC / D64 (attach + deterministic sector reads + IEC ATN timing .
+F:\GitHub\vice-sharp\README.md           101 | Datasette / TAP (pulse reads + CIA1 FLAG + builder wiring + rewind/seek.
+F:\GitHub\vice-sharp\README.md           103 | Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + VIC + CIA TOD + SID ADSR rou.
+F:\GitHub\vice-sharp\README.md           105 | Keyboard matrix + control-port parity (LoadFromFile + EnumerateDevices .
+F:\GitHub\vice-sharp\README.md           109 | x64sc variant lockstep gate (10-frame depth across no-cart variants, 32.
+F:\GitHub\vice-sharp\README.md           110 | Upstream VICE testbench integration (debugcart + limitcycles + PRG auto.
+F:\GitHub\vice-sharp\README.md           112 ### Iterations 2-5: Other Machines
+F:\GitHub\vice-sharp\README.md           114 | Machine | Target Iteration | State | % |
+F:\GitHub\vice-sharp\README.md           127 | BenchmarkDotNet harness vs native VICE | ?? | 60% | `PERF-TUNING-001` P.
+F:\GitHub\vice-sharp\README.md           131 | Completion Dashboard (this section) | ? | 100% | `DOC-DASHBOARD-001` Ph.
+F:\GitHub\vice-sharp\README.md           139 | C64 / C64C | MOS 6510 + VIC-II + SID + CIA x2 | Iteration 1 |
+F:\GitHub\vice-sharp\README.md           140 | SX-64 | Same as C64 (built-in monitor + 1541) | Iteration 1 |
+F:\GitHub\vice-sharp\README.md           141 | VIC-20 | MOS 6502 + VIC + VIA x2 | Iteration 2 |
+F:\GitHub\vice-sharp\README.md           142 | C128 | MOS 8502 + VIC-IIe + SID + CIA x2 + Z80 | Iteration 3 |
+F:\GitHub\vice-sharp\README.md           143 | PET | MOS 6502 + PIA/VIA + CRTC | Iteration 4 |
+F:\GitHub\vice-sharp\README.md           144 | Plus/4 / C16 | MOS 7501 + TED | Iteration 5 |
+F:\GitHub\vice-sharp\README.md           189 - **ViceSharp.Architectures** - machine definitions: C64 and the C1541 tr.
+F:\GitHub\vice-sharp\docs\plan.md          1 # ViceSharp Phase 1 Completion Plan
+F:\GitHub\vice-sharp\docs\plan.md          3 **STATUS: PHASE 1 COMPLETE (2026-05-31, HEAD `6086e11`).** See `HANDOFF.m.
+F:\GitHub\vice-sharp\docs\plan.md         10 entirety. Keep this document as the live Phase 1 closeout plan. Do not ap.
+F:\GitHub\vice-sharp\docs\plan.md         26 TODOs from real Phase 1 blockers before new feature work continues.
+F:\GitHub\vice-sharp\docs\plan.md         28 ## Phase 1 Definition
+F:\GitHub\vice-sharp\docs\plan.md         30 Phase 1 means Iteration 1 C64 bringup is complete enough to operate the C.
+F:\GitHub\vice-sharp\docs\plan.md         38 Phase 1 is complete only when all of these are true:
+F:\GitHub\vice-sharp\docs\plan.md         40 1. Every Phase 1 implementation slice is driven by current canonical
+F:\GitHub\vice-sharp\docs\plan.md         68    agree on what is done, what is deferred, and what remains post-Phase 1.
+F:\GitHub\vice-sharp\docs\plan.md         97 1. Query MCP TODO again and classify each open item as Phase 1 blocker,
+
+Line |
+   2 |  . GitHub\vice-sharp\docs -Filter "*phase*","*roadmap*","*plan*" -Recurs .
+     |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot convert 'System.Object[]' to the type 'System.String' required by parameter 'Filter'. Specified method is not supported.

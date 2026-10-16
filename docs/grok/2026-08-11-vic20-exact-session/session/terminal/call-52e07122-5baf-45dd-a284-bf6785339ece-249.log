@@ -1,0 +1,31 @@
+  ViceSharp.Library.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.iOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.iOS\bin\Release\net10.0\ViceSharp.Host.iOS.dll
+  ViceSharp.Host.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Host.Xbox\bin\Release\net10.0\ViceSharp.Host.Xbox.dll
+  ViceSharp.Host.Android -> F:\GitHub\vice-sharp\src\ViceSharp.Host.Android\bin\Release\net10.0\ViceSharp.Host.Android.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.Heads.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\bin\Release\net10.0\ViceSharp.Heads.Tests.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+  Building VICE native library
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:24.01
+BUILD_EXIT=0
+Phase 2 verification receipts 2026-08-05T14:46:06.5975996-05:00
+1 Vic20 filter: 80 passed / 0 failed / 0 skipped
+2 Vic20 lockstep: 17 passed / 0 failed (native create+step+5000-cycle A/X/Y/S/P/PC)
+3 C64 smoke: 31 passed / 0 failed
+4 Boot proof: 19 passed including READY prompt
+5 Build: see build.log
+Open-bus: BasicBus last-data; ROM reads skip latch except chargen (VICE parity)
+vice_xvic.dll present: True
+CI: VIC20 + dos1540 ROMs added to EnsureCiRomRoot
+Known residual: intermittent mid-instruction PC lag after cycle ~5005

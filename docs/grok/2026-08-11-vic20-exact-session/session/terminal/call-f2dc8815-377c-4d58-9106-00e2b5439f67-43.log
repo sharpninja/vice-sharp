@@ -1,0 +1,6 @@
+2026-08-05 05:53:48 -05:00
+ .../ViewModels/AttachPanelViewModel.cs             |  3 [32m+[m[31m-[m
+ .../Services/MediaServiceHost.cs                   | 44 [32m++++++++++++++++++[m[31m----[m
+ .../MediaExtensionMap.cs                           |  3 [32m+[m[31m-[m
+ src/ViceSharp.Xbox/RomM/XboxGameLauncher.cs        | 14 [32m++++++[m[31m-[m
+ 4 files changed, 53 insertions(+), 11 deletions(-)

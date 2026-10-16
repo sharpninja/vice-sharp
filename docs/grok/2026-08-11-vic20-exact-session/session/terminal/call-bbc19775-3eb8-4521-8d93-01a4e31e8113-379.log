@@ -1,0 +1,10 @@
+Credential user: kingd
+ParserError: 
+Line |
+   4 |  $probe = Invoke-Command -ComputerName PAYTON-DESKTOP -Credential $cre .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | At line:5 char:64 + ...   Docker = (Get-Command docker -ErrorAction SilentlyContinue)?.Source +                 
+     | ~~~~~~~~ Unexpected token '?.Source' in expression or statement.  At line:5 char:64 + ...   Docker =
+     | (Get-Command docker -ErrorAction SilentlyContinue)?.Source +                                                    
+     | ~ The hash literal was incomplete.  At line:13 char:3 +   } +   ~ Unexpected token '}' in expression or
+     | statement.

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-ROMM-LAUNCH-001",
+  "title": "Download, attach, boot",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. Selecting a game downloads it, attaches to the right slot, and boots on the supported Avalonia product path. TR-ROMM-SEC-001. Xbox/UWP launch acceptance is archived and outside product scope.\nAC-LAUNCH-01: DownloadAsync accepts one relative filename, contains it under cacheDir/{romId}, reuses only on expected-size match, streams to a temporary file, rejects overflow/truncation, and atomically publishes complete content with progress -> RomMGatewayDownloadTests.Streams_Reuses_Progress + RejectsFileNamesOutsideRomCache + TruncatedDownload_DoesNotPublishPartialCacheEntry.\nAC-LAUNCH-02: slot = SelectedSlot or MediaExtensionMap default from fs_name -> MediaExtensionMapTests.Extension_MapsSlot.\nAC-LAUNCH-03: .prg is not launchable and Attach is disabled -> MediaExtensionMapTests.Prg_NotLaunchable + LibraryBrowseViewModelTests.Prg_AttachDisabled.\nAC-LAUNCH-04: attach/attach+start invoke IGameLauncher with resolved slot + autostart flag -> LibraryBrowseViewModelTests.AttachStart_InvokesLauncher.\nAC-LAUNCH-05: Avalonia launcher delegates to DropAndStartFileAsync(autostart)/AttachAsync(attach-only) -> AvaloniaGameLauncherTests.DelegatesToShell.\nAC-LAUNCH-06: two-phase status (Downloading N% then Starting) -> LibraryBrowseViewModelTests.Launch_TwoPhaseStatus.\n\n## Acceptance Criteria\n- `DownloadAsync` streams to `<cacheDir>/{romId}/{fs_name}`, reuses on size match, reports\n- slot = `SelectedSlot` or `MediaExtensionMap` default from `fs_name` ->\n- `.prg` is not launchable and Attach is disabled -> `MediaExtensionMapTests.Prg_NotLaunchable`\n- attach/attach+start invoke `IGameLauncher` with the resolved slot + autostart flag ->\n- Xbox launcher reads bytes -> `AttachMediaAsync` payload -> `AutostartDrive8Async`(disk)/\n- Avalonia launcher delegates to `DropAndStartFileAsync`(autostart)/`AttachAsync`\n- two-phase status (\"Downloading N%\" then \"Starting\") ->",
+  "condition": null,
+  "acceptanceCriteria": []
+}

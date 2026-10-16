@@ -1,0 +1,7 @@
+native/vice/vice/src\drive\iecieee\via2d.c:471:    via2p->drive->req_ref_cycles = BUS_READ_DELAY;
+native/vice/vice/src\drive\iecieee\via2d.c:494:    via2p->drive->req_ref_cycles = BUS_READ_DELAY;
+native/vice/vice/src\core\viacore.c:282:        return via_context->tal - partial_cycle;                     /* 3-4=FFFF */
+native/vice/vice/src\core\viacore.c:350:        via_context->t1reload += nuf * full_cycle;
+native/vice/vice/src\core\viacore.c:354:            VIALOG("update_via_t1_latch: t1reload too far into the future: rclk %lu, t1reload %lu, full_cycle %u, T1 %04x, nuf %lu\n", rclk, via_context->t1reload, full_cycle, viacore_t1(via_context, rclk), nuf);
+native/vice/vice/src\core\viacore.c:1322:        via_context->t1zero += full_cycle;
+native/vice/vice/src\core\viacore.c:1331:        via_context->t1reload += full_cycle;

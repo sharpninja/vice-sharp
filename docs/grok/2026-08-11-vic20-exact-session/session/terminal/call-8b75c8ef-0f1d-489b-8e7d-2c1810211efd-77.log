@@ -1,0 +1,104 @@
+
+Name            : dotnet-dump.exe
+CommandType     : Application
+Definition      : C:\Users\kingd\.dotnet\tools\dotnet-dump.exe
+Extension       : .exe
+Path            : C:\Users\kingd\.dotnet\tools\dotnet-dump.exe
+FileVersionInfo : File:             C:\Users\kingd\.dotnet\tools\dotnet-dump.exe
+                  InternalName:     dotnet-dump.dll
+                  OriginalFilename: dotnet-dump.dll
+                  FileVersion:      9.0.13.11903
+                  FileDescription:  dotnet-dump
+                  Product:          dotnet-dump
+                  ProductVersion:   9.0.661903+d7b455b46332b31fd9ba3a3f3e020387984c511a
+                  Debug:            False
+                  Patched:          False
+                  PreRelease:       False
+                  PrivateBuild:     False
+                  SpecialBuild:     False
+                  Language:         Language Neutral
+                  
+
+
+dotnet-dump                                 9.0.661903                              dotnet-dump                
+Loading core dump: C:\Users\kingd\AppData\Local\Temp\vicesharp-crash.dmp ...
+OS Thread Id: 0x11bd0 (0)
+        Child SP               IP Call Site
+000000078BA06380 00007ffb110400e4 [InlinedCallFrame: 000000078ba06380] 
+000000078BA06380 00007ffa2ad87f20 [InlinedCallFrame: 000000078ba06380] 
+000000078BA06330 00007FFA2AD87F20 System.IO.PathHelper.GetFullPathName(System.ReadOnlySpan`1<Char>, System.Text.ValueStringBuilder ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/IO/PathHelper.Windows.cs @ 77]
+000000078BA06430 00007FFA2AD87C63 System.IO.PathHelper.Normalize(System.String) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/IO/PathHelper.Windows.cs @ 30]
+000000078BA066D0 00007FFA2AD6C662 System.IO.Path.GetFullPathInternal(System.String) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/IO/Path.Windows.cs @ 143]
+000000078BA06710 00007FFA2AD6C0DB System.IO.Path.GetFullPath(System.String) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/IO/Path.Windows.cs @ 58]
+000000078BA06750 00007FFA2AD5C2BB System.IO.File.Exists(System.String) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/IO/File.cs @ 100]
+000000078BA06780 00007FF9D0E64623 ViceSharp.RomM.FileRecentsStore+<ReadUnlockedAsync>d__7.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.RomM\FileRecentsStore.cs @ 91]
+000000078BA068A0 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA06910 00007FF9D0E64092 ViceSharp.RomM.FileRecentsStore.ReadUnlockedAsync(System.Threading.CancellationToken)
+000000078BA06980 00007FF9D0E63D7B ViceSharp.RomM.FileRecentsStore+<LoadAsync>d__4.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.RomM\FileRecentsStore.cs @ 31]
+000000078BA06AA0 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA06B10 00007FF9D0E63B22 ViceSharp.RomM.FileRecentsStore.LoadAsync(System.Threading.CancellationToken)
+000000078BA06B80 00007FF9D0E634FD ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel+<GetListsRailAsync>d__80.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 526]
+000000078BA06D30 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA06DA0 00007FF9D0E62B12 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.GetListsRailAsync(System.Threading.CancellationToken)
+000000078BA06E10 00007FF9D0E6274B ViceSharp.Avalonia.Views.ListsView+<RefreshRailAsync>d__15.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 238]
+000000078BA06EC0 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA06F30 00007FF9D0E62223 ViceSharp.Avalonia.Views.ListsView.RefreshRailAsync()
+000000078BA06FA0 00007FF9D0E64EE7 ViceSharp.Avalonia.Views.ListsView.OnHostChanged(System.Object, System.ComponentModel.PropertyChangedEventArgs) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 278]
+000000078BA07050 00007FF9D013FB24 ILStubClass.IL_STUB_MulticastDelegate_Invoke(System.Object, System.ComponentModel.PropertyChangedEventArgs)
+000000078BA070A0 00007FF9D0BA4409 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.OnPropertyChanged(System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 559]
+000000078BA070F0 00007FF9D0BA5746 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.SetProperty[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef, System.__Canon, System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 554]
+000000078BA07150 00007FF9D0E64DD6 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.set_RecentGames(System.Collections.Generic.IReadOnlyList`1<ViceSharp.Library.ViewModels.RecentGame>) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 124]
+000000078BA071A0 00007FF9D0E63647 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel+<GetListsRailAsync>d__80.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 526]
+000000078BA07350 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA073C0 00007FF9D0E62B12 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.GetListsRailAsync(System.Threading.CancellationToken)
+000000078BA07430 00007FF9D0E6274B ViceSharp.Avalonia.Views.ListsView+<RefreshRailAsync>d__15.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 238]
+000000078BA074E0 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA07550 00007FF9D0E62223 ViceSharp.Avalonia.Views.ListsView.RefreshRailAsync()
+000000078BA075C0 00007FF9D0E64EE7 ViceSharp.Avalonia.Views.ListsView.OnHostChanged(System.Object, System.ComponentModel.PropertyChangedEventArgs) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 278]
+000000078BA07670 00007FF9D013FB24 ILStubClass.IL_STUB_MulticastDelegate_Invoke(System.Object, System.ComponentModel.PropertyChangedEventArgs)
+000000078BA076C0 00007FF9D0BA4409 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.OnPropertyChanged(System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 559]
+000000078BA07710 00007FF9D0BA5746 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.SetProperty[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef, System.__Canon, System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 554]
+000000078BA07770 00007FF9D0E64DD6 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.set_RecentGames(System.Collections.Generic.IReadOnlyList`1<ViceSharp.Library.ViewModels.RecentGame>) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 124]
+000000078BA077C0 00007FF9D0E63647 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel+<GetListsRailAsync>d__80.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 526]
+000000078BA07970 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA079E0 00007FF9D0E62B12 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.GetListsRailAsync(System.Threading.CancellationToken)
+000000078BA07A50 00007FF9D0E6274B ViceSharp.Avalonia.Views.ListsView+<RefreshRailAsync>d__15.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 238]
+000000078BA07B00 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA07B70 00007FF9D0E62223 ViceSharp.Avalonia.Views.ListsView.RefreshRailAsync()
+000000078BA07BE0 00007FF9D0E64EE7 ViceSharp.Avalonia.Views.ListsView.OnHostChanged(System.Object, System.ComponentModel.PropertyChangedEventArgs) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 278]
+000000078BA07C90 00007FF9D013FB24 ILStubClass.IL_STUB_MulticastDelegate_Invoke(System.Object, System.ComponentModel.PropertyChangedEventArgs)
+000000078BA07CE0 00007FF9D0BA4409 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.OnPropertyChanged(System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 559]
+000000078BA07D30 00007FF9D0BA5746 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.SetProperty[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef, System.__Canon, System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 554]
+000000078BA07D90 00007FF9D0E64DD6 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.set_RecentGames(System.Collections.Generic.IReadOnlyList`1<ViceSharp.Library.ViewModels.RecentGame>) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 124]
+000000078BA07DE0 00007FF9D0E63647 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel+<GetListsRailAsync>d__80.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 526]
+000000078BA07F90 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA08000 00007FF9D0E62B12 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.GetListsRailAsync(System.Threading.CancellationToken)
+000000078BA08070 00007FF9D0E6274B ViceSharp.Avalonia.Views.ListsView+<RefreshRailAsync>d__15.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 238]
+000000078BA08120 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA08190 00007FF9D0E62223 ViceSharp.Avalonia.Views.ListsView.RefreshRailAsync()
+000000078BA08200 00007FF9D0E64EE7 ViceSharp.Avalonia.Views.ListsView.OnHostChanged(System.Object, System.ComponentModel.PropertyChangedEventArgs) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 278]
+000000078BA082B0 00007FF9D013FB24 ILStubClass.IL_STUB_MulticastDelegate_Invoke(System.Object, System.ComponentModel.PropertyChangedEventArgs)
+000000078BA08300 00007FF9D0BA4409 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.OnPropertyChanged(System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 559]
+000000078BA08350 00007FF9D0BA5746 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.SetProperty[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef, System.__Canon, System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 554]
+000000078BA083B0 00007FF9D0E64DD6 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.set_RecentGames(System.Collections.Generic.IReadOnlyList`1<ViceSharp.Library.ViewModels.RecentGame>) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 124]
+000000078BA08400 00007FF9D0E63647 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel+<GetListsRailAsync>d__80.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 526]
+000000078BA085B0 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA08620 00007FF9D0E62B12 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.GetListsRailAsync(System.Threading.CancellationToken)
+000000078BA08690 00007FF9D0E6274B ViceSharp.Avalonia.Views.ListsView+<RefreshRailAsync>d__15.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 238]
+000000078BA08740 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA087B0 00007FF9D0E62223 ViceSharp.Avalonia.Views.ListsView.RefreshRailAsync()
+000000078BA08820 00007FF9D0E64EE7 ViceSharp.Avalonia.Views.ListsView.OnHostChanged(System.Object, System.ComponentModel.PropertyChangedEventArgs) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 278]
+000000078BA088D0 00007FF9D013FB24 ILStubClass.IL_STUB_MulticastDelegate_Invoke(System.Object, System.ComponentModel.PropertyChangedEventArgs)
+000000078BA08920 00007FF9D0BA4409 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.OnPropertyChanged(System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 559]
+000000078BA08970 00007FF9D0BA5746 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.SetProperty[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef, System.__Canon, System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 554]
+000000078BA089D0 00007FF9D0E64DD6 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.set_RecentGames(System.Collections.Generic.IReadOnlyList`1<ViceSharp.Library.ViewModels.RecentGame>) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 124]
+000000078BA08A20 00007FF9D0E63647 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel+<GetListsRailAsync>d__80.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 526]
+000000078BA08BD0 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA08C40 00007FF9D0E62B12 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.GetListsRailAsync(System.Threading.CancellationToken)
+000000078BA08CB0 00007FF9D0E6274B ViceSharp.Avalonia.Views.ListsView+<RefreshRailAsync>d__15.MoveNext() [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 238]
+000000078BA08D60 00007FFA2B0B22AA System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[[System.__Canon, System.Private.CoreLib]](System.__Canon ByRef) [/_/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/AsyncMethodBuilderCore.cs @ 38]
+000000078BA08DD0 00007FF9D0E62223 ViceSharp.Avalonia.Views.ListsView.RefreshRailAsync()
+000000078BA08E40 00007FF9D0E64EE7 ViceSharp.Avalonia.Views.ListsView.OnHostChanged(System.Object, System.ComponentModel.PropertyChangedEventArgs) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\ListsView.cs @ 278]
+000000078BA08EF0 00007FF9D013FB24 ILStubClass.IL_STUB_MulticastDelegate_Invoke(System.Object, System.ComponentModel.PropertyChangedEventArgs)
+000000078BA08F40 00007FF9D0BA4409 ViceSharp.Avalonia.ViewModels.RomMLibraryViewModel.OnPropertyChanged(System.String) [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs @ 559]
+

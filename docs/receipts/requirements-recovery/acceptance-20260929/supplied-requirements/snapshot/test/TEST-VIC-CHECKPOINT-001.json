@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-VIC-CHECKPOINT-001",
+  "title": "VicIiCheckpointTests + VicIISpriteDmaNativeCheckpointTests (9 tests)",
+  "status": "closed",
+  "priority": "medium",
+  "body": null,
+  "condition": "Managed PAL frame periodic raster/cycle-counter (2 Facts), native screen-RAM roundtrip and one-frame DMA read-only (2 ViceFacts), sprite-3 DMA window for 5 models (5 ViceTheory). All 9 pass.",
+  "acceptanceCriteria": []
+}

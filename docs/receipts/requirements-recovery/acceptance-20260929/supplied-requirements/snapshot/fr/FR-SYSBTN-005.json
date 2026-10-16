@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSBTN-005",
+  "title": "LT hold-to-warp hysteresis",
+  "status": "pending",
+  "priority": "medium",
+  "body": "LT hold-to-warp hysteresis (on>=0.6/off<=0.4). Acceptance: rising 0.0->0.7 one WarpHoldOn; falling 0.7->0.3 one WarpHoldOff; 0.4..0.6 none.\n\n## Acceptance Criteria\n- rising 0.0->0.7 one WarpHoldOn; falling 0.7->0.3 one WarpHoldOff; 0.4..0.6 none.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

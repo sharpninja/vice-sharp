@@ -1,0 +1,11 @@
+Select-String: 
+Line |
+   2 |  . lect-String -Path src/ViceSharp.Chips/Cpu -Pattern "B1" -Glob "*Cycle .
+     |                                                            ~~~~~
+     | A parameter cannot be found that matches parameter name 'Glob'.
+grep: 
+Line |
+   5 |  grep -n "0xB1" src/ViceSharp.Chips/Cpu/*.cs | Select-Object -First 15
+     |  ~~~~
+     | The term 'grep' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.

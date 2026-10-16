@@ -1,0 +1,18 @@
+FULL LINE (draw buffer): width=568
+  paper at x=96 .. 447 (w=352)
+  left_border_on_full=96 right_border_on_full=120
+  small_x_border=96
+
+CANVAS (visible normal): width=448
+  condition gfx_w + small*2 > canvas? 544 > 448 = True
+  first_x = gfx_x - (canvas-gfx)/2 = 96 - 48 = 48
+
+VISIBLE WINDOW into full line: [48, 496)
+  left_border_in_canvas=48
+  paper_in_canvas=352
+  right_border_in_canvas=48
+  sum=448 (must equal canvas 448)
+  Lfrac=0.1071 Rfrac=0.1071
+
+WRONG crop (ViceSharp src=0): window [0, 448)
+  left=96 paper=352 right=0

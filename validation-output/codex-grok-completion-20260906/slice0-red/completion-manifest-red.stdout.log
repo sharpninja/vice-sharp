@@ -1,0 +1,491 @@
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Library.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll (.NETCoreApp,Version=v10.0)
+Logging Vstest Diagnostics in file: F:\GitHub\vice-sharp\validation-output\codex-grok-completion-20260906\slice0-red\completion-manifest-red.diag.log
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.91]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceInvocationIdDiffersFromCurrentInvocation [FAIL]
+[xUnit.net 00:00:00.94]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceUsesNonFinalNativeLibraryHash [FAIL]
+[xUnit.net 00:00:00.94]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenSnapshotRunLogTheoryHasNoDiscoveredData [FAIL]
+[xUnit.net 00:00:00.95]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsSkippedTest [FAIL]
+[xUnit.net 00:00:00.95]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "artifact") [FAIL]
+[xUnit.net 00:00:00.96]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "model") [FAIL]
+[xUnit.net 00:00:00.96]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "verdict") [FAIL]
+[xUnit.net 00:00:00.97]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "status") [FAIL]
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceInvocationIdDiffersFromCurrentInvocation [28 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceInvocationIdDiffersFromCurrentInvocation() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 597
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceUsesNonFinalNativeLibraryHash [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceUsesNonFinalNativeLibraryHash() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 649
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenSnapshotRunLogTheoryHasNoDiscoveredData [1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenSnapshotRunLogTheoryHasNoDiscoveredData() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 513
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsSkippedTest [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsSkippedTest() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 246
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "artifact") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(String defect) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 487
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "model") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(String defect) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 487
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "verdict") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(String defect) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 487
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "status") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(String defect) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 487
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.99]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "effort") [FAIL]
+[xUnit.net 00:00:01.00]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestIdentityMatchesNoPartition [FAIL]
+[xUnit.net 00:00:01.00]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxHasZeroExecutedTests [FAIL]
+[xUnit.net 00:00:01.01]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenLivePassLacksTypedRuntimeEvidence [FAIL]
+[xUnit.net 00:00:01.01]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenManualDispositionDoesNotNameAnExactMethod [FAIL]
+[xUnit.net 00:00:01.01]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(state: "invalid") [FAIL]
+[xUnit.net 00:00:01.02]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(state: "missing") [FAIL]
+[xUnit.net 00:00:01.02]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(state: "empty") [FAIL]
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(defect: "effort") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(String defect) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 487
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenAiReviewArtifactLacksAstraXhighMetadata(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestIdentityMatchesNoPartition [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestIdentityMatchesNoPartition() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 66
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxHasZeroExecutedTests [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxHasZeroExecutedTests() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 230
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenLivePassLacksTypedRuntimeEvidence [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenLivePassLacksTypedRuntimeEvidence() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 458
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenManualDispositionDoesNotNameAnExactMethod [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenManualDispositionDoesNotNameAnExactMethod() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 704
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(state: "invalid") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(String state) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 210
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(state: "missing") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(String state) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 210
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(state: "empty") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(String state) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 210
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenRequiredTestArtifactIsMissing(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.03]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAlwaysFailingDiagnosticMethodIsInRequiredPartition [FAIL]
+[xUnit.net 00:00:01.03]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxOmitsDiscoveredExpectedCase [FAIL]
+[xUnit.net 00:00:01.04]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPendingOrLegacyParityIsExcludedAsComplete(category: "ParityLegacy") [FAIL]
+[xUnit.net 00:00:01.04]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPendingOrLegacyParityIsExcludedAsComplete(category: "ParityPending") [FAIL]
+[xUnit.net 00:00:01.04]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredBuildOrPublishArtifactIsMissing(commandId: "xbox-publish") [FAIL]
+[xUnit.net 00:00:01.05]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredBuildOrPublishArtifactIsMissing(commandId: "release-build") [FAIL]
+[xUnit.net 00:00:01.05]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPaidAiIdentityAlsoMatchesContractPartition [FAIL]
+[xUnit.net 00:00:01.06]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "not-executed") [FAIL]
+[xUnit.net 00:00:01.06]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "aborted") [FAIL]
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAlwaysFailingDiagnosticMethodIsInRequiredPartition [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAlwaysFailingDiagnosticMethodIsInRequiredPartition() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 684
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxOmitsDiscoveredExpectedCase [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxOmitsDiscoveredExpectedCase() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 529
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPendingOrLegacyParityIsExcludedAsComplete(category: "ParityLegacy") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPendingOrLegacyParityIsExcludedAsComplete(String category) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 361
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPendingOrLegacyParityIsExcludedAsComplete(category: "ParityPending") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPendingOrLegacyParityIsExcludedAsComplete(String category) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 361
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenPendingOrLegacyParityIsExcludedAsComplete(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredBuildOrPublishArtifactIsMissing(commandId: "xbox-publish") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredBuildOrPublishArtifactIsMissing(String commandId) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 424
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredBuildOrPublishArtifactIsMissing(commandId: "release-build") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenRequiredBuildOrPublishArtifactIsMissing(String commandId) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 424
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenRequiredBuildOrPublishArtifactIsMissing(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPaidAiIdentityAlsoMatchesContractPartition [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPaidAiIdentityAlsoMatchesContractPartition() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 184
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "not-executed") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(String counter) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 286
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "aborted") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(String counter) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 286
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.07]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "timeout") [FAIL]
+[xUnit.net 00:00:01.07]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "inconclusive") [FAIL]
+[xUnit.net 00:00:01.08]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "error") [FAIL]
+[xUnit.net 00:00:01.08]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceXvicArtifactIsMissingOrEmpty(state: "missing") [FAIL]
+[xUnit.net 00:00:01.08]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceXvicArtifactIsMissingOrEmpty(state: "empty") [FAIL]
+[xUnit.net 00:00:01.09]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxCaseMultiplicityDiffersFromDiscovery [FAIL]
+[xUnit.net 00:00:01.09]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPaidPartitionIsSelectedTwiceInOneInvocation [FAIL]
+[xUnit.net 00:00:01.10]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceUsesNonFinalProductBinaryHash [FAIL]
+[xUnit.net 00:00:01.10]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenCliExpectedCountIsFrozen [FAIL]
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "timeout") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(String counter) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 286
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "inconclusive") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(String counter) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 286
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(counter: "error") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(String counter) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 286
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenTrxContainsAbortedOrIncompleteTest(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceXvicArtifactIsMissingOrEmpty(state: "missing") [1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceXvicArtifactIsMissingOrEmpty(String state) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 393
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceXvicArtifactIsMissingOrEmpty(state: "empty") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceXvicArtifactIsMissingOrEmpty(String state) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 393
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenViceXvicArtifactIsMissingOrEmpty(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxCaseMultiplicityDiffersFromDiscovery [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxCaseMultiplicityDiffersFromDiscovery() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 581
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPaidPartitionIsSelectedTwiceInOneInvocation [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenPaidPartitionIsSelectedTwiceInOneInvocation() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 299
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceUsesNonFinalProductBinaryHash [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEvidenceUsesNonFinalProductBinaryHash() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 629
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenCliExpectedCountIsFrozen [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenCliExpectedCountIsFrozen() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 116
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.10]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestIdentityMatchesMultiplePartitions [FAIL]
+[xUnit.net 00:00:01.11]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceX64ArtifactIsMissingOrEmpty(state: "missing") [FAIL]
+[xUnit.net 00:00:01.11]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceX64ArtifactIsMissingOrEmpty(state: "empty") [FAIL]
+[xUnit.net 00:00:01.12]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsExcessDuplicateCase [FAIL]
+[xUnit.net 00:00:01.12]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsUnexpectedCase [FAIL]
+[xUnit.net 00:00:01.12]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveryAndTrxUseDifferentTestAssemblyHashes [FAIL]
+[xUnit.net 00:00:01.13]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsFailedTest [FAIL]
+[xUnit.net 00:00:01.13]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiContractPartitionOmitsFutureNonAiReviewTest [FAIL]
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestIdentityMatchesMultiplePartitions [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestIdentityMatchesMultiplePartitions() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 83
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceX64ArtifactIsMissingOrEmpty(state: "missing") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceX64ArtifactIsMissingOrEmpty(String state) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 377
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceX64ArtifactIsMissingOrEmpty(state: "empty") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenViceX64ArtifactIsMissingOrEmpty(String state) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 377
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenViceX64ArtifactIsMissingOrEmpty(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsExcessDuplicateCase [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsExcessDuplicateCase() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 564
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsUnexpectedCase [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsUnexpectedCase() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 547
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveryAndTrxUseDifferentTestAssemblyHashes [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveryAndTrxUseDifferentTestAssemblyHashes() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 613
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsFailedTest [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenTrxContainsFailedTest() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 262
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiContractPartitionOmitsFutureNonAiReviewTest [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenAiContractPartitionOmitsFutureNonAiReviewTest() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 166
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.14]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEitherNativeOracleIsNotLoadable(path: "native/vice_x64.dll") [FAIL]
+[xUnit.net 00:00:01.14]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEitherNativeOracleIsNotLoadable(path: "native/vice_xvic.dll") [FAIL]
+[xUnit.net 00:00:01.14]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestProjectIsMissingFromManifest [FAIL]
+[xUnit.net 00:00:01.15]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenExclusionUsesFileOrClassWildcard [FAIL]
+[xUnit.net 00:00:01.15]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDispositionIsUnresolved [FAIL]
+[xUnit.net 00:00:01.15]     ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenCommandEvidenceUsesTestCountersInsteadOfCommandContract [FAIL]
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEitherNativeOracleIsNotLoadable(path: "native/vice_x64.dll") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEitherNativeOracleIsNotLoadable(String path) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 404
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEitherNativeOracleIsNotLoadable(path: "native/vice_xvic.dll") [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenEitherNativeOracleIsNotLoadable(String path) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 404
+   at InvokeStub_CompletionTestManifestTests.Validate_FailsWhenEitherNativeOracleIsNotLoadable(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestProjectIsMissingFromManifest [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDiscoveredTestProjectIsMissingFromManifest() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 48
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenExclusionUsesFileOrClassWildcard [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenExclusionUsesFileOrClassWildcard() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 101
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDispositionIsUnresolved [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenDispositionIsUnresolved() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 331
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenCommandEvidenceUsesTestCountersInsteadOfCommandContract [< 1 ms]
+  Error Message:
+   Assert.Contains() Failure: Filter not matched in collection
+Collection: []
+  Stack Trace:
+     at ViceSharp.Library.Tests.CompletionTestManifestTests.AssertIssue(String expectedCode, CompletionManifest manifest, CompletionRunEvidence run) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 722
+   at ViceSharp.Library.Tests.CompletionTestManifestTests.Validate_FailsWhenCommandEvidenceUsesTestCountersInsteadOfCommandContract() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\CompletionTestManifestTests.cs:line 442
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: F:\GitHub\vice-sharp\validation-output\codex-grok-completion-20260906\slice0-red\completion-manifest-red.trx
+
+Failed!  - Failed:    48, Passed:     3, Skipped:     0, Total:    51, Duration: 98 ms - ViceSharp.Library.Tests.dll (net10.0)

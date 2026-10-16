@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-ROMM-COVER-001",
+  "title": "Cover art and cache",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. Cover art loads efficiently for large virtualized grids. TR-ROMM-SEC-001.\nAC-COVER-01: url_cover is fetched without auth; only server-relative path_cover_* is fetched with bearer under the configured RomM base address; an absolute authenticated-path input is rejected -> RomMCoverImageSourceTests.AuthRules + AuthenticatedPath_RejectsAbsoluteUri.\nAC-COVER-02: two-tier cache; second request for same cover hits cache (no second HTTP) -> CoverCacheTests.SecondRequest_Cached.\nAC-COVER-03: concurrency gate (<=4) + off-screen cancellation -> CoverCacheTests.Concurrency_Gated_Cancellable.\nAC-COVER-04: a fetch failure yields the placeholder and never throws -> CoverCacheTests.Failure_Placeholder.\n\n## Acceptance Criteria\n- `url_cover` fetched without auth; `path_cover_*` fetched with bearer under the confirmed\n- two-tier cache; the second request for the same cover hits cache (no second HTTP) ->\n- concurrency gate (<=4) + off-screen cancellation ->\n- a fetch failure yields the placeholder and never throws ->",
+  "condition": null,
+  "acceptanceCriteria": []
+}

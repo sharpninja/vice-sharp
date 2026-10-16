@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-INSTALL-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "InstallerFileAssociationTests: wxs registers each DesktopFileAssociations entry and open command; TryGetOpenPath skips exe/flags and unknown extensions.",
+  "acceptanceCriteria": []
+}

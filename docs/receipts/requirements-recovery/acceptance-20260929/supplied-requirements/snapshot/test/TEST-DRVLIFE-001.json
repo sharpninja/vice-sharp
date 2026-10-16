@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-DRVLIFE-001",
+  "title": "Drive attach/detach lifecycle",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Attach creates+clocks+bus-connects the drive instance; detach unregisters from clock and disconnects from bus.",
+  "acceptanceCriteria": []
+}

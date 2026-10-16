@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRVTRUE-001",
+  "title": "Per-drive True Drive toggle",
+  "status": "pending",
+  "priority": "high",
+  "body": "Each IEC drive's UI exposes a True Drive toggle. Enabled = cycle-accurate emulated 1541 (6502+VIA+DOS over IEC); disabled (default) = lightweight simulated/buffered drive. Mirrors VICE per-unit DriveTrueEmulation / Fidelity TrueDevice vs Buffered. The runtime honors it (gated true-drive coordinator path), default off so existing behavior is unchanged.\n\n## Acceptance Criteria\n- Each IEC drive's UI exposes a True Drive toggle.\n- Enabled = cycle-accurate emulated 1541 (6502+VIA+DOS over IEC); disabled (default) = lightweight simulated/buffered drive.\n- Mirrors VICE per-unit DriveTrueEmulation / Fidelity TrueDevice vs Buffered.\n- The runtime honors it (gated true-drive coordinator path), default off so existing behavior is unchanged.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

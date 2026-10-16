@@ -1,0 +1,10 @@
+{
+  "generatedUtc": "2026-09-29T23:22:00Z",
+  "route": "/mcpserver/requirements/tr/%5BTR-REMOTECTRL-SERVER-001%5D",
+  "statusCode": 200,
+  "id": "[TR-REMOTECTRL-SERVER-001]",
+  "title": "[TR-REMOTECTRL-SERVER-001]",
+  "body": "Placeholder requirement backfilled for TODO link [TR-REMOTECTRL-SERVER-001].",
+  "structuredAcceptanceCriteria": 0,
+  "note": "This id includes the square brackets. It is a different row from TR-REMOTECTRL-SERVER-001."
+}

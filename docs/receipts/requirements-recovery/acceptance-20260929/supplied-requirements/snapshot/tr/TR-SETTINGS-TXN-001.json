@@ -1,0 +1,41 @@
+{
+  "kind": "tr",
+  "id": "TR-SETTINGS-TXN-001",
+  "title": "Truthful transactional Settings state",
+  "status": "pending",
+  "priority": "high",
+  "body": "Add SettingsStateDto(Active, Accepted) and optional State on settings responses; preserve existing DTO fields and protobuf tags, using GetSettingsResponse.state=3 and UpdateSettingsResponse.state=4.\nPrepare a fully configured replacement with media restored before publication; candidate cleanup produces no writeback or success notifications.\nCommit under existing synchronization, defer publication until success, and roll back runtime/session/pump state on failure. Do not swallow attachment exceptions.\nUpdateSettings honors Limiter.IsEnabled=false atomically and the view model makes no second Warp RPC for Apply.\nA single synchronization path handles initial state, refresh, Apply response, Revert and persistence; perform field-wise three-way merge against Accepted.\nPreserve existing field and standalone-control compatibility. Detect absent State explicitly rather than fabricating Active/Accepted truth.\n\n## Acceptance Criteria\n- **ac-01**: Add SettingsStateDto(Active, Accepted) and optional State on settings responses; preserve existing DTO fields and protobuf tags, using GetSettingsResponse.state=3 and UpdateSettingsResponse.state=4.\n- **ac-02**: Prepare a fully configured replacement with media restored before publication; candidate cleanup produces no writeback or success notifications.\n- **ac-03**: Commit under existing synchronization, defer publication until success, and roll back runtime/session/pump state on failure. Do not swallow attachment exceptions.\n- **ac-04**: UpdateSettings honors Limiter.IsEnabled=false atomically and the view model makes no second Warp RPC for Apply.\n- **ac-05**: A single synchronization path handles initial state, refresh, Apply response, Revert and persistence; perform field-wise three-way merge against Accepted.\n- **ac-06**: Preserve existing field and standalone-control compatibility. Detect absent State explicitly rather than fabricating Active/Accepted truth.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Add SettingsStateDto(Active, Accepted) and optional State on settings responses; preserve existing DTO fields and protobuf tags, using GetSettingsResponse.state=3 and UpdateSettingsResponse.state=4.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Prepare a fully configured replacement with media restored before publication; candidate cleanup produces no writeback or success notifications.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Commit under existing synchronization, defer publication until success, and roll back runtime/session/pump state on failure. Do not swallow attachment exceptions.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "UpdateSettings honors Limiter.IsEnabled=false atomically and the view model makes no second Warp RPC for Apply.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "A single synchronization path handles initial state, refresh, Apply response, Revert and persistence; perform field-wise three-way merge against Accepted.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-06",
+      "text": "Preserve existing field and standalone-control compatibility. Detect absent State explicitly rather than fabricating Active/Accepted truth.",
+      "isSatisfied": false
+    }
+  ]
+}

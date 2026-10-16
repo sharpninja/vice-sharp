@@ -1,0 +1,1988 @@
+type: result
+payload:
+  requestId: req-20260928T203205Z-345c
+  result:
+    items:
+    - id: ARCH-TRUEDRIVE-1541-002
+      title: True-Drive 1541 IEC timing and motor ramp
+      description: IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.
+      status: closed
+      priority: high
+      area: TRUEDRIVE
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5808138+00:00
+      updatedAt: 2026-09-28T20:32:06.5808408+00:00
+    - id: BACKFILL-MEDIA-001
+      title: Media devices (D64, tape) I/O functional parity
+      description: D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.
+      status: closed
+      priority: medium
+      area: MEDIA
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5814500+00:00
+      updatedAt: 2026-09-28T20:32:06.5814777+00:00
+    - id: BACKFILL-VIDEO-001
+      title: VIC-II visible-frame parity (RC window, DMA checkpoints, screen-RAM)
+      description: VIC-II RC/VC state machine matches VICE cycle-accurate behavior (RC window). Native checkpoints validate sprite DMA for all 5 non-PAL models. Screen RAM survives one PAL frame unchanged. VICE viciisc/vicii-cycle.c:541-563, vicii-fetch.c:135-166.
+      status: closed
+      priority: high
+      area: VIDEO
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5817387+00:00
+      updatedAt: 2026-09-28T20:32:06.5817601+00:00
+    - id: FR-AIREVIEW-ROUTING-001
+      title: Auditable Astra xhigh AI review routing
+      description: >-
+        Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.
+
+        An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.
+
+        Critical and high findings are resolved and affected reviews rerun before completion.
+      status: pending
+      priority: high
+      area: AIREVIEW
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.
+        isSatisfied: false
+      - id: ac-02
+        text: An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.
+        isSatisfied: false
+      - id: ac-03
+        text: Critical and high findings are resolved and affected reviews rerun before completion.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5829599+00:00
+      updatedAt: 2026-09-28T20:32:06.5829822+00:00
+    - id: FR-CFG-001
+      title: FR-CFG-001
+      description: Placeholder requirement backfilled for TODO link FR-CFG-001.
+      status: pending
+      priority: medium
+      area: CFG
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5831271+00:00
+      updatedAt: 2026-09-28T20:32:06.5831473+00:00
+    - id: FR-CFG-005
+      title: FR-CFG-005
+      description: Placeholder requirement backfilled for TODO link FR-CFG-005.
+      status: pending
+      priority: medium
+      area: CFG
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5832776+00:00
+      updatedAt: 2026-09-28T20:32:06.5832976+00:00
+    - id: FR-CHIPSTATE-001
+      title: Per-tick full chip state capture
+      description: Each captured tick snapshots the full internal state of every stateful chip (VIC, SID, CIA, PLA) for display in the debug screen.
+      status: completed
+      priority: medium
+      area: CHIPSTATE
+      acceptanceCriteria:
+      - id: ac-1
+        text: VIC, SID, CIA and PLA each implement IStatefulDevice
+        isSatisfied: true
+      - id: ac-2
+        text: Each chip's state is captured per tick with zero hot-path allocation
+        isSatisfied: true
+      - id: ac-3
+        text: Captured state decodes into named register/field values
+        isSatisfied: true
+      - id: ac-4
+        text: The debug screen shows each chip's decoded state at the selected tick
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5836893+00:00
+      updatedAt: 2026-09-28T20:32:06.5837096+00:00
+    - id: FR-COMPLETION-001
+      title: Exhaustive approved-work completion evidence
+      description: >-
+        Complete every approved slice, including baseline repairs, Settings/Warp/video, portable CLI, native lifecycle, external integration and both Astra AI reviews.
+
+        All required tests finish with zero failures, skips, aborts or silent prerequisite returns before completion.
+
+        Run two fresh live application validation passes against final binaries and prove runtime effects independently of UI values.
+
+        Preserve unrelated dirty files and probes. Finalize tracked requirements, plan, handoff and receipts before explicit-manifest commit and non-force push; verify local and remote SHAs match.
+
+        Independent Astra xhigh agreement is required after requirements, red tests, green implementation and final combined evidence.
+      status: pending
+      priority: high
+      area: COMPLETION
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Complete every approved slice, including baseline repairs, Settings/Warp/video, portable CLI, native lifecycle, external integration and both Astra AI reviews.
+        isSatisfied: false
+      - id: ac-02
+        text: All required tests finish with zero failures, skips, aborts or silent prerequisite returns before completion.
+        isSatisfied: false
+      - id: ac-03
+        text: Run two fresh live application validation passes against final binaries and prove runtime effects independently of UI values.
+        isSatisfied: false
+      - id: ac-04
+        text: Preserve unrelated dirty files and probes. Finalize tracked requirements, plan, handoff and receipts before explicit-manifest commit and non-force push; verify local and remote SHAs match.
+        isSatisfied: false
+      - id: ac-05
+        text: Independent Astra xhigh agreement is required after requirements, red tests, green implementation and final combined evidence.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5845504+00:00
+      updatedAt: 2026-09-28T20:32:06.5845705+00:00
+    - id: FR-CPUTICK-001
+      title: Per-CPU independent tick counter and per-CPU speed metric
+      description: Each CPU in the emulator keeps its own independent executed-cycle counter and the displayed speed is that CPU's executed-cycle rate versus its own target clock.
+      status: pending
+      priority: high
+      area: CPUTICK
+      acceptanceCriteria:
+      - id: ac-1
+        text: Each CPU ExecutedCycles increments once per executed cycle and not on a stolen or skipped cycle.
+        isSatisfied: false
+      - id: ac-2
+        text: Per-CPU speed percent equals delta-executed over delta-wall over targetHz; the C64 primary reads about 95-100 percent at real time and the drive about 100 percent when running.
+        isSatisfied: false
+      - id: ac-3
+        text: The status surface lists per-CPU rate entries for the host and each peripheral CPU distinctly.
+        isSatisfied: false
+      - id: ac-4
+        text: Machine reset zeroes every CPU's executed-cycle counter.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5850314+00:00
+      updatedAt: 2026-09-28T20:32:06.5850520+00:00
+    - id: FR-CSDB-001
+      title: CSDb discovery, ingest, scan, refresh
+      description: >-
+        PLAN-ROMM-001. Search CSDb scene releases, ingest into RomM, scan, and refresh the library.
+
+        AC-CSDB-01: SearchAsync returns classified hits (demo/crack/sid) -> CsdbDiscoveryViewModelTests.Search_ReturnsHits.
+
+        AC-CSDB-02: ingest selection capped at 20 -> CsdbDiscoveryViewModelTests.Ingest_CapsAt20.
+
+        AC-CSDB-03: LocalCsdbGateway ingests via CsdbRomMWorkflow then triggers scan -> LocalCsdbGatewayTests.Ingest_WritesThenScans.
+
+        AC-CSDB-04: BridgeCsdbGateway POSTs /csdb/v1/ingest then calls RomMClient.Tasks.ScanLibraryAsync (bridge does not scan) -> BridgeCsdbGatewayTests.Posts_ThenScans.
+
+        AC-CSDB-05: completion raises LibraryRefreshRequested -> CsdbDiscoveryViewModelTests.Ingest_RaisesRefresh.
+
+        AC-CSDB-06: gateway selection by config (roms root writable -> Local, else Bridge) -> CsdbGatewaySelectionTests.PicksByConfig.
+      status: pending
+      priority: medium
+      area: CSDB
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5854732+00:00
+      updatedAt: 2026-09-28T20:32:06.5854933+00:00
+    - id: FR-CTX-001
+      title: Context machine states + transitions
+      description: 'The context machine has states Gameplay/MainMenu/VirtualKeyboard/ConfirmDialog with defined transitions. Acceptance: a transition-table test drives every (state,input) edge; no undefined transition changes context.'
+      status: pending
+      priority: medium
+      area: CTX
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5859589+00:00
+      updatedAt: 2026-09-28T20:32:06.5859803+00:00
+    - id: FR-CTX-002
+      title: Non-Gameplay forces ports neutral
+      description: 'Every non-Gameplay context forces both ports neutral; A does not fire in a menu. Acceptance: Resolve in any non-Gameplay context with A held + sticks deflected -> Joy1=Joy2=Neutral, no fire.'
+      status: pending
+      priority: medium
+      area: CTX
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5861798+00:00
+      updatedAt: 2026-09-28T20:32:06.5862008+00:00
+    - id: FR-CTX-003
+      title: Non-Gameplay routes UI navigation
+      description: 'In non-Gameplay, D-pad/left-stick -> UI nav, A=UiActivate, B=UiBack. Acceptance: DPadDown -> UiNavigateDown; A -> UiActivate; B -> UiBack; sticks emit no joystick effect.'
+      status: pending
+      priority: medium
+      area: CTX
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5863854+00:00
+      updatedAt: 2026-09-28T20:32:06.5864068+00:00
+    - id: FR-CTX-004
+      title: One-shot neutralizing push on context entry
+      description: 'Entering any non-Gameplay context emits a one-shot neutralizing push to both ports. Acceptance: Gameplay->MainMenu edge -> Joy1=Joy2 neutral push (an emitted neutral, not a suppressed no-op).'
+      status: pending
+      priority: medium
+      area: CTX
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5866064+00:00
+      updatedAt: 2026-09-28T20:32:06.5866273+00:00
+    - id: FR-D71-001
+      title: D71 disk image format
+      description: 'D71 (double-sided 1541-format GCR) images: exactly 349,696 bytes, 70 tracks with the D64 zone table applied per side; attachable only to a 1571 drive; implements the shared IGcrDisk surface so the drive mechanism is image-format agnostic.'
+      status: pending
+      priority: high
+      area: D71
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5868365+00:00
+      updatedAt: 2026-09-28T20:32:06.5868576+00:00
+    - id: FR-D81-001
+      title: D81 disk image format
+      description: 'D81 (3.5in MFM 800K) images: exactly 819,200 bytes, 80 tracks x 2 sides x 10 physical 512-byte MFM sectors (40 logical 256-byte sectors per track); attachable only to a 1581 drive; exposed to the WD1770/MFM floppy model via IMfmDiskImage.'
+      status: pending
+      priority: high
+      area: D81
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5870643+00:00
+      updatedAt: 2026-09-28T20:32:06.5870890+00:00
+    - id: FR-DEVCARDART-001
+      title: Device-card vector art backgrounds
+      description: Every peripheral card in the Avalonia sidebar renders model-appropriate vector device art as a dimmed (opacity 0.20), right-anchored, hit-test-invisible background layer behind the card content. Drives select art by drive model (breadbin for 1540/1541/unknown, 1541-II, 1571, 1581, SFD-1001, CMD-HD, CMD-FD); Tape shows the datasette; Cartridge shows a cartridge. Card content, LED, bindings, and automation ids are unchanged.
+      status: pending
+      priority: medium
+      area: DEVCARDART
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5873757+00:00
+      updatedAt: 2026-09-28T20:32:06.5873970+00:00
+    - id: FR-DRV-002
+      title: Commodore 1571 true drive
+      description: 'The 1571: 6502 with runtime-switchable 1/2 MHz clock (VIA1 PA bit 5), two VIAs at $1800/$1C00, WD1770 FDC at $2000-$2FFF (regs mirrored & 3), CIA 6526 at $4000-$7FFF (regs & 0x0F), 32KB DOS ROM at $8000, 2KB RAM mirrored at $0800; double-sided GCR with side select (VIA1 PA bit 2), D64 and D71 attach; per memiec.c:178-199. Acceptance: full cycle-lockstep vs x64sc with Drive8Type=1571 (boot witness + anchored LOAD gates on both D64 and D71).'
+      status: pending
+      priority: high
+      area: DRV
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5876824+00:00
+      updatedAt: 2026-09-28T20:32:06.5877038+00:00
+    - id: FR-DRV-003
+      title: Commodore 1581 true drive
+      description: 'The 1581: 6502 at fixed 2 MHz, 8KB RAM at $0000-$1FFF, CIA at $4000-$5FFF (plain 6526 semantics matching the native oracle), WD1770 at $6000-$7FFF, 32KB DOS ROM at $8000; IEC entirely through the CIA (ATN falling edge triggers the CIA FLAG line); MFM 800K D81 media through the WD1770 type-2 read path; per memiec.c:249-256 and cia1581d.c. Acceptance: full cycle-lockstep vs x64sc with Drive8Type=1581 (boot witness + anchored D81 LOAD gate).'
+      status: pending
+      priority: high
+      area: DRV
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5880381+00:00
+      updatedAt: 2026-09-28T20:32:06.5880600+00:00
+    - id: FR-DRV-005
+      title: IEC Serial Bus Protocol
+      description: The emulator shall expose an active-low IEC serial bus with ATN, CLK, DATA, and SRQ line behavior that drives 1541/D64 operations and observable bus activity.
+      status: in_progress
+      priority: high
+      area: DRV
+      notes: ''
+      acceptanceCriteria:
+      - id: fr-drv-005-ac-1
+        text: IEC bus endpoints resolve ATN, CLK, DATA, and SRQ as active-low wired-OR lines.
+        isSatisfied: false
+      - id: fr-drv-005-ac-2
+        text: Mounted D64 directory and file operations generate observable IEC line activity from the bus signal source.
+        isSatisfied: false
+      - id: fr-drv-005-ac-3
+        text: Mounted D64 directory and file operations complete with correct data through the IEC path.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5884785+00:00
+      updatedAt: 2026-09-28T20:32:06.5885006+00:00
+    - id: FR-DRV1540-001
+      title: Commodore 1540 true drive
+      description: 'The 1540 (VIC-1540) drive variant: identical 1541 board topology (6502 + 2KB RAM + two 6522 VIAs + 16KB DOS ROM at $C000) with the dos1540-325302+3-01.bin DOS ROM. Acceptance: full cycle-lockstep vs native VICE x64sc with Drive8Type=1540 (boot witness drive-CPU register lockstep at equal drive clocks over 2M host cycles, plus the KERNAL-CLOSE anchored D64 LOAD gate).'
+      status: pending
+      priority: high
+      area: DRV1540
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5887680+00:00
+      updatedAt: 2026-09-28T20:32:06.5887928+00:00
+    - id: FR-DRV1541II-001
+      title: Commodore 1541-II true drive
+      description: 'The 1541-II variant: identical 1541 board topology with the dos1541ii-251968-03.bin DOS ROM (VICE type id 1542). Acceptance: full cycle-lockstep vs native VICE x64sc with Drive8Type=1542 (boot witness + anchored D64 LOAD gate).'
+      status: pending
+      priority: high
+      area: DRV1541II
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5890086+00:00
+      updatedAt: 2026-09-28T20:32:06.5890304+00:00
+    - id: FR-DRVLED-001
+      title: Per-drive activity LED
+      description: Each drive card shows an activity LED sourced from that drive's VIA2 (1C00) port B bit 3, set by the 1541 DOS ROM (VICE led_status model), independent of IEC bus traffic.
+      status: pending
+      priority: medium
+      area: DRVLED
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5892171+00:00
+      updatedAt: 2026-09-28T20:32:06.5892390+00:00
+    - id: FR-DRVMODEL-001
+      title: Drive model selection plumbing end-to-end
+      description: A DriveModel enum (Abstractions; VICE-canonical values 1540, 1541, 1542=1541-II, 1571, 1581) flows from the protocol (CreateEmulatorSessionRequest.true_drive_model, MediaAttachmentDto.drive_model) through DefaultEmulatorRuntimeFactory and C64TrueDriveRigBuilder to a DriveDescriptorFactory selecting the per-model drive descriptor. Persisted as the VICE-canonical Drive8Type integer in vice.ini via ViceSettings. Every default is 1541; an absent or zero value normalizes to 1541 so behavior is unchanged until a model is selected.
+      status: pending
+      priority: high
+      area: DRVMODEL
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5895805+00:00
+      updatedAt: 2026-09-28T20:32:06.5896021+00:00
+    - id: FR-DRVMODEL-002
+      title: Drive model selection surface (UI, settings, launcher)
+      description: The Avalonia drive card exposes a drive-model selector that drives SetTrueDriveAsync with the model and adjusts attach file filters per model; the launcher accepts -drive8type/-drive9type; the multisystem topology YAML accepts an optional model field on drive peripherals; the selection persists to vice.ini Drive8Type and restores at startup.
+      status: pending
+      priority: high
+      area: DRVMODEL
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5898799+00:00
+      updatedAt: 2026-09-28T20:32:06.5899017+00:00
+    - id: FR-DRVTRUE-001
+      title: Per-drive True Drive toggle
+      description: Each IEC drive's UI exposes a True Drive toggle. Enabled = cycle-accurate emulated 1541 (6502+VIA+DOS over IEC); disabled (default) = lightweight simulated/buffered drive. Mirrors VICE per-unit DriveTrueEmulation / Fidelity TrueDevice vs Buffered. The runtime honors it (gated true-drive coordinator path), default off so existing behavior is unchanged.
+      status: pending
+      priority: high
+      area: DRVTRUE
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5901659+00:00
+      updatedAt: 2026-09-28T20:32:06.5901873+00:00
+    - id: FR-GAMEPAD-001
+      title: Left stick + D-pad drive JOY2 (OR-merged pre-SOCD)
+      description: 'Left stick and D-pad both drive JOY2, OR-merged before SOCD. Acceptance: LeftX past right threshold + DPadUp -> Joy2.DirectionMask == 0x09, JOY1 unaffected.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5903756+00:00
+      updatedAt: 2026-09-28T20:32:06.5903972+00:00
+    - id: FR-GAMEPAD-002
+      title: Right stick drives JOY1 only
+      description: 'Right stick drives JOY1 with no D-pad contribution. Acceptance: RightY past up threshold -> Joy1 Up(0x01); D-pad does not alter Joy1.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5905726+00:00
+      updatedAt: 2026-09-28T20:32:06.5905940+00:00
+    - id: FR-GAMEPAD-003
+      title: A -> JOY2 fire, B -> JOY1 fire
+      description: 'A -> JOY2 fire, B -> JOY1 fire, emitted as the separate bool. Acceptance: Buttons=A -> Joy2.Fire only; Buttons=B -> Joy1.Fire only; no mask change.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5907779+00:00
+      updatedAt: 2026-09-28T20:32:06.5908026+00:00
+    - id: FR-GAMEPAD-004
+      title: Radial deadzone + per-axis hysteresis 8-way
+      description: 'Radial deadzone + per-axis Activate/Release hysteresis 8-way. Acceptance: mag 0.20 -> mask 0; 0.60 sets, 0.45 holds, 0.35 clears.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5909746+00:00
+      updatedAt: 2026-09-28T20:32:06.5909957+00:00
+    - id: FR-GAMEPAD-005
+      title: Axis sign mapping to direction bits
+      description: 'Axis sign +Y=Up/-Y=Down/+X=Right/-X=Left. Acceptance: the four signed extremes map to the four bits.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5911625+00:00
+      updatedAt: 2026-09-28T20:32:06.5911836+00:00
+    - id: FR-GAMEPAD-006
+      title: SOCD Neutral clears opposing pairs post-merge
+      description: 'SocdMode.Neutral clears opposing pairs post-merge. Acceptance: stick Left + D-pad Right -> both Left and Right cleared.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5913552+00:00
+      updatedAt: 2026-09-28T20:32:06.5913763+00:00
+    - id: FR-GAMEPAD-007
+      title: Default locked mapping, remappable, port swap
+      description: 'Default profile is the locked mapping; remappable at runtime; swap via XboxInputConfig.SwapPorts. Acceptance: defaults LeftStick->Joystick2, RightStick->Joystick1, Dpad->Joystick2, Joy2Fire=A, Joy1Fire=B; a swapped config routes to the other port.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5915923+00:00
+      updatedAt: 2026-09-28T20:32:06.5916131+00:00
+    - id: FR-GAMEPAD-008
+      title: Fail-safe center on disconnect/no-pad/exception
+      description: 'Fail-safe center both ports on disconnect/no-pad/reader-exception; promote next pad. Acceptance: primary disconnect while held -> next Tick emits (Joystick1,0,false)+(Joystick2,0,false), second pad becomes primary.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5918330+00:00
+      updatedAt: 2026-09-28T20:32:06.5918539+00:00
+    - id: FR-GAMEPAD-009
+      title: Single XboxInputContext consumes whole snapshot
+      description: 'The whole snapshot is consumed only by the single XboxInputContext (no separate app-button path). Acceptance: no AppButtonChanged event exists; system buttons reach the context, never a joystick port directly.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5920681+00:00
+      updatedAt: 2026-09-28T20:32:06.5920894+00:00
+    - id: FR-HOST-006
+      title: Host Runtime Status and Control Telemetry
+      description: The host runtime shall expose emulator status telemetry for runtime state, timing, media, automation, and IEC bus activity to clients.
+      status: in_progress
+      priority: high
+      area: HOST
+      notes: ''
+      acceptanceCriteria:
+      - id: fr-host-006-ac-1
+        text: Host status responses include existing runtime fields including session, run state, cycle, frame, model, limiter, and automation status.
+        isSatisfied: false
+      - id: fr-host-006-ac-2
+        text: Host status responses include IEC activity derived from emulator bus traffic and safe for UI polling.
+        isSatisfied: false
+      - id: fr-host-006-ac-3
+        text: Status polling does not mutate emulator, drive, or bus state.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5924874+00:00
+      updatedAt: 2026-09-28T20:32:06.5925085+00:00
+    - id: FR-IECHOTPLUG-001
+      title: Hot drive add and remove and live device renumber
+      description: Drives can be turned on and off and have their device number changed at runtime without restarting the emulator.
+      status: pending
+      priority: medium
+      area: IECHOTPLUG
+      acceptanceCriteria:
+      - id: ac-1
+        text: A drive attached to a running session answers on the bus with no restart.
+        isSatisfied: false
+      - id: ac-2
+        text: A detached drive's pull contributions are removed and line states recompute.
+        isSatisfied: false
+      - id: ac-3
+        text: A drive's device number (8 to 11) can be changed at runtime and it answers the new number.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5928595+00:00
+      updatedAt: 2026-09-28T20:32:06.5928806+00:00
+    - id: FR-IECLOAD-001
+      title: True-drive 1541 LOAD over IEC
+      description: A single-system C64 with a true-drive 1541 attached completes LOAD"*",8,1, LOAD"$",8 and SAVE over the IEC bus, talking to the drive's DOS ROM via the faithful serial electrical model.
+      status: pending
+      priority: high
+      area: IECLOAD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5930732+00:00
+      updatedAt: 2026-09-28T20:32:06.5930950+00:00
+    - id: FR-IECMON-001
+      title: IEC bus monitor (scope view)
+      description: Dedicated logic-analyzer panel showing a timing diagram of the IEC lines over emulator time, colored by which device drives each segment, with decoded IEC protocol bands, cursor/zoom/scroll, synced to forward step and reverse step.
+      status: pending
+      priority: high
+      area: IECMON
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5932991+00:00
+      updatedAt: 2026-09-28T20:32:06.5933214+00:00
+    - id: FR-IECSPY-001
+      title: IEC bus snapshot / spy
+      description: At any instant the IEC bus can be snapshotted to read each line's level (ATN/CLK/DATA/SRQ), which endpoints are pulling each line low, and which devices are talking. Read-only; never perturbs bus state. DONE.
+      status: pending
+      priority: high
+      area: IECSPY
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5935186+00:00
+      updatedAt: 2026-09-28T20:32:06.5935395+00:00
+    - id: FR-INPROC-001
+      title: Kestrel-free in-process host path
+      description: 'The console host runs the core in-process with no Kestrel/ASP.NET on the emulation/render/input path. Acceptance: ConsoleHostComposition.Build works with no WebApplication/Kestrel; ViceSharp.Host.InProcess has no Microsoft.AspNetCore.* reference.'
+      status: pending
+      priority: medium
+      area: INPROC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5937539+00:00
+      updatedAt: 2026-09-28T20:32:06.5937890+00:00
+    - id: FR-INPROC-002
+      title: IConsoleEmulatorHost surface
+      description: 'IConsoleEmulatorHost exposes session lifecycle + lock-free frame pull + FrameGeometry + joystick/key/RESTORE injection. Acceptance: a headless test exercises start->advance->frame-pull->input->reset->close; TryGetFrameGeometry.BufferLength == FrameBuffer.Length.'
+      status: pending
+      priority: medium
+      area: INPROC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5940071+00:00
+      updatedAt: 2026-09-28T20:32:06.5940280+00:00
+    - id: FR-INPROC-003
+      title: Explicit swap-immune joystick injection
+      description: 'Joystick injection uses explicit Joystick1/Joystick2 (swap-immune). Acceptance: SetJoystick(Joystick2, Up|fire) -> SetJoystickState(2,0x01,true); toggling SwapJoystickPorts does not change the control port.'
+      status: pending
+      priority: medium
+      area: INPROC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5942298+00:00
+      updatedAt: 2026-09-28T20:32:06.5942507+00:00
+    - id: FR-INSTALL-001
+      title: MSI registers supported Commodore file types
+      description: >-
+        The ViceSharp MSI shall register per-machine Open verbs for supported Commodore media extensions so Explorer can open them with ViceSharp.Avalonia.exe "%1". Registered extensions: d64, g64, d71, d81, tap, t64, crt, prg. Generic .bin/.rom are not claimed as defaults. Double-clicking a registered file starts ViceSharp and drop-starts the path (attach+autostart or PRG load).
+
+
+        Acceptance:
+
+        1. installer/ViceSharp.wxs writes HKLM Software\Classes for each registered extension and ProgId shell\open\command with [INSTALLFOLDER]ViceSharp.Avalonia.exe and %1.
+
+        2. Capabilities FileAssociations and RegisteredApplications entries exist for Default Programs.
+
+        3. Startup argument parsing picks the first existing supported path from args (skipping the exe and dash flags).
+
+        4. MainWindow opens that path via DropAndStartFileAsync after the window is shown.
+      status: pending
+      priority: medium
+      area: INSTALL
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5946985+00:00
+      updatedAt: 2026-09-28T20:32:06.5947197+00:00
+    - id: FR-MACHINEPICKER-001
+      title: Settings Computer and Model dropdowns
+      description: Avalonia Settings splits machine selection into two ComboBoxes matching Xbox SettingsPage. Computer is the family (Commodore 64 / VIC-20). Model is the variant list for that family from the host profile catalog (C64 PAL/NTSC/C64C/... or VIC-20 PAL/NTSC). Changing Computer publishes that family's Models and selects the family default profile. Changing Model sets the host profile id and flags Apply+Restart.
+      status: pending
+      priority: high
+      area: MACHINEPICKER
+      acceptanceCriteria:
+      - id: ac-two-combos
+        text: Settings exposes Computer and Model ComboBoxes with AutomationIds Settings.Computer and Settings.MachineVariant.
+        isSatisfied: false
+      - id: ac-models-filter
+        text: Selecting Commodore 64 lists only x64sc models; selecting VIC-20 lists only xvic models. Minimal host is excluded.
+        isSatisfied: false
+      - id: ac-restart
+        text: Changing Computer or Model flags restart and Apply+Restart switches the live machine family/variant.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5955278+00:00
+      updatedAt: 2026-09-28T20:32:06.5955591+00:00
+    - id: FR-MED-002
+      title: BMP frame-sequence video export (all / unique frames)
+      description: Export video as a numbered 24-bit BMP sequence, writing every frame or only frames that differ from the previous one (frames=all|unique capture option).
+      status: pending
+      priority: high
+      area: MED
+      acceptanceCriteria:
+      - id: ac-1
+        text: Unique mode skips consecutive byte-identical frames
+        isSatisfied: true
+      - id: ac-2
+        text: Frame files are written off the emulation worker thread
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5958625+00:00
+      updatedAt: 2026-09-28T20:32:06.5958857+00:00
+    - id: FR-MED-003
+      title: WAV sound recording tapped off the SID output
+      description: Record the emulator's SID audio to a 16-bit PCM WAV file via a runtime-swappable tap installed in the SID -> output path.
+      status: pending
+      priority: high
+      area: MED
+      acceptanceCriteria:
+      - id: ac-1
+        text: Output parses as valid RIFF/WAVE with data-chunk size matching samples
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5961284+00:00
+      updatedAt: 2026-09-28T20:32:06.5961527+00:00
+    - id: FR-MED-004
+      title: Muxed video+audio export via external ffmpeg
+      description: Export emulator video and audio into a single muxed container (mp4/mkv/avi) by streaming raw BGRA + s16le PCM to an external ffmpeg process over loopback TCP, mirroring VICE ffmpegexedrv.
+      status: pending
+      priority: high
+      area: MED
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5963650+00:00
+      updatedAt: 2026-09-28T20:32:06.5963879+00:00
+    - id: FR-NATIVE-LIFECYCLE-001
+      title: Bounded and isolated native oracle lifecycle
+      description: >-
+        Native VIC-20 sound-oracle reset preserves the live mixer timing and clocks.
+
+        Create and step finish or fail within 5000 ms; stop finishes or fails within 2000 ms.
+
+        Dispose is idempotent; a live worker never observes freed state. Failed stop poisons shared native-library state and all later operations fail immediately.
+
+        Reset, destroy, snapshot read and snapshot write apply the same shutdown-failure policy.
+
+        Normal audio, dual-VIA, reset, snapshot and dispose work repeatedly in one process for PAL and NTSC.
+      status: pending
+      priority: high
+      area: NATIVE
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Native VIC-20 sound-oracle reset preserves the live mixer timing and clocks.
+        isSatisfied: false
+      - id: ac-02
+        text: Create and step finish or fail within 5000 ms; stop finishes or fails within 2000 ms.
+        isSatisfied: false
+      - id: ac-03
+        text: Dispose is idempotent; a live worker never observes freed state. Failed stop poisons shared native-library state and all later operations fail immediately.
+        isSatisfied: false
+      - id: ac-04
+        text: Reset, destroy, snapshot read and snapshot write apply the same shutdown-failure policy.
+        isSatisfied: false
+      - id: ac-05
+        text: Normal audio, dual-VIA, reset, snapshot and dispose work repeatedly in one process for PAL and NTSC.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5971973+00:00
+      updatedAt: 2026-09-28T20:32:06.5972208+00:00
+    - id: FR-NATIVERESIDUE-001
+      title: Order-independent native oracle across .vsf resumes
+      description: Every native (x64sc shim) machine created in a test process must present identical boot and post-activity-reset state regardless of whether a .vsf snapshot was resumed earlier in the same process. Snapshot side effects on process-wide VICE resources (e.g. DriveNTrueEmulation from a has_tde=0 DRIVE8 module) must be re-baselined to VICE defaults at machine create so lockstep suites are order-independent and can run in one process.
+      status: pending
+      priority: high
+      area: NATIVERESIDUE
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5975600+00:00
+      updatedAt: 2026-09-28T20:32:06.5975830+00:00
+    - id: FR-PACESEL-001
+      title: Selectable emulation pacing strategy
+      description: The pacing strategy (Semaphore vs VICE) is selectable in settings, applied live by swapping the gate on the worker thread, and persisted.
+      status: completed
+      priority: medium
+      area: PACESEL
+      acceptanceCriteria:
+      - id: ac-1
+        text: Strategy is selectable in the Settings UI (Semaphore or VICE)
+        isSatisfied: true
+      - id: ac-2
+        text: Change applies live - the pump swaps the gate with no session restart
+        isSatisfied: true
+      - id: ac-3
+        text: Selection round-trips through the settings DTO and persists
+        isSatisfied: true
+      - id: ac-4
+        text: Unknown or null strategy defaults to Semaphore
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5979836+00:00
+      updatedAt: 2026-09-28T20:32:06.5980044+00:00
+    - id: FR-PERF-RUNFRAME-001
+      title: C64 PAL RunFrame Throughput
+      description: Managed C64 PAL emulation must execute IMachine.RunFrame() fast enough for a host application to sustain 50.125 Hz PAL playback with remaining budget for blit and audio work.
+      status: completed
+      priority: critical
+      area: PERF
+      notes: 'Implemented on PR #3, branch codex/c64-pal-runframe-perf, head f533ec7ba552bd93dca8e683bee142eb0d2fbf79. Canonical MCP TR IDs replace legacy repo shorthand TR-CYCLE-001/TR-DET-001/TR-ALLOC-001/TR-AOT-001 for this slice.'
+      acceptanceCriteria:
+      - id: ac-real-c64-pal
+        text: Production C64 PAL machine is built through ArchitectureBuilder with real C64 ROMs; romless and minimal-host machines are not valid evidence.
+        isSatisfied: true
+        evidence: tests/ViceSharp.Benchmarks/BenchmarkMachineFactory.cs; tests/ViceSharp.Benchmarks/C64PalRunFrameBenchmark.cs; BenchmarksSmokeTests.C64PalRunFrameBenchmark_UsesRealC64Pal passed
+      - id: ac-median
+        text: Release/net10.0 managed-only 60 warmup plus 600 measured frame run reports median <= 18.0 ms.
+        isSatisfied: true
+        evidence: 'RunFramePerfProbe 60 600: median=1.575ms'
+      - id: ac-p95
+        text: The same measured run reports p95 <= 22.0 ms.
+        isSatisfied: true
+        evidence: 'RunFramePerfProbe 60 600: p95=2.753ms'
+      - id: ac-zero-alloc
+        text: The measured RunFrame loop reports 0 bytes allocated on the current thread.
+        isSatisfied: true
+        evidence: 'RunFramePerfProbe 60 600: allocated=0 bytes; BenchmarkDotNet Allocated reported no managed allocation'
+      - id: ac-public-api
+        text: Public signatures for IMachine, IVideoChip, IAudioChip, IBus, IKeyboardMatrix, ArchitectureBuilder, and C64MachineProfiles remain unchanged.
+        isSatisfied: true
+        evidence: 'PR #3 diff only changes internal implementation plus benchmark/test/docs; no public interface signatures changed'
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5988436+00:00
+      updatedAt: 2026-09-28T20:32:06.5988648+00:00
+    - id: FR-PUBSUB-001
+      title: Internal Pub/Sub Event Bus
+      description: ViceSharp shall provide an internal synchronous topic-based Pub/Sub event bus for transient intra-frame device-to-device communication, including interrupts, NMI, bus availability, address-enable control, DMA, clock, and state notifications. The bus exposes typed publish and subscribe APIs, raw payload compatibility, deterministic registration-order delivery, handle-based unsubscription, frame reset behavior, and message pool integration.
+      status: completed
+      priority: high
+      area: PUBSUB
+      notes: 'Implemented by commit b5d38630a4d6feb63eecd6ffd86883b2197dcbd2 (feat(pubsub): implement iteration 1 event bus). Source references: docs/PubSub.md, src/ViceSharp.Abstractions/IPubSub.cs, src/ViceSharp.Core/LockFreePubSub.cs.'
+      acceptanceCriteria:
+      - id: ac-fr-pubsub-001-contract
+        text: Public IPubSub exposes typed Publish/Subscribe, raw payload compatibility, Unsubscribe by SubscriptionHandle, Flush, FrameReset, and SubscriptionCount.
+        isSatisfied: true
+        evidence: src/ViceSharp.Abstractions/IPubSub.cs
+      - id: ac-fr-pubsub-001-delivery
+        text: Publish delivers synchronously to subscribers in registration order for each topic.
+        isSatisfied: true
+        evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs
+      - id: ac-fr-pubsub-001-lifecycle
+        text: Message pool exhaustion, return, and frame reset behavior are covered by focused tests.
+        isSatisfied: true
+        evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.5995667+00:00
+      updatedAt: 2026-09-28T20:32:06.5995873+00:00
+    - id: FR-REMOTECTRL-001
+      title: Live Avalonia visual-tree inspection over gRPC
+      description: ViceSharp.Avalonia can expose its live Avalonia visual tree for remote inspection and (optionally) interaction over gRPC via the SharpNinja.Avalonia.RemoteControl embeddable server, to support UI development/validation. The server is disabled by default and only starts when explicitly enabled via environment switches, and then only with a bearer token on a loopback transport (interaction and live frames remain deny-by-default opt-ins).
+      status: pending
+      priority: medium
+      area: REMOTECTRL
+      notes: ''
+      acceptanceCriteria:
+      - id: ac-01
+        text: RemoteControl is disabled when VICESHARP_REMOTECONTROL_ENABLE is unset; enabled startup without a bearer token fails closed.
+        isSatisfied: false
+      - id: ac-02
+        text: Explicitly enabled, authenticated loopback gRPC exposes the current live MainWindow visual tree.
+        isSatisfied: false
+      - id: ac-03
+        text: Interaction and live-frame access remain denied unless their separate opt-ins permit them; authentication and action failures are explicit.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6001135+00:00
+      updatedAt: 2026-09-28T20:32:06.6001344+00:00
+    - id: FR-REMOTECTRL-CLI-001
+      title: Portable RemoteControl gRPC command line
+      description: >-
+        CLI restores and builds from a standalone ViceSharp checkout without a sibling repository.
+
+        Support grpc transport and its environment default; reject unsupported transports explicitly.
+
+        Provide machine-readable capabilities and tree results suitable for retained validation evidence.
+
+        Resolve exact automation IDs first; reject ambiguous matches, malformed trees and ancestor-hidden controls.
+
+        Authentication, disabled control, denied actions, failed mutations, cancellation, timeout and invalid frames produce accurate failures and exit codes.
+      status: pending
+      priority: high
+      area: REMOTECTRL
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: CLI restores and builds from a standalone ViceSharp checkout without a sibling repository.
+        isSatisfied: false
+      - id: ac-02
+        text: Support grpc transport and its environment default; reject unsupported transports explicitly.
+        isSatisfied: false
+      - id: ac-03
+        text: Provide machine-readable capabilities and tree results suitable for retained validation evidence.
+        isSatisfied: false
+      - id: ac-04
+        text: Resolve exact automation IDs first; reject ambiguous matches, malformed trees and ancestor-hidden controls.
+        isSatisfied: false
+      - id: ac-05
+        text: Authentication, disabled control, denied actions, failed mutations, cancellation, timeout and invalid frames produce accurate failures and exit codes.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6008602+00:00
+      updatedAt: 2026-09-28T20:32:06.6008810+00:00
+    - id: FR-REVEXEC-001
+      title: Reverse execution (backward step)
+      description: The emulator can step backward by cycle and by frame, restoring exact prior state, so protocols can be watched forward and backward. Backed by a frame-granular snapshot ring and deterministic re-run.
+      status: pending
+      priority: high
+      area: REVEXEC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6010740+00:00
+      updatedAt: 2026-09-28T20:32:06.6010980+00:00
+    - id: FR-ROMM-AVUI-001
+      title: Avalonia Steam desktop UI
+      description: >-
+        PLAN-ROMM-001. Steam-style desktop library, details, and lists views on the Avalonia head.
+
+        AC-AUI-01 [V]: LibraryView builds and binds LibraryBrowseViewModel (build + headless VM tests AC-BROWSE-*).
+
+        AC-AUI-02 [V]: connection dialog + browse/search/list/launch end to end (E2E).
+
+        AC-AUI-03 [V]: GameDetailsView builds and binds RomDetailViewModel (cover, metadata, files table, Attach+play/Attach only/Add-to-list, membership) (build + RomDetailViewModelTests).
+
+        AC-AUI-04 [V]: ListsView builds and binds CollectionsViewModel (rail, toolbar Rename/Delete/Add games, per-row remove) (build + CollectionsViewModelTests).
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6014368+00:00
+      updatedAt: 2026-09-28T20:32:06.6014573+00:00
+    - id: FR-ROMM-BROWSE-001
+      title: RomM browse, search, filter, page, jump
+      description: >-
+        PLAN-ROMM-001. Browse thousands of titles scoped to the active machine. TR-ROMM-THREAD-001.
+
+        AC-BROWSE-01: BrowseAsync maps CustomLimitOffsetPage -> LibraryPage (items,total,offset,charIndex) -> RomMGatewayBrowseTests.Page_Maps.
+
+        AC-BROWSE-02: active machine slug (c64/c128/c-plus-4/vic-20/cpet, from ICurrentMachineProvider) resolves to numeric id and always scopes the query; no user platform picker -> RomMGatewayBrowseTests.PlatformSlug_ResolvesAndFilters.
+
+        AC-BROWSE-03: searchTerm passes through to search_term -> RomMGatewayBrowseTests.SearchTerm_Passed.
+
+        AC-BROWSE-04: LoadMoreAsync appends next page; HasMore false at offset>=total -> LibraryBrowseViewModelTests.Paging_AppendsToEnd.
+
+        AC-BROWSE-05: A-Z jump maps letter -> offset via charIndex; JumpToLetterAsync loads that page -> LibraryBrowseViewModelTests.Jump_UsesCharIndex.
+
+        AC-BROWSE-06: rapid search input debounces (300 ms) to a single query -> LibraryBrowseViewModelTests.Search_Debounced.
+
+        AC-BROWSE-07: changing the active machine (Settings) re-scopes browse to the new slug and reloads; no in-library source/platform selector -> LibraryBrowseViewModelTests.MachineChange_RescopesAndReloads.
+
+        AC-BROWSE-08: background load raises PropertyChanged on the captured context (no cross-thread) -> LibraryBrowseViewModelTests.OffContext_Dispatches.
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6020748+00:00
+      updatedAt: 2026-09-28T20:32:06.6020954+00:00
+    - id: FR-ROMM-COLLECT-001
+      title: Lists via RomM server-side collections
+      description: >-
+        PLAN-ROMM-001. Game lists are RomM collections (/api/collections), synced across both heads. TR-ROMM-JSON-001.
+
+        AC-COLLECT-01: GetCollectionsAsync lists user collections; smart/virtual flagged read-only -> RomMGatewayCollectionsTests.List_FlagsReadOnly.
+
+        AC-COLLECT-02: CreateCollectionAsync POSTs and returns the collection -> RomMGatewayCollectionsTests.Create_Posts.
+
+        AC-COLLECT-03: add/remove send CollectionRomsPayload{rom_ids[]} on the right verb -> RomMGatewayCollectionsTests.AddRemove_SendPayload.
+
+        AC-COLLECT-04: rename (PUT) and delete (DELETE) -> RomMGatewayCollectionsTests.RenameDelete.
+
+        AC-COLLECT-05: CollectionsViewModel add/remove selected roms then refresh -> CollectionsViewModelTests.AddRemove_Refreshes.
+
+        AC-COLLECT-06: every collections DTO deserializes reflection-free via RomMJsonContext -> RomMJsonContextTests.Collections_SourceGenOnly.
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6025458+00:00
+      updatedAt: 2026-09-28T20:32:06.6025662+00:00
+    - id: FR-ROMM-CONN-001
+      title: RomM connection and authentication
+      description: >-
+        PLAN-ROMM-001. Connect the supported desktop product path to a RomM 5.x server and authenticate. TR-ROMM-NUGET-001, TR-ROMM-JSON-001, TR-ROMM-SEC-001.
+
+        AC-CONN-01: base URL + client token authenticates; Authorization: Bearer rmm_... on requests -> RomMGatewayAuthTests.ClientToken_SetsBearer.
+
+        AC-CONN-02: device-pair exchange returns a token and persists it via the store -> RomMPairingTests.Exchange_ReturnsAndPersists.
+
+        AC-CONN-03: OAuth password token auto-refreshes on near-expiry through RomMAuthHandler -> RomMAuthRefreshTests.NearExpiry_Refreshes.
+
+        AC-CONN-04: a 401 sets the connection VM to a sign-in-expired reauth state and raises ConnectionInvalid -> LibraryConnectionViewModelTests.Unauthorized_SurfacesReauth.
+
+        AC-CONN-05: on Windows, FileRomMConnectionStore persists protected_token with current-user DPAPI, writes atomically, and immediately migrates legacy plaintext records; unsupported operating systems fail closed -> FileRomMConnectionStoreTests.SaveLoad_RoundTrips + Load_LegacyPlaintext_MigratesImmediately.
+
+        AC-CONN-06: token never appears in a URL/query string -> RomMGatewayAuthTests.Token_NeverInUri.
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6031128+00:00
+      updatedAt: 2026-09-28T20:32:06.6031352+00:00
+    - id: FR-ROMM-COVER-001
+      title: Cover art and cache
+      description: >-
+        PLAN-ROMM-001. Cover art loads efficiently for large virtualized grids. TR-ROMM-SEC-001.
+
+        AC-COVER-01: url_cover is fetched without auth; only server-relative path_cover_* is fetched with bearer under the configured RomM base address; an absolute authenticated-path input is rejected -> RomMCoverImageSourceTests.AuthRules + AuthenticatedPath_RejectsAbsoluteUri.
+
+        AC-COVER-02: two-tier cache; second request for same cover hits cache (no second HTTP) -> CoverCacheTests.SecondRequest_Cached.
+
+        AC-COVER-03: concurrency gate (<=4) + off-screen cancellation -> CoverCacheTests.Concurrency_Gated_Cancellable.
+
+        AC-COVER-04: a fetch failure yields the placeholder and never throws -> CoverCacheTests.Failure_Placeholder.
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6035635+00:00
+      updatedAt: 2026-09-28T20:32:06.6035843+00:00
+    - id: FR-ROMM-DETAIL-001
+      title: RomM ROM detail
+      description: >-
+        PLAN-ROMM-001. Show a game's detail (cover, metadata, files, launchable, collection membership).
+
+        AC-DETAIL-01: GetRomAsync maps DetailedRomSchema (files/cover/summary/launchable) -> RomMGatewayDetailTests.Detail_Maps.
+
+        AC-DETAIL-02: RomDetailViewModel invokes add-to-collection -> RomDetailViewModelTests.AddToCollection_Invokes.
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6038285+00:00
+      updatedAt: 2026-09-28T20:32:06.6038491+00:00
+    - id: FR-ROMM-LAUNCH-001
+      title: Download, attach, boot
+      description: >-
+        PLAN-ROMM-001. Selecting a game downloads it, attaches to the right slot, and boots on the supported Avalonia product path. TR-ROMM-SEC-001. Xbox/UWP launch acceptance is archived and outside product scope.
+
+        AC-LAUNCH-01: DownloadAsync accepts one relative filename, contains it under cacheDir/{romId}, reuses only on expected-size match, streams to a temporary file, rejects overflow/truncation, and atomically publishes complete content with progress -> RomMGatewayDownloadTests.Streams_Reuses_Progress + RejectsFileNamesOutsideRomCache + TruncatedDownload_DoesNotPublishPartialCacheEntry.
+
+        AC-LAUNCH-02: slot = SelectedSlot or MediaExtensionMap default from fs_name -> MediaExtensionMapTests.Extension_MapsSlot.
+
+        AC-LAUNCH-03: .prg is not launchable and Attach is disabled -> MediaExtensionMapTests.Prg_NotLaunchable + LibraryBrowseViewModelTests.Prg_AttachDisabled.
+
+        AC-LAUNCH-04: attach/attach+start invoke IGameLauncher with resolved slot + autostart flag -> LibraryBrowseViewModelTests.AttachStart_InvokesLauncher.
+
+        AC-LAUNCH-05: Avalonia launcher delegates to DropAndStartFileAsync(autostart)/AttachAsync(attach-only) -> AvaloniaGameLauncherTests.DelegatesToShell.
+
+        AC-LAUNCH-06: two-phase status (Downloading N% then Starting) -> LibraryBrowseViewModelTests.Launch_TwoPhaseStatus.
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6044601+00:00
+      updatedAt: 2026-09-28T20:32:06.6044806+00:00
+    - id: FR-ROMM-PKG-001
+      title: NuGet packaging of RomM libraries
+      description: >-
+        PLAN-ROMM-001. Ship ViceSharp.Library.ViewModels + ViceSharp.RomM as nuget.org packages. TR-ROMM-BOUNDARY-001, TR-ROMM-NUGET-001.
+
+        AC-PKG-01: both libraries IsPackable with id + GPL-2.0-or-later metadata -> PackageMetadataTests.Ids_License.
+
+        AC-PKG-02: PublishNuget packs both nupkgs with correct deps (RomM.Client, RomM.Client.Csdb, ViceSharp.*) -> PackageMetadataTests.Dependencies + build.ps1 PublishNuget --skip [V].
+
+        AC-PKG-03: ViceSharp.Library.ViewModels references only Protocol; no RomM./Http/Grpc./Avalonia./Windows./engine names -> LibraryViewModelsBoundaryTests.
+
+        AC-PKG-04: restore resolves RomM.Client/Csdb from nuget.org with the nuget.org-only config -> NuGetConfigTests.NugetOrgOnly + restore [V].
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6048779+00:00
+      updatedAt: 2026-09-28T20:32:06.6048988+00:00
+    - id: FR-ROMM-XBOXUI-001
+      title: Xbox Game Pass UI and navigation
+      description: >-
+        PLAN-ROMM-001. 10-foot gamepad-first library, details, and lists pages on the UWP head.
+
+        AC-XUI-01: Library in NavigationDestination, a HomePage button, and Push route -> XboxNavigationTests.Library_Routable.
+
+        AC-XUI-02 [V]: LibraryPage builds Debug-UWP, binds LibraryBrowseViewModel (grid tiles, search, read-only machine indicator, slot picker, A/Y actions, A-Z strip; no source/platform picker).
+
+        AC-XUI-03 [V]: A=Attach, Y=Attach+Autostart via the input command path.
+
+        AC-XUI-04 [V]: no RPC_E_WRONG_THREAD on async tile/cover load (guarded by AC-BROWSE-08).
+
+        AC-XUI-05 [V]: GameDetailsPage builds Debug-UWP, binds RomDetailViewModel (cover, screenshots, metadata, files, slot picker, A/Y/X); VM logic in RomDetailViewModelTests.
+
+        AC-XUI-06 [V]: ListsPage builds Debug-UWP, binds CollectionsViewModel (rail, selected-list games, X=remove/Y=rename/Menu=delete/+New list); VM logic in CollectionsViewModelTests.
+      status: pending
+      priority: medium
+      area: ROMM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6053750+00:00
+      updatedAt: 2026-09-28T20:32:06.6053952+00:00
+    - id: FR-SETTINGS-TXN-001
+      title: Truthful transactional Settings state
+      description: >-
+        Expose Active runtime settings, Accepted last accepted target including staged restart fields, and local unsaved Draft independently.
+
+        Dirty compares normalized Draft to Accepted. Restart-required compares restart-relevant Draft to Active.
+
+        Plain Apply applies live fields, accepts the complete target, clears dirty and retains a pending restart. Revert restores Accepted and does not cancel an earlier accepted restart.
+
+        Apply + Restart publishes a prepared replacement and then makes Active and Accepted equal. Any failure preserves prior runtime, accepted state and unsaved draft.
+
+        Validate profile/family, RAM, limiter, resources, cartridge image/preset and IEC root/unit/reserved-device conflicts before any externally visible mutation.
+
+        Derive active cartridge kind from the actual device. A non-none kind needs a compatible image; none detaches. Preserve image, banks, preset, writeback and uIEC across applicable restart.
+
+        Apply Warp through the existing limiter in the same settings transaction. Existing standalone Warp control remains compatible.
+
+        Serialize refresh and Apply, reject stale responses, preserve edited draft fields and refresh untouched fields. Same-field conflicts keep local draft until Apply or Revert.
+
+        Older hosts lacking State remain readable and clearly disable state-aware Apply/Restart with an upgrade explanation.
+
+        Snapshots and INI persistence include RAM, cartridge and uIEC fields. Defaults are no RAM expansion, no cartridge, preset start, writeback false, uIEC disabled with empty root and unit 9. Save-on-exit preferences remain outside host Apply/Revert.
+      status: pending
+      priority: high
+      area: SETTINGS
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Expose Active runtime settings, Accepted last accepted target including staged restart fields, and local unsaved Draft independently.
+        isSatisfied: false
+      - id: ac-02
+        text: Dirty compares normalized Draft to Accepted. Restart-required compares restart-relevant Draft to Active.
+        isSatisfied: false
+      - id: ac-03
+        text: Plain Apply applies live fields, accepts the complete target, clears dirty and retains a pending restart. Revert restores Accepted and does not cancel an earlier accepted restart.
+        isSatisfied: false
+      - id: ac-04
+        text: Apply + Restart publishes a prepared replacement and then makes Active and Accepted equal. Any failure preserves prior runtime, accepted state and unsaved draft.
+        isSatisfied: false
+      - id: ac-05
+        text: Validate profile/family, RAM, limiter, resources, cartridge image/preset and IEC root/unit/reserved-device conflicts before any externally visible mutation.
+        isSatisfied: false
+      - id: ac-06
+        text: Derive active cartridge kind from the actual device. A non-none kind needs a compatible image; none detaches. Preserve image, banks, preset, writeback and uIEC across applicable restart.
+        isSatisfied: false
+      - id: ac-07
+        text: Apply Warp through the existing limiter in the same settings transaction. Existing standalone Warp control remains compatible.
+        isSatisfied: false
+      - id: ac-08
+        text: Serialize refresh and Apply, reject stale responses, preserve edited draft fields and refresh untouched fields. Same-field conflicts keep local draft until Apply or Revert.
+        isSatisfied: false
+      - id: ac-09
+        text: Older hosts lacking State remain readable and clearly disable state-aware Apply/Restart with an upgrade explanation.
+        isSatisfied: false
+      - id: ac-10
+        text: Snapshots and INI persistence include RAM, cartridge and uIEC fields. Defaults are no RAM expansion, no cartridge, preset start, writeback false, uIEC disabled with empty root and unit 9. Save-on-exit preferences remain outside host Apply/Revert.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6070450+00:00
+      updatedAt: 2026-09-28T20:32:06.6070694+00:00
+    - id: FR-SID-013
+      title: SID audio backend wiring
+      description: The emulator shall wire SID sample production through the host audio backend without dropping or duplicating real-time audio buffers.
+      status: completed
+      priority: high
+      area: SID
+      notes: Existing SidAudioBackendTests reference FR-SID-013; wrap-up aligned the MCP requirement with that code traceability and reserved FR-SID-014 for the new VICE-compatible signed-output pacing fix.
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6073092+00:00
+      updatedAt: 2026-09-28T20:32:06.6073298+00:00
+    - id: FR-SID-014
+      title: VICE-compatible signed SID voice output and demo pacing
+      description: SID voice output must be centered and scaled like VICE/reSID so live host audio back-pressure paces demos at the same rate as VICE across runtime segment transitions.
+      status: completed
+      priority: critical
+      area: SID
+      notes: 'Evidence: tests/ViceSharp.TestHarness/SidCombinedWaveformTests.cs; tests/ViceSharp.TestHarness/SidPcmEquivalencyTests.cs; validation-output/runtime/sid-goal-20260626-2351/vicesharp-pieces-release-space-final.mp4; status CSV shows pre-Space average 99.87% and post-Space average 99.59%.'
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6076297+00:00
+      updatedAt: 2026-09-28T20:32:06.6076504+00:00
+    - id: FR-SIDAUDIO-001
+      title: SID plays at correct pitch
+      description: The SID must tick at the phi2 master-clock rate so pitch, envelopes, noise and sync are correct (BUG-SIDAUDIO-001). It was registered as a slow device (ClockDivisor 16) while its accumulator advanced once per Tick, making everything 16x too slow.
+      status: completed
+      priority: high
+      area: SIDAUDIO
+      acceptanceCriteria:
+      - id: ac-1
+        text: With voice freq 0x8000, after stepping the SystemClock 8192 master cycles OSC3 reads 0x10 (was 0x01 at the 16x-slow rate)
+        isSatisfied: true
+      - id: ac-2
+        text: Audio sample rate remains 44.1 kHz (self-corrects via ConfigureAudioClock at either divisor)
+        isSatisfied: true
+      - id: ac-3
+        text: ADSR, noise-LFSR and hard-sync run at the phi2 rate
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6080418+00:00
+      updatedAt: 2026-09-28T20:32:06.6080623+00:00
+    - id: FR-SIDEBARUI-001
+      title: Responsive sidebar layout with collapse expander
+      description: The attach sidebar has a collapse expander on its inner edge (facing the video) that flips side with the panel anchor, and its button groups wrap to new rows when the panel is narrow.
+      status: pending
+      priority: medium
+      area: SIDEBARUI
+      acceptanceCriteria:
+      - id: ac-1
+        text: The collapse expander sits on the inner edge - Right when the panel is anchored Left, Left when anchored Right
+        isSatisfied: true
+      - id: ac-2
+        text: The expander toggles the sidebar pane and its chevron points toward the collapse direction
+        isSatisfied: true
+      - id: ac-3
+        text: Tab and action button groups wrap to new rows (WrapPanel) when the panel is narrow
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6084440+00:00
+      updatedAt: 2026-09-28T20:32:06.6084643+00:00
+    - id: FR-SNDREG-001
+      title: VICE gate sound back-pressure regulator
+      description: When the SID is the audio timing source, the VICE pacing gate paces the worker to the audio device draining its sample buffer (regulator 1), taking precedence over vsync.
+      status: completed
+      priority: high
+      area: SNDREG
+      acceptanceCriteria:
+      - id: ac-1
+        text: Buffer at or over the high-water mark => worker blocks (advances nothing)
+        isSatisfied: true
+      - id: ac-2
+        text: Buffer has room => worker advances a chunk
+        isSatisfied: true
+      - id: ac-3
+        text: Warp skips both sound and vsync (highest precedence)
+        isSatisfied: true
+      - id: ac-4
+        text: No active audio device => falls through to the vsync regulator
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6088428+00:00
+      updatedAt: 2026-09-28T20:32:06.6088689+00:00
+    - id: FR-SYSBTN-001
+      title: Ship default gameplay binding set
+      description: 'Ship the default gameplay binding set. Acceptance: BindingProfile.Default enumerates the locked table by value.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6090360+00:00
+      updatedAt: 2026-09-28T20:32:06.6090566+00:00
+    - id: FR-SYSBTN-002
+      title: Menu toggles the main menu (fixed)
+      description: 'Menu toggles the main menu; not remappable away from menu control. Acceptance: Menu edge in Gameplay -> MainMenu+OpenMainMenu; in MainMenu -> Gameplay+CloseMenu.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6092332+00:00
+      updatedAt: 2026-09-28T20:32:06.6092595+00:00
+    - id: FR-SYSBTN-003
+      title: View toggles the virtual keyboard overlay
+      description: 'View toggles the virtual keyboard overlay. Acceptance: View edge toggles Gameplay<->VirtualKeyboard.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6094170+00:00
+      updatedAt: 2026-09-28T20:32:06.6094374+00:00
+    - id: FR-SYSBTN-004
+      title: Each non-nav AppCommand maps to a host command
+      description: 'Each non-nav AppCommand maps to an existing host command. Acceptance: AppCommandDispatcher invokes the correct recorded host call once with correct args on fakes.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6096255+00:00
+      updatedAt: 2026-09-28T20:32:06.6096460+00:00
+    - id: FR-SYSBTN-005
+      title: LT hold-to-warp hysteresis
+      description: 'LT hold-to-warp hysteresis (on>=0.6/off<=0.4). Acceptance: rising 0.0->0.7 one WarpHoldOn; falling 0.7->0.3 one WarpHoldOff; 0.4..0.6 none.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6098101+00:00
+      updatedAt: 2026-09-28T20:32:06.6098305+00:00
+    - id: FR-SYSBTN-006
+      title: SwapJoystickPorts flips config, no host change
+      description: 'SwapJoystickPorts flips XboxInputConfig.SwapPorts; no host InputSettings change. Acceptance: dispatch flips the flag, issues no ISettingsService call; second dispatch flips back.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6100225+00:00
+      updatedAt: 2026-09-28T20:32:06.6100429+00:00
+    - id: FR-SYSBTN-007
+      title: Exit only from main menu behind ConfirmDialog
+      description: 'Exit only from the main menu behind ConfirmDialog. Acceptance: no RequestExit binding in Default; RequestExit only from MainMenu->ConfirmDialog, only ConfirmYes exits.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6102293+00:00
+      updatedAt: 2026-09-28T20:32:06.6102494+00:00
+    - id: FR-SYSBTN-008
+      title: Bindings remappable + persisted + reset
+      description: 'Bindings remappable and persisted with reset-to-defaults. Acceptance: Save then Load round-trips an edited profile byte-for-byte; ResetToDefaults yields Default.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6106946+00:00
+      updatedAt: 2026-09-28T20:32:06.6107334+00:00
+    - id: FR-SYSINDEP-001
+      title: Independent per-system scheduling coupled only by the async IEC bus
+      description: Each system (C64, each drive) runs on its own clock and the systems couple only through the asynchronous wired-OR IEC bus, replacing cycle-lockstep.
+      status: pending
+      priority: high
+      area: SYSINDEP
+      acceptanceCriteria:
+      - id: ac-1
+        text: With a drive attached, the drive CPU advances on its own clock and is not stepped in cycle-lockstep per host instruction.
+        isSatisfied: false
+      - id: ac-2
+        text: An IEC line transition is observed by every other endpoint's system before that system reads the line.
+        isSatisfied: false
+      - id: ac-3
+        text: A real IEC transaction such as a directory or program load completes correctly under independent scheduling, at parity with the existing true-drive LOAD test.
+        isSatisfied: false
+      - id: ac-4
+        text: Each system sustains about 100 percent of its own CPU clock under load including audio on, with no fixed-chunk under-throttle.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6114944+00:00
+      updatedAt: 2026-09-28T20:32:06.6115163+00:00
+    - id: FR-TESTGATE-001
+      title: S0 feasibility gate before production
+      description: 'The head is delivered as an ordered BDP v4 slice sequence where S0 is a feasibility go/no-go that must pass before any production slice. Acceptance: S0 GO recorded before S1; the ordered slice list is the single source of execution order.'
+      status: pending
+      priority: medium
+      area: TESTGATE
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6117749+00:00
+      updatedAt: 2026-09-28T20:32:06.6117957+00:00
+    - id: FR-TESTGATE-002
+      title: 0 failed AND 0 skipped per slice scope
+      description: "Every gate enforces 0 failed AND 0 skipped within that slice's filter scope. Acceptance: each slice trx within its --filter reports Failed=0 and Skipped=0."
+      status: pending
+      priority: medium
+      area: TESTGATE
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6126616+00:00
+      updatedAt: 2026-09-28T20:32:06.6126838+00:00
+    - id: FR-TESTGATE-003
+      title: Determinism + desktop never regress
+      description: 'Determinism and the desktop suite never regress across any gate. Acceptance: Category=Determinism 0 failed with pass count == pre-S1 baseline at every gate; Avalonia boundary + desktop build stay green.'
+      status: pending
+      priority: medium
+      area: TESTGATE
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6129799+00:00
+      updatedAt: 2026-09-28T20:32:06.6130012+00:00
+    - id: FR-TESTGATE-004
+      title: Majority off-console; device slices isolated
+      description: 'The majority of gates run off-console; on-console work is isolated to marked device slices. Acceptance: production off-console slices need no hardware; only S0 + device slices are onConsole=true.'
+      status: pending
+      priority: medium
+      area: TESTGATE
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6132040+00:00
+      updatedAt: 2026-09-28T20:32:06.6132250+00:00
+    - id: FR-TICKHIST-001
+      title: Last-100-ticks time-travel debugger
+      description: A History panel lists the last 100 executed CPU instructions; when paused, selecting a tick opens a debug screen with that tick's registers, reconstructed memory, and chip state.
+      status: completed
+      priority: medium
+      area: TICKHIST
+      acceptanceCriteria:
+      - id: ac-1
+        text: History panel lists the last 100 completed instructions, newest first
+        isSatisfied: true
+      - id: ac-2
+        text: Selecting a tick while paused shows that tick's CPU registers
+        isSatisfied: true
+      - id: ac-3
+        text: Memory dump is reconstructed as-of-tick (later ticks' write-deltas reverse-applied to current RAM)
+        isSatisfied: true
+      - id: ac-4
+        text: Inspection is only available while the emulator is paused
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6136414+00:00
+      updatedAt: 2026-09-28T20:32:06.6136622+00:00
+    - id: FR-UI-002
+      title: Emulator Status and Machine Control Bar
+      description: The UI shall provide a status and control bar for runtime state, controls, performance fields, and IEC activity.
+      status: in_progress
+      priority: high
+      area: UI
+      notes: ''
+      acceptanceCriteria:
+      - id: fr-ui-002-ac-1
+        text: The status bar presents existing run state, cycle, frame, model, limiter, automation, and control commands.
+        isSatisfied: false
+      - id: fr-ui-002-ac-2
+        text: The status bar presents IEC activity from host telemetry without replacing existing fields.
+        isSatisfied: false
+      - id: fr-ui-002-ac-3
+        text: The status bar remains usable without stealing emulator focus for normal display interaction.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6140415+00:00
+      updatedAt: 2026-09-28T20:32:06.6140620+00:00
+    - id: FR-UI-003
+      title: Collapsible Tabbed Emulator Sidebar
+      description: The UI shall provide a dockable tabbed sidebar with peripherals and settings surfaces driven by host protocol state.
+      status: in_progress
+      priority: high
+      area: UI
+      notes: ''
+      acceptanceCriteria:
+      - id: fr-ui-003-ac-1
+        text: The peripherals tab exposes drive attachment state and media commands for configured drives.
+        isSatisfied: false
+      - id: fr-ui-003-ac-2
+        text: Drive entries expose IEC active/idle state from the same host telemetry source as the status bar.
+        isSatisfied: false
+      - id: fr-ui-003-ac-3
+        text: Drive IEC activity returns idle in the peripherals tab after bus activity settles.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6144573+00:00
+      updatedAt: 2026-09-28T20:32:06.6144779+00:00
+    - id: FR-UIDROP-002
+      title: Drop PRG into current session RAM and RUN at BASIC start
+      description: >-
+        The Avalonia video surface shall accept a dropped *.prg file and load it into the current emulator session RAM at the PRG little-endian load address. The drop shall not attach the file as disk, tape, or cartridge media and shall not reset the machine. BASIC start is the live TXTTAB at $2B/$2C for the current machine and memory configuration (C64 $0801; VIC-20 unexpanded $1001, +3K $0401, +8K and above $1201). The host shall not assume C64 $0801. If the load address equals that live TXTTAB, the host shall update BASIC end pointers (VARTAB, ARYTAB, STREND) and inject RUN. If the load address is not the current BASIC start, the host shall load the bytes only and shall not RUN. Invalid or too-short PRG files return InvalidArgument without mutating emulator memory.
+
+
+        Acceptance:
+
+        1. Drag-over of a local *.prg path is accepted (Copy).
+
+        2. DropAndStartFileAsync of a *.prg calls host LoadProgram and does not AttachMedia or reset.
+
+        3. PRG bytes are written at the 2-byte little-endian load address.
+
+        4. When load address equals live TXTTAB, VARTAB/ARYTAB/STREND are set to load+payload length and RUN is queued. TXTTAB is C64 $0801 or VIC-20 $1001/$0401/$1201 by RAM config.
+
+        5. When load address differs from live TXTTAB (including a C64 $0801 PRG on VIC-20 unexpanded), memory is written and RUN is not queued.
+
+        6. PRG shorter than 3 bytes is rejected with InvalidArgument and memory is unchanged.
+
+        7. Existing disk/cart drop-and-start paths remain unchanged.
+      status: pending
+      priority: medium
+      area: UIDROP
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6151799+00:00
+      updatedAt: 2026-09-28T20:32:06.6152004+00:00
+    - id: FR-UIFLYOUT-001
+      title: Flyout sidebar with single side-toggle
+      description: The Attach/settings sidebar is a proper flyout (Avalonia SplitView/Flyout). A single icon button toggles the flyout's side (left/right), replacing the separate Left and Right buttons.
+      status: pending
+      priority: high
+      area: UIFLYOUT
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6153867+00:00
+      updatedAt: 2026-09-28T20:32:06.6154069+00:00
+    - id: FR-UIMENUBAR-001
+      title: VICE-style menu bar
+      description: "A top menu bar with structure modeled on VICE's x64sc GTK UI: File (smart attach, attach/detach disk 8-11, tape + datasette controls, cartridge, reset soft/hard, exit), Snapshot (load/save, quick, media recording), Settings (full settings, machine/drive/audio/video/input categories, toggle warp, toggle true drive per drive, swap joysticks), Debug (monitor, step), Help (about). Menu commands bind to the existing view-model actions/host services."
+      status: pending
+      priority: medium
+      area: UIMENUBAR
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6156881+00:00
+      updatedAt: 2026-09-28T20:32:06.6157083+00:00
+    - id: FR-UIPERIPHERAL-001
+      title: Reusable per-peripheral UserControl
+      description: Each peripheral in the sidebar (Drive 8, Drive 9, Tape, Cartridge) is rendered by a single reusable AXAML UserControl bound to a per-slot view model (status, attach/eject, RO, activity LED, True Drive toggle for drives).
+      status: pending
+      priority: high
+      area: UIPERIPHERAL
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6159146+00:00
+      updatedAt: 2026-09-28T20:32:06.6159350+00:00
+    - id: FR-UISETTINGS-001
+      title: Settings panel as a UserControl
+      description: The settings panel is a self-contained reusable AXAML UserControl bound to the settings view model (machine profile, video/renderer/palette, audio, input/joystick, limiter, resource mode).
+      status: pending
+      priority: medium
+      area: UISETTINGS
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6161213+00:00
+      updatedAt: 2026-09-28T20:32:06.6161450+00:00
+    - id: FR-UISETVIS-001
+      title: Family-specific Settings visibility
+      description: VIC-20-only Settings (memory preset, BLK0/1/2/3/5, expansion kind/preset/write-back, flash builder) are not effectively visible when a C64 family model is selected. When a VIC-20 family model is selected, those controls are visible and any C64-only Settings (none in the current Avalonia surface besides family-filtered Models) stay hidden. Shared limiter/display/audio/input/uIEC/persistence remain visible for both families.
+      status: pending
+      priority: high
+      area: UISETVIS
+      acceptanceCriteria:
+      - id: ac-c64-hides-vic20
+        text: On C64 Computer, Settings.Vic20MemoryPreset, Vic20Blk0-5, ExpansionCartKind/Preset/WriteBack have IsEffectivelyVisible false.
+        isSatisfied: false
+      - id: ac-vic20-shows-vic20
+        text: On VIC-20 Computer, those same controls have IsEffectivelyVisible true.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6165855+00:00
+      updatedAt: 2026-09-28T20:32:06.6166062+00:00
+    - id: FR-VIC-001
+      title: VIC-II PAL raster cycle counter and frame-periodic behavior
+      description: Managed PAL VIC-II advances rasterLine/rasterX cyclically by exactly 312*63=19,656 ticks per frame. CycleCounter increments monotonically. VICE vicii-cycle.c:576-598.
+      status: closed
+      priority: high
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6167904+00:00
+      updatedAt: 2026-09-28T20:32:06.6168108+00:00
+    - id: FR-VIC-002
+      title: FR-VIC-002
+      description: Placeholder requirement backfilled for TODO link FR-VIC-002.
+      status: pending
+      priority: medium
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6169422+00:00
+      updatedAt: 2026-09-28T20:32:06.6169624+00:00
+    - id: FR-VIC-003
+      title: FR-VIC-003
+      description: Placeholder requirement backfilled for TODO link FR-VIC-003.
+      status: pending
+      priority: medium
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6170951+00:00
+      updatedAt: 2026-09-28T20:32:06.6171155+00:00
+    - id: FR-VIC-004
+      title: FR-VIC-004
+      description: Placeholder requirement backfilled for TODO link FR-VIC-004.
+      status: pending
+      priority: medium
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6172437+00:00
+      updatedAt: 2026-09-28T20:32:06.6172640+00:00
+    - id: FR-VIC-005
+      title: FR-VIC-005
+      description: Placeholder requirement backfilled for TODO link FR-VIC-005.
+      status: pending
+      priority: medium
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6174003+00:00
+      updatedAt: 2026-09-28T20:32:06.6174208+00:00
+    - id: FR-VIC-006
+      title: FR-VIC-006
+      description: Placeholder requirement backfilled for TODO link FR-VIC-006.
+      status: pending
+      priority: medium
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6175527+00:00
+      updatedAt: 2026-09-28T20:32:06.6175729+00:00
+    - id: FR-VIC-007
+      title: FR-VIC-007
+      description: Placeholder requirement backfilled for TODO link FR-VIC-007.
+      status: pending
+      priority: medium
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6177119+00:00
+      updatedAt: 2026-09-28T20:32:06.6177367+00:00
+    - id: FR-VIC-008
+      title: VIC-II FLI forced bad line RC window interrupt
+      description: Changing YSCROLL mid-frame to match current raster line low 3 bits forces a bad line. VC update at cycle 13 resets rc=0 and clears idle_state, interrupting the idle window. VICE viciisc/vicii-cycle.c:51-60.
+      status: closed
+      priority: high
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6179645+00:00
+      updatedAt: 2026-09-28T20:32:06.6179851+00:00
+    - id: FR-VIC-010
+      title: FR-VIC-010
+      description: Placeholder requirement backfilled for TODO link FR-VIC-010.
+      status: pending
+      priority: medium
+      area: VIC
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6181203+00:00
+      updatedAt: 2026-09-28T20:32:06.6181406+00:00
+    - id: FR-VIC20-001
+      title: Scoped VIC-20 framebuffer parity vs xvic
+      description: PLAN-VIC20-EXACT-001 Phase A. READY PAL/NTSC/busy palette-index captures match native xvic at normal-border geometry. READY PAL, READY NTSC, and busy PAL native visible-frame BGRA SequenceEqual also match xvic canvas export (video_calc_palette RGB, opaque alpha; unpainted NTSC clamp rows are opaque black). Exact is scoped to those named captures, not whole-machine Exact. Other border modes and mid-line draw remain Partial.
+      status: pending
+      priority: high
+      area: VIC20
+      acceptanceCriteria:
+      - id: AC-PX-01
+        text: READY boot identical canvas width/height (PAL 448x284; NTSC normal)
+        isSatisfied: true
+        evidence: Vic20PixelLockstep geometry asserts
+      - id: AC-PX-02
+        text: Index SequenceEqual READY idle PAL one full frame managed vs xvic
+        isSatisfied: true
+        evidence: Index_ReadyPal_SequenceEqual
+      - id: AC-PX-03
+        text: Index SequenceEqual READY idle NTSC one full frame
+        isSatisfied: true
+        evidence: Index_ReadyNtsc_SequenceEqual
+      - id: AC-PX-04
+        text: Index SequenceEqual busy screen PAL
+        isSatisfied: true
+        evidence: Index_BusyPal_SequenceEqual
+      - id: AC-PX-05
+        text: BGRA SequenceEqual READY PAL, READY NTSC, and busy PAL vs xvic capture_visible_frame after canvas-palette align
+        isSatisfied: true
+        evidence: Bgra_ReadyPal/Ntsc/BusyPal_SequenceEqual
+      - id: AC-PX-06
+        text: Capture not sentinel/all-black after READY; BGRA alpha 0xFF (NTSC unpainted clamp rows opaque black)
+        isSatisfied: true
+        evidence: Vic20PixelLockstep alpha asserts
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6188809+00:00
+      updatedAt: 2026-09-28T20:32:06.6189013+00:00
+    - id: FR-VIC20-002
+      title: VIC-20 base memory map and RAM expansions
+      description: 'Unexpanded VIC-20 has 5KB base RAM; expansions (3K/8K/16K/24K/all) map into BLK regions and are selectable via Settings Apply+Restart. AC4: expansion configurations selectable; All five BLK flags plus Apply+Restart keep Vic20MemorySpec all and BYTES FREE not 3583.'
+      status: pending
+      priority: medium
+      area: VIC20
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6191152+00:00
+      updatedAt: 2026-09-28T20:32:06.6191357+00:00
+    - id: FR-VIC20-005
+      title: VIC-20 FE3, Ultimem, and Mega-Cart runtime behavior
+      description: The supported VIC-20 expansion set attaches through the architecture cartridge path. FE3 MODE_FLASH follows the AM29F040B TYPE_B command model and VICE erase budgets (50-cycle timeout, 1,000,000-cycle sector, 8,000,000-cycle chip), including busy status and suspend/resume. Dirty FE3/Ultimem flash and Mega-Cart NVRAM are surfaced separately and persisted atomically on detach.
+      status: pending
+      priority: medium
+      area: VIC20
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6194020+00:00
+      updatedAt: 2026-09-28T20:32:06.6194224+00:00
+    - id: FR-VIC20-SOUND-001
+      title: Deterministic VIC-I sound and live PCM delivery
+      description: VIC-I sound-register writes update a managed deterministic sound engine. Machine-clock advancement produces PCM16 mono, delivers fixed 256-sample batches to the configured backend, and keeps the silent Mos6561.Store hot path allocation-free after warmup. Focused silence and tone batches match native xvic byte-for-byte; the complete waveform/input space remains Partial.
+      status: pending
+      priority: medium
+      area: VIC20
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6196860+00:00
+      updatedAt: 2026-09-28T20:32:06.6197064+00:00
+    - id: FR-VSFLOCKSTEP-001
+      title: Resume externally-staged VICE .vsf snapshots in the native oracle
+      description: The native VICE oracle (vice_x64 shim) reads and resumes a .vsf snapshot staged by a standalone x64sc, including snapshots from an older VICE release whose module versions differ from the bundled submodule, so lockstep can start from a user-supplied known state (C64SC identity, reSID engine, true-drive set).
+      status: pending
+      priority: high
+      area: VSFLOCKSTEP
+      acceptanceCriteria:
+      - id: fr-vsflockstep-001-ac-1
+        text: A supplied x64sc PAL/C64C .vsf (tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf) loads with rc=0 and snapshot_last_error=0; all 16 C64 modules (MAINCPU..USERPORT) are consumed.
+        isSatisfied: false
+      - id: fr-vsflockstep-001-ac-2
+        text: The resumed MAINCPU registers (A/X/Y/SP/PC) equal those encoded in the snapshot's MAINCPU module.
+        isSatisfied: false
+      - id: fr-vsflockstep-001-ac-3
+        text: No regression to the reSID lockstep timing gate or SID parity (X64ScVariantLockstep 306 pass / 0 fail / 1 skip; SID parity 8/8).
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6202214+00:00
+      updatedAt: 2026-09-28T20:32:06.6202460+00:00
+    - id: FR-WARP-001
+      title: Warp mode runs uncapped relative to 100 percent limiter
+      description: Settings Warp (VICE -warp) disables the speed limiter so the emulator runs as fast as the host allows. The status bar must show LIMITER WARP and CLOCK percent well above 100 when warp is applied through the UI or RemoteControl.
+      status: pending
+      priority: high
+      area: WARP
+      acceptanceCriteria:
+      - id: ac-status-warp
+        text: Warp via Settings or RemoteControl sets status LIMITER to WARP.
+        isSatisfied: false
+      - id: ac-clock-above-100
+        text: After warp is applied, status CLOCK percent is well above 100.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6205716+00:00
+      updatedAt: 2026-09-28T20:32:06.6205922+00:00
+    - id: FR-XAUDIO-001
+      title: SID audio through console endpoint
+      description: 'SID audio plays through the console default endpoint when foreground and not muted. Acceptance (on-console): a known SID tune / $D418 tone is audible; matches desktop WinMm within resampling tolerance.'
+      status: pending
+      priority: medium
+      area: XAUDIO
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6207834+00:00
+      updatedAt: 2026-09-28T20:32:06.6208040+00:00
+    - id: FR-XAUDIO-002
+      title: Master volume/mute, gain applied once
+      description: 'Master volume and mute are honored; EffectiveGain applied exactly once. Acceptance: Volume scales output; Muted silences without stopping the ring; gain applied in AudioSampleConverter before samples reach the ring.'
+      status: pending
+      priority: medium
+      area: XAUDIO
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6210042+00:00
+      updatedAt: 2026-09-28T20:32:06.6210243+00:00
+    - id: FR-XAUDIO-003
+      title: Suspend/resume audio without deadlock
+      description: 'Audio pauses on suspend/background and resumes without breaking determinism or deadlocking the worker. Acceptance: Suspending stops the source voice; the worker is not parked in SubmitSamples (non-blocking ring); Resuming continues; core state unchanged.'
+      status: pending
+      priority: medium
+      area: XAUDIO
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6212419+00:00
+      updatedAt: 2026-09-28T20:32:06.6212620+00:00
+    - id: FR-XAV-001
+      title: Headless stays silent + deterministic
+      description: 'Headless/test stays silent and deterministic. Acceptance: XboxAudioBackendFactory.CreateDefault() returns null headless; SID built null-backend has IsAudioTimingSource==false and emits no samples; parity/pacing suite unchanged.'
+      status: pending
+      priority: medium
+      area: XAV
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6214641+00:00
+      updatedAt: 2026-09-28T20:32:06.6214845+00:00
+    - id: FR-XBOXGPL-006
+      title: MSIX GPL compliance payload
+      description: 'The MSIX bundles COPYING + THIRD_PARTY_NOTICES.md (incl. vkm GPL attribution) + the *.vkm Content, bundles zero ROM *.bin, and exposes the source URL; the release attaches MSIX + source archive. Acceptance: staging test asserts Licenses/ contents + vkm Assets present + no kernal/basic/chargen *.bin + compiled SourceUrl.'
+      status: pending
+      priority: medium
+      area: XBOXGPL
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6217199+00:00
+      updatedAt: 2026-09-28T20:32:06.6217401+00:00
+    - id: FR-XBOXGPL-007
+      title: Official Commodore C= logo source and CC BY-SA 4.0 attribution
+      description: >
+        When ViceSharp product branding uses the Commodore C= logo mark, the logo asset
+
+        must be the officially published Wikimedia Commons file "Commodore C= logo.svg"
+
+        (CC BY-SA 4.0, author Alien426; https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg).
+
+        The project must retain a local copy of the source SVG (and any rasterization used
+
+        for packaging) plus a written attribution. Attribution text must be disclosed in
+
+        THIRD_PARTY_NOTICES.md, shipped with every NuGet package payload, surfaced in
+
+        product/package README files, and shown on About dialogs for Xbox UWP and Avalonia
+
+        desktop heads. ShareAlike obligations apply to derivative branding that includes
+
+        the mark. This requirement is separate from FR-XBOXGPL-006 (GPL/VICE license payload).
+      status: completed
+      priority: high
+      area: XBOXGPL
+      notes: >
+        Implemented 2026-08-06: docs/xbox/store-screenshots/Commodore_C_logo.svg,
+
+        LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt, THIRD_PARTY_NOTICES.md, Directory.Build.props
+
+        PackagePath for notices, package READMEs, AboutInfo.LogoAttributionText,
+
+        Xbox AboutPage + Avalonia About dialog, tests AboutViewModelTests and
+
+        XboxGplComplianceTests.
+      acceptanceCriteria:
+      - id: ac-logo-source
+        text: Branding assets use the Wikimedia Commons Commodore C= logo.svg (or a direct rasterization thereof), not an unattributed third-party redraw.
+        isSatisfied: true
+        evidence: docs/xbox/store-screenshots/Commodore_C_logo.svg; docs/xbox/store-screenshots/LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt
+      - id: ac-logo-notices
+        text: THIRD_PARTY_NOTICES.md names the file, author Alien426, CC BY-SA 4.0, and the commons URL.
+        isSatisfied: true
+        evidence: THIRD_PARTY_NOTICES.md; tests/ViceSharp.TestHarness/Xbox/XboxGplComplianceTests.cs
+      - id: ac-logo-nuget
+        text: Every NuGet package packs THIRD_PARTY_NOTICES.md at package root via Directory.Build.props.
+        isSatisfied: true
+        evidence: Directory.Build.props
+      - id: ac-logo-readme
+        text: Root README and per-package README files include CC BY-SA 4.0 C= logo attribution.
+        isSatisfied: true
+        evidence: README.md; src/**/README.md
+      - id: ac-logo-about
+        text: About surfaces expose LogoAttributionText (or equivalent) with CC BY-SA 4.0, Alien426, and commons URL for Xbox and Avalonia.
+        isSatisfied: true
+        evidence: src/ViceSharp.Xbox.ViewModels/AboutInfo.cs; AboutPage.xaml; MainWindow.axaml.cs OnMenuAbout; AboutViewModelTests
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6228219+00:00
+      updatedAt: 2026-09-28T20:32:06.6228440+00:00
+    - id: FR-XBOXPKG-001
+      title: Head csproj references only core + Host.InProcess
+      description: 'The head csproj references only the managed core (+ Host.InProcess) and none of Host/Grpc.AspNetCore/AspNetCore.App/Avalonia. Acceptance: csproj + slnx text test asserts presence of core refs + absence of forbidden refs; slnx builds.'
+      status: pending
+      priority: medium
+      area: XBOXPKG
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6230565+00:00
+      updatedAt: 2026-09-28T20:32:06.6230768+00:00
+    - id: FR-XBOXPKG-003
+      title: Manifest declares Windows.Xbox + capability rule
+      description: 'Package.appxmanifest declares Windows.Xbox (Min 10.0.19041.0, MaxTested 10.0.26100.0), x64 identity, and declares internetClient iff the HTTPS ROM download path is kept (else no restricted capability). Acceptance: XML-parse asserts the TargetDeviceFamily, x64, and the internetClient-present-iff-download-kept rule.'
+      status: pending
+      priority: medium
+      area: XBOXPKG
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6233163+00:00
+      updatedAt: 2026-09-28T20:32:06.6233389+00:00
+    - id: FR-XBOXTOPO-001
+      title: New ViceSharp.Xbox UWP-on-console head project
+      description: A new project src/ViceSharp.Xbox exists and is registered in ViceSharp.slnx as the true UWP-on-Xbox-console head (net10.0-windows10.0.26100.0 + UseUwp; Native AOT for Release/Store, JIT for Debug/Dev-Mode sideload), distinct from and additive to the existing src/ViceSharp.Host.Xbox Avalonia scaffold, which stays byte-for-byte intact.
+      status: pending
+      priority: medium
+      area: XBOXTOPO
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6235846+00:00
+      updatedAt: 2026-09-28T20:32:06.6236103+00:00
+    - id: FR-XBOXUI-001
+      title: Six destinations + overlays, non-destructive back stack
+      description: 'Six navigable destinations + quick-menu/virtual-keyboard overlays reachable from any state; back stack never recreates/pauses the running video surface. Acceptance: push Settings->DeviceSetup, GoBack twice returns to Home in order; opening overlays pushes no stack entry.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6238369+00:00
+      updatedAt: 2026-09-28T20:32:06.6238617+00:00
+    - id: FR-XBOXUI-002
+      title: Controller-only high-visibility focus
+      description: 'Every control operable by D-pad/left-stick + A/B, no pointer, high-visibility focus in the TV-safe rect. Acceptance: BuildGrid(3,2) edges correct, top Up null, no wrap; on-console focus-visual smoke.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6240604+00:00
+      updatedAt: 2026-09-28T20:32:06.6240817+00:00
+    - id: FR-XBOXUI-003
+      title: One authoritative input context
+      description: 'UI-nav and gameplay input never simultaneous; exactly one context authoritative. Acceptance: quick menu -> non-Gameplay; closing with empty stack -> Gameplay.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6242557+00:00
+      updatedAt: 2026-09-28T20:32:06.6242795+00:00
+    - id: FR-XBOXUI-004
+      title: Session keeps running under overlays
+      description: 'Session keeps running while overlays shown (video advancing unless explicitly paused). Acceptance: simulated navigation/overlay toggles never stop/dispose the pull adapter.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6244613+00:00
+      updatedAt: 2026-09-28T20:32:06.6244817+00:00
+    - id: FR-XBOXUI-005
+      title: Video renders committed frames ~50Hz as pure sink
+      description: 'Video renders committed frames ~50Hz as a pure sink. Acceptance: 10 fires/200ms -> 10 pulls +/-1; pure-sink forbidden-identifier scan passes.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6246670+00:00
+      updatedAt: 2026-09-28T20:32:06.6246873+00:00
+    - id: FR-XBOXUI-006
+      title: On-screen C64 keyboard exact key strings
+      description: 'On-screen controller-navigable C64 keyboard maps every key to the exact SetKeyState string incl RETURN/RUNSTOP/F1-F8. Acceptance: RETURN tile emits SetKeyState("Return",true) then false; shift-latch+F1 emits "F2"; every KeyName is in the known-good list.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6249034+00:00
+      updatedAt: 2026-09-28T20:32:06.6249240+00:00
+    - id: FR-XBOXUI-007
+      title: ViewModels depend only on Abstractions+Protocol
+      description: 'ViceSharp.Xbox.ViewModels depends only on Abstractions + Protocol (portable, Kestrel-free). Acceptance: csproj-reference assertion + forbidden-identifier scan (no Core/Chips/Architectures/Host/Avalonia/Grpc/XAML).'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6251249+00:00
+      updatedAt: 2026-09-28T20:32:06.6251451+00:00
+    - id: FR-XBOXUI-008
+      title: About page GPL disclosure
+      description: 'About page discloses GPL-2.0-or-later, VICE attribution, source-availability offer. Acceptance: LicenseIdentifier=="GPL-2.0-or-later", AttributionText contains "VICE", SourceOfferText non-empty + URL.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6253362+00:00
+      updatedAt: 2026-09-28T20:32:06.6253569+00:00
+    - id: FR-XDEV-001
+      title: Device Setup attach/eject via host media
+      description: 'Device Setup presents Drive8/Drive9/Tape/Cartridge cards with typed attach + eject through the host media boundary. Acceptance: patterns per slot; Attach reads bytes via IStoragePicker and calls AttachMediaAsync; Eject calls DetachMediaAsync; no runtime-internal calls.'
+      status: pending
+      priority: medium
+      area: XDEV
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6255770+00:00
+      updatedAt: 2026-09-28T20:32:06.6255973+00:00
+    - id: FR-XDEV-002
+      title: Drive-model selector rebuilds true-drive rig
+      description: 'Drive cards expose the implemented drive-model selector and rebuild the true-drive rig on model change. Acceptance: AvailableDriveModels==DriveModelCatalog.Implemented; active true-drive model change calls SetTrueDriveAsync(true, device, diskPath, (int)model) with 1542 for 1541-II; inactive-slot change is inert.'
+      status: pending
+      priority: medium
+      area: XDEV
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6258388+00:00
+      updatedAt: 2026-09-28T20:32:06.6258592+00:00
+    - id: FR-XDEV-003
+      title: Single true-drive rig at a time
+      description: 'Only one true-drive rig at a time. Acceptance: enabling Drive9 true-drive sets Drive8.TrueDrive=false with one rebuild; disabling all issues SetTrueDriveAsync(false).'
+      status: pending
+      priority: medium
+      area: XDEV
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6260390+00:00
+      updatedAt: 2026-09-28T20:32:06.6260596+00:00
+    - id: FR-XKBD-001
+      title: RESTORE/NMI seam distinct from SetKeyState
+      description: "A dedicated RESTORE/NMI trigger exists on the Abstractions keyboard seam and the in-process facade; the virtual-keyboard RESTORE tile drives it, not SetKeyState. Acceptance: IMachineKeyboardInput.SetRestoreState(bool) routes to the C64 NMI path (keycode 0x31) distinct from SetKeyState; VirtualKeyboardViewModel RESTORE tile calls the facade's SetRestoreState, and a spy keyboard input records the NMI trigger, not a SetKeyState(\"*\")."
+      status: pending
+      priority: medium
+      area: XKBD
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6264307+00:00
+      updatedAt: 2026-09-28T20:32:06.6264752+00:00
+    - id: FR-XROM-001
+      title: First-run ROM provisioning gate
+      description: 'First run evaluates ROM provisioning and blocks normal boot until Complete (offering the wizard). Acceptance: Evaluate returns Complete only when every required role is present+hash-valid; NotProvisioned/Partial otherwise; IsBootBlocked unless Complete (or kernal not required).'
+      status: pending
+      priority: medium
+      area: XROM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6268294+00:00
+      updatedAt: 2026-09-28T20:32:06.6268555+00:00
+    - id: FR-XROM-002
+      title: Wizard acquires core ROMs (HTTPS/USB)
+      description: 'The wizard acquires the core ROM set by verified HTTPS download (requires internetClient) or USB/storage import into LocalFolder\vice\C64. Acceptance: Download fetches basic/kernal/characters SHA256-checked after confirm; Import validates size+MD5 before copy; mismatch rejected leaving state unchanged.'
+      status: pending
+      priority: medium
+      area: XROM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6271692+00:00
+      updatedAt: 2026-09-28T20:32:06.6271968+00:00
+    - id: FR-XROM-003
+      title: Provision shipped vkm keymaps
+      description: 'Shipped GPL *.vkm keymaps are provisioned into the writable C64 folder so the picker lists them. Acceptance: after XboxDataPathBridge.Configure the packaged vkm exist under C64Path and ListKeyboardMapsAsync returns them; else the embedded gtk3_pos fallback.'
+      status: pending
+      priority: medium
+      area: XROM
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6274863+00:00
+      updatedAt: 2026-09-28T20:32:06.6275139+00:00
+    - id: FR-XSET-001
+      title: Four Settings pages bind desktop values via host
+      description: 'Four 10-foot Settings pages bind to the same values/option ids as desktop and apply through the host UpdateSettings pipeline. Acceptance: Refresh loads GetSettings/ListSettingsProfiles; any resource change sets HasPendingSettingsChanges; Apply sends DTO ids equal to SettingsOptionCatalog.To*(...); host-canonical returned settings adopted.'
+      status: pending
+      priority: medium
+      area: XSET
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6278567+00:00
+      updatedAt: 2026-09-28T20:32:06.6278848+00:00
+    - id: FR-XSET-002
+      title: Rebuild-required changes flagged and gated
+      description: 'Rebuild-required changes are flagged and gated as on desktop. Acceptance: profile/resource-mode -> RequiresRestart; Apply(restart:true) sends RestartSession=true; others keep false.'
+      status: pending
+      priority: medium
+      area: XSET
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6281249+00:00
+      updatedAt: 2026-09-28T20:32:06.6281481+00:00
+    - id: FR-XSET-003
+      title: Validation without applying
+      description: 'Validation runs without applying and surfaces per-resource results. Acceptance: Validate sends ValidateSettingsResourcesRequest, populates results, sends no UpdateSettings; editing clears stale results.'
+      status: pending
+      priority: medium
+      area: XSET
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6283597+00:00
+      updatedAt: 2026-09-28T20:32:06.6283804+00:00
+    - id: FR-XSET-004
+      title: RevertSettings restores last-applied
+      description: 'RevertSettings restores the last-applied local state. Acceptance: after dirtying, Revert restores each field, clears dirty + validation.'
+      status: pending
+      priority: medium
+      area: XSET
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6285573+00:00
+      updatedAt: 2026-09-28T20:32:06.6285781+00:00
+    - id: FR-XSET-005
+      title: Xbox-only prefs to vice-sharp.ini
+      description: 'Master volume/mute/TV-safe-inset/per-stick deadzone are Xbox-only prefs persisted to vice-sharp.ini, not the emulator DTOs. Acceptance: setting them then Save writes [ViceSharpXbox]; fresh Load returns them; no UpdateSettingsRequest carries them.'
+      status: pending
+      priority: medium
+      area: XSET
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6287872+00:00
+      updatedAt: 2026-09-28T20:32:06.6288080+00:00
+    - id: FR-XVIDEO-001
+      title: Live C64 frames, BGRA, letterbox, no tear
+      description: 'Display live C64 frames with correct BGRA colors, 4:3 letterbox, no tearing (Win2D nearest-neighbor integer scale into the TV-safe rect). Acceptance (on-console): READY. screen + animation; colors match desktop; centered/letterboxed, no tear.'
+      status: pending
+      priority: medium
+      area: XVIDEO
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6290324+00:00
+      updatedAt: 2026-09-28T20:32:06.6290537+00:00
+    - id: FR-XVIDEO-002
+      title: Render is a pure read-only sink
+      description: 'Frame rendering is a pure read-only sink and does not perturb determinism. Acceptance: the pull adapter invokes only TryCopyFrameInto; render-enabled vs disabled replay is bit-identical; steady-state allocation delta == 0.'
+      status: pending
+      priority: medium
+      area: XVIDEO
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6292596+00:00
+      updatedAt: 2026-09-28T20:32:06.6292806+00:00
+    - id: RUNTIME-TAPE-002
+      title: Datasette motor ramp + sense line + record mode
+      description: Datasette.Tick() enforces MOTOR_DELAY=32,000-cycle ramp (datasette.c:62) before pulse delivery when Tick is timing mechanism. SenseLine=!PlayPressed||!RecordPressed (CIA1  bit 4). TryWritePulse stores pulses in record mode.
+      status: closed
+      priority: medium
+      area: TAPE
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-09-28T20:32:06.6294980+00:00
+      updatedAt: 2026-09-28T20:32:06.6295194+00:00
+    totalCount: 140
+  deprecated: true
+
+---

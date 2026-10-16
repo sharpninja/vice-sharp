@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSBTN-004",
+  "title": "Each non-nav AppCommand maps to a host command",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Each non-nav AppCommand maps to an existing host command. Acceptance: AppCommandDispatcher invokes the correct recorded host call once with correct args on fakes.\n\n## Acceptance Criteria\n- AppCommandDispatcher invokes the correct recorded host call once with correct args on fakes.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

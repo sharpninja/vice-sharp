@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC-EDGE-003",
+  "title": "VIC-II RC window state machine cycle-accurate",
+  "status": "closed",
+  "priority": "high",
+  "body": "VIC-II row counter (RC) and video counter (VC) state machine matches VICE viciisc/vicii-cycle.c:541-563. VC update at RasterX=13: vc=vcBase, vmli=0, bad line sets rc=0. RC update at RasterX=57: rc==7 sets idle; if not idle or bad line, rc=(rc+1)&7.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

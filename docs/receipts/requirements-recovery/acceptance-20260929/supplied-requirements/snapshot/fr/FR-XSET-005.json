@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XSET-005",
+  "title": "Xbox-only prefs to vice-sharp.ini",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Master volume/mute/TV-safe-inset/per-stick deadzone are Xbox-only prefs persisted to vice-sharp.ini, not the emulator DTOs. Acceptance: setting them then Save writes [ViceSharpXbox]; fresh Load returns them; no UpdateSettingsRequest carries them.\n\n## Acceptance Criteria\n- round-trip equality; only vice-sharp.ini changes; defaults when absent.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,123 @@
+
+--- VIA1 store_pra / read_pra VICE ---
+--- VIA2 ---
+--- managed cart: how complete ---
+LineNumber Line
+---------- ----
+         8 /// 16-bit timers, shift register, ACR, PCR, IFR, IER).
+        15 /// Timer 1 + one-shot Timer 2 decrement, IFR/IER + IRQ assertion, port
+        16 /// input/output callbacks. Shift register modes, CB1/CB2 handshake, and
+        19 public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
+        24     private const byte IfrTimer1 = 0x40;
+        25     private const byte IfrTimer2 = 0x20;
+        26     private const byte IfrCb1 = 0x10;
+        27     private const byte IfrCb2 = 0x08;
+        28     private const byte IfrSr = 0x04;
+        29     private const byte IfrCa1 = 0x02;
+        30     private const byte IfrCa2 = 0x01;
+        31     private const byte IfrAny = 0x80;
+        33     private const byte PcrCa1ActiveEdgeMask = 0x01; // PCR bit 0: 1 = rising, 0 = falling
+        34     private const byte PcrCa2ModeMask = 0x0E;       // PCR bits 3..1 select CA2 mode
+        35     private const byte PcrCb1ActiveEdgeMask = 0x10; // PCR bit 4: 1 = rising, 0 = falling
+        36     private const byte PcrCb2ModeMask = 0xE0;       // PCR bits 7..5 select CB2 mode
+        38     // CA2 mode encodings (PCR bits 3..1 packed into 0..7). Match the CB2
+        41     private const int Ca2ModeHandshakeOut = 0b100;
+        42     private const int Ca2ModePulseOut = 0b101;
+        43     private const int Ca2ModeManualLow = 0b110;
+        44     private const int Ca2ModeManualHigh = 0b111;
+        46     // CB2 mode encodings (PCR bits 7..5 packed into 0..7)
+        47     private const int Cb2ModeInputNegEdge = 0b000;
+        48     private const int Cb2ModeInputNegIndependent = 0b001;
+        49     private const int Cb2ModeInputPosEdge = 0b010;
+        50     private const int Cb2ModeInputPosIndependent = 0b011;
+        51     private const int Cb2ModeHandshakeOut = 0b100;
+        52     private const int Cb2ModePulseOut = 0b101;
+        53     private const int Cb2ModeManualLow = 0b110;
+        54     private const int Cb2ModeManualHigh = 0b111;
+        56     private const byte AcrT1ContinuousMask = 0x40;
+        57     private const byte AcrT1Pb7Mask = 0x80; // ACR bit 7: route T1 onto PB7
+        58     private const byte AcrT2PulseCountMask = 0x20; // ACR bit 5: 0 = phi2 countdown, 1 = count PB6 negative.
+        65     private byte _portAOutput;
+        66     private byte _portBOutput;
+        70     private ushort _t1Counter;
+        71     private ushort _t1Latch;
+        72     private ushort _t2Counter;
+        73     private bool _t1Running;
+        74     private bool _t2Running;
+        76     /// VICE continuous T1 period is (latch + 2): N..0 then one phi2 before
+        79     private bool _t1ZeroStatePending;
+        81     /// Timer values visible to CPU bus access this phi2. VICE viacore reads T1/T2
+        83     /// before the CPU so post-Tick <see cref="_t1Counter"/> matches export peeks.
+        88     private ushort _t1BusVisible;
+        89     private ushort _t2BusVisible;
+        91     private byte _sr;
+        94     private byte _ifr;
+        95     private byte _ier;
+        98     // Shift register state. _srShiftCount tracks bits shifted in the current
+           static void update_portbits(void)
+           void via1_store(uint16_t addr, uint8_t data)
+           uint8_t via1_read(uint16_t addr)
+           uint8_t via1_peek(uint16_t addr)
+           static void set_ca2(via_context_t *via_context, int state)
+           static void set_cb2(via_context_t *via_context, int state, int offset)
+           static void set_int(via_context_t *via_context, unsigned int int_num, int value, CLOCK rclk)
+           static void restore_int(via_context_t *via_context, unsigned int int_num, int value)
+           void via1_set_tape_sense(int v)
+           void via1_set_tape_write_in(int v)
+           void via1_set_tape_motor_in(int v)
+           static void via1_internal_lightpen_check(uint8_t pa)
+           void via1_check_lightpen(void)
+           static void undump_pra(via_context_t *via_context, uint8_t byte)
+           static void store_pra(via_context_t *via_context, uint8_t byte, uint8_t myoldpa,
+           static void undump_prb(via_context_t *via_context, uint8_t byte)
+           static void store_prb(via_context_t *via_context, uint8_t byte, uint8_t myoldpb,
+           static void undump_pcr(via_context_t *via_context, uint8_t byte)
+           static void reset(via_context_t *via_context)
+           static uint8_t store_pcr(via_context_t *via_context, uint8_t byte, uint16_t addr)
+           static void undump_acr(via_context_t *via_context, uint8_t byte)
+           void via1_init(via_context_t *via_context)
+           void vic20via1_setup_context(machine_context_t *machinecontext)
+           void via2_store(uint16_t addr, uint8_t data)
+           uint8_t via2_read(uint16_t addr)
+           uint8_t via2_peek(uint16_t addr)
+           static void set_ca2(via_context_t *via_context, int state)
+           static void set_cb2(via_context_t *via_context, int state, int offset)
+           static void set_int(via_context_t *via_context, unsigned int int_num,
+           static void restore_int(via_context_t *via_context, unsigned int int_num, int value)
+           static void undump_acr(via_context_t *via_context, uint8_t byte)
+           static void store_acr(via_context_t *via_context, uint8_t byte)
+           static void store_sr(via_context_t *via_context, uint8_t byte)
+           static void store_t2l(via_context_t *via_context, uint8_t byte)
+           static void undump_pra(via_context_t *via_context, uint8_t byte)
+           static void store_pra(via_context_t *via_context, uint8_t byte, uint8_t myoldpa,
+           static void undump_prb(via_context_t *via_context, uint8_t byte)
+           static void store_prb(via_context_t *via_context, uint8_t byte, uint8_t myoldpb,
+           static void undump_pcr(via_context_t *via_context, uint8_t byte)
+           static void reset(via_context_t *via_context)
+           static uint8_t store_pcr(via_context_t *via_context, uint8_t byte, uint16_t addr)
+           static uint8_t read_pra(via_context_t *via_context, uint16_t addr)
+           static uint8_t read_prb(via_context_t *via_context)
+           void via2_init(via_context_t *via_context)
+           void vic20via2_setup_context(machine_context_t *machinecontext)
+         1 using ViceSharp.Abstractions;
+         3 namespace ViceSharp.Core.Vic20;
+         6 /// VIC-20 Final Expansion 3 (VICE finalexpansion.c v3.2) MVP.
+        12 /// maps match VICE tables for host RAM Manager presets.
+        54         Id = new DeviceId(0x0C10);
+        58     public DeviceId Id { get; }
+        67         // VICE powerup: START mode, bank 0, registers enabled.
+       252         // VICE RAM map (simplified): BLK windows into 8K slices; SUPER_RAM banks N*64K.
+         1 using ViceSharp.Abstractions;
+         3 namespace ViceSharp.Core.Vic20;
+         6 /// VIC-20 Ultimem (VICE ultimem.c) MVP: register file at $9C00+, banked BLK windows.
+        10     public const int MaxImageSize = 0x1000000; // up to 16MB in VICE; we accept up to 1MB for MVP
+        25         Id = new DeviceId(0x0C11);
+        29     public DeviceId Id { get; }
+       104         // Bank select: registers 6+ pair per block (simplified from VICE CART_BLK_ADDR).
+         1 using ViceSharp.Abstractions;
+         3 namespace ViceSharp.Core.Vic20;
+         6 /// VIC-20 Mega-Cart (VICE megacart.c) MVP: banked ROM + 8K NVRAM window.
+        29         Id = new DeviceId(0x0C12);
+        33     public DeviceId Id { get; }
+       130         // bit7 of bank = RAM enable style (VICE ram_low_en)
+

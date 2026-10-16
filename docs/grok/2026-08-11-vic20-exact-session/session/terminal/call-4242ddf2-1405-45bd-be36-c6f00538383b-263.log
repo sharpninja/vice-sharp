@@ -1,0 +1,25 @@
+Select-String: Cannot find path 'F:\GitHub\vice-sharp\native\vice\vice\src\core\via.c' because it does not exist.
+
+native\vice\vice\src\vic20\vic20.h:81:    struct via_context_s *via1;
+native\vice\vice\src\vic20\vic20.h:82:    struct via_context_s *via2;
+native\vice\vice\src\vic20\vic20.h:83:    struct via_context_s *ieeevia1;
+native\vice\vice\src\vic20\vic20.h:84:    struct via_context_s *ieeevia2;
+native\vice\vice\src\vic20\vic20ieeevia.h:36:int ieeevia1_dump(void);
+native\vice\vice\src\vic20\vic20ieeevia.h:37:void vic20ieeevia1_setup_context(struct machine_context_s 
+*machine_context);
+native\vice\vice\src\vic20\vic20ieeevia.h:38:void ieeevia1_init(struct via_context_s *via_context);
+native\vice\vice\src\vic20\vic20ieeevia.h:39:void ieeevia1_store(uint16_t addr, uint8_t byte);
+native\vice\vice\src\vic20\vic20ieeevia.h:40:uint8_t ieeevia1_read(uint16_t addr);
+native\vice\vice\src\vic20\vic20ieeevia.h:41:uint8_t ieeevia1_peek(uint16_t addr);
+native\vice\vice\src\vic20\vic20ieeevia.h:43:int ieeevia2_dump(void);
+native\vice\vice\src\vic20\vic20ieeevia.h:44:void vic20ieeevia2_setup_context(struct machine_context_s 
+*machine_context);
+native\vice\vice\src\vic20\vic20ieeevia.h:45:void ieeevia2_init(struct via_context_s *via_context);
+native\vice\vice\src\vic20\vic20ieeevia.h:46:void ieeevia2_store(uint16_t addr, uint8_t byte);
+native\vice\vice\src\vic20\vic20ieeevia.h:47:uint8_t ieeevia2_read(uint16_t addr);
+native\vice\vice\src\vic20\vic20ieeevia.h:48:uint8_t ieeevia2_peek(uint16_t addr);
+native\vice\vice\src\vic20\vic20ieeevia.h:50:void ieeevia2_set_tape_sense(int v);
+native\vice\vice\src\vic20\vic20via.h:2: * via20via.h - VIC20 VIA emulation.
+native\vice\vice\src\vic20\vic20via.h:36:void vic20via1_setup_context(struct machine_context_s *machine_context);
+native\vice\vice\src\vic20\vic20via.h:37:void via1_init(struct via_context_s *via_context);
+

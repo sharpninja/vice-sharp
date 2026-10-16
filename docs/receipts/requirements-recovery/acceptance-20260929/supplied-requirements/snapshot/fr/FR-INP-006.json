@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INP-006",
+  "title": "VICE VKM Keymap Selection and Real-Time Keyboard Translation",
+  "status": "pending",
+  "priority": "high",
+  "body": "The emulator shall use VICE keymap files to translate host keyboard events into machine-specific keyboard matrix state. Built-in maps and uploaded custom maps are selected per emulator session and applied by the host-owned machine keyboard input handler.\n\n## Acceptance Criteria\n- Built-in VICE keymaps are discoverable by machine and map style.\n- A selected keymap is retained per emulator session until changed or the session ends.\n- Custom keymaps can be uploaded by content and metadata without requiring shared file paths between UI and host.\n- The parser supports VICE keymap comments, `!CLEAR`, `!INCLUDE`, `!UNDEF`, modifier directives, row/column entries, and shift flags needed for SHIFT, C=, and CTRL behavior.\n- Includes resolve relative to the current keymap file or uploaded bundle context.\n- Invalid custom maps report diagnostics and do not replace the active map.\n- Real-time key down/up events update the C64 keyboard matrix through the selected map without constructing UI-local emulator devices.\n- Machine-specific keyboard translators can be registered for future non-C64 profiles.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

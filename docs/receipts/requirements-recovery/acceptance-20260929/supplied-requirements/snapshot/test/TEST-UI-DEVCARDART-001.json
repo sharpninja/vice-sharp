@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UI-DEVCARDART-001",
+  "title": "Device art key mapping",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "DeviceArtKeyTests: slot-kind defaults (Drive8/9 to Breadbin, Tape to Datasette, Cartridge to Cartridge); model mapping rows (1540/1541 to Breadbin, 1541-II, 1571, 1581, SFD-1001, CMD-HD, CMD-FD/fd2000, unknown/empty to Breadbin); AllKeys superset of every resolvable key; DeviceArtKey PropertyChanged on ApplyAttachment; MarkEmpty retains last model.",
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,19 @@
+
+FullName      : F:\GitHub\vice-sharp\docs\xvic-ready-pal-2026-08-08.png
+Length        : 13741
+LastWriteTime : 8/8/2026 3:39:10 AM
+
+size=575x492
+(10,10)=R98G38B50
+(100,50)=R20G20B20
+(200,100)=R128G128B128
+(300,150)=R20G20B20
+(400,200)=R64G64B64
+(50,400)=R20G20B20
+(300,400)=R20G20B20
+white_pixels~0 bounds x=9999..0 y=9999..0 w=-9999 h=-9999
+cyanish_samples=0
+vicesharp_window size=2000x1073
+vs_white bounds x=613..1675 y=217..883 w=1062 h=666 samples=77003
+vs_cyan bounds x=325..1675 y=43..1030 w=1350 h=987 samples=69665
+vs_paper_aspect=1.59459459459459

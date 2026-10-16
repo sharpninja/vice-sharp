@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XAUDIO-002",
+  "title": "Audio decoupled via lock-free ring buffer",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Audio decoupled via lock-free ring buffer; SubmitSamples non-blocking; no audio-as-clock back-pressure; Pause unblocks. Acceptance: verified by TEST-XAUDIO-004.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,13 @@
+True
+
+Select-String: 
+  Length LastWriteTime
+  ------ -------------
+10488833 8/5/2026 2:13:32 PM
+       1 
+       1 
+
+Line |
+   5 |  Select-String -Path "F:\GitHub\vice-sharp\native\vice-shim-runtime.h" .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'F:\GitHub\vice-sharp\native\vice-shim-runtime.h' because it does not exist.

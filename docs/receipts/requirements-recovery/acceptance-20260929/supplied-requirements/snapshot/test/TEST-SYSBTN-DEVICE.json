@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-SYSBTN-DEVICE",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console button response (Menu/X/LT/A gating). Acceptance: system-button behaviors confirmed on device.",
+  "acceptanceCriteria": []
+}

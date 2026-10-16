@@ -1,0 +1,47 @@
+make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+make: Nothing to be done for 'all'.
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c: In function 'vice_shim_set_current_thread_description':
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c:265:30: warning: cast between incompatible function types from 'FARPROC' {aka 'long long int (*)(void)'} to 'HRESULT (*)(void *, const WCHAR *)' {aka 'long int (*)(void *, const short unsigned int *)'} [-Wcast-function-type]
+  265 |     set_thread_description = (vice_shim_set_thread_description_fn)GetProcAddress(kernel32, "SetThreadDescription");
+      |                              ^
+Built: /f/GitHub/vice-sharp/native/vice_xvic.dll
+-rwxr-xr-x 1 kingd kingd 10912499 Aug  8 02:50 /f/GitHub/vice-sharp/native/vice_xvic.dll
+[xUnit.net 00:00:02.83]       
+[xUnit.net 00:00:02.83]       Stack Trace:
+[xUnit.net 00:00:02.83]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs(95,0): at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.RunEveryCycleVideo(Int32 budget, String modelSelector)
+[xUnit.net 00:00:02.83]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs(26,0): at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_FocusedWindow()
+[xUnit.net 00:00:02.83]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:02.83]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.84]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [641 ms]
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_FocusedWindow [9 ms]
+  Error Message:
+   VIDEO DIV first=65 matchedCycles=64 budget=500000
+c=58 nR=0 mR=0 nCyc=64 mCyc=64 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=0 mis=False
+c=59 nR=0 mR=0 nCyc=65 mCyc=65 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=0 mis=False
+c=60 nR=0 mR=0 nCyc=66 mCyc=66 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=0 mis=False
+c=61 nR=0 mR=0 nCyc=67 mCyc=67 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=0 mis=False
+c=62 nR=0 mR=0 nCyc=68 mCyc=68 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=0 mis=False
+c=63 nR=0 mR=0 nCyc=69 mCyc=69 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=0 mis=False
+c=64 nR=0 mR=0 nCyc=70 mCyc=70 nA=1 mA=1 nF=0 mF=0 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=0 nBlank=0 mBlank=0 mis=False
+c=65 nR=1 mR=1 nCyc=0 mCyc=0 nA=2 mA=2 nF=1 mF=1 nMem=0 mMem=0 nY=0 mY=0 nRow=0 mRow=0 nCols=0 mCols=22 nBlank=1 mBlank=1 mis=True
+TextCols n=0 m=22
+nRegs= 0=00 1=00 2=00 3=00 4=00 5=00 6=00 7=00 8=00 9=00 A=00 B=00 C=00 D=00 E=00 F=00
+mRegs= 0=00 1=00 2=00 3=00 4=00 5=00 6=00 7=00 8=00 9=00 A=00 B=00 C=00 D=00 E=00 F=00
+peek $9003 n=$80 m=$80 $9004 n=$00 m=$00
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.RunEveryCycleVideo(Int32 budget, String modelSelector) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs:line 95
+   at ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_FocusedWindow() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs:line 26
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Test Run Failed.
+Total tests: 2
+     Passed: 1
+     Failed: 1
+ Total time: 3.4260 Seconds
+EXIT=1

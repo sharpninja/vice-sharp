@@ -1,0 +1,9 @@
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=0
+ src/ViceSharp.Chips/Cpu/Mos6502.cs | 1761 ++++++++++++++++++++++++++++++++++--
+ src/ViceSharp.Chips/Vic/Mos6561.cs |  227 ++++-
+ src/ViceSharp.Core/SystemClock.cs  |   67 +-
+ 3 files changed, 1968 insertions(+), 87 deletions(-)
+

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC20-004",
+  "title": "VIC-20 keyboard matrix via VIA ports",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Keyboard scanning uses VIA port lines (not CIA). Host key events map through a VIC-20 matrix type.\n\n## Acceptance Criteria\n- Key press/release is visible to software scanning the matrix through VIA ports.\n- Matrix layout matches VICE VIC-20 VKM / hardware mapping for the default layout.\n- Disabled until wiring slice; skeleton builds without requiring host keyboard.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

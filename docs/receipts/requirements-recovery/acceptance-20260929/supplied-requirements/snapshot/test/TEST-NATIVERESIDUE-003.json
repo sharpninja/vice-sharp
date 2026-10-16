@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-NATIVERESIDUE-003",
+  "title": "Drive CPU cycle_accum residue zeroed at machine boundary",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "A machine created after a scratch machine resumes a true-drive .vsf and runs activity must present drive-8 cycle_accum == 0. Guards drivecpu_reset_clk cycle_accum omission. Code: NativeResidueDiagTests.FreshMachine_DriveCycleAccum_IsZero_AfterSnapshotResumeActivity (label TEST-NATIVE-RESIDUE-04).",
+  "acceptanceCriteria": []
+}

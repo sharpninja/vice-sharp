@@ -1,0 +1,28 @@
+t=0s WS=107MB Title=''
+t=1s WS=143MB Title=''
+t=2s WS=148MB Title=''
+t=3s WS=150MB Title=''
+t=4s WS=151MB Title=''
+t=5s WS=151MB Title=''
+t=6s WS=181MB Title=''
+t=7s WS=182MB Title=''
+t=8s WS=182MB Title=''
+t=9s WS=216MB Title=''
+t=10s WS=260MB Title=''
+DIED after 11s code=-1073741571
+
+Name                                                    Length LastWriteTime
+----                                                    ------ -------------
+vicesharp-crash.dmp                                  109123666 8/5/2026 6:09:08 AM
+ViceSharpXboxDataPathTests                                     8/5/2026 3:53:40 AM
+vicesharp-diagnostics-tests                                    8/5/2026 3:53:37 AM
+ViceSharpVkmTests                                              8/5/2026 3:53:14 AM
+vicesharp-7544b4b43a274125b218b030ff36adf1.d64.moved    174848 8/5/2026 3:49:37 AM
+ViceSharpDataResolverTests                                     8/5/2026 3:49:32 AM
+vicesharp_ready_frame.bmp                               313398 8/5/2026 3:49:26 AM
+vicesharp_test_frame.bmp                                313398 8/5/2026 3:49:25 AM
+vicesharp-cart-tests                                           8/5/2026 3:48:55 AM
+vicesharp-4f0724d307a241599338222016f39174.d64.moved    174848 8/5/2026 3:41:49 AM
+vicesharp-crash.dmp                                  109123666 8/5/2026 6:09:08 AM
+tvvkabeu.dmp                                                   7/20/2026 12:31:10 PM
+

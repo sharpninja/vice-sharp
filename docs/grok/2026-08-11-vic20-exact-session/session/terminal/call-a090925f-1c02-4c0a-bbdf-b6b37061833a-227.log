@@ -1,0 +1,26 @@
+{"status":"available","agent":"GrokCode","namespaces":["workflow.sessionlog","workflow.todo","workflow.requirements","workflow.triage","workflow.graphrag","workflow.memory","workflow.failsafe"],"requirementMethods":["workflow.requirements.listLayers","workflow.requirements.createLayer","workflow.requirements.updateLayer","workflow.requirements.effective"],"requirementClientMethods":["client.Requirements.ListRequirementLayersAsync","client.Requirements.CreateRequirementLayerAsync","client.Requirements.UpdateRequirementLayerAsync","client.Requirements.GetEffectiveRequirementsAsync"],"cacheDir":"F:\\GitHub\\vice-sharp\\.mcpServer\\grok","hasSession":true,"hasCurrentTurn":true,"pendingCount":0,"pendingTurnCount":0,"failsafeDir":"F:\\GitHub\\vice-sharp\\.mcpServer\\grok\\failsafe","failsafeCount":0,"failsafeQuarantineCount":0}
+sig=True
+nonce_match=True status=Healthy
+[33m16bfbf1[m docs: cancel Xbox UWP Dev-Mode sideload platform track
+[33m41d0eb9[m docs: cancel Microsoft Store track (emulators not allowed)
+[33me1cf592[m feat(vic20): FE3 flash040 FSM and xvic pixel frame capture
+[33m0cd61f8[m feat(vic20): present-path borders, expansion UX, flash cart builder
+[33me5203f9[m docs(requirements): capture C= logo source/attribution as FR-XBOXGPL-007
+[33me77ec58[m docs: refresh wiki export for store docs and v1.2.2 line
+[33mf46404d[m release: bump to 1.2.2 with Store art and C= logo attribution
+[33m3d3b6e4[m fix(vic20): 10s PAL+NTSC every-cycle lockstep vs xvic
+## main...origin/main
+?? docs/10s-lockstep-2026-08-07.log
+?? docs/10s-lockstep-blankfix-2026-08-06.log
+?? docs/10s-lockstep-idle-2026-08-06.log
+?? docs/10s-lockstep-memptr2-2026-08-06.log
+?? docs/10s-lockstep-ntsc-2026-08-07.log
+?? docs/10s-lockstep-rst6-2026-08-06.log
+?? docs/2s-adc-2026-08-06.log
+?? docs/2s-adc2-2026-08-06.log
+?? docs/2s-and-imm-2026-08-06.log
+?? docs/2s-arm-bcc-2026-08-06.log
+?? docs/2s-asl-2026-08-06.log
+?? docs/2s-asl-bcs-2026-08-06.log
+?? docs/2s-b1-beq-2026-08-06.log
+?? docs/2s-b1stage-2026-08-06.log

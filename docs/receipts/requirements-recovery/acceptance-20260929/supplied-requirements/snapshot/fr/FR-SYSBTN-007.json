@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSBTN-007",
+  "title": "Exit only from main menu behind ConfirmDialog",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Exit only from the main menu behind ConfirmDialog. Acceptance: no RequestExit binding in Default; RequestExit only from MainMenu->ConfirmDialog, only ConfirmYes exits.\n\n## Acceptance Criteria\n- no RequestExit binding in Default; RequestExit only from MainMenu->ConfirmDialog, only ConfirmYes exits.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

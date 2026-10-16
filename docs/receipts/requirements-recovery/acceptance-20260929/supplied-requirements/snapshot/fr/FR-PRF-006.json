@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-PRF-006",
+  "title": "Commodore PET Machine Profile",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The Commodore PET series uses a MOS 6502 CPU, MOS 6520 PIA or MOS 6522 VIA chips, and a monochrome 40x25 or 80x25 character display. Multiple PET models (2001, 3032, 4032, 8032, 8296) have different configurations.\n\n## Acceptance Criteria\n- CPU: Standard MOS 6502.\n- Display: CRTC (6545) controlled monochrome character display (40 or 80 columns).\n- I/O: MOS 6520 PIA and/or MOS 6522 VIA depending on model.\n- RAM: 8KB, 16KB, or 32KB depending on model.\n- ROM: PET BASIC (V1, V2, or V4), PET KERNAL, Character Generator.\n- IEEE-488 parallel bus for disk drive communication (not IEC serial).\n- Built-in cassette drive (PET 2001).\n- Selectable via `IMachineProfile.LoadProfile(\"pet\")` with model sub-selection.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SID-RESAMPLE-001",
+  "title": "SID fixed-point sampling engine port (fast/interpolate/Kaiser-FIR resample)",
+  "status": "completed",
+  "priority": "high",
+  "body": "PLAN-VICEPARITY-001 S13 ports reSID's sampling engine (sid.cc:542-1038, sid.h:140-179) into src/ViceSharp.Chips/Audio/Sid6581.Sampling.cs. Constants FirN=125, FirRes=285, FirShift=15, RingSize=1<<14, FixpShift=16. SetSamplingParameters is a statement-for-statement port of set_sampling_parameters: the resampling constraint checks, cycles_per_sample = (int)(clock/sample*(1<<16)+0.5) 16.16 fixed point, the mirrored ring short[RingSize*2], the Kaiser-windowed sinc FIR table (I0 Bessel, beta=0.1102*(A-8.7), the only legitimate float stage, rounded to short round-half-away-from-zero). ClockBuffered mirrors SID::clock(delta_t, buf, n): clock_fast, clock_interpolate, clock_resample. It calls the managed single-cycle Tick() where reSID calls clock() and reads CycleExternalFilterOutput where reSID calls output(), so the emitted short stream is bit-exact vs the oracle. RESAMPLE_FASTMEM deliberately NOT ported. All buffers preallocated; zero per-sample allocation. Verified by OUTPUT-08..13 vs SidExactClockBuffered (TR-SID-ORACLE-002) on both 6581 (c64) and 8580 (c64c). Slice LW (commit 4924b94) COMPLETED the live-audio wiring: the live path now drives this SAMPLE_RESAMPLE engine one cycle per Tick (EmitLiveResampleTick), Resample-always (VICE x64sc default), bit-exact vs the buffered pull and zero-allocation; SetRelativeSpeed scales the 16.16 cadence only (warp = pitch, synthesis untouched). Benchmark SidSamplingBenchmarks: live tail ~0.30x real-time (100% speed holds). Post-review fix 9b00899 handles the zero-cycle-window underflow below ~4.5% warp. PLAN-VICEPARITY-001 CLOSED 466/466.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

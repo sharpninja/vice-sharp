@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-IEC-TIMING-001",
+  "title": "IecTimingTests: ATN response within spec window (5 tests)",
+  "status": "closed",
+  "priority": "medium",
+  "body": null,
+  "condition": "After setting IecBus.Atn=false and calling Tick() up to 985 times, Clock==false and Data==false. After ATN release and Tick() up to 985 times, both return true. 5 pass.",
+  "acceptanceCriteria": []
+}

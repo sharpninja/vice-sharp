@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20260930T151741Z-0fb0
+  code: not_found
+  message: TR 'PERF-SPRITE-DMA-OPT-001' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getTr
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+

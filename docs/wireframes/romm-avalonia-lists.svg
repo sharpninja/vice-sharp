@@ -1,0 +1,62 @@
+<svg width="100%" viewBox="0 0 680 462" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Avalonia list management wireframe</title>
+<desc>Desktop list management: collections rail, selected list toolbar with new, rename, delete and add games, and a games table with per-row remove.</desc>
+<style>
+:root{--fg:#1a1a1a;--muted:#6a6a6a;--line:#8a8a8a;--blue:#2f6fed;--amber:#d08700;}
+@media (prefers-color-scheme:dark){:root{--fg:#f0f0f0;--muted:#9aa0a6;--line:#5a5f66;--blue:#5b8cff;--amber:#e0a200;}}
+svg{font-family:'Segoe UI',system-ui,sans-serif;}
+.c-gray rect,.c-gray circle{fill:none;stroke:var(--line);}
+.c-blue rect,.c-blue circle{fill:none;stroke:var(--blue);}
+.c-amber rect,.c-amber circle{fill:none;stroke:var(--amber);}
+text{fill:var(--fg);}
+.t{font-size:13px;fill:var(--fg);}
+.ts{font-size:11px;fill:var(--muted);}
+.th{font-size:18px;font-weight:600;fill:var(--fg);}
+</style>
+<text class="th" x="24" y="28">Lists</text>
+<g class="c-gray"><rect x="6" y="42" width="160" height="384" rx="8" stroke-width="0.5"/></g>
+<g class="c-blue"><rect x="12" y="52" width="148" height="24" rx="6" stroke-width="0.5"/></g>
+<text class="t" x="20" y="69">Favorites  (12)</text>
+<text class="ts" x="20" y="98">Shmups  (34)</text>
+<text class="ts" x="20" y="122">Cracktros  (8)</text>
+<text class="ts" x="20" y="146">SID favourites  (57)</text>
+<text class="ts" x="20" y="410">+ New list</text>
+<text class="th" x="180" y="30">Favorites</text>
+<g class="c-gray"><rect x="360" y="14" width="76" height="24" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="398" y="30" text-anchor="middle">Rename</text>
+<g class="c-gray"><rect x="442" y="14" width="70" height="24" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="477" y="30" text-anchor="middle">Delete</text>
+<g class="c-blue"><rect x="518" y="14" width="100" height="24" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="568" y="30" text-anchor="middle">Add games</text>
+<text class="ts" x="188" y="60">Title</text>
+<text class="ts" x="420" y="60">Format</text>
+<text class="ts" x="510" y="60">Platform</text>
+<text class="ts" x="600" y="60">Remove</text>
+<g class="c-gray"><rect x="176" y="68" width="498" height="30" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="188" y="87">Boulder Dash</text>
+<text class="ts" x="420" y="87">.d64</text>
+<text class="ts" x="510" y="87">C64</text>
+<text class="ts" x="614" y="87">x</text>
+<g class="c-gray"><rect x="176" y="102" width="498" height="30" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="188" y="121">Paradroid</text>
+<text class="ts" x="420" y="121">.d64</text>
+<text class="ts" x="510" y="121">C64</text>
+<text class="ts" x="614" y="121">x</text>
+<g class="c-gray"><rect x="176" y="136" width="498" height="30" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="188" y="155">Uridium</text>
+<text class="ts" x="420" y="155">.d64</text>
+<text class="ts" x="510" y="155">C64</text>
+<text class="ts" x="614" y="155">x</text>
+<g class="c-gray"><rect x="176" y="170" width="498" height="30" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="188" y="189">Wizball</text>
+<text class="ts" x="420" y="189">.crt</text>
+<text class="ts" x="510" y="189">C64</text>
+<text class="ts" x="614" y="189">x</text>
+<g class="c-gray"><rect x="176" y="204" width="498" height="30" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="188" y="223">Turrican</text>
+<text class="ts" x="420" y="223">.d64</text>
+<text class="ts" x="510" y="223">C64</text>
+<text class="ts" x="614" y="223">x</text>
+<g class="c-gray"><rect x="6" y="434" width="668" height="22" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="18" y="449">Drag to reorder · changes sync to romm.local</text>
+</svg>

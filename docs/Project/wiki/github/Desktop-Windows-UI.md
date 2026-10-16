@@ -104,6 +104,11 @@ Machine view (default)
   |     +-- Browse Cartridge       -> OpenFilePickerAsync (.crt/.bin)
   |     +-- Load .vkm              -> OpenFilePickerAsync (.vkm)
   |
+  +-- drop on VideoSurface
+        +-- .d64/.g64/.t64 -> Drive 8 attach + autostart
+        +-- .crt/.bin/.rom -> cartridge attach + cold reset
+        +-- .prg           -> LoadProgram into current RAM; RUN if load == TXTTAB
+  |
   +-- sidebar > Monitor tab
   |     +-- Pop Out -> secondary Window with full monitor
   |
@@ -118,6 +123,7 @@ Machine view (default)
 | Input | Behavior |
 |-------|----------|
 | Mouse click on `VideoSurface` | Focuses the surface so subsequent key events reach the emulator. |
+| Drop a local file on `VideoSurface` | Copy cursor for supported media and `*.prg`; drop attaches/autostarts disks and carts, or loads a PRG into current RAM (RUN at live BASIC start). |
 | Mouse click on status button | Sends the corresponding RPC (Pause / Step / Reset / etc.). |
 | Mouse drag on `GridSplitter` | Resizes sidebar vs. video column. |
 | Keyboard (focused video) | Mapped via `ToHostKeyName` and forwarded as `SetKeyStateAsync`. |

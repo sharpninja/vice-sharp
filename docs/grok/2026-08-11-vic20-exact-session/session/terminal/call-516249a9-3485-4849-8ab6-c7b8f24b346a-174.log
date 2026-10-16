@@ -1,0 +1,56 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36248.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file F:\GitHub\vice-sharp\native\vice_xvic.dll
+
+File Type: DLL
+
+  Image has the following dependencies:
+
+    DSOUND.dll
+    KERNEL32.dll
+    msvcrt.dll
+    ntdll.dll
+    SHELL32.dll
+    libstdc++-6.dll
+    USER32.dll
+    WINMM.dll
+    WS2_32.dll
+    zlib1.dll
+
+  Summary
+
+     1744000 .bss
+       2B000 .data
+       5B000 .debug_abbrev
+        7000 .debug_aranges
+       40000 .debug_frame
+      384000 .debug_info
+      175000 .debug_line
+       26000 .debug_line_str
+      161000 .debug_loclists
+       21000 .debug_rnglists
+        8000 .debug_str
+        1000 .edata
+        3000 .idata
+       10000 .pdata
+       6C000 .rdata
+        4000 .reloc
+      1A5000 .text
+LoadLibrary handle=0 lastError=126
+
+Name                  Length
+----                  ------
+libgcc_s_seh-1.dll    150196
+libiconv-2.dll       1136529
+libstdc++-6.dll      2461848
+libwinpthread-1.dll    65018
+vice_x64.dll        14583843
+vice_xvic.dll       10912499
+zlib1.dll             120814
+                    10911412
+                    10912499
+                    10912499
+                    10911412
+

@@ -1,0 +1,41 @@
+{
+  "kind": "tr",
+  "id": "TR-COMPLETION-MANIFEST-001",
+  "title": "Exhaustive approved-work completion evidence",
+  "status": "pending",
+  "priority": "high",
+  "body": "Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.\nImplement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.\nFinal validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.\nFresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.\nLive representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.\nProve actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only validation processes started by this work.\n\n## Acceptance Criteria\n- **ac-01**: Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.\n- **ac-02**: Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.\n- **ac-03**: Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.\n- **ac-04**: Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.\n- **ac-05**: Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.\n- **ac-06**: Prove actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only validation processes started by this work.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-06",
+      "text": "Prove actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only validation processes started by this work.",
+      "isSatisfied": false
+    }
+  ]
+}

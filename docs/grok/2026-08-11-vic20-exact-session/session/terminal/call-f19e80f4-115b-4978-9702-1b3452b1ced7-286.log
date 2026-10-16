@@ -1,0 +1,9 @@
+314:#define DO_IRQBRK()                                                                                                   \
+323:        PUSH(LOCAL_STATUS());                                                                                         \
+354:#define DO_INTERRUPT(int_kind)                                                 \
+378:                PUSH(LOCAL_STATUS());                                          \
+404:                DO_IRQBRK();                                                   \
+1016:        DO_IRQBRK();        \
+1363:        PUSH(LOCAL_STATUS() | P_BREAK); \
+1763:            DO_INTERRUPT(pending_interrupt);
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.Xvic.cs:327:        public MachineState GetState()

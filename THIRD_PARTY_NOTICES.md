@@ -10,6 +10,23 @@ ViceSharp is a derivative work of VICE and incorporates knowledge, algorithms, a
 
 ViceSharp is a clean-room C# port informed by VICE's architecture and behavior, not a direct code translation. VICE's GPL license applies to this derivative work.
 
+### Bundled VICE keymap data (`*.vkm`)
+
+- **License:** GPL-2.0-or-later
+- **Origin:** VICE `data/C64/*.vkm` keyboard mapping files
+- **Redistributed in:** the desktop head packages these under `data/C64/*.vkm`; the Xbox (UWP) head packages these under `Assets/vice-data/C64/*.vkm`
+
+The C64 keyboard keymap files (`*.vkm`) shipped with ViceSharp are verbatim GPL-2.0-or-later VICE data. They are redistributed here unmodified, under the same GPL-2.0-or-later license as the VICE project. The desktop discovers the packaged files directly; the Xbox head seeds its writable keymap folder on first run. No Commodore ROM images (`kernal-*.bin`, `basic-*.bin`, `chargen-*.bin`) are bundled; ROMs remain user-provided or fetched at runtime.
+
+### Bundled PetMe64 font (`PetMe64.ttf`)
+
+- **Author:** Kreative Korporation (Kreative Software), https://www.kreativekorp.com/software/fonts/c64/
+- **License:** Kreative Software Relay Fonts Free Use License 1.2f (redistributable free of charge with the license included verbatim and credit given; see `src/ViceSharp.Xbox/Assets/Fonts/PetMe-FreeLicense.txt`)
+- **Origin:** VICE `data/common/PetMe64.ttf` (VICE bundles the PetMe font family under the same license)
+- **Redistributed in:** the Xbox (UWP) head packages the font under `Assets/Fonts/` and renders the virtual keyboard's keycaps with it (family "Pet Me 64")
+
+The PetMe64 TrueType font reproduces the Commodore 64's character set pixel-for-pixel. It is redistributed unmodified together with its verbatim license text, with credit to Kreative Korporation as the license requires.
+
 ## resid / resid-fp
 
 - **Project:** SID chip emulation library by Dag Lem
@@ -55,6 +72,19 @@ The following community-documented file formats are implemented:
 - **CRT** — cartridge image format
 - **PRG** — program file format
 - **P00** — PC64 file format
+
+## Commodore C= logo (Wikimedia Commons)
+
+**Requirement:** FR-XBOXGPL-007 (see `docs/requirements/functional/FR-Xbox-Branding.md`).
+
+- **File:** Commodore C= logo.svg
+- **Source:** https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg
+- **Author:** Alien426 (Wikimedia Commons)
+- **License:** Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+  https://creativecommons.org/licenses/by-sa/4.0/
+- **Used in:** Microsoft Store / Xbox marketing assets under `docs/xbox/store-screenshots/` (posters, box art, super-hero art, key/hero art, featured promo square, app tile icons); local copies `Commodore_C_logo.svg` and `Commodore_C_logo-1280.png` with attribution file `LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt`.
+
+This mark is **not** a Commodore system ROM and is separate from GPL VICE content. When redistributed (including derivative marketing composites that include the mark), attribution and ShareAlike terms of CC BY-SA 4.0 apply. The product name **Vice#** and ViceSharp wordmarks are separate from this logo.
 
 ## NuGet Dependencies
 

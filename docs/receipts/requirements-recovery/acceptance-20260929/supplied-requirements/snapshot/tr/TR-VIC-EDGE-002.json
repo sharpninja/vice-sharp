@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC-EDGE-002",
+  "title": "VIC-II PAL raster position frame-periodic",
+  "status": "closed",
+  "priority": "medium",
+  "body": "Managed PAL VIC-II raster (rasterLine, rasterX) returns to identical position after exactly one frame (312x63=19,656 cycles). VICE vicii-cycle.c:576-598.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

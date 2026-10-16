@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC-EDGE-001",
+  "title": "VIC-II native screen-RAM visible-frame checkpoint",
+  "status": "closed",
+  "priority": "medium",
+  "body": "Native VICE screen RAM (-) survives one full PAL frame (19,656 cycles) unchanged. VIC-II c-access DMA is read-only. VICE vicii-fetch.c:135-166.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

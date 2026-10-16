@@ -142,7 +142,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         byte cia2PortAInputMask = 0x7F,
         bool cia2Connected = true,
         CartridgeMappingMode defaultCartridgeMappingMode = CartridgeMappingMode.Auto,
-        Func<ushort>? cpuPcReader = null)
+        Func<ushort>? cpuPcReader = null,
+        IInterruptLine? nmiLine = null)
     {
         _vic = vic;
         _sid = sid;
@@ -157,6 +158,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _defaultCartridgeMappingMode = defaultCartridgeMappingMode;
         _cpuPcReader = cpuPcReader;
         _keyboard = new C64KeyboardMatrix();
+        // FIX-XKBDNMI-001: wire RESTORE to the shared NMI open-drain line.
+        _keyboard.ConnectNmiLine(nmiLine);
         _keyboardMap = keyboardMap ?? C64HostKeyboardMapper.DefaultFallbackMap;
         _joystickPort1 = new C64JoystickPort();
         _joystickPort2 = new C64JoystickPort();
@@ -467,12 +470,11 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             return;
         }
 
-        if (address is >= ColorRamStart and <= ColorRamEnd)
-        {
-            _colorRam[address - ColorRamStart] = (byte)(value & 0x0F);
-            return;
-        }
-
+        // VICE c64meminit.c: colorram_store is hooked only when
+        // c64meminit_io_config[config]==1 (configs 5,6,7 and cart mirrors).
+        // Config 4 (CHAREN, !HIRAM, !LORAM; $01=$24/$34) leaves $D000-$DFFF
+        // as ram_store (mem_ram[addr]=value). Do not divert $D800 to color RAM
+        // when I/O is banked out.
         _ram[address] = value;
     }
 
@@ -577,6 +579,21 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             foreach (var keyCode in keyCodes)
                 ApplyMatrixKeyState(keyCode, pressed);
         }
+
+        return true;
+    }
+
+    /// <inheritdoc />
+    public bool SetRestoreState(bool pressed)
+    {
+        if (!_keyboardEnabled)
+            return false;
+
+        // RESTORE is a hardware NMI wired directly to the CPU, not a key-matrix key.
+        // Route straight to the dedicated RESTORE/NMI trigger on the matrix, never
+        // through SetKeyState / the keymap.
+        lock (_inputSync)
+            _keyboard.SetRestore(pressed);
 
         return true;
     }

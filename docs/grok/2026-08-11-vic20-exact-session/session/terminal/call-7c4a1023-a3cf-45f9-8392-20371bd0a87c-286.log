@@ -1,0 +1,11 @@
+=== aiUnit ===
+Desc: Replicated from azure-pipelines.yml (full clone of Azure pipeline steps as scripts). Created by Grok remote/octopus plan.
+Run azure-pipelines.yml
+  url: github.com/sharpninja/aiUnit.git
+=== Avalonia.RemoteControl ===
+Desc: Replicated from azure-pipelines.yml (full clone of Azure pipeline steps as scripts). Created by Grok remote/octopus plan.
+Run azure-pipelines.yml
+  url: github.com/sharpninja/Avalonia.RemoteControl.git
+=== BitNet-b1.58-Sharp ===
+Desc: Replicated from azure-pipelines.yml (full clone of Azure pipeline steps as scripts). Created by Grok remote/octopus plan.
+Run azure-pipelines.yml

@@ -1,0 +1,2 @@
+MCP done=True tasksDone=7/7
+Scoped bit-exact VIC-20 program complete 2026-08-11: pixel index Exact PAL/NTSC/busy; BGRA capture path + shared-palette alignment (canvas RGB may Partial); video 2k; FE3 flash040 TYPE_B erase latency; sound silence/tone SequenceEqual; 2s non-idle CPU lockstep PAL+NTSC; managed snapshot blob RT + resume; process-isolated umbrella 46/0/0. Hostile AGREE on scoped claims. NOT whole-machine Exact: niche carts Explicit Missing; IEEE/rsuser/printer; headless WriteSnapshot hang.

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-SNAPFULL-001",
+  "title": "Snapshot round-trip determinism",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Restore then run N cycles equals continuous run N (full MachineState + memory equality) at multiple cut points, for C64 and C64+1541.",
+  "acceptanceCriteria": []
+}

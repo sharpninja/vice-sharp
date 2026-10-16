@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-D71-001",
+  "title": "D71 disk image format",
+  "status": "pending",
+  "priority": "high",
+  "body": "D71 (double-sided 1541-format GCR) images: exactly 349,696 bytes, 70 tracks with the D64 zone table applied per side; attachable only to a 1571 drive; implements the shared IGcrDisk surface so the drive mechanism is image-format agnostic.\n\n## Acceptance Criteria\n- D71 (double-sided 1541-format GCR) images: exactly 349,696 bytes, 70 tracks with the D64 zone table applied per side; attachable only to a 1571 drive; implements the shared IGcrDisk surface so the drive mechanism is image-format agnostic.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,35 @@
+F:\GitHub\vice-sharp\native\vice\vice\src\acia.h:79:    ACIA_CMD_BITS_TRANSMITTER_NO_RTS      = 0x00,
+F:\GitHub\vice-sharp\native\vice\vice\src\c64dtv\c64dtvcpu.c:183:#define CLK_RTS (3 - (dtv_registers[9] & 1))
+F:\GitHub\vice-sharp\native\vice\vice\src\c64dtv\c64dtvcpu.c:188:#define CLK_STACK_PULL (2 - 2 * (dtv_registers[9] & 1))
+F:\GitHub\vice-sharp\native\vice\vice\src\c64dtv\c64dtvcpu.c:287:#define PULL()    (LOAD((((uint16_t) dtv_registers[11]) << 8) + ((++reg_sp) & 0xff)))
+F:\GitHub\vice-sharp\native\vice\vice\src\c64\cart\c64cartsystem.h:27:#ifndef VICE_C64CARTSYSTEM_H
+F:\GitHub\vice-sharp\native\vice\vice\src\c64\cart\c64cartsystem.h:28:#define VICE_C64CARTSYSTEM_H
+F:\GitHub\vice-sharp\native\vice\vice\src\config.h:409:/* #undef HAVE_PORTSID */
+F:\GitHub\vice-sharp\native\vice\vice\src\joyport\joyport.h:116:    JOYPORT_MAX_PORTS
+F:\GitHub\vice-sharp\native\vice\vice\src\joyport\joystick.h:33:#include "joyport.h" /* for JOYPORT_MAX_PORTS */
+F:\GitHub\vice-sharp\native\vice\vice\src\joyport\joystick.h:484:extern int joystick_port_map[JOYPORT_MAX_PORTS];
+F:\GitHub\vice-sharp\native\vice\vice\src\lib\libusbsiddrv\USBSID.h:115:    ACM_CTRL_RTS   = 0x02,
+F:\GitHub\vice-sharp\native\vice\vice\src\mainc64cpu.c:358:#define PULL()    memmap_mem_read(0x100 + (++reg_sp))
+F:\GitHub\vice-sharp\native\vice\vice\src\mainc64cpu.c:444:#ifndef PULL
+F:\GitHub\vice-sharp\native\vice\vice\src\mainc64cpu.c:445:#define PULL()    mem_read_check_ba(0x100 + (++reg_sp))
+F:\GitHub\vice-sharp\native\vice\vice\src\mainviccpu.c:209:#define PULL()    memmap_mem_read(0x100 + (++reg_sp))
+F:\GitHub\vice-sharp\native\vice\vice\src\mainviccpu.c:271:#ifndef PULL
+F:\GitHub\vice-sharp\native\vice\vice\src\mainviccpu.c:272:#define PULL()    (*_mem_read_tab_ptr[0x01])((uint16_t)(0x100 + (++reg_sp)))
+F:\GitHub\vice-sharp\native\vice\vice\src\rs232drv\rsuser.h:35:#define RTS_OUT         0x02    /* PB1 */
+F:\GitHub\vice-sharp\native\vice\vice\src\rs232drv\rs232drv.h:44:    RS232_HSO_RTS = 0x01,
+F:\GitHub\vice-sharp\native\vice\vice\src\profiler.h:55:/* called whenever an RTS/RI is called */
+F:\GitHub\vice-sharp\native\vice\vice\src\scpu64\scpu64-stubs.c:45:tape_image_t *tape_image_dev[TAPEPORT_MAX_PORTS] =  { NULL };
+F:\GitHub\vice-sharp\native\vice\vice\src\userport\userport.h:222:#define USERPORT24_PLUS4_PIN_ACIA_RTS      USERPORT24_PIN_D
+F:\GitHub\vice-sharp\native\vice\vice\src\tapeport\tapeport.h:69:    TAPEPORT_MAX_PORTS
+F:\GitHub\vice-sharp\native\vice\vice\src\65816core.c:330:#define PULL() ((reg_sp = (reg_emul) ? 0x100 | ((reg_sp + 1) & 0xff) : reg_sp + 1), LOAD_LONG(reg_sp))
+F:\GitHub\vice-sharp\native\vice\vice\src\6510core.c:74:#define CLK_RTS 3
+F:\GitHub\vice-sharp\native\vice\vice\src\6510core.c:367:#define PULL()    ((PAGE_ONE)[(++reg_sp)])
+F:\GitHub\vice-sharp\native\vice\vice\src\6510core.c:374:#define PULL() (++reg_sp, LOAD(0x100 + reg_sp))
+F:\GitHub\vice-sharp\native\vice\vice\src\65c02core.c:264:#define PULL()    ((PAGE_ONE)[(++reg_sp)])
+F:\GitHub\vice-sharp\native\vice\vice\src\c64dtv\c64dtvcpu.c:183:#define CLK_RTS (3 - (dtv_registers[9] & 1))
+F:\GitHub\vice-sharp\native\vice\vice\src\c64dtv\c64dtvcpu.c:287:#define PULL()    (LOAD((((uint16_t) dtv_registers[11]) << 8) + ((++reg_sp) & 0xff)))
+F:\GitHub\vice-sharp\native\vice\vice\src\mainviccpu.c:209:#define PULL()    memmap_mem_read(0x100 + (++reg_sp))
+F:\GitHub\vice-sharp\native\vice\vice\src\mainviccpu.c:272:#define PULL()    (*_mem_read_tab_ptr[0x01])((uint16_t)(0x100 + (++reg_sp)))
+F:\GitHub\vice-sharp\native\vice\vice\src\mainc64cpu.c:358:#define PULL()    memmap_mem_read(0x100 + (++reg_sp))
+F:\GitHub\vice-sharp\native\vice\vice\src\mainc64cpu.c:445:#define PULL()    mem_read_check_ba(0x100 + (++reg_sp))
+F:\GitHub\vice-sharp\native\vice\vice\src\c64\cart\turbomaster.c:286:#define PULL() (LOAD(reg_pc + 1)), (LOAD(reg_sp | 0x100)), (turbomaster_ram_read((WORD)(++reg_sp | 0x100)))

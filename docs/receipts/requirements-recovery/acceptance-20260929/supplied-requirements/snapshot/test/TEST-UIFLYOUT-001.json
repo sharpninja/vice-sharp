@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UIFLYOUT-001",
+  "title": "Flyout sidebar + single side-toggle",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "VM: toggling DockSide flips Left<->Right and IsPaneOpen opens/closes; default state correct. App-launch: flyout opens/closes, docks both sides via the single icon button, no Left/Right buttons.",
+  "acceptanceCriteria": []
+}

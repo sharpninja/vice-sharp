@@ -2,12 +2,10 @@
 
 > **SUPERSEDED.** The manual scratch-clone publish procedure below was replaced
 > by the implemented automation: `tools/Publish-Wiki.ps1` plus the Nuke
-> `PublishWiki` target (`build/Build.cs`). The script regenerates the MCP wiki
-> export and pushes both wiki targets, skipping a target when its PAT env var
-> is absent. The known-gaps items are closed: the three TR markdown files exist
-> under `docs/requirements/technical/`, and the manifests are regenerated on
-> each publish. The gates G1-G6 below remain the publishing rules the script
-> honors; the rest of this document is retained as historical planning record.
+> `PublishWiki` target (`build/Build.cs`). Operator 2026-09-10: Azure DevOps is
+> retired and is not used; the live wiki target is GitHub only. The rest of this
+> document is retained as a historical planning record. The gates G1-G6 remain
+> the publishing rules the script honors for a GitHub wiki push.
 
 Owner: REPO-MAINT-001 phase 1.
 
@@ -20,7 +18,7 @@ This plan documents the pipeline that will publish the ViceSharp requirements wi
 | GitHub Wiki | https://github.com/sharpninja/vice-sharp/wiki | `docs/Project/wiki/github/` |
 | Azure DevOps Wiki | https://dev.azure.com/McpServer/VICE-Sharp/_wiki/wikis/VICE-Sharp.wiki | `docs/Project/wiki/azure/` |
 
-GitHub is the **mirror** target (per the global rule that Azure DevOps is the primary). Both targets are published from the same MCP-generated source set, but each gets its own platform-formatted output (GitHub uses `_Sidebar.md`/`_Footer.md`; Azure uses `.order`).
+GitHub Wiki is the **live** target. Azure DevOps wiki is retired and is not used. Generated source still includes `docs/Project/wiki/azure/` for historical export shape (`.order`); do not push it.
 
 ## Source set (both targets)
 

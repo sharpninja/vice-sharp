@@ -1,0 +1,20 @@
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.95
+=== 2s PAL ===
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [3 s]
+   DIV first=541046 matchedCycles=541045 budget=2216810
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+=== 10s NTSC ===
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [3 s]
+   DIV first=521027 matchedCycles=521026 budget=10227270
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+

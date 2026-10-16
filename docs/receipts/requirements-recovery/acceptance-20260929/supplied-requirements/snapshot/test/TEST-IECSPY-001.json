@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-IECSPY-001",
+  "title": "IEC bus snapshot/spy",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Snapshot reports idle all-high/no-talkers; single puller -> line low + talker; multi-puller wired-AND lists all; release restores high; snapshot never mutates bus. DONE (5/5 green).",
+  "acceptanceCriteria": []
+}

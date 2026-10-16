@@ -1,0 +1,21 @@
+native/vice/vice/src/vic20\vic20cpu.c:45:#define REWIND_FETCH_OPCODE(clock) /*clock-=2*/rg: 
+native/vice/vice/src/vic20\vic20cpu.c:52:   EXPORT_REGISTERS()/IMPORT_REGISTERS() are in scope here because CLK_INC()
+native/vice/vice/src/vic20\vic20cpu.c:54:#define CLK_INC()                                      \
+native/vice/vice/src/vic20\vic20cpu.c:59:        if (vice_shim_cycle_checkpoint()) {            \
+native/vice/vice/src/vic20\vic20cpu.c:65:#define CLK_INC() maincpu_clk++; vic_cycle()
+native/vice/vice/src/vic20\vic20cpu.c:135:/* FETCH_OPCODE implementation(s) */
+native/vice/vice/src/vic20\vic20cpu.c:138:#define FETCH_OPCODE(o) \
+native/vice/vice/src/vic20\vic20cpu.c:143:            CLK_INC();                                          \
+native/vice/vice/src/vic20\vic20cpu.c:144:            CLK_INC();                                          \
+native/vice/vice/src/vic20\vic20cpu.c:146:                CLK_INC();                                      \
+native/vice/vice/src/vic20\vic20cpu.c:150:            CLK_INC();                                          \
+native/vice/vice/src/vic20\vic20cpu.c:152:            CLK_INC();                                          \
+native/vice/vice/src/vic20\vic20cpu.c:155:                CLK_INC();                                      \
+native/vice/vice/src/vic20\vic20cpu.c:161:#define FETCH_OPCODE(o) \
+native/vice/vice/src/vic20\vic20cpu.c:166:            CLK_INC();                                            \
+native/vice/vice/src/vic20\vic20cpu.c:168:            CLK_INC();                                            \
+native/vice/vice/src/vic20\vic20cpu.c:171:                CLK_INC();                                        \
+native/vice/vice/src/vic20\vic20cpu.c:175:            CLK_INC();                                            \
+native/vice/vice/src/vic20\vic20cpu.c:177:            CLK_INC();                                            \
+native/vice/vice/src/vic20\vic20cpu.c:180:                CLK_INC();                                        \
+native/vice/vice/src/vic20/*.c: IO error for operation on native/vice/vice/src/vic20/*.c: The filename, directory name, or volume label syntax is incorrect. (os error 123)

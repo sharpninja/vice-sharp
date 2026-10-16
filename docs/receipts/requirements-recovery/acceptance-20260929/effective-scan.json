@@ -1,0 +1,144 @@
+{
+  "generatedUtc": "2026-09-29T23:19:43.5232791Z",
+  "snapshot": "docs/receipts/requirements-recovery/acceptance-20260929/effective-product.json",
+  "counts": {
+    "fr": 232,
+    "tr": 138,
+    "test": 140,
+    "map": 231
+  },
+  "functional": {
+    "count": 232,
+    "emptyText": [],
+    "placeholder": [],
+    "badId": [],
+    "zeroStructuredAcceptanceCriteria": 203,
+    "withStructuredAcceptanceCriteria": 29
+  },
+  "technical": {
+    "count": 138,
+    "emptyText": [],
+    "placeholder": [
+      "[TR-REMOTECTRL-SERVER-001]",
+      "PERF-SPRITE-DMA-OPT-001"
+    ],
+    "badId": [
+      "[TR-REMOTECTRL-SERVER-001]",
+      "PERF-SPRITE-DMA-OPT-001"
+    ],
+    "zeroStructuredAcceptanceCriteria": 104,
+    "withStructuredAcceptanceCriteria": 34
+  },
+  "testing": {
+    "count": 140,
+    "emptyText": [],
+    "placeholder": [],
+    "badId": [
+      "TEST-INPROC-DEVICE",
+      "TEST-SYSBTN-DEVICE",
+      "TEST-XAUDIO-DEVICE",
+      "TEST-XBOXUI-002a",
+      "TEST-XBOXUI-002b",
+      "TEST-XBOXUI-005a",
+      "TEST-XBOXUI-005b",
+      "TEST-XSET-DEVICE",
+      "TEST-XVIDEO-DEVICE"
+    ],
+    "zeroStructuredAcceptanceCriteria": 113,
+    "withStructuredAcceptanceCriteria": 27
+  },
+  "applyNamed": [
+    {
+      "id": "TR-REMOTECTRL-SERVER-001",
+      "inApplyPayload": true,
+      "kind": "tr",
+      "title": "Embeddable RemoteControl 0.7.4 integration",
+      "bodyLength": 1094,
+      "startsWithPlaceholder": false,
+      "hasAcceptanceCriteriaHeading": true,
+      "status": "pending"
+    },
+    {
+      "id": "PERF-SPRITE-DMA-OPT-001",
+      "inApplyPayload": false
+    },
+    {
+      "id": "TR-ROMM-SEC-001",
+      "inApplyPayload": false
+    },
+    {
+      "id": "TR-VIC20-FLASH-001",
+      "inApplyPayload": false
+    },
+    {
+      "id": "TR-VIC20-PIXEL-001",
+      "inApplyPayload": false
+    },
+    {
+      "id": "TR-VIC20-SOUND-001",
+      "inApplyPayload": false
+    }
+  ],
+  "snapshotNamed": [
+    {
+      "id": "TR-REMOTECTRL-SERVER-001",
+      "inSnapshot": true,
+      "title": "Embeddable RemoteControl 0.7.4 integration",
+      "textLength": 1094,
+      "startsWithPlaceholder": false,
+      "hasAcceptanceCriteriaHeading": true,
+      "structuredAcceptanceCriteria": 3,
+      "status": "pending"
+    },
+    {
+      "id": "PERF-SPRITE-DMA-OPT-001",
+      "inSnapshot": true,
+      "title": "PERF-SPRITE-DMA-OPT-001",
+      "textLength": 73,
+      "startsWithPlaceholder": true,
+      "hasAcceptanceCriteriaHeading": false,
+      "structuredAcceptanceCriteria": 0,
+      "status": "pending"
+    },
+    {
+      "id": "TR-ROMM-SEC-001",
+      "inSnapshot": true,
+      "title": "Keep RomM bearer tokens and downloaded content inside trusted boundaries",
+      "textLength": 383,
+      "startsWithPlaceholder": false,
+      "hasAcceptanceCriteriaHeading": false,
+      "structuredAcceptanceCriteria": 0,
+      "status": "pending"
+    },
+    {
+      "id": "TR-VIC20-FLASH-001",
+      "inSnapshot": true,
+      "title": "VICE-compatible AM29F040B timing and safe expansion write-back",
+      "textLength": 295,
+      "startsWithPlaceholder": false,
+      "hasAcceptanceCriteriaHeading": false,
+      "structuredAcceptanceCriteria": 0,
+      "status": "pending"
+    },
+    {
+      "id": "TR-VIC20-PIXEL-001",
+      "inSnapshot": true,
+      "title": "Pixel compare path index-primary then BGRA",
+      "textLength": 378,
+      "startsWithPlaceholder": false,
+      "hasAcceptanceCriteriaHeading": false,
+      "structuredAcceptanceCriteria": 3,
+      "status": "pending"
+    },
+    {
+      "id": "TR-VIC20-SOUND-001",
+      "inSnapshot": true,
+      "title": "VIC-I sound advances on the machine clock and batches PCM without hot-path allocation",
+      "textLength": 239,
+      "startsWithPlaceholder": false,
+      "hasAcceptanceCriteriaHeading": false,
+      "structuredAcceptanceCriteria": 0,
+      "status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-TAPE-EDGE-001",
+  "title": "Datasette motor 32,000-cycle ramp before pulse delivery",
+  "status": "closed",
+  "priority": "medium",
+  "body": "Datasette.Tick() enforces 32,000-cycle motor ramp (MOTOR_DELAY=32000, datasette/datasette.c:62) before TryReadNextPulse delivers pulses. Ramp only activates when Tick() is used as timing. Motor off resets ramp.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

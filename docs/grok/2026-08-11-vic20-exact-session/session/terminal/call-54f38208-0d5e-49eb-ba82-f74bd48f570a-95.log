@@ -1,0 +1,43 @@
+
+> native\vice\vice\src\6510dtvcore.c:1196:#define JSR_FIXUP_MSB(x)    monitor_cpuhistory_fix_p2(x)
+  native\vice\vice\src\6510dtvcore.c:1197:#else
+> native\vice\vice\src\6510dtvcore.c:1198:#define JSR_FIXUP_MSB(x)
+  native\vice\vice\src\6510dtvcore.c:1199:#endif
+  native\vice\vice\src\6510dtvcore.c:1200:
+> native\vice\vice\src\6510dtvcore.c:1201:#define JSR()                                     \
+  native\vice\vice\src\6510dtvcore.c:1202:    do {                                          \
+  native\vice\vice\src\6510dtvcore.c:1203:        uint8_t addr_msb;                         \
+  native\vice\vice\src\6510dtvcore.c:1204:        uint16_t dest_addr;                       \
+  native\vice\vice\src\6510dtvcore.c:1205:        if (!SKIP_CYCLE) {                        \
+  native\vice\vice\src\6510dtvcore.c:1206:            STACK_PEEK();                         \
+  native\vice\vice\src\6510dtvcore.c:1207:            CLK_INC();                            \
+  native\vice\vice\src\6510dtvcore.c:1208:        }                                         \
+  native\vice\vice\src\6510dtvcore.c:1209:        INC_PC(2);                                \
+  native\vice\vice\src\6510dtvcore.c:1210:        PUSH(((reg_pc) >> 8) & 0xff);             \
+  native\vice\vice\src\6510dtvcore.c:1211:        CLK_INC();                                \
+  native\vice\vice\src\6510dtvcore.c:1212:        PUSH((reg_pc) & 0xff);                    \
+  native\vice\vice\src\6510dtvcore.c:1213:        CLK_INC();                                \
+  native\vice\vice\src\6510dtvcore.c:1214:        addr_msb = LOAD(reg_pc);                  \
+  native\vice\vice\src\6510dtvcore.c:1215:        JSR_FIXUP_MSB(addr_msb);                  \
+  native\vice\vice\src\6510dtvcore.c:1216:        dest_addr = (uint16_t)(p1 | (addr_msb << 8)); \
+  native\vice\vice\src\6510dtvcore.c:1217:        CLK_INC();                                \
+  native\vice\vice\src\6510dtvcore.c:1218:        CHECK_PROFILE_JSR(dest_addr);             \
+  native\vice\vice\src\6510dtvcore.c:1219:        JUMP(dest_addr);                          \
+  native\vice\vice\src\6510dtvcore.c:1220:    } while (0)
+  native\vice\vice\src\6510dtvcore.c:1221:
+  native\vice\vice\src\6510dtvcore.c:1222:#define LAS()                                          \
+  native\vice\vice\src\6510dtvcore.c:1223:    do {                                               \
+  native\vice\vice\src\6510dtvcore.c:1224:        unsigned int value;                            \
+  native\vice\vice\src\6510dtvcore.c:1225:        GET_ABS_Y(value)                               \
+  native\vice\vice\src\6510dtvcore.c:1226:        reg_a_write = reg_x = reg_sp = reg_sp & value; \
+  native\vice\vice\src\6510dtvcore.c:1227:        LOCAL_SET_NZ(reg_a_read);                      \
+  native\vice\vice\src\6510dtvcore.c:1228:        INC_PC(3);                                     \
+  native\vice\vice\src\6510dtvcore.c:1229:    } while (0)
+  native\vice\vice\src\6510dtvcore.c:1230:
+  native\vice\vice\src\6510dtvcore.c:1231:#define LAX(get_func, pc_inc)     \
+  native\vice\vice\src\6510dtvcore.c:1232:    do {                          \
+  native\vice\vice\src\6510dtvcore.c:1233:        get_func(reg_x);          \
+  native\vice\vice\src\6510dtvcore.c:1234:        reg_a_write = reg_x;      \
+  native\vice\vice\src\6510dtvcore.c:1235:        LOCAL_SET_NZ(reg_a_read); \
+  native\vice\vice\src\6510dtvcore.c:1236:        INC_PC(pc_inc);           \
+

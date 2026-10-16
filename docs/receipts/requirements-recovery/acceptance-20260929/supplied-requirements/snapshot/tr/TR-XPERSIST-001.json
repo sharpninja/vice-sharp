@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XPERSIST-001",
+  "title": "Xbox prefs persist via ViceSettings INI",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Xbox prefs persist via the portable ViceSettings INI [ViceSharpXbox], not Avalonia SessionPersistence. Acceptance: verified by TEST-XSET-001, XboxUiStateStoreTests.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

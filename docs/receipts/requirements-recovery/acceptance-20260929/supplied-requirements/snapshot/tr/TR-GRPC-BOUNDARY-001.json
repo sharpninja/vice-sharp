@@ -1,0 +1,26 @@
+{
+  "kind": "tr",
+  "id": "TR-GRPC-BOUNDARY-001",
+  "title": "Versioned gRPC Boundary Between Emulator Host and UI Clients",
+  "status": "in_progress",
+  "priority": "high",
+  "body": "ViceSharp shall separate emulator execution from host UI control through a versioned gRPC boundary. The host process owns the emulator core, devices, media state, persistence, and local render-source composition. Host UI control, media, session, input, snapshot, capture, and diagnostic operations consume generated gRPC clients or narrow gRPC-backed client abstractions and must not instantiate or mutate core emulator objects directly.\n\nThe in-process Avalonia renderer is the local rendering exception: a host-owned render surface may bind directly to a local emulator/frame source so frame presentation does not have to loop through gRPC. This exception is narrow and does not permit Avalonia ViewModels to reference runtime internals or concrete emulator devices. External or remote UIs still use the gRPC video service and stream APIs when direct in-process rendering is unavailable.\n\n## Acceptance Criteria\n- UI assemblies do not reference `ViceSharp.Core`, `ViceSharp.Chips`, or `ViceSharp.Architectures` directly.\n- Host services expose enough control, remote output, input, media, state, and diagnostic operations to satisfy FR-HOST-001 through FR-HOST-005 and FR-UI-001.\n- Contract compatibility checks detect deleted fields, reused field numbers, and incompatible service changes.\n- An integration test can start the host, connect a remote UI client, receive a frame stream, submit input, request a screenshot, and shut down cleanly.\n- Architecture tests enforce that only host/composition assemblies reference both concrete core assemblies and boundary service implementations.\n- Streaming tests verify that client disconnects, slow frame consumers, and reconnects do not mutate emulator state.\n- Release validation includes the host and at least one reference UI client.\n- An in-process Avalonia rendering test can bind the host-owned render surface to a local frame source without introducing `ViceSharp.Core` or runtime-internal references into ViewModels.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "tr-grpc-boundary-ac-1",
+      "text": "Status, media, command, monitor, and settings requests remain DTO-only across the host protocol boundary.",
+      "isSatisfied": false
+    },
+    {
+      "id": "tr-grpc-boundary-ac-2",
+      "text": "The status DTO includes IEC activity telemetry without removing existing status fields.",
+      "isSatisfied": false
+    },
+    {
+      "id": "tr-grpc-boundary-ac-3",
+      "text": "gRPC service adapters and the Avalonia gRPC client preserve IEC activity telemetry on status round trips.",
+      "isSatisfied": false
+    }
+  ]
+}

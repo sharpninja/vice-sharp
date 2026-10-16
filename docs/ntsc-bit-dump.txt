@@ -1,0 +1,5 @@
+DUMP c=521023 nA=$F7 mA=$F7 nP=$A5 mP=$A5 mRast=185 nRast=185 mCyc=54 nCyc=54 mFetch=4 nFetch=4 m$9124=$C2 n$9124=$C2 m$9125=$41 n$9125=$41 m$912B=$40 n$912B=$40 m$912D=$C0 n$912D=$40 m$912E=$C0 n$912E=$C0 mis=False
+DUMP c=521024 nA=$F7 mA=$F7 nP=$A5 mP=$A5 mRast=185 nRast=185 mCyc=55 nCyc=55 mFetch=4 nFetch=4 m$9124=$C1 n$9124=$C1 m$9125=$41 n$9125=$41 m$912B=$40 n$912B=$40 m$912D=$C0 n$912D=$40 m$912E=$C0 n$912E=$C0 mis=False
+DUMP c=521025 nA=$F7 mA=$F7 nP=$A5 mP=$A5 mRast=185 nRast=185 mCyc=56 nCyc=56 mFetch=4 nFetch=4 m$9124=$C0 n$9124=$C0 m$9125=$41 n$9125=$41 m$912B=$40 n$912B=$40 m$912D=$C0 n$912D=$40 m$912E=$C0 n$912E=$C0 mis=False
+DUMP c=521026 nA=$F7 mA=$F7 nP=$A5 mP=$A5 mRast=185 nRast=185 mCyc=57 nCyc=57 mFetch=4 nFetch=4 m$9124=$BF n$9124=$BF m$9125=$41 n$9125=$41 m$912B=$40 n$912B=$40 m$912D=$00 n$912D=$00 m$912E=$C0 n$912E=$C0 mis=False
+DUMP c=521027 nA=$F7 mA=$F7 nP=$E5 mP=$E5 mRast=185 nRast=185 mCyc=58 nCyc=58 mFetch=4 nFetch=4 m$9124=$BE n$9124=$BE m$9125=$41 n$9125=$41 m$912B=$40 n$912B=$40 m$912D=$00 n$912D=$00 m$912E=$C0 n$912E=$C0 mis=False

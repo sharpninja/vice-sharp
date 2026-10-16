@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-CPU-TICK-001",
+  "title": "Per-instance CPU executed-cycle counter and target clock",
+  "status": "pending",
+  "priority": "high",
+  "body": "ICpu exposes ExecutedCycles and TargetClockHz per instance; MachineState carries a per-CPU breakdown; UpdatePerformanceCounters uses the primary CPU executed cycles divided by its target clock.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "ICpu exposes a per-instance ExecutedCycles counter and TargetClockHz.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-2",
+      "text": "MachineState carries a per-CPU breakdown (id, executedCycles, targetHz) for host and peripheral CPUs.",
+      "isSatisfied": false
+    }
+  ]
+}

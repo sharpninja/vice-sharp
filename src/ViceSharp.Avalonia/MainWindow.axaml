@@ -34,6 +34,7 @@
                     <MenuItem Header="Hard (cold)" Click="OnMenuColdReset" />
                 </MenuItem>
                 <MenuItem Header="Autostart drive 8" Click="OnRunDrive8" />
+                <MenuItem Header="Toggle fullscreen" HotKey="F11" Click="OnMenuToggleFullscreen" />
                 <Separator />
                 <MenuItem Header="E_xit" Click="OnMenuExit" />
             </MenuItem>
@@ -73,7 +74,7 @@
             </MenuItem>
         </Menu>
 
-        <Border DockPanel.Dock="Bottom" MinHeight="34" Background="#1A1C20">
+        <Border x:Name="PART_StatusBar" DockPanel.Dock="Bottom" MinHeight="34" Background="#1A1C20">
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Spacing="4" Margin="6,4"
                             VerticalAlignment="Center">
@@ -236,15 +237,18 @@
             </DockPanel>
         </Border>
 
-        <!-- Emulator display is a control docked to the right, aspect-sized by
-             VideoSurface.MeasureOverride so it takes only the width it needs; the sidebar is
-             the stretched fill child and consumes the rest. Code-behind (ApplyContentLayout)
-             flips the dock edge with DockSide and, on collapse, reorders so the display fills. -->
+        <!-- Emulator display is docked; VideoSurface.MeasureOverride fills available height
+             and takes width from display aspect (NTSC crops to content rows so it grows too).
+             The sidebar is the stretched fill child for remaining width. Code-behind
+             (ApplyContentLayout) flips DockSide and, on collapse, reorders so the display fills. -->
         <DockPanel x:Name="PART_ContentPanel" LastChildFill="True">
             <!-- FR-IECMON-001: real-time IEC bus monitor. Collapsed (no docked space) unless the
                  session has a true-drive IEC bus, so the single-system layout is unchanged. -->
             <views:IecMonitorView x:Name="PART_IecMonitor" DockPanel.Dock="Top" />
-            <ContentControl x:Name="PART_VideoHost" DockPanel.Dock="Right" />
+            <ContentControl x:Name="PART_VideoHost" DockPanel.Dock="Right"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            HorizontalContentAlignment="Left" />
             <ContentControl x:Name="PART_SidebarHost"
                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
         </DockPanel>

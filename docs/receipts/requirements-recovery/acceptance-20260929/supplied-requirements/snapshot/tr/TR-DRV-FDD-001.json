@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-DRV-FDD-001",
+  "title": "MFM floppy drive model port",
+  "status": "pending",
+  "priority": "high",
+  "body": "MfmFloppyDrive.cs ports native fdd.c: init state write_protect=1, disk_change=1, rate=2, tracks=83 (:92-115); CRC-1021 table (:117-135); raw-track build (:435-557: 6250-byte track, D81 ISO layout gap2=22 gap3=35 sector_size=2 head_invert=1 image_sectors=40 per :192-209); flush-back parser (:265-433); Rotate (:559-576); Read/Write with the 0x100 sync-mark ninth bit (:626-680); SeekPulse clamped 0..83 with current_half_track=(track+1)*2 (:690-727). Buffers allocated once at image attach; Read/Write/Rotate zero-allocation. IMfmDiskImage span-based sector access implemented by D81Image.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,12 @@
+cs-FullyQualifiedName_Fe3Flash.log -> True
+cs-FullyQualifiedName_Flash040.log -> True
+cs-FullyQualifiedName_MegaCartParity.log -> True
+cs-FullyQualifiedName_UltimemParity.log -> True
+cs-FullyQualifiedName_Vic20CartInventory.log -> True
+cs-FullyQualifiedName_Vic20NativeAudio.log -> True
+cs-FullyQualifiedName_Vic20Sound.log -> True
+CART_SOUND Passed=31 Failed=0 Skipped=0
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     7, Skipped:     0, Total:     7, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)

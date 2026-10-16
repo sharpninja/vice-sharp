@@ -1,0 +1,7 @@
+
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:3:  docs/wireframes/romm-xbox-library.svg): a count header + search box + 
+read-only machine
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:24:        <!-- Header: title, search, machine indicator + count. -->
+src\ViceSharp.Xbox\Views\LibraryPage.xaml:36:                    <TextBlock x:Name="MachineText" Text="Machine - C64" 
+Foreground="White" FontSize="18" />
+

@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-TICKHIST-CAPTURE-001",
+  "title": "Write-delta capture and reconstruction",
+  "status": "completed",
+  "priority": "medium",
+  "body": "BasicBus publishes MemoryWriteEvent (pre-write byte, gated on a live subscriber); the CPU publishes instruction-completed events; one LockFreePubSub per machine is wired in ArchitectureBuilder and exposed via IMachine.PubSub. TickHistoryRecorder keeps a 100-deep ring bundling write-deltas per instruction; reconstruction reverse-applies later ticks' writes to the current paused RAM.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Bus publishes MemoryWriteEvent with the pre-write byte only when subscribed",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Recorder ring is bounded to 100 and reconstruction recovers as-of-tick RAM",
+      "isSatisfied": true
+    }
+  ]
+}

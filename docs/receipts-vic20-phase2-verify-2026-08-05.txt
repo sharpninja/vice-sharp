@@ -1,0 +1,9 @@
+Phase 2 criterion-3 complete 2026-08-05T14:59:39.5777061-05:00
+Vic20 filter: 86 passed / 0 failed / 0 skipped (SCRATCH vic20-gate.log)
+Lockstep suite: 24 passed / 0 failed (CPU + dual VIA + VIC-I)
+CPU: A/X/Y/S/P/PC through 5000 cycles PAL+NTSC
+Dual VIA: DDRA/DDRB/ACR/PCR/IER at $9110/$9120 for 64/256/1024 cycles
+VIC-I: static peeks + VICE raster encoding ($9003/$9004) through 5000 cycles
+API: IViceNative.PeekBus + vice_machine_peek_bus (via1_peek/via2_peek/vic_peek)
+Mos6561 power-on zeros + raster encoding match VICE
+C64 smoke: 31 passed; Boot READY: 19 passed; Build: 0 errors

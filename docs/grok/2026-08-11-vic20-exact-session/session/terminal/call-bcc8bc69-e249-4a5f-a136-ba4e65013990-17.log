@@ -1,0 +1,8 @@
+Get-ChildItem: Cannot find path 'F:\GitHub\vice-sharp\native\vice\src' because it does not exist.
+
+FullName
+--------
+F:\GitHub\vice-sharp\native\vice\vice\src\6510core.c
+F:\GitHub\vice-sharp\native\vice\vice\src\6510core.h
+F:\GitHub\vice-sharp\native\vice\vice\src\6510dtvcore.c
+

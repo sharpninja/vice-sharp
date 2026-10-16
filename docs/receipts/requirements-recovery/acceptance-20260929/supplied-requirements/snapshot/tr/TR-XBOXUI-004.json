@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXUI-004",
+  "title": "VideoSurfaceHost + pull timer constructed once",
+  "status": "pending",
+  "priority": "medium",
+  "body": "VideoSurfaceHost + pull timer constructed once at shell level, never disposed by navigation. Acceptance: verified by TEST-XBOXUI-004.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

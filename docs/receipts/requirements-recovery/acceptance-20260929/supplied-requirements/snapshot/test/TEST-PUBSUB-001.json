@@ -1,0 +1,29 @@
+{
+  "kind": "test",
+  "id": "TEST-PUBSUB-001",
+  "title": "Pub/Sub Event Bus Correctness and Performance Tests",
+  "status": "completed",
+  "priority": "high",
+  "body": null,
+  "condition": "Focused unit, smoke, and benchmark-probe coverage shall verify the Pub/Sub event bus contract, including typed/raw/packed delivery, unsubscription, deterministic delivery order, collision isolation, route growth, message pool exhaustion/reset, frame arena payloads, zero publish allocation, and release probe performance.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-test-pubsub-001-focused",
+      "text": "Focused Pub/Sub test suite and benchmark smoke tests pass.",
+      "isSatisfied": true,
+      "evidence": "dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj --no-restore --filter FullyQualifiedName~LockFreePubSubTests|FullyQualifiedName~BenchmarksSmokeTests.PubSub => Passed: 22, Failed: 0"
+    },
+    {
+      "id": "ac-test-pubsub-001-probe",
+      "text": "Release quick probe proves the Pub/Sub performance targets without managed allocation.",
+      "isSatisfied": true,
+      "evidence": "dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000 => publish-one=43.78ns publish-three=58.14ns publish-packed=35.62ns pool-rent-return=16.80ns arena-alloc=3.20ns allocated=0 bytes"
+    },
+    {
+      "id": "ac-test-pubsub-001-build",
+      "text": "The full solution builds after the Pub/Sub implementation.",
+      "isSatisfied": true,
+      "evidence": "dotnet build ViceSharp.slnx --no-restore => Build succeeded"
+    }
+  ]
+}

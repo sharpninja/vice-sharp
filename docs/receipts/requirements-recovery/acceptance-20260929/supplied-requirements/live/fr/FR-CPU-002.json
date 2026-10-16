@@ -1,0 +1,19 @@
+{
+  "fetchedUtc": "2026-09-30T00:35:23.6000798Z",
+  "httpStatus": 200,
+  "source": "parent HTTP GET because the reviewer has no MCP access",
+  "route": "/mcpserver/requirements/fr/FR-CPU-002",
+  "record": {
+    "id": "FR-CPU-002",
+    "title": "Cycle-Accurate Execution Timing",
+    "body": "Each instruction shall consume the exact number of clock cycles as the real MOS 6510, including the extra cycle for page-boundary crossings on indexed addressing modes, the extra cycle for taken branches, and the additional cycle for page-crossing branches. The CPU shall expose its internal pipeline state (fetch, decode, execute sub-cycles) to allow other devices to observe and react at sub-instruction granularity.\n\n## Acceptance Criteria\n- Every opcode consumes exactly the documented cycle count (per the \"MOS 6510 Unintended Opcodes\" reference and 64doc.txt).\n- Page-boundary crossing adds exactly one cycle for absolute indexed reads (LDA abs,X / LDA abs,Y / LDA (zp),Y).\n- Page-boundary crossing on write instructions (STA abs,X) always takes the extra cycle regardless of whether a page boundary is actually crossed.\n- Taken branches add one cycle; taken branches crossing a page boundary add two cycles.\n- The `IClockedDevice.Tick()` method is invoked once per clock phase, and CPU sub-cycle state is observable via `ICpu.Phase`.\n- The CIA/VIC-II timing interleave passes the VICE timing test suite.",
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "priority": "high",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null,
+    "linkedUseCases": []
+  }
+}

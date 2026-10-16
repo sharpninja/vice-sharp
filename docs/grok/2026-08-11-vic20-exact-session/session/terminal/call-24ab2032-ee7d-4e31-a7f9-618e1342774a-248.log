@@ -1,0 +1,93 @@
+## [32mfeat/xbox-uwp-app[m...[31morigin/feat/xbox-uwp-app[m
+[32mM[m  GitVersion.yml
+[32mM[m  azure-pipelines.ci.yml
+[32mM[m  azure-pipelines.release.yml
+[32mM[m  src/ViceSharp.Avalonia/MainWindow.axaml
+[32mM[m  src/ViceSharp.Avalonia/MainWindow.axaml.cs
+[32mM[m  src/ViceSharp.Avalonia/VideoSurface.cs
+[32mM[m  src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs
+[32mM[m  src/ViceSharp.Avalonia/ViewModels/AvaloniaGameLauncher.cs
+[32mM[m  src/ViceSharp.Avalonia/ViewModels/RomMLibraryViewModel.cs
+[32mM[m  src/ViceSharp.Avalonia/ViewModels/ShellViewModel.cs
+[32mM[m  src/ViceSharp.Avalonia/Views/AttachPanelView.cs
+[32mM[m  src/ViceSharp.Avalonia/Views/LibraryView.cs
+[32mM[m  src/ViceSharp.Avalonia/Views/ListsView.cs
+[32mM[m  src/ViceSharp.Chips/IEC/D64FileSystem.cs
+[32mM[m  src/ViceSharp.Chips/IEC/D64Image.cs
+[32mA[m  src/ViceSharp.Chips/IEC/D64SingleFileBuilder.cs
+[32mA[m  src/ViceSharp.Chips/Tape/T64Image.cs
+[32mM[m  src/ViceSharp.Host.InProcess/Services/MediaServiceHost.cs
+[32mA[m  src/ViceSharp.Library.ViewModels/GameGroup.cs
+[32mA[m  src/ViceSharp.Library.ViewModels/GameGrouper.cs
+[32mA[m  src/ViceSharp.Library.ViewModels/IRecentsStore.cs
+[32mA[m  src/ViceSharp.Library.ViewModels/IRomMServerProbe.cs
+[32mM[m  src/ViceSharp.Library.ViewModels/LibraryBrowseViewModel.cs
+[32mM[m  src/ViceSharp.Library.ViewModels/MediaExtensionMap.cs
+[32mA[m  src/ViceSharp.Library.ViewModels/RecentGame.cs
+[32mA[m  src/ViceSharp.Library.ViewModels/RomMLocateResult.cs
+[32mA[m  src/ViceSharp.Library.ViewModels/RomMServerLocator.cs
+[32mM[m  src/ViceSharp.Library.ViewModels/RomTile.cs
+[32mA[m  src/ViceSharp.RomM/FileRecentsStore.cs
+[32mM[m  src/ViceSharp.RomM/RomMCollectionsGateway.cs
+[32mA[m  src/ViceSharp.RomM/RomMHeartbeatProbe.cs
+[32mM[m  src/ViceSharp.RomM/RomMJsonContext.cs
+[32mM[m  src/ViceSharp.RomM/RomMLibraryGateway.cs
+[32mM[m  src/ViceSharp.Xbox/App.xaml.cs
+[32mM[m  src/ViceSharp.Xbox/Assets/SplashScreen.png
+[32mM[m  src/ViceSharp.Xbox/Assets/Square150x150Logo.png
+[32mM[m  src/ViceSharp.Xbox/Assets/Square44x44Logo.png
+[32mM[m  src/ViceSharp.Xbox/Assets/StoreLogo.png
+[32mM[m  src/ViceSharp.Xbox/Assets/Wide310x150Logo.png
+[32mM[m  src/ViceSharp.Xbox/RomM/GameDetailsRequest.cs
+[32mM[m  src/ViceSharp.Xbox/RomM/XboxGameLauncher.cs
+[32mM[m  src/ViceSharp.Xbox/Views/EmulatorView.xaml
+[32mM[m  src/ViceSharp.Xbox/Views/GameDetailsPage.xaml
+[32mM[m  src/ViceSharp.Xbox/Views/GameDetailsPage.xaml.cs
+[32mM[m  src/ViceSharp.Xbox/Views/LibraryPage.xaml
+[32mM[m  src/ViceSharp.Xbox/Views/LibraryPage.xaml.cs
+[32mM[m  src/ViceSharp.Xbox/Views/ListsPage.xaml
+[32mM[m  src/ViceSharp.Xbox/Views/ListsPage.xaml.cs
+[32mM[m  tests/ViceSharp.Library.Tests/Adapter/FakeRomMHandler.cs
+[32mM[m  tests/ViceSharp.Library.Tests/Adapter/RomMGatewayBrowseTests.cs
+[32mM[m  tests/ViceSharp.Library.Tests/Adapter/RomMGatewayCollectionsTests.cs
+[32mA[m  tests/ViceSharp.Library.Tests/Browse/GameGrouperTests.cs
+[32mM[m  tests/ViceSharp.Library.Tests/Browse/LibraryBrowseViewModelTests.cs
+[32mA[m  tests/ViceSharp.Library.Tests/Connection/FileRecentsStoreTests.cs
+[32mA[m  tests/ViceSharp.Library.Tests/Connection/RomMServerLocatorTests.cs
+[32mM[m  tests/ViceSharp.Library.Tests/Media/MediaExtensionMapTests.cs
+[32mM[m  tests/ViceSharp.TestHarness/Branding/AppIconTests.cs
+[32mA[m  tests/ViceSharp.TestHarness/HostShells/AvaloniaFullscreenHotkeyTests.cs
+[32mM[m  tests/ViceSharp.TestHarness/HostShells/AvaloniaVideoAspectTests.cs
+[32mM[m  tests/ViceSharp.TestHarness/IEC/D64FileSystemTests.cs
+[32mA[m  tests/ViceSharp.TestHarness/IEC/T64ImageTests.cs
+[32mM[m  tests/ViceSharp.TestHarness/ShellViewModelTests.cs
+[32mM[m  tools/generate-icons.py
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+ src/ViceSharp.Xbox/RomM/GameDetailsRequest.cs      |  16 +-
+ src/ViceSharp.Xbox/RomM/XboxGameLauncher.cs        |  14 +-
+ src/ViceSharp.Xbox/Views/EmulatorView.xaml         |   6 +-
+ src/ViceSharp.Xbox/Views/GameDetailsPage.xaml      |  57 ++-
+ src/ViceSharp.Xbox/Views/GameDetailsPage.xaml.cs   | 212 ++++++++-
+ src/ViceSharp.Xbox/Views/LibraryPage.xaml          |  41 +-
+ src/ViceSharp.Xbox/Views/LibraryPage.xaml.cs       | 317 ++++++++++---
+ src/ViceSharp.Xbox/Views/ListsPage.xaml            | 166 +++++--
+ src/ViceSharp.Xbox/Views/ListsPage.xaml.cs         | 522 ++++++++++++++++++++-
+ .../Adapter/FakeRomMHandler.cs                     |   2 +-
+ .../Adapter/RomMGatewayBrowseTests.cs              |   2 +
+ .../Adapter/RomMGatewayCollectionsTests.cs         |  30 ++
+ .../Browse/GameGrouperTests.cs                     |  86 ++++
+ .../Browse/LibraryBrowseViewModelTests.cs          | 226 ++++++++-
+ .../Connection/FileRecentsStoreTests.cs            |  70 +++
+ .../Connection/RomMServerLocatorTests.cs           | 152 ++++++
+ .../Media/MediaExtensionMapTests.cs                |   1 +
+ .../ViceSharp.TestHarness/Branding/AppIconTests.cs |  31 ++
+ .../HostShells/AvaloniaFullscreenHotkeyTests.cs    |  65 +++
+ .../HostShells/AvaloniaVideoAspectTests.cs         |  61 ++-
+ .../IEC/D64FileSystemTests.cs                      |  42 +-
+ tests/ViceSharp.TestHarness/IEC/T64ImageTests.cs   |  84 ++++
+ tests/ViceSharp.TestHarness/ShellViewModelTests.cs |  28 ++
+ tools/generate-icons.py                            |  27 ++
+ 63 files changed, 4535 insertions(+), 708 deletions(-)

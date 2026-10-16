@@ -1,0 +1,32 @@
+t=0s Responding=True WS=115MB MainWindow=
+t=1s Responding=True WS=118MB MainWindow=
+t=2s Responding=True WS=119MB MainWindow=
+t=3s Responding=True WS=121MB MainWindow=
+t=4s Responding=True WS=198MB MainWindow=
+t=5s Responding=True WS=198MB MainWindow=
+DIED after 6s exit=-1073741571
+{
+  "schemaVersion": 1,
+  "processId": 2528,
+  "endpoint": "http://127.0.0.1:50530/",
+  "currentSessionId": "",
+  "protocolPackage": "vice_sharp.v1",
+  "appVersion": "1.2.167\u002Bcbb72bef2ef7f27c99f024729e877d7dbe1fc845",
+  "startedAtUtc": "2026-08-05T11:07:47.1608307+00:00",
+  "updatedAtUtc": "2026-08-05T11:07:47.1611858+00:00",
+  "authMode": "none"
+}
+
+Name                                                 Length LastWriteTime
+----                                                 ------ -------------
+ViceSharpXboxDataPathTests                                  8/5/2026 3:53:40 AM
+vicesharp-diagnostics-tests                                 8/5/2026 3:53:37 AM
+ViceSharpVkmTests                                           8/5/2026 3:53:14 AM
+vicesharp-7544b4b43a274125b218b030ff36adf1.d64.moved 174848 8/5/2026 3:49:37 AM
+ViceSharpDataResolverTests                                  8/5/2026 3:49:32 AM
+vicesharp_ready_frame.bmp                            313398 8/5/2026 3:49:26 AM
+vicesharp_test_frame.bmp                             313398 8/5/2026 3:49:25 AM
+vicesharp-cart-tests                                        8/5/2026 3:48:55 AM
+vicesharp-4f0724d307a241599338222016f39174.d64.moved 174848 8/5/2026 3:41:49 AM
+vicesharp-romm-e2e                                          7/16/2026 8:51:10 PM
+

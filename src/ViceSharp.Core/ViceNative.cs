@@ -28,7 +28,54 @@ public static unsafe partial class ViceNative
 
     static ViceNative()
     {
-        NativeLibrary.SetDllImportResolver(typeof(ViceNative).Assembly, ResolveLibrary);
+        // Combined resolver: vice_x64 (this class) and vice_xvic (ViceNativeXvic).
+        // Only one SetDllImportResolver is allowed per assembly.
+        NativeLibrary.SetDllImportResolver(typeof(ViceNative).Assembly, ResolveLibraryCombined);
+    }
+
+    private static IntPtr ResolveLibraryCombined(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
+    {
+        if (string.Equals(libraryName, LibraryName, StringComparison.Ordinal))
+        {
+            var path = ResolvedLibraryPath.Value;
+            return path is null ? IntPtr.Zero : LoadNativeWithSiblingSearch(path);
+        }
+
+        if (string.Equals(libraryName, "vice_xvic", StringComparison.Ordinal))
+        {
+            var path = ViceNativeXvic.ResolvedPath;
+            return path is null ? IntPtr.Zero : LoadNativeWithSiblingSearch(path);
+        }
+
+        return IntPtr.Zero;
+    }
+
+    /// <summary>
+    /// Load a MinGW-built vice_*.dll so sibling runtime DLLs (libstdc++-6, zlib1, …)
+    /// in the same directory are found. Plain <see cref="NativeLibrary.Load(string)"/>
+    /// often fails with 0x8007007E when those deps are not on PATH.
+    /// </summary>
+    private static IntPtr LoadNativeWithSiblingSearch(string fullPath)
+    {
+        var dir = Path.GetDirectoryName(fullPath);
+        if (!string.IsNullOrEmpty(dir))
+            NativeMethods.SetDllDirectory(dir);
+        try
+        {
+            return NativeLibrary.Load(fullPath);
+        }
+        finally
+        {
+            if (!string.IsNullOrEmpty(dir))
+                NativeMethods.SetDllDirectory(null!);
+        }
+    }
+
+    private static class NativeMethods
+    {
+        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetDllDirectory(string? lpPathName);
     }
 
     public static bool IsAvailable => ResolvedLibraryPath.Value is not null;
@@ -83,6 +130,21 @@ public static unsafe partial class ViceNative
 
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_set_keyboard_matrix_key")]
     private static partial int SetKeyboardMatrixKeyNative(IntPtr instance, int row, int column, int pressed);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_kbdbuf_feed")]
+    private static partial int KbdbufFeedNative(IntPtr instance, ReadOnlySpan<byte> petscii, int length);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_kbdbuf_flush")]
+    private static partial void KbdbufFlushNative(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_autostart", StringMarshalling = StringMarshalling.Utf8)]
+    private static partial int AutostartNative(IntPtr instance, string path);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_autostart_in_progress")]
+    private static partial int AutostartInProgressNative(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_step_cycles")]
+    private static partial void StepCyclesNative(IntPtr instance, uint cycles);
 
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_cia1_store")]
     public static partial void StoreCia1Register(IntPtr instance, byte registerIndex, byte value);
@@ -214,6 +276,10 @@ public static unsafe partial class ViceNative
 
     public static IViceNative CreateInstance(string? modelSelector = null)
     {
+        // Vic20 models route to the separate xvic oracle (vice_xvic.dll).
+        if (ViceNativeXvic.IsVic20ModelSelector(modelSelector))
+            return ViceNativeXvic.CreateInstance(modelSelector);
+
         if (!IsAvailable)
             throw new DllNotFoundException(AvailabilityMessage);
 
@@ -280,6 +346,47 @@ public static unsafe partial class ViceNative
         var result = SetKeyboardMatrixKeyNative(instance, row, column, pressed ? 1 : 0);
         if (result != 0)
             throw new InvalidOperationException($"Native VICE failed to set keyboard matrix key row {row}, column {column}. Error code: {result}.");
+    }
+
+    /// <summary>Native layout for <c>vice_vic20_get_video_state</c> (Pack=1).</summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ViceVic20VideoState
+    {
+        public uint Cycle;
+        public ushort RasterLine;
+        public byte RasterCycle;
+        public byte Area;
+        public byte FetchState;
+        public byte TextCols;
+        public byte TextLines;
+        public byte YCounter;
+        public byte RowCounter;
+        public byte BlankThisLine;
+        public byte LineWasBlank;
+        public byte CharHeight;
+        public ushort Memptr;
+        public ushort MemptrInc;
+        public fixed byte Regs[16];
+        public fixed byte Cbuf[32];
+        public fixed byte Gbuf[32];
+
+        public readonly byte[] GetRegs()
+        {
+            fixed (byte* p = Regs)
+                return new ReadOnlySpan<byte>(p, 16).ToArray();
+        }
+
+        public readonly byte[] GetCbuf()
+        {
+            fixed (byte* p = Cbuf)
+                return new ReadOnlySpan<byte>(p, 32).ToArray();
+        }
+
+        public readonly byte[] GetGbuf()
+        {
+            fixed (byte* p = Gbuf)
+                return new ReadOnlySpan<byte>(p, 32).ToArray();
+        }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -351,8 +458,8 @@ public static unsafe partial class ViceNative
         /// <summary>TR-LOCKSTEP-VSF-001: Timer B reload latch (ciat_read_latch).</summary>
         public ushort TimerBLatch;
 
-        /// <summary>TR-LOCKSTEP-VSF-001: ICR interrupt-enable mask (ciacore irq_enabled).</summary>
-        public byte IrqMask;
+        /// <summary>TR-LOCKSTEP-VSF-001: live CIA IRQ-output state (ciacore irq_enabled).</summary>
+        public byte IrqLineActive;
 
         /// <summary>Padding; keeps the native struct mirror byte-exact.</summary>
         public byte Reserved;
@@ -527,15 +634,6 @@ public static unsafe partial class ViceNative
         public ulong NmiDelayCycles;
     }
 
-    private static IntPtr ResolveLibrary(string libraryName, Assembly _, DllImportSearchPath? __)
-    {
-        if (!string.Equals(libraryName, LibraryName, StringComparison.Ordinal))
-            return IntPtr.Zero;
-
-        var path = ResolvedLibraryPath.Value;
-        return path is null ? IntPtr.Zero : NativeLibrary.Load(path);
-    }
-
     private static string? FindLibraryPath()
     {
         foreach (var candidatePath in EnumerateCandidateLibraryPaths())
@@ -591,8 +689,12 @@ public static unsafe partial class ViceNative
                 Directory.CreateSymbolicLink(expectedDataDirectory, dataRoot);
             }
 
-            if (!Directory.Exists(Path.Combine(expectedDataDirectory, "C64")))
+            // Accept C64 or VIC20 ROM trees (multi-machine native oracles).
+            if (!Directory.Exists(Path.Combine(expectedDataDirectory, "C64"))
+                && !Directory.Exists(Path.Combine(expectedDataDirectory, "VIC20")))
+            {
                 return false;
+            }
 
             relocatedLibraryPath = Path.Combine(runtimeDirectory, Path.GetFileName(sourceLibraryPath));
             return File.Exists(relocatedLibraryPath);
@@ -715,7 +817,25 @@ public static unsafe partial class ViceNative
             ViceNative.SetKeyboardMatrixKey(_instance, row, column, pressed);
         }
 
+        public int FeedKeyboardBuffer(ReadOnlySpan<byte> petscii)
+            => KbdbufFeedNative(_instance, petscii, petscii.Length);
+
+        public void FlushKeyboardBuffer() => KbdbufFlushNative(_instance);
+
+        public int Autostart(string path) => AutostartNative(_instance, path);
+
+        public bool AutostartInProgress() => AutostartInProgressNative(_instance) != 0;
+
+        public void StepCycles(uint cycles) => StepCyclesNative(_instance, cycles);
+
         public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
+
+        /// <inheritdoc />
+        /// <remarks>C64 path: physical RAM peek (I/O uses dedicated CIA/VIC APIs).</remarks>
+        public byte PeekBus(ushort address) => PeekRamNative(_instance, address);
+
+        /// <inheritdoc />
+        public void WriteBus(ushort address, byte value) => WriteMemory(_instance, address, value);
 
         public MachineState GetState()
         {
@@ -750,6 +870,30 @@ public static unsafe partial class ViceNative
             };
         }
 
+        public bool TryCaptureVisibleFrame(byte[] bgraBuffer, out int width, out int height)
+        {
+            width = 0;
+            height = 0;
+            if (bgraBuffer is null || bgraBuffer.Length < 4)
+                return false;
+            var res = CaptureVisibleFrame(_instance, bgraBuffer, bgraBuffer.Length, out width, out height);
+            return res != 0 && width > 0 && height > 0;
+        }
+
+        public bool TryCaptureFrameIndices(byte[] indexBuffer, out int width, out int height)
+        {
+            // C64 path: index capture uses vice_vic_capture_frame_indices when available.
+            width = 0;
+            height = 0;
+            return false;
+        }
+
+        public int RenderVic20Samples(short[] buffer, int sampleRate, int cyclesPerSec, int deltaTCycles)
+            => 0; // C64 SID path uses vice_sid_render_samples; VIC-I is xvic-only.
+
+        public Vic20VideoLockstepState GetVic20VideoState()
+            => throw new NotSupportedException("VIC-I video lockstep export is only available on the xvic (VIC-20) oracle.");
+
         public NativeCiaState GetCiaState(int ciaIndex)
         {
             var state = new ViceCiaState();
@@ -768,7 +912,7 @@ public static unsafe partial class ViceNative
                 Cra = state.Cra,
                 Crb = state.Crb,
                 InterruptFlags = state.InterruptFlag,
-                IrqMask = state.IrqMask
+                IrqMask = (byte)(state.Icr & 0x7F)
             };
         }
 

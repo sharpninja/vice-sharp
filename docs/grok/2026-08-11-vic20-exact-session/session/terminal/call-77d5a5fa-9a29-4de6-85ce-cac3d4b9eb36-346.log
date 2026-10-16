@@ -1,0 +1,27 @@
+
+native\vice-shim-vic20.c:649:VICE_SHIM_API uint8_t vice_machine_peek_bus(void *machine, uint16_t address)
+> src\ViceSharp.Core\ViceNative.Xvic.cs:67:    private static partial byte PeekBusNative(IntPtr instance, ushort 
+address);
+  src\ViceSharp.Core\ViceNative.Xvic.cs:68:
+  src\ViceSharp.Core\ViceNative.Xvic.cs:69:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_disk", 
+StringMarshalling = StringMarshalling.Utf8)]
+  src\ViceSharp.Core\ViceNative.Xvic.cs:70:    private static partial int AttachDiskNative(IntPtr instance, uint unit, 
+uint drive, string path);
+  src\ViceSharp.Core\ViceNative.Xvic.cs:71:
+  src\ViceSharp.Core\ViceNative.Xvic.cs:72:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_detach_disk")]
+  src\ViceSharp.Core\ViceNative.Xvic.cs:73:    private static partial int DetachDiskNative(IntPtr instance, uint unit, 
+uint drive);
+  src\ViceSharp.Core\ViceNative.Xvic.cs:74:
+  src\ViceSharp.Core\ViceNative.Xvic.cs:75:    [LibraryImport(LibraryName, EntryPoint = 
+"vice_machine_set_keyboard_matrix_key")]
+> src\ViceSharp.Core\ViceNative.Xvic.cs:325:        public byte PeekBus(ushort address) => PeekBusNative(_instance, 
+address);
+  src\ViceSharp.Core\ViceNative.Xvic.cs:326:
+  src\ViceSharp.Core\ViceNative.Xvic.cs:327:        public MachineState GetState()
+  src\ViceSharp.Core\ViceNative.Xvic.cs:328:        {
+  src\ViceSharp.Core\ViceNative.Xvic.cs:329:            return new MachineState
+  src\ViceSharp.Core\ViceNative.Xvic.cs:330:            {
+  src\ViceSharp.Core\ViceNative.Xvic.cs:331:                A = GetA(_instance),
+  src\ViceSharp.Core\ViceNative.Xvic.cs:332:                X = GetX(_instance),
+  src\ViceSharp.Core\ViceNative.Xvic.cs:333:                Y = GetY(_instance),
+

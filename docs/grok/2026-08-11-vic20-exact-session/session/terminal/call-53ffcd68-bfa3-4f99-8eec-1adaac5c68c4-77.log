@@ -1,0 +1,37 @@
+235:        ValidationReport? firstMismatch = null;
+238:            firstMismatch = ValidationReport.Fail(0, 0, GetStateDiff());
+240:                return firstMismatch;
+261:            if (firstMismatch is null && !ValidateState())
+264:                firstMismatch = ValidationReport.Fail(mismatchCycle, mismatchCycle, GetStateDiff());
+266:                    return firstMismatch;
+270:        return firstMismatch ?? ValidationReport.Pass(maxCycles);
+307:        cpu.InjectSnapshotResumeState(cpu0.A, cpu0.X, cpu0.Y, cpu0.S, cpu0.P, cpu0.PC);
+351:    /// Captures a per-cycle CPU run log (cycle, PC, A, X, Y, S, P) from NATIVE VICE
+380:                yield return new CpuRunLogEntry(state.Cycle, state.PC, state.A, state.X, state.Y, state.S, state.P);
+419:            entries.Add(new CpuRunLogEntry(state.Cycle, state.PC, state.A, state.X, state.Y, state.S, state.P));
+548:        if (strictReport.Success || strictReport.Mismatch is null)
+553:        var mismatchCycle = strictReport.FirstMismatchCycle;
+554:        var mismatch = strictReport.Mismatch.Value;
+558:        if (ReplayToMismatch(maxCycles, mismatchCycle, out var replayFailure))
+575:        if (ReplayToMismatch(maxCycles, mismatchCycle, out replayFailure))
+679:            if (_hasPendingKernalCloseCall && _machine.GetState().PC == _pendingKernalCloseCall.ReturnPc)
+784:            managedState.A == nativeState.A &&
+790:            (!comparePc || managedState.PC == nativeState.PC);
+803:    private bool ReplayToMismatch(long maxCycles, long expectedMismatchCycle, out StateDiff? mismatch)
+806:        if (report.Success || report.Mismatch is null)
+812:        mismatch = report.Mismatch.Value;
+813:        return report.FirstMismatchCycle == expectedMismatchCycle;
+878:            state.PC,
+1051:            $"cycle {cycle}: managed PC=${managedState.PC:X4} A=${managedState.A:X2} X=${managedState.X:X2} Y=${managedState.Y:X2} S=${managedState.S:X2} P=${managedState.P:X2}; " +
+1052:            $"native PC=${nativeState.PC:X4} A=${nativeState.A:X2} X=${nativeState.X:X2} Y=${nativeState.Y:X2} S=${nativeState.S:X2} P=${nativeState.P:X2}; " +
+1124:        ushort PC,
+1133:                $"A=${A:X2}, X=${X:X2}, Y=${Y:X2}, S=${S:X2}, P=${P:X2}, PC=${PC:X4}, " +
+1335:    public long FirstMismatchCycle { get; private init; }
+1340:    public StateDiff? Mismatch { get; private init; }
+1353:            FirstMismatchCycle = -1,
+1373:            FirstMismatchCycle = mismatchCycle,
+1377:            Mismatch = mismatch,
+1394:            FirstMismatchCycle = mismatchCycle,
+1396:            Mismatch = mismatch,
+1412:                $"Isolated load window at cycle {FirstMismatchCycle}: {LeadingSide} reached the post-window anchor first; " +
+1417:            $"Load-window isolation failed at cycle {FirstMismatchCycle}: neither side matched the other within {CatchUpLimit} cycle(s).";

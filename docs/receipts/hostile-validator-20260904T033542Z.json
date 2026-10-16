@@ -1,0 +1,176 @@
+{
+  "timestampUtc": "2026-09-04T03:35:42Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "workClass": "project-implementation",
+  "scope": "VIC-20 plan closeout D1/D2 language recheck after hostile-validator-20260904T032339Z DISAGREE",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "mcp": {
+    "agent": "GrokCode",
+    "sessionId": "GrokCode-20260904T033322Z-hostile-d1d2",
+    "requestId": "req-20260904T033322Z-001-hostile-d1-d2-recheck",
+    "beginTurnId": 43355,
+    "completeTurnStatus": "completed",
+    "persistenceProof": {
+      "method": "mcpserver__sessionlog_query",
+      "queryText": "Hostile recheck D1/D2 VIC-20 closeout docs",
+      "totalCount": 1,
+      "turnStatus": "completed",
+      "dialogItemCount": 3,
+      "actionCount": 6,
+      "designDecisionCount": 4,
+      "filesModifiedCount": 2,
+      "lastUpdated": "2026-09-04T03:37:57.5433200+00:00",
+      "sessionId": "GrokCode-20260904T033322Z-hostile-d1d2",
+      "requestId": "req-20260904T033322Z-001-hostile-d1-d2-recheck",
+      "beginTurnId": 43355
+    }
+  },
+  "overallVerdict": "AGREE",
+  "accuracyRating": 93,
+  "completenessRating": 96,
+  "failList": [],
+  "unevaluatedMandatorySurfaces": [],
+  "wikiWriteProbe": {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\VIC20-vs-VICE-Audit.md",
+    "attributes": "ReadOnly, Archive",
+    "openReadWrite": "Access to the path is denied.",
+    "writeAllBytes": "Access to the path is denied.",
+    "generatedRefreshUtc": "2026-09-04T03:33:11.0619297Z",
+    "generatedNowMatchesCanonical": true,
+    "failSolelyBecauseWikiUnwritable": false
+  },
+  "claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "summary": "Isolated Vic20PixelLockstep index+BGRA READY PAL/NTSC/busy 1/0/0",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "summary": "Cart/flash managed 37/0/0 and isolated sound 8/0/0",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "summary": "Vic20SnapshotRoundTripTests 4/0/0; WriteSnapshot hang Explicit Missing",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "summary": "Video 2k/500k PAL+NTSC, workload 250k, 2s PAL+NTSC env=1 Failed=0 Skipped=0; 10s fallback captured",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "summary": "Process-isolated Vic20 umbrella; managed 179/0/0; native theory retries; hang not counted green",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "summary": "git diff --check exit 0 this turn; vice_xvic.dll not rebuilt",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "summary": "No whole-machine Exact; IEEE/rsuser/printer/niche carts/WriteSnapshot hang Explicit Missing",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "summary": "This receipt is the closeout recheck; PAL/busy AGREE not substituted",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "summary": "Byrd v4 closeout; no FR-vs-mtime FAIL",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "summary": "Receipts re-verified by live file scans and git diff --check",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "summary": "MCP-only TODO/session/requirements; todo.yaml not in git status",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "summary": "PowerShell only; no Python invoked",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "summary": "Honesty: no whole-Exact overclaim; D1/D2 now match evidence",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "summary": "Look-before-delete",
+      "verdict": "N/A"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "summary": "FR-VIC20-001 / TR-VIC20-PIXEL-001 / TEST-VIC20-001 map exists",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "summary": "FR AC-PX-01..06 covered by named pixel tests; lockstep tests exist",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "summary": "Audit Pixel FB capture and conclusion match READY PAL/NTSC/busy BGRA SequenceEqual evidence",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "summary": "HANDOFF L90/L103, USER-GUIDE, Iteration-Roadmap, README match Exact-scoped BGRA evidence",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "summary": "This receipt is closeout AGREE; PAL/busy receipt not used as this closeout",
+      "verdict": "PASS"
+    }
+  ],
+  "residualNitsNotFail": [
+    "HANDOFF.md L38 2026-08-11 Phase G recap still says canvas RGB may Partial",
+    "Audit ordered remaining work item 6 still says Pixel FB lockstep when native export exists",
+    "PLAN-VIC20-EXACT-001 DoneSummary still has the 2026-08-11 canvas RGB may Partial sentence",
+    "Generated wiki is ReadOnly to this validator; generator refresh already matched canonical"
+  ],
+  "priorFailRecheck": {
+    "D1": "PASS",
+    "D2": "PASS",
+    "priorReceipt": "docs/receipts/hostile-validator-20260904T032339Z.md"
+  }
+}

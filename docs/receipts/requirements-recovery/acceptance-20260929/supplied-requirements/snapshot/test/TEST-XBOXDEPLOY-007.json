@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXDEPLOY-007",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console install/launch/first-frame + rollback. Acceptance: MSIX deploys clean; first frame; rollback documented/works.",
+  "acceptanceCriteria": []
+}

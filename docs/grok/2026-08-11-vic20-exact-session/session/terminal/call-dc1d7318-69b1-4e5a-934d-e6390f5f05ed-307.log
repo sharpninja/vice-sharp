@@ -1,0 +1,152 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "nullable": true
+    },
+    "priority": {
+      "type": "string",
+      "nullable": true
+    },
+    "section": {
+      "type": "string",
+      "nullable": true
+    },
+    "done": {
+      "type": "boolean",
+      "nullable": true
+    },
+    "estimate": {
+      "type": "string",
+      "nullable": true
+    },
+    "description": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "nullable": true
+    },
+    "technicalDetails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "nullable": true
+    },
+    "implementationTasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TodoFlatTask"
+      },
+      "nullable": true
+    },
+    "note": {
+      "type": "string",
+      "nullable": true
+    },
+    "completedDate": {
+      "type": "string",
+      "nullable": true
+    },
+    "doneSummary": {
+      "type": "string",
+      "nullable": true
+    },
+    "remaining": {
+      "type": "string",
+      "nullable": true
+    },
+    "reference": {
+      "type": "string",
+      "nullable": true
+    },
+    "phase": {
+      "type": "string",
+      "nullable": true
+    },
+    "dependsOn": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "nullable": true
+    },
+    "functionalRequirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "nullable": true
+    },
+    "technicalRequirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
+PUT_OK
+{
+  "success": true,
+  "error": null,
+  "item": {
+    "id": "PLAN-VIC20-EXACT-001",
+    "title": "Bit-exact whole VIC-20 vs xvic (pixel FB, carts, sound, lockstep)",
+    "section": "Vic20",
+    "priority": "high",
+    "done": false,
+    "estimate": "multi-phase",
+    "note": "Receipts 2026-08-11: docs/receipts/vic20-pixel-gate-2026-08-11.log (8/0/0), vic20-cart-sound-gate-2026-08-11.log (31/0/0), vic20-lockstep-gate-2026-08-11.log (2s PAL+NTSC green), vic20-snapshot-gate-2026-08-11.log (4/0/0), hostile-validator-20260811T203852Z.md AGREE. Scoped Exact only.",
+    "description": [
+      "BDPv4 plan for full bit-exact VIC-20 parity with xvic (CPU, video state, pixel FB, carts, sound, snapshots).",
+      "Phases A-G; IEEE/rsuser/printer Explicit Missing exclude; Xbox/Store cancelled.",
+      "Plan file in session; FR/TR/TEST with AC and 100% TDD coverage."
+    ],
+    "technicalDetails": null,
+    "implementationTasks": [
+      {
+        "task": "Phase A: Pixel FB index+BGRA Exact (FR-VIC20-PIXEL-001)",
+        "done": true
+      },
+      {
+        "task": "Phase B: VIC-I cycle/draw residual",
+        "done": true
+      },
+      {
+        "task": "Phase C: Full cart parity + FE3 erase latency",
+        "done": true
+      },
+      {
+        "task": "Phase D: Full sound parity",
+        "done": true
+      },
+      {
+        "task": "Phase E: Bus/VIA/input residual + workload CPU lockstep",
+        "done": true
+      },
+      {
+        "task": "Phase F: Snapshots",
+        "done": true
+      },
+      {
+        "task": "Phase G: Whole-machine claim + hostile AGREE",
+        "done": false
+      }
+    ],
+    "completedDate": null,
+    "doneSummary": null,
+    "remaining": "Residuals: niche carts Explicit Missing; IEEE/rsuser/printer; headless WriteSnapshot hang; process isolation for multi-NativeVice suites",
+    "priorityNote": null,
+    "reference": null,
+    "phase": null,
+    "dependsOn": null,
+    "functionalRequirements": null,
+    "technicalRequirements": null
+  },
+  "failureKind": "None"
+}

@@ -1,0 +1,6 @@
+F:\GitHub\vice-sharp\native\vice\vice\src\vic20\vic20iec.c:143:uint8_t iec_pa_read(void)
+F:\GitHub\vice-sharp\native\vice\vice\src\vic20\vic20iec.h:35:uint8_t iec_pa_read(void);
+F:\GitHub\vice-sharp\native\vice\vice\src\vic20\vic20iec.h:35:uint8_t iec_pa_read(void);
+F:\GitHub\vice-sharp\native\vice\vice\src\vic20\vic20iec.c:143:uint8_t iec_pa_read(void)
+F:\GitHub\vice-sharp\native\vice\vice\src\vic20\vic20via1.c:248:    /* We assume `iec_pa_read()' returns the non-IEC bits
+F:\GitHub\vice-sharp\native\vice\vice\src\vic20\vic20via1.c:251:            | ((iec_pa_read() | joy_bits) & ~(via_context->via[VIA_DDRA])));

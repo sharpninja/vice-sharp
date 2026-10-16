@@ -1,0 +1,14 @@
+09:03:13 [INF] Deployed Release-UWP build into the registered layout: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+09:03:14 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').PackageFamilyName""
+09:03:14 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""Start-Process 'shell:AppsFolder\sharpninja.ViceSharp.Xbox_wbxy578d68v3y!App'""
+09:03:15 [INF] Launched sharpninja.ViceSharp.Xbox_wbxy578d68v3y. Log: %LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+DeployXboxLocal    Succeeded       0:21
+───────────────────────────────────────
+Total                              0:21
+═══════════════════════════════════════
+​
+Build succeeded on 8/7/2026 9:03:15 AM. ＼（＾ᴗ＾）／

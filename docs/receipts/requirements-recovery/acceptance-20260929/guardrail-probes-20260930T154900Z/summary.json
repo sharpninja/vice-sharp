@@ -1,0 +1,46 @@
+{
+  "generatedUtc": "2026-09-30T15:49:00Z",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "method": "workflow.requirements.planRecovery",
+  "mode": "dry-run",
+  "frVic001BodyUnchanged": true,
+  "probes": [
+    {
+      "name": "empty-body",
+      "code": "schema_validation_failed",
+      "retryable": false,
+      "message": "items[0].body must be a non-empty string.",
+      "file": "empty-body.yaml"
+    },
+    {
+      "name": "placeholder-body",
+      "code": "validation_error",
+      "retryable": false,
+      "message": "Requirement FR-GUARD-PLACEHOLDER-001 body is a placeholder.",
+      "exceptionType": "System.ArgumentException",
+      "file": "placeholder-body.yaml"
+    },
+    {
+      "name": "malformed-id",
+      "code": "schema_validation_failed",
+      "retryable": false,
+      "message": "items[0].id 'NOT-AN-ID' is not valid for kind 'fr'.",
+      "file": "malformed-id.yaml"
+    },
+    {
+      "name": "type-prefix",
+      "code": "schema_validation_failed",
+      "retryable": false,
+      "message": "items[0].id 'TEST-GUARD-TYPE-001' is not valid for kind 'tr'.",
+      "file": "type-prefix.yaml"
+    },
+    {
+      "name": "ac-removal",
+      "code": "validation_error",
+      "retryable": false,
+      "message": "Requirement FR-VIC-001 removes acceptance criteria.",
+      "exceptionType": "System.ArgumentException",
+      "file": "ac-removal.yaml"
+    }
+  ]
+}

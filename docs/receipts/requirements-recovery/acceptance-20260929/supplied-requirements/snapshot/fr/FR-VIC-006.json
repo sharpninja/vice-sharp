@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC-006",
+  "title": "Badline Handling and CPU DMA Cycle Stealing",
+  "status": "pending",
+  "priority": "high",
+  "body": "A \"badline\" occurs when the lower 3 bits of the raster counter match the Y-scroll value ($D011 bits 0-2) and the display is enabled. During a badline, the VIC-II steals 40 CPU cycles (plus 3 setup cycles) to fetch character pointers from the screen matrix (c-access). The CPU is halted during these stolen cycles.\n\n## Acceptance Criteria\n- Badline condition triggers when (raster_line & 7) == (d011 & 7) and display is enabled, within the display window (lines 48-247).\n- During a badline, the VIC-II performs 40 c-accesses to read the screen matrix.\n- The CPU is halted for 40-43 cycles during a badline (3 setup cycles + 40 character fetch cycles).\n- Sprite DMA stealing occurs independently: each enabled sprite steals 2 cycles per line (p-access + s-access pattern).\n- Sprite and badline DMA can overlap, with sprite DMA taking priority.\n- The cycle at which the CPU is first halted for a badline is deterministic and occurs at cycle 15 of the raster line.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

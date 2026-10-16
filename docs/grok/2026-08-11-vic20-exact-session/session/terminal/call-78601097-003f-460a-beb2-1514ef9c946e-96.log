@@ -1,0 +1,77 @@
+[33maaa53e3[m test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+[33m2d92adb[m chore(repo): make main the mainline; retire master from CI + scoop publishing
+[33medcea99[m merge: integrate github pipeline scoop-bucket commits into master
+[33m0e06461[m docs(requirements): regenerate wiki exports for TR/TEST-QA-TESTSILENCE-001
+[33m9793837[m ci(release): treat chocolatey moderation 403 / duplicate 409 as non-fatal
+[33m7f57f92[m test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+[33med0b67f[m feat(xbox): menu slides in from the right; single-navigator dpad throttle [PLAN-XBOXUWP FEAT-XMENUSLIDE-001 FIX-XDPADSKIP-002]
+[33m6050107[m feat(xbox): authentic two-line RUN/STOP and SHIFT LOCK keycaps; chords show RUN [PLAN-XBOXUWP FEAT-XKBDSTICKY-001]
+[33ma00f9b0[m fix(host): v2 machine snapshot: true chip state via lockstep injectors [PLAN-XBOXUWP FIX-XSNAPWARP-001]
+[33m95153d0[m feat(xbox): sticky C=/SHIFT modifiers, real-time-scanned virtual keyboard [PLAN-XBOXUWP FEAT-XKBDSTICKY-001]
+2d92adbc4c078b48b0f15f1426aef226b52e23e0
+aaa53e3 test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+--- romm worktree ---
+## [32mfeat/romm-integration[m
+ [31mM[m src/ViceSharp.Abstractions/IMachineJoystickInput.cs
+ [31mM[m src/ViceSharp.Avalonia/Views/LibraryView.cs
+ [31mM[m src/ViceSharp.Core/C64MemoryMap.cs
+ [31mM[m src/ViceSharp.Host.InProcess/Runtime/ConsoleEmulatorHost.cs
+ [31mM[m src/ViceSharp.Host.InProcess/Services/InputServiceHost.cs
+ [31mM[m src/ViceSharp.Xbox/App.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Platform/WinRtGamepadSource.cs
+ [31mM[m src/ViceSharp.Xbox/Styles/C64Keycaps.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/LibraryPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/LibraryPage.xaml.cs
+ [31mM[m tests/ViceSharp.TestHarness/HostInputServiceTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/InputServiceHostTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Xbox/Fakes/FakeMachineJoystickInput.cs
+[31m??[m src/ViceSharp.Avalonia/Views/AvaloniaCoverImageLoader.cs
+[31m??[m src/ViceSharp.Xbox.ViewModels/KeyboardSpatialNavigator.cs
+[31m??[m src/ViceSharp.Xbox/RomM/XboxCoverImageLoader.cs
+[31m??[m tests/ViceSharp.TestHarness/Xbox/KeyboardSpatialNavigatorTests.cs
+[33m978b5a6[m fix(xbox): OnLaunched composed the shell twice, leaking an unarmed gamepad pump
+[33mdcd0565[m feat(xbox): virtual keyboard font-fits caps, centers SPACE, insets rows 3-4
+[33mc539f48[m feat(xbox): detach the gamepad from the C64 joysticks while the virtual keyboard is open
+[33m314f37e[m fix(xbox): reconcile virtual keyboard legends with the real C64 (no clipped caps)
+[33m7808bd3[m feat(xbox): shell menu keycaps skin per emulated model, matching the virtual keyboard
+--- octopus diff summary ---
+ azure-pipelines.ci.yml      | 26 [32m++++++++++++++++++++++++++[m
+ azure-pipelines.release.yml | 26 [32m++++++++++++++++++++++++++[m
+ 2 files changed, 52 insertions(+)
+diff --git a/azure-pipelines.ci.yml b/azure-pipelines.ci.yml
+index c6721d1..b71ba8d 100644
+--- a/azure-pipelines.ci.yml
++++ b/azure-pipelines.ci.yml
+@@ -40,3 +40,29 @@ stages:
+             displayName: 'Run: CiTest'
+             inputs:
+               script: './build.cmd CiTest --skip'
++
+
++      - pwsh: |
++          if (-not $env:OCTOPUS_API_KEY) {
++            Write-Host 'OCTOPUS_API_KEY not set; skipping Octopus LEGION2 release'
++            exit 0
++          }
++          $url = if ($env:OCTOPUS_URL) { $env:OCTOPUS_URL.TrimEnd('/') } else { 'http://PAYTON-LEGION2:8066' }
++          $env:OCTOPUS_URL = $url
++          $env:OCTOPUS_SPACE = if ($env:OCTOPUS_SPACE) { $env:OCTOPUS_SPACE } else { 'Default' }
++          $project = 'vice-sharp'
++          $version = ('$(Build.BuildNumber)' -replace '[^0-9A-Za-z\.\-_+]', '-')
++          if ([string]::IsNullOrWhiteSpace($version)) { $version = '0.0.$(Build.BuildId)' }
++          $octo = 'C:\Program Files\Octopus CLI\octopus.exe'
++          if (-not (Test-Path $octo)) { throw "octopus CLI missing: $octo" }
++          Write-Host "Octopus $url project=$project version=$version"
++          & $octo release create --project $project --version $version --packageVersion $version --releaseNotes "ADO $(Build.DefinitionName) $(Build.SourceVersion)" --ignoreExisting --no-prompt
++          if ($LASTEXITCODE -ne 0) { throw "octopus release create failed exit $LASTEXITCODE" }
++          & $octo release deploy --project $project --version $version --deployTo Development --progress --no-prompt
++          if ($LASTEXITCODE -ne 0) { Write-Warning "octopus deploy Development exit $LASTEXITCODE (release still created)" }
++        displayName: Octopus LEGION2 release
++        condition: and(succeeded(), ne(variables['SkipOctopus'], 'true'))
++        env:
++          OCTOPUS_API_KEY: $(OCTOPUS_API_KEY)
++          OCTOPUS_URL: $(OCTOPUS_URL)
++          OCTOPUS_SPACE: $(OCTOPUS_SPACE)
+
++

@@ -1,0 +1,61 @@
+
+src\ViceSharp.Chips\VicIi\Mos6569.cs:81:    public int FrameWidth => VideoRenderer.ScreenWidth;
+src\ViceSharp.Chips\VicIi\Mos6569.cs:84:    public int FrameHeight => VideoRenderer.ScreenHeight;
+src\ViceSharp.Chips\VicIi\Mos6569.cs:95:    public const int PalVisibleLines = 312;
+src\ViceSharp.Chips\VicIi\Mos6569.cs:96:    public const int PalTotalLines = 312;
+src\ViceSharp.Chips\VicIi\Mos6569.cs:100:    public const int NtscTotalLines = 263;
+src\ViceSharp.Chips\VicIi\Mos6569.cs:201:    // NTSC-65 (cycle_tab_ntsc, vicii-chip-model.c:272-403): sprite 3's s-pair
+src\ViceSharp.Chips\VicIi\Mos6569.cs:1853:    // Derived from VICE cycle_tab_ntsc in 
+native/vice/vice/src/viciisc/vicii-chip-model.c:272+
+src\ViceSharp.Chips\VicIi\Mos6569.cs:1856:    // BACKFILL-VIDEO-001 / TR-VIC-EDGE-004: NTSC table (VICE 
+vicii-chip-model.c:272+). Dispatch now active (see ComputeIsInSpriteDmaStallWindow / cached _inSpriteDmaStallWindow*).
+src\ViceSharp.Chips\VicIi\Mos6569.cs:1905:    // VICE sources: same as Compute (chip-model.c:272-403/437-566 + 
+cycle.c:118/502).
+src\ViceSharp.Chips\VicIi\Mos6569.cs:1917:    // VICE sources: vicii-chip-model.c:272-403/437-566 
+(cycle_tab_ntsc/ntsc_old SprDma*/BaSpr* tables).
+src\ViceSharp.Chips\VicIi\Mos6569.cs:1962:    // PAL: 54/55 (vicii-cycle.c:499). NTSC/old: equivalent from cycle_tab 
+(chip-model.c:272+/437+ per report 019e6acc).
+src\ViceSharp.Chips\VicIi\Mos6569.cs:1965:    // VICE sources: vicii-chip-model.c:272-403/437-566 (cycle_tab_* check 
+points), vicii-cycle.c:118/499/502/503.
+src\ViceSharp.Chips\VicIi\Mos6569.cs:2336:        // VICE sources: vicii-chip-model.c:272-403/437-566 
+(cycle_tab_ntsc/ntsc_old SprDma*/BaSpr*),
+src\ViceSharp.Chips\VicIi\Mos6569.cs:2395:        // wires the data-fetch side effect for non-PAL models (per explore 
+report 019e6acc... + vicii-chip-model.c:272,437).
+src\ViceSharp.Chips\VicIi\PixelSequencer.cs:237:    // audit M11: NTSC-65 tables (cycle_tab_ntsc, 
+vicii-chip-model.c:272-403).
+src\ViceSharp.Chips\VicIi\PixelSequencer.cs:267:        // NTSC-65 (vicii-chip-model.c:272-403).
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:11:    public const int ScreenWidth = 384;
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:12:    public const int ScreenHeight = 272;
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:14:    public const int PalTotalLines = 312;
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:15:    public const int PalVisibleLines = 272;
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:35:    /// 384x<see cref="ScreenHeight"/> frame buffer. The renderer maps 
+raster line
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:38:    /// 0..245 (246 content rows) and leave the bottom 26 rows black, 
+while PAL's 312 lines
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:39:    /// cover the whole 272-row window. Displays crop to this height so 
+NTSC content fills
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:42:    /// <param name="visibleRasterLines">The standard's total 
+raster-line count (262/312).</param>
+src\ViceSharp.Chips\VicIi\VideoRenderer.cs:130:        // evaluating the 3-register switch expression for every pixel 
+(384x per line).
+src\ViceSharp.Host.InProcess\Runtime\C64TrueDriveRigBuilder.cs:23:    // PAL C64 frame: 312 lines x 63 cycles. Matches 
+Commodore64.RunFrame and the
+src\ViceSharp.Host.InProcess\Runtime\ConsoleEmulatorHost.cs:308:    /// SHIFT+C= (or a POKE 53272) is reflected on the 
+next poll; unknown sessions or
+src\ViceSharp.Host.InProcess\Runtime\ConsoleEmulatorHost.cs:341:    /// VIC frame buffer (FIX-XNTSCFILL-001: NTSC 246 
+of 272; PAL the full 272), or <c>null</c>
+src\ViceSharp.Host.InProcess\Runtime\ConsoleEmulatorHost.cs:456:            geometry = new 
+FrameGeometry(video.FrameWidth, video.FrameHeight, video.FrameBuffer.Length);
+src\ViceSharp.Host.InProcess\Runtime\EmulatorRuntimeSession.cs:372:        _committedWidth = videoChip.FrameWidth;
+src\ViceSharp.Host.InProcess\Runtime\EmulatorRuntimeSession.cs:373:        _committedHeight = videoChip.FrameHeight;
+src\ViceSharp.Host.InProcess\Services\CaptureServiceHost.cs:160:                width = videoChip.FrameWidth;
+src\ViceSharp.Host.InProcess\Services\CaptureServiceHost.cs:161:                height = videoChip.FrameHeight;
+src\ViceSharp.Host.InProcess\Services\CaptureServiceHost.cs:452:            width = videoChip.FrameWidth;
+src\ViceSharp.Host.InProcess\Services\CaptureServiceHost.cs:453:            height = videoChip.FrameHeight;
+src\ViceSharp.Host.InProcess\Services\LocalVideoFrameSource.cs:78:                new 
+VideoFrameDto(videoChip.FrameWidth, videoChip.FrameHeight, session.Machine.GetState().Cycle, frame)));
+src\ViceSharp.Host.InProcess\Services\VideoServiceHost.cs:38:                new VideoStatusDto(true, 
+videoChip.FrameWidth, videoChip.FrameHeight, session.Machine.GetState().Cycle)));
+src\ViceSharp.Host.InProcess\Services\VideoServiceHost.cs:61:                new VideoFrameDto(videoChip.FrameWidth, 
+videoChip.FrameHeight, session.Machine.GetState().Cycle, frame)));
+

@@ -152,6 +152,7 @@ public static class EmulatorHost
     public const string ColdReset = "ColdReset";
     public const string WarmReset = "WarmReset";
     public const string ResetAndAutostartDrive8 = "ResetAndAutostartDrive8";
+    public const string LoadProgram = "LoadProgram";
     public const string StepCycle = "StepCycle";
     public const string StepFrame = "StepFrame";
     public const string RewindCycle = "RewindCycle";
@@ -202,6 +203,10 @@ public interface IEmulatorHost
         ResetAndAutostartDrive8Request request,
         CancellationToken cancellationToken = default);
 
+    ValueTask<LoadProgramResponse> LoadProgramAsync(
+        LoadProgramRequest request,
+        CancellationToken cancellationToken = default);
+
     ValueTask<EmulatorCommandResponse> StepCycleAsync(
         StepCycleRequest request,
         CancellationToken cancellationToken = default);
@@ -232,13 +237,28 @@ public sealed record CreateEmulatorSessionRequest(
     string DisplayName = "",
     bool TrueDrive = false,
     int TrueDriveDevice = 8,
-    string TrueDriveDiskImagePath = "");
+    string TrueDriveDiskImagePath = "",
+    /// <summary>xvic -memory style VIC-20 expansion (none/3k/8k/16k/24k/all or 0,1,2,3,5 / 04,20,40,60,a0). Ignored for non-VIC-20.</summary>
+    string Vic20MemorySpec = "");
 
 public sealed record SessionRequest(string SessionId);
 
 public sealed record ResetRequest(string SessionId, ResetKind Kind = ResetKind.Warm);
 
 public sealed record ResetAndAutostartDrive8Request(string SessionId);
+
+public sealed record LoadProgramRequest(
+    string SessionId,
+    string FilePath = "",
+    byte[]? Payload = null,
+    string DisplayName = "");
+
+public sealed record LoadProgramResponse(
+    RpcStatus Status,
+    int LoadAddress,
+    int ByteCount,
+    bool Ran,
+    EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
 
 public sealed record StepCycleRequest(string SessionId, long CycleCount = 1);
 
@@ -418,7 +438,19 @@ public sealed record SessionSettingsDto(
     DisplaySettingsDto Display,
     InputSettingsDto Input,
     AudioSettingsDto? Audio = null,
-    ResourceSettingsDto? Resources = null);
+    ResourceSettingsDto? Resources = null,
+    /// <summary>xvic -memory style VIC-20 expansion; empty when not VIC-20 or default unexpanded.</summary>
+    string Vic20MemorySpec = "",
+    /// <summary>Host directory for uIEC/fsdevice filesystem IEC unit (empty = detached).</summary>
+    string FileSystemIecRootPath = "",
+    /// <summary>IEC unit number for filesystem device (8-11). Default 9.</summary>
+    int FileSystemIecUnit = 9,
+    /// <summary>Attached VIC-20 expansion cart kind: none, fe3, ultimem, megacart.</summary>
+    string Vic20ExpansionCartKind = "none",
+    /// <summary>Write-back for FE3/Ultimem/Mega-Cart image.</summary>
+    bool Vic20ExpansionWriteBack = false,
+    /// <summary>Configuration preset id for the attached expansion cart.</summary>
+    string Vic20ExpansionConfigPreset = "start");
 
 public sealed record SettingApplyDiagnosticDto(
     string Setting,
@@ -442,7 +474,14 @@ public sealed record UpdateSettingsRequest(
     string ProfileId = "",
     bool RestartSession = false,
     AudioSettingsDto? Audio = null,
-    ResourceSettingsDto? Resources = null);
+    ResourceSettingsDto? Resources = null,
+    /// <summary>xvic -memory style VIC-20 expansion; null means leave unchanged.</summary>
+    string? Vic20MemorySpec = null,
+    string? FileSystemIecRootPath = null,
+    int? FileSystemIecUnit = null,
+    string? Vic20ExpansionCartKind = null,
+    bool? Vic20ExpansionWriteBack = null,
+    string? Vic20ExpansionConfigPreset = null);
 
 public sealed record ValidateSettingsResourcesRequest(
     string SessionId,

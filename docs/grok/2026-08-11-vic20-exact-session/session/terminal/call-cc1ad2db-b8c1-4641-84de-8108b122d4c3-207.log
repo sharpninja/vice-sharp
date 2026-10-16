@@ -1,0 +1,91 @@
+native/vice/vice/src/vic20/cart\finalexpansion.c:902:    { "FinalExpansionWriteBack", 0, RES_EVENT_STRICT, (resource_value_t)0,
+native/vice/vice/src/vic20/cart\finalexpansion.c:919:      NULL, NULL, "FinalExpansionWriteBack", (resource_value_t)1,
+native/vice/vice/src/vic20/cart\finalexpansion.c:922:      NULL, NULL, "FinalExpansionWriteBack", (resource_value_t)0,
+native/vice/vice/src/vic20/cart\megacart.c:2: * megacart.c -- VIC20 Mega-Cart emulation.
+native/vice/vice/src/vic20/cart\megacart.c:44:#include "megacart.h"
+native/vice/vice/src/vic20/cart\megacart.c:114:static log_t megacart_log = LOG_DEFAULT;
+native/vice/vice/src/vic20/cart\megacart.c:125:static uint8_t megacart_io2_read(uint16_t addr);
+native/vice/vice/src/vic20/cart\megacart.c:126:static void megacart_io2_store(uint16_t addr, uint8_t value);
+native/vice/vice/src/vic20/cart\megacart.c:127:static uint8_t megacart_io3_read(uint16_t addr);
+native/vice/vice/src/vic20/cart\megacart.c:128:static uint8_t megacart_io3_peek(uint16_t addr);
+native/vice/vice/src/vic20/cart\megacart.c:129:static void megacart_io3_store(uint16_t addr, uint8_t value);
+native/vice/vice/src/vic20/cart\megacart.c:130:static int megacart_mon_dump(void);
+native/vice/vice/src/vic20/cart\megacart.c:132:static io_source_t megacart_io2_device = {
+native/vice/vice/src/vic20/cart\megacart.c:138:    megacart_io2_store,            /* store function */
+native/vice/vice/src/vic20/cart\megacart.c:140:    megacart_io2_read,             /* read function */
+native/vice/vice/src/vic20/cart\megacart.c:142:    megacart_mon_dump,             /* device state information dump function */
+native/vice/vice/src/vic20/cart\megacart.c:149:static io_source_t megacart_io3_device = {
+native/vice/vice/src/vic20/cart\megacart.c:155:    megacart_io3_store,            /* store function */
+native/vice/vice/src/vic20/cart\megacart.c:157:    megacart_io3_read,             /* read function */
+native/vice/vice/src/vic20/cart\megacart.c:158:    megacart_io3_peek,             /* peek function */
+native/vice/vice/src/vic20/cart\megacart.c:159:    megacart_mon_dump,             /* device state information dump function */
+native/vice/vice/src/vic20/cart\megacart.c:166:static io_source_list_t *megacart_io2_list_item = NULL;
+native/vice/vice/src/vic20/cart\megacart.c:167:static io_source_list_t *megacart_io3_list_item = NULL;
+native/vice/vice/src/vic20/cart\megacart.c:170:    CARTRIDGE_VIC20_NAME_MEGACART, 0, 0, &megacart_io2_device, &megacart_io3_device, CARTRIDGE_VIC20_MEGACART
+native/vice/vice/src/vic20/cart\megacart.c:176:uint8_t megacart_ram123_read(uint16_t addr)
+native/vice/vice/src/vic20/cart\megacart.c:186:void megacart_ram123_store(uint16_t addr, uint8_t value)
+native/vice/vice/src/vic20/cart\megacart.c:194:uint8_t megacart_blk123_read(uint16_t addr)
+native/vice/vice/src/vic20/cart\megacart.c:221:void megacart_blk123_store(uint16_t addr, uint8_t value)
+native/vice/vice/src/vic20/cart\megacart.c:244:uint8_t megacart_blk5_read(uint16_t addr)
+native/vice/vice/src/vic20/cart\megacart.c:271:void megacart_blk5_store(uint16_t addr, uint8_t value)
+native/vice/vice/src/vic20/cart\megacart.c:294:static uint8_t megacart_io2_read(uint16_t addr)
+native/vice/vice/src/vic20/cart\megacart.c:299:        megacart_io2_device.io_source_valid = 1;
+native/vice/vice/src/vic20/cart\megacart.c:302:        megacart_io2_device.io_source_valid = 0;
+native/vice/vice/src/vic20/cart\megacart.c:309:static void megacart_io2_store(uint16_t addr, uint8_t value)
+native/vice/vice/src/vic20/cart\megacart.c:317:static uint8_t megacart_io3_read(uint16_t addr)
+native/vice/vice/src/vic20/cart\megacart.c:322:        megacart_io3_device.io_source_valid = 1;
+native/vice/vice/src/vic20/cart\megacart.c:325:        megacart_io3_device.io_source_valid = 0;
+native/vice/vice/src/vic20/cart\megacart.c:331:static uint8_t megacart_io3_peek(uint16_t addr)
+native/vice/vice/src/vic20/cart\megacart.c:348:static void megacart_io3_store(uint16_t addr, uint8_t value)
+native/vice/vice/src/vic20/cart\megacart.c:404:            log_message(megacart_log, "Failed to read NvRAM image `%s'!", filename);
+native/vice/vice/src\fsdevice.h:2: * fsdevice.h - File system device.
+native/vice/vice/src\fsdevice.h:39:int fsdevice_cmdline_options_init(void);
+native/vice/vice/src\fsdevice.h:40:int fsdevice_resources_init(void);
+native/vice/vice/src\fsdevice.h:41:void fsdevice_resources_shutdown(void);
+native/vice/vice/src\fsdevice.h:43:void fsdevice_init(void);
+native/vice/vice/src\fsdevice.h:44:void fsdevice_shutdown(void);
+native/vice/vice/src\fsdevice.h:46:int fsdevice_attach(unsigned int device, unsigned int drive, const char *name);
+native/vice/vice/src\fsdevice.h:47:void fsdevice_set_directory(char *filename, unsigned int unit);
+native/vice/vice/src\fsdevice\fsdevice-close.c:2: * fsdevice-close.c - File system device.
+native/vice/vice/src\fsdevice\fsdevice-close.c:41:#include "fsdevice-close.h"
+native/vice/vice/src\fsdevice\fsdevice-close.c:42:#include "fsdevice-read.h"
+native/vice/vice/src\fsdevice\fsdevice-close.c:43:#include "fsdevicetypes.h"
+native/vice/vice/src\fsdevice\fsdevice-close.c:49:int fsdevice_close(vdrive_t *vdrive, unsigned int secondary)
+native/vice/vice/src\fsdevice\fsdevice-close.c:53:    bufinfo = &fsdevice_dev[vdrive->unit - 8].bufinfo[secondary];
+native/vice/vice/src\fsdevice\fsdevice-close.c:56:        fsdevice_error(vdrive, CBMDOS_IPE_OK);
+native/vice/vice/src\fsdevice\fsdevice-close.c:62:            fsdevice_relative_pad_record(bufinfo);
+native/vice/vice/src\fsdevice\fsdevice-close.h:2: * fsdevice-close.h - File system device.
+native/vice/vice/src\fsdevice\fsdevice-close.h:34:int fsdevice_close(struct vdrive_s *vdrive, unsigned int secondary);
+native/vice/vice/src\fsdevice\fsdevice-cmdline-options.c:2: * fsdevice-cmdline-options.c - File system device, command line options.
+native/vice/vice/src\fsdevice\fsdevice-cmdline-options.c:34:#include "fsdevice.h"
+477:#define CARTRIDGE_VIC20_MEGACART        1   /* megacart.c */
+
+FullName
+--------
+F:\GitHub\vice-sharp\native\vice\vice\src\fsdevice
+src\ViceSharp.Abstractions\Fidelity.cs:16:    /// Lightweight in-host emulation. For 1541: IecD64Attachment reads
+src\ViceSharp.Core\ArchitectureBuilder.cs:126:        var iecBusConnected = profile?.SystemCore.IecBusConnected ?? true;
+src\ViceSharp.Core\ArchitectureBuilder.cs:128:        var drive8 = iecBusConnected ? new IecDrive(8) : null;
+src\ViceSharp.Core\ArchitectureBuilder.cs:129:        var drive9 = iecBusConnected ? new IecDrive(9) : null;
+src\ViceSharp.Core\ArchitectureBuilder.cs:137:        var iecBus = iecBusConnected ? IecInterSystemBus.Create() : null;
+src\ViceSharp.Core\ArchitectureBuilder.cs:140:            drive8?.ConnectIecBus(iecBus);
+src\ViceSharp.Core\ArchitectureBuilder.cs:141:            drive9?.ConnectIecBus(iecBus);
+src\ViceSharp.Core\ArchitectureBuilder.cs:198:            deviceRegistry.Add(new IecBusDevice(iecBus));
+src\ViceSharp.Core\ArchitectureBuilder.cs:353:        Vic20IecPort.AttachIdleVia1PortA(via1);
+src\ViceSharp.Core\ArchitectureBuilder.cs:478:        deviceRegistry.Add(new C1541IecInterfaceDevice(deviceNumber));
+src\ViceSharp.Core\C64Cia2InterfaceDevice.cs:22:        Action? synchronizeIec = null)
+src\ViceSharp.Core\C64Cia2InterfaceDevice.cs:57:                synchronizeIec?.Invoke();
+src\ViceSharp.Core\C64Cia2InterfaceDevice.cs:60:                iec.Pull(IecInterSystemBus.Atn, low: IsOutputAsserted(latch, direction, 0x08));
+src\ViceSharp.Core\C64Cia2InterfaceDevice.cs:61:                iec.Pull(IecInterSystemBus.Clk, low: IsOutputAsserted(latch, direction, 0x10));
+src\ViceSharp.Core\C64Cia2InterfaceDevice.cs:62:                iec.Pull(IecInterSystemBus.Data, low: IsOutputAsserted(latch, direction, 0x20));
+src\ViceSharp.Core\C64Cia2InterfaceDevice.cs:71:                synchronizeIec?.Invoke();
+src\ViceSharp.Core\C64Cia2InterfaceDevice.cs:73:                if (iec.ReadLine(IecInterSystemBus.Clk))
+src\ViceSharp.Core\C64Cia2InterfaceDevice.cs:75:                if (iec.ReadLine(IecInterSystemBus.Data))
+src\ViceSharp.Core\CoordinatorMachine.cs:38:        IecBus = iecBus;
+src\ViceSharp.Core\CoordinatorMachine.cs:47:    public IInterSystemBus? IecBus { get; }
+src\ViceSharp.Core\C1541IecInterfaceDevice.cs:9:public sealed class C1541IecInterfaceDevice : IDevice
+src\ViceSharp.Core\C1541IecInterfaceDevice.cs:15:    public C1541IecInterfaceDevice(int deviceNumber = 8)
+src\ViceSharp.Core\C1541IecInterfaceDevice.cs:57:            UpdateIecOutputs(iec);
+src\ViceSharp.Core\C1541IecInterfaceDevice.cs:58:            iec.Pull(IecInterSystemBus.Clk, low: (value & 0x08) != 0);
+src\ViceSharp.Core\C1541IecInterfaceDevice.cs:64:            if (!iec.ReadLine(IecInterSystemBus.Data))
+

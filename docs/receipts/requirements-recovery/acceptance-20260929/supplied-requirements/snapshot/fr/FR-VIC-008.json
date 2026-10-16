@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC-008",
+  "title": "Flexible Line Interpretation (FLI) Support",
+  "status": "closed",
+  "priority": "medium",
+  "body": "The emulator shall support Flexible Line Interpretation (FLI) and Advanced FLI (AFLI) techniques, which exploit badline forcing to change the character pointer base every raster line, enabling more than the normal 8 unique character colors per 8-pixel-tall cell.\n\n## Acceptance Criteria\n- Forcing a badline every line (by changing Y-scroll each line) triggers a new c-access fetch each raster line.\n- The 3-cycle \"FLI bug\" (gray pixels at the left of each line due to the VIC-II not having fetched character data yet) is accurately reproduced.\n- Changing $D018 (VIC memory pointers) during specific cycles of a raster line takes effect for subsequent fetches on that line.\n- AFLI mode (combining FLI with bitmap mode) is supported.\n- The CPU cycle-accurate timing of the bank switch and pointer changes matches VICE x64sc behavior.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

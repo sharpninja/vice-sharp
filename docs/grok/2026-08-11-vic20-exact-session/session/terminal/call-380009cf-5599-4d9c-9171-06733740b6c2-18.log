@@ -1,0 +1,15 @@
+
+Name
+----
+INDEX.md
+segment_000.md
+segment_001.md
+segment_002.md
+# Compaction Segment Index
+
+| Segment | File | Turns | Approx bytes | Keywords |
+|---|---|---|---|---|
+| 000 | segment_000.md | 593 | 522052 | "Diagnosing", "JumpToLetterAsync", "Index", "server", "CharIndex", "missing", "returns", "immediately" |
+| 001 | segment_001.md | 574 | 524335 | "Implemented", "attach", "extract", "D64SingleFileBuilder", "MediaServiceHost", "XboxGameLauncher", "MediaExtensionMap", "Drive8" |
+| 002 | segment_002.md | 603 | 519870 | "iteration2", "explore", "subagent", "gathering", "builder", "patterns", "implement", "Slice" |
+

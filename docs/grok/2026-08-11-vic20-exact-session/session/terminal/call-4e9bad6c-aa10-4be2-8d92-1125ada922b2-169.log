@@ -1,0 +1,11 @@
+=== 1 ===
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 477 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+=== 2 ===
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 507 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+=== 3 ===
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 542 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+

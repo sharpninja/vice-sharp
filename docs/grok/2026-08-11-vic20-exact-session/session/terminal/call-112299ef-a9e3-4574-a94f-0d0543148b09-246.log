@@ -1,0 +1,10 @@
+
+src\ViceSharp.Chips\Cpu\Mos6502.cs:732:            _rtsOverlappedFirstFetch = _opcode == 0x60
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1862:        if (_opcode != 0x60)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1917:                if (Peek(_pc) == 0x60)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2034:            if (Peek(fallThrough) == 0x60)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2608:                if (Peek(_pc) == 0x60)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2667:        if (Peek(_pc) == 0x60 && !_nonOverlappedRegion)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2843:            0x20 or 0x60 or
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:193:            case 0x60:
+

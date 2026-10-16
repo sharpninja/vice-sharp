@@ -1,0 +1,60 @@
+978b5a6 fix(xbox): OnLaunched composed the shell twice, leaking an unarmed gamepad pump
+dcd0565 feat(xbox): virtual keyboard font-fits caps, centers SPACE, insets rows 3-4
+c539f48 feat(xbox): detach the gamepad from the C64 joysticks while the virtual keyboard is open
+314f37e fix(xbox): reconcile virtual keyboard legends with the real C64 (no clipped caps)
+7808bd3 feat(xbox): shell menu keycaps skin per emulated model, matching the virtual keyboard
+a06f0ec feat(xbox): authentic special-key widths + per-model keycap colour skins
+3d6990f fix(xbox): SHIFT/C= keycap graphics use the correct PETSCII glyphs (U+F1xx)
+df12969 fix(xbox): bind the virtual keyboard on the deferred (first-run provisioning) boot path
+a3a695f fix(xbox-audio): bound the XAudio2 device queue so SID music stops crackling worse over time
+c0fdb80 build(romm): pin RomM.Client + Csdb 1.0.1 (Native-AOT safe) [PLAN-ROMM-001]
+a7cd6a9 refactor(xbox): app-wide {Binding} -> {x:Bind} for Native-AOT console build [PLAN-XBOXUWP]
+46b0857 fix(xbox): RomM tile templates use {x:Bind}, not {Binding} - AOT-safe [PLAN-ROMM-001]
+39719ae fix(romm): collection rename sends rom_ids as a JSON array string [PLAN-ROMM-001 AC-COLLECT-04]
+b07d29d fix(romm): use the discovered RomM URL, not the bridge's internal one [PLAN-ROMM-001 AC-CONN-07]
+715045c feat(heads): Scan LAN = zero-touch per-user bridge login [PLAN-ROMM-001 AC-CONN-07]
+eed3d79 feat(romm): consume per-user bridge token as a bearer (operator-approved variant) [PLAN-ROMM-001 AC-CONN-07]
+0da5b79 test(romm): Phase E suite self-provisions from the bridge (no manual token) [PLAN-ROMM-001 Phase E]
+d5c3344 feat(romm): bridge connection carries per-user creds (OAuth password) [PLAN-ROMM-001 AC-CONN-07]
+98daaf1 feat(romm): fetch RomM connection from the LAN bridge - no pairing code [PLAN-ROMM-001 AC-CONN-07]
+06f0144 docs(romm): pairing code is optional - direct Client API Token path [PLAN-ROMM-001]
+[33m978b5a6[m fix(xbox): OnLaunched composed the shell twice, leaking an unarmed gamepad pump
+[33mdcd0565[m feat(xbox): virtual keyboard font-fits caps, centers SPACE, insets rows 3-4
+[33mc539f48[m feat(xbox): detach the gamepad from the C64 joysticks while the virtual keyboard is open
+[33m314f37e[m fix(xbox): reconcile virtual keyboard legends with the real C64 (no clipped caps)
+[33m7808bd3[m feat(xbox): shell menu keycaps skin per emulated model, matching the virtual keyboard
+[33ma06f0ec[m feat(xbox): authentic special-key widths + per-model keycap colour skins
+[33m3d6990f[m fix(xbox): SHIFT/C= keycap graphics use the correct PETSCII glyphs (U+F1xx)
+[33mdf12969[m fix(xbox): bind the virtual keyboard on the deferred (first-run provisioning) boot path
+[33ma3a695f[m fix(xbox-audio): bound the XAudio2 device queue so SID music stops crackling worse over time
+[33mc0fdb80[m build(romm): pin RomM.Client + Csdb 1.0.1 (Native-AOT safe) [PLAN-ROMM-001]
+
+Name
+----
+ViceSharp.Abstractions
+ViceSharp.AdhocHelper
+ViceSharp.Architectures
+ViceSharp.Avalonia
+ViceSharp.Chips
+ViceSharp.Console
+ViceSharp.Core
+ViceSharp.Core.Package
+ViceSharp.Host
+ViceSharp.Host.Android
+ViceSharp.Host.InProcess
+ViceSharp.Host.iOS
+ViceSharp.Host.MacOS
+ViceSharp.Host.Xbox
+ViceSharp.Launcher
+ViceSharp.Library.ViewModels
+ViceSharp.Monitor
+ViceSharp.Protocol
+ViceSharp.RomFetch
+ViceSharp.RomM
+ViceSharp.SourceGen
+ViceSharp.Xbox
+ViceSharp.Xbox.Input
+ViceSharp.Xbox.ViewModels
+True
+True
+

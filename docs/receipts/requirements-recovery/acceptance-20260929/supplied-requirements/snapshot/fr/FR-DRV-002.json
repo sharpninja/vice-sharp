@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRV-002",
+  "title": "Commodore 1571 Double-Sided Floppy Disk Drive Emulation",
+  "status": "pending",
+  "priority": "low",
+  "body": "The 1571 is a double-sided version of the 1541, used primarily with the C128. It supports 70 tracks (35 per side), MFM encoding for CP/M compatibility, and burst transfer mode for faster data transfer.\n\n## Acceptance Criteria\n- The 1571 is emulated with its own 6502 CPU and expanded ROM.\n- Double-sided disk support: 70 tracks (35 per side), 1,366 sectors.\n- D71 disk images are supported.\n- GCR encoding is used for the first side (Commodore-native).\n- MFM encoding is available for CP/M mode on both sides.\n- Burst transfer mode enables faster serial bus communication.\n- The 1571 can operate in 1541-compatibility mode (single-sided, GCR only).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

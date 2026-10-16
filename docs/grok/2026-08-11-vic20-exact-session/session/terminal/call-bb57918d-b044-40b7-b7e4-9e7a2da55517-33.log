@@ -1,0 +1,7 @@
+c=540339 nPC=$D946 mPC=$D946 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$F9 mS=$F9 nP=$A0 mP=$A0 dbgCyc=5 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=F
+c=540340 nPC=$D946 mPC=$D946 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$F9 mS=$F9 nP=$A0 mP=$A0 dbgCyc=4 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=F
+c=540341 nPC=$D946 mPC=$D946 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$FA mS=$F9 nP=$A0 mP=$A0 dbgCyc=3 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=T
+c=540344 nPC=$DDD7 mPC=$DDD7 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$FB mS=$FB nP=$A0 mP=$A0 dbgCyc=0 op=$60 trail=2 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis
+c=559298 nPC=$F75F mPC=$F75F nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$27 mP=$27 dbgCyc=5 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=F
+c=559299 nPC=$F75F mPC=$F75F nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$27 mP=$27 dbgCyc=4 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=F
+c=559300 nPC=$F75F mPC=$F75F nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EC mS=$EB nP=$27 mP=$27 dbgCyc=3 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=T

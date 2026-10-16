@@ -1,0 +1,55 @@
+GET status=200
+PUT err The request was canceled due to the configured HttpClient.Timeout of 5 seconds elapsing.
+POST status=405
+PATCH status=405
+WARNING: Resulting JSON is truncated as serialization has exceeded the set depth of 4.
+{
+  "tags": [
+    "Todo"
+  ],
+  "parameters": [
+    {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "requestBody": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/TodoUpdateRequest"
+        }
+      },
+      "text/json": {
+        "schema": {
+          "$ref": "#/components/schemas/TodoUpdateRequest"
+        }
+      },
+      "application/*+json": {
+        "schema": {
+          "$ref": "#/components/schemas/TodoUpdateRequest"
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "OK",
+      "content": {
+        "text/plain": {
+          "schema": "@{$ref=#/components/schemas/TodoMutationResult}"
+        },
+        "application/json": {
+          "schema": "@{$ref=#/components/schemas/TodoMutationResult}"
+        },
+        "text/json": {
+          "schema": "@{$ref=#/components/schemas/TodoMutationResult}"
+        }
+      }
+    }
+  }
+}

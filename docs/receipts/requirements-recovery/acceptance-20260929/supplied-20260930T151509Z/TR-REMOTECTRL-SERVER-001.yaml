@@ -1,0 +1,43 @@
+type: result
+payload:
+  requestId: req-20260930T151739Z-ab6d
+  result:
+    id: TR-REMOTECTRL-SERVER-001
+    title: Embeddable RemoteControl 0.7.4 integration
+    description: >-
+      Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.
+
+      Use AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.
+
+      Preserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.
+
+
+      ## Acceptance Criteria
+
+      - **ac-01**: Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.
+
+      - **ac-02**: Use AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.
+
+      - **ac-03**: Preserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.
+    status: pending
+    priority: medium
+    area: REMOTECTRL
+    subarea: SERVER
+    notes: ''
+    acceptanceCriteria:
+    - id: ac-01
+      text: Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.
+      isSatisfied: false
+    - id: ac-02
+      text: Use AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.
+      isSatisfied: false
+    - id: ac-03
+      text: Preserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-30T15:17:40.5641272+00:00
+    updatedAt: 2026-09-30T15:17:40.5642775+00:00
+  deprecated: true
+
+---
+

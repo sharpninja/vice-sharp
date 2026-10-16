@@ -95,6 +95,11 @@ public sealed class DisconnectedHostProtocolClientTests
             await client.SetLimiterRateAsync(50.0, ct),
         };
 
+        var loadProgram = await client.LoadProgramAsync("hello.prg", ct);
+        Assert.Equal(RpcStatusCode.Unavailable, loadProgram.Status.Code);
+        Assert.False(loadProgram.Ran);
+        Assert.Null(loadProgram.EmulatorStatus);
+
         foreach (var response in results)
         {
             Assert.Equal(RpcStatusCode.Unavailable, response.Status.Code);

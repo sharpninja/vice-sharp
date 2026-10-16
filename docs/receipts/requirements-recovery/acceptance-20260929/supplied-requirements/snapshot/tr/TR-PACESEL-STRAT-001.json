@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-PACESEL-STRAT-001",
+  "title": "Live-switchable pacing strategy plumbing",
+  "status": "completed",
+  "priority": "medium",
+  "body": "EmulationGateStrategies provides canonical ids + gate factory. EmulationPumpService.SetStrategy swaps the gate on the worker thread (no restart). LimiterSettingsDto.PacingStrategy flows through proto/gRPC, SettingsServiceHost applies it live to the pump and round-trips it, and the UI exposes a dropdown.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "EmulationGateStrategies.CreateGate/Normalize/DisplayName map ids to gates, defaulting to Semaphore",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "SetStrategy swaps the gate live; SettingsServiceHost applies and round-trips PacingStrategy",
+      "isSatisfied": true
+    }
+  ]
+}

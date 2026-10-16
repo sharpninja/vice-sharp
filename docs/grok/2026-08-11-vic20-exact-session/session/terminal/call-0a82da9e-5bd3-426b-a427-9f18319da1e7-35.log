@@ -1,0 +1,26 @@
+src/ViceSharp.Chips/Cpu\Mos6502.Opcodes.cs:51:    private partial int GetCycleCount(byte opcode) => OpCycleCounts[opcode];
+src/ViceSharp.Chips/Cpu\Mos6502.Opcodes.cs:422:            case 0xD0: BranchRelative((P & 0x02) == 0); break; // BNE
+src/ViceSharp.Chips/Cpu\Mos6502.cs:353:            _cycle = GetCycleCount(_opcode);
+src/ViceSharp.Chips/Cpu\Mos6502.cs:914:            0xD0 => (P & 0x02) == 0,
+src/ViceSharp.Chips/Cpu\Mos6502.cs:926:        _cycle = Math.Max(0, GetCycleCount(_opcode) - 1);
+src/ViceSharp.Chips/Cpu\Mos6502.cs:1461:    private partial int GetCycleCount(byte opcode);
+20:    private ushort _instructionPC;
+21:    private ushort _visiblePC;
+22:    public ushort PC
+24:        get => IsInstructionBoundary ? _pc : _visiblePC;
+28:            _instructionPC = value;
+29:            _visiblePC = value;
+126:        _instructionPC = _interruptReturnPc;
+127:        _visiblePC = _interruptReturnPc;
+181:                _instructionPC = _interruptReturnPc;
+182:                _visiblePC = _interruptReturnPc;
+298:            _instructionPC = _pc;
+299:            _visiblePC = _pc;
+337:            _instructionPC = _pc;
+338:            _visiblePC = _instructionPC;
+427:                    _visiblePC = _instructionPC;
+432:                _pc = (ushort)(_instructionPC + 2);
+433:                _visiblePC = _pc;
+449:        var source = _instructionPC;
+450:        var lo = Read((ushort)(_instructionPC + 1));
+531:            _instructionPC = _pc;

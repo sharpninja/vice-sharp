@@ -1,0 +1,46 @@
+ExtensionData attrs:
+System.Runtime.CompilerServices.NullableAttribute :: System.Runtime.CompilerServices.NullableAttribute
+System.Text.Json.Serialization.JsonExtensionDataAttribute :: System.Text.Json.Serialization.JsonExtensionDataAttribute
+=== SimpleRomSchema props ===
+Int32 Id []
+String Name []
+String FsName []
+String FsPath []
+Nullable`1 PlatformId []
+String PlatformSlug []
+String PlatformFsSlug []
+String PlatformDisplayName []
+Nullable`1 FsSizeBytes []
+Dictionary`2 ExtensionData [NullableAttribute,JsonExtensionDataAttribute]
+=== Types with Rom ===
+RomM.Client.IRomMSystemClient
+RomM.Client.IRomMPlatformsClient
+RomM.Client.IRomMRomsClient
+RomM.Client.IRomMTasksClient
+RomM.Client.RomMSystemClient
+RomM.Client.RomMPlatformsClient
+RomM.Client.RomMRomsClient
+RomM.Client.RomMTasksClient
+RomM.Client.RomMApiException
+RomM.Client.RomMAuthException
+RomM.Client.RomMForbiddenException
+RomM.Client.IRomMTransport
+RomM.Client.RomMTransport
+RomM.Client.RomListQuery
+RomM.Client.IRomMClient
+RomM.Client.RomMClient
+RomM.Client.RomMServiceCollectionExtensions
+RomM.Client.RomMClientOptions
+RomM.Client.Models.SimpleRomSchema
+RomM.Client.Models.DetailedRomSchema
+RomM.Client.Models.RomPage
+RomM.Client.Json.RomMJson
+RomM.Client.Json.RomMJsonContext
+RomM.Client.Http.RomMHttp
+RomM.Client.Auth.IRomMTokenStore
+RomM.Client.Auth.MemoryRomMTokenStore
+RomM.Client.Auth.RomMAuthKind
+RomM.Client.Auth.RomMAuth
+RomM.Client.Auth.RomMAuthHandler
+RomM.Client.Auth.RomMScopes
+RomM.Client.Auth.RomMToken

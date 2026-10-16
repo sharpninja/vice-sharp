@@ -1,0 +1,27 @@
+
+native\vice\vice\src\6510dtvcore.c:503:#define GET_ABS_X(dest)        \
+native\vice\vice\src\6510dtvcore.c:508:#define GET_ABS_X_DUMMY()      \
+native\vice\vice\src\6510dtvcore.c:518:#define GET_ABS_X_RMW(dest)    \
+native\vice\vice\src\6510dtvcore.c:2007:                NOOP(GET_ABS_X_DUMMY, 3);
+native\vice\vice\src\6510dtvcore.c:2011:                ORA(GET_ABS_X, 3);
+native\vice\vice\src\6510dtvcore.c:2015:                ASL(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2019:                SLO(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2115:                AND(GET_ABS_X, 3);
+native\vice\vice\src\6510dtvcore.c:2119:                ROL(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2123:                RLA(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2219:                EOR(GET_ABS_X, 3);
+native\vice\vice\src\6510dtvcore.c:2223:                LSR(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2227:                SRE(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2323:                ADC(GET_ABS_X, 3);
+native\vice\vice\src\6510dtvcore.c:2327:                ROR(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2331:                RRA(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2567:                LD(reg_y, GET_ABS_X, 3);
+native\vice\vice\src\6510dtvcore.c:2571:                LD(reg_a_write, GET_ABS_X, 3);
+native\vice\vice\src\6510dtvcore.c:2678:            case 0xdd:          /* CMP $nnnn,X */
+native\vice\vice\src\6510dtvcore.c:2679:                CP(reg_a_read, GET_ABS_X, 3);
+native\vice\vice\src\6510dtvcore.c:2683:                DEC(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2687:                DCP(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2780:                SBC(GET_ABS_X, 3);
+native\vice\vice\src\6510dtvcore.c:2784:                INC(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+native\vice\vice\src\6510dtvcore.c:2788:                ISB(3, GET_ABS_X_RMW, SET_ABS_X_RMW);
+

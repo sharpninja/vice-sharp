@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CIA-004",
+  "title": "Joystick Port Reading via CIA1",
+  "status": "pending",
+  "priority": "high",
+  "body": "Joystick port 2 shares CIA1 Port A with the keyboard columns, and joystick port 1 shares CIA1 Port B with the keyboard rows. The joystick signals (up, down, left, right, fire) override keyboard reads when active.\n\n## Acceptance Criteria\n- Joystick port 2 is read from CIA1 Port A ($DC00) bits 0-4 (active low).\n- Joystick port 1 is read from CIA1 Port B ($DC01) bits 0-4 (active low).\n- Bit mapping: 0=Up, 1=Down, 2=Left, 3=Right, 4=Fire.\n- Joystick signals OR with keyboard matrix signals (both active-low, so a joystick direction can interfere with keyboard reading).\n- The `IJoystickPort` interface allows the host to set joystick state (direction + fire).\n- Simultaneous joystick and keyboard reading conflicts are handled as on real hardware.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

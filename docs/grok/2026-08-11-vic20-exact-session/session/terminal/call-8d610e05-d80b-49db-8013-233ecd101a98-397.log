@@ -1,0 +1,200 @@
+/*
+ * vic20cpu.c - Emulation of the VIC 6502 processor.
+ *
+ * Written by
+ *  Hannu Nuotio <hannu.nuotio@tut.fi>
+ *
+ * This file is part of VICE, the Versatile Commodore Emulator.
+ * See README for copyright notice.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307  USA.
+ *
+ */
+
+#include "vice.h"
+
+#include <stdio.h>
+
+#include "monitor.h"
+#include "vic-cycle.h"
+
+/* ------------------------------------------------------------------------- */
+
+/* Global clock counter.  */
+CLOCK maincpu_clk = 0L;
+/* if != 0, exit when this many cycles have been executed */
+CLOCK maincpu_clk_limit = 0L;
+
+#define REWIND_FETCH_OPCODE(clock) /*clock-=2*/
+
+#define CLK_INC() maincpu_clk++; vic_cycle()
+
+#define CLK_ADD(clock, amount) nosuchfunction(&clock, amount)
+
+/* Skip cycle implementation */
+
+#define SKIP_CYCLE 0
+
+/* opcode_t etc */
+
+#if !defined WORDS_BIGENDIAN && defined ALLOW_UNALIGNED_ACCESS
+
+#define opcode_t uint32_t
+
+#define p0 (opcode & 0xff)
+#define p1 ((opcode >> 8) & 0xff)
+#define p2 (opcode >> 8)
+
+#define SET_OPCODE(o) (opcode) = o;
+
+#else /* WORDS_BIGENDIAN || !ALLOW_UNALIGNED_ACCESS */
+
+#define opcode_t          \
+    struct {              \
+        uint8_t ins;         \
+        union {           \
+            uint8_t op8[2];  \
+            uint16_t op16;    \
+        } op;             \
+    }
+
+#define p0 (opcode.ins)
+#define p2 (opcode.op.op16)
+
+#ifdef WORDS_BIGENDIAN
+
+#define p1 (opcode.op.op8[1])
+
+
+native\vice\vice\src\vic20\vic20cpu.c:27:#include "vice.h"
+native\vice\vice\src\vic20\vic20cpu.c:29:#include <stdio.h>
+native\vice\vice\src\vic20\vic20cpu.c:31:#include "monitor.h"
+native\vice\vice\src\vic20\vic20cpu.c:32:#include "vic-cycle.h"
+native\vice\vice\src\vic20\vic20cpu.c:43:#define CLK_INC() maincpu_clk++; vic_cycle()
+native\vice\vice\src\vic20\vic20cpu.c:120:            CLK_INC();                                          \
+native\vice\vice\src\vic20\vic20cpu.c:121:            CLK_INC();                                          \
+native\vice\vice\src\vic20\vic20cpu.c:123:                CLK_INC();                                      \
+native\vice\vice\src\vic20\vic20cpu.c:127:            CLK_INC();                                          \
+native\vice\vice\src\vic20\vic20cpu.c:129:            CLK_INC();                                          \
+native\vice\vice\src\vic20\vic20cpu.c:132:                CLK_INC();                                      \
+native\vice\vice\src\vic20\vic20cpu.c:143:            CLK_INC();                                            \
+native\vice\vice\src\vic20\vic20cpu.c:145:            CLK_INC();                                            \
+native\vice\vice\src\vic20\vic20cpu.c:148:                CLK_INC();                                        \
+native\vice\vice\src\vic20\vic20cpu.c:152:            CLK_INC();                                            \
+native\vice\vice\src\vic20\vic20cpu.c:154:            CLK_INC();                                            \
+native\vice\vice\src\vic20\vic20cpu.c:157:                CLK_INC();                                        \
+native\vice\vice\src\vic20\vic20cpu.c:165:#include "../mainviccpu.c"
+/*
+ * mainviccpu.c - Emulation of the VIC 6510 processor.
+ *
+ * Written by
+ *  Ettore Perazzoli <ettore@comm2000.it>
+ *  Andreas Boose <viceteam@t-online.de>
+ *
+ * This file is part of VICE, the Versatile Commodore Emulator.
+ * See README for copyright notice.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307  USA.
+ *
+ */
+
+#include "vice.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "6510core.h"
+#include "alarm.h"
+#include "archdep.h"
+#include "autostart.h"
+#include "debug.h"
+#include "interrupt.h"
+#include "machine.h"
+#include "maincpu.h"
+#include "mem.h"
+#include "monitor.h"
+#include "mos6510.h"
+#include "snapshot.h"
+#include "resources.h"
+#include "cmdline.h"
+#include "traps.h"
+#include "types.h"
+
+#ifndef EXIT_FAILURE
+#define EXIT_FAILURE 1
+#endif
+
+log_t maincpu_log = LOG_DEFAULT;
+
+/* MACHINE_STUFF should define/undef
+
+ - NEED_REG_PC
+
+*/
+
+/* ------------------------------------------------------------------------- */
+#if defined (DEBUG) || defined (FEATURE_CPUMEMHISTORY)
+CLOCK debug_clk;
+#endif
+
+CLOCK stolen_cycles;
+
+#define NEED_REG_PC
+
+/* ------------------------------------------------------------------------- */
+
+/* Implement the hack to make opcode fetches faster.  */
+#define JUMP(addr)                                                                         \
+    do {                                                                                   \
+        reg_pc = (unsigned int)(addr);                                                     \
+        if (reg_pc >= (unsigned int)bank_limit || reg_pc < (unsigned int)bank_start) {     \
+            mem_mmu_translate((unsigned int)(addr), &bank_base, &bank_start, &bank_limit); \
+        }                                                                                  \
+    } while (0)
+
+/* ------------------------------------------------------------------------- */
+
+#ifdef FEATURE_CPUMEMHISTORY
+
+/* this is called per memory access, so it should only do whats really needed */
+inline static void memmap_mem_update(unsigned int addr, int write, int dummy)
+{
+    unsigned int type = MEMMAP_RAM_R;
+    unsigned int a_m = addr >> 8;
+
+    if (((a_m >= 0x90) && (a_m <= 0x93)) ||
+        ((a_m >= 0x98) && (a_m <= 0x9f))) {
+        /* FIXME: IO2 or IO3 could be RAM */
+        type = MEMMAP_I_O_R;
+    } else if (((a_m >= 0x60) && (a_m <= 0x7f)) ||
+               ((a_m >= 0x80) && (a_m <= 0x8f)) || /* chargen */
+                (a_m >= 0xa0)) {
+        /* FIXME: blocks 1,2,3 could be ROM also */
+        type = MEMMAP_ROM_R;
+

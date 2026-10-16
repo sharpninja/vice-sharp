@@ -1,0 +1,26 @@
+﻿{
+    "/mcpserver/requirements/stats":  {
+                                          "ok":  false,
+                                          "status":  404,
+                                          "preview":  "",
+                                          "len":  0
+                                      },
+    "/mcpserver/requirements/effective":  {
+                                              "ok":  true,
+                                              "status":  200,
+                                              "preview":  "{\"currentLayer\":{\"key\":\"layer-1\",\"order\":1,\"name\":\"Layer 1\",\"description\":null,\"scopeEndLayerKey\":null,\"workspaceId\":\"F:\\\\GitHub\\\\vice-sharp\",\"createdAtUtc\":\"2026-06-30T03:25:50.2331983+00:00\",\"update",
+                                              "len":  494634
+                                          },
+    "/mcpserver/requirements/summary":  {
+                                            "ok":  false,
+                                            "status":  404,
+                                            "preview":  "",
+                                            "len":  0
+                                        },
+    "/mcpserver/requirements/counts":  {
+                                           "ok":  false,
+                                           "status":  404,
+                                           "preview":  "",
+                                           "len":  0
+                                       }
+}

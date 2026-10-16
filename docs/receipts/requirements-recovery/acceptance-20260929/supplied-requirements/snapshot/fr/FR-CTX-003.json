@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CTX-003",
+  "title": "Non-Gameplay routes UI navigation",
+  "status": "pending",
+  "priority": "medium",
+  "body": "In non-Gameplay, D-pad/left-stick -> UI nav, A=UiActivate, B=UiBack. Acceptance: DPadDown -> UiNavigateDown; A -> UiActivate; B -> UiBack; sticks emit no joystick effect.\n\n## Acceptance Criteria\n- DPadDown -> UiNavigateDown; A -> UiActivate; B -> UiBack; sticks emit no joystick effect.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

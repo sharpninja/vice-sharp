@@ -1,0 +1,5 @@
+Select-String: 
+Line |
+   3 |  . ess -Pattern "branch.*PC|visiblePC|BNE|taken branch" -Recurse | Selec .
+     |                                                         ~~~~~~~~
+     | A parameter cannot be found that matches parameter name 'Recurse'.

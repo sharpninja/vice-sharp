@@ -1,0 +1,7 @@
+
+A total of 1 test files matched the specified pattern.
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.FirstDiverge_WithWindowDump [110 ms]
+   DIV first=20753
+Failed!  - Failed:     1, Passed:    18, Skipped:     0, Total:    19, Duration: 1 s - ViceSharp.TestHarness.dll 
+(net10.0)
+

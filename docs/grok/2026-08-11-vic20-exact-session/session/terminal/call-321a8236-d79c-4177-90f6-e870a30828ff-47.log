@@ -1,0 +1,15 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 44 ms - ViceSharp.Library.Tests.dll (net10.0)
+EXIT: 0
+[Parameter("UWP configuration for DeployXboxLocal: Release-UWP (default) or Debug-UWP.")]
+[Parameter("Launch the app after DeployXboxLocal refreshes the layout. Default: true.")]
+Target DeployXboxLocal => _ => _
+//  - PublishXbox / DeployXbox: DEV-PC / MANUAL DEVICE targets. They need the
+[Parameter("DeployXbox: the Dev-Mode console IP (or host:port) passed to WinAppDeployCmd -ip.")]
+[Parameter("DeployXbox: the Dev-Mode pairing PIN passed to WinAppDeployCmd -pin.")]
+[Parameter("DeployXbox: override the MSIX to sideload. Default: the newest .msix under the ViceSharp.Xbox build output.")]
+Target DeployXbox => _ => _
+/// eligible half of the Xbox build; the DEVICE targets (PublishXbox/DeployXbox)
+/// Resolves the MSIX <see cref="DeployXbox"/> sideloads: the explicit

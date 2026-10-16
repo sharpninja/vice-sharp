@@ -1,0 +1,95 @@
+
+GitVersion.yml:3:# next-version pins the major.minor base so the build field auto-increments with
+GitVersion.yml:6:next-version: 1.2.2
+Directory.Build.props:4:    <LangVersion>13</LangVersion>
+Directory.Build.props:10:    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\FlashCartBuilderView.axaml
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\FlashCartBuilderView.axaml.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\FlashCarts
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\FlashCarts\FlashBankContentKind.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\FlashCarts\FlashBankSlot.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\FlashCarts\FlashCartImageBuilderViewModel.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\FlashCarts\FlashCartProfiles.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\FlashCarts\FlashImageBuilder.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\FlashCarts\IFlashBuilderFileIo.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\FlashCarts\IFlashCartProfile.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\Views\FlashC
+           artBuilderPage.xbf
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Xbox\obj\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\embed\Views\
+           FlashCartBuilderPage.xbf
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Xbox\obj\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\Views\FlashC
+           artBuilderPage.g.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Xbox\obj\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\Views\FlashC
+           artBuilderPage.g.i.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Xbox\obj\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\Views\FlashC
+           artBuilderPage.xaml
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Xbox\obj\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\Views\FlashC
+           artBuilderPage.xbf
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\FlashCartBuilderPage.xaml
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\FlashCartBuilderPage.xaml.cs
+
+
+FullName : F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\FlashCart
+
+
+FullName : F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\FlashCart\FlashCartImageBuilderViewModelTests.cs
+
+
+FullName : F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\FlashCart\FlashImageBuilderTests.cs
+
+
+Name          : hostile-validator-20260808T094911Z.json
+LastWriteTime : 8/8/2026 4:51:48 AM
+
+
+Name          : hostile-validator-20260808T094911Z.md
+LastWriteTime : 8/8/2026 4:51:48 AM
+
+
+Name          : hostile-validator-20260808T103211Z.json
+LastWriteTime : 8/8/2026 5:32:53 AM
+
+
+Name          : hostile-validator-20260808T103211Z.md
+LastWriteTime : 8/8/2026 5:32:53 AM
+
+
+Name          : store-phase0-20260805.md
+LastWriteTime : 8/5/2026 2:45:35 PM
+
+

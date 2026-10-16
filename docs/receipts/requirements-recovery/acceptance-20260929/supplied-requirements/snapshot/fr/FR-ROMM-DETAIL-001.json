@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-ROMM-DETAIL-001",
+  "title": "RomM ROM detail",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. Show a game's detail (cover, metadata, files, launchable, collection membership).\nAC-DETAIL-01: GetRomAsync maps DetailedRomSchema (files/cover/summary/launchable) -> RomMGatewayDetailTests.Detail_Maps.\nAC-DETAIL-02: RomDetailViewModel invokes add-to-collection -> RomDetailViewModelTests.AddToCollection_Invokes.\n\n## Acceptance Criteria\n- `GetRomAsync` maps `DetailedRomSchema` (files/cover/summary/launchable) ->\n- `RomDetailViewModel` invokes add-to-collection ->",
+  "condition": null,
+  "acceptanceCriteria": []
+}

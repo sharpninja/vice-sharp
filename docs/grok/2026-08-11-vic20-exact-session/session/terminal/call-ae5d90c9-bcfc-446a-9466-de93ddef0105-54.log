@@ -1,0 +1,20 @@
+
+native\vice\vice\src\Makefile.am:612:vic20_lib = $(top_builddir)/src/vic20/libvic20.a
+native\vice\vice\src\Makefile.am:613:vic20stubs_lib = $(top_builddir)/src/vic20/libvic20stubs.a
+native\vice\vice\src\Makefile.am:614:vic20cart_lib = $(top_builddir)/src/vic20/cart/libvic20cart.a
+native\vice\vice\src\Makefile.am:1007:xvic_libs =  \
+native\vice\vice\src\Makefile.am:1042:xvic_LDADD = $(xvic_libs) $(emu_extlibs) $(mascuerade_lib) @TFE_LIBS@ 
+@NETPLAY_LIBS@ $(XVIC_RES)
+native\vice\vice\src\Makefile.am:1043:xvic_DEPENDENCIES = $(xvic_libs)
+native\vice\vice\src\Makefile.am:1054:	@for i in $(xvic_libs); do rm -fr "$$i"; done
+native\vice\vice\src\Makefile.am:1621:	@(cd vic20 && $(MAKE) libvic20.a)
+native\vice\vice\src\Makefile.am:1623:	@echo "making libvic20stubs.a in vic20"
+native\vice\vice\src\Makefile.am:1624:	@(cd vic20 && $(MAKE) libvic20stubs.a)
+native\vice\vice\src\Makefile.am:1626:	@echo "making libvic20cart.a in vic20/cart"
+native\vice\vice\src\Makefile.am:1627:	@(cd vic20/cart && $(MAKE) libvic20cart.a)
+native\vice\vice\src\Makefile:291:xvic_OBJECTS = $(am_xvic_OBJECTS)
+native\vice\vice\src\Makefile:1473:xvic_libs = \
+native\vice\vice\src\Makefile:1508:xvic_LDADD = $(xvic_libs) $(emu_extlibs) $(mascuerade_lib)   $(XVIC_RES)
+native\vice\vice\src\Makefile:1509:xvic_DEPENDENCIES = $(xvic_libs)
+native\vice\vice\src\Makefile:2451:	@for i in $(xvic_libs); do rm -fr "$$i"; done
+

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CFG-002",
+  "title": "ROM and Romset Selection",
+  "status": "pending",
+  "priority": "high",
+  "body": "The emulator shall load machine ROM images and named romsets needed by the selected machine profile, validate them before use, and report missing or invalid ROMs without starting an invalid machine session.\n\n## Acceptance Criteria\n- Machine profiles declare required and optional ROM artifacts.\n- ROM files are validated for size and checksum when known.\n- Named romsets can be selected for a session.\n- Missing or invalid ROMs produce actionable diagnostics.\n- ROM selection does not require UI code to access emulator runtime internals.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

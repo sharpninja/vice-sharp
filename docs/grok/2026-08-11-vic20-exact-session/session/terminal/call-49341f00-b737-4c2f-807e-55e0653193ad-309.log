@@ -1,0 +1,3 @@
+710:            if (_softDeferCompareCommit && IsStagedCompareOpcode(_opcode))
+1265:    private static bool IsStagedCompareOpcode(byte opcode)
+1292:        return IsStagedCompareOpcode(opcode)

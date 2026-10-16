@@ -2111,4 +2111,3 @@ internal static class SidWaveTables
     };
 
 }
-

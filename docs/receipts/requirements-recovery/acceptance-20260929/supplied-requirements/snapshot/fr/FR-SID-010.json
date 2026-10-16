@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-010",
+  "title": "Direct Digital Sample Playback via Volume Register",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The SID's master volume register ($D418 bits 0-3) can be used for 4-bit direct digital sample playback by rapidly writing sample values. This technique (\"digi\" or \"$D418 samples\") is used extensively in C64 demos and games.\n\n## Acceptance Criteria\n- Writes to $D418 bits 0-3 immediately affect the audio output level.\n- The volume register acts as a 4-bit DAC that adds a DC offset to the mixed output.\n- Rapid writes to $D418 produce audible PCM audio at the write rate.\n- The audio output pipeline has sufficiently low latency that per-rasterline $D418 writes produce clean audio without significant aliasing.\n- Galway/Daglish-style digi playback (NMI-driven 4-bit samples) is clearly audible and recognizable.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

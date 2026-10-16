@@ -1,0 +1,51 @@
+=== NTSC TenSecond ===
+start=2026-08-07T09:49:29.6157691-05:00
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.25]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:01.92]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.23]   Starting:    ViceSharp.TestHarness
+xvic vice_machine_create call=1 model=vic20ntsc
+xvic vice_machine_reset call=1 machine=000001c41e3e0660
+xvic vice_machine_step_cycle call=1 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000001c41e3e0660
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:47.79]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [45 s]
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 48.4273 Seconds
+NTSC_EXIT=0 elapsed_s=49.5

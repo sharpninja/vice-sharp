@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SNP-004",
+  "title": "Snapshot Comparison and State Diffing",
+  "status": "pending",
+  "priority": "low",
+  "body": "The emulator shall support comparing two snapshots and reporting the differences in machine state. This is useful for debugging, understanding program behavior, and verifying determinism.\n\n## Acceptance Criteria\n- Two snapshots can be compared via `ISnapshotManager.Compare(snapshot1, snapshot2)`.\n- The diff result reports all changed CPU registers and flags.\n- The diff result reports all changed memory addresses with old and new values.\n- The diff result reports all changed I/O chip register values (VIC-II, SID, CIA).\n- A summary mode reports the count of changes per subsystem (e.g., \"RAM: 42 bytes changed, VIC-II: 3 registers changed\").\n- A detailed mode reports every individual change.\n- Unchanged state is not included in the diff output (only deltas).\n- The diff can be serialized to a human-readable format for inspection.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

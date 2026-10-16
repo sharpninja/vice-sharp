@@ -21,7 +21,7 @@ public sealed class DiagnosticsServiceHostTests
     {
         using var provider = BuildProvider();
         var state = provider.GetRequiredService(DiagnosticsReflectionTestHelpers.RequiredType(
-            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host"));
+            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host.InProcess"));
         DiagnosticsReflectionTestHelpers.Invoke(state, "UpdateEndpoint", new Uri("http://127.0.0.1:51723/"));
         var service = ResolveDiagnosticsService(provider);
 
@@ -81,7 +81,7 @@ public sealed class DiagnosticsServiceHostTests
         var registry = provider.GetRequiredService<EmulatorRuntimeRegistry>();
         registry.Add(CreateSession("diag-current"));
         var state = provider.GetRequiredService(DiagnosticsReflectionTestHelpers.RequiredType(
-            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host"));
+            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host.InProcess"));
         DiagnosticsReflectionTestHelpers.Invoke(state, "UpdateCurrentSession", "diag-current");
         var service = ResolveDiagnosticsService(provider);
 
@@ -108,7 +108,7 @@ public sealed class DiagnosticsServiceHostTests
         var registry = provider.GetRequiredService<EmulatorRuntimeRegistry>();
         registry.Add(CreateSession("diag-snapshot"));
         var state = provider.GetRequiredService(DiagnosticsReflectionTestHelpers.RequiredType(
-            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host"));
+            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host.InProcess"));
         DiagnosticsReflectionTestHelpers.Invoke(state, "UpdateCurrentSession", "diag-snapshot");
         var request = DiagnosticsReflectionTestHelpers.CreateInstance(
             DiagnosticsReflectionTestHelpers.RequiredType("ViceSharp.Protocol.PerformanceSnapshotRequest, ViceSharp.Protocol"),
@@ -166,7 +166,7 @@ public sealed class DiagnosticsServiceHostTests
         var registry = provider.GetRequiredService<EmulatorRuntimeRegistry>();
         registry.Add(CreateSession("diag-watch"));
         var state = provider.GetRequiredService(DiagnosticsReflectionTestHelpers.RequiredType(
-            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host"));
+            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host.InProcess"));
         DiagnosticsReflectionTestHelpers.Invoke(state, "UpdateCurrentSession", "diag-watch");
         var request = DiagnosticsReflectionTestHelpers.CreateInstance(
             DiagnosticsReflectionTestHelpers.RequiredType("ViceSharp.Protocol.WatchPerformanceRequest, ViceSharp.Protocol"),
@@ -193,7 +193,7 @@ public sealed class DiagnosticsServiceHostTests
     private static object ResolveDiagnosticsService(IServiceProvider provider)
     {
         return provider.GetRequiredService(DiagnosticsReflectionTestHelpers.RequiredType(
-            "ViceSharp.Host.Services.DiagnosticsServiceHost, ViceSharp.Host"));
+            "ViceSharp.Host.Services.DiagnosticsServiceHost, ViceSharp.Host.InProcess"));
     }
 
     private static EmulatorRuntimeSession CreateSession(string sessionId)

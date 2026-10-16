@@ -1,0 +1,51 @@
+
+native\vice\vice\src\6510core.c:2016:static const uint8_t fetch_tab[] = {
+native\vice\vice\src\6510core.c:2040:static const uint8_t rewind_fetch_tab[] = {
+native\vice\vice\src\6510core.c:2068:            if (rewind_fetch_tab[o & 0xff]) {                          \
+native\vice\vice\src\6510core.c:2078:            if (fetch_tab[o & 0xff]) {                                 \
+native\vice\vice\src\6510core.c:2084:            if (rewind_fetch_tab[o & 0xff]) {                          \
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\plus4\ted-fetch.c
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\plus4\ted-fetch.h
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\plus4\.deps\ted-fetch.Po
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\vicii\vicii-fetch.c
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\vicii\vicii-fetch.h
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\vicii\.deps\vicii-fetch.Po
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\viciisc\vicii-fetch.c
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\viciisc\vicii-fetch.h
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\viciisc\vicii-fetch.o
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\viciisc\.deps\vicii-fetch.Po
+
+native\vice\vice\src\6510core.c:2016:static const uint8_t fetch_tab[] = {
+native\vice\vice\src\6510core.c:2040:static const uint8_t rewind_fetch_tab[] = {
+native\vice\vice\src\6510core.c:2068:            if (rewind_fetch_tab[o & 0xff]) {                          \
+native\vice\vice\src\6510core.c:2078:            if (fetch_tab[o & 0xff]) {                                 \
+native\vice\vice\src\6510core.c:2084:            if (rewind_fetch_tab[o & 0xff]) {                          \
+native\vice\vice\src\6510core.c:2102:            if (fetch_tab[o & 0xff]) {                                 \
+native\vice\vice\src\6510core.c:2129:            if (rewind_fetch_tab[(o).ins]) {                                      
+        \
+native\vice\vice\src\6510core.c:2139:            if (fetch_tab[(o).ins]) {                                             
+        \
+native\vice\vice\src\6510core.c:2145:            if (rewind_fetch_tab[(o).ins]) {                                      
+        \
+native\vice\vice\src\6510core.c:2163:            if (fetch_tab[(o).ins]) {                                             
+        \
+

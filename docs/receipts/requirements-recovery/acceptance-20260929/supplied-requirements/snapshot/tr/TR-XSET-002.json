@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XSET-002",
+  "title": "SettingsOptionCatalog single-sourced in Protocol",
+  "status": "pending",
+  "priority": "medium",
+  "body": "SettingsOptionCatalog single-sourced in Protocol, byte-identical to desktop. Acceptance: verified by TEST-XSET-001, SettingsOptionCatalogTests.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

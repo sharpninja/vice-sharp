@@ -1,10 +1,12 @@
 using Avalonia;
+using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using ViceSharp.Avalonia.ViewModels;
 using ViceSharp.Protocol;
 
@@ -16,15 +18,30 @@ public sealed class AttachPanelView : UserControl
     private static readonly Thickness SlotPadding = new(8);
     private static readonly IBrush SlotBorderBrush = new SolidColorBrush(Color.FromRgb(74, 78, 86));
 
-    public AttachPanelView(AttachPanelViewModel viewModel)
+    private readonly RomMLibraryViewModel? _library;
+
+    public AttachPanelView(AttachPanelViewModel viewModel, RomMLibraryViewModel? library = null)
     {
         ArgumentNullException.ThrowIfNull(viewModel);
         ViewModel = viewModel;
+        _library = library;
         DataContext = viewModel;
         Content = BuildContent();
     }
 
     public AttachPanelViewModel ViewModel { get; }
+
+    /// <summary>
+    /// PropertyChanged may fire off the UI thread after host gRPC (ConfigureAwait(false)).
+    /// Touching Avalonia controls from that thread crashes with VerifyAccess.
+    /// </summary>
+    private static void RunOnUi(Action action)
+    {
+        if (Dispatcher.UIThread.CheckAccess())
+            action();
+        else
+            Dispatcher.UIThread.Post(action);
+    }
 
     /// <summary>Media file picker; forwarded to the view-model so the reusable
     /// <see cref="PeripheralCardView"/> can request an attach (FR-UIPERIPHERAL-001).</summary>
@@ -74,8 +91,9 @@ public sealed class AttachPanelView : UserControl
         };
         ViewModel.PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(AttachPanelViewModel.StatusText))
-                status.Text = ViewModel.StatusText;
+            if (args.PropertyName != nameof(AttachPanelViewModel.StatusText))
+                return;
+            RunOnUi(() => status.Text = ViewModel.StatusText);
         };
         header.Children.Add(status);
 
@@ -88,10 +106,29 @@ public sealed class AttachPanelView : UserControl
         // FR-SIDEBARUI-001: real TabControl for the sidebar sections. SelectedIndex tracks the
         // SidebarTab enum order (Peripherals=0, Settings=1, Monitor=2, History=3).
         var tabs = new TabControl { Padding = new Thickness(0) };
-        tabs.Items.Add(new TabItem { Header = "Peripherals", Content = CreatePeripheralsPanel() });
-        tabs.Items.Add(new TabItem { Header = "Settings", Content = new SettingsView { DataContext = ViewModel } });
-        tabs.Items.Add(new TabItem { Header = "Monitor", Content = CreateMonitorPanel(includePopOut: true) });
-        tabs.Items.Add(new TabItem { Header = "History", Content = new TickHistoryView { DataContext = ViewModel.TickHistory } });
+        AutomationProperties.SetAutomationId(tabs, "Sidebar.Tabs");
+        var peripheralsTab = new TabItem { Header = "Peripherals", Content = CreatePeripheralsPanel() };
+        AutomationProperties.SetAutomationId(peripheralsTab, "Sidebar.Peripherals");
+        var settingsTab = new TabItem { Header = "Settings", Content = new SettingsView { DataContext = ViewModel } };
+        AutomationProperties.SetAutomationId(settingsTab, "Sidebar.Settings");
+        var monitorTab = new TabItem { Header = "Monitor", Content = CreateMonitorPanel(includePopOut: true) };
+        AutomationProperties.SetAutomationId(monitorTab, "Sidebar.Monitor");
+        var historyTab = new TabItem { Header = "History", Content = new TickHistoryView { DataContext = ViewModel.TickHistory } };
+        AutomationProperties.SetAutomationId(historyTab, "Sidebar.History");
+        tabs.Items.Add(peripheralsTab);
+        tabs.Items.Add(settingsTab);
+        tabs.Items.Add(monitorTab);
+        tabs.Items.Add(historyTab);
+
+        // PLAN-ROMM-001: the RomM tabs (SidebarTab.Library/Lists/CsdbDiscovery == indices 4/5/6),
+        // present only when the head supplied a library host view-model.
+        if (_library is not null)
+        {
+            tabs.Items.Add(new TabItem { Header = "Library", Content = new LibraryView(_library) });
+            tabs.Items.Add(new TabItem { Header = "Lists", Content = new ListsView(_library) });
+            tabs.Items.Add(new TabItem { Header = "CSDb", Content = new CsdbView(_library) });
+        }
+
         tabs.SelectedIndex = (int)ViewModel.ActiveTab;
         tabs.SelectionChanged += (_, _) =>
         {
@@ -101,7 +138,7 @@ public sealed class AttachPanelView : UserControl
         ViewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(AttachPanelViewModel.ActiveTab))
-                tabs.SelectedIndex = (int)ViewModel.ActiveTab;
+                RunOnUi(() => tabs.SelectedIndex = (int)ViewModel.ActiveTab);
         };
 
         root.Children.Add(tabs);
@@ -181,9 +218,9 @@ public sealed class AttachPanelView : UserControl
         ViewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(AttachPanelViewModel.KeyboardMapStatus))
-                status.Text = ViewModel.KeyboardMapStatus;
+                RunOnUi(() => status.Text = ViewModel.KeyboardMapStatus);
             else if (args.PropertyName == nameof(AttachPanelViewModel.SelectedKeyboardMap))
-                selector.SelectedItem = ViewModel.SelectedKeyboardMap;
+                RunOnUi(() => selector.SelectedItem = ViewModel.SelectedKeyboardMap);
         };
         stack.Children.Add(status);
 
@@ -222,11 +259,13 @@ public sealed class AttachPanelView : UserControl
         };
         ViewModel.PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(AttachPanelViewModel.MonitorOutput))
+            if (args.PropertyName != nameof(AttachPanelViewModel.MonitorOutput))
+                return;
+            RunOnUi(() =>
             {
                 output.Text = ViewModel.MonitorOutput;
                 output.CaretIndex = output.Text?.Length ?? 0;
-            }
+            });
         };
         stack.Children.Add(output);
 

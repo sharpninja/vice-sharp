@@ -1,0 +1,65 @@
+removed F:\GitHub\vice-sharp\docs\grok\2026-08-11-vic20-exact-session\chat_history.timestamped.jsonl
+removed F:\GitHub\vice-sharp\docs\grok\2026-08-11-vic20-exact-session\timeline-turns.jsonl
+=== LIVE top-level files ===
+
+Mode  Length    Name
+----  ------    ----
+d----           assets
+d----           compaction
+d----           compaction_checkpoints
+d----           compaction_requests
+d----           goal
+d----           images
+d----           recap_requests
+d----           subagents
+d----           terminal
+-a--- 903       announcement_state.json
+-a--- 271382    chat_history.jsonl
+-a--- 0         chat_history.jsonl.lock
+-a--- 17594825  events.jsonl
+-a--- 1994297   hunk_records.jsonl
+-a--- 1         last_recap_main_turn
+-a--- 150       plan_mode.json
+-a--- 17        plan.json
+-a--- 23805     plan.md
+-a--- 29712     prompt_context.json
+-a--- 25852     resources_state.json
+-a--- 11914573  rewind_points.jsonl
+-a--- 0         rewind_points.jsonl.lock
+-a--- 1809      signals.json
+-a--- 1090      summary.json
+-a--- 0         summary.json.lock
+-a--- 4156      system_prompt.txt
+-a--- 245643292 updates.jsonl
+-a--- 0         updates.jsonl.lock
+-a--- 3465      vic20-cart-sound-gate.log
+-a--- 3218      vic20-phase-b-gate.log
+-a--- 2960      vic20-phase-ef-gate.log
+-a--- 320       vic20-pixel-gate.log
+-a--- 4352      vic20-sound-gate.log
+-a--- 193       vic20-umbrella-gate.log
+-a--- 2829      vic20-video-lockstep-gate.log
+
+=== LIVE dirs ===
+
+Name                   Files    MB
+----                   -----    --
+assets                    18  3.50
+compaction                18  8.43
+compaction_checkpoints    17  1.34
+compaction_requests       17 33.04
+goal                       9  0.11
+images                    18 16.02
+recap_requests            19 29.99
+subagents                 90  0.93
+terminal                1453  6.73
+
+=== ARCHIVE current ===
+
+Mode  Length  Name
+----  ------  ----
+d----         goal
+-a--- 2175124 chat_history.jsonl
+-a--- 23805   plan.md
+-a--- 1027810 TRANSCRIPT.md
+

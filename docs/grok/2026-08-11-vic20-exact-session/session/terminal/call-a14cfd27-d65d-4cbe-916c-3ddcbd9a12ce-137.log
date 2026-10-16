@@ -1,0 +1,15 @@
+
+native\vice\vice\src\interrupt.c:151:            cs->irq_clk = (CLOCK) 0;
+native\vice\vice\src\interrupt.h:70:    CLOCK irq_clk;
+native\vice\vice\src\interrupt.h:80:       calculate irq_clk).  */
+native\vice\vice\src\interrupt.h:141:inline static void interrupt_set_irq(interrupt_cpu_status_t *cs,
+native\vice\vice\src\interrupt.h:174:                    cs->irq_clk = cpu_clk;
+native\vice\vice\src\interrupt.h:176:                    interrupt_fixup_int_clk(cs, cpu_clk, &(cs->irq_clk));
+native\vice\vice\src\interrupt.h:336:#define maincpu_set_irq_clk(int_num, value, clk) \
+native\vice\vice\src\interrupt.c:141:        cs->irq_clk += warp_amount;
+native\vice\vice\src\interrupt.c:148:        if (cs->irq_clk > warp_amount) {
+native\vice\vice\src\interrupt.c:149:            cs->irq_clk -= warp_amount;
+native\vice\vice\src\interrupt.c:151:            cs->irq_clk = (CLOCK) 0;
+native\vice\vice\src\interrupt.c:388:    if (SMW_CLOCK(m, cs->irq_clk) < 0
+native\vice\vice\src\interrupt.c:435:        || SMR_CLOCK(m, &cs->irq_clk) < 0
+

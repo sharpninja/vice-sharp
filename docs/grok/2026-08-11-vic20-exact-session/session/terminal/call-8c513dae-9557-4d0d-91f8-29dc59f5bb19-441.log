@@ -1,0 +1,7 @@
+
+A total of 1 test files matched the specified pattern.
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [2 s]
+   DIV first=503725 matchedCycles=503724 budget=2216810
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll 
+(net10.0)
+

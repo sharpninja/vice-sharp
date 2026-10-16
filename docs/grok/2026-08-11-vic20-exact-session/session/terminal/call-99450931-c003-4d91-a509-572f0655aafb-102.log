@@ -1,0 +1,193 @@
+
+native\vice\vice\src\vic20\vic20sound.c:49:static int vic_sound_machine_init(sound_t *psid, int speed, int 
+cycles_per_sec);
+native\vice\vice\src\vic20\vic20sound.c:50:static void vic_sound_machine_store(sound_t *psid, uint16_t addr, uint8_t 
+value);
+native\vice\vice\src\vic20\vic20sound.c:52:#ifdef SOUND_SYSTEM_FLOAT
+native\vice\vice\src\vic20\vic20sound.c:53:static int vic_sound_machine_calculate_samples(sound_t **psid, float *pbuf, 
+int nr, int sound_chip_channels, CLOCK *delta_t);
+native\vice\vice\src\vic20\vic20sound.c:55:static int vic_sound_machine_calculate_samples(sound_t **psid, int16_t 
+*pbuf, int nr, int sound_output_channels, int sound_chip_channels, CLOCK *delta_t);
+native\vice\vice\src\vic20\vic20sound.c:58:static int vic_sound_machine_cycle_based(void)
+native\vice\vice\src\vic20\vic20sound.c:63:static int vic_sound_machine_channels(void)
+native\vice\vice\src\vic20\vic20sound.c:68:#ifdef SOUND_SYSTEM_FLOAT
+native\vice\vice\src\vic20\vic20sound.c:70:static sound_chip_mixing_spec_t 
+vic_sound_mixing_spec[SOUND_CHIP_CHANNELS_MAX] = {
+native\vice\vice\src\vic20\vic20sound.c:79:static sound_chip_t vic_sound_chip = {
+native\vice\vice\src\vic20\vic20sound.c:81:    vic_sound_machine_init,              /* sound chip init function */
+native\vice\vice\src\vic20\vic20sound.c:83:    vic_sound_machine_calculate_samples, /* sound chip calculate samples 
+function */
+native\vice\vice\src\vic20\vic20sound.c:84:    vic_sound_machine_store,             /* sound chip store function */
+native\vice\vice\src\vic20\vic20sound.c:86:    vic_sound_reset,                     /* sound chip reset function */
+native\vice\vice\src\vic20\vic20sound.c:87:    vic_sound_machine_cycle_based,       /* sound chip 'is_cycle_based()' 
+function, chip is NOT cycle based */
+native\vice\vice\src\vic20\vic20sound.c:88:    vic_sound_machine_channels,          /* sound chip 
+'get_amount_of_channels()' function, sound chip has 1 channel */
+native\vice\vice\src\vic20\vic20sound.c:89:#ifdef SOUND_SYSTEM_FLOAT
+native\vice\vice\src\vic20\vic20sound.c:90:    vic_sound_mixing_spec,               /* stereo mixing placement specs */
+native\vice\vice\src\vic20\vic20sound.c:95:static uint16_t vic_sound_chip_offset = 0;
+native\vice\vice\src\vic20\vic20sound.c:97:void vic_sound_chip_init(void)
+native\vice\vice\src\vic20\vic20sound.c:99:    vic_sound_chip_offset = sound_chip_register(&vic_sound_chip);
+native\vice\vice\src\vic20\vic20sound.c:104:/* TODO: remove when new vic_sound_clock is confirmed to work right */
+native\vice\vice\src\vic20\vic20sound.c:216:static uint8_t vic20_sound_data[16];
+native\vice\vice\src\vic20\vic20sound.c:219:int machine_sid2_check_range(unsigned int sid_adr)
+native\vice\vice\src\vic20\vic20sound.c:225:int machine_sid3_check_range(unsigned int sid_adr)
+native\vice\vice\src\vic20\vic20sound.c:231:int machine_sid4_check_range(unsigned int sid_adr)
+native\vice\vice\src\vic20\vic20sound.c:237:int machine_sid5_check_range(unsigned int sid_adr)
+native\vice\vice\src\vic20\vic20sound.c:243:int machine_sid6_check_range(unsigned int sid_adr)
+native\vice\vice\src\vic20\vic20sound.c:249:int machine_sid7_check_range(unsigned int sid_adr)
+native\vice\vice\src\vic20\vic20sound.c:255:int machine_sid8_check_range(unsigned int sid_adr)
+native\vice\vice\src\vic20\vic20sound.c:260:void machine_sid2_enable(int val)
+native\vice\vice\src\vic20\vic20sound.c:264:struct sound_vic20_s {
+native\vice\vice\src\vic20\vic20sound.c:279:    float cycles_per_sample;
+native\vice\vice\src\vic20\vic20sound.c:288:typedef struct sound_vic20_s sound_vic20_t;
+native\vice\vice\src\vic20\vic20sound.c:290:static struct sound_vic20_s snd;
+native\vice\vice\src\vic20\vic20sound.c:292:void vic_sound_clock(CLOCK cycles);
+native\vice\vice\src\vic20\vic20sound.c:294:#ifdef SOUND_SYSTEM_FLOAT
+native\vice\vice\src\vic20\vic20sound.c:296:static int vic_sound_machine_calculate_samples(sound_t **psid, float 
+*pbuf, int nr, int scc, CLOCK *delta_t)
+native\vice\vice\src\vic20\vic20sound.c:300:    int samples_to_do;
+native\vice\vice\src\vic20\vic20sound.c:302:    while (s < nr && *delta_t >= snd.cycles_per_sample - 
+snd.leftover_cycles) {
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-review
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-s3slice
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-s4slice
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-v2slice
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-v3slice
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-v5slice
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-verify
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Cia
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Cpu
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\obj
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\PLA
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Serial
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Tape
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Vic
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\VicIi
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio\Sid6581.BatchedClock.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio\Sid6581.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio\Sid6581.Filter.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio\Sid6581.Sampling.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio\Sid6581.State.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio\Sid8580.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio\SidSamplingMethod.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\Audio\SidWaveTables.cs
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Abstractions.dll
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Abstractions.pdb
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.deps.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.pdb
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-review\Release
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-review\Release\net10.0
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-review\Release\net10.0\ViceSharp.Abstractions.dll
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-review\Release\net10.0\ViceSharp.Abstractions.pdb
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-review\Release\net10.0\ViceSharp.Chips.deps.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin-review\Release\net10.0\ViceSharp.Chips.dll
+
+native\vice-shim-vic20.c:664: * Side-effect-free bus peek for lockstep I/O samples (VIA1 $9110, VIA2 $9120,
+native\vice-shim-vic20.c:1413:VICE_SHIM_API size_t vice_sid_render_samples(void *machine, int16_t *buffer, size_t n, 
+int delta_t_cycles)
+native\vice-shim-vic20.c:1481:VICE_SHIM_API int vice_sid_exact_set_sampling(void *machine, int method, double 
+sample_freq, double pass_freq, double filter_scale)
+native\vice-shim-vic20.c:1485:    (void)sample_freq;
+native\vice-shim.h:27:// VIA ($9110/$9120) and VIC-I ($9000) samples. Prefer over peek_ram for I/O.
+native\vice-shim.h:204:// Render N audio samples from the active SID into buffer. Returns the count
+native\vice-shim.h:206:// budget per sample request (e.g. 22 for ~44.1kHz at C64 PAL 985248Hz).
+native\vice-shim.h:209:// require sound_open() to have succeeded.
+native\vice-shim.h:210:VICE_SHIM_API size_t vice_sid_render_samples(void* machine, int16_t* buffer, size_t n, int 
+delta_t_cycles);
+native\vice-shim.h:214:// exist once reSID has been clocked via vice_sid_render_samples (the headless
+native\vice-shim.h:219:// 1:1 (sample_rate == cpu_clock) renderer, so its internal ADSR/accumulator state
+native\vice-shim.h:220:// advances cycle-exactly - unlike vice_sid_render_samples, whose 44100 Hz
+native\vice-shim.h:221:// resampling advances ~22.34 cycles per sample and cannot be matched to an exact
+native\vice-shim.h:274:// 2=RESAMPLE 3=RESAMPLE_FASTMEM); clock_freq fixed at 985248.0. Returns 1 ok.
+native\vice-shim.h:275:VICE_SHIM_API int vice_sid_exact_set_sampling(void* machine, int method, double sample_freq, 
+double pass_freq, double filter_scale);
+native\vice-shim.h:276:// Buffered clock path: clock up to `cycles`, write up to buffer_len samples,
+native\vice-shim.h:277:// return sample count; *cycles_remaining gets the unconsumed remainder.
+

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-INPROC-003",
+  "title": "Pacing does not affect emulated cycle results",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Pacing does not affect emulated cycle results; deterministic advance bit-exact. Acceptance: verified by TEST-INPROC-002.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

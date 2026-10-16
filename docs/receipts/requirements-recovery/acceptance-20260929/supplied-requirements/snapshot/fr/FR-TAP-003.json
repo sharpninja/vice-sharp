@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TAP-003",
+  "title": "Cycle-Accurate Tape Read Timing",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Tape reading relies on the CIA1 Timer A or the FLAG pin to measure the time between pulses from the datasette. The Kernal tape routine uses Timer A in one-shot mode to measure pulse widths and classify them as short, medium, or long pulses for data decoding.\n\n## Acceptance Criteria\n- Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).\n- The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.\n- Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).\n- The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.\n- Tape reading at normal speed produces identical results to real hardware.\n- The timing accuracy supports both PAL and NTSC system clock rates.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,31 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSINDEP-001",
+  "title": "Independent per-system scheduling coupled only by the async IEC bus",
+  "status": "pending",
+  "priority": "high",
+  "body": "Each system (C64, each drive) runs on its own clock and the systems couple only through the asynchronous wired-OR IEC bus, replacing cycle-lockstep.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "With a drive attached, the drive CPU advances on its own clock and is not stepped in cycle-lockstep per host instruction.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-2",
+      "text": "An IEC line transition is observed by every other endpoint's system before that system reads the line.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-3",
+      "text": "A real IEC transaction such as a directory or program load completes correctly under independent scheduling, at parity with the existing true-drive LOAD test.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-4",
+      "text": "Each system sustains about 100 percent of its own CPU clock under load including audio on, with no fixed-chunk under-throttle.",
+      "isSatisfied": false
+    }
+  ]
+}

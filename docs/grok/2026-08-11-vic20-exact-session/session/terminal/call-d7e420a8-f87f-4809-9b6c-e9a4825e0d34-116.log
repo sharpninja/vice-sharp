@@ -1,0 +1,117 @@
+FOUND: F:\GitHub\mcpserver-grok-plugin
+
+FOUND: C:\Users\kingd\.grok\installed-plugins
+FOUND: C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f
+FullName
+--------
+F:\GitHub\mcpserver-grok-plugin\lib\repl-invoke.ps1
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\lib\repl-invoke.ps1
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\lib\repl-invoke.ps1
+True
+True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+schema: mcp-wiki-export/v1
+home:
+  document: home
+documents:
+- id: home
+  title: Home
+  source: generated:home
+  target: Home.md
+  platforms:
+  - github
+  - azure
+- id: functional
+  title: Functional Requirements
+  source: generated:functional
+  target: Functional-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: technical
+  title: Technical Requirements
+  source: generated:technical
+  target: Technical-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: testing
+  title: Testing Requirements
+  source: generated:testing
+  target: Testing-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: mapping
+  title: TR per FR Mapping
+  source: generated:mapping
+  target: TR-per-FR-Mapping.md
+  platforms:
+  - github
+  - azure
+- id: matrix
+  title: Requirements Matrix
+  source: generated:matrix
+  target: Requirements-Matrix.md
+  platforms:
+  - github
+  - azure
+- id: project-overview
+  title: Project Overview
+  source: README.md
+  target: Project-Overview.md
+  platforms:
+  - github
+  - azure
+- id: user-guide
+  title: User Guide
+  source: docs/USER-GUIDE.md
+  target: User-Guide.md
+  platforms:
+  - github
+  - azure
+- id: vice-migration
+  title: Migrating from Classic VICE
+  source: docs/VICE-MIGRATION.md
+  target: VICE-Migration.md
+  platforms:
+  - github
+  - azure
+- id: rom-setup
+  title: ROM Setup and Legal Sources
+  source: docs/ROMs.md
+  target: ROM-Setup.md
+  platforms:
+  - github
+  - azure
+- id: privacy
+  title: Privacy Policy
+  source: docs/PRIVACY.md
+  target: Privacy-Policy.md
+  platforms:
+  - github
+

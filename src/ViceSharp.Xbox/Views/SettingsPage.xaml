@@ -1,0 +1,96 @@
+<!--
+  PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the settings page. Binds XboxSettingsViewModel (a
+  first-pass subset of the pickers; the operator expands the visual layout). Inert on the
+  net10.0 fallback.
+-->
+<Page
+    x:Class="ViceSharp.Xbox.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    RequiresPointer="Never"
+    Background="#EE000000">
+    <Grid Style="{StaticResource TvSafeAreaRootStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Settings" FontSize="48" Foreground="White" Margin="0,0,0,16" />
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="16" MaxWidth="900">
+                <ComboBox Header="Computer" ItemsSource="{x:Bind ViewModel.Computers, Mode=OneWay}" DisplayMemberPath="DisplayName" SelectedItem="{x:Bind ViewModel.SelectedComputer, Mode=TwoWay}" />
+                <ComboBox Header="Model" ItemsSource="{x:Bind ViewModel.Models, Mode=OneWay}" DisplayMemberPath="DisplayName" SelectedItem="{x:Bind ViewModel.SelectedModel, Mode=TwoWay}" />
+                <TextBlock Text="Restart required to change model." FontSize="18" Foreground="#FFDDAA88" />
+                <!-- FEAT-XROMPICK-001: per-model ROM readiness (guidance; boot block stays on ROM page). -->
+                <TextBlock Text="{x:Bind ViewModel.SelectedModelRomStatus, Mode=OneWay}" FontSize="18" Foreground="#FF88CCFF" />
+                <!-- VIC-20 RAM (xvic) + expansion cart + uIEC; IsVic20Selected gates visibility in code-behind if needed. -->
+                <TextBlock Text="VIC-20 memory (xvic)" FontSize="22" Foreground="White" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+                <ComboBox Header="RAM preset" ItemsSource="{x:Bind ViewModel.Vic20MemoryPresets, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedVic20MemoryPreset, Mode=TwoWay}" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+                <!-- UWP has no WrapPanel; VariableSizedWrapGrid is the wrap layout (left-to-right, then next row). -->
+                <VariableSizedWrapGrid Orientation="Horizontal"
+                                       MaximumRowsOrColumns="3"
+                                       ItemWidth="220"
+                                       ItemHeight="88"
+                                       Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}">
+                    <ToggleSwitch Header="BLK0 $0400" IsOn="{x:Bind ViewModel.Vic20Blk0, Mode=TwoWay}" />
+                    <ToggleSwitch Header="BLK1 $2000" IsOn="{x:Bind ViewModel.Vic20Blk1, Mode=TwoWay}" />
+                    <ToggleSwitch Header="BLK2 $4000" IsOn="{x:Bind ViewModel.Vic20Blk2, Mode=TwoWay}" />
+                    <ToggleSwitch Header="BLK3 $6000" IsOn="{x:Bind ViewModel.Vic20Blk3, Mode=TwoWay}" />
+                    <ToggleSwitch Header="BLK5 $A000" IsOn="{x:Bind ViewModel.Vic20Blk5, Mode=TwoWay}" />
+                </VariableSizedWrapGrid>
+                <TextBlock Text="Expansion cart (FE3 / Ultimem / Mega-Cart)" FontSize="22" Foreground="White" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+                <ComboBox Header="Cart kind" ItemsSource="{x:Bind ViewModel.ExpansionCartKinds, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedExpansionCartKind, Mode=TwoWay}" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+                <ComboBox Header="Cart preset" ItemsSource="{x:Bind ViewModel.ExpansionCartPresets, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedExpansionCartPreset, Mode=TwoWay}" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+                <ToggleSwitch Header="Write image on detach" IsOn="{x:Bind ViewModel.ExpansionCartWriteBack, Mode=TwoWay}" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+                <!-- Content management: attach/eject flash or multi-bank ROM (Device Setup had no picker). -->
+                <TextBlock Text="{x:Bind ViewModel.ExpansionCartImageStatus, Mode=OneWay}"
+                           FontSize="20"
+                           Foreground="#FFCCCCCC"
+                           TextWrapping="Wrap"
+                           Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+                <TextBlock Text="Attach a .bin/.rom image: FE3 ≈512K, Ultimem ≥1MB, Mega-Cart ≥64K. Host detects kind by size."
+                           FontSize="16"
+                           Foreground="#FF88AACC"
+                           TextWrapping="Wrap"
+                           Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}" />
+                <StackPanel Orientation="Horizontal" Spacing="12" Visibility="{x:Bind ViewModel.IsVic20Selected, Mode=OneWay}">
+                    <Button Content="Attach cart image"
+                            Style="{StaticResource TenFootButtonStyle}"
+                            Click="OnAttachExpansionCartImage" />
+                    <Button Content="Eject cart image"
+                            Style="{StaticResource TenFootButtonStyle}"
+                            IsEnabled="{x:Bind ViewModel.HasExpansionCartImage, Mode=OneWay}"
+                            Click="OnEjectExpansionCartImage" />
+                    <Button Content="Build cart image"
+                            Style="{StaticResource TenFootButtonStyle}"
+                            Click="OnOpenFlashCartBuilder" />
+                </StackPanel>
+                <TextBlock Text="uIEC filesystem (IEC unit)" FontSize="22" Foreground="White" />
+                <TextBox Header="Host folder / SD path" Text="{x:Bind ViewModel.FileSystemIecRootPath, Mode=TwoWay}" />
+                <Slider Header="IEC unit" Minimum="8" Maximum="11" StepFrequency="1" Value="{x:Bind ViewModel.FileSystemIecUnit, Mode=TwoWay}" />
+                <ComboBox Header="Renderer" ItemsSource="{x:Bind ViewModel.Renderers, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedRenderer, Mode=TwoWay}" />
+                <ComboBox Header="Display scale" ItemsSource="{x:Bind ViewModel.DisplayScales, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedDisplayScale, Mode=TwoWay}" />
+                <ComboBox Header="Palette" ItemsSource="{x:Bind ViewModel.Palettes, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedPalette, Mode=TwoWay}" />
+                <ComboBox Header="Audio" ItemsSource="{x:Bind ViewModel.AudioModes, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedAudioMode, Mode=TwoWay}" />
+                <Slider Header="Master volume" Minimum="0" Maximum="100" Value="{x:Bind ViewModel.MasterVolumePercent, Mode=TwoWay}" />
+                <ToggleSwitch Header="Swap joystick ports" IsOn="{x:Bind ViewModel.SwapJoystickPorts, Mode=TwoWay}" />
+                <!--
+                  FEAT-XPERFHUD-001 toggle (operator 2026-07-14): show/hide the letterbox
+                  performance counters. Applies LIVE and persists immediately (head-local
+                  LocalSettings), independent of Apply/Revert: it is a display preference of
+                  this head, not a host session setting.
+                -->
+                <ToggleSwitch x:Name="PerfCountersToggle" Header="Performance counters" Toggled="OnPerfCountersToggled" />
+                <TextBlock Text="{x:Bind ViewModel.StatusText, Mode=OneWay}" Foreground="#FFAADDAA" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Apply" Style="{StaticResource TenFootButtonStyle}" IsEnabled="{x:Bind ViewModel.IsDirty, Mode=OneWay}" Click="OnApply" />
+            <Button Content="Revert" Style="{StaticResource TenFootButtonStyle}" Click="OnRevert" />
+            <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
+        </StackPanel>
+    </Grid>
+</Page>

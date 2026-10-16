@@ -1,0 +1,36 @@
+{
+  "kind": "test",
+  "id": "TEST-NATIVE-LIFECYCLE-001",
+  "title": "Bounded and isolated native oracle lifecycle",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.\nRun AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.\nRun create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.\nRequire native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.\nBuild the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.\n\n## Acceptance Criteria\n- **ac-01**: Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.\n- **ac-02**: Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.\n- **ac-03**: Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.\n- **ac-04**: Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.\n- **ac-05**: Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.",
+      "isSatisfied": false
+    }
+  ]
+}

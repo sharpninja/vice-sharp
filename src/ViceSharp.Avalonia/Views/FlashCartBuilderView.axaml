@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:fc="using:ViceSharp.Core.FlashCarts"
+             x:Class="ViceSharp.Avalonia.Views.FlashCartBuilderView"
+             x:DataType="fc:FlashCartImageBuilderViewModel">
+    <DockPanel Margin="12">
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
+            <Button Content="Import into bank…" Click="OnImport" />
+            <Button Content="Clear bank" Click="OnClearBank" />
+            <Button Content="Clear all" Click="OnClearAll" />
+            <Button Content="Build &amp; Save…" Click="OnSave" />
+            <Button Content="Close" Click="OnClose" />
+        </StackPanel>
+        <TextBlock DockPanel.Dock="Bottom" Text="{Binding StatusText}" TextWrapping="Wrap" Margin="0,8,0,0" />
+        <StackPanel>
+            <TextBlock FontSize="18" FontWeight="SemiBold" Text="Flash cart image builder" Margin="0,0,0,8" />
+            <TextBlock Text="{Binding ImageSizeSummary}" Margin="0,0,0,8" />
+            <DockPanel Margin="0,0,0,8">
+                <TextBlock Text="Profile" Width="80" VerticalAlignment="Center" />
+                <ComboBox x:Name="ProfileBox"
+                          ItemsSource="{Binding Profiles}"
+                          SelectionChanged="OnProfileChanged"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="fc:IFlashCartProfile">
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </DockPanel>
+            <CheckBox Content="Treat imports as PRG (strip load address)" IsChecked="{Binding TreatAsPrg, Mode=TwoWay}" Margin="0,0,0,8" />
+            <TextBlock Text="Banks" FontWeight="SemiBold" Margin="0,0,0,4" />
+            <ListBox x:Name="BankList"
+                     ItemsSource="{Binding Banks}"
+                     SelectedIndex="{Binding SelectedBankIndex, Mode=TwoWay}"
+                     Height="280">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="fc:FlashBankSlotViewItem">
+                        <DockPanel>
+                            <TextBlock Text="{Binding Label}" Width="140" />
+                            <TextBlock Text="{Binding ContentKind}" Width="60" Margin="8,0" />
+                            <TextBlock Text="{Binding SourceName}" />
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

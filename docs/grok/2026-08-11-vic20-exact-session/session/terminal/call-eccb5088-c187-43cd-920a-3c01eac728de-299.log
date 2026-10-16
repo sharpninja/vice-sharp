@@ -1,0 +1,66 @@
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024) [487 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256) [5 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64) [6 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [4 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 1024) [7 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 5000) [12 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 1024) [7 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [7 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 5000) [33 ms]
+[xUnit.net 00:00:02.54]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256) [FAIL]
+[xUnit.net 00:00:02.54]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs(155,0): at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles)
+[xUnit.net 00:00:02.55]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [FAIL]
+[xUnit.net 00:00:02.55]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs(155,0): at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles)
+[xUnit.net 00:00:02.55]            at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [11 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [4 ms]
+Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256) [7 ms]
+at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 155
+Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [6 ms]
+at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 155
+at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [6 ms]
+Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged [9 ms]
+Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [5 ms]
+Test Run Failed.
+Passed: 13
+Failed: 3
+
+[xUnit.net 00:00:02.47]       c0: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=00 m=2E $9004 n=00 m=00 
+$9005 n=00 m=F0 $9006 n=57 m=00 $9007 n=EA m=00 $9008 n=00 m=00 $9009 n=00 m=00 $900A n=00 m=00 $900B n=00 m=00 $900C 
+n=00 m=00 $900D n=00 m=00 $900E n=00 m=00 $900F n=00 m=1B
+[xUnit.net 00:00:02.47]       c64: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=00 m=2E $9004 n=00 m=00 
+$9005 n=00 m=F0 $9006 n=57 m=00 $9007 n=EA m=00 $9008 n=00 m=00 $9009 n=00 m=00 $900A n=00 m=00 $900B n=00 m=00 $900C 
+n=00 m=00 $900D n=00 m=00 $900E n=00 m=00 $900F n=00 m=1B
+[xUnit.net 00:00:02.47]       c256: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=80 m=2E $9004 n=01 m=03 
+$9005 n=00 m=F0 $9006 n=57 m=00 $9007 n=EA m=00 $9008 n=00 m=00 $9009 n=00 m=00 $900A n=00 m=00 $900B n=00 m=00 $900C 
+n=00 m=00 $900D n=00 m=00 $900E n=00 m=00 $900F n=00 m=1B
+[xUnit.net 00:00:02.47]       c1024: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=00 m=2E $9004 n=07 m=0E 
+$9005 n=00 m=F0 $9006 n=57 m=00 $9007 n=EA m=00 $9008 n=FF m=00 $9009 n=FF m=00 $900A n=00 m=00 $900B n=00 m=00 $900C 
+n=00 m=00 $900D n=00 m=00 $900E n=00 m=00 $900F n=00 m=1B
+[xUnit.net 00:00:02.47]       c5000: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=00 m=2E $9004 n=23 m=46 
+$9005 n=00 m=F0 $9006 n=57 m=00 $9007 n=EA m=00 $9008 n=FF m=00 $9009 n=FF m=00 $900A n=00 m=00 $900B n=00 m=00 $900C 
+n=00 m=00 $900D n=00 m=00 $900E n=00 m=00 $900F n=00 m=1B
+[xUnit.net 00:00:02.47]       c20000: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=80 m=2E $9004 n=8C m=19 
+$9005 n=00 m=F0 $9006 n=57 m=00 $9007 n=EA m=00 $9008 n=FF m=00 $9009 n=FF m=00 $900A n=00 m=00 $900B n=00 m=00 $900C 
+n=00 m=00 $900D n=00 m=00 $900E n=00 m=00 $900F n=00 m=1B
+   c0: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=00 m=2E $9004 n=00 m=00 $9005 n=00 m=F0 $9006 n=57 m=00 
+$9007 n=EA m=00 $9008 n=00 m=00 $9009 n=00 m=00 $900A n=00 m=00 $900B n=00 m=00 $900C n=00 m=00 $900D n=00 m=00 $900E 
+n=00 m=00 $900F n=00 m=1B
+c64: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=00 m=2E $9004 n=00 m=00 $9005 n=00 m=F0 $9006 n=57 m=00 
+$9007 n=EA m=00 $9008 n=00 m=00 $9009 n=00 m=00 $900A n=00 m=00 $900B n=00 m=00 $900C n=00 m=00 $900D n=00 m=00 $900E 
+n=00 m=00 $900F n=00 m=1B
+c256: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=80 m=2E $9004 n=01 m=03 $9005 n=00 m=F0 $9006 n=57 m=00 
+$9007 n=EA m=00 $9008 n=00 m=00 $9009 n=00 m=00 $900A n=00 m=00 $900B n=00 m=00 $900C n=00 m=00 $900D n=00 m=00 $900E 
+n=00 m=00 $900F n=00 m=1B
+c1024: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=00 m=2E $9004 n=07 m=0E $9005 n=00 m=F0 $9006 n=57 m=00 
+$9007 n=EA m=00 $9008 n=FF m=00 $9009 n=FF m=00 $900A n=00 m=00 $900B n=00 m=00 $900C n=00 m=00 $900D n=00 m=00 $900E 
+n=00 m=00 $900F n=00 m=1B
+c5000: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=00 m=2E $9004 n=23 m=46 $9005 n=00 m=F0 $9006 n=57 m=00 
+$9007 n=EA m=00 $9008 n=FF m=00 $9009 n=FF m=00 $900A n=00 m=00 $900B n=00 m=00 $900C n=00 m=00 $900D n=00 m=00 $900E 
+n=00 m=00 $900F n=00 m=1B
+c20000: $9000 n=00 m=05 $9001 n=00 m=19 $9002 n=00 m=96 $9003 n=80 m=2E $9004 n=8C m=19 $9005 n=00 m=F0 $9006 n=57 
+m=00 $9007 n=EA m=00 $9008 n=FF m=00 $9009 n=FF m=00 $900A n=00 m=00 $900B n=00 m=00 $900C n=00 m=00 $900D n=00 m=00 
+$900E n=00 m=00 $900F n=00 m=1B
+EXIT=1
+

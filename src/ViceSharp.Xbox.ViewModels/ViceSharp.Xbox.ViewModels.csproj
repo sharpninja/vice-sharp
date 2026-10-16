@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    PLAN-XBOXUWP S19 (IMPL-XBOXUWP-019): the portable, unit-testable 10-foot-UI
+    ViewModels library. Later slices add navigation, the focus graph, the virtual
+    keyboard, the video-pull adapter, and the settings/device/ROM view-models here;
+    S19 ships only the project plus its boundary guard (XboxViewModelsBoundaryTests).
+
+    net10.0 with the AOT/trim/warnings-as-errors knobs (IsAotCompatible,
+    EnableTrimAnalyzer, TreatWarningsAsErrors, Nullable, ImplicitUsings,
+    RootNamespace, AssemblyName) inherited from Directory.Build.props and NOT
+    overridden here.
+
+    References EXACTLY the three portable contract projects: Abstractions (the
+    emulator contract the ViewModels bind to), Protocol (DTOs + the settings option
+    catalog), and Xbox.Input (portable controller / binding types). It deliberately
+    references no emulation engine (Core / Chips / Architectures), no Host
+    composition, no desktop UI, no Monitor, and no gRPC / ASP.NET / XAML / WinRT
+    package - see XboxViewModelsBoundaryTests for the enforced invariant.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
+    <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+    <ProjectReference Include="..\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj" />
+  </ItemGroup>
+
+</Project>

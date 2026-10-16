@@ -1,0 +1,18 @@
+=== XVIC 610 x 569 ===
+white bounds (37,33)-(609,567) size=573x535 samples=44799 aspect=1.07102803738318
+cyan bounds (17,88)-(609,568) size=593x481 samples=154830
+left_border_px=37 top_border_px=33 right_margin=0 bottom_margin=1
+left_as_frac_of_whiteW=0.0645724258289703
+paper_to_frame W=0.939344262295082 H=0.9402460456942
+blueish_on_paper=3108
+border_left_of_paper=74,227,224
+paper_center=74,227,224
+
+=== VICESHARP WINDOW 2000 x 1073 ===
+white bounds (613,217)-(1676,883) size=1064x667 samples=689214 aspect=1.5952023988006
+cyan bounds (323,42)-(1676,1042) size=1354x1001 samples=644603
+paper left inset from cyan left=290 top inset=175 right inset=0 bottom inset=159
+paper_aspect=1.5952023988006
+cyan_frame_aspect=1.35264735264735
+vs_border=100,227,222
+vs_paper=255,255,255

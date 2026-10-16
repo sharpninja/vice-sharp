@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XDEV-002",
+  "title": "Drive-model selector rebuilds true-drive rig",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Drive cards expose the implemented drive-model selector and rebuild the true-drive rig on model change. Acceptance: AvailableDriveModels==DriveModelCatalog.Implemented; active true-drive model change calls SetTrueDriveAsync(true, device, diskPath, (int)model) with 1542 for 1541-II; inactive-slot change is inert.\n\n## Acceptance Criteria\n- AvailableDriveModels==DriveModelCatalog.Implemented; active true-drive model change calls SetTrueDriveAsync(true, device, diskPath, (int)model) with 1542 for 1541-II; inactive-slot change is inert.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

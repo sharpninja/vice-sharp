@@ -1,0 +1,18 @@
+{
+  "fetchedUtc": "2026-09-30T00:35:23.6000798Z",
+  "httpStatus": 200,
+  "source": "parent HTTP GET because the reviewer has no MCP access",
+  "route": "/mcpserver/requirements/tr/PERF-SPRITE-DMA-OPT-001",
+  "record": {
+    "id": "PERF-SPRITE-DMA-OPT-001",
+    "title": "PERF-SPRITE-DMA-OPT-001",
+    "body": "Placeholder requirement backfilled for TODO link PERF-SPRITE-DMA-OPT-001.",
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "priority": "medium",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null
+  }
+}

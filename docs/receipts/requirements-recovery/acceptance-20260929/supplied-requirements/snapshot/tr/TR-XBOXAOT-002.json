@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXAOT-002",
+  "title": "MSIX manifest declares Windows.Xbox",
+  "status": "pending",
+  "priority": "medium",
+  "body": "ViceSharpXboxUwp=true emits an MSIX whose manifest declares Windows.Xbox. Acceptance: verified by XboxManifestTests / device.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,14 @@
+=== isolation+keyboard ===
+
+A total of 1 test files matched the specified pattern.
+Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 118 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+=== snapshot inventory+managed ===
+A total of 1 test files matched the specified pattern.
+Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 113 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+=== workload pal only ===
+A total of 1 test files matched the specified pattern.
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll 
+(net10.0)
+

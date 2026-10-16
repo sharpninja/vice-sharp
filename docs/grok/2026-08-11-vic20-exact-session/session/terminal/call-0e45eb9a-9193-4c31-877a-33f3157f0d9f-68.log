@@ -1,0 +1,28 @@
+---APPEND ACTIONS---
+---COMPLETE TURN---
+---TURN STATE---
+turnRequestId: req-20260810T130257Z-prompt-72b6
+queryTitle: Refresh docs and wrap-up with detailed handoff
+openedAt: 2026-08-10T13:02:57Z
+status: completed
+sessionId: GrokCode-20260810T130431Z-plugin-session
+codeEdits: 6
+lastBuildStatus: unknown
+auditActions: 6
+auditDialog: 2
+auditDecisions: 1
+auditFiles: 6
+auditCommits: 2
+queryText: |-
+  <user_query>
+  /refresh-docs and /mcpserver:wrap-up with detailed handoff
+  </user_query>
+  <skill_information>
+  <skills_referenced>
+  <skill name="refresh-docs" path="C:\Users\kingd\.grok\skills\refresh-docs\SKILL.md"/>
+  <skill name="mcpserver:wrap-up" path="C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\./skills/wrap-up\SKILL.md"/>
+  </skills_referenced>
+  <skill name="refresh-docs" args="and">
+  # Refresh Docs
+
+  Reconcile `docs/` with the current codebase, remove documentation that no longer applies, make `docs/wiki.yaml` list every project doc that should be published to the wiki, and export the MCP-backed requirement documents.

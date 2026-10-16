@@ -1,0 +1,60 @@
+
+tests\ViceSharp.TestHarness\MachineTestFactory.cs:23:    public static IMachine CreateVic20Machine()
+tests\ViceSharp.TestHarness\MachineTestFactory.cs:24:        => CreateVic20Machine(new Vic20Descriptor());
+tests\ViceSharp.TestHarness\MachineTestFactory.cs:26:    public static IMachine CreateVic20Machine(string 
+modelSelector)
+tests\ViceSharp.TestHarness\MachineTestFactory.cs:27:        => CreateVic20Machine(new Vic20Descriptor(modelSelector));
+tests\ViceSharp.TestHarness\MachineTestFactory.cs:29:    public static IMachine CreateVic20Machine(Vic20Descriptor 
+descriptor)
+tests\ViceSharp.TestHarness\MachineTestFactory.cs:31:        var builder = new 
+ArchitectureBuilder(CreateVic20RomProvider());
+tests\ViceSharp.TestHarness\MachineTestFactory.cs:61:    public static IRomProvider CreateVic20RomProvider()
+tests\ViceSharp.TestHarness\MachineTestFactory.cs:104:        return CreateVic20RomProvider().LoadRom(romName, 
+Vic20ViceRomNames.ArchitectureKey);
+tests\ViceSharp.TestHarness\LockstepValidator.cs:71:        if (_machine.Devices.GetByRole(DeviceRole.Cpu) is Mos6502 
+cpu)
+tests\ViceSharp.TestHarness\LockstepValidator.cs:81:            var cartridgePort = 
+_machine.Devices.GetAll<ICartridgePort>().SingleOrDefault()
+tests\ViceSharp.TestHarness\LockstepValidator.cs:92:                var drive = 
+_machine.Devices.GetAll<IFloppyDrive>().SingleOrDefault(drive => drive.DriveNumber == diskDriveNumber)
+tests\ViceSharp.TestHarness\LockstepValidator.cs:138:        var mapSelection = 
+_machine.Devices.GetAll<IKeyboardInputMapSelection>().SingleOrDefault()
+tests\ViceSharp.TestHarness\LockstepValidator.cs:140:        var keyboardInput = 
+_machine.Devices.GetAll<IMachineKeyboardInput>().SingleOrDefault()
+tests\ViceSharp.TestHarness\LockstepValidator.cs:162:        _kernalCloseTarget = 
+ResolveKernalJumpTarget(_machine.Bus, KernalCloseVector);
+tests\ViceSharp.TestHarness\LockstepValidator.cs:391:    /// each of the <paramref name="cycles"/> managed clock steps 
+so both sides can be
+tests\ViceSharp.TestHarness\LockstepValidator.cs:603:        _kernalCloseTarget = 
+ResolveKernalJumpTarget(_machine.Bus, KernalCloseVector);
+tests\ViceSharp.TestHarness\LockstepValidator.cs:622:            
+_basicCommandAutomation?.AdvanceTo(_machine.GetState().Cycle, _machine);
+tests\ViceSharp.TestHarness\LockstepValidator.cs:640:                var searchStartManagedCycle = 
+_machine.GetState().Cycle;
+tests\ViceSharp.TestHarness\LockstepValidator.cs:645:                        var managedCyclesAdvanced = 
+_machine.GetState().Cycle - searchStartManagedCycle;
+tests\ViceSharp.TestHarness\LockstepValidator.cs:647:                            _machine.GetState().Cycle,
+tests\ViceSharp.TestHarness\LockstepValidator.cs:673:            if (_hasPendingKernalCloseCall && 
+_machine.GetState().PC == _pendingKernalCloseCall.ReturnPc)
+tests\ViceSharp.TestHarness\LockstepValidator.cs:676:                var managedCycle = _machine.GetState().Cycle;
+tests\ViceSharp.TestHarness\LockstepValidator.cs:735:        if (_machine.Devices.GetByRole(DeviceRole.SystemRam) is 
+not IMemory memory)
+tests\ViceSharp.TestHarness\LockstepValidator.cs:738:        var managedState = _machine.GetState();
+tests\ViceSharp.TestHarness\LockstepValidator.cs:773:        var managedState = _machine.GetState();
+tests\ViceSharp.TestHarness\LockstepValidator.cs:793:            Actual = _machine.GetState()
+tests\ViceSharp.TestHarness\LockstepValidator.cs:849:        var state = _machine.GetState();
+tests\ViceSharp.TestHarness\LockstepValidator.cs:884:        if (_machine.Devices.GetByRole(DeviceRole.SystemRam) is 
+not IMemory memory)
+tests\ViceSharp.TestHarness\LockstepValidator.cs:899:            _machine.Reset();
+tests\ViceSharp.TestHarness\LockstepValidator.cs:907:            _machine.Clock.Step();
+tests\ViceSharp.TestHarness\LockstepValidator.cs:971:        var managedCycle = _machine.GetState().Cycle;
+tests\ViceSharp.TestHarness\LockstepValidator.cs:1001:        var target = ResolveKernalJumpTarget(_machine.Bus, 
+KernalCloseVector);
+tests\ViceSharp.TestHarness\LockstepValidator.cs:1037:        var managedState = _machine.GetState();
+tests\ViceSharp.TestHarness\LockstepValidator.cs:1052:        if (_machine.Devices.GetByRole(DeviceRole.VideoChip) is 
+not Mos6569 vic)
+tests\ViceSharp.TestHarness\LockstepValidator.cs:1063:        return _machine.Devices.GetByRole(DeviceRole.Cpu) is 
+Mos6502 cpu
+tests\ViceSharp.TestHarness\LockstepValidator.cs:1075:            chars[i] = 
+DecodeScreenCode(_machine.Bus.Peek((ushort)(BasicCommandAutomation.ReadyPromptStart + i)));
+

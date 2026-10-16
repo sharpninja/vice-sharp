@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXUI-004",
+  "title": "Session keeps running under overlays",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Session keeps running while overlays shown (video advancing unless explicitly paused). Acceptance: simulated navigation/overlay toggles never stop/dispose the pull adapter.\n\n## Acceptance Criteria\n- simulated navigation/overlay toggles never stop/dispose the pull adapter.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

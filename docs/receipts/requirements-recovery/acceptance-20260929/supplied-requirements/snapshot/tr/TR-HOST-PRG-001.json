@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-HOST-PRG-001",
+  "title": "Host-owned PRG memory load over the gRPC emulator host contract",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PRG drop loading belongs to the emulator host, not Avalonia ViewModels. `EmulatorHost.LoadProgram` is the versioned RPC. The host reads the PRG (file path and/or payload), writes the payload through the session machine bus, decides BASIC-start from live TXTTAB (`$2B/$2C`), updates BASIC pointers only on that match, and queues `HostKeyboardAutomation` BASIC RUN (KERNAL keyboard buffer) when RUN is required. UI shells call `IHostProtocolClient.LoadProgramAsync` and must not poke Core devices. Shared chips stay machine-agnostic; TXTTAB is the BASIC-start oracle instead of a hardcoded family address table.\n\n## Acceptance Criteria\n- Avalonia ViewModels do not write emulator RAM or inject KERNAL keystrokes directly.\n- `LoadProgram` is declared on the `EmulatorHost` proto service and mapped by `GrpcEmulatorHostService`.\n- BASIC-start detection uses live TXTTAB (`$2B/$2C`) for the current machine and VIC-20 memory config, not a C64-only `$0801` constant.\n- RUN uses the existing host keyboard-buffer automation after READY, scanning the current KERNAL HIBASE screen page (`$0288`) so VIC-20 unexpanded `$1E00` and +8K `$1000` are found as well as C64 `$0400`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

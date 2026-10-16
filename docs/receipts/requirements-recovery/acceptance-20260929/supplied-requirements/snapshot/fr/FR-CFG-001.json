@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CFG-001",
+  "title": "Resource File and Command-Line Configuration",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall support persistent resource configuration and command-line or host-command overrides for emulator options that affect machine behavior and user-visible operation.\n\n## Acceptance Criteria\n- Resource files can persist named emulator settings.\n- Command-line or host-command overrides can update resource-backed settings before or during a session when the setting is runtime-safe.\n- Invalid resource names or values are rejected with diagnostics and do not corrupt the active configuration.\n- Machine-specific resources are scoped to the active profile.\n- Effective resource values can be queried for diagnostics.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

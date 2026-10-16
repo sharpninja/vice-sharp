@@ -1,0 +1,8 @@
+
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:51:    private partial int GetCycleCount(byte opcode) => 
+OpCycleCounts[opcode];
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:136:        return (opcode & 0x0F) is 0x19 or 0x1D or 0x1E or 0x39 or 0x3D 
+or 0x3E or 0x59 or 0x5D or 0x5E or 0x79 or 0x7D or 0x7E or 0xB1 or 0xB9 or 0xBD or 0xD1 or 0xD9 or 0xDD or 0xF1 or 
+0xF9 or 0xFD;
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:151:            case 0xB1: A = _bus.Read(IndirectY()); UpdateNZ(A); break;
+

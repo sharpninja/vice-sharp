@@ -1,0 +1,9 @@
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Gamepad action bar. -->
+        <TextBlock Grid.Row="3" Margin="4,12,0,0" Foreground="#FFE0E0E0" FontSize="18"
+                   Text="(A) Attach     (Y) Attach + autostart     (X) Add to list     (B) Back" />
+    </Grid>
+</Page>

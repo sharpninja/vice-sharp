@@ -1,0 +1,12 @@
+d011=60
+d016=FF
+d018=A5
+dd00=80
+d015=20
+d021=A5
+d025=70
+d026=ED
+d027=85
+width=384 height=272
+bmp=F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\vicesharp-wolf64.bmp
+ram=F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\vicesharp-ram.bin

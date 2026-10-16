@@ -1,0 +1,57 @@
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:05.84]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [3 s]
+  Error Message:
+   DIV first=520829 matchedCycles=520828 budget=10227270
+c=520818 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$14 mX=$14 nY=$02 mY=$02 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=2 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520819 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$14 mX=$14 nY=$02 mY=$02 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=True irq=0 mis=False
+c=520820 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$14 mX=$14 nY=$02 mY=$02 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520821 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$14 mX=$14 nY=$02 mY=$02 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$88 trail=5 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520822 nPC=$EA9E mPC=$EA9E nA=$01 mA=$01 nX=$14 mX=$14 nY=$01 mY=$01 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$88 trail=5 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520823 nPC=$EA9E mPC=$EA9E nA=$01 mA=$01 nX=$14 mX=$14 nY=$01 mY=$01 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$10 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520824 nPC=$EAA0 mPC=$EAA0 nA=$01 mA=$01 nX=$14 mX=$14 nY=$01 mY=$01 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$10 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520825 nPC=$EA95 mPC=$EA95 nA=$01 mA=$01 nX=$14 mX=$14 nY=$01 mY=$01 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=1 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520826 nPC=$EA95 mPC=$EA95 nA=$01 mA=$01 nX=$14 mX=$14 nY=$01 mY=$01 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520827 nPC=$EA97 mPC=$EA97 nA=$20 mA=$20 nX=$14 mX=$14 nY=$01 mY=$01 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520828 nPC=$EA97 mPC=$EA97 nA=$20 mA=$20 nX=$14 mX=$14 nY=$01 mY=$01 nS=$EE mS=$EE nP=$31 mP=$31 dbgCyc=5 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=520829 nPC=$EA97 mPC=$EA99 nA=$20 mA=$20 nX=$14 mX=$14 nY=$01 mY=$01 nS=$ED mS=$EE nP=$21 mP=$31 dbgCyc=4 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+irqdiag: nLastOp=0xA9 nDelays=False nPend=0x2 nIrqClk=520829 nClk=520835 mDelays=False mBound=False mIrqSeq=0
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget, String modelSelector) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 220
+   at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 87
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll (net10.0)
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [3 s]
+   DIV first=520829 matchedCycles=520828 budget=10227270
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+DUMP c=1 nA=$00 mA=$00 mVBus=$FF mRast=0 nRast=0 mCyc=7 nCyc=7 mFetch=0 nFetch=0 nArea=1 mBuf=0 mCols=22 mis=False
+DUMP c=6 nA=$00 mA=$00 mVBus=$FF mRast=0 nRast=0 mCyc=12 nCyc=12 mFetch=0 nFetch=0 nArea=1 mBuf=0 mCols=22 mis=False
+DUMP c=65 nA=$00 mA=$00 mVBus=$22 mRast=1 nRast=1 mCyc=6 nCyc=6 mFetch=3 nFetch=4 nArea=2 mBuf=1 mCols=22 mis=False
+DUMP c=520820 nA=$01 mA=$01 mVBus=$00 mRast=182 nRast=182 mCyc=46 nCyc=46 mFetch=2 nFetch=2 nArea=2 mBuf=19 mCols=22 mis=False
+DUMP c=520829 nA=$20 mA=$20 mVBus=$00 mRast=182 nRast=182 mCyc=55 nCyc=55 mFetch=4 nFetch=4 nArea=2 mBuf=22 mCols=22 mis=True
+EXIT=1
+

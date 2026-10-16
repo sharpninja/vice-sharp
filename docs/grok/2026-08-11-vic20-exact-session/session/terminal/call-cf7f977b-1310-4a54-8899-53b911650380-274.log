@@ -1,0 +1,40 @@
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000002751e4309e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000002751e4309e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000002751e4309e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000002751e4309e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000002751e4309e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000002751e4309e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:08.18]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyPal_SequenceEqual [5 s]
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 8.9984 Seconds
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=00000182589b08b0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=00000182589b08b0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=00000182589b08b0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=00000182589b08b0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=00000182589b08b0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=00000182589b08b0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:07.68]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Bgra_ReadyPal_SequenceEqual [5 s]
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 8.3723 Seconds

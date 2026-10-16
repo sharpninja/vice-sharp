@@ -1,0 +1,3572 @@
+[
+  {
+    "kind": "fr",
+    "id": "FR-AIREVIEW-ROUTING-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-AIREVIEW-ROUTING-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ARCH-TRUEDRIVE-1541-002",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ARCH-TRUEDRIVE-1541-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-BACKFILL-MEDIA-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-BACKFILL-MEDIA-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-BACKFILL-VIDEO-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-BACKFILL-VIDEO-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CFG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CFG-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CFG-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CFG-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CFG-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CFG-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CFG-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CFG-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CFG-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CFG-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CFG-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CFG-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CFG-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CFG-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CFG-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CFG-008.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CHIPSTATE-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CHIPSTATE-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CIA-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CIA-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CIA-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CIA-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CIA-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CIA-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CIA-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CIA-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CIA-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CIA-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CIA-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CIA-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CIA-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CIA-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-COMPLETION-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-COMPLETION-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CPU-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CPU-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CPU-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CPU-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CPU-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CPU-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CPU-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CPU-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CPU-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CPU-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CPUTICK-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CPUTICK-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CRT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CRT-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CRT-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CRT-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CRT-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CRT-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CRT-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CRT-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CRT-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CRT-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CSDB-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CSDB-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CTX-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CTX-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CTX-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CTX-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CTX-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CTX-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CTX-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-CTX-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-D71-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-D71-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-D81-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-D81-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DEVCARDART-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DEVCARDART-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRV-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRV-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRV-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRV-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRV-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRV-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRV-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRV-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRV-005",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRV-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRV-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRV-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRV1540-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRV1540-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRV1541II-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRV1541II-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRVLED-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRVLED-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRVMODEL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRVMODEL-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRVMODEL-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRVMODEL-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-DRVTRUE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-DRVTRUE-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-008.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-GAMEPAD-009",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-GAMEPAD-009.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-HOST-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-HOST-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-HOST-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-HOST-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-HOST-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-HOST-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-HOST-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-HOST-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-HOST-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-HOST-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-HOST-006",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-HOST-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-HOST-DIAG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-HOST-DIAG-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-IECHOTPLUG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-IECHOTPLUG-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-IECLOAD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-IECLOAD-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-IECMON-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-IECMON-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-IECSPY-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-IECSPY-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INP-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INP-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INP-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INP-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INP-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INP-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INP-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INP-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INP-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INP-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INP-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INPROC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INPROC-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INPROC-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INPROC-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INPROC-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INPROC-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-INSTALL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-INSTALL-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MACHINEPICKER-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MACHINEPICKER-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MED-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MED-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MED-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MED-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MED-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 1,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MED-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MED-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MED-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MED-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MED-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MEM-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MEM-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MEM-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MEM-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MEM-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MEM-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MEM-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MEM-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MEM-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MEM-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MEM-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MEM-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MON-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MON-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MON-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MON-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MON-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MON-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MON-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MON-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MON-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MON-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-MON-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-MON-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-NATIVE-LIFECYCLE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-NATIVE-LIFECYCLE-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-NATIVERESIDUE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-NATIVERESIDUE-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PACESEL-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PACESEL-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PERF-RUNFRAME-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PERF-RUNFRAME-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PRF-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PRF-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PRF-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PRF-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PRF-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PRF-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PRF-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PRF-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PRF-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PRF-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PRF-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PRF-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PRF-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PRF-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PRF-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PRF-008.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PUBSUB-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-PUBSUB-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-REMOTECTRL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-REMOTECTRL-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-REMOTECTRL-CLI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-REMOTECTRL-CLI-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-REVEXEC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-REVEXEC-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-AVUI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-AVUI-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-BROWSE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-BROWSE-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-COLLECT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-COLLECT-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-CONN-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-CONN-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-COVER-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-COVER-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-DETAIL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-DETAIL-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-LAUNCH-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-LAUNCH-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-PKG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-PKG-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-ROMM-XBOXUI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-ROMM-XBOXUI-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-RUNTIME-TAPE-002",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-RUNTIME-TAPE-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SETTINGS-TXN-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 10,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SETTINGS-TXN-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-008.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-009",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-009.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-010",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-010.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-011",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-011.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-012",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-012.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-013",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-013.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-014",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SID-014.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SIDAUDIO-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SIDAUDIO-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SIDEBARUI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SIDEBARUI-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SNDREG-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SNDREG-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SNP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SNP-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SNP-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SNP-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SNP-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SNP-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SNP-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SNP-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSBTN-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSBTN-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSBTN-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSBTN-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSBTN-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSBTN-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSBTN-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSBTN-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSBTN-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSBTN-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSBTN-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSBTN-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSBTN-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSBTN-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSBTN-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSBTN-008.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SYSINDEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-SYSINDEP-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TAP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TAP-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TAP-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TAP-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TAP-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TAP-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TAP-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TAP-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TAP-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TAP-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TESTGATE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TESTGATE-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TESTGATE-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TESTGATE-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TESTGATE-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TESTGATE-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TESTGATE-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TESTGATE-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TICKHIST-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-TICKHIST-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UI-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UI-002",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UI-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UI-003",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UI-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UI-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UI-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UIDROP-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UIDROP-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UIFLYOUT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UIFLYOUT-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UIMENUBAR-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UIMENUBAR-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UIPERIPHERAL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UIPERIPHERAL-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UISETTINGS-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UISETTINGS-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-UISETVIS-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-UISETVIS-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIA-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIA-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIA-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIA-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIA-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIA-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIA-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIA-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIA-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIA-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-008",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-008.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-009",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-009.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-010",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC-010.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC20-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 6,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC20-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC20-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC20-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC20-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC20-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC20-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC20-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC20-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC20-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC20-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC20-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC20-SOUND-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VIC20-SOUND-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VSFLOCKSTEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-VSFLOCKSTEP-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-WARP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-WARP-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XAUDIO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XAUDIO-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XAUDIO-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XAUDIO-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XAUDIO-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XAUDIO-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XAV-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XAV-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXGPL-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXGPL-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXGPL-007",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXGPL-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXPKG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXPKG-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXPKG-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXPKG-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXTOPO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXTOPO-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXUI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXUI-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXUI-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXUI-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXUI-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXUI-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXUI-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXUI-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXUI-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXUI-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXUI-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXUI-006.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXUI-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXUI-007.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXUI-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XBOXUI-008.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XDEV-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XDEV-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XDEV-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XDEV-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XDEV-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XDEV-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XKBD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XKBD-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XROM-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XROM-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XROM-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XROM-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XROM-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XROM-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XSET-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XSET-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XSET-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XSET-002.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XSET-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XSET-003.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XSET-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XSET-004.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XSET-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XSET-005.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XVIDEO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XVIDEO-001.json"
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XVIDEO-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\fr\\FR-XVIDEO-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "[TR-REMOTECTRL-SERVER-001]",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\[TR-REMOTECTRL-SERVER-001].json"
+  },
+  {
+    "kind": "tr",
+    "id": "PERF-SPRITE-DMA-OPT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\PERF-SPRITE-DMA-OPT-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-AIREVIEW-ROUTING-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-AIREVIEW-ROUTING-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-ALLOC-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-ALLOC-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-AOT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-AOT-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-BASELINE-CORRECTNESS-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-BASELINE-CORRECTNESS-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-BUILD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-BUILD-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CHIPSTATE-CAPTURE-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-CHIPSTATE-CAPTURE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-COMPLETION-MANIFEST-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 6,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-COMPLETION-MANIFEST-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CORE-CYCLE-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-CORE-CYCLE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CORE-DET-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-CORE-DET-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CPU-TICK-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-CPU-TICK-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CTX-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-CTX-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CYCLE-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-CYCLE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DEPS-202607-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-DEPS-202607-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DET-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-DET-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DRV-EDGE-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-DRV-EDGE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DRV-FDD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-DRV-FDD-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DRVLIFE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-DRVLIFE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DRV-PACE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-DRV-PACE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DRV-WD1770-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-DRV-WD1770-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-GAMEPAD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-GAMEPAD-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-GAMEPAD-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-GAMEPAD-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-GAMEPAD-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-GAMEPAD-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-GAMEPAD-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-GAMEPAD-004.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-GAMEPAD-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-GAMEPAD-005.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-GRPC-BOUNDARY-001",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-GRPC-BOUNDARY-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-HOST-DIAG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-HOST-DIAG-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-HOST-DIAG-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-HOST-DIAG-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-HOST-DIAG-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-HOST-DIAG-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-HOST-DIAG-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-HOST-DIAG-004.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-HOST-PRG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-HOST-PRG-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-HOST-STATUS-001",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-HOST-STATUS-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-IECDECODE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-IECDECODE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-IEC-EDGE-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-IEC-EDGE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-IECELEC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-IECELEC-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-IECSPY-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-IECSPY-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-IECTRACE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-IECTRACE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-INPROC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-INPROC-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-INPROC-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-INPROC-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-INPROC-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-INPROC-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-INPROC-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-INPROC-004.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-INPROC-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-INPROC-005.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-INPUT-VKM-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-INPUT-VKM-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-INSTALL-ASSOC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-INSTALL-ASSOC-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-LIB-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-LIB-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-MED-FFMPEG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-MED-FFMPEG-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-MEDIA-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-MEDIA-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-MED-SOUND-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-MED-SOUND-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-MED-VIDEO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-MED-VIDEO-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-MVVM-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-MVVM-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-NATIVE-LIFECYCLE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-NATIVE-LIFECYCLE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PACESEL-STRAT-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-PACESEL-STRAT-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PERF-ALLOC-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-PERF-ALLOC-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PERF-AOT-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-PERF-AOT-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PLAT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-PLAT-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PUBSUB-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-PUBSUB-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PUBSUB-PERF-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 7,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-PUBSUB-PERF-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-QA-TESTSILENCE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-QA-TESTSILENCE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-REMOTECTRL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-REMOTECTRL-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-REMOTECTRL-CLI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-REMOTECTRL-CLI-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-REMOTECTRL-SERVER-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-REMOTECTRL-SERVER-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-REMOTE-INTEGRATION-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-REMOTE-INTEGRATION-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-REVEXEC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-REVEXEC-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-ROMM-BOUNDARY-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-ROMM-BOUNDARY-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-ROMM-JSON-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-ROMM-JSON-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-ROMM-NUGET-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-ROMM-NUGET-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-ROMM-SEC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-ROMM-SEC-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-ROMM-THREAD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-ROMM-THREAD-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SETTINGS-TXN-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 6,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SETTINGS-TXN-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SID-AMPLIFY-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SID-AMPLIFY-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SIDAUDIO-CLOCK-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SIDAUDIO-CLOCK-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SIDEBARUI-LAYOUT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SIDEBARUI-LAYOUT-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SID-EDGE-004",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SID-EDGE-004.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SID-ORACLE-002",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SID-ORACLE-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SID-RESAMPLE-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SID-RESAMPLE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SIMD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SIMD-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SNAPFULL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SNAPFULL-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SNDREG-GATE-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SNDREG-GATE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-STATE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-STATE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SYSBTN-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SYSBTN-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SYSBTN-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SYSBTN-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SYSBTN-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SYSBTN-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SYSBTN-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SYSBTN-004.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SYS-SCHED-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SYS-SCHED-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SYSTEM-CORE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-SYSTEM-CORE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TAP-EDGE-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TAP-EDGE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TAPE-EDGE-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TAPE-EDGE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TESTGATE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TESTGATE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TESTGATE-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TESTGATE-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TESTGATE-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TESTGATE-004.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TICKHIST-CAPTURE-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TICKHIST-CAPTURE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TICKHIST-PERF-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TICKHIST-PERF-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TICKHIST-RPC-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TICKHIST-RPC-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TICKHIST-UI-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-TICKHIST-UI-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-UIAXAML-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-UIAXAML-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-UIAXAML-PICKER-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 1,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-UIAXAML-PICKER-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-UIAXAML-VIEWS-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-UIAXAML-VIEWS-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-UI-COREBOUNDARY-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-UI-COREBOUNDARY-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-UI-DEVART-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-UI-DEVART-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-UI-SHELL-001",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-UI-SHELL-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC20-FLASH-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC20-FLASH-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC20-PIXEL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC20-PIXEL-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC20-SOUND-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC20-SOUND-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC-EDGE-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-002",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC-EDGE-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-003",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC-EDGE-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-004",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC-EDGE-004.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-005",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC-EDGE-005.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-006",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VIC-EDGE-006.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VSFLOCKSTEP-RESUME-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-VSFLOCKSTEP-RESUME-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-WARP-STATUS-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-WARP-STATUS-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XAUDIO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XAUDIO-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XAUDIO-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XAUDIO-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XAUDIO-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XAUDIO-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXAOT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXAOT-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXAOT-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXAOT-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXAOT-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXAOT-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXCI-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXCI-005.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXGPL-BRAND-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXGPL-BRAND-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXPKG-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXPKG-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXTOPO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXTOPO-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXTOPO-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXTOPO-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXTOPO-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXTOPO-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXUI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXUI-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXUI-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXUI-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXUI-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXUI-003.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXUI-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXUI-004.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXUI-005",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXUI-005.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXUI-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXUI-006.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXUI-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXUI-007.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXUI-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XBOXUI-008.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XKBD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XKBD-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XMVVM-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XMVVM-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XPATH-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XPATH-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XPERSIST-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XPERSIST-001.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XSET-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XSET-002.json"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XVIDEO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\tr\\TR-XVIDEO-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-AIREVIEW-ROUTING-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-AIREVIEW-ROUTING-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-ARCH-CHIPGLUE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-ARCH-CHIPGLUE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-BASELINE-CORRECTNESS-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-BASELINE-CORRECTNESS-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CFG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-CFG-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CHIPSTATE-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-CHIPSTATE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CIA-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-CIA-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CLI-LAUNCHER-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-CLI-LAUNCHER-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-COMPLETION-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 6,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-COMPLETION-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CPU-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-CPU-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CPUTICK-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-CPUTICK-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CRT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-CRT-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CTX-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-CTX-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DEPS-202607-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 1,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DEPS-202607-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRV-001",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRV-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRV1540-LOCKSTEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRV1540-LOCKSTEP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRV1541II-LOCKSTEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRV1541II-LOCKSTEP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRV1571-LOCKSTEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRV1571-LOCKSTEP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRV1581-LOCKSTEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRV1581-LOCKSTEP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRVLED-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRVLED-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRVLIFE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRVLIFE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRV-MOTOR-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRV-MOTOR-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRVTRUE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRVTRUE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRV-TYPE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-DRV-TYPE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-GAMEPAD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-GAMEPAD-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-GAMEPAD-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-GAMEPAD-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-GRPC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-GRPC-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-HOST-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-HOST-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-HOST-DIAG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-HOST-DIAG-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IECDECODE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-IECDECODE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IECELEC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-IECELEC-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IECHOTPLUG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-IECHOTPLUG-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IECLOAD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-IECLOAD-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IECMON-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-IECMON-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IECSPY-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-IECSPY-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IEC-TIMING-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-IEC-TIMING-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IECTRACE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-IECTRACE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-INPROC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-INPROC-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-INPROC-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-INPROC-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-INPROC-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-INPROC-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-INPROC-DEVICE",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-INPROC-DEVICE.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-INPUT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-INPUT-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-INSTALL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-INSTALL-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-MED-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-MED-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-MED-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-MED-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-MED-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-MED-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-MED-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-MED-004.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-MEM-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-MEM-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-MON-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-MON-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-NATIVE-LIFECYCLE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-NATIVE-LIFECYCLE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-NATIVERESIDUE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-NATIVERESIDUE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-NATIVERESIDUE-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-NATIVERESIDUE-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-NATIVERESIDUE-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-NATIVERESIDUE-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-PACESEL-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-PACESEL-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-PERF-RUNFRAME-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-PERF-RUNFRAME-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-PRF-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-PRF-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-PUBSUB-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-PUBSUB-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-QA-TESTSILENCE-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-QA-TESTSILENCE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-REMOTECTRL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 4,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-REMOTECTRL-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-REMOTECTRL-CLI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-REMOTECTRL-CLI-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-REMOTE-INTEGRATION-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-REMOTE-INTEGRATION-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-REVEXEC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-REVEXEC-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-ROMM-AVUI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-ROMM-AVUI-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-ROMM-DETAIL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-ROMM-DETAIL-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-ROMM-PKG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-ROMM-PKG-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-ROMM-SEC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-ROMM-SEC-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SETTINGS-TXN-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 8,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SETTINGS-TXN-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SID-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SID-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SID-002",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SID-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SIDAUDIO-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SIDAUDIO-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SIDEBARUI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SIDEBARUI-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SNAPFULL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SNAPFULL-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SNDREG-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SNDREG-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SNP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SNP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SYSBTN-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SYSBTN-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SYSBTN-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SYSBTN-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SYSBTN-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SYSBTN-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SYSBTN-DEVICE",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SYSBTN-DEVICE.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SYSINDEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-SYSINDEP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TAP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TAP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TAPE-RAMP-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TAPE-RAMP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TAPE-SENSE-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TAPE-SENSE-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TESTGATE-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TESTGATE-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TESTGATE-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TESTGATE-008.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TESTGATE-009",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TESTGATE-009.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TESTGATE-010",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TESTGATE-010.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TICKHIST-001",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TICKHIST-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TICKHIST-002",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-TICKHIST-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UI-001",
+    "status": "in_progress",
+    "structuredAcceptanceCriteria": 3,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UI-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UI-COREBOUNDARY-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UI-COREBOUNDARY-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UI-DEVCARDART-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UI-DEVCARDART-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UI-DEVCARDART-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UI-DEVCARDART-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UI-DEVCARDART-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UI-DEVCARDART-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UI-DIAG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UI-DIAG-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UIDROP-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UIDROP-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UIFLYOUT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UIFLYOUT-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UIMENUBAR-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UIMENUBAR-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UIPERIPHERAL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UIPERIPHERAL-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UISET-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 2,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UISET-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UISET-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UISET-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UISET-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UISET-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-UISETTINGS-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-UISETTINGS-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIA-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-VIA-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-VIC-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC20-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 5,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-VIC20-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC20-FLASH-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-VIC20-FLASH-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC20-SOUND-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-VIC20-SOUND-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC-CHECKPOINT-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-VIC-CHECKPOINT-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC-RC-001",
+    "status": "closed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-VIC-RC-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VSFLOCKSTEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 1,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-VSFLOCKSTEP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-X64SC-LOCKSTEP-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-X64SC-LOCKSTEP-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XAUDIO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XAUDIO-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XAUDIO-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XAUDIO-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XAUDIO-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XAUDIO-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XAUDIO-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XAUDIO-004.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XAUDIO-DEVICE",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XAUDIO-DEVICE.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXAOT-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXAOT-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXCI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXCI-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXDEPLOY-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXDEPLOY-007.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXGPL-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXGPL-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXGPL-002",
+    "status": "completed",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXGPL-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXPKG-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXPKG-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXPKG-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXPKG-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXTOPO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXTOPO-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXTOPO-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXTOPO-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-002a",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-002a.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-002b",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-002b.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-003",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-003.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-004",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-004.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-005a",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-005a.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-005b",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-005b.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-006",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-006.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-007",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-007.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXUI-008",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XBOXUI-008.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XKBD-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XKBD-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XSET-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XSET-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XSET-DEVICE",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XSET-DEVICE.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XVIDEO-001",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XVIDEO-001.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XVIDEO-002",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XVIDEO-002.json"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XVIDEO-DEVICE",
+    "status": "pending",
+    "structuredAcceptanceCriteria": 0,
+    "path": "docs\\receipts\\requirements-recovery\\acceptance-20260929\\supplied-requirements\\snapshot\\test\\TEST-XVIDEO-DEVICE.json"
+  }
+]

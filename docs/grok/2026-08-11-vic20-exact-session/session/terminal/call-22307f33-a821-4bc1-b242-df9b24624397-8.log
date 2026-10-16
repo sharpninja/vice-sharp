@@ -1,0 +1,161 @@
+        }
+
+        if (_cycle == 0)
+        {
+            // Instruction boundary: the previous instruction has fully executed.
+            // Publish it (opcode + post-execution registers) for diagnostic / pacing
+            // subscribers. Gated on a live subscriber so an unobserved run pays only
+            // a null + count check per instruction; pure notification, so cycle parity
+            // is unaffected.
+            if (_instructionExecuted && _pubSub is { SubscriptionCount: > 0 })
+            {
+                _pubSub.Publish(
+                    CpuInstructionCompletedEvent.Topic,
+                    new CpuInstructionCompletedEvent(_currentInstructionPc, _opcode, A, X, Y, S, P, _pc));
+            }
+
+            _instructionPC = _pc;
+            _visiblePC = _instructionPC;
+            _currentInstructionPc = _pc; // the instruction about to be fetched here
+
+            // KERNAL serial-bus trap (VICE virtual device traps). If a trap fires
+            // it has set PC to the routine's resume address; skip the trapped
+            // instruction and re-fetch from there on the next cycle. The hook is
+            // a no-op (returns false) unless a virtual disk is being addressed,
+            // so cycle-accurate behaviour is unchanged in every other case.
+            if (SerialTrapHook is not null && SerialTrapHook(_pc))
+            {
+                return;
+            }
+
+            _opcode = Read(_pc++);
+            _instructionExecuted = true; // a real instruction has now been fetched/executed
+            _cycle = GetCycleCount(_opcode);
+            _stagedMemoryReadCompleted = false;
+            _delayNextFetch = false;
+            _stagedNzUpdate = false;
+            _stagedNzValue = 0;
+            _stagedCarryUpdate = false;
+            _stagedCarryValue = false;
+            var deferIndirectYLoadAfterBranchRmw = _deferNextIndirectYLoadAfterBranchRmw && IsIndirectYLoadOpcode(_opcode);
+            _deferNextIndirectYLoadAfterBranchRmw = false;
+            _deferImmediateLoadAfterBranch = fetchingBranchTarget && IsImmediateLoadOpcode(_opcode);
+            _deferImpliedRegisterCompletionAfterBranch = fetchingBranchTarget && IsImpliedRegisterOrFlagOpcode(_opcode);
+            _deferJsrPushAfterBranch = fetchingBranchTarget && _opcode == 0x20;
+            var fetchingIndexedLoadControlTarget = fetchingBranchTarget;
+            _deferAbsoluteXLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && IsAbsoluteXLoadOpcode(_opcode);
+            _deferAbsoluteYLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && IsAbsoluteYLoadOpcode(_opcode);
+            _deferIndirectYLoadCompletionAfterBranch = (fetchingBranchTarget && IsIndirectYLoadOpcode(_opcode))
+                || deferIndirectYLoadAfterBranchRmw;
+            _deferZeroPageRmwPcAdvanceAfterBranch = fetchingBranchTarget && IsZeroPageIncrementDecrementOpcode(_opcode);
+            _deferIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && IsIndexedAbsoluteStoreOpcode(_opcode);
+            _deferZeroPageIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && IsZeroPageIndexedStoreOpcode(_opcode);
+            // TR-LOCKSTEP-VSF-001: a taken branch costs 3 native cycles
+            // (6510dtvcore.c BRANCH: fetch, operand, dummy fetch + JUMP) but this
+            // core resolves it in 2 ticks and re-establishes the one-cycle lag by
+            // deferring the FOLLOWING instruction. For opcode classes without a
+            // dedicated defer path the extension is a plain +1 cycle budget: a
+            // staged compare's read at _cycle == 1 then lands on the native read
+            // cycle (CMP abs C4) and its staged apply on the native commit-export
+            // cycle (the next instruction's first CLK_INC in the hosted
+            // c64cpusc.c core); an unstaged control transfer (JMP indirect)
+            // commits on the native export cycle.
+            if (fetchingBranchTarget && IsAfterBranchBudgetExtendedOpcode(_opcode))
+            {
+                _cycle++;
+            }
+            _pendingDeferredImmediateLoad = false;
+            _indexedLoadPageCrossDelayConsumed = false;
+            _stagedReturnAddress = 0;
+            _effectiveAddress = 0;
+            _fetched = 0;
+
+        }
+
+        _cycle--;
+
+        if (TryExecuteCycleStagedOpcode())
+        {
+            return;
+        }
+
+        if (TryDeferImpliedRegisterCompletionAfterBranch())
+        {
+            return;
+        }
+
+        if (_cycle == 0)
+        {
+            ExecuteOpcode(_opcode);
+        }
+    }
+
+    private bool TryExecuteCycleStagedOpcode()
+    {
+        if (_opcode != 0x20)
+        {
+            return TryExecuteCycleStagedMemoryReadOpcode();
+        }
+
+        switch (_cycle)
+---BRANCH---
+                _pc = _stagedReturnAddress;
+                _instructionPC = _pc;
+                _visiblePC = _pc;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private bool TryExecuteCycleStagedBranchOpcode()
+    {
+        if (_cycle != 0 || !IsBranchOpcode(_opcode))
+        {
+            return false;
+        }
+
+        var fallThrough = (ushort)(_instructionPC + 2);
+        if (!IsBranchTaken(_opcode))
+        {
+            if (Peek(fallThrough) == 0x60)
+            {
+                PrefetchOpcodeAt(fallThrough);
+                return true;
+            }
+
+            return false;
+        }
+
+        var target = (ushort)(fallThrough + (sbyte)Read((ushort)(_instructionPC + 1)));
+        _pc = target;
+        _visiblePC = fallThrough;
+        _suppressBootstrapBoundary = true;
+        if ((fallThrough & 0xFF00) != (target & 0xFF00))
+        {
+            // TR-LOCKSTEP-VSF-001: a taken branch across a page boundary costs
+            // 4 native cycles (6510dtvcore.c BRANCH: the PBC fix-up cycle does
+            // another dummy fetch and keeps exporting the un-fixed PC); consume
+            // one extra tick before the target fetch.
+            _branchPageCrossExtraPending = true;
+        }
+        else
+        {
+            _branchTargetFetchPending = true;
+        }
+
+        return true;
+    }
+
+    private static bool IsBranchOpcode(byte opcode)
+    {
+        return opcode is 0x10 or 0x30 or 0x50 or 0x70 or 0x90 or 0xB0 or 0xD0 or 0xF0;
+    }
+
+    private bool IsBranchTaken(byte opcode)
+    {
+        return opcode switch
+        {
+            0x10 => (P & 0x80) == 0,
+            0x30 => (P & 0x80) != 0,
+            0x50 => (P & 0x40) == 0,

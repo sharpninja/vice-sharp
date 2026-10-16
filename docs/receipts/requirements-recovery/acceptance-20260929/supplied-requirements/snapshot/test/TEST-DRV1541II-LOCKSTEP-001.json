@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-DRV1541II-LOCKSTEP-001",
+  "title": "1541-II full lockstep gates",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Boot witness + anchored D64 LOAD gate vs native x64sc with Drive8Type=1542, same procedure as TEST-DRV1540-LOCKSTEP-001.",
+  "acceptanceCriteria": []
+}

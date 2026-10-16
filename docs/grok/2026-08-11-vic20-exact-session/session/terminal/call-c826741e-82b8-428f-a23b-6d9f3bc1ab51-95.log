@@ -1,0 +1,20 @@
+
+> src\ViceSharp.Core\ViceNative.Xvic.cs:31:    static ViceNativeXvic()
+  src\ViceSharp.Core\ViceNative.Xvic.cs:32:    {
+> src\ViceSharp.Core\ViceNative.Xvic.cs:33:        NativeLibrary.SetDllImportResolver(typeof(ViceNativeXvic).Assembly, 
+ResolveLibrary);
+  src\ViceSharp.Core\ViceNative.Xvic.cs:34:    }
+  src\ViceSharp.Core\ViceNative.Xvic.cs:35:
+  src\ViceSharp.Core\ViceNative.Xvic.cs:36:    public static bool IsAvailable => ResolvedLibraryPath.Value is not null;
+  src\ViceSharp.Core\ViceNative.Xvic.cs:37:    public static string AvailabilityMessage => ResolvedLibraryPath.Value 
+is { } path
+  src\ViceSharp.Core\ViceNative.Xvic.cs:38:        ? $"Native VICE xvic library resolved at '{path}'."
+> src\ViceSharp.Core\ViceNative.Xvic.cs:137:        // same assembly, the last SetDllImportResolver wins. Chain: if 
+ViceNative
+  src\ViceSharp.Core\ViceNative.Xvic.cs:138:        // registered first, this may be the only active resolver - so 
+also try
+  src\ViceSharp.Core\ViceNative.Xvic.cs:139:        // forwarding is not possible. Registration order is handled in
+  src\ViceSharp.Core\ViceNative.Xvic.cs:140:        // ViceNative static ctor by installing a combined resolver.
+  src\ViceSharp.Core\ViceNative.Xvic.cs:141:        var path = ResolvedLibraryPath.Value;
+  src\ViceSharp.Core\ViceNative.Xvic.cs:142:        return path is null ? IntPtr.Zero : NativeLibrary.Load(path);
+

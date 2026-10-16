@@ -1,0 +1,26 @@
+{
+  "kind": "tr",
+  "id": "TR-HOST-STATUS-001",
+  "title": "Measured Emulator Runtime Telemetry",
+  "status": "in_progress",
+  "priority": "high",
+  "body": "ViceSharp host status shall distinguish requested throttle settings from measured emulation output and measured emulated clock speed.\n\n## Acceptance Criteria\n- Status responses include nominal clock Hz, effective clock Hz, effective clock percent, limiter rate percent, measured FPS, frame count, cycle, PC, power state, and run state.\n- Tests can verify limiter target remains stable while effective clock and FPS vary with execution.\n- Paused sessions report stable cycle/frame counters and paused run state.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "tr-host-status-ac-1",
+      "text": "Status responses include existing runtime telemetry and IEC activity fields.",
+      "isSatisfied": false
+    },
+    {
+      "id": "tr-host-status-ac-2",
+      "text": "IEC activity is derived from authoritative IEC line changes or an equivalent host-owned bus signal monitor.",
+      "isSatisfied": false
+    },
+    {
+      "id": "tr-host-status-ac-3",
+      "text": "Status polling does not mutate machine, drive, or bus state.",
+      "isSatisfied": false
+    }
+  ]
+}

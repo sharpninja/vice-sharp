@@ -1,0 +1,102 @@
+
+TimeCreated      : 8/6/2026 11:53:54 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+                   EventId: 0
+                   
+                   MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 355.81ms (RequestId: 
+                   "0HNN89RCBK0S0:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+                   User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=802; 
+                   X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+                   ResponseHeaders: "Content-Type=application/jso
+
+TimeCreated      : 8/6/2026 11:53:53 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.WorkspaceResolutionMiddleware
+                   EventId: 0
+                   
+                   [WS-Resolve] "POST" "/mcpserver/sessionlog" | Tier1 OK: X-Workspace-Path='"F:\GitHub\vice-sharp"'  
+                   "F:\GitHub\vice-sharp"
+                   
+
+TimeCreated      : 8/6/2026 11:53:53 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+                   EventId: 0
+                   
+                   MCP request ENTRY "POST" "/mcpserver/sessionlog" (RequestId: "0HNN89RCBK0S0:00000001", Headers: 
+                   "Accept=application/json; Host=payton-legion2:7147; User-Agent=McpServer; 
+                   Content-Type=application/json; charset=utf-8; Content-Length=802; 
+                   X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp")
+                   
+
+TimeCreated      : 8/6/2026 11:53:52 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+                   EventId: 0
+                   
+                   MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 402.48ms (RequestId: 
+                   "0HNN89RCBK0RV:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+                   User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=784; 
+                   X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+                   ResponseHeaders: "Content-Type=application/jso
+
+TimeCreated      : 8/6/2026 11:53:52 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.WorkspaceResolutionMiddleware
+                   EventId: 0
+                   
+                   [WS-Resolve] "POST" "/mcpserver/sessionlog" | Tier1 OK: X-Workspace-Path='"F:\GitHub\vice-sharp"'  
+                   "F:\GitHub\vice-sharp"
+                   
+
+TimeCreated      : 8/6/2026 11:53:52 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+                   EventId: 0
+                   
+                   MCP request ENTRY "POST" "/mcpserver/sessionlog" (RequestId: "0HNN89RCBK0RV:00000001", Headers: 
+                   "Accept=application/json; Host=payton-legion2:7147; User-Agent=McpServer; 
+                   Content-Type=application/json; charset=utf-8; Content-Length=784; 
+                   X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp")
+                   
+
+TimeCreated      : 8/6/2026 11:53:48 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.WorkspaceResolutionMiddleware
+                   EventId: 0
+                   
+                   [WS-Resolve] "GET" "/mcpserver/sessionlog" | Tier1 OK: X-Workspace-Path='"F:\GitHub\vice-sharp"'  
+                   "F:\GitHub\vice-sharp"
+                   
+
+TimeCreated      : 8/6/2026 11:53:48 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+                   EventId: 0
+                   
+                   MCP request ENTRY "GET" "/mcpserver/sessionlog" (RequestId: "0HNN89RCBK0RU:00000001", Headers: 
+                   "Accept=application/json; Host=payton-legion2:7147; User-Agent=McpServer; 
+                   X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp")
+                   
+
+TimeCreated      : 8/6/2026 11:53:44 PM
+Id               : 0
+LevelDisplayName : Information
+Msg              : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+                   EventId: 0
+                   
+                   MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 356.19ms (RequestId: 
+                   "0HNN89RCBK0RT:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+                   User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=712; 
+                   X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+                   ResponseHeaders: "Content-Type=application/jso
+

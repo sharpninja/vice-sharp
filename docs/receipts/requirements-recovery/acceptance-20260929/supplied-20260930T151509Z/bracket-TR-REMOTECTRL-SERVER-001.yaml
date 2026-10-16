@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20260930T151740Z-2992
+  code: not_found
+  message: TR '[TR-REMOTECTRL-SERVER-001]' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getTr
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+

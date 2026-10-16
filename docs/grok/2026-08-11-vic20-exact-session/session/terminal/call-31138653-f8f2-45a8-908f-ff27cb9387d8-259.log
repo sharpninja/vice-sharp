@@ -1,0 +1,14 @@
+2728
+
+[xUnit.net 00:00:02.22]   Starting:    ViceSharp.TestHarness
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstepDiag.Dump_ReadyPal_IndexHistogram [5 s]
+
+
+Id        : 26760
+CPU       : 2.71875
+StartTime : 8/11/2026 3:00:18 PM
+
+Id        : 31388
+CPU       : 614.078125
+StartTime : 8/11/2026 3:00:20 PM
+

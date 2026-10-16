@@ -1,0 +1,40 @@
+Build started 8/5/2026 12:21:24 PM.
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.28]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:01.55]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:01.79]   Starting:    ViceSharp.TestHarness
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_FirstThousandCycles_DoNotThrow_AndAdvanceClock [56 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_BaseRam_IsWritable [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "vic20pal") [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "xvic") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "pal") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "vic20") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Default_IsPal_With6561TimingAnd1540Drive [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_Builds_WithCpuVideoDualViaAndRoms [13 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_AfterReset_CpuPcMatchesKernalResetVector [4 ms]
+[xUnit.net 00:00:01.99]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_NtscAliases(selector: "vic20ntsc") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_NtscAliases(selector: "ntsc") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20RomSet_IsComplete_AgainstViceDataRoot [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Launcher_Xvic_BuildsTopologyYaml_WithVic20HostAnd1540DriveDefaultComment [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_DevicesList_IncludesExpectedRoles [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_WithoutRomProvider_ThrowsClearError [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.DefaultDrive_Is1540_Not1541 [< 1 ms]
+
+Test Run Successful.
+Total tests: 16
+     Passed: 16
+ Total time: 2.4844 Seconds
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.21
+---
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 65 ms - ViceSharp.TestHarness.dll (net10.0)

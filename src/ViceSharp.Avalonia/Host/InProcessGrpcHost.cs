@@ -9,6 +9,7 @@ using ViceSharp.Abstractions;
 using ViceSharp.Host.Diagnostics;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;
+using ViceSharp.Host.Startup;
 
 namespace ViceSharp.Avalonia.Host;
 
@@ -37,10 +38,23 @@ public sealed class InProcessGrpcHost : IAsyncDisposable
 
     public ILocalVideoFrameSource VideoFrameSource => _app.Services.GetRequiredService<ILocalVideoFrameSource>();
 
+    public static Task<InProcessGrpcHost> StartAsync(
+        CancellationToken cancellationToken = default,
+        string? debugAttachPath = null)
+        => StartAsync(false, cancellationToken, debugAttachPath);
+
+    /// <summary>FR-CFG-002: desktop startup can opt into verified default ROM acquisition.</summary>
     public static async Task<InProcessGrpcHost> StartAsync(
+        bool provisionDefaultRoms,
         CancellationToken cancellationToken = default,
         string? debugAttachPath = null)
     {
+        // FR-CFG-002: provision before DI creates the runtime factory. Failure flows
+        // to the desktop's disconnected status instead of a video-less minimal session.
+        if (provisionDefaultRoms)
+            await C64RomBootstrap.EnsureAsync(cancellationToken,
+                Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE")).ConfigureAwait(false);
+
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
             Args = [],

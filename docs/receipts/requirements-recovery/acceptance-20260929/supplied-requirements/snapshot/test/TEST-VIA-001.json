@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-VIA-001",
+  "title": "VIA Integration Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "VIA timer, shift register, port handshake, VIC-20, and drive integration behavior are verified with unit and machine integration tests.",
+  "acceptanceCriteria": []
+}

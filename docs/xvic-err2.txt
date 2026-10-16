@@ -1,0 +1,2 @@
+Unknown option '-VICFilter'.
+Error parsing command-line options, bailing out. For help use '-help'

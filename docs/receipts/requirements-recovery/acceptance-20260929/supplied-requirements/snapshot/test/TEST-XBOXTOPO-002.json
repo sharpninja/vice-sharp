@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXTOPO-002",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Default-props solution build needs no UWP workload. Acceptance: slnx build exit 0 workload-absent.",
+  "acceptanceCriteria": []
+}

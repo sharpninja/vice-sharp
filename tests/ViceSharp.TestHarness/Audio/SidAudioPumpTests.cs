@@ -6,7 +6,6 @@ using FluentAssertions;
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Audio;
 using ViceSharp.Core;
-using ViceSharp.Host.Audio;
 using Xunit;
 
 /// <summary>

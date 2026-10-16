@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRV1541II-001",
+  "title": "Commodore 1541-II true drive",
+  "status": "pending",
+  "priority": "high",
+  "body": "The 1541-II variant: identical 1541 board topology with the dos1541ii-251968-03.bin DOS ROM (VICE type id 1542). Acceptance: full cycle-lockstep vs native VICE x64sc with Drive8Type=1542 (boot witness + anchored D64 LOAD gate).\n\n## Acceptance Criteria\n- The 1541-II variant: identical 1541 board topology with the dos1541ii-251968-03.bin DOS ROM (VICE type id 1542).\n- Acceptance: full cycle-lockstep vs native VICE x64sc with Drive8Type=1542 (boot witness + anchored D64 LOAD gate).\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-SIDAUDIO-CLOCK-001",
+  "title": "SID ticks once per phi2 cycle",
+  "status": "completed",
+  "priority": "high",
+  "body": "Sid6581.ClockDivisor is 1 so the SystemClock ticks the SID every master cycle; the 24-bit accumulator advances by Frequency per tick and the ADSR rate tables are resid phi2-cycle values. ConfigureAudioClock divides by ClockDivisor so the 44.1 kHz sample rate self-corrects.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Sid6581.ClockDivisor returns 1",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Direct-Tick SID tests are divisor-independent; only SystemClock-driven calibration changed",
+      "isSatisfied": true
+    }
+  ]
+}

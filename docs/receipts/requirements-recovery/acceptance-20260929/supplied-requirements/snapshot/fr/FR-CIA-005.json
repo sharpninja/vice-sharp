@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CIA-005",
+  "title": "CIA Serial Port Shift Register",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Each CIA has an 8-bit serial shift register that can transmit or receive data bit-by-bit, clocked by Timer A or an external clock. CIA2's serial port is used for the IEC serial bus connection to disk drives.\n\n## Acceptance Criteria\n- The shift register at offset $0C shifts one bit per Timer A underflow (output mode) or external clock edge (input mode).\n- Direction is controlled by bit 6 of CRA: 0 = input, 1 = output.\n- After 8 bits are shifted, the SDR interrupt bit is set in the ICR.\n- In output mode, data written to the SDR register is loaded into the shift register on the next Timer A underflow.\n- In input mode, incoming bits are shifted in on each external clock edge.\n- The serial data appears on the SP pin and the clock on the CNT pin.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

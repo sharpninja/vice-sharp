@@ -1,0 +1,13 @@
+VICE PAL NORMAL (from vic-timing.h + open_h origin 12):
+  display_width=224  originX=12*4=48  text=22*8=176
+  left=48  paper=176  right=224-48-176=0
+  with PIXEL_WIDTH=2: frame=448 left=96 paper=352 right=0  leftFrac=0.214285714285714
+
+ViceSharp measured (crop screenshot):
+  cyan 323..1676 (1354px), paper 613..1676 (1064px)
+  left=290 right=0  leftFrac=0.214180206794682  paperFrac=0.785819793205318
+  expected paperFrac=0.785714285714286
+
+xvic measured (live window capture 08b):
+  at paper midline: cyan ~158px then paper to window right edge (right=0)
+  leftFrac of content ~158/594=0.265993265993266 (window chrome/CRT makes this noisier)

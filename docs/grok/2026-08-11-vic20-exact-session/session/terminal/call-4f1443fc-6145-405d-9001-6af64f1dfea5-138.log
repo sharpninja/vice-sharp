@@ -1,0 +1,33 @@
+
+README.md:5:> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's 
+`x64sc`. **Iteration 2 (VIC-20)** every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` is green for **10 s PAL** 
+(11_084_050 cycles) and **10 s NTSC** (10_227_270 cycles). See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md) 
+and [HANDOFF.md](HANDOFF.md).
+README.md:210:- **Deterministic** - bit-exact replay given identical inputs
+HANDOFF.md:24:- **Residual:** intermittent mid-instruction PC lag after cycle ~5005 (control-flow diverge later; 
+deeper CPU staging for multi-frame bit-exact).
+HANDOFF.md:70:- **S11 / S11b**: 8580 reSID filter port (filter8580new m==1) + write pipeline + per-model 
+ttl(0xA2000)/scaleFactor(5); shim exports vice_sid_exact_set_sampling + vice_sid_exact_clock_buffered; DATABUS-07 
+flipped; oracle via "c64c". Ratchet ->444.
+HANDOFF.md:74:- **BC**: ported reSID batched SID::clock(delta_t) (Sid6581.BatchedClock.cs); SAMPLE_FAST now 
+value-bit-exact; un-pended the last 4 SID quarantines + authored the last 9 (EXTFILT-01..07, CLOCK-05/08). Ratchet 
+->466 with a strict completion pin (Assert.Equal(466, covered)).
+HANDOFF.md:75:- **LW** (4924b94, pushed): live audio wired through the reSID SAMPLE_RESAMPLE engine (Resample always, 
+VICE x64sc parity); push tail bit-exact vs the buffered pull; warp = cadence-only; zero-alloc; benchmark in 
+SidSamplingBenchmarks.
+HANDOFF.md:84:**Oracle note:** SidExactRead (read path) is the reliable bus observable; SidExactGetState().BusValue 
+export is NOT a dependable live-latch snapshot (returned stale/garbage) - compare via the read path + managed spec 
+constants.
+HANDOFF.md:102:- ~~VICE parity program (PLAN-VICEPARITY-001) remaining slices~~ **COMPLETE 2026-07-10** (SID side 
+fully bit-exact vs reSID; VIC per-cycle work landed through V7 + audit phases). Only manifest-wide pending AC left is 
+TEST-VIC-FETCH-06 (VIC-II FAITHFUL-lock conflict, out of SID scope, needs the parity owner). Candidate follow-up: 
+PLAN-NATIVERESIDUE-002 native-shim lifecycle hardening (a sustained-consecutive-native-load ACCESS_VIOLATION observed 
+once, non-reproducing).
+docs\plan.md:75:2. Identify the exact canonical `FR-*`, `TR-*`, and `TEST-*` IDs, plus the
+docs\plan.md:271:| 7 | Final x64sc lockstep | `BACKFILL-LOCKSTEP-001` | Run all required x64sc profile gates with 
+media/input/video/snapshot coverage, no required skips, and explicit triage for every Phase-1-relevant edge TR. | 
+Final x64sc lockstep green; blockers must identify missing asset, native shim gap, exact failing subsystem, or 
+deferred edge TR. |
+docs\plan.md:476:If a command is skipped, the closeout note must state the exact reason.
+docs\plan.md:484:- Full validation results are listed with exact commands and counts.
+

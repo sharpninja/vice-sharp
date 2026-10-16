@@ -8,7 +8,7 @@ namespace ViceSharp.Core;
 /// (first attached) machine's FrequencyHz. Cart-port extension machines share
 /// the host clock and are stepped exactly once per host cycle.
 /// </summary>
-public sealed class SystemCoordinator : ISystemCoordinator
+public sealed partial class SystemCoordinator : ISystemCoordinator
 {
     private readonly List<IMachine> _systems = new();
     private readonly List<IInterSystemBus> _buses = new();

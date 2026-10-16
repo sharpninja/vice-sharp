@@ -1,0 +1,7 @@
+Get-ChildItem: 
+HEALTH: {"status":"Healthy","version":"1.4.25+1fb065e8eea53215fc16a327bd8840f2fa768bb2","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.0005},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":Line |
+   6 |  . lugin\lib -Filter '*status*','*health*','*bootstrap*','repl*' | Selec .
+     |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot convert 'System.Object[]' to the type 'System.String' required by parameter 'Filter'. Specified method is not supported.
+0.0013}],"nonce":"3d5b65cbf406434a94ec596d3a75eba4","storage":"reachable"}
+NONCE_OK

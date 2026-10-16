@@ -1,0 +1,131 @@
+=== Mos6561 key methods ===
+
+LineNumber Line
+---------- ----
+        13 public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
+        43     /// VICE <c>VIC_PIXEL_WIDTH</c> with <c>VIC_DUPLICATES_PIXELS</c> (victypes.h).
+        45     public const int PixelWidth = 2;
+        48     public const int MaxTextCols = 32;
+        50     // VICE vic-timing.h VIC_*_NORMAL_*
+        59     // VICE vic.c geometry: typical KERNAL Y origin 38 * 2.
+        66     public const int FullLineOriginXKernalPal = PalNormalLeftBorderCycles * 4 * PixelWidth;
+        73     public const int BorderX = 48;
+        76     public const int BorderY = ViceTopBorderBase - PalNormalFirstDisplayedLine;
+        79     /// VICE <c>video_viewport_resize</c> horizontal window start into the full
+        89     public static int ComputeViewportFirstX(
+       162     /// VICE full raster line buffer (screen_width * VIC_PIXEL_WIDTH), before
+       189     public Func<ushort, byte>? MemoryPeek { get; set; }
+       195     public Action<byte, byte>? VBusFetch { get; set; }
+       198     public ushort CharacterRomBase { get; set; } = 0x8000;
+       200     public Mos6561(IInterruptLine? irqLine = null)
+       213     public bool IsNtsc => _cyclesPerLine <= 65;
+       216     /// VICE <c>vic_get_pixel_aspect</c>: PAL 1.66574035/2, NTSC 1.50411479/2.
+       218     public static float GetPixelAspectRatio(bool ntsc)
+       221     public float PixelAspectRatio => GetPixelAspectRatio(IsNtsc);
+       223     public DeviceId Id { get; init; }
+       224     public string Name { get; init; }
+       225     public DeviceId SourceId { get; init; }
+       226     public ushort BaseAddress { get; init; }
+       227     public ushort Size { get; init; }
+       228     public uint ClockDivisor => 1;
+       229     public ClockPhase Phase => ClockPhase.Phi2;
+       230     public IReadOnlyList<IInterruptLine> ConnectedLines =>
+       233     public ushort CurrentRasterLine => _rasterLine;
+       234     public int CycleInLine => _cycleInLine;
+       235     public int DebugVBusFetchState => (int)_fetchState;
+       236     public int DebugVBusBufOffset => _bufOffset;
+       238     public byte DebugArea => (byte)_area;
+       240     public int DebugMemptr => _memptr;
+       242     public int DebugYCounter => _ycounter;
+       244     public int DebugRowCounter => _rowCounter;
+       245     public int CyclesPerLine => _cyclesPerLine;
+       246     public int VisibleLines => _visibleLines;
+       247     public int TotalLines => _totalLines;
+       248     public bool IsVBlank => _rasterLine >= _visibleLines;
+       249     public byte[] FrameBuffer => _frameBuffer;
+       250     public int FrameWidth => _frameWidth;
+       251     public int FrameHeight => _frameHeight;
+       252     public int TextColumns => _columns;
+       253     public int TextRows => _rows;
+       254     public event EventHandler? FrameCompleted;
+       260     public Vic20VideoLockstepState CaptureVideoLockstepState(uint cycle = 0)
+       290     public void ConfigureTiming(int cyclesPerLine, int totalLines, int visibleLines, int columns = 22, int .
+       305     public bool HandlesAddress(ushort address)
+       308     public byte Read(ushort address)
+       311         // VICE vic-mem.c: reg 3 bit7 = raster bit0; reg 4 = raster >> 1.
+       319     public void Write(ushort address, byte value)
+       323         // VICE vic-mem.c case 3: character height from bit 0.
+       326         // Sound $900A-$900E: stored only (vic20sound deferred; non-goal).
+       329     public byte Peek(ushort address) => Read(address);
+       334     /// Display truth is per-line <see cref="DrawRasterLine"/> (vic-draw), not an EOF invent grid.
+       336     public void Tick()
+       338         // VICE: if area IDLE and regs[1] == (raster_line >> 1) -> open_v
+       369     private void OpenV()
+       380     private void OpenH()
+       391         // VICE: text_cols = pending at open_h (before start_fetch may re-assign).
+       396     private void StartFetch()
+       422     private void EndOfLine()
+       438     private void EndOfFrame()
+       453     private void HandleMemptr()
+       470     private void LatchColumns()
+       473         // VICE: MIN(regs[2] & 0x7f, max_text_cols) - no eager live text_cols.
+       480     private void LatchRows()
+       496     private void PerformFetch()
+       536                 // VICE: ((regs[5]&0xf)<<10) + (vbuf * char_height + (ycounter & mask))
+       565     private void DrawRasterLine(int rasterLine)
+       579         // VICE border fill for the whole physical line, then graphics in the open region.
+       604                     // VICE: dr = (reverse & !(b & 8)) ? ~d : d
+       643         // not full-line x=0 (that invent wiped the right border on READY).
+       695     public void Reset()
+       698         // VICE vic_reset: raster_cycle = 6.
+       708         // VICE vic_init: pending_text_cols=22, text_lines=23; text_cols assigned on open_h.
+       713         // VICE raster_reset: blank_this_line = 0 (raster.c).
+       731     public void RenderNow()
+       776     public static int BorderColorIndex(byte reg900F) => reg900F & 0x07;
+=== Vic20 Core files ===
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+=== Sound/carts stubs ===
+         9 /// IEC sector read, raw 8K/16K cart mapping, pulse-only datasette, snapshot,
+        17     /// sectors directly from the D64 image. For cartridges:
+        18     /// StandardCartridgeImage stays the mapping authority. For tape:
+        28     /// IEC handshake. For cartridges: an ICartPortExtension machine. For
+         4 /// Cartridge expansion port exposed by cartridge-capable machines.
+         6 public interface ICartridgePort : IDevice
+         9     CartridgeMappingMode DefaultMappingMode { get; }
+        11     /// <summary>Currently attached cartridge mapping mode, or null when empty.</summary>
+        12     CartridgeMappingMode? AttachedMappingMode { get; }
+        14     /// <summary>True when a cartridge image is currently attached.</summary>
+        15     bool IsCartridgeAttached { get; }
+        17     /// <summary>Attach a raw cartridge payload using the requested mapping mode.</summary>
+        18     void AttachCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode);
+        20     /// <summary>Eject the currently attached cartridge, if any.</summary>
+        21     void EjectCartridge();
+        24     /// Bind a cart-port InterSystemBus endpoint as the live GAME/EXROM pin
+        25     /// source. When set + a cartridge is attached, the active mapping mode
+        29     void SetCartPortPinSource(IBusEndpoint? endpoint);
+        33 /// Raw cartridge mapping modes understood by the C64 cartridge port.
+        35 public enum CartridgeMappingMode
+        40     /// <summary>Generic 8K cartridge mapped at ROML, $8000-$9FFF.</summary>
+        43     /// <summary>Generic 16K cartridge mapped at ROML/ROMH, $8000-$BFFF.</summary>
+        46     /// <summary>Ultimax/MAX cartridge mapped at ROML and ROMH, $8000-$9FFF and $E000-$FFFF.</summary>
+        49     /// <summary>C64 Games System cartridge mapped as 64 switchable 8K ROML banks.</summary>
+        55     /// = bank index, bit 7 = cart-disable (releases ROML when high).
+        67     /// Final Cartridge III (CRT type 60). 64K image split into 4 banks of
+        72     FinalCartridgeIII = 7,
+        69     /// <summary>Expansion cartridge port</summary>
+        70     CartridgePort,
+        62     /// <summary>True when cartridge insertion is part of the model's normal boot path.</summary>
+

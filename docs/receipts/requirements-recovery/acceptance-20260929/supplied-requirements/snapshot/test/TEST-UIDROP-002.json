@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UIDROP-002",
+  "title": "PRG drag-drop load and BASIC RUN tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Verify PRG drop acceptance and host RAM load: `ShellViewModel` routes `*.prg` to `LoadProgramAsync` without attach/reset; `IsDropStartSupported` is true for `.prg` and existing media and false for unsupported types; `PrgMemoryLoader` writes at the load address, updates BASIC pointers only when load equals TXTTAB, and reports ran; `EmulatorHostService.LoadProgramAsync` loads payload into the session, sets Ran, and starts BASIC RUN automation only for BASIC-start PRGs; invalid PRGs return InvalidArgument; `GrpcEmulatorHostService` maps LoadProgram request/response fields.",
+  "acceptanceCriteria": []
+}

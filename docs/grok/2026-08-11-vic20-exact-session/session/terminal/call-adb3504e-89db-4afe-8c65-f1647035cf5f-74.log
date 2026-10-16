@@ -1,0 +1,306 @@
+2026-08-07 00:02:04 -05:00
+---LOG---
+
+Friday, August 7, 2026 12:00:45 AM
+4535
+2026-08-07 00:00:28.497 [Information] App: App starting; log file: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+2026-08-07 00:00:28.796 [Information] App: OnLaunched entry; c64Directory=C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64
+2026-08-07 00:00:28.805 [Information] App: ROM assessment: State=Complete IsBootBlocked=False
+2026-08-07 00:00:28.805 [Information] App: Boot not blocked: building host and session at launch
+2026-08-07 00:00:28.900 [Information] App: BuildHostAndSession: composing in-process host
+2026-08-07 00:00:29.638 [Information] App: BuildHostAndSession: session started id=emulator-68ddc81065ac49c79158d3f3080bd7bd (persisted profile: vic20)
+2026-08-07 00:00:29.661 [Information] App: persisted settings re-applied: success=True profile=vic20
+2026-08-07 00:00:29.667 [Information] App: boot cartridge: none configured
+2026-08-07 00:00:29.704 [Information] App: BuildHostAndSession: built VideoPull=True gamepad=True keyboardVm=False audio=True
+2026-08-07 00:00:29.820 [Information] App: Boot branch: emulator (VideoPull present) -> starting surface + gamepad
+2026-08-07 00:00:29.822 [Information] App: video aspect applied: standard=Pal pixelAspect=0.93650794 clockHz=1108405 contentRows=0 refreshHz=50.03633983387505 surface=True
+2026-08-07 00:00:29.823 [Information] App: video surface started
+2026-08-07 00:00:29.823 [Information] App: gamepad started (present=True)
+2026-08-07 00:00:29.836 [Information] App: menu closed: emulation resumed
+2026-08-07 00:00:29.898 [Information] Video: tick 1: EnsureDevice: D3D11CreateDevice(HW) hr=0x00000000 device=0x1BF37FB55F0 context=0x1CAEC860108
+2026-08-07 00:00:29.899 [Information] Video: tick 1: EnsureDevice: CreateDXGIFactory2 hr=0x00000000 factory=0x1BF37FBD710
+2026-08-07 00:00:29.900 [Information] Video: tick 1: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x1CAEC6EC298
+2026-08-07 00:00:29.900 [Information] Video: tick 1: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-07 00:00:29.918 [Information] Video: tick 1: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 00:00:29.919 [Information] Video: tick 1: EnsureSwapChain: created + bound 3840x1980
+2026-08-07 00:00:29.922 [Information] Video: tick 1: paint geometry: target 3840x1980, src 40x40, draw 1854x1980+993+0, PAR 0.93650794
+2026-08-07 00:00:29.942 [Information] Video: tick 1: OK: first frame presented (target 3840x1980, src 40x40, 6400 bytes)
+2026-08-07 00:00:29.965 [Information] Gamepad: poll thread=4
+2026-08-07 00:00:29.967 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-07 00:00:30.140 [Information] Video: tick 8: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:00:30.159 [Information] Video: tick 9: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:00:30.175 [Information] Video: tick 10: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:00:30.191 [Information] Video: tick 11: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:00:30.207 [Information] Video: tick 12: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:00:30.223 [Information] Video: tick 13: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:00:30.239 [Information] Video: tick 14: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:00:30.255 [Information] Video: tick 15: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:00:34.943 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:00:40.022 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:00:41.757 [Information] App: menu open: emulation paused
+2026-08-07 00:00:41.760 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-07 00:00:43.981 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-07 00:00:44.040 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=2 renderers=2 selComputer='VIC-20' selModel='Commodore VIC-20 PAL' selRenderer='Host direct' volume=100
+2026-08-07 00:00:45.137 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+---SETTINGS---
+{
+  "ProfileId": "vic20",
+  "Limiter": {
+    "RatePercent": 100,
+    "IsEnabled": true,
+    "PacingStrategy": "vice"
+  },
+  "Display": {
+    "Renderer": "host",
+    "Palette": "vice",
+    "ShowBorder": true,
+    "MaintainAspectRatio": true,
+    "Scale": "fit-window",
+    "CropMode": "visible-area",
+    "AspectMode": "vice-pixel-aspect"
+  },
+  "Input": {
+    "KeyboardMapId": "c64:gtk3_pos",
+    "PrimaryJoystickPort": 1,
+    "SwapJoystickPorts": false,
+    "Mode": "keyboard-joystick"
+  },
+  "Audio": {
+    "Mode": "enabled"
+  },
+  "Resources": {
+    "Mode": "auto-detect"
+  },
+  "Vic20MemorySpec": "all",
+  "FileSystemIecRootPath": "",
+  "FileSystemIecUnit": 9,
+  "Vic20ExpansionCartKind": "none",
+  "Vic20ExpansionWriteBack": false,
+  "Vic20ExpansionConfigPreset": "start"
+}
+---WER---
+
+
+Time     : 8/7/2026 12:01:52 AM
+Id       : 0
+Provider : McpServer
+Msg      : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+           EventId: 0
+           
+           MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 233.16ms (RequestId: 
+           "0HNN89RCBK0SD:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+           User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=2802; 
+           X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+           ResponseHeaders: "Content-Type=application/json; charset=utf-8; Date=Fri, 07 Aug 2026 05:01:52 GMT; 
+           Server=Kestrel; 
+           Location=/mcpserver/sessionlog?agent=ClaudeCode&sessionId=ClaudeCode-20260807T045516Z-plugin-session; 
+           Transfer-Encoding=chunked",
+
+Time     : 8/7/2026 12:01:44 AM
+Id       : 0
+Provider : McpServer
+Msg      : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+           EventId: 0
+           
+           MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 246.98ms (RequestId: 
+           "0HNN89RCBK0SA:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+           User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=2712; 
+           X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+           ResponseHeaders: "Content-Type=application/json; charset=utf-8; Date=Fri, 07 Aug 2026 05:01:43 GMT; 
+           Server=Kestrel; 
+           Location=/mcpserver/sessionlog?agent=GrokCode&sessionId=GrokCode-20260807T045514Z-plugin-session; 
+           Transfer-Encoding=chunked", Inp
+
+Time     : 8/7/2026 12:00:58 AM
+Id       : 0
+Provider : McpServer
+Msg      : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+           EventId: 0
+           
+           MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 819.75ms (RequestId: 
+           "0HNN89RCBK0S8:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+           User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=2828; 
+           X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+           ResponseHeaders: "Content-Type=application/json; charset=utf-8; Date=Fri, 07 Aug 2026 05:00:57 GMT; 
+           Server=Kestrel; 
+           Location=/mcpserver/sessionlog?agent=ClaudeCode&sessionId=ClaudeCode-20260807T045516Z-plugin-session; 
+           Transfer-Encoding=chunked",
+
+Time     : 8/7/2026 12:00:53 AM
+Id       : 1001
+Provider : Windows Error Reporting
+Msg      : Fault bucket 1388710887020820662, type 5
+           Event Name: CLR20r3
+           Response: Not available
+           Cab Id: 0
+           
+           Problem signature:
+           P1: ViceSharp.Xbox.exe
+           P2: 1.2.7.0
+           P3: 6a3e0000
+           P4: WinRT.Runtime
+           P5: 2.2.0.48161
+           P6: bd5998bb
+           P7: 80a
+           P8: 0
+           P9: System.StackOverflowException
+           P10: 
+           
+           Attached files:
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.0381cc0f-07b9-42b3-b04b-59fc896149e4.tmp.dmp
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.8517be45-3739-4a5a-88d5-fdbddbd61726.tmp.WERInternalMetada
+           ta.xml
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.f7f32c39-2b35-4395-8129-ca317b3d88eb.tmp.csv
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.a0bc5139-82e9-4fb9-be38-7109e04339fa.tmp.tx
+
+Time     : 8/7/2026 12:00:50 AM
+Id       : 1000
+Provider : Application Error
+Msg      : Faulting application name: ViceSharp.Xbox.exe, version: 1.2.7.0, time stamp: 0x6a3e0000
+           Faulting module name: unknown, version: 0.0.0.0, time stamp: 0x00000000
+           Exception code: 0xc00000fd
+           Fault offset: 0x00007ffa3bc034d3
+           Faulting process id: 0x6360
+           Faulting application start time: 0x1DD2629A9F7B5EE
+           Faulting application path: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout\ViceSharp.Xbox.exe
+           Faulting module path: unknown
+           Report Id: a843a4d0-3d7a-41cd-aa08-5527e591be55
+           Faulting package full name: sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+           Faulting package-relative application ID: App
+
+Time     : 8/7/2026 12:00:48 AM
+Id       : 0
+Provider : McpServer
+Msg      : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+           EventId: 0
+           
+           MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 248.92ms (RequestId: 
+           "0HNN89RCBK0S5:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+           User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=2738; 
+           X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH26kR59OghqOHk; X-Workspace-Path=F:\GitHub\vice-sharp", 
+           ResponseHeaders: "Content-Type=application/json; charset=utf-8; Date=Fri, 07 Aug 2026 05:00:47 GMT; 
+           Server=Kestrel; 
+           Location=/mcpserver/sessionlog?agent=GrokCode&sessionId=GrokCode-20260807T045514Z-plugin-session; 
+           Transfer-Encoding=chunked", Inp
+
+Time     : 8/6/2026 11:55:48 PM
+Id       : 1001
+Provider : Windows Error Reporting
+Msg      : Fault bucket , type 0
+           Event Name: BlueScreen
+           Response: Not available
+           Cab Id: 0
+           
+           Problem signature:
+           P1: 7e
+           P2: ffffffffc0000005
+           P3: fffff8015f1ad26f
+           P4: ffff9184f47f72f8
+           P5: ffff9184f47f6b00
+           P6: 10_0_26200
+           P7: 0_0
+           P8: 256_1
+           P9: 
+           P10: 
+           
+           Attached files:
+           \\?\C:\WINDOWS\Minidump\070626-12015-01.dmp
+           \\?\C:\WINDOWS\SystemTemp\WER-12078-0.sysdata.xml
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.a49598f4-9d10-420d-a7c6-ceea6c06e76c.tmp.xml
+           
+           These files may be available here:
+           \\?\C:\ProgramData\Microsoft\Windows\WER\ReportQueue\Kernel_7e_487f61d313f0827b27f2ed55bacf9cbac969b4_000000
+           00_3d1c3df8-0330-4d7f-af4d-e28ee1db0474
+           
+           Analysis symbol: 
+           Rechecking for solution: 0
+           Rep
+
+Time     : 8/6/2026 11:53:18 PM
+Id       : 1001
+Provider : Windows Error Reporting
+Msg      : Fault bucket 2227112147677846019, type 5
+           Event Name: MoAppCrash
+           Response: Not available
+           Cab Id: 0
+           
+           Problem signature:
+           P1: sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+           P2: praid:App
+           P3: 1.2.7.0
+           P4: 6a3e0000
+           P5: Windows.UI.Xaml.dll
+           P6: 10.0.26100.8875
+           P7: de7cc7c7
+           P8: c00000fd
+           P9: 00000000000b59e6
+           P10: 
+           
+           Attached files:
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.d89bee6e-0f1e-48fc-a682-2375b603d413.tmp.dmp
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.9a81d35e-0a91-477f-998e-cd98a07df9e4.tmp.WERInternalMetada
+           ta.xml
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER.159c12b4-5e21-4ba4-9ff0-32b067785b36.tmp.csv
+           \\?\C:\ProgramData\Microsoft\Windows\WER\Temp\
+
+Time     : 8/6/2026 11:53:14 PM
+Id       : 1000
+Provider : Application Error
+Msg      : Faulting application name: ViceSharp.Xbox.exe, version: 1.2.7.0, time stamp: 0x6a3e0000
+           Faulting module name: Windows.UI.Xaml.dll, version: 10.0.26100.8875, time stamp: 0xde7cc7c7
+           Exception code: 0xc00000fd
+           Fault offset: 0x00000000000b59e6
+           Faulting process id: 0x17B3C
+           Faulting application start time: 0x1DD26287DB4DDCB
+           Faulting application path: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout\ViceSharp.Xbox.exe
+           Faulting module path: C:\Windows\System32\Windows.UI.Xaml.dll
+           Report Id: 0e26b882-f698-4b47-9db2-0ea4f828c429
+           Faulting package full name: sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+           Faulting package-relative application ID: App
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 1042
+Provider : MsiInstaller
+Msg      : Ending a Windows Installer transaction: F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi. Client 
+           Process Id: 96132.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 1033
+Provider : MsiInstaller
+Msg      : Windows Installer installed the product. Product Name: ViceSharp. Product Version: 1.2.7. Product Language: 
+           0. Manufacturer: sharpninja. Installation success or error status: 1603.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 11708
+Provider : MsiInstaller
+Msg      : Product: ViceSharp -- Installation failed.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 10005
+Provider : MsiInstaller
+Msg      : Product: ViceSharp -- A newer version of ViceSharp is already installed.
+
+Time     : 8/6/2026 11:51:26 PM
+Id       : 1040
+Provider : MsiInstaller
+Msg      : Beginning a Windows Installer transaction: F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi. Client 
+           Process Id: 96132.
+
+Time     : 8/6/2026 11:51:22 PM
+Id       : 1033
+Provider : MsiInstaller
+Msg      : Windows Installer installed the product. Product Name: ViceSharp. Product Version: 1.2.7. Product Language: 
+           0. Manufacturer: sharpninja. Installation success or error status: 0.
+
+Time     : 8/6/2026 11:51:22 PM
+Id       : 11707
+Provider : MsiInstaller
+Msg      : Product: ViceSharp -- Installation completed successfully.
+
+---DEPLOY DLL---
+
+FullName                                                                             LastWriteTime        Length
+--------                                                                             -------------        ------
+C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout\ViceSharp.Xbox.ViewModels.dll 8/7/2026 12:00:12 AM 144896
+C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout\ViceSharp.Xbox.exe            8/7/2026 12:00:25 AM 162816
+

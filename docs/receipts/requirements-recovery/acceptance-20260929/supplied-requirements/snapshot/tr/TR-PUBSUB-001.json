@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-PUBSUB-001",
+  "title": "<50ns Publish, <100ns Deliver, 0 Allocations Per Frame",
+  "status": "pending",
+  "priority": "high",
+  "body": "The internal event/message bus used for inter-device communication (e.g., VIC-II asserting IRQ on the CPU, CIA timer underflow signaling the SID) shall achieve sub-100ns latency with zero managed heap allocations. This pub/sub system is the backbone of the emulation's device interconnect and fires hundreds of thousands of times per second.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

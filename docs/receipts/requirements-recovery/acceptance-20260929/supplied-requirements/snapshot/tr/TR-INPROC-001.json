@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-INPROC-001",
+  "title": "Portable lib, no ASP.NET FrameworkReference",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Portable net10.0 lib, IsAotCompatible, no ASP.NET FrameworkReference. Acceptance: verified by TEST-INPROC-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,26 @@
+{
+  "kind": "test",
+  "id": "TEST-UI-001",
+  "title": "Avalonia Shell ViewModel Tests",
+  "status": "in_progress",
+  "priority": "medium",
+  "body": null,
+  "condition": "Sidebar, status bar, attach panel, settings, keyboard map selection, monitor dock/pop-out, focus, and startup behavior are verified with fake host clients.",
+  "acceptanceCriteria": [
+    {
+      "id": "test-ui-ac-1",
+      "text": "ViewModel tests prove peripherals panel drive entries show IEC active and idle states from host telemetry.",
+      "isSatisfied": false
+    },
+    {
+      "id": "test-ui-ac-2",
+      "text": "ViewModel tests prove status bar IEC activity uses the same source while preserving status fields.",
+      "isSatisfied": false
+    },
+    {
+      "id": "test-ui-ac-3",
+      "text": "Focused UI tests run with zero failed and zero skipped tests.",
+      "isSatisfied": false
+    }
+  ]
+}

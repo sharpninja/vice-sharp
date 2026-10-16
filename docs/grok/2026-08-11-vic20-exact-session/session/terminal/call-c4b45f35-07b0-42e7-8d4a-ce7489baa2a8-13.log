@@ -1,0 +1,119 @@
+=== events type counts (top 30) ===
+
+=== turn_started samples ===
+=== events with message/user/assistant ===
+=== file sizes ===
+ Count Name
+ ----- ----
+167302 phase_changed
+  6213 tool_started
+  6203 tool_completed
+  6194 permission_resolved
+  6194 permission_requested
+  2978 first_token
+  2978 loop_started
+   149 turn_started
+   147 turn_ended
+    30 mcp_tool_call_started
+    30 mcp_tool_call_completed
+    23 goal_verifier_skeptic_verdict
+    22 goal_role_model_resolved
+    18 yolo_toggled
+    11 goal_verifier_aggregate_verdict
+    11 goal_role_model_fail_open
+    11 goal_classifier_verdict
+    11 goal_classifier_fired
+     7 goal_planner_fired
+     7 goal_planner_completed
+     6 mcp_server_starting
+     6 goal_summarizer_fired
+     6 goal_summarizer_completed
+     3 mcp_init_completed
+     3 mcp_managed_config_result
+     3 mcp_server_connected
+     3 mcp_server_failed
+     3 interjected
+     3 mcp_config_resolved
+     1 goal_auto_paused
+{"ts":"2026-08-05T07:42:03.675Z","type":"turn_started","session_id":"019fd0df-383d-7fc0-9f0a-69785afd78ed","turn_number":0,"model_id":"grok-4.5","yolo_mode":true,"conversation_message_count":4,"session_relationship":"primary","schema_version":"1.0"}
+{"ts":"2026-08-05T07:49:46.194Z","type":"turn_started","session_id":"019fd0df-383d-7fc0-9f0a-69785afd78ed","turn_number":1,"model_id":"grok-4.5","yolo_mode":false,"conversation_message_count":80,"session_relationship":"primary","schema_version":"1.0"}
+{"ts":"2026-08-05T08:28:24.219Z","type":"turn_started","session_id":"019fd0df-383d-7fc0-9f0a-69785afd78ed","turn_number":2,"model_id":"grok-4.5","yolo_mode":true,"conversation_message_count":455,"session_relationship":"primary","schema_version":"1.0"}
+{"ts":"2026-08-05T08:34:55.936Z","type":"turn_started","session_id":"019fd0df-383d-7fc0-9f0a-69785afd78ed","turn_number":3,"model_id":"grok-4.5","yolo_mode":true,"conversation_message_count":458,"session_relationship":"primary","schema_version":"1.0"}
+{"ts":"2026-08-05T08:54:07.397Z","type":"turn_started","session_id":"019fd0df-383d-7fc0-9f0a-69785afd78ed","turn_number":4,"model_id":"grok-4.5","yolo_mode":true,"conversation_message_count":577,"session_relationship":"primary","schema_version":"1.0"}
+     1 events.jsonl
+     1 updates.jsonl
+     1 chat_history.jsonl
+     1 rewind_points.jsonl
+=== updates sessionUpdate types sample ===
+ts=1785915723 update=hook_execution
+ts=1785915737 update=hook_execution
+ts=1785915739 update=user_message_chunk
+ts=1785915740 update=agent_thought_chunk
+ts=1785915742 update=agent_message_chunk
+ts=1785915742 update=tool_call
+ts=1785915742 update=tool_call_update
+ts=1785915742 update=tool_call
+ts=1785915742 update=tool_call_update
+ts=1785915742 update=tool_call
+ts=1785915742 update=tool_call_update
+ts=1785915742 update=tool_call
+ts=1785915742 update=tool_call_update
+ts=1785915742 update=tool_call_update
+ts=1785915742 update=tool_call_update
+ts=1785915742 update=tool_call_update
+ts=1785915743 update=tool_call_update
+ts=1785915745 update=agent_thought_chunk
+ts=1785915747 update=agent_message_chunk
+ts=1785915747 update=tool_call
+ts=1785915747 update=tool_call_update
+ts=1785915747 update=tool_call
+ts=1785915748 update=tool_call_update
+ts=1785915748 update=tool_call
+ts=1785915748 update=tool_call_update
+ts=1785915748 update=tool_call
+ts=1785915748 update=hook_execution
+ts=1785915748 update=tool_call_update
+ts=1785915748 update=tool_call_update
+ts=1785915748 update=tool_call_update
+=== TRANSCRIPT head for export notes ===
+# Grok session transcript
+
+Session id: `019fd0df-383d-7fc0-9f0a-69785afd78ed`
+Workspace: `F:\GitHub\vice-sharp`
+Exported: 2026-08-11 18:32:21 -05:00
+
+## Contents of this package
+
+- `chat_history.jsonl` - raw session chat history
+- `TRANSCRIPT.md` - human-readable export from chat history
+- `plan.md` - session BDPv4 plan (bit-exact whole VIC-20 / xvic parity)
+- `goal/plan.md` - goal harness plan (finish plan without stopping)
+- `goal/plan.baseline.md` - goal plan baseline
+- `goal/state.json` - goal runtime state
+- `goal/goal-classifier-*.md` - goal classifier / verifier artifacts
+
+---
+
+## 1. system
+
+You are Grok 4.5 released by xAI. You are an interactive CLI tool that helps users with software engineering tasks. Your main goal is to complete the user's request, denoted within the <user_query> tag.
+
+<action_safety>
+Weigh each action by how easily it can be undone and how far its effects reach. Local, reversible work such as editing files and running tests is fine to do freely. Before executing any actions that are hard to reverse, reach shared external systems, or are otherwise risky or destructive, check with the user first.
+
+Confirming is cheap; a mistaken action is not (such as lost work, messages you cannot unsend, deleted branches). For those cases, take the context, the action, and the user's instructions into account; by default, say what you plan to do and ask before doing it. Users can override that default - if they explicitly ask you to act more autonomously, you may proceed without confirmation, but still mind risks and consequences.
+
+One approval is not a blank check. Approving something once (e.g. a git push) does not approve it in every later situation. Unless the user has authorized the action in advance, confirm with the user.
+
+Here are some examples of risky actions that warrant user confirmation:
+- Destructive operations such as removing files or branches, dropping database tables, killing processes, `rm -rf`, discarding uncommitted work
+- Irreversible operations such as force-pushes (including overwriting remote history), `git reset --hard`, amending commits already published, removing or downgrading dependencies, changing CI/CD pipelines
+- Actions others can see, or that change shared state: pushing code; opening, closing, or commenting on PRs and issues; sending messages (Slack, email, GitHub); posting to external services; changing shared infrastructure or permissions
+
+If you find unexpected state - unfamiliar files, branches, or configuration - investigate before deleting or overwriting; it may be the user's in-progress work.
+</action_safety>
+
+<tool_calling>
+- Use specialized tools instead of bash commands when possible, as this provides a better user experience. For file operations, prefer dedicated file tools (e.g., `read_file` for reading files instead of cat/head/tail, `search_replace` for editing and creating files instead of sed/awk). Reserve bash tools exclusively for actual system commands and terminal operations that require shell execution. NEVER use bash echo or other command-line tools to communicate thoughts, explanations, or instructions to the user. Output all communication directly in your response text instead.
+</tool_calling>
+

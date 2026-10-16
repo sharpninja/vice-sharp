@@ -1,0 +1,15 @@
+
+LineNumber Filename      Line
+---------- --------      ----
+       234 vic-cycle.c           b = vic20memrom_chargen_rom[addr & 0xfff];
+        78 vic-mem.c             case 5:                   /* $9005  Video and char matrix base
+       210 vic20mem.c    static uint8_t chargen_read(uint16_t addr)
+       212 vic20mem.c        vic20_cpu_last_data = vic20memrom_chargen_read(addr);
+       217 vic20mem.c    static uint8_t chargen_peek(uint16_t addr)
+       219 vic20mem.c        return vic20memrom_chargen_read(addr);
+       729 vic20mem.c        *base = ((vic_peek(0x9005) & 0x80) ? 0 : 0x8000) + ((vic_peek(0x9005) & 0x70) << 6) + ((v.
+        52 vic20memrom.c uint8_t vic20memrom_chargen_read(uint16_t addr)
+        54 vic20memrom.c     return vic20memrom_chargen_rom[addr & 0xfff];
+        82 vic20memrom.c             return vic20memrom_chargen_read(addr);
+        98 vic20memrom.c             vic20memrom_chargen_rom[addr & 0x0fff] = value;
+

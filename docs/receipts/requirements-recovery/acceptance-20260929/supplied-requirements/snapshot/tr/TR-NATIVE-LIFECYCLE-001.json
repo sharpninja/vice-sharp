@@ -1,0 +1,36 @@
+{
+  "kind": "tr",
+  "id": "TR-NATIVE-LIFECYCLE-001",
+  "title": "Bounded and isolated native oracle lifecycle",
+  "status": "pending",
+  "priority": "high",
+  "body": "Oracle sound state is separate from live mixer state; no reset memset clears playback timing.\nUse absolute monotonic deadlines for create/step 5000 ms and stop 2000 ms; remove infinite waits and propagate native failure to managed callers.\nPoison belongs to the shared loaded native library, not only one wrapper instance; retain memory if its worker is still alive.\nCapture all required modified native source in the supported patch against the pinned clean native gitlink; retain patch/build and loaded-DLL SHA256 receipts.\nAudio comparisons require identical sample counts and complete PCM sequences; truncated Math.Min comparisons cannot establish parity.\n\n## Acceptance Criteria\n- **ac-01**: Oracle sound state is separate from live mixer state; no reset memset clears playback timing.\n- **ac-02**: Use absolute monotonic deadlines for create/step 5000 ms and stop 2000 ms; remove infinite waits and propagate native failure to managed callers.\n- **ac-03**: Poison belongs to the shared loaded native library, not only one wrapper instance; retain memory if its worker is still alive.\n- **ac-04**: Capture all required modified native source in the supported patch against the pinned clean native gitlink; retain patch/build and loaded-DLL SHA256 receipts.\n- **ac-05**: Audio comparisons require identical sample counts and complete PCM sequences; truncated Math.Min comparisons cannot establish parity.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Oracle sound state is separate from live mixer state; no reset memset clears playback timing.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Use absolute monotonic deadlines for create/step 5000 ms and stop 2000 ms; remove infinite waits and propagate native failure to managed callers.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Poison belongs to the shared loaded native library, not only one wrapper instance; retain memory if its worker is still alive.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Capture all required modified native source in the supported patch against the pinned clean native gitlink; retain patch/build and loaded-DLL SHA256 receipts.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Audio comparisons require identical sample counts and complete PCM sequences; truncated Math.Min comparisons cannot establish parity.",
+      "isSatisfied": false
+    }
+  ]
+}

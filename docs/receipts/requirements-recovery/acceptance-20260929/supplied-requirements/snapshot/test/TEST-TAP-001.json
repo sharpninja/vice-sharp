@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-TAP-001",
+  "title": "Tape and Datasette Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Datasette motor, TAP parsing, pulse timing, write behavior, and turbo loader compatibility are verified with unit and timing tests.",
+  "acceptanceCriteria": []
+}

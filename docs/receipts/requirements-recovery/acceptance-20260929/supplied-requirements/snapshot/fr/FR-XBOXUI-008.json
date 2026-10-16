@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXUI-008",
+  "title": "About page GPL disclosure",
+  "status": "pending",
+  "priority": "medium",
+  "body": "About page discloses GPL-2.0-or-later, VICE attribution, source-availability offer. Acceptance: LicenseIdentifier==\"GPL-2.0-or-later\", AttributionText contains \"VICE\", SourceOfferText non-empty + URL.\n\n## Acceptance Criteria\n- About discloses GPL/VICE/source URL.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

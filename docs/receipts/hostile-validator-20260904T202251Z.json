@@ -1,0 +1,92 @@
+{
+  "TimestampUtc": "2026-09-04T20:22:51Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\vice-sharp",
+  "WorkClass": "mixed",
+  "WorkClassNote": "Class-1 Settings AutomationIds + RC allow-list + tests, plus live RC driving of the approved VIC-20 Settings plan. Surface C scored on the product/test slice.",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "ReviewSession": {
+    "sessionId": "GrokCode-20260904T201239Z-hostile-settings-rc",
+    "requestId": "req-20260904T201239Z-001-hostile-validate-settings-rc",
+    "agent": "GrokCode",
+    "persistenceProof": "sessionlog_query text Hostile validate Settings RC remaining work totalCount=1 turn status=completed lastUpdated=2026-09-04T20:28:24.9209889+00:00 actions=5 designDecisions=2 processingDialog=2 filesModified=2"
+  },
+  "ActivePlan": [
+    "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a06a23-81e8-7b41-8fa0-4773aa19757c\\goal\\plan.md",
+    "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a06a23-81e8-7b41-8fa0-4773aa19757c\\plan.md"
+  ],
+  "AccuracyRating": 90,
+  "CompletenessRating": 93,
+  "OverallVerdict": "DISAGREE",
+  "FailList": [
+    {
+      "id": "A7",
+      "rule": "Always bring the receipts; claims must match named artifacts",
+      "evidence": "rc-inventory.log claims ExpansionCartPreset flash; rc-inventory-dump.txt text=start SelectedIndex=0; Settings.Revert en=True contradicting enabled-only-when-dirty; no GetSettings DTO file"
+    },
+    {
+      "id": "C4",
+      "rule": "Byrd/requirements tracking: map FR to TEST; missing mapping for claimed T2 TEST-UISET-002 work is FAIL",
+      "evidence": "MCP mapping list has no FR-VIC20-002 or FR-UISETTINGS-001 rows to TEST-UISET-001/002; FR-VIC20-002 absent from MCP FR list; TEST-UISET Status=pending AC array empty"
+    },
+    {
+      "id": "D5",
+      "rule": "Do not trust plan checkboxes; remaining-inventory [x] requires every control round-trip or reaction",
+      "evidence": "Goal plan remaining-inventory [x] while named inventory dump mismatches flash, Revert enabled and unclicked, parent Revert-restore AC unproven"
+    }
+  ],
+  "Counts": {
+    "pass": 22,
+    "fail": 3,
+    "unknown": 0,
+    "na": 1
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "Plan not 100% complete; PLAN-REMOTECTRL-001 Done=false; I1 does not finish this goal" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "Settings.* + Limiter.WarpToggle/SpeedCycle AutomationIds; allow-list on/off; Sidebar.Tabs/Settings" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "Inventory tests 8/0/0; *Vic20Settings* 18/0/0 via in-process exe" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "pid 82636 port 47100 caps twice click/mutate/frames; frames 3583 READY; ROM path" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "claim": "All + Apply+Restart: five BLKs true, 28159 BYTES FREE" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "claim": "PAL ContentHeight 284 CLOCK ~1.11; NTSC 234 CLOCK ~1.02; READY both" },
+    { "id": "A7", "surface": "A", "verdict": "FAIL", "claim": "Remaining inventory SET ok plus host status; Revert not clicked" },
+    { "id": "A8", "surface": "A", "verdict": "PASS", "claim": "LIMITER WARP + WarpToggle IsChecked; CLOCK percent not well above 100; not claimed" },
+    { "id": "A9", "surface": "A", "verdict": "PASS", "claim": "git diff --check exit 0 on T2 files" },
+    { "id": "A10", "surface": "A", "verdict": "PASS", "claim": "Did not mark PLAN-REMOTECTRL-001 done" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "Honesty of non-inventory claims (not 100%, CLOCK open, PLAN Done=false)" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "Receipts re-verified" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only storage for TODO/requirements reads" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell / no Python" },
+    { "id": "B5", "surface": "B", "verdict": "N/A", "claim": "Look-before-delete (no deletions)" },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "claim": "Byrd T2 red CS0117 before gates method; no phase-order timestamp FAIL" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "FR-UISETTINGS-001 still the Settings UserControl" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "FR-VIC20-002 AC4 All expansions selectable and applied" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "claim": "TEST-UISET-001 tests + live BYTES FREE; TEST not marked completed" },
+    { "id": "C4", "surface": "C", "verdict": "FAIL", "claim": "TEST-UISET-002 MCP mapping FR-VIC20-002/FR-UISETTINGS-001 missing" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "No 100% plan-complete claim" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "claim": "PLAN-REMOTECTRL-001 Done=false; TEST-REMOTECTRL-001 and app-launch tasks false" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "claim": "T2 AutomationIds checkbox matches tree and tests" },
+    { "id": "D4", "surface": "D", "verdict": "PASS", "claim": "All+Restart UI/BYTES FREE checkbox matches PNGs and dumps" },
+    { "id": "D5", "surface": "D", "verdict": "FAIL", "claim": "Remaining-inventory [x] overclaim vs named dump and Revert" },
+    { "id": "D6", "surface": "D", "verdict": "PASS", "claim": "Warp CLOCK-percent left open; not an overclaim" }
+  ],
+  "Evidence": {
+    "planRemoteCtrl": "PLAN-REMOTECTRL-001 Done=false; TEST-REMOTECTRL-001 task false; app-launch task false",
+    "inventoryTests": "ViceSharp.TestHarness.exe -class ViceSharp.TestHarness.Ui.Vic20SettingsRemoteControlInventoryTests Total 8 Failed 0 Skipped 0 exit 0",
+    "vic20SettingsTests": "ViceSharp.TestHarness.exe -class *Vic20Settings* Total 18 Failed 0 Skipped 0 exit 0",
+    "redLog": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-c6e8b45ea2fd\\implementer\\vic20-settings-tests-red.log CS0117 ApplyRemoteControlActionGates",
+    "pid": "82636 ViceSharp.Avalonia.exe listen 127.0.0.1:47100",
+    "independentCaps": "click=True mutate=True frames=True identity=vicesharp-inspector twice exit 0",
+    "independentFrame": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-c6e8b45ea2fd\\hostile\\hostile-frame.png 80835 bytes All 28159 READY LIMITER WARP CLOCK 1.023 MHz 100%",
+    "allRamDump": "rc-all-ram-dump.txt preset All BLK0-5 IsChecked=True ContentHeight=284 CLOCK 1.110 MHz",
+    "ntscDump": "rc-pal-ntsc-dump.txt MachineProfile Commodore VIC-20 NTSC ContentHeight=234 CLOCK 1.013 MHz",
+    "warpDump": "rc-warp-clock.txt WarpToggle IsChecked=True LIMITER WARP CLOCK 1.006 MHz 98%",
+    "inventoryDumpPreset": "rc-inventory-dump.txt ExpansionCartPreset start SelectedIndex=0 Revert en=True",
+    "gitDiffCheck": "exit 0 T2 files and full git diff --check",
+    "romPath": "User and current-process VICESHARP_ROM_PATH=F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data",
+    "mcpMapping": "no FR-VIC20-002 or FR-UISETTINGS-001 mapping to TEST-UISET-001/002"
+  }
+}

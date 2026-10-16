@@ -1,0 +1,21 @@
+212
+
+Name
+----
+BindableInput.cs
+BindingActivation.cs
+BindingJsonContext.cs
+BindingProfile.cs
+BindingProfileExtensions.cs
+ButtonBinding.cs
+IBindingStore.cs
+InMemoryBindingStore.cs
+BindingProfile.cs
+BindingProfileExtensions.cs
+
+Path                                                        LineNumber Line
+----                                                        ---------- ----
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\HomePage.xaml         31                     Text="{Binding Title}"
+
+
+

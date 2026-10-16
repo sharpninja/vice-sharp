@@ -1,0 +1,52 @@
+type: result
+payload:
+  requestId: req-20260811T150001Z-98f0
+  result:
+    success: true
+    item:
+      id: PLAN-XBOXUWP-END-001
+      title: CANCELLED - Xbox UWP and Dev-Mode sideload platform track
+      section: xbox-uwp
+      priority: low
+      done: false
+      note: CANCELLED 2026-08-11. Entire Xbox platform track closed (Store + local sideload).
+      description:
+      - Operator cancelled Microsoft Store (emulators not allowed) and then cancelled remaining local Xbox UWP / Dev-Mode sideload.
+      - No Partner Center, no DeployXboxLocal product track, no console smoke as open work.
+      - Historical IMPL-XBOXUWP-*** slices remain done for audit; do not reopen.
+      technicalDetails: &o0 []
+      implementationTasks:
+      - task: Record cancellation in HANDOFF and stop agents from resuming Xbox deploy
+        done: true
+      remaining: Cancelled - Xbox UWP / Dev-Mode sideload abandoned.
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+  deprecated: true
+
+---
+      technicalDetails:
+      - Byrd TDD; red tests first for path resolution and stream open.
+      - Do not invent media formats; zip is a container only over existing image types.
+      - Determinism and lockstep hosts must still accept plain filesystem paths.
+      - Write-back into zip is out of scope for v1 unless explicitly scoped later.
+      implementationTasks:
+      - task: Capture FR/TR/TEST for zip virtual media folder and attach path
+        done: false
+      - task: Design IMediaSource / virtual folder abstraction over zip entries
+        done: false
+      - task: Implement zip entry stream open for disk, tape, and cart attach
+        done: false
+      - task: Wire Avalonia (and console) attach UI to accept .zip and entry pick
+        done: false
+      - task: Add unit/integration tests with fixture zips (no extract required)
+        done: false
+      - task: Update USER-GUIDE and handoff with usage and limits
+        done: false
+      remaining: Not started
+      dependsOn: &o0 []
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+  deprecated: true
+
+---

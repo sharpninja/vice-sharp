@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INPROC-002",
+  "title": "IConsoleEmulatorHost surface",
+  "status": "pending",
+  "priority": "medium",
+  "body": "IConsoleEmulatorHost exposes session lifecycle + lock-free frame pull + FrameGeometry + joystick/key/RESTORE injection. Acceptance: a headless test exercises start->advance->frame-pull->input->reset->close; TryGetFrameGeometry.BufferLength == FrameBuffer.Length.\n\n## Acceptance Criteria\n- a headless test exercises start->advance->frame-pull->input->reset->close; TryGetFrameGeometry.BufferLength == FrameBuffer.Length.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

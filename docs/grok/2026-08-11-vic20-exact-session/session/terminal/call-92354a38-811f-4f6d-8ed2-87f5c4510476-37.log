@@ -1,0 +1,19 @@
+
+native\vice\vice\src\video\video-canvas.h:2: * video-canvas.h
+native\vice\vice\src\video\video-canvas.h:27:#ifndef VICE_VIDEO_CANVAS_H
+native\vice\vice\src\video\video-canvas.h:28:#define VICE_VIDEO_CANVAS_H
+native\vice\vice\src\video\video-canvas.h:30:struct video_canvas_s;
+native\vice\vice\src\video\video-canvas.h:33:int video_canvas_palette_set(struct video_canvas_s *canvas, struct 
+palette_s *palette);
+native\vice\vice\src\video\video-render.h:36:struct video_canvas_s;
+native\vice\vice\src\video\video-render.h:59:void video_render_update_palette(struct video_canvas_s *canvas);
+native\vice\vice\src\video\video-render.h:72:                                unsigned int viewport_first_line, 
+unsigned int viewport_last_line);
+native\vice\vice\src\video\video-render.h:78:                            unsigned int viewport_first_line, unsigned 
+int viewport_last_line);
+native\vice\vice\src\video\video-render.h:84:                                unsigned int viewport_first_line, 
+unsigned int viewport_last_line);
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\viewport.h
+
+

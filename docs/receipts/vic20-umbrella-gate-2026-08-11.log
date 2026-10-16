@@ -1,0 +1,113 @@
+vic20-umbrella-gate PROCESS-ISOLATED 2026-08-11T15:42:04.2225333-05:00
+DLL=F:\GitHub\vice-sharp\native\vice_xvic.dll len=10930779 mtimeUtc=2026-08-11T18:10:36.4494845Z
+VICESHARP_LOCKSTEP_VIDEO=0
+
+======== pixel_index_pal filter=FullyQualifiedName~Vic20PixelLockstep.Index_ReadyPal EXIT=0 MS=14854 P=1 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 7 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== pixel_index_ntsc filter=FullyQualifiedName~Vic20PixelLockstep.Index_ReadyNtsc EXIT=0 MS=15720 P=1 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 8 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== pixel_busy filter=FullyQualifiedName~Vic20PixelLockstep.Index_BusyPal EXIT=0 MS=16051 P=1 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 7 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== pixel_bgra filter=FullyQualifiedName~Vic20PixelLockstep.Bgra_ReadyPal EXIT=0 MS=14067 P=1 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 6 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== pixel_frame filter=FullyQualifiedName~Vic20PixelFrameTests.CaptureVisibleFrame_AfterBoot EXIT=0 MS=11683 P=1 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== video_2k filter=FullyQualifiedName~Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k EXIT=0 MS=7936 P=2 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== sound filter=FullyQualifiedName~Vic20Sound|FullyQualifiedName~Vic20NativeAudio EXIT=0 MS=7985 P=8 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     8, Skipped:     0, Total:     8, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== flash filter=FullyQualifiedName~Flash040|FullyQualifiedName~Fe3Flash EXIT=0 MS=6532 P=12 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    12, Skipped:     0, Total:    12, Duration: 114 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== cart filter=FullyQualifiedName~UltimemParity|FullyQualifiedName~MegaCartParity|FullyQualifiedName~Vic20CartInventory EXIT=0 MS=6922 P=7 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     7, Skipped:     0, Total:     7, Duration: 102 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== workload_pal filter=FullyQualifiedName~EveryCycle_Workload_Match_FocusedPal EXIT=0 MS=10550 P=1 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== workload_ntsc filter=FullyQualifiedName~EveryCycle_Workload_Match_FocusedNtsc EXIT=0 MS=9291 P=1 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== snapshot filter=FullyQualifiedName~Vic20Snapshot EXIT=0 MS=9199 P=4 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+======== keyboard filter=FullyQualifiedName~Vic20Keyboard|FullyQualifiedName~Vic20LockstepIsolation EXIT=0 MS=8385 P=6 F=0 S=0 ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 239 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+===== UMBRELLA SUMMARY =====
+Passed=46 Failed=0 Skipped=0 anyNonZeroExit=0
+Criterion: Failed=0 Skipped=0 and all part EXIT=0
+Date: 2026-08-11T15:44:23.6554892-05:00
+
+======== 2s workload PAL (VICESHARP_LOCKSTEP_2S=1) ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 27 s - ViceSharp.TestHarness.dll (net10.0)
+
+======== 2s workload NTSC ========
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 11 s - ViceSharp.TestHarness.dll (net10.0)
+
+UMBRELLA_PLUS_2S complete 2026-08-11T15:45:36.6176660-05:00

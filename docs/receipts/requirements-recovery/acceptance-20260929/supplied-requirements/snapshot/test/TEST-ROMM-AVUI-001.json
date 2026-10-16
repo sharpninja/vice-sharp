@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-ROMM-AVUI-001",
+  "title": "RomM Avalonia UI validation",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Build, headless view-model, and end-to-end validation prove LibraryView and ListsView binding, connection, browse, search, list, collection, and launch behavior.",
+  "acceptanceCriteria": []
+}

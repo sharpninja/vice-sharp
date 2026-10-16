@@ -20,8 +20,8 @@ On every subsequent user message:
 4. Persist session-log updates immediately after each meaningful change: turn creation, action append, decision, requirement, blocker, file/context update, validation result, commit, or push.
 5. Capture rich turn detail: interpretation, response, status, actions with type/status/filePath, contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and relevant processing dialog.
 6. Follow workspace conventions in this file, `README.md`, `docs/plan.md`, `HANDOFF.md`, and `.github/copilot-instructions.md`.
-7. In Codex Desktop, use PowerShell.Mcp for command execution. Open or reuse a PowerShell.Mcp console, then invoke git, dotnet, Nuke, Bash, Node, PowerShell, and file-system commands through `mcp__powershell.invoke_expression`.
-8. If Bash is required from PowerShell.Mcp, invoke explicit Git Bash at `C:\Program Files\Git\bin\bash.exe`; do not rely on bare `bash`.
+7. In Codex Desktop, use PowerShell.MCP `execute_command` for git, dotnet, Nuke, Bash, Node, PowerShell, and file-system commands. With the local `powershell` server key, the host-qualified tool is `mcp__powershell__execute_command`. Calling `start_console` first is optional because `execute_command` auto-starts or reuses a console; use `start_console` explicitly only to pre-warm at a location, show a banner, or force an additional console with `reason`.
+8. If Bash is required from PowerShell.MCP, invoke explicit Git Bash at `C:\Program Files\Git\bin\bash.exe`; do not rely on bare `bash`.
 9. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
 10. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
 11. When writing session logs or other audit records, identify the real agent accurately using the correct Pascal-case source type. Do not use placeholder, legacy, or misleading agent identities.
@@ -48,7 +48,7 @@ On every subsequent user message:
 
 ## Build and Test Commands
 
-Prefer PowerShell.Mcp `invoke_expression` for all commands in Codex Desktop.
+Prefer PowerShell.MCP `execute_command` for all commands in Codex Desktop. Use `wait_for_completion` after a long-running command remains active, `cancel` for an interruptible runaway command, and `close_console` for an uninterruptible command or PowerShell host prompt.
 
 Common validation commands:
 
@@ -102,6 +102,10 @@ Use the repo-supported Nuke targets for packaging and deployment. Do not invent 
 - The VIA chip must remain one common implementation; C1541/VIC-20-specific wiring belongs in the owning machine/device layer.
 - Preserve lockstep/checkpoint determinism when touching CPU, VIC-II, CIA, VIA, SID, IEC, storage, tape, input, snapshot, capture, or host pacing code.
 - Follow existing project conventions and public API XMLDocs. Public APIs and tests should document requirement/use-case/acceptance context where the local convention requires it.
+
+## Source control and workflow
+
+GitHub `origin` (`https://github.com/sharpninja/vice-sharp.git`) is the source of truth. Azure DevOps is retired and is not used. Push and PR target `origin` only unless explicitly told otherwise. The default branch is `main`. Read `AGENTS-README-FIRST.yaml` and `HANDOFF.md` when resuming work; route TODO, session-log, and requirements operations through the MCP Server.
 
 ## MCP Interaction
 

@@ -73,4 +73,5 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 - The core library does not implement a "run loop" -- the host application calls `RunFrame()` at the appropriate cadence (vsync, timer, or free-running).
 - The core library exposes synchronous APIs only; the host is responsible for threading and async patterns.
 - ROM images are not bundled with the library; the host provides ROM data via `IRomProvider.LoadRom(romName, architecture)`, with `IRomSet` validating per-architecture completeness.
+- FR-CFG-002 desktop C64 acquisition belongs to the host composition layer and is explicitly enabled by local desktop startup. It reuses complete local sets before downloading the three default core ROMs through the built-in SHA256-pinned GitHub catalog into a per-user cache. Configured roots precede that cache, failures remain actionable, and generic runtime factories, headless hosts, and remote-host connections retain their existing local provisioning behavior. Verification: TEST-CFG-001.
 - `ViceSharp.Host` may expose the core through gRPC, but that transport remains outside the core library.

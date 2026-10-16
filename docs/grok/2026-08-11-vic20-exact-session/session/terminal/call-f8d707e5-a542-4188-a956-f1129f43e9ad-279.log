@@ -1,0 +1,12 @@
+Add-AppxPackage : Deployment failed with HRESULT: 0x80073CF9, Install failed. Please contact your software vendor.
+Deployment Register operation with target volume C: on Package sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y 
+from:  (AppxManifest.xml)  failed with error 0x80070003. See http://go.microsoft.com/fwlink/?LinkId=235160 for help 
+diagnosing app deployment issues.
+NOTE: For additional information, look for [ActivityId] 8c6041a4-1a14-0009-645c-0d9b141add01 in the Event Log or use 
+the command line Get-AppPackageLog -ActivityID 8c6041a4-1a14-0009-645c-0d9b141add01
+At line:1 char:1
++ Add-AppxPackage -Register 'F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bi ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (F:\GitHub\vice-...ppxManifest.xml:String) [Add-AppxPackage], IOException
+    + FullyQualifiedErrorId : DeploymentError,Microsoft.Windows.Appx.PackageManager.Commands.AddAppxPackageCommand
+ 

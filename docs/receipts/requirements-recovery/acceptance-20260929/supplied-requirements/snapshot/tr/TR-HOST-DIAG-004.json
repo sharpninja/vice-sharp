@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-HOST-DIAG-004",
+  "title": "Development-Scoped gRPC Reflection",
+  "status": "pending",
+  "priority": "medium",
+  "body": "ViceSharp shall support gRPC reflection for local development diagnostics without enabling reflection unconditionally in release/runtime use.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

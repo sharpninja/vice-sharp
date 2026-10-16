@@ -1,0 +1,2 @@
+docs\_deploy-desktop-2026-08-08_045501.log|0
+docs\_deploy-xbox-2026-08-08_045348.log|0

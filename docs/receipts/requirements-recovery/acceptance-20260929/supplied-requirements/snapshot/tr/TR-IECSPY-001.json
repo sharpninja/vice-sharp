@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-IECSPY-001",
+  "title": "IInterSystemBus.Snapshot API",
+  "status": "pending",
+  "priority": "high",
+  "body": "IInterSystemBus exposes Snapshot() returning BusSnapshot (per-line level + pullers, talking endpoints, attached endpoints). Read-only. DONE.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

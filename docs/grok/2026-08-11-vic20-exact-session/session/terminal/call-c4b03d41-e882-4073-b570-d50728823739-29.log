@@ -1,0 +1,29 @@
+=== limit=2&offset=0 === has_char_index=True len=131581
+keys: items, total, limit, offset, char_index, rom_id_index, filter_values
+char_index: {"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":6717,"u":6754,"v":6755,"w":6761}
+=== limit=2&offset=0&with_char_index=true === has_char_index=True len=131581
+keys: items, total, limit, offset, char_index, rom_id_index, filter_values
+char_index: {"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":6717,"u":6754,"v":6755,"w":6761}
+=== limit=2&offset=0&with_char_index=false === has_char_index=True len=131354
+keys: items, total, limit, offset, char_index, rom_id_index, filter_values
+char_index: {}
+=== limit=2&offset=0&platform_id=15 === has_char_index=True len=131581
+keys: items, total, limit, offset, char_index, rom_id_index, filter_values
+char_index: {"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":6717,"u":6754,"v":6755,"w":6761}
+=== limit=2&offset=0&platform_ids=15&with_char_index=true === has_char_index=True len=260
+keys: items, total, limit, offset, char_index, rom_id_index, filter_values
+char_index: {}
+=== limit=2&offset=0&order_by=name&order_dir=asc&with_char_index=true === has_char_index=True len=131581
+keys: items, total, limit, offset, char_index, rom_id_index, filter_values
+char_index: {"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":6717,"u":6754,"v":6755,"w":6761}
+=== RomListQuery props ===
+String SearchTerm
+IReadOnlyList`1 PlatformIds
+Nullable`1 Limit
+Nullable`1 Offset
+String OrderBy
+String OrderDir
+Nullable`1 Matched
+Nullable`1 Favorite
+Nullable`1 Missing
+Nullable`1 WithFiles

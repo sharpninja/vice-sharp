@@ -49,16 +49,17 @@ public sealed class D64FileSystemTests
         return image;
     }
 
+    /// <summary>Writes one CBM DOS directory slot using VICE layout (slotBase = index * 32).</summary>
     private static void WriteDirEntry(System.Span<byte> dir, int index, byte type, byte track, byte sector, string name, int blocks)
     {
-        var slot = 2 + index * 32;
-        dir[slot + 0] = type;
-        dir[slot + 1] = track;
-        dir[slot + 2] = sector;
+        var slot = index * 32;
+        dir[slot + 2] = type;
+        dir[slot + 3] = track;
+        dir[slot + 4] = sector;
         for (var i = 0; i < 16; i++)
-            dir[slot + 3 + i] = (byte)(i < name.Length ? name[i] : 0xA0);
-        dir[slot + 0x1E] = (byte)(blocks & 0xFF);
-        dir[slot + 0x1F] = (byte)(blocks >> 8);
+            dir[slot + 5 + i] = (byte)(i < name.Length ? name[i] : 0xA0);
+        dir[slot + 30] = (byte)(blocks & 0xFF);
+        dir[slot + 31] = (byte)(blocks >> 8);
     }
 
     private static void WritePadded(System.Span<byte> sector, int offset, string text, int length)
@@ -81,6 +82,33 @@ public sealed class D64FileSystemTests
         DecodeName(entries[0].NamePetscii).Should().Be("TEST");
         DecodeName(entries[1].NamePetscii).Should().Be("GAME");
         entries[1].Blocks.Should().Be(5);
+    }
+
+    /// <summary>
+    /// Regression: Attach+Autostart crashed with IndexOutOfRangeException when a directory
+    /// sector used all 8 slots (old layout read blocks at offset 256/257).
+    /// </summary>
+    [Fact]
+    public void EnumerateDirectory_EightLiveSlots_DoesNotThrow()
+    {
+        var image = new D64Image(new byte[D64Image.DiskSize35Track]);
+        image.Format();
+        var dir = image.GetSector(18, 1);
+        dir[0] = 0x00;
+        dir[1] = 0xFF;
+        for (var i = 0; i < 8; i++)
+            WriteDirEntry(dir, i, 0x82, 17, (byte)i, $"FILE{i}", blocks: i + 1);
+
+        var fs = new D64FileSystem(image);
+        var act = () => fs.EnumerateDirectory();
+
+        act.Should().NotThrow();
+        var entries = fs.EnumerateDirectory();
+        entries.Should().HaveCount(8);
+        entries[7].Blocks.Should().Be(8);
+        DecodeName(entries[7].NamePetscii).Should().Be("FILE7");
+        fs.TryFindFile("*"u8, out var first).Should().BeTrue();
+        DecodeName(first.NamePetscii).Should().Be("FILE0");
     }
 
     [Fact]

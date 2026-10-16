@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MON-005",
+  "title": "Memory Bank View Selection",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The monitor shall allow the user to select which memory \"bank\" or view is displayed: CPU view (as the CPU sees it with current PLA configuration), RAM view (raw RAM regardless of ROM overlay), ROM view (character/BASIC/KERNAL ROM), I/O view, and individual bank configurations.\n\n## Acceptance Criteria\n- CPU view: shows memory as the CPU currently sees it (respecting PLA banking).\n- RAM view: shows raw RAM contents at all addresses, ignoring ROM overlays.\n- ROM view: shows the ROM contents at their mapped addresses ($A000 BASIC, $D000 CHARROM, $E000 KERNAL).\n- I/O view: shows the I/O register space at $D000-$DFFF.\n- Drive view: shows memory from the attached disk drive's address space.\n- Bank selection is independent of the actual PLA banking state.\n- Editing memory in a specific bank view writes to that specific target (e.g., editing RAM view writes to RAM even if ROM is currently banked in).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

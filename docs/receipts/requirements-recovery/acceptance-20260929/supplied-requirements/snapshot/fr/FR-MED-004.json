@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MED-004",
+  "title": "Synchronized Audio/Video Capture",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall support recording audio and video simultaneously with correct synchronization. The audio and video streams are muxed into a single container file (MP4) with timestamps that maintain A/V sync throughout the recording.\n\n## Acceptance Criteria\n- Audio and video streams are written to a single MP4 container with correct timestamps.\n- A/V sync drift does not exceed 1 frame duration (20ms PAL, 16.7ms NTSC) over any recording length.\n- The muxer correctly interleaves audio and video packets.\n- Starting A/V recording captures both streams from the same frame/sample boundary.\n- Pausing and resuming A/V recording maintains sync after the gap.\n- The `IMuxer` interface handles timestamp generation and stream interleaving.\n- Audio sample count per video frame is correctly calculated to avoid drift (PAL: 882.17 samples/frame at 44100Hz).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

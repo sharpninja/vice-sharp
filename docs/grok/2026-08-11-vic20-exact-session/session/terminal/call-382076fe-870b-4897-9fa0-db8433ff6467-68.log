@@ -1,0 +1,66 @@
+
+TimeCreated  : 8/5/2026 6:07:32 AM
+Id           : 1001
+ProviderName : Windows Error Reporting
+Msg          : Fault bucket 1397598015822408501, type 4
+               Event Name: APPCRASH
+               Response: Not available
+               Cab Id: 0
+               
+               Problem signature:
+               P1: ViceSharp.Avalonia.exe
+               P2: 1.2.167.0
+               P3: 6a3ed1eb
+               P4: ntdll.dll
+               P5: 10.0.26100.8875
+               P6: ba65e4a2
+               P7: c00000fd
+               P8: 00000000000716a5
+               P9: 
+               P10: 
+               
+               Attached files:
+               \\?\C:\Users\kingd\AppData\Local\Temp\WER.0f30000b-3807-4800-b6f5-2f4c509f3c74.tmp.WERDataCollectionSta
+
+TimeCreated  : 8/5/2026 6:07:24 AM
+Id           : 1000
+ProviderName : Application Error
+Msg          : Faulting application name: ViceSharp.Avalonia.exe, version: 1.2.167.0, time stamp: 0x6a3ed1eb
+               Faulting module name: ntdll.dll, version: 10.0.26100.8875, time stamp: 0xba65e4a2
+               Exception code: 0xc00000fd
+               Fault offset: 0x00000000000716a5
+               Faulting process id: 0x19530
+               Faulting application start time: 0x1DD24CA9683A224
+               Faulting application path: C:\Program Files\ViceSharp\ViceSharp.Avalonia.exe
+               
+
+TimeCreated  : 8/5/2026 6:06:28 AM
+Id           : 0
+ProviderName : McpServer
+Msg          : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+               EventId: 0
+               
+               MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 280.09ms (RequestId: 
+               "0HNN89RCBK06J:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+               User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=800; 
+               X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH2
+
+TimeCreated  : 8/5/2026 6:06:24 AM
+Id           : 0
+ProviderName : McpServer
+Msg          : ...:null,\"processingDialog\":null,\"commits\":null,\"designDecisions\":[\"Deferred commit/push and MCP 
+               requirements export pending explicit user direction because of the worktree/marker mismatch and 
+               unresolved debug scaffolding. Consequence: 18 files of UI, joystick, and keyboard-nav work remained 
+               uncommitted and unexported at end of session; DIAG-* diagnostic logging remained in place.\"],\"requ
+
+TimeCreated  : 8/5/2026 6:06:21 AM
+Id           : 0
+ProviderName : McpServer
+Msg          : Category: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+               EventId: 0
+               
+               MCP interaction "POST" "/mcpserver/sessionlog" completed with 201 in 222.72ms (RequestId: 
+               "0HNN89RCBK06G:00000001", RequestHeaders: "Accept=application/json; Host=payton-legion2:7147; 
+               User-Agent=McpServer; Content-Type=application/json; charset=utf-8; Content-Length=710; 
+               X-Api-Key=TQ2MpeTmenLce9IjLsSSKXsnF8v3bH2
+

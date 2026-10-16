@@ -31,3 +31,7 @@ public partial class MyDevice : IDevice
 This is a build-time-only analyzer package with no runtime code; it produces source, not a library you call into. The generated `Register()` and `Create()` members reference `ViceSharp.Core` and `ViceSharp.Abstractions`, so consuming projects reference those packages as usual.
 
 License: GPL-2.0-or-later (derivative of VICE). Part of the ViceSharp project: https://github.com/sharpninja/vice-sharp
+
+### Commodore C= logo (CC BY-SA 4.0)
+
+The Commodore C= logo used in ViceSharp product branding (where present) is from Wikimedia Commons ([Commodore C= logo.svg](https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg)) by Alien426, licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). See the repository `THIRD_PARTY_NOTICES.md` for full third-party attribution.

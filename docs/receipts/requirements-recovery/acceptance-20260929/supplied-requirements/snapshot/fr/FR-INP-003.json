@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INP-003",
+  "title": "Commodore 1351 Proportional Mouse Emulation",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The 1351 mouse uses the SID's potentiometer inputs (POT X, POT Y) to report proportional (analog) position data. The mouse connects to the joystick port and uses the analog pot lines for X/Y movement and the digital lines for buttons.\n\n## Acceptance Criteria\n- Mouse X movement is reported via the POTX register ($D419 for port 1, $D41A for port 2).\n- Mouse Y movement is reported via the POTY register.\n- The pot registers report the proportional position as a value that wraps at 0-255.\n- Left mouse button is mapped to the fire button (joystick bit 4).\n- Right mouse button is mapped to a secondary control line (typically UP direction on joystick port).\n- Host mouse movement is scaled and mapped to the 1351 proportional output.\n- The `IMousePort` interface accepts delta-X and delta-Y from the host pointing device.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

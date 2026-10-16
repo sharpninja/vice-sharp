@@ -1,0 +1,40 @@
+
+native\vice\vice\src\vic20\vic20io.c:325:        return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20io.c:329:        vic20_cpu_last_data = retval;
+native\vice\vice\src\vic20\vic20io.c:331:        return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20io.c:337:        return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20io.c:342:        vic20_cpu_last_data = realval;
+native\vice\vice\src\vic20\vic20io.c:344:        return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20io.c:349:        vic20_cpu_last_data = realval;
+native\vice\vice\src\vic20\vic20io.c:351:        return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20io.c:353:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20io.c:375:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20io.c:385:    vic20_cpu_last_data = value;
+native\vice\vice\src\vic20\vic20mem.c:81:uint8_t vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20mem.c:117:    vic20_cpu_last_data = mem_ram[addr & 0xff];
+native\vice\vice\src\vic20\vic20mem.c:119:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20mem.c:124:    vic20_cpu_last_data = value;
+native\vice\vice\src\vic20\vic20mem.c:131:    vic20_cpu_last_data = mem_ram[addr];
+native\vice\vice\src\vic20\vic20mem.c:132:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20mem.c:137:    vic20_cpu_last_data = mem_ram[addr];
+native\vice\vice\src\vic20\vic20mem.c:139:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20mem.c:144:    vic20_cpu_last_data = value;
+native\vice\vice\src\vic20\vic20mem.c:150:    vic20_cpu_last_data = value;
+native\vice\vice\src\vic20\vic20mem.c:166:        vic20_cpu_last_data = vfli_ram[addr] | (vic20_v_bus_last_data & 
+0xf0);
+native\vice\vice\src\vic20\vic20mem.c:168:        vic20_cpu_last_data = mem_ram[addr] | (vic20_v_bus_last_data & 0xf0);
+native\vice\vice\src\vic20\vic20mem.c:170:    vic20_v_bus_last_data = vic20_cpu_last_data; /* TODO verify this */
+native\vice\vice\src\vic20\vic20mem.c:171:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20mem.c:176:    vic20_cpu_last_data = value;
+native\vice\vice\src\vic20\vic20mem.c:177:    vic20_v_bus_last_data = vic20_cpu_last_data; /* TODO verify this */
+native\vice\vice\src\vic20\vic20mem.c:212:    vic20_cpu_last_data = vic20memrom_chargen_read(addr);
+native\vice\vice\src\vic20\vic20mem.c:214:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20mem.c:226:    vic20_cpu_last_data = vic20_v_bus_last_data;
+native\vice\vice\src\vic20\vic20mem.c:228:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20mem.c:233:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20mem.c:238:    vic20_cpu_last_data = value;
+native\vice\vice\src\vic20\vic20mem.c:244:    vic20_cpu_last_data = value;
+native\vice\vice\src\vic20\vic20mem.c:254:    return vic20_cpu_last_data;
+native\vice\vice\src\vic20\vic20memsnapshot.c:106:    SMW_B(m, vic20_cpu_last_data);
+native\vice\vice\src\vic20\vic20memsnapshot.c:152:    SMR_B(m, &vic20_cpu_last_data);
+

@@ -1,0 +1,29 @@
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\VirtualKeyRow.cs:15:public sealed class VirtualKeyRow : IReadOnlyList<VirtualKeyEntry>
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\VirtualKeyRow.cs:21:    public VirtualKeyRow(IReadOnlyList<VirtualKeyEntry> keys)
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Xbox\XboxAotBindingConventionTests.cs:20:/// false-positive); HomePage and keyboard rows use <c>x:Bind</c> / <c>VirtualKeyRow</c>.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Xbox\XboxAotBindingConventionTests.cs:70:    /// uses <c>VirtualKeyRow</c> and <c>x:Bind Keys</c>.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Xbox\XboxAotBindingConventionTests.cs:73:    public void HomeAndKeyboard_UseCompiledBinds_AndVirtualKeyRow()
+
+src\ViceSharp.Xbox\App.xaml.cs:645:            SettingsVm.ConfigureRomReadiness(new RomProvisionEvaluator(), 
+_c64Directory);
+F:\GitHub\vice-sharp\src\ViceSharp.Console\Program.cs:13:Console.WriteLine("=====================================");
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceTopologyBuilderTests.cs:129:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceTopologyBuilderTests.cs:131:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceArgsParserTests.cs:147:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceArgsParserTests.cs:151:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceArgsParserTests.cs:379:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceArgsParserTests.cs:384:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceArgsParserTests.cs:502:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceArgsParserTests.cs:504:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceArgsParserTests.cs:527:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Launcher\ViceArgsParserTests.cs:529:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs:138:    // =========================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs:140:    // =========================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs:814:    // =========================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs:816:    // =========================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\SpriteCollisionTests.cs:385:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\SpriteCollisionTests.cs:391:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs:30:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs:33:    // =====================================================================
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs:190:    // =====================================================================
+

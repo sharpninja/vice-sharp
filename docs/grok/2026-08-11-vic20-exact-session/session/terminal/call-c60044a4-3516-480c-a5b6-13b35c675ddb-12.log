@@ -1,0 +1,52 @@
+=== live chat_history first line keys ===
+{"type":"system","content":"You are Grok 4.5 released by xAI. You are an interactive CLI tool that helps users with software engineering tasks. Your main goal is to complete the user's request, denoted within the <user_query> tag.\n\n<action_safety>\nWeigh each action by how easily it can be undone and how far its effects reach. Local, reversible work such as editing files and running tests is fine to do freely. Before executing any actions that are hard to reverse, reach shared external systems
+
+=== live chat line count ===
+35
+=== sample keys from live chat lines ===
+type=system keys=[type,content] hasTS=False hasCreated=False
+type=user keys=[type,content,synthetic_reason] hasTS=False hasCreated=False
+type=user keys=[type,content,synthetic_reason] hasTS=False hasCreated=False
+type=user keys=[type,content] hasTS=False hasCreated=False
+type=user keys=[type,content,synthetic_reason] hasTS=False hasCreated=False
+type=user keys=[type,content,synthetic_reason] hasTS=False hasCreated=False
+type=reasoning keys=[type,id,summary,encrypted_content,status] hasTS=False hasCreated=False
+type=assistant keys=[type,content,tool_calls,model_id,model_fingerprint,reasoning_effort] hasTS=False hasCreated=False
+type=tool_result keys=[type,tool_call_id,content] hasTS=False hasCreated=False
+type=tool_result keys=[type,tool_call_id,content] hasTS=False hasCreated=False
+type=reasoning keys=[type,id,summary,encrypted_content,status] hasTS=False hasCreated=False
+type=assistant keys=[type,content,tool_calls,model_id,model_fingerprint,reasoning_effort] hasTS=False hasCreated=False
+type=tool_result keys=[type,tool_call_id,content] hasTS=False hasCreated=False
+type=tool_result keys=[type,tool_call_id,content] hasTS=False hasCreated=False
+type=tool_result keys=[type,tool_call_id,content] hasTS=False hasCreated=False
+type=tool_result keys=[type,tool_call_id,content] hasTS=False hasCreated=False
+type=reasoning keys=[type,id,summary,encrypted_content,status] hasTS=False hasCreated=False
+type=assistant keys=[type,content,tool_calls,model_id,model_fingerprint,reasoning_effort] hasTS=False hasCreated=False
+type=tool_result keys=[type,tool_call_id,content] hasTS=False hasCreated=False
+type=reasoning keys=[type,id,summary,encrypted_content,status] hasTS=False hasCreated=False
+=== events.jsonl first 3 (trunc) ===
+{"ts":"2026-08-05T07:41:58.576Z","type":"mcp_config_resolved","servers":[{"name":"mcpserver","transport":"http","source":"local"},{"name":"pwsh","transport":"stdio","source":"local"}],"disabled":[]}
+{"ts":"2026-08-05T07:41:58.576Z","type":"mcp_managed_config_result","server_count":0}
+{"ts":"2026-08-05T07:41:58.693Z","type":"mcp_server_starting","server_name":"pwsh","transport":"stdio","target":"C:\\Users\\kingd\\OneDrive\\Documents\\PowerShell\\Modules\\PowerShell.MCP\\1.11.0\\bin\\win-x64\\PowerShell.MCP.Proxy.exe","timeout_sec":30}
+=== events keys sample ===
+type=mcp_config_resolved keys=[ts,type,servers,disabled]
+type=mcp_managed_config_result keys=[ts,type,server_count]
+type=mcp_server_starting keys=[ts,type,server_name,transport,target,timeout_sec]
+type=mcp_server_starting keys=[ts,type,server_name,transport,target,timeout_sec]
+type=mcp_server_failed keys=[ts,type,server_name,transport,target,error_type,error_message,duration_ms,timeout_sec]
+type=mcp_server_connected keys=[ts,type,server_name,transport,tool_count,duration_ms,tools]
+type=mcp_init_completed keys=[ts,type,total_servers,succeeded,failed,auth_required,total_tools,duration_ms,is_reinit,failed_servers]
+type=turn_started keys=[ts,type,session_id,turn_number,model_id,yolo_mode,conversation_message_count,session_relationship,schema_version]
+type=loop_started keys=[ts,type,loop_index]
+type=phase_changed keys=[ts,type,phase]
+type=first_token keys=[ts,type]
+type=phase_changed keys=[ts,type,phase]
+type=phase_changed keys=[ts,type,phase]
+type=phase_changed keys=[ts,type,phase]
+type=phase_changed keys=[ts,type,phase]
+=== updates.jsonl first 2 (trunc) ===
+{"timestamp":1785915723,"method":"_x.ai/session/update","params":{"sessionId":"019fd0df-383d-7fc0-9f0a-69785afd78ed","update":{"sessionUpdate":"hook_execution","event_name":"session_start","runs":[{"name":"global/mcpserver-1.74.0:session_start[0].hooks[0]","status":{"status":"success","elapsed_ms":1918}},{"name":"global/settings:session_start[0].ho
+{"timestamp":1785915737,"method":"_x.ai/session/update","params":{"sessionId":"019fd0df-383d-7fc0-9f0a-69785afd78ed","update":{"sessionUpdate":"hook_execution","event_name":"user_prompt_submit","prompt_id":"de8cf5bc-c9bc-4d75-a7c8-83d255e0b651","runs":[{"name":"global/mcpserver-1.74.0:user_prompt_submit[0].hooks[0]","status":{"status":"success","el
+=== archive unique top-level keys across sample ===
+type, content, synthetic_reason, id, summary, encrypted_content, status, tool_calls, model_id, model_fingerprint, reasoning_effort, tool_call_id
+=== any timestamp-like field in archive? ===

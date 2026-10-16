@@ -1,0 +1,16 @@
+{
+  "kind": "tr",
+  "id": "TR-UIAXAML-PICKER-001",
+  "title": "Avalonia Computer/Model picker binds like Xbox",
+  "status": "pending",
+  "priority": "high",
+  "body": "AttachPanelViewModel mirrors XboxSettingsViewModel Computers/Models/SelectedComputer/SelectedModel using host SettingsProfileDto.Machine as family key (x64sc, xvic). SettingsView.axaml replaces the single Settings.MachineProfile ComboBox with Settings.Computer and Settings.MachineVariant. IsVic20Selected remains family xvic.\n\n## Acceptance Criteria\n- **ac-vm**: ViewModel tests cover Computers list, Models filter, family switch default profile, PAL/NTSC keeps Models instance.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-vm",
+      "text": "ViewModel tests cover Computers list, Models filter, family switch default profile, PAL/NTSC keeps Models instance.",
+      "isSatisfied": false
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-UI-001",
+  "title": "Dockable Host UI Control Client",
+  "status": "pending",
+  "priority": "high",
+  "body": "The UI control layer shall operate as a dockable thin client of the emulator host. It sends commands and input events, presents host status, and performs media/session/state operations through generated gRPC clients or narrow gRPC-backed client abstractions without referencing or mutating core emulator objects directly.\n\nFor local desktop presentation, the in-process Avalonia renderer may bind a host-owned render surface directly to a local emulator/frame source. That direct renderer boundary is limited to frame presentation and is not available to ViewModels. External or remote UIs display streamed output through the gRPC video service/stream APIs.\n\n## Acceptance Criteria\n- The UI control layer can connect to an emulator host, create or attach to a session, and reflect lifecycle state through gRPC-backed abstractions.\n- A media attach panel can dock on the left or right side of the main window and expose disk, tape, cartridge, readonly, status, validation, and recent-media affordances.\n- External or remote UIs display streamed video frames and route audio samples from host stream APIs to the platform audio backend.\n- The UI maps keyboard and joystick input to normalized host input events.\n- The UI invokes media attach/eject, snapshot save/load, and screenshot commands through host services.\n- The UI surfaces host errors and command validation failures without crashing.\n- Reconnecting to an existing remote session restores lifecycle state, current media status, and the latest committed frame.\n- UI ViewModels depend on abstraction-level host client facades; generated gRPC clients are isolated behind adapters.\n- The in-process Avalonia render surface may consume a local frame source directly only from the host/composition layer; ViewModels must not reference runtime internals, concrete emulator devices, or frame-source implementations.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

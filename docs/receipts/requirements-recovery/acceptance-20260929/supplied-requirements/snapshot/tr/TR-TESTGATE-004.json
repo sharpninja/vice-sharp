@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-TESTGATE-004",
+  "title": "Head validated by raw-file-read",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Head validated by raw-file-read (harness references the portable libs, not the head). Acceptance: verified by slice audit / TEST-TESTGATE-010.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

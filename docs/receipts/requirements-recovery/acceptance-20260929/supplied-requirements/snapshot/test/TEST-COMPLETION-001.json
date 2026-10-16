@@ -1,0 +1,41 @@
+{
+  "kind": "test",
+  "id": "TEST-COMPLETION-001",
+  "title": "Exhaustive approved-work completion evidence",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.\nFinal Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.\nBoth fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.\nAudit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.\nRequire final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.\n\n## Acceptance Criteria\n- **ac-01**: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.\n- **ac-02**: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.\n- **ac-03**: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.\n- **ac-04**: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.\n- **ac-05**: Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.\n- **ac-06**: Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-06",
+      "text": "Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence.",
+      "isSatisfied": false
+    }
+  ]
+}

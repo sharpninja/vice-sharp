@@ -1,0 +1,19 @@
+
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemorySettingsRestartTests.cs(51,20): error CS0104: 
+'Vic20MemoryLayout' is an ambiguous reference between 'ViceSharp.Architectures.Vic20.Vic20MemoryLayout' and 
+'ViceSharp.Core.Vic20.Vic20MemoryLayout' 
+[F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemorySettingsRestartTests.cs(53,21): error CS0104: 
+'Vic20MemoryLayout' is an ambiguous reference between 'ViceSharp.Architectures.Vic20.Vic20MemoryLayout' and 
+'ViceSharp.Core.Vic20.Vic20MemoryLayout' 
+[F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]
+Build FAILED.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemorySettingsRestartTests.cs(51,20): error CS0104: 
+'Vic20MemoryLayout' is an ambiguous reference between 'ViceSharp.Architectures.Vic20.Vic20MemoryLayout' and 
+'ViceSharp.Core.Vic20.Vic20MemoryLayout' 
+[F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemorySettingsRestartTests.cs(53,21): error CS0104: 
+'Vic20MemoryLayout' is an ambiguous reference between 'ViceSharp.Architectures.Vic20.Vic20MemoryLayout' and 
+'ViceSharp.Core.Vic20.Vic20MemoryLayout' 
+[F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]
+

@@ -1,0 +1,20 @@
+## [32mmain[m...[31morigin/main[m
+[32mM[m  azure-pipelines.ci.yml
+[32mM[m  azure-pipelines.release.yml
+[32mM[m  build/Build.CI.cs
+[32mM[m  build/Build.cs
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+[main b2ba4da] ci: point ADO pipelines at GitHub; restore Octopus release steps
+ 4 files changed, 193 insertions(+), 122 deletions(-)
+[33mb2ba4da[m ci: point ADO pipelines at GitHub; restore Octopus release steps
+To https://github.com/sharpninja/vice-sharp.git
+   3b20c4f..b2ba4da  main -> main
+{
+  "repo": "GitHub",
+  "result": null,
+  "sourceBranch": "refs/tags/v1.2.1",
+  "status": "notStarted"
+}

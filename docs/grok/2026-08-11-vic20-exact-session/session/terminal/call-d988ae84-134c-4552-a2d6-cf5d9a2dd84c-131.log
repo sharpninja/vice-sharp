@@ -1,0 +1,2 @@
+romless test present
+C:\Program Files\dotnet\sdk\10.0.302\Sdks\Microsoft.NET.Sdk\targets\Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file 'F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\obj\project.assets.json' not found. Run a NuGet package restore to generate this file. [F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]

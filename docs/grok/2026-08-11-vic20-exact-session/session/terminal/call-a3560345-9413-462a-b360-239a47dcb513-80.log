@@ -1,0 +1,23 @@
+
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:14:  FOCUSED_EXIT=0, Passed 20 / Failed 0
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:18:  matchedCycles=577678  DIV first=577679  budget=2216810
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:27:Current residual:       matchedCycles=577678
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:66:  OPCODE_DELAYS_INTERRUPT (6510dtvcore.c BRANCH + mainviccpu.c
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:70:  Model VICE last_opcode_info DELAYS_INTERRUPT for taken 
+same-page
+private bool _nopHoldOpcodePcOnFinal;
+var cleanBranchFetch = priorTrailingAtNextPc == 2 || afterSoftCompare
+&& (((priorTrailingAtNextPc == 2)
+_nopHoldOpcodePcOnFinal = true;
+_nopHoldOpcodePcOnFinal = false;
+|| (priorTrailingAtNextPc == 2 && IsStoreOpcode(_previousOpcode))
+&& DebugPriorTrailingAtNextPc == 2)))
+if (_nopHoldOpcodePcOnFinal)
+_nopHoldOpcodePcOnFinal = false;
+&& DebugPriorTrailingAtNextPc == 2);
+_nopHoldOpcodePcOnFinal = false;
+var advanceOnTrail1 = IsLoadOpcode(_previousOpcode)
+var holdOpcodePc = trail == 0 || (trail == 1 && !advanceOnTrail1);
+if (holdOpcodePc)
+_nopHoldOpcodePcOnFinal = false;
+

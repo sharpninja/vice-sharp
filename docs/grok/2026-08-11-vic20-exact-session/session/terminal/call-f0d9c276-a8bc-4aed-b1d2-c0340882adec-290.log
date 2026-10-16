@@ -1,0 +1,5 @@
+Select-String: 
+Line |
+   4 |  . ceSharp.Avalonia" -Pattern "ViceSharp.Architectures" -Recurse -Includ .
+     |                                                         ~~~~~~~~
+     | A parameter cannot be found that matches parameter name 'Recurse'.

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XROM-002",
+  "title": "Wizard acquires core ROMs (HTTPS/USB)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The wizard acquires the core ROM set by verified HTTPS download (requires internetClient) or USB/storage import into LocalFolder\\vice\\C64. Acceptance: Download fetches basic/kernal/characters SHA256-checked after confirm; Import validates size+MD5 before copy; mismatch rejected leaving state unchanged.\n\n## Acceptance Criteria\n- Download fetches basic/kernal/characters SHA256-checked after confirm; Import validates size+MD5 before copy; mismatch rejected leaving state unchanged.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,56 @@
+
+LineNumber Line
+---------- ----
+        49 static int vic_sound_machine_init(sound_t *psid, int speed, int cycles_per_sec);
+        50 static void vic_sound_machine_store(sound_t *psid, uint16_t addr, uint8_t value);
+        53 static int vic_sound_machine_calculate_samples(sound_t **psid, float *pbuf, int nr, int sound_chip_channels.
+        55 static int vic_sound_machine_calculate_samples(sound_t **psid, int16_t *pbuf, int nr, int sound_output_chan.
+        58 static int vic_sound_machine_cycle_based(void)
+        63 static int vic_sound_machine_channels(void)
+        70 static sound_chip_mixing_spec_t vic_sound_mixing_spec[SOUND_CHIP_CHANNELS_MAX] = {
+        79 static sound_chip_t vic_sound_chip = {
+        95 static uint16_t vic_sound_chip_offset = 0;
+        97 void vic_sound_chip_init(void)
+       106 static uint8_t noisepattern[1024] = {
+       164 static float voltagefunction[] = {
+       216 static uint8_t vic20_sound_data[16];
+       260 void machine_sid2_enable(int val)
+       290 static struct sound_vic20_s snd;
+       292 void vic_sound_clock(CLOCK cycles);
+       296 static int vic_sound_machine_calculate_samples(sound_t **psid, float *pbuf, int nr, int scc, CLOCK *delta_t)
+       326 static int vic_sound_machine_calculate_samples(sound_t **psid, int16_t *pbuf, int nr, int soc, int scc, CLO.
+       368 void vic_sound_reset(sound_t *psid, CLOCK cpu_clk)
+       377 void vic_sound_store(uint16_t addr, uint8_t value)
+       385 static uint16_t noise_LFSR = 0x0000;
+       386 static uint8_t noise_LFSR0_old = 0;
+       388 void vic_sound_clock(CLOCK cycles)
+       443 void vic_sound_clock(int cycles)
+       504 static void vic_sound_machine_store(sound_t *psid, uint16_t addr, uint8_t value)
+       525 static int vic_sound_machine_init(sound_t *psid, int speed, int cycles_per_sec)
+       577 void sound_machine_enable(int enable)
+         9  * This file is part of VICE, the Versatile Commodore Emulator.
+        10  * See README for copyright notice.
+        19  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        52 static int userport_pa6 = 1;    /* HACK: pin 8, this is also connected to tape sense */
+        53 static int userport_pb = 0xff;
+        56          when PB is written, which is why both is updated by the same function. */
+        59     store_userport_pbx(userport_pb, userport_pa6 ? USERPORT_NO_PULSE : USERPORT_PULSE);
+        62 void via1_store(uint16_t addr, uint8_t data)
+        64     viacore_store(machine_context.via1, addr, data);
+        67 uint8_t via1_read(uint16_t addr)
+        69     return viacore_read(machine_context.via1, addr);
+        77 static void set_ca2(via_context_t *via_context, int state)
+        81 static void set_cb2(via_context_t *via_context, int state, int offset)
+        85         store_userport_pa2(state);
+        91     interrupt_set_nmi(maincpu_int_status, int_num, value, rclk);
+        94 static void restore_int(via_context_t *via_context, unsigned int int_num, int value)
+        96     interrupt_restore_nmi(maincpu_int_status, int_num, value);
+       119 static void via1_internal_lightpen_check(uint8_t pa)
+       121     uint8_t b = read_joyport_dig(JOYPORT_1);
+       123     b &= pa;
+       130     uint8_t pa = machine_context.via1->via[VIA_PRA] | ~(machine_context.via1->via[VIA_DDRA]);
+       132     via1_internal_lightpen_check(pa);
+       137     iec_pa_write(byte);
+       140 static void store_pra(via_context_t *via_context, uint8_t byte, uint8_t myoldpa,
+       146     iec_pa_write(byte);
+

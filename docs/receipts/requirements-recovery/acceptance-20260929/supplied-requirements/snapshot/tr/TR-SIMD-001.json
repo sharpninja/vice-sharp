@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SIMD-001",
+  "title": "SIMD-Accelerated Rendering and Audio with Generic Specialization for CPU Core",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Performance-critical rendering and audio processing paths shall use SIMD (Single Instruction, Multiple Data) intrinsics to process multiple pixels or audio samples in parallel. The CPU core shall use generic specialization (constrained generics with `where T : struct`) to allow the JIT compiler to generate specialized machine code for different CPU variants (6502, 6510, 8502) without virtual dispatch overhead.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

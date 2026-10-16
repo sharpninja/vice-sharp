@@ -1,0 +1,10 @@
+
+src\ViceSharp.Chips\Cpu\Mos6502.cs:556:            _cycle = GetCycleCount(_opcode);
+src\ViceSharp.Chips\Cpu\Mos6502.cs:597:            if (_opcode != 0x68)
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1446:            case 0x68:
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1673:        _cycle = Math.Max(0, GetCycleCount(_opcode) - 1);
+src\ViceSharp.Chips\Cpu\Mos6502.cs:2320:    private partial int GetCycleCount(byte opcode);
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:51:    private partial int GetCycleCount(byte opcode) => 
+OpCycleCounts[opcode];
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:307:            case 0x68: A = Pop(); UpdateNZ(A); break;
+

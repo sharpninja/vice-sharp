@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-QA-TESTSILENCE-001",
+  "title": "WindowsAudioSessionMute engages, mutes, and restores the process audio session",
+  "status": "pending",
+  "priority": "low",
+  "body": null,
+  "condition": "WindowsAudioSessionMuteTests (tests/ViceSharp.TestHarness/Audio) verifies: when a render endpoint exists the fixture engages and the process Windows audio session reads muted (endpointExists equals IsEngaged, then muted is true); disposing an engaged fixture restores the prior mute state; and construction plus double-dispose never throw on any host. Validates TR-QA-TESTSILENCE-001.",
+  "acceptanceCriteria": []
+}

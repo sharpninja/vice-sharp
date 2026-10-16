@@ -1,0 +1,24 @@
+
+Name                       Length
+----                       ------
+build.log                    4123
+receipts-n0n1.txt             478
+verification-summary.txt      539
+vic20-boot-proof.log         2951
+vic20-c64-smoke.log           319
+vic20-filter.log              319
+vic20-gate.log               3217
+vic20-lockstep-n0.log        4091
+vic20-native-lockstep.log   14939
+vic20-native-lockstep2.log  14935
+vic20-openbus-lockstep.log   3984
+vic20-openbus-v2.log         5457
+vic20-openbus-v3.log         3217
+vic20-xvic-lockstep.log       322
+xvic-build.log              59173
+xvic-shim-build.log          1030
+
+vic20-gate.log: Passed!  - Failed:     0, Passed:    80, Skipped:     0, Total:    80, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+vic20-xvic-lockstep.log: Passed!  - Failed:     0, Passed:    17, Skipped:     0, Total:    17, Duration: 839 ms - ViceSharp.TestHarness.dll (net10.0)
+vic20-c64-smoke.log: Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+build.log: Build succeeded.

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XVIDEO-001",
+  "title": "Live C64 frames, BGRA, letterbox, no tear",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Display live C64 frames with correct BGRA colors, 4:3 letterbox, no tearing (Win2D nearest-neighbor integer scale into the TV-safe rect). Acceptance (on-console): READY. screen + animation; colors match desktop; centered/letterboxed, no tear.\n\n## Acceptance Criteria\n- image correct; SID audible; mute silences; suspend/resume clean.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

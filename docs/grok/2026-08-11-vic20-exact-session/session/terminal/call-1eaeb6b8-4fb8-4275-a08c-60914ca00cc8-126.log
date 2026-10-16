@@ -1,0 +1,13 @@
+
+src\ViceSharp.Core\ViceNative.cs:519:        public byte IrqAsserted;
+src\ViceSharp.Core\ViceNative.cs:540:        public uint LastOpcodeInfo;
+src\ViceSharp.Core\ViceNative.cs:797:        public NativeCpuPipelineState GetCpuPipelineState()
+src\ViceSharp.Core\ViceNative.cs:802:            return new NativeCpuPipelineState
+src\ViceSharp.Core\ViceNative.cs:805:                LastOpcodeInfo = state.LastOpcodeInfo,
+src\ViceSharp.Core\ViceNative.Xvic.cs:382:        public NativeCpuPipelineState GetCpuPipelineState()
+src\ViceSharp.Core\ViceNative.Xvic.cs:387:            return new NativeCpuPipelineState
+src\ViceSharp.Core\ViceNative.Xvic.cs:390:                LastOpcodeInfo = state.LastOpcodeInfo,
+src\ViceSharp.Abstractions\IViceNative.cs:82:    NativeCpuPipelineState GetCpuPipelineState();
+src\ViceSharp.Abstractions\IViceNative.cs:165:public readonly struct NativeCpuPipelineState
+src\ViceSharp.Abstractions\IViceNative.cs:171:    public uint LastOpcodeInfo { get; init; }
+

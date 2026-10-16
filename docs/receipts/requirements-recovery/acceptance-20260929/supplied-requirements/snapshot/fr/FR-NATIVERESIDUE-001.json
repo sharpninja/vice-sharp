@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-NATIVERESIDUE-001",
+  "title": "Order-independent native oracle across .vsf resumes",
+  "status": "pending",
+  "priority": "high",
+  "body": "Every native (x64sc shim) machine created in a test process must present identical boot and post-activity-reset state regardless of whether a .vsf snapshot was resumed earlier in the same process. Snapshot side effects on process-wide VICE resources (e.g. DriveNTrueEmulation from a has_tde=0 DRIVE8 module) must be re-baselined to VICE defaults at machine create so lockstep suites are order-independent and can run in one process.\n\n## Acceptance Criteria\n- Every native (x64sc shim) machine created in a test process must present identical boot and post-activity-reset state regardless of whether a .vsf snapshot was resumed earlier in the same process.\n- Snapshot side effects on process-wide VICE resources (e.g. DriveNTrueEmulation from a has_tde=0 DRIVE8 module) must be re-baselined to VICE defaults at machine create so lockstep suites are order-independent and can run in one process.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

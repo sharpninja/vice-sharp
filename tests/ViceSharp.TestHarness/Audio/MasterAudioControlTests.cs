@@ -1,6 +1,6 @@
 namespace ViceSharp.TestHarness.Audio;
 
-using ViceSharp.Host.Audio;
+using ViceSharp.Abstractions;
 using Xunit;
 
 /// <summary>

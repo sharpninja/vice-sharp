@@ -1,0 +1,211 @@
+=== section: xbox-uwp ===
+
+      title: 'S0: FEASIBILITY GO/NO-GO (the one gate all production slices depend on)'
+      done: true
+      title: 'S1: Extract ViceSharp.Host.InProcess (namespace-preserving); Host keeps only Grpc/Kestrel'
+      done: true
+      title: 'S2: PacingMath extraction + XboxManagedFrameGate (single managed gate, zero P/Invoke)'
+      done: true
+      title: 'S3: Kestrel-free composition root + IConsoleEmulatorHost facade + FrameGeometry + per-frame input hook + 
+determinism gate'
+      done: true
+      title: 'S4: Create ViceSharp.Xbox head project (ViceSharpXboxUwp fallback, core+Host.InProcess refs, slnx, 
+solution-build gate)'
+      done: true
+      title: 'S5: Off-console AOT/trim link gate on the reused core+Host.InProcess graph'
+      done: true
+      title: 'S6: Relocate MasterAudioControl + AudioSampleConverter to ViceSharp.Abstractions'
+      done: true
+      title: 'S7: ViceSharp.Xbox.Input scaffold + POCO data shapes'
+      done: true
+      title: 'S8: Pure analog->8-way converter (deadzone + hysteresis + axis sign)'
+      done: true
+      title: 'S9: Merge + SOCD + fire + swap-in-config + profile default/remap'
+      done: true
+      title: UWP Virtual Keyboard should be a real C64 keyboard
+      done: true
+      title: Wire C64 RESTORE trigger (IsRestorePressed) to the CPU NMI edge
+      done: true
+      title: Resolve Win2D on modern-.NET UWP (NETSDK1130) or commit to the DX11 fallback
+      done: true
+      title: 'S10: System-button binding model + edge activation (BindingProfile.Default, LT hysteresis, Toggle)'
+      done: true
+      title: 'S11: XboxInputContext single-consumer state machine'
+      done: true
+      title: 'S12: Remappable bindings + source-gen persistence + single deadzone/config flow'
+      done: true
+      title: 'S13: AppCommand -> host-command dispatcher seam (marshaled; fakes)'
+      done: true
+      title: 'S14: XboxDataPathBridge + keymap seeding + startup ordering + AppContainer keymap write-path'
+      done: true
+      title: 'S15: SettingsOptionCatalog in Protocol + desktop parity'
+      done: true
+      title: 'S16: Pure XAudio2 ring/queue math (ring-buffer decoupling; back-pressure-free)'
+      done: true
+      title: 'S17: XboxAudioBackendFactory selection + silent-headless guarantee'
+      done: true
+      title: 'S18: XAudio2SourceVoiceBackend interop (AOT-clean vtable; non-blocking ring sink; Pause unparks)'
+      done: true
+      title: 'S19: ViceSharp.Xbox.ViewModels scaffold + boundary test'
+      done: true
+      title: 'S20: Navigation stack + InputContext observer over XboxInputContext'
+      done: true
+      title: 'S21: Host-facade seam (IEmulatorSessionFacade/ILocalVideoFramePull/IXboxSettingsGateway) + fakes + 
+round-trip'
+      done: true
+      title: 'S22: Focus graph builder (FocusMapBuilder)'
+      done: true
+      title: 'S23: Video frame-pull adapter (pure sink) + zero-alloc gate + FrameGeometry'
+      done: true
+      title: 'S24: RESTORE / NMI seam (FR-XKBD) in Abstractions + Host.InProcess facade'
+      done: true
+      title: 'S25: Virtual keyboard layout + emission + RESTORE tile drives FR-XKBD'
+      done: true
+      title: 'S26: XboxSettingsViewModel bind/apply/validate/revert (against the fake gateway)'
+      done: true
+      title: 'S27: XboxDeviceSetupViewModel attach/eject + true-drive + drive-model'
+      done: true
+      title: 'S28: RomProvisionEvaluator + XboxRomProvisioningViewModel (first-run provisioning)'
+      done: true
+      title: 'S29: XboxUiStateStore persistence to vice-sharp.ini'
+      done: true
+      title: 'S30: Home/InputMapping/About page ViewModels (About GPL disclosure)'
+      done: true
+      title: 'S31: Package.appxmanifest (Windows.Xbox + capability rule) validated off-console'
+      done: true
+      title: 'S32: GPL compliance: license + vkm Content + THIRD_PARTY_NOTICES + no-ROM payload'
+      done: true
+      title: 'S33: Nuke targets (PublishXbox/DeployXbox/ValidateXbox) + CI-exclusion + rollback doc'
+      done: true
+      title: 'S34: UWP XAML head build: pages, controls, Win2D video sink, XAudio2 wiring, WinRT gamepad source, App 
+composition + adapter, focus visuals'
+      done: true
+      title: 'S35: Desktop-intact + full-suite + AOT regression guard'
+      done: true
+      title: 'S36: On-console deploy + boot-to-menu + C64 render smoke'
+      done: true
+=== keyword: PLAN-XBOX ===
+      title: XBOX-compatible client (10-foot console front-end)
+      done: true
+      title: Wire C64 RESTORE trigger (IsRestorePressed) to the CPU NMI edge
+      done: true
+      title: Resolve Win2D on modern-.NET UWP (NETSDK1130) or commit to the DX11 fallback
+      done: true
+    totalCount: 3
+=== keyword: IMPL-XBOX ===
+      title: 'S0: FEASIBILITY GO/NO-GO (the one gate all production slices depend on)'
+      done: true
+      title: 'S1: Extract ViceSharp.Host.InProcess (namespace-preserving); Host keeps only Grpc/Kestrel'
+      done: true
+      title: 'S2: PacingMath extraction + XboxManagedFrameGate (single managed gate, zero P/Invoke)'
+      done: true
+      title: 'S3: Kestrel-free composition root + IConsoleEmulatorHost facade + FrameGeometry + per-frame input hook + 
+determinism gate'
+      done: true
+      title: 'S4: Create ViceSharp.Xbox head project (ViceSharpXboxUwp fallback, core+Host.InProcess refs, slnx, 
+solution-build gate)'
+      done: true
+      title: 'S5: Off-console AOT/trim link gate on the reused core+Host.InProcess graph'
+      done: true
+      title: 'S6: Relocate MasterAudioControl + AudioSampleConverter to ViceSharp.Abstractions'
+      done: true
+      title: 'S7: ViceSharp.Xbox.Input scaffold + POCO data shapes'
+      done: true
+      title: 'S8: Pure analog->8-way converter (deadzone + hysteresis + axis sign)'
+      done: true
+      title: 'S9: Merge + SOCD + fire + swap-in-config + profile default/remap'
+      done: true
+      title: 'S10: System-button binding model + edge activation (BindingProfile.Default, LT hysteresis, Toggle)'
+      done: true
+      title: 'S11: XboxInputContext single-consumer state machine'
+      done: true
+      title: 'S12: Remappable bindings + source-gen persistence + single deadzone/config flow'
+      done: true
+      title: 'S13: AppCommand -> host-command dispatcher seam (marshaled; fakes)'
+      done: true
+      title: 'S14: XboxDataPathBridge + keymap seeding + startup ordering + AppContainer keymap write-path'
+      done: true
+      title: 'S15: SettingsOptionCatalog in Protocol + desktop parity'
+      done: true
+      title: 'S16: Pure XAudio2 ring/queue math (ring-buffer decoupling; back-pressure-free)'
+      done: true
+      title: 'S17: XboxAudioBackendFactory selection + silent-headless guarantee'
+      done: true
+      title: 'S18: XAudio2SourceVoiceBackend interop (AOT-clean vtable; non-blocking ring sink; Pause unparks)'
+      done: true
+      title: 'S19: ViceSharp.Xbox.ViewModels scaffold + boundary test'
+      done: true
+      title: 'S20: Navigation stack + InputContext observer over XboxInputContext'
+      done: true
+      title: 'S21: Host-facade seam (IEmulatorSessionFacade/ILocalVideoFramePull/IXboxSettingsGateway) + fakes + 
+round-trip'
+      done: true
+      title: 'S22: Focus graph builder (FocusMapBuilder)'
+      done: true
+      title: 'S23: Video frame-pull adapter (pure sink) + zero-alloc gate + FrameGeometry'
+      done: true
+      title: 'S24: RESTORE / NMI seam (FR-XKBD) in Abstractions + Host.InProcess facade'
+      done: true
+      title: 'S25: Virtual keyboard layout + emission + RESTORE tile drives FR-XKBD'
+      done: true
+      title: 'S26: XboxSettingsViewModel bind/apply/validate/revert (against the fake gateway)'
+      done: true
+      title: 'S27: XboxDeviceSetupViewModel attach/eject + true-drive + drive-model'
+      done: true
+      title: 'S28: RomProvisionEvaluator + XboxRomProvisioningViewModel (first-run provisioning)'
+      done: true
+      title: 'S29: XboxUiStateStore persistence to vice-sharp.ini'
+      done: true
+      title: 'S30: Home/InputMapping/About page ViewModels (About GPL disclosure)'
+      done: true
+      title: 'S31: Package.appxmanifest (Windows.Xbox + capability rule) validated off-console'
+      done: true
+      title: 'S32: GPL compliance: license + vkm Content + THIRD_PARTY_NOTICES + no-ROM payload'
+      done: true
+      title: 'S33: Nuke targets (PublishXbox/DeployXbox/ValidateXbox) + CI-exclusion + rollback doc'
+      done: true
+      title: 'S34: UWP XAML head build: pages, controls, Win2D video sink, XAudio2 wiring, WinRT gamepad source, App 
+composition + adapter, focus visuals'
+      done: true
+      title: 'S35: Desktop-intact + full-suite + AOT regression guard'
+      done: true
+      title: 'S36: On-console deploy + boot-to-menu + C64 render smoke'
+      done: true
+      title: 'S37: On-console live gamepad smoke (JOY2/JOY1 + A/B fire + menu neutralization + swap)'
+      done: true
+      title: 'S38: On-console A/V smoke (Win2D video + XAudio2 audio + mute + suspend/resume)'
+      done: true
+      title: 'S39: On-console system-button + context smoke'
+      done: true
+=== keyword: FEAT-X ===
+      title: Create a RomM client library and UI for Avalonia and Xbox
+      done: true
+      title: 'S35: Desktop-intact + full-suite + AOT regression guard'
+      done: true
+      title: 'S40: On-console first-run ROM provisioning + settings persistence + device attach E2E'
+      done: true
+    totalCount: 3
+=== keyword: xbox-uwp ===
+      title: 'Process romless-vic-badline-fix.md: VIC raises no bad lines on KERNAL-less host-driven machine'
+      done: true
+      title: XBOX-compatible client (10-foot console front-end)
+      done: true
+      title: 'S1: Extract ViceSharp.Host.InProcess (namespace-preserving); Host keeps only Grpc/Kestrel'
+      done: true
+      title: Wire C64 RESTORE trigger (IsRestorePressed) to the CPU NMI edge
+      done: true
+      title: Resolve Win2D on modern-.NET UWP (NETSDK1130) or commit to the DX11 fallback
+      done: true
+    totalCount: 5
+=== keyword: console deploy ===
+      title: 'S0: FEASIBILITY GO/NO-GO (the one gate all production slices depend on)'
+      done: true
+      title: 'S33: Nuke targets (PublishXbox/DeployXbox/ValidateXbox) + CI-exclusion + rollback doc'
+      done: true
+      title: 'S36: On-console deploy + boot-to-menu + C64 render smoke'
+      done: true
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV 
+device-family behaviors, Store cert)'
+      done: true
+    totalCount: 4
+

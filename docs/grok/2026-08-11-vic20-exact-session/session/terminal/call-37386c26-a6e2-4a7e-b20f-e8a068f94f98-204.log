@@ -1,0 +1,109 @@
+
+FullName                                                                                               Length LastWrite
+                                                                                                              Time
+--------                                                                                               ------ ---------
+C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log  12442 8/5/2026.
+2026-08-05 04:55:11.424 [Information] App: App starting; log file: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+2026-08-05 04:55:11.527 [Information] App: OnLaunched entry; c64Directory=C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64
+2026-08-05 04:55:11.536 [Information] App: ROM assessment: State=Complete IsBootBlocked=False
+2026-08-05 04:55:11.536 [Information] App: Boot not blocked: building host and session at launch
+2026-08-05 04:55:11.540 [Information] App: BuildHostAndSession: composing in-process host
+2026-08-05 04:55:12.385 [Information] App: BuildHostAndSession: session started id=emulator-c889adb2d83b430282b51a41a18230b4 (persisted profile: c64)
+2026-08-05 04:55:12.422 [Information] App: persisted settings re-applied: success=True profile=c64
+2026-08-05 04:55:12.428 [Information] App: boot cartridge: none configured
+2026-08-05 04:55:12.467 [Information] App: BuildHostAndSession: built VideoPull=True gamepad=True keyboardVm=True audio=True
+2026-08-05 04:55:12.586 [Information] App: Boot branch: emulator (VideoPull present) -> starting surface + gamepad
+2026-08-05 04:55:12.589 [Information] App: video aspect applied: standard=Pal pixelAspect=0.93650794 clockHz=985248 contentRows=272 refreshHz=50.124542124542124 surface=True
+2026-08-05 04:55:12.590 [Information] App: video surface started
+2026-08-05 04:55:12.590 [Information] App: gamepad started (present=True)
+2026-08-05 04:55:12.866 [Information] Video: tick 1: EnsureDevice: D3D11CreateDevice(HW) hr=0x00000000 device=0x208F6BCEBA0 context=0x214ABC84108
+2026-08-05 04:55:12.867 [Information] Video: tick 1: EnsureDevice: CreateDXGIFactory2 hr=0x00000000 factory=0x208F6CF6FD0
+2026-08-05 04:55:12.868 [Information] Video: tick 1: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x214AB7BDF58
+2026-08-05 04:55:12.868 [Information] Video: tick 1: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-05 04:55:12.879 [Information] Video: tick 1: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:55:12.880 [Information] Video: tick 1: EnsureSwapChain: created + bound 3840x1980
+2026-08-05 04:55:12.882 [Information] Video: tick 1: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 04:55:12.898 [Information] Video: tick 1: OK: first frame presented (target 3840x1980, src 384x272, 417792 bytes)
+2026-08-05 04:55:13.340 [Information] App: menu closed: emulation resumed
+2026-08-05 04:55:13.364 [Information] Gamepad: poll thread=4
+2026-08-05 04:55:13.365 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 04:55:18.097 [Information] Video: perf: FPS 60.6 EMU 46.9 SPD 96.7% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:55:18.297 [Information] App: menu open: emulation paused
+2026-08-05 04:55:18.325 [Information] Video: tick 291: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:55:18.325 [Information] Video: tick 291: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 04:55:18.336 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 04:55:20.036 [Information] App: menu closed: emulation resumed
+2026-08-05 04:55:20.049 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 04:55:20.066 [Information] Video: tick 396: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:55:20.068 [Information] Video: tick 396: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 04:55:20.961 [Information] App: menu open: emulation paused
+2026-08-05 04:55:20.969 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 04:55:20.971 [Information] Video: tick 451: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:55:20.972 [Information] Video: tick 451: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 04:55:22.189 [Information] App: menu closed: emulation resumed
+2026-08-05 04:55:22.210 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 04:55:22.211 [Information] Video: tick 526: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:55:22.212 [Information] Video: tick 526: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 04:55:23.207 [Information] Video: perf: FPS 59.4 EMU 44.1 SPD 97.6% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:55:23.533 [Information] App: menu open: emulation paused
+2026-08-05 04:55:23.540 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 04:55:23.558 [Information] Video: tick 606: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:55:23.559 [Information] Video: tick 606: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 04:55:28.305 [Information] Video: perf: FPS 59.0 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:55:33.383 [Information] Video: perf: FPS 59.3 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:55:38.466 [Information] Video: perf: FPS 60.5 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:55:43.563 [Information] Video: perf: FPS 60.9 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:55:48.701 [Information] Video: perf: FPS 60.2 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:55:53.788 [Information] Video: perf: FPS 58.9 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:55:58.871 [Information] Video: perf: FPS 59.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:03.985 [Information] Video: perf: FPS 60.7 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:09.055 [Information] Video: perf: FPS 59.0 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:14.170 [Information] Video: perf: FPS 59.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:19.249 [Information] Video: perf: FPS 60.9 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:24.348 [Information] Video: perf: FPS 59.3 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:29.431 [Information] Video: perf: FPS 61.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:34.523 [Information] Video: perf: FPS 59.5 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:39.605 [Information] Video: perf: FPS 58.8 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:44.687 [Information] Video: perf: FPS 60.7 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:49.641 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 04:56:49.660 [Information] App: perf HUD visibility set: True
+2026-08-05 04:56:49.678 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=14 renderers=2 selComputer='Commodore 64' selModel='Commodore 64 PAL' selRenderer='Host direct' volume=100
+2026-08-05 04:56:49.738 [Information] Video: perf: FPS 49.9 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:56:49.740 [Information] Video: tick 5772: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:56:49.740 [Information] Video: tick 5772: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 04:56:54.826 [Information] Video: perf: FPS 59.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 04:57:00.013 [Information] App: video aspect applied: standard=Ntsc pixelAspect=0.75 clockHz=1022730 contentRows=246 refreshHz=59.82626498976309 surface=True
+2026-08-05 04:57:00.018 [Information] Video: perf: FPS 43.1 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.4ms)
+2026-08-05 04:57:04.131 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 04:57:04.149 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 04:57:05.094 [Information] Video: perf: FPS 0.0 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.4ms)
+2026-08-05 04:57:07.528 [Information] App: menu closed: emulation resumed
+2026-08-05 04:57:07.574 [Information] Video: tick 6854: paint geometry: target 3840x1980, src 384x246, draw 2318x1980+761+0, PAR 0.75
+2026-08-05 04:57:10.182 [Information] Video: perf: FPS 60.7 EMU 54.8 SPD 101.4% NTSC 1.02MHz PAR 0.75 (interval 8.4ms)
+2026-08-05 04:57:12.736 [Information] App: menu open: emulation paused
+2026-08-05 04:57:12.740 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 04:57:12.741 [Information] Video: tick 7165: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:57:12.741 [Information] Video: tick 7165: paint geometry: target 2940x1980, src 384x246, draw 2318x1980+311+0, PAR 0.75
+2026-08-05 04:57:15.272 [Information] Video: perf: FPS 59.2 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.4ms)
+2026-08-05 04:57:19.188 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 04:57:19.259 [Information] Video: tick 7553: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 04:57:19.260 [Information] Video: tick 7553: paint geometry: target 3840x1980, src 384x246, draw 2318x1980+761+0, PAR 0.75
+2026-08-05 04:57:20.354 [Information] Video: perf: FPS 61.3 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.4ms)
+2026-08-05 04:57:25.434 [Information] Video: perf: FPS 60.9 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.4ms)
+2026-08-05 04:57:30.515 [Information] Video: perf: FPS 61.1 EMU 0.0 NTSC 1.02MHz PAR 0.75 (interval 8.4ms)
+2026-08-05 04:57:35.171 [Critical] App: AppDomain UnhandledException (terminating=True)
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at ViceSharp.Chips.IEC.D64FileSystem.EnumerateDirectory() in F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\D64FileSystem.cs:line 53
+   at ViceSharp.Chips.IEC.D64FileSystem.TryFindFile(ReadOnlySpan`1 patternPetscii, D64DirectoryEntry& entry) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\D64FileSystem.cs:line 101
+   at ViceSharp.Chips.Serial.VirtualDriveServer.OpenFile(Int32 device, Int32 channel) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\Serial\VirtualDriveServer.cs:line 198
+   at ViceSharp.Chips.Serial.VirtualDriveServer.SerialCommand(Int32 device, Byte secondary) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\Serial\VirtualDriveServer.cs:line 156
+   at ViceSharp.Chips.Serial.VirtualDriveServer.Unlisten(Int32 device, Byte secondary) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\Serial\VirtualDriveServer.cs:line 80
+   at ViceSharp.Chips.Serial.KernalSerialTrap.Attention() in F:\GitHub\vice-sharp\src\ViceSharp.Chips\Serial\KernalSerialTrap.cs:line 171
+   at ViceSharp.Chips.Serial.KernalSerialTrap.TryHandle(UInt16 pc) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\Serial\KernalSerialTrap.cs:line 125
+   at ViceSharp.Chips.Cpu.Mos6502.Tick() in F:\GitHub\vice-sharp\src\ViceSharp.Chips\Cpu\Mos6502.cs:line 260
+   at ViceSharp.Host.Services.EmulationPumpService.AdvanceCleanly(EmulatorRuntimeSession session, Int64 targetCycles) in F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Services\EmulationPumpService.cs:line 233
+   at ViceSharp.Host.Services.XboxManagedFrameGate.Tick(EmulatorRuntimeRegistry registry, Func`3 advance) in F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Services\XboxManagedFrameGate.cs:line 51
+   at ViceSharp.Host.Services.EmulationPumpService.Loop() in F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Services\EmulationPumpService.cs:line 183
+   at System.Threading.Thread.StartCallback()
+2026-08-05 04:57:35.588 [Information] Video: perf: FPS 26.0 EMU 12.0 SPD 106.6% NTSC 1.02MHz PAR 0.75 (interval 8.4ms)
+

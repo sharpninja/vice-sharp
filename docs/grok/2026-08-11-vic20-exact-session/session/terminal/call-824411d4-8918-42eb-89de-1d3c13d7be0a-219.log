@@ -1,0 +1,124 @@
+  ViceSharp.Heads.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\bin\Release\net10.0\ViceSharp.Heads.Tests.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.84
+
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp3K, address: 
+1024, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 
+1024, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp24K, address: 
+24576, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 
+0, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Exp8KMachine_Blk1IsWritable_Blk2OpenBusNonSticky [35 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.IoWindow_ViaAndVicStillMapped [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_Reset_DoesNotApplyC64InitPattern [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_OpenBusExpansion_WriteDoesNotStick [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_FirstThousandCycles_DoNotThrow_AndAdvanceClock 
+[12 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_BaseRam_IsWritable [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "vic20pal") [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "xvic") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "pal") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_PalAliases(selector: "vic20") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Default_IsPal_With6561TimingAnd1540Drive [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_Builds_WithCpuVideoDualViaAndRoms [9 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Machine_AfterReset_CpuPcMatchesKernalResetVector [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_NtscAliases(selector: "vic20ntsc") [< 1 
+ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Profile_Resolve_NtscAliases(selector: "ntsc") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20RomSet_IsComplete_AgainstViceDataRoot [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Launcher_Xvic_BuildsTopologyYaml_WithVic20HostAnd1540DriveDefau
+ltComment [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_DevicesList_IncludesExpectedRoles [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_WithoutRomProvider_ThrowsClearError [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.DefaultDrive_Is1540_Not1541 [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DriveDefaultTests.XvicTopology_Drive8_InjectsDos1540 [18 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DriveDefaultTests.Vic20SystemCoreTraits_AdvertiseDefaultDrive [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DriveDefaultTests.C64Profile_DefaultDrivePath_Remains1541 [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DriveDefaultTests.Vic20Profile_DefaultDrive_IsC1540_FromProductionProfile [< 
+1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_BankBitClear_Selects8000Bank [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PalAndNtsc_Profiles_ExposeDistinctTiming [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameCompleted_FiresAfterFullRaster [22 ms]
+  Passed 
+ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_MatchesViceFormula_UnexpandedReadyLayout [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Joystick_Right_ClearsVia2PortBBit7 [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Machine_KeyboardInject_VisibleOnVia2PortA [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Matrix_SetKey_AppearsInScanRowsForColumns [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.DualVia_Windows_RemainAt9110And9120 [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_CartPrg_MapsIntoBlkRegion [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_AfterReset_RomsAndResetVector_FromProductionBuilder [4 
+ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_Boot_Reaches_Ready_Prompt [223 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DeterminismTests.SingleMachine_ReplayFromReset_MatchesPriorRun [228 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DeterminismTests.TwoMachines_SameFrames_ProduceIdenticalState [97 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20HeadsTests.Launcher_Xvic_HostKind_IsVic20 [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20HeadsTests.XboxComputerPicker_ListsVic20_Enabled [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20HeadsTests.SessionFactory_CanCreateVic20Session [9 ms]
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 321 ms - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5, Duration: 77 ms - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 134 ms - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 891 ms - ViceSharp.TestHarness.dll (net10.0)
+## Iteration 0: Foundations ? COMPLETED
+## Iteration 1: C64 (MVP) ? COMPLETED
+**Status (2026-08-05):** COMPLETE on branch `feat/iteration2-vic20`.
+> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`, and the validation baseline at the v1.0.2 release is `2594 passed / 21 skipped / 0 failed` (2615 total) in `ViceSharp.TestHarness`. See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md).
+? **Iteration 0 (Foundations)**: Complete. All core primitives implemented, lock-free and zero allocation.
+? **Iteration 1 (C64 Bringup)**: **Complete (Phase 1 closed 2026-05-31; diagnostics/attach surface updated 2026-06-25)**:
+| .NET 10 + Nuke build pipeline | ? | 100% | iteration0 batch 1 |
+| MCP Server + TODO workspace integration | ? | 100% | iteration0 batch 2 |
+| Documentation set (Architecture, Public API, Roadmap) | ? | 100% | iteration0 batch 3 |
+| GraphRAG ingest | ? | 100% | iteration0 batch 4 |
+| MOS 6510 CPU (official + illegal opcodes) | ? | 100% | `LockstepValidationTests.First100000CyclesMatch` |
+| Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ? | 100% | lockstep gate |
+| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + visible sprite composition + sprite priority + light pen + color/register read masks + $D018/$D016/$D011 decoding + display mode selection + VICE display-mode pixel color routing + $D015/$D010 sprite registers + managed continuous side-border behavior + managed matrix idle/fill behavior + RC window cycle-accurate + non-PAL sprite DMA tables + screen-RAM checkpoint) | ? | 100% | `BACKFILL-VIDEO-001` closed (Phase 1 slice 1; FLI/AFLI deepening continues post-Phase 1) |
+| MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + force-load + keyboard scan + joystick scan + ICR) | ? | 100% | `BACKFILL-CIA` + base input scan coverage |
+| MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + dual-SID + noise LFSR + determinism) | ? | 100% | `BACKFILL-SID-001` closed; 8580 filter deepening is post-MVP |
+| MOS 6522 VIA (timer-1 PB7 + timer-2 phi2+PB6 + SR modes + CA1/CB1 edge IRQ + CA2/CB2 handshake/manual/pulse) | ? | 100% | `BACKFILL-VIA` complete |
+| Mos6510 CPU interrupts (NMI vector + BRK B-flag + IRQ vector) | ? | 100% | `BACKFILL-CPU` complete |
+| PLA + Memory map ($0000-$FFFF) | ? | 100% | boot proof |
+| Reset sequencing (7-cycle + port init) | ? | 100% | reset tests |
+| ROM loader (KERNAL/BASIC/CHARGEN + SHA1) | ? | 100% | `BasicBootProofTests` |
+| 1541 / IEC / D64 (attach + deterministic sector reads + IEC ATN timing + 1541 motor ramp) | ? | 100% | `ARCH-TRUEDRIVE-1541-002` Phase 1 close (slice 2) |
+| Datasette / TAP (pulse reads + CIA1 FLAG + builder wiring + rewind/seek + 32k motor ramp + SenseLine + record buffer) | ? | 100% | `RUNTIME-TAPE-002` Phase 1 close (slice 3) |
+| Standard cartridge mapping (8K/16K raw + CRT + GAME/EXROM live map) | ? | 100% | `RUNTIME-CART-002` validated for standard cartridges; broad mapper families are post-MVP |
+| Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + VIC + CIA TOD + SID ADSR round-trip) | ? | 100% | `RUNTIME-SNAPSHOT-002` Phase 1 close (slice 4) |
+| Media export (PNG/BMP screenshot + WAV sound + BMP sequence all/unique + muxed MP4/MKV/AVI video via ffmpeg, over the gRPC capture surface) | ? | 100% | `RUNTIME-CAPTURE-002` + `FR-MED-002/003/004`; ffmpeg-backed muxed video mirrors VICE `ffmpegexedrv` |
+| Keyboard matrix + control-port parity (LoadFromFile + EnumerateDevices + 30-frame key-repeat hold) | ? | 100% | `BACKFILL-INPUT-001` Phase 1 close (slice 5) |
+| Host UI + Monitor control surface (10 services + 8 adapters + view model + registry + mapper + frame source + InProcessGrpcHost + 2 clients; ~230 tests) | ? | 100% | `BACKFILL-HOSTUI-001` closeable; launcher/UI shell work is tracked separately |
+| Core primitives (SystemClock + DoubleBufferedMutationQueue + LockFreePubSub + BasicBus + SimpleRam) | ? | 100% | TR-PUBSUB-PERFORMANCE + TR-Cycle-Accuracy + TR-System-Core |
+| Chip/package boundary audit (shared chips vs machine/device glue) | ? | 100% | `ARCH-CHIPGLUE-001` closed with `TEST-ARCH-CHIPGLUE-001`; focused gate 579/579 and lockstep/checkpoint 335/335 |
+| x64sc variant lockstep gate (10-frame depth across no-cart variants, 322 lockstep tests green) | ? | 100% | `BACKFILL-LOCKSTEP-001` Phase 1 close (slice 7) |
+| Upstream VICE testbench integration (debugcart + limitcycles + PRG autostart + help text + ROM-less smoke) | ? | 100% | `ARCH-TESTBENCH-001` + `CLI-LAUNCHER-001` Phase 1 close (slice 6) |
+| VIC-20 (MOS 6502 + VIC-I + VIA x2) | 2 | ? | 100% |
+| XMLDOCS test contract (cite FR/TR, use case, acceptance) | ? | 100% | `QA-XMLDOCS-001` CLOSED: ratchet baseline at 0 (full retrofit + `XmlDocsConventionTests.ExpectedMaxViolations=0`) |
+| Completion Dashboard (this section) | ? | 100% | `DOC-DASHBOARD-001` Phase 1 close (slice 9) |
+| VIC-20 | MOS 6502 + VIC-I + VIA x2 | Iteration 2 (complete on `feat/iteration2-vic20`) |
+vic20-gate.log: Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_WithoutRomProvider_ThrowsClearError [< 1 ms]
+vic20-gate.log: 0 Error(s)
+vic20-c64-smoke.log: Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+build.log: 0 Error(s)
+

@@ -1,0 +1,8 @@
+
+[xUnit.net 00:00:03.65]       no native VIC write in 500k
+  Failed ViceSharp.TestHarness.Vic20.Vic20VicProbe.Probe [1 s]
+   no native VIC write in 500k
+Test Run Failed.
+     Failed: 1
+EXIT=1
+

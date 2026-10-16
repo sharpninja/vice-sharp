@@ -1,0 +1,8 @@
+bash=C:\Program Files\Git\bin\bash.exe
+./build-vice-shim-xvic.sh: line 89: make: command not found
+EXIT=127
+
+  Length LastWriteTime
+  ------ -------------
+10911412 8/5/2026 2:54:11 PM
+

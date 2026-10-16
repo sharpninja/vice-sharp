@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TAP-002",
+  "title": "TAP File Format Support (v0 and v1)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengths as single bytes (with 0 indicating an overflow requiring 3 additional bytes). TAP v1 extends the overflow encoding. The emulator shall read and write both TAP format versions.\n\n## Acceptance Criteria\n- TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.\n- A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.\n- TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.\n- The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.\n- Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.\n- Writing to TAP format captures the pulse timing from emulated writes.\n- The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

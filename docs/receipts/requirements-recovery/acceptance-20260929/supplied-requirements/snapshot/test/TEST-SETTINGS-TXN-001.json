@@ -1,0 +1,51 @@
+{
+  "kind": "test",
+  "id": "TEST-SETTINGS-TXN-001",
+  "title": "Truthful transactional Settings state",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.\nInject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.\nInject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.\nVerify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.\nRace refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.\nRound-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.\nTest old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.\nVerify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.\n\n## Acceptance Criteria\n- **ac-01**: Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.\n- **ac-02**: Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.\n- **ac-03**: Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.\n- **ac-04**: Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.\n- **ac-05**: Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.\n- **ac-06**: Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.\n- **ac-07**: Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.\n- **ac-08**: Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-06",
+      "text": "Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-07",
+      "text": "Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-08",
+      "text": "Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.",
+      "isSatisfied": false
+    }
+  ]
+}

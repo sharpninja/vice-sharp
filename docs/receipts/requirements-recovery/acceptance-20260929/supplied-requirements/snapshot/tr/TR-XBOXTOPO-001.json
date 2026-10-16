@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXTOPO-001",
+  "title": "TFM-conditional fallback (default net10.0)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "TFM-conditional fallback (ViceSharpXboxUwp default false=net10.0) so slnx builds with no UWP workload. Acceptance: verified by TEST-XBOXTOPO-002.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

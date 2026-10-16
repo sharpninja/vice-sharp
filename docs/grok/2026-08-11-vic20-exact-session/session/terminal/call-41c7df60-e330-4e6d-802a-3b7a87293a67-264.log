@@ -1,0 +1,12 @@
+
+build\Build.cs:959:    [Parameter("UWP configuration for DeployXboxLocal: Release-UWP (default) or Debug-UWP.")]
+build\Build.cs:962:    [Parameter("Launch the app after DeployXboxLocal refreshes the layout. Default: true.")]
+build\Build.cs:976:    Target DeployXboxLocal => _ => _
+F:\GitHub\vice-sharp\build\_build.csproj : error NU1903: Warning As Error: Package 'System.Security.Cryptography.Xml' 10.0.9 has a known high severity vulnerability, https://github.com/advisories/GHSA-23rf-6693-g89p
+F:\GitHub\vice-sharp\build\_build.csproj : error NU1903: Warning As Error: Package 'System.Security.Cryptography.Xml' 10.0.9 has a known high severity vulnerability, https://github.com/advisories/GHSA-8q5v-6pqq-x66h
+F:\GitHub\vice-sharp\build\_build.csproj : error NU1903: Warning As Error: Package 'System.Security.Cryptography.Xml' 10.0.9 has a known high severity vulnerability, https://github.com/advisories/GHSA-cvvh-rhrc-wg4q
+F:\GitHub\vice-sharp\build\_build.csproj : error NU1903: Warning As Error: Package 'System.Security.Cryptography.Xml' 10.0.9 has a known high severity vulnerability, https://github.com/advisories/GHSA-g8r8-53c2-pm3f
+F:\GitHub\vice-sharp\build\_build.csproj : error NU1903: Warning As Error: Package 'System.Security.Cryptography.Xml' 10.0.9 has a known high severity vulnerability, https://github.com/advisories/GHSA-mmjf-rqrv-855v
+
+The build failed. Fix the build errors and run again.
+

@@ -1,0 +1,15 @@
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:11.29
+EXIT=0
+
+A total of 1 test files matched the specified pattern.
+  Passed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Unexpanded_ManagedBlob_ResumeLockstep_Short [1 s]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Inventory_DocumentsXvicVsfModules [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Unexpanded_ManagedStateBlob_RoundTripEqual [31 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Fe3_ConfigBlob_RoundTrip [1 ms]
+Total tests: 4
+     Passed: 4
+ Total time: 4.6109 Seconds
+

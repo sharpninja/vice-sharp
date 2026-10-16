@@ -1,0 +1,99 @@
+{
+  "TimestampUtc": "20260808T094911Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\vice-sharp",
+  "OverallVerdict": "AGREE",
+  "ExplicitFailList": [],
+  "Claims": [
+    {
+      "Id": 1,
+      "Summary": "READY PAL present geometry matches VICE first_x=48 with L/R borders on FrameBuffer after RenderNow",
+      "Verdict": "PASS",
+      "Evidence": [
+        "native/vice/vice/src/video/video-viewport.c video_viewport_resize first_x algorithm",
+        "Math READY PAL: first_x=96-(448-352)/2=48",
+        "src/ViceSharp.Chips/Vic/Mos6561.cs ComputeViewportFirstX + DrawRasterLine crop",
+        "dotnet test filter Vic20VideoTests|Vic20VideoLockstep: ReadyPal_NormalBorderWindow_HasLeftAndRightBorder_ViceFirstX Passed; ViewportFirstX_ReadyPal_Is48 Passed"
+      ]
+    },
+    {
+      "Id": 2,
+      "Summary": "Crop uses ComputeViewportFirstX not invent src=0",
+      "Verdict": "PASS",
+      "Evidence": [
+        "Mos6561.cs: var src = firstX * 4; Buffer.BlockCopy(line, src, ...)",
+        "No alternate src=0 crop path in Mos6561 present path",
+        "VICE video-canvas.c uses viewport->first_x as draw buffer origin"
+      ]
+    },
+    {
+      "Id": 3,
+      "Summary": "No continuous invent paper strip; space via draw slots",
+      "Verdict": "PASS",
+      "Evidence": [
+        "Mos6561 DrawRasterLine slot 0 => bg paint for glyphs",
+        "vic-draw.c drawing_table / PUT_PIXEL reference",
+        "SpaceGlyph_PaintsBackgroundPaper_WithoutInventStrip Passed"
+      ]
+    },
+    {
+      "Id": 4,
+      "Summary": "LatchColumns pending-only; live text_cols on open_h/start_fetch",
+      "Verdict": "PASS",
+      "Evidence": [
+        "vic-cycle.c vic_cycle_latch_columns only pending_text_cols",
+        "Mos6561.LatchColumns only _pendingTextCols; OpenH/StartFetch set _textCols",
+        "LatchColumns_DoesNotEagerlySetLiveTextCols Passed"
+      ]
+    },
+    {
+      "Id": 5,
+      "Summary": "Audit honest: no whole-machine Exact; sound/carts/IEC/tape/snapshots Missing/Stub",
+      "Verdict": "PASS",
+      "Evidence": [
+        "docs/audit-vic20-vs-vice-2026-08-07.md lines 16-18, 77-81, 115-129, 185-187"
+      ]
+    },
+    {
+      "Id": 6,
+      "Summary": "Vic20 video + lockstep tests green on validator re-run",
+      "Verdict": "PASS",
+      "Evidence": [
+        "dotnet test .\\tests\\ViceSharp.TestHarness\\ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Vic20VideoTests|FullyQualifiedName~Vic20VideoLockstep",
+        "Failed: 0, Passed: 22, Skipped: 0, Total: 22, EXIT=0"
+      ]
+    },
+    {
+      "Id": 7,
+      "Summary": "Product VIC-20 path uses Mos6561 not VicIStub",
+      "Verdict": "PASS",
+      "Evidence": [
+        "ArchitectureBuilder.cs BuildVic20Machine: new Mos6561(irqLine)",
+        "No product new VicIStub; VicIStub.cs type only residual"
+      ]
+    },
+    {
+      "Id": 8,
+      "Summary": "Closed invent items truly closed in live code",
+      "Verdict": "PASS",
+      "Evidence": [
+        "src=0 crop closed: firstX crop",
+        "paper strip closed: slot paint",
+        "eager latch closed: pending-only LatchColumns + green test"
+      ]
+    }
+  ],
+  "Residuals": [
+    "Extra managed firstX+canvasW clamp inert for READY PAL",
+    "Pixel FB lockstep vs xvic still Missing (audit)",
+    "VicIStub type file still in tree unused by product builder"
+  ],
+  "TestCommand": "dotnet test .\\tests\\ViceSharp.TestHarness\\ViceSharp.TestHarness.csproj -c Release --filter \"FullyQualifiedName~Vic20VideoTests|FullyQualifiedName~Vic20VideoLockstep\"",
+  "TestResult": {
+    "Failed": 0,
+    "Passed": 22,
+    "Skipped": 0,
+    "Total": 22,
+    "ExitCode": 0
+  }
+}

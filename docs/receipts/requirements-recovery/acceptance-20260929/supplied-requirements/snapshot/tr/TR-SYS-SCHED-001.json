@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-SYS-SCHED-001",
+  "title": "Single-worker interleave scheduling with IEC bus-event sync",
+  "status": "pending",
+  "priority": "high",
+  "body": "One emulation worker interleaves systems with per-system deficit pacing and resynchronizes at InterSystemBus.LineChanged; lazy sync-on-IEC-access retained as the fine-grained backstop.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Each system advances on its own clock via a self-correcting deficit pacer.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-2",
+      "text": "Systems resync at LineChanged so IEC bus edges are observed in order before a read.",
+      "isSatisfied": false
+    }
+  ]
+}

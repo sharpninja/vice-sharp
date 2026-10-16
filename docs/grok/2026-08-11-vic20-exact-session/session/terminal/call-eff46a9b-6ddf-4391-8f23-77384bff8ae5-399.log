@@ -1,0 +1,7 @@
+
+A total of 1 test files matched the specified pattern.
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_FocusedWindow [707 ms]
+   DIV first=195422 matchedCycles=195421 budget=500000
+Failed!  - Failed:     1, Passed:    24, Skipped:     0, Total:    25, Duration: 1 s - ViceSharp.TestHarness.dll 
+(net10.0)
+

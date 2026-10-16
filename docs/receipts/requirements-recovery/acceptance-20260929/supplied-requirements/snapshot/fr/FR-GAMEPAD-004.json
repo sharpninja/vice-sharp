@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-004",
+  "title": "Radial deadzone + per-axis hysteresis 8-way",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Radial deadzone + per-axis Activate/Release hysteresis 8-way. Acceptance: mag 0.20 -> mask 0; 0.60 sets, 0.45 holds, 0.35 clears.\n\n## Acceptance Criteria\n- mag 0.20 -> mask 0; 0.60 sets, 0.45 holds, 0.35 clears.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC-EDGE-005",
+  "title": "VIC-II c-access DMA read-only semantics",
+  "status": "closed",
+  "priority": "medium",
+  "body": "VIC-II matrix DMA c-access reads screen RAM without write side-effects. Screen RAM bytes written before a frame remain unchanged after. VICE vicii-fetch.c:135-166.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,58 @@
+type: result
+payload:
+  requestId: req-20260930T151738Z-c98d
+  result:
+    id: TR-CYCLE-001
+    title: Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior
+    description: >-
+      The emulation core shall operate at sub-cycle granularity, modeling the two phases of the system clock (PHI1 and PHI2) and the bus ownership arbitration between the CPU and VIC-II. This level of accuracy is required to correctly emulate cycle-exact tricks used by C64 demos and games. The reference implementation for correctness is VICE x64sc (the cycle-exact VICE variant).
+
+
+      ## Acceptance Criteria
+
+      - All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.
+
+      - The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle.
+
+      - CIA timer countdown occurs at the correct bus phase (PHI2 falling edge).
+
+      - CPU memory accesses occur only during PHI2 when AEC is asserted.
+
+      - The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).
+
+      - The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.
+
+      - Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.
+    status: closed
+    priority: high
+    area: CYCLE
+    subarea: 001
+    acceptanceCriteria:
+    - id: ac-01
+      text: All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.
+      isSatisfied: false
+    - id: ac-02
+      text: The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle.
+      isSatisfied: false
+    - id: ac-03
+      text: CIA timer countdown occurs at the correct bus phase (PHI2 falling edge).
+      isSatisfied: false
+    - id: ac-04
+      text: CPU memory accesses occur only during PHI2 when AEC is asserted.
+      isSatisfied: false
+    - id: ac-05
+      text: The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).
+      isSatisfied: false
+    - id: ac-06
+      text: The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.
+      isSatisfied: false
+    - id: ac-07
+      text: Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-30T15:17:39.4866677+00:00
+    updatedAt: 2026-09-30T15:17:39.4868288+00:00
+  deprecated: true
+
+---
+

@@ -1,0 +1,5 @@
+
+native\vice\vice\src\vic20\vic20sound.h:34:void vic_sound_store(uint16_t address, uint8_t byte);
+native\vice\vice\src\vic20\vic20sound.h:35:void vic_sound_reset(sound_t *psid, CLOCK cpu_clk);
+native\vice\vice\src\vic20\vic20sound.h:37:void vic_sound_chip_init(void);
+

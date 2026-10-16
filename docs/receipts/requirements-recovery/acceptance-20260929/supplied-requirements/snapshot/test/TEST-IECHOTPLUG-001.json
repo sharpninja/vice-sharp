@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-IECHOTPLUG-001",
+  "title": "Hot drive add/remove and renumber tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Tests that a drive attached mid-run answers on the bus, a detached drive removes its pulls and recomputes line states, and a renumbered drive answers its new device number.",
+  "acceptanceCriteria": []
+}

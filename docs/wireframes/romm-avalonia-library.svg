@@ -1,0 +1,56 @@
+<svg width="100%" viewBox="0 0 680 462" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Avalonia RomM library wireframe</title>
+<desc>Steam desktop style RomM library. Single RomM source; platform bound to the active machine. Collections rail is lists, not sources.</desc>
+<style>
+:root{--fg:#1a1a1a;--muted:#6a6a6a;--line:#8a8a8a;--blue:#2f6fed;--amber:#d08700;}
+@media (prefers-color-scheme:dark){:root{--fg:#f0f0f0;--muted:#9aa0a6;--line:#5a5f66;--blue:#5b8cff;--amber:#e0a200;}}
+svg{font-family:'Segoe UI',system-ui,sans-serif;}
+.c-gray rect,.c-gray circle{fill:none;stroke:var(--line);}
+.c-blue rect,.c-blue circle{fill:none;stroke:var(--blue);}
+.c-amber rect,.c-amber circle{fill:none;stroke:var(--amber);}
+text{fill:var(--fg);}
+.t{font-size:13px;fill:var(--fg);}
+.ts{font-size:11px;fill:var(--muted);}
+.th{font-size:18px;font-weight:600;fill:var(--fg);}
+</style>
+<text class="th" x="24" y="28">ViceSharp - library</text>
+<g class="c-gray"><rect x="6" y="42" width="150" height="384" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="18" y="64">Collections</text>
+<g class="c-blue"><rect x="12" y="74" width="138" height="22" rx="6" stroke-width="0.5"/></g>
+<text class="t" x="20" y="89">All games</text>
+<text class="ts" x="20" y="114">Favorites</text>
+<text class="ts" x="20" y="136">Shmups</text>
+<text class="ts" x="20" y="158">Cracktros</text>
+<text class="ts" x="20" y="196">CSDb discovery</text>
+<text class="ts" x="20" y="220">+ New list</text>
+<g class="c-gray"><rect x="168" y="44" width="230" height="30" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="180" y="64">Search library...</text>
+<g class="c-gray"><rect x="406" y="44" width="62" height="30" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="414" y="64">Name v</text>
+<g class="c-blue"><rect x="168" y="88" width="86" height="96" rx="8" stroke-width="2"/></g>
+<text class="ts" x="168" y="200">Boulder Dash</text>
+<g class="c-gray"><rect x="266" y="88" width="86" height="96" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="266" y="200">Paradroid</text>
+<g class="c-gray"><rect x="364" y="88" width="86" height="96" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="364" y="200">Uridium</text>
+<g class="c-gray"><rect x="168" y="214" width="86" height="96" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="168" y="326">Wizball</text>
+<g class="c-gray"><rect x="266" y="214" width="86" height="96" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="266" y="326">Turrican</text>
+<g class="c-gray"><rect x="364" y="214" width="86" height="96" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="364" y="326">Creatures</text>
+<g class="c-gray"><rect x="478" y="42" width="196" height="384" rx="8" stroke-width="0.5"/></g>
+<g class="c-gray"><rect x="492" y="56" width="168" height="120" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="492" y="196">Boulder Dash</text>
+<text class="ts" x="492" y="212">C64 · 1984 · disk</text>
+<text class="ts" x="492" y="228">170 KB · 1 file</text>
+<text class="ts" x="492" y="244">rating 4.6 / 5</text>
+<g class="c-blue"><rect x="492" y="256" width="168" height="30" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="576" y="276" text-anchor="middle">Attach + play</text>
+<g class="c-gray"><rect x="492" y="294" width="168" height="28" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="576" y="312" text-anchor="middle">Attach only</text>
+<g class="c-gray"><rect x="492" y="330" width="168" height="28" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="576" y="348" text-anchor="middle">Add to list v</text>
+<g class="c-gray"><rect x="6" y="434" width="668" height="22" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="18" y="449">Connected  romm.local · C64 · 3,412 titles · Drive 8 empty · Cartridge empty</text>
+</svg>

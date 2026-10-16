@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXAOT-001",
+  "title": "Core+Host.InProcess graph links clean under AOT",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Core+Host.InProcess graph links clean under Native AOT, 0 IL2xxx/IL3xxx. Acceptance: verified by TEST-XBOXAOT-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

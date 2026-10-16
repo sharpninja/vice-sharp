@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-INPUT-VKM-001",
+  "title": "VICE VKM Parser and Selected Map Resolver",
+  "status": "pending",
+  "priority": "high",
+  "body": "ViceSharp machine keyboard input shall resolve normalized host key events through a selected machine-specific VICE keymap before updating keyboard matrix state.\n\n## Acceptance Criteria\n- Built-in and custom VKM maps produce deterministic key-to-matrix mappings.\n- Invalid maps return diagnostics without replacing the selected map.\n- Host input service tests prove selected map entries affect C64 keyboard matrix state.\n- The parser and resolver are usable without Avalonia dependencies.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

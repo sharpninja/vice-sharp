@@ -1,0 +1,7 @@
+
+src\ViceSharp.Chips\Cpu\Mos6502.cs:384:                _softDeferredImmediateLoad = false;
+src\ViceSharp.Chips\Cpu\Mos6502.cs:470:        _softDeferredImmediateLoad = false;
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1136:        _softDeferredImmediateLoad = false;
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1309:        _softDeferredImmediateLoad = false;
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1585:        _softDeferredImmediateLoad = false;
+

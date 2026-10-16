@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Avalonia;
+using Avalonia.Threading;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Avalonia.Persistence;
 using ViceSharp.Abstractions;
@@ -37,6 +39,10 @@ public sealed class AttachPanelViewModel : ObservableObject
     private bool _swapJoystickPorts;
     private string _selectedResourceMode = "Auto detect";
     private string _selectedPacingStrategy = "VICE";
+    private readonly Vic20MemoryUiState _vic20Memory = new("none");
+    private string _fileSystemIecRootPath = "";
+    private int _fileSystemIecUnit = 9;
+    private readonly ExpansionCartManageState _expansionCart = new();
     private bool _saveSettingsOnExit;
     private bool _saveTransientValuesOnExit;
     private string _settingsStatusText = "Settings will load from the connected host.";
@@ -55,7 +61,8 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         Slots =
         [
-            new AttachSlotViewModel(MediaSlot.Drive8, "Drive 8", "Disk", ["*.d64", "*.g64"], trueDrive: true),
+            // *.t64: archive of PRGs; media host converts to single-file D64 on Drive 8.
+            new AttachSlotViewModel(MediaSlot.Drive8, "Drive 8", "Disk", ["*.d64", "*.g64", "*.t64"], trueDrive: true),
             new AttachSlotViewModel(MediaSlot.Drive9, "Drive 9", "Disk", ["*.d64", "*.g64"]),
             new AttachSlotViewModel(MediaSlot.Tape, "Tape", "Tape", ["*.tap"]),
             new AttachSlotViewModel(MediaSlot.Cartridge, "Cartridge", "Cart", ["*.crt", "*.bin", "*.rom"])
@@ -65,7 +72,9 @@ public sealed class AttachPanelViewModel : ObservableObject
         [
             new MachineProfileOption("c64", "C64 PAL", "Placeholder until host profile enumeration is available.", true),
             new MachineProfileOption("ntsc", "C64 NTSC", "Placeholder until host profile enumeration is available.", true),
-            new MachineProfileOption("c64c", "C64C PAL", "Placeholder until host profile enumeration is available.", true)
+            new MachineProfileOption("c64c", "C64C PAL", "Placeholder until host profile enumeration is available.", true),
+            new MachineProfileOption("vic20", "VIC-20 PAL", "Placeholder until host profile enumeration is available.", true),
+            new MachineProfileOption("vic20ntsc", "VIC-20 NTSC", "Placeholder until host profile enumeration is available.", true)
         ];
         _selectedMachineProfile = MachineProfiles[0];
         _appliedSettings = CaptureSettings();
@@ -162,7 +171,7 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     /// <summary>
     /// Mutes the emulator's audio output (the status-bar mute toggle). Drives the process-wide
-    /// <see cref="global::ViceSharp.Host.Audio.MasterAudioControl"/> the audio backend reads.
+    /// <see cref="global::ViceSharp.Abstractions.MasterAudioControl"/> the audio backend reads.
     /// </summary>
     public bool Muted
     {
@@ -170,13 +179,13 @@ public sealed class AttachPanelViewModel : ObservableObject
         set
         {
             if (SetProperty(ref _muted, value))
-                global::ViceSharp.Host.Audio.MasterAudioControl.Muted = value;
+                global::ViceSharp.Abstractions.MasterAudioControl.Muted = value;
         }
     }
 
     /// <summary>
     /// Master output volume as a percentage 0-100 (the status-bar volume slider). Drives
-    /// <see cref="global::ViceSharp.Host.Audio.MasterAudioControl"/>.Volume (percent / 100).
+    /// <see cref="global::ViceSharp.Abstractions.MasterAudioControl"/>.Volume (percent / 100).
     /// </summary>
     public double MasterVolumePercent
     {
@@ -185,7 +194,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         {
             var clamped = System.Math.Clamp(value, 0, 100);
             if (SetProperty(ref _masterVolumePercent, clamped))
-                global::ViceSharp.Host.Audio.MasterAudioControl.Volume = (float)(clamped / 100.0);
+                global::ViceSharp.Abstractions.MasterAudioControl.Volume = (float)(clamped / 100.0);
         }
     }
 
@@ -372,7 +381,8 @@ public sealed class AttachPanelViewModel : ObservableObject
             if (value is null)
                 return;
 
-            SetSettingsProperty(ref _selectedMachineProfile, value);
+            if (SetSettingsProperty(ref _selectedMachineProfile, value))
+                OnPropertyChanged(nameof(IsVic20Selected));
         }
     }
 
@@ -441,6 +451,199 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         get => _selectedPacingStrategy;
         set => SetSettingsProperty(ref _selectedPacingStrategy, value);
+    }
+
+    /// <summary>True when the selected machine profile is VIC-20 (xvic).</summary>
+    public bool IsVic20Selected =>
+        SelectedMachineProfile.Id is "vic20" or "vic20ntsc"
+        || SelectedMachineProfile.Id.StartsWith("vic20", StringComparison.OrdinalIgnoreCase);
+
+    public IReadOnlyList<string> Vic20MemoryPresets => SettingsOptionCatalog.Vic20MemoryPresets;
+
+    public string SelectedVic20MemoryPreset
+    {
+        get => _vic20Memory.PresetLabel;
+        set
+        {
+            // ComboBox TwoWay may write null/empty mid-update; ignore to avoid All<->none oscillation.
+            if (_vic20MemoryNotifyBusy || string.IsNullOrWhiteSpace(value))
+                return;
+            if (string.Equals(value, _vic20Memory.PresetLabel, StringComparison.Ordinal))
+                return;
+            if (!_vic20Memory.SetFromPresetLabel(value))
+                return;
+            NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk0
+    {
+        get => _vic20Memory.Blk0;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk0Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk1
+    {
+        get => _vic20Memory.Blk1;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk1Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk2
+    {
+        get => _vic20Memory.Blk2;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk2Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk3
+    {
+        get => _vic20Memory.Blk3;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk3Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk5
+    {
+        get => _vic20Memory.Blk5;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk5Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public string Vic20MemorySpec => _vic20Memory.MemorySpec;
+
+    public string FileSystemIecRootPath
+    {
+        get => _fileSystemIecRootPath;
+        set => SetSettingsProperty(ref _fileSystemIecRootPath, value ?? "");
+    }
+
+    public int FileSystemIecUnit
+    {
+        get => _fileSystemIecUnit;
+        set => SetSettingsProperty(ref _fileSystemIecUnit, value);
+    }
+
+    public IReadOnlyList<string> ExpansionCartKinds => ExpansionCartManageState.CartKinds;
+
+    public string SelectedExpansionCartKind
+    {
+        get => _expansionCart.CartKind;
+        set
+        {
+            var next = string.IsNullOrWhiteSpace(value) ? "none" : value;
+            if (string.Equals(_expansionCart.CartKind, next, StringComparison.Ordinal))
+                return;
+
+            _expansionCart.CartKind = next;
+            var presets = _expansionCart.AvailablePresets;
+            if (presets.Count > 0
+                && !presets.Contains(_expansionCart.ConfigPreset, StringComparer.Ordinal))
+            {
+                _expansionCart.ConfigPreset = presets[0];
+            }
+
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ExpansionCartPresets));
+            OnPropertyChanged(nameof(SelectedExpansionCartPreset));
+            MarkSettingsDirty();
+        }
+    }
+
+    public bool ExpansionCartWriteBack
+    {
+        get => _expansionCart.WriteBack;
+        set
+        {
+            if (_expansionCart.WriteBack == value)
+                return;
+            _expansionCart.WriteBack = value;
+            OnPropertyChanged();
+            MarkSettingsDirty();
+        }
+    }
+
+    public IReadOnlyList<string> ExpansionCartPresets => _expansionCart.AvailablePresets;
+
+    public string SelectedExpansionCartPreset
+    {
+        get => _expansionCart.ConfigPreset;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return;
+            if (string.Equals(_expansionCart.ConfigPreset, value, StringComparison.Ordinal))
+                return;
+            if (!_expansionCart.AvailablePresets.Contains(value, StringComparer.Ordinal))
+                return;
+
+            _expansionCart.ConfigPreset = value;
+            OnPropertyChanged();
+            MarkSettingsDirty();
+        }
+    }
+
+    private bool _vic20MemoryNotifyBusy;
+
+    private void NotifyVic20MemoryChanged()
+    {
+        if (_vic20MemoryNotifyBusy)
+            return;
+
+        _vic20MemoryNotifyBusy = true;
+        try
+        {
+            OnPropertyChanged(nameof(SelectedVic20MemoryPreset));
+            OnPropertyChanged(nameof(Vic20Blk0));
+            OnPropertyChanged(nameof(Vic20Blk1));
+            OnPropertyChanged(nameof(Vic20Blk2));
+            OnPropertyChanged(nameof(Vic20Blk3));
+            OnPropertyChanged(nameof(Vic20Blk5));
+            OnPropertyChanged(nameof(Vic20MemorySpec));
+        }
+        finally
+        {
+            _vic20MemoryNotifyBusy = false;
+        }
+
+        MarkSettingsDirty(restart: true);
+    }
+
+    private void MarkSettingsDirty(bool restart = false)
+    {
+        if (_refreshingSettingsFromHost)
+            return;
+        _hasPendingSettingsChanges = true;
+        if (restart)
+            _requiresRestart = true;
+        OnPropertyChanged(nameof(HasPendingSettingsChanges));
+        OnPropertyChanged(nameof(RequiresRestart));
     }
 
     public string SettingsStatusText
@@ -539,14 +742,15 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         if (string.IsNullOrWhiteSpace(filePath))
         {
-            slot.MarkError("No file selected.");
+            await RunOnUiAsync(() => slot.MarkError("No file selected.")).ConfigureAwait(false);
             return;
         }
 
         byte[]? payload = null;
         if (File.Exists(filePath))
-            payload = await File.ReadAllBytesAsync(filePath, cancellationToken).ConfigureAwait(true);
+            payload = await File.ReadAllBytesAsync(filePath, cancellationToken).ConfigureAwait(false);
 
+        // Host/gRPC uses ConfigureAwait(false) internally; never assume we are on the UI thread.
         var response = payload is { Length: > 0 }
             ? await _hostClient.AttachMediaAsync(
                 slot.Slot,
@@ -554,38 +758,67 @@ public sealed class AttachPanelViewModel : ObservableObject
                 slot.IsReadOnly,
                 payload,
                 Path.GetFileName(filePath),
-                cancellationToken).ConfigureAwait(true)
+                cancellationToken).ConfigureAwait(false)
             : await _hostClient.AttachMediaAsync(slot.Slot, filePath, slot.IsReadOnly, cancellationToken)
-                .ConfigureAwait(true);
+                .ConfigureAwait(false);
 
-        if (!response.Status.IsSuccess)
+        await RunOnUiAsync(async () =>
         {
-            slot.MarkError(response.Status.Message);
-            StatusText = response.Status.Message;
+            if (!response.Status.IsSuccess)
+            {
+                slot.MarkError(response.Status.Message);
+                StatusText = response.Status.Message;
+                return;
+            }
+
+            if (response.Attachment is not null)
+            {
+                slot.ApplyAttachment(response.Attachment, filePath);
+                if (slot.SupportsTrueDrive && slot.TrueDrive)
+                {
+                    _applyingTrueDrive = true;
+                    try
+                    {
+                        await ApplyTrueDriveSelectionAsync(slot, cancellationToken).ConfigureAwait(true);
+                    }
+                    finally
+                    {
+                        _applyingTrueDrive = false;
+                    }
+
+                    StatusText = $"Attached; True Drive enabled for {slot.Title} (session restarted)";
+                    return;
+                }
+            }
+
+            StatusText = "Attached";
+        }).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Run UI-facing work on the Avalonia UI thread when a live app exists; otherwise inline
+    /// (unit tests have no dispatcher loop, so InvokeAsync would hang forever).
+    /// </summary>
+    private static Task RunOnUiAsync(Action action)
+    {
+        if (Dispatcher.UIThread.CheckAccess() || Application.Current is null)
+        {
+            action();
+            return Task.CompletedTask;
+        }
+
+        return Dispatcher.UIThread.InvokeAsync(action).GetTask();
+    }
+
+    private static async Task RunOnUiAsync(Func<Task> action)
+    {
+        if (Dispatcher.UIThread.CheckAccess() || Application.Current is null)
+        {
+            await action().ConfigureAwait(false);
             return;
         }
 
-        if (response.Attachment is not null)
-        {
-            slot.ApplyAttachment(response.Attachment, filePath);
-            if (slot.SupportsTrueDrive && slot.TrueDrive)
-            {
-                _applyingTrueDrive = true;
-                try
-                {
-                    await ApplyTrueDriveSelectionAsync(slot, cancellationToken).ConfigureAwait(true);
-                }
-                finally
-                {
-                    _applyingTrueDrive = false;
-                }
-
-                StatusText = $"Attached; True Drive enabled for {slot.Title} (session restarted)";
-                return;
-            }
-        }
-
-        StatusText = "Attached";
+        await Dispatcher.UIThread.InvokeAsync(action).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -734,6 +967,19 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         if (response.Settings is not null)
             ApplySettingsFromHost(response.Settings);
+
+        // Xbox/host warp entry is SetLimiterRate(0). A positive rate on that
+        // RPC re-enables the limiter, so warp Apply must send 0 after the DTO.
+        if (IsWarpMode)
+        {
+            var warp = await _hostClient.SetLimiterRateAsync(0, cancellationToken).ConfigureAwait(true);
+            if (!warp.Status.IsSuccess)
+            {
+                StatusText = warp.Status.Message;
+                SettingsStatusText = warp.Status.Message;
+                return;
+            }
+        }
 
         _appliedSettings = CaptureSettings();
         HasPendingSettingsChanges = false;
@@ -914,6 +1160,12 @@ public sealed class AttachPanelViewModel : ObservableObject
         _swapJoystickPorts = settings.Input.SwapJoystickPorts;
         _selectedResourceMode = FromResourceModeId(settings.Resources?.Mode ?? new ResourceSettingsDto().Mode);
         _selectedPacingStrategy = FromPacingStrategyId(settings.Limiter.PacingStrategy);
+        _vic20Memory.SetFromSpec(settings.Vic20MemorySpec);
+        _fileSystemIecRootPath = settings.FileSystemIecRootPath ?? "";
+        _fileSystemIecUnit = settings.FileSystemIecUnit is >= 8 and <= 11 ? settings.FileSystemIecUnit : 9;
+        _expansionCart.CartKind = string.IsNullOrWhiteSpace(settings.Vic20ExpansionCartKind) ? "none" : settings.Vic20ExpansionCartKind;
+        _expansionCart.WriteBack = settings.Vic20ExpansionWriteBack;
+        _expansionCart.ConfigPreset = string.IsNullOrWhiteSpace(settings.Vic20ExpansionConfigPreset) ? "start" : settings.Vic20ExpansionConfigPreset;
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
@@ -931,6 +1183,19 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SwapJoystickPorts));
         OnPropertyChanged(nameof(SelectedResourceMode));
         OnPropertyChanged(nameof(SelectedPacingStrategy));
+        OnPropertyChanged(nameof(IsVic20Selected));
+        OnPropertyChanged(nameof(SelectedVic20MemoryPreset));
+        OnPropertyChanged(nameof(Vic20Blk0));
+        OnPropertyChanged(nameof(Vic20Blk1));
+        OnPropertyChanged(nameof(Vic20Blk2));
+        OnPropertyChanged(nameof(Vic20Blk3));
+        OnPropertyChanged(nameof(Vic20Blk5));
+        OnPropertyChanged(nameof(FileSystemIecRootPath));
+        OnPropertyChanged(nameof(FileSystemIecUnit));
+        OnPropertyChanged(nameof(SelectedExpansionCartKind));
+        OnPropertyChanged(nameof(ExpansionCartWriteBack));
+        OnPropertyChanged(nameof(SelectedExpansionCartPreset));
+        OnPropertyChanged(nameof(ExpansionCartPresets));
     }
 
     public void ApplyWarpMode(WarpModeEvent warpMode)
@@ -948,7 +1213,10 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         return new UpdateSettingsRequest(
             _hostClient.SessionId,
-            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled, ToPacingStrategyId(SelectedPacingStrategy)),
+            new LimiterSettingsDto(
+                IsWarpMode ? 0 : LimiterRatePercent,
+                LimiterEnabled,
+                ToPacingStrategyId(SelectedPacingStrategy)),
             new DisplaySettingsDto(
                 ToRendererId(SelectedRenderer),
                 ToPaletteId(SelectedPalette),
@@ -965,7 +1233,13 @@ public sealed class AttachPanelViewModel : ObservableObject
             GetSelectedMachineProfileId(),
             restartSession,
             new AudioSettingsDto(ToAudioModeId(SelectedAudioMode)),
-            new ResourceSettingsDto(ToResourceModeId(SelectedResourceMode)));
+            new ResourceSettingsDto(ToResourceModeId(SelectedResourceMode)),
+            IsVic20Selected ? Vic20MemorySpec : null,
+            FileSystemIecRootPath,
+            FileSystemIecUnit,
+            SelectedExpansionCartKind,
+            ExpansionCartWriteBack,
+            SelectedExpansionCartPreset);
     }
 
     private ValidateSettingsResourcesRequest CreateValidateSettingsRequest()
@@ -1188,7 +1462,9 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     private static bool IsRestartRelevant(string propertyName)
     {
-        return propertyName is nameof(SelectedMachineProfile) or nameof(SelectedResourceMode);
+        return propertyName is nameof(SelectedMachineProfile) or nameof(SelectedResourceMode)
+            or nameof(SelectedVic20MemoryPreset) or nameof(Vic20Blk0) or nameof(Vic20Blk1)
+            or nameof(Vic20Blk2) or nameof(Vic20Blk3) or nameof(Vic20Blk5);
     }
 
     private SettingsSnapshot CaptureSettings()
@@ -1418,5 +1694,14 @@ public enum SidebarTab
     Peripherals,
     Settings,
     Monitor,
-    History
+    History,
+
+    /// <summary>PLAN-ROMM-001: the RomM game library tab.</summary>
+    Library,
+
+    /// <summary>PLAN-ROMM-001: the RomM list-management tab.</summary>
+    Lists,
+
+    /// <summary>PLAN-ROMM-001: the CSDb discovery tab.</summary>
+    CsdbDiscovery,
 }

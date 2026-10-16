@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXUI-005",
+  "title": "SwapChainPanel + Win2D pull into pinned buffer",
+  "status": "pending",
+  "priority": "medium",
+  "body": "SwapChainPanel + Win2D pull into a pinned buffer, nearest-neighbor into the TV-safe rect. Acceptance: verified by TEST-XBOXUI-005a/005b.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

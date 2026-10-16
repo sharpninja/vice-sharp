@@ -1,0 +1,13 @@
+diag EXIT=0 MS=11297
+busy EXIT=0 MS=11030
+ntsc EXIT=0 MS=9589
+bgra EXIT=0 MS=9663
+pal EXIT=0 MS=10462
+frame_cap EXIT=0 MS=7911
+frame_geo EXIT=0 MS=10748
+frame_idx EXIT=0 MS=10367
+AGGREGATE Passed=0 Failed=8 Skipped=0
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:412:AGGREGATE Passed=0 
+Failed=8 Skipped=0
+

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-SYSBTN-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Binding table + edge/LT-hysteresis + swap-flag (off-console). Acceptance: Default matches locked table; Press once; LT one On + one Off.",
+  "acceptanceCriteria": []
+}

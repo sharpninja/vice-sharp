@@ -1,0 +1,36 @@
+{
+  "kind": "test",
+  "id": "TEST-UISET-003",
+  "title": "C64 Settings RC plus family visibility",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Headless and live RemoteControl tests for C64 variants (at least c64, c64c, ntsc from host catalog) mutate shared Settings controls, Apply+Restart PAL vs NTSC CLOCK ~0.985 vs ~1.023 MHz with READY, Warp LIMITER WARP and CLOCK percent well above 100, and assert VIC-20-only AutomationIds are not effectively visible on C64 and are visible on VIC-20.\n\n## Acceptance Criteria\n- **ac-c64-inventory**: Shared Settings inventory mutates and sticks for C64 models c64, c64c, and ntsc.\n- **ac-c64-palntsc-warp**: C64 PAL versus NTSC boots READY with clocks approximately 0.985 versus 1.023 MHz; Warp status and live runtime satisfy TR-WARP-STATUS-001, including EffectiveClockPercent greater than 150.\n- **ac-visibility**: VIC-20-only AutomationIds are not effectively visible on C64 Computer and are visible on VIC-20 Computer.\n- **ac-catalog-14**: Automatically cover all 14 available C64 host catalog profiles and live c64/c64c/ntsc representatives. Cover case-insensitive IDs, unavailable/out-of-family/null/reentry rejection, stable Models within family and disabled Apply with a visible explanation for unusable catalog.\n- **ac-draft-preservation**: Exercise shared synchronization for initial load, refresh, Apply, Revert and persisted state, preserving VIC-20 draft RAM/cart fields across family switches without attaching VIC-20 hardware to a C64 runtime.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-c64-inventory",
+      "text": "Shared Settings inventory mutates and sticks for C64 models c64, c64c, and ntsc.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-c64-palntsc-warp",
+      "text": "C64 PAL versus NTSC boots READY with clocks approximately 0.985 versus 1.023 MHz; Warp status and live runtime satisfy TR-WARP-STATUS-001, including EffectiveClockPercent greater than 150.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-visibility",
+      "text": "VIC-20-only AutomationIds are not effectively visible on C64 Computer and are visible on VIC-20 Computer.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-catalog-14",
+      "text": "Automatically cover all 14 available C64 host catalog profiles and live c64/c64c/ntsc representatives. Cover case-insensitive IDs, unavailable/out-of-family/null/reentry rejection, stable Models within family and disabled Apply with a visible explanation for unusable catalog.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-draft-preservation",
+      "text": "Exercise shared synchronization for initial load, refresh, Apply, Revert and persisted state, preserving VIC-20 draft RAM/cart fields across family switches without attaching VIC-20 hardware to a C64 runtime.",
+      "isSatisfied": false
+    }
+  ]
+}

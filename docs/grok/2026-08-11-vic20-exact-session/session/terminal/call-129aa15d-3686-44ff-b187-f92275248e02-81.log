@@ -1,0 +1,11 @@
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [2 s]
+   DIV first=521027 matchedCycles=521026 budget=10227270
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll 
+(net10.0)
+DUMP c=100 nA=$00 mA=$00 nP=$25 mP=$25 mRast=1 nRast=1 mCyc=41 nCyc=41 mFetch=2 nFetch=4 m$9124=$FF n$9124=$9B m$9125=$FF n$9125=$FF m$912B=$00 n$912B=$00 m$912D=$00 n$912D=$00 m$912E=$80 n$912E=$80 mis=False
+DUMP c=1000 nA=$00 mA=$00 nP=$25 mP=$25 mRast=15 nRast=15 mCyc=31 nCyc=31 mFetch=2 nFetch=4 m$9124=$FF n$9124=$17 m$9125=$FF n$9125=$FC m$912B=$00 n$912B=$00 m$912D=$00 n$912D=$00 m$912E=$80 n$912E=$80 mis=False
+DUMP c=10000 nA=$04 mA=$04 nP=$24 mP=$24 mRast=153 nRast=153 mCyc=61 nCyc=61 mFetch=4 nFetch=4 m$9124=$FF n$9124=$EF m$9125=$FF n$9125=$D8 m$912B=$00 n$912B=$00 m$912D=$00 n$912D=$00 m$912E=$80 n$912E=$80 mis=False
+DUMP c=100000 nA=$00 mA=$00 nP=$26 mP=$26 mRast=233 nRast=233 mCyc=36 nCyc=36 mFetch=0 nFetch=0 m$9124=$FF n$9124=$60 m$9125=$FF n$9125=$79 m$912B=$00 n$912B=$00 m$912D=$00 n$912D=$00 m$912E=$80 n$912E=$80 mis=False
+DUMP c=520000 nA=$01 mA=$01 nP=$31 mP=$31 mRast=170 nRast=170 mCyc=6 nCyc=6 mFetch=1 nFetch=1 m$9124=$35 n$9124=$36 m$9125=$03 n$9125=$03 m$912B=$40 n$912B=$40 m$912D=$00 n$912D=$00 m$912E=$C0 n$912E=$C0 mis=False
+

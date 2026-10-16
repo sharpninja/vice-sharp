@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XVIDEO-DEVICE",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console video smoke. Acceptance: image correct, letterboxed, no tear.",
+  "acceptanceCriteria": []
+}

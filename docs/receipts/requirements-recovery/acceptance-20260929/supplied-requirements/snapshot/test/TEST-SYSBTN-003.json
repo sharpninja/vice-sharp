@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-SYSBTN-003",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Source-gen round-trip + reset-to-defaults + remap. Acceptance: profile round-trips byte-identical; ResetToDefaults yields Default.",
+  "acceptanceCriteria": []
+}

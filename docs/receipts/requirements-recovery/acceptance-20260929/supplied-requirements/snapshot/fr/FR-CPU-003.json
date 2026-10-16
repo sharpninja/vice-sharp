@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CPU-003",
+  "title": "Interrupt Handling with Correct Timing",
+  "status": "pending",
+  "priority": "high",
+  "body": "The CPU shall correctly handle hardware interrupts (IRQ, NMI) and the software BRK instruction. IRQ is level-triggered and masked by the I flag. NMI is edge-triggered on the falling edge. The interrupt sequence shall take exactly 7 cycles. Interrupt hijacking (where an NMI arrives during an IRQ sequence or vice versa) shall be handled correctly per real hardware behavior.\n\n## Acceptance Criteria\n- IRQ is sampled during the penultimate cycle of each instruction; when asserted and the I flag is clear, the IRQ sequence begins after the current instruction completes.\n- NMI is edge-detected (falling edge); once detected, it is serviced after the current instruction regardless of the I flag.\n- The BRK instruction pushes PC+2 (not PC+1) and sets the B flag in the pushed status register.\n- Interrupt hijacking: if NMI occurs during the vector-fetch cycles of an IRQ, the NMI vector ($FFFA) is fetched instead of the IRQ vector ($FFFE).\n- The interrupt acknowledge sequence takes exactly 7 cycles.\n- The `IInterruptController` interface allows external devices to assert/deassert IRQ and NMI lines independently.\n- Passes the Lorenz CIA interrupt timing tests.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

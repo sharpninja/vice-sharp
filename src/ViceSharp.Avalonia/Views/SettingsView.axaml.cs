@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using ViceSharp.Avalonia.ViewModels;
+// FlashCartBuilderView in same namespace
 
 namespace ViceSharp.Avalonia.Views;
 
@@ -40,4 +41,23 @@ public partial class SettingsView : UserControl
 
     private void OnCycleSpeed(object? sender, RoutedEventArgs e)
         => _ = ViewModel?.CycleSpeedAsync();
+
+    private async void OnOpenFlashCartBuilder(object? sender, RoutedEventArgs e)
+    {
+        var builder = new FlashCartBuilderView();
+        var window = new Window
+        {
+            Title = "Flash cart image builder",
+            Width = 560,
+            Height = 520,
+            Content = builder,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
+        builder.CloseRequested += (_, _) => window.Close();
+        var owner = TopLevel.GetTopLevel(this) as Window;
+        if (owner is not null)
+            await window.ShowDialog(owner);
+        else
+            window.Show();
+    }
 }

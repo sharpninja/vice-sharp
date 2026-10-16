@@ -1,0 +1,31 @@
+{
+  "kind": "fr",
+  "id": "FR-CPUTICK-001",
+  "title": "Per-CPU independent tick counter and per-CPU speed metric",
+  "status": "pending",
+  "priority": "high",
+  "body": "Each CPU in the emulator keeps its own independent executed-cycle counter and the displayed speed is that CPU's executed-cycle rate versus its own target clock.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Each CPU ExecutedCycles increments once per executed cycle and not on a stolen or skipped cycle.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-2",
+      "text": "Per-CPU speed percent equals delta-executed over delta-wall over targetHz; the C64 primary reads about 95-100 percent at real time and the drive about 100 percent when running.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-3",
+      "text": "The status surface lists per-CPU rate entries for the host and each peripheral CPU distinctly.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-4",
+      "text": "Machine reset zeroes every CPU's executed-cycle counter.",
+      "isSatisfied": false
+    }
+  ]
+}

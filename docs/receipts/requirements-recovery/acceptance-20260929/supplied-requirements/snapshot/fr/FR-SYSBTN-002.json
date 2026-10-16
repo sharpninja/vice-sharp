@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSBTN-002",
+  "title": "Menu toggles the main menu (fixed)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Menu toggles the main menu; not remappable away from menu control. Acceptance: Menu edge in Gameplay -> MainMenu+OpenMainMenu; in MainMenu -> Gameplay+CloseMenu.\n\n## Acceptance Criteria\n- Menu edge in Gameplay -> MainMenu+OpenMainMenu; in MainMenu -> Gameplay+CloseMenu.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

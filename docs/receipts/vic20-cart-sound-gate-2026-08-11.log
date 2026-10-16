@@ -1,0 +1,56 @@
+
+
+==== FullyQualifiedName~Flash040 EXIT=0 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    12, Skipped:     0, Total:    12, Duration: 109 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+==== FullyQualifiedName~Fe3Flash EXIT=0 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 73 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+==== FullyQualifiedName~UltimemParity EXIT=0 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 45 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+==== FullyQualifiedName~MegaCartParity EXIT=0 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 43 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+==== FullyQualifiedName~Vic20CartInventory EXIT=0 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 32 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+==== FullyQualifiedName~Vic20Sound EXIT=0 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     7, Skipped:     0, Total:     7, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+==== FullyQualifiedName~Vic20NativeAudio EXIT=0 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 69 ms - ViceSharp.TestHarness.dll (net10.0)
+
+
+CART_SOUND_SUMMARY Passed=0 Failed=0 Skipped=0
+
+CART_SOUND_SUMMARY_FIXED Passed=31 Failed=0 Skipped=0 EXIT_ALL=0
+
+CART_SOUND_SUMMARY_FIXED Passed=31 Failed=0 Skipped=0

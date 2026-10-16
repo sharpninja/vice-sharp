@@ -1,0 +1,69 @@
+FDA8: 81
+FDA9: 02
+FDAA: A8
+FDAB: A9
+FDAC: 04
+FDAD: 85
+FDAE: C2
+FDAF: E6
+FDB0: C1
+FDB1: D0
+FDB2: 02
+FDB3: E6
+FDB4: C2
+FDB5: 20
+FDB6: 91
+FDB7: FE
+FDB8: A5
+FDB9: 97
+FDBA: F0
+FDBB: 22
+FDBC: B0
+FDBD: F1
+FDBE: A4
+FDBF: C2
+FDC0: A6
+
+[xUnit.net 00:00:02.51]       c4986: nPC=$FEA8 mPC=$FEA8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FB
+[xUnit.net 00:00:02.51]       c4987: nPC=$FEA8 mPC=$FEA8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FC
+[xUnit.net 00:00:02.51]       c4988: nPC=$FEA8 mPC=$FEA8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4989: nPC=$FEA8 mPC=$FEA8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4990: nPC=$FDB8 mPC=$FDB8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4991: nPC=$FDB8 mPC=$FDB8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4992: nPC=$FDB8 mPC=$FDB8 nP=$24 mP=$24 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4993: nPC=$FDBA mPC=$FDBA nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4994: nPC=$FDBA mPC=$FDBA nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]     ViceSharp.TestHarness.Vic20.Vic20PcDivergeProbe.Probe_FirstDiverge [FAIL]
+[xUnit.net 00:00:02.51]       c4995: nPC=$FDBC mPC=$FDBC nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4996: nPC=$FDDE mPC=$FDDE nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4997: nPC=$FDDE mPC=$FDDE nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4998: nPC=$FDE0 mPC=$FDE0 nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c4999: nPC=$FDAF mPC=$FDAF nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c5000: nPC=$FDAF mPC=$FDAF nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c5001: nPC=$FDAF mPC=$FDAF nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c5002: nPC=$FDB1 mPC=$FDB1 nP=$24 mP=$24 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c5003: nPC=$FDB1 mPC=$FDB1 nP=$24 mP=$24 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c5004: nPC=$FDB1 mPC=$FDB1 nP=$24 mP=$24 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       c5005: nPC=$FDB1 mPC=$FDB3 nP=$24 mP=$24 nA=$00 nX=$04 nS=$FD
+[xUnit.net 00:00:02.51]       DIV at 5005
+[xUnit.net 00:00:02.51]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PcDivergeProbe.cs(27,0): 
+at ViceSharp.TestHarness.Vic20.Vic20PcDivergeProbe.Probe_FirstDiverge()
+  Failed ViceSharp.TestHarness.Vic20.Vic20PcDivergeProbe.Probe_FirstDiverge [525 ms]
+   c4986: nPC=$FEA8 mPC=$FEA8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FB
+c4987: nPC=$FEA8 mPC=$FEA8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FC
+c4988: nPC=$FEA8 mPC=$FEA8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FD
+c4989: nPC=$FEA8 mPC=$FEA8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FD
+c4990: nPC=$FDB8 mPC=$FDB8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FD
+c4991: nPC=$FDB8 mPC=$FDB8 nP=$24 mP=$24 nA=$04 nX=$04 nS=$FD
+c4992: nPC=$FDB8 mPC=$FDB8 nP=$24 mP=$24 nA=$00 nX=$04 nS=$FD
+c4993: nPC=$FDBA mPC=$FDBA nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+c4994: nPC=$FDBA mPC=$FDBA nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+c4995: nPC=$FDBC mPC=$FDBC nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+c4996: nPC=$FDDE mPC=$FDDE nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+c4997: nPC=$FDDE mPC=$FDDE nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+c4998: nPC=$FDE0 mPC=$FDE0 nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+c4999: nPC=$FDAF mPC=$FDAF nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+c5000: nPC=$FDAF mPC=$FDAF nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+c5001: nPC=$FDAF mPC=$FDAF nP=$26 mP=$26 nA=$00 nX=$04 nS=$FD
+EXIT=
+

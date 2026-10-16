@@ -1,0 +1,133 @@
+  Determining projects to restore...
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Protocol\ViceSharp.Protocol.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj (in 1.08 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj (in 1.12 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.RomM\ViceSharp.RomM.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj (in 1.09 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceSharp.Core.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Host\ViceSharp.Host.csproj (in 1.18 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj (in 1.19 sec).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj (in 1.18 sec).
+  6 of 21 projects are up-to-date for restore.
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views/SettingsView.axaml(69,18,69,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+  Building VICE native library
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.37]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:02.41]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.80]   Starting:    ViceSharp.TestHarness
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterBits_AreDoubleWidth_LikeXvic [93 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameIncludesBorderStrips_AroundCharacterArea [21 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderCyan_UsesVicePalettesVplRgb [16 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ColorBase_Uses9600_WhenScreenBankBitSet [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PixelAspect_MatchesViceVicGetPixelAspect [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_BankBitClear_Selects8000Bank [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PalAndNtsc_Profiles_ExposeDistinctTiming [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.Reg900F_BorderIsLowNibble_BackgroundIsHighNibble [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameCompleted_FiresAfterFullRaster [37 ms]
+[xUnit.net 00:00:03.21]       expected black ink pixels from planted 'A' glyph
+[xUnit.net 00:00:03.21]       Stack Trace:
+[xUnit.net 00:00:03.20]     ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph [FAIL]
+[xUnit.net 00:00:03.21]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoTests.cs(130,0): at ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph()
+[xUnit.net 00:00:03.21]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:03.21]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.21]     ViceSharp.TestHarness.Vic20.Vic20VideoTests.ReadyStyle_PaperRegion_IsWhiteBand_NotShortCyanIsland [FAIL]
+[xUnit.net 00:00:03.21]       paper mid-band should stay white (23 rows)
+[xUnit.net 00:00:03.21]       Stack Trace:
+[xUnit.net 00:00:03.21]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoTests.cs(353,0): at ViceSharp.TestHarness.Vic20.Vic20VideoTests.ReadyStyle_PaperRegion_IsWhiteBand_NotShortCyanIsland()
+[xUnit.net 00:00:03.21]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:03.21]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+xvic vice_machine_create call=1 model=vic20
+xvic vice_machine_reset call=1 machine=000002159e590930
+xvic vice_machine_step_cycle call=1 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:04.26]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Pal_FrameGeometry_MatchesViceNormalBorders [12 ms]
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph [13 ms]
+  Error Message:
+   expected black ink pixels from planted 'A' glyph
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoTests.cs:line 130
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ReadyStyle_PaperRegion_IsWhiteBand_NotShortCyanIsland [13 ms]
+  Error Message:
+   paper mid-band should stay white (23 rows)
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20VideoTests.ReadyStyle_PaperRegion_IsWhiteBand_NotShortCyanIsland() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoTests.cs:line 353
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_MatchesViceFormula_UnexpandedReadyLayout [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Ntsc_FrameGeometry_MatchesViceNormalBorders [10 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.RenderNow_UsesCycleDrawPath_FrameCompletedOnce [14 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderPixels_MatchBorderColor_NotBackground [13 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [982 ms]
+
+Test Run Failed.
+Total tests: 17
+     Passed: 15
+     Failed: 2
+ Total time: 4.9456 Seconds

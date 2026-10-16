@@ -1,0 +1,36 @@
+{
+  "kind": "tr",
+  "id": "TR-REMOTECTRL-CLI-001",
+  "title": "Portable RemoteControl gRPC command line",
+  "status": "pending",
+  "priority": "high",
+  "body": "Use published SharpNinja Avalonia RemoteControl Protocol 0.7.4 matching the embedded Server 0.7.4, its generated gRPC client and the existing Grpc.Net.Client dependency.\nOwn and dispose the channel; propagate bearer metadata and cancellation with bounded calls.\nAdd CLI and test projects to ViceSharp.slnx and the exhaustive CompletionTest manifest.\nCalculate effective visibility through ancestors and validate malformed references/cycles rather than assuming a matching node is actionable.\nValidate frame data before writing PNG output and retain machine-readable response/error contracts.\n\n## Acceptance Criteria\n- **ac-01**: Use published SharpNinja Avalonia RemoteControl Protocol 0.7.4 matching the embedded Server 0.7.4, its generated gRPC client and the existing Grpc.Net.Client dependency.\n- **ac-02**: Own and dispose the channel; propagate bearer metadata and cancellation with bounded calls.\n- **ac-03**: Add CLI and test projects to ViceSharp.slnx and the exhaustive CompletionTest manifest.\n- **ac-04**: Calculate effective visibility through ancestors and validate malformed references/cycles rather than assuming a matching node is actionable.\n- **ac-05**: Validate frame data before writing PNG output and retain machine-readable response/error contracts.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Use published SharpNinja Avalonia RemoteControl Protocol 0.7.4 matching the embedded Server 0.7.4, its generated gRPC client and the existing Grpc.Net.Client dependency.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Own and dispose the channel; propagate bearer metadata and cancellation with bounded calls.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Add CLI and test projects to ViceSharp.slnx and the exhaustive CompletionTest manifest.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Calculate effective visibility through ancestors and validate malformed references/cycles rather than assuming a matching node is actionable.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Validate frame data before writing PNG output and retain machine-readable response/error contracts.",
+      "isSatisfied": false
+    }
+  ]
+}

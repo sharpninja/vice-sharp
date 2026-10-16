@@ -1,0 +1,15 @@
+
+[xUnit.net 00:00:03.48]       firstP=25 firstPc=5005 nPC=$FDB1 mPC=$FDB3 nP=$24 mP=$24 nA=$00 mA=$00 nX=$04 mX=$FF
+[xUnit.net 00:00:03.48]     ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence [FAIL]
+[xUnit.net 00:00:03.48]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PdivProbe.cs(25,0): at 
+ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence()
+  Failed ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence [769 ms]
+  Error Message:
+   firstP=25 firstPc=5005 nPC=$FDB1 mPC=$FDB3 nP=$24 mP=$24 nA=$00 mA=$00 nX=$04 mX=$FF
+     at ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence() in 
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PdivProbe.cs:line 25
+Test Run Failed.
+Total tests: 1
+     Failed: 1
+EXIT=1
+

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XAUDIO-003",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Volume/mute gain-once. Acceptance: EffectiveGain applied once in AudioSampleConverter.",
+  "acceptanceCriteria": []
+}

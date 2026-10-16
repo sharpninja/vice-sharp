@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-001",
+  "title": "Left stick + D-pad drive JOY2 (OR-merged pre-SOCD)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Left stick and D-pad both drive JOY2, OR-merged before SOCD. Acceptance: LeftX past right threshold + DPadUp -> Joy2.DirectionMask == 0x09, JOY1 unaffected.\n\n## Acceptance Criteria\n- LeftX past right threshold + DPadUp -> Joy2.DirectionMask == 0x09, JOY1 unaffected.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

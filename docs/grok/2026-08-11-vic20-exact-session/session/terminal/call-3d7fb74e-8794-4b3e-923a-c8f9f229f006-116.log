@@ -1,0 +1,67 @@
+
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:45:            lines.AppendLine($"t{t}: PC=${cpu.PC:X4} 
+cyc={cpu.DebugCycle} op={cpu.DebugOpcode:X2} bound={cpu.IsInstructionBoundary}");
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:46:            if (t > 3 && cpu.IsInstructionBoundary && 
+cpu.PC == 0x1004)
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:73:            lines.AppendLine($"t{t}: PC=${cpu.PC:X4} 
+cyc={cpu.DebugCycle} op={cpu.DebugOpcode:X2} bound={cpu.IsInstructionBoundary}");
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:74:            if (t > 1 && cpu.IsInstructionBoundary && 
+cpu.PC == 0x1002)
+tests\ViceSharp.TestHarness\Vic20\Vic20DeterminismTests.cs:7:/// Bounded multi-frame determinism substitute for native 
+xvic lockstep when the
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:9:/// Every-cycle CPU lockstep vs xvic (A/X/Y/S/P/PC) on the 
+production create/step path.
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:36:    /// Long every-cycle probe (~2s PAL). Skips unless 
+VICESHARP_LOCKSTEP_2S=1
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:44:        if 
+(!string.Equals(Environment.GetEnvironmentVariable("VICESHARP_LOCKSTEP_2S"), "1", StringComparison.Ordinal))
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:53:    /// Steps managed Vic20 and native xvic together; 
+returns matched cycle count.
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:72:            native.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:73:            managed.Clock.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:83:                $"irq={cpu.DebugInterruptSequenceRemaining} 
+mis={mismatch}";
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:7:/// TR-VIC20-LOCKSTEP-001 / Slice N0-N1.
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:8:/// Use case: native <c>xvic</c> oracle creates 
+Vic20 machines and steps CPU
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:9:/// in lockstep-compatible fashion with the managed 
+Vic20 path.
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:11:/// real machine, reset lands at the kernal reset 
+vector, and multi-cycle step
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:15:public sealed class Vic20LockstepScaffoldTests
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:49:    /// N1 precursor: native step advances master 
+cycle when oracle is present.
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:52:    public void 
+NativeXvic_StepAdvancesCycle_WhenOraclePresent()
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:63:            native.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:87:    /// N1: short native vs managed CPU lockstep 
+(PC + A) after equal cycle counts.
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:90:    public void 
+NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent()
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:106:            native.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs:107:            managed.Clock.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:10:/// TR-VIC20-LOCKSTEP-001 / Criterion 3.
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:11:/// Use case: multi-cycle native xvic vs managed 
+Vic20 lockstep on CPU, dual VIA,
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:12:/// and basic VIC-I register samples (production 
+create/step/peek path).
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:19:public sealed class Vic20NativeLockstepTests
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:38:    /// Full CPU lockstep (A/X/Y/S/P/PC) for multiple 
+budgets.
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:42:    public void 
+NativeXvic_Managed_CpuRegs_Lockstep(string modelSelector, int cycles)
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:54:            native.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:55:            managed.Clock.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:82:            native.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:83:            managed.Clock.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:93:    /// Criterion 3: dual-VIA control register 
+samples agree after create+step.
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:101:    public void 
+NativeXvic_Managed_DualVia_ControlRegs_Lockstep(int cycles)
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:113:            native.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:114:            managed.Clock.Step();
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:127:    /// during the CPU lockstep window (kernal has 
+not yet programmed $9000; both
+tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:135:    public void 
+NativeXvic_Managed_VicI_Regs_Lockstep(int cycles)
+

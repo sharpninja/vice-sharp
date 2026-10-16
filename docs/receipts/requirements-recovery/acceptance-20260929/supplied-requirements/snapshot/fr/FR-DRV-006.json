@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRV-006",
+  "title": "Fast Loader Compatibility",
+  "status": "pending",
+  "priority": "low",
+  "body": "Many C64 programs use custom fast loader routines that replace the slow standard IEC protocol with faster custom transfer protocols. The emulator shall support common fast loaders by accurately emulating the drive CPU timing and IEC bus signal transitions.\n\n## Acceptance Criteria\n- True drive emulation (drive CPU runs in parallel) ensures fast loader compatibility.\n- The timing of IEC bus signal transitions is accurate to within 1 CPU cycle.\n- Common fast loaders that must work: EPYX Fast Load, Turbo Disk, SpeedDOS, JiffyDOS protocol, DolphinDOS parallel transfer.\n- The drive CPU and main CPU clocks are synchronized (not free-running) to prevent drift.\n- Parallel port connection for DolphinDOS and SpeedDOS is emulated when configured.\n- Custom transfer protocols that use CIA timer-based handshaking are supported.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

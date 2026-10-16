@@ -1,0 +1,78 @@
+hwnd=0 title= exited=True
+rect 0 x 0
+PrintWindow=New-Object: 
+
+Line |
+  43 |  $bmp = New-Object System.Drawing.Bitmap $w, $h
+     |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling ".ctor" with "2" argument(s): "Parameter is not valid."
+MethodInvocationException: 
+Line |
+  44 |  $g = [System.Drawing.Graphics]::FromImage($bmp)
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "FromImage" with "1" argument(s): "Value cannot be null. (Parameter 'image')"
+InvalidOperation: 
+Line |
+  45 |  $hdc = $g.GetHdc()
+     |  ~~~~~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+MethodException: 
+Line |
+  46 |  $ok = [W4]::PrintWindow($p.MainWindowHandle, $hdc, 2)
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot convert argument "hdcBlt", with value: "", for "PrintWindow" to type "System.IntPtr": "Cannot convert null to type "System.IntPtr"."
+InvalidOperation: 
+Line |
+  47 |  $g.ReleaseHdc($hdc)
+     |  ~~~~~~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+InvalidOperation: 
+Line |
+  50 |    $g.CopyFromScreen($r.L, $r.T, 0, 0, $bmp.Size)
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+InvalidOperation: 
+Line |
+  52 |  $bmp.Save($shot, [System.Drawing.Imaging.ImageFormat]::Png)
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+(50,50)=RGB
+(0,0)=RGB
+(0,0)=RGB
+(0,0)=RGB
+white=0 cyan=0 size=0 x 0 file=13741
+InvalidOperation: 
+Line |
+  54 |  . le($x,$y) { $c=$bmp.GetPixel([Math]::Min($x,$w-1),[Math]::Min($y,$h-1 .
+     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+InvalidOperation: 
+Line |
+  54 |  . le($x,$y) { $c=$bmp.GetPixel([Math]::Min($x,$w-1),[Math]::Min($y,$h-1 .
+     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+InvalidOperation: 
+Line |
+  54 |  . le($x,$y) { $c=$bmp.GetPixel([Math]::Min($x,$w-1),[Math]::Min($y,$h-1 .
+     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+InvalidOperation: 
+Line |
+  54 |  . le($x,$y) { $c=$bmp.GetPixel([Math]::Min($x,$w-1),[Math]::Min($y,$h-1 .
+     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+InvalidOperation: 
+Line |
+  59 |  $g.Dispose(); $bmp.Dispose()
+     |  ~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+InvalidOperation: 
+Line |
+  59 |  $g.Dispose(); $bmp.Dispose()
+     |                ~~~~~~~~~~~~~~
+     | You cannot call a method on a null-valued expression.
+Stop-Process: 
+Line |
+  60 |  Stop-Process -Id $p.Id -Force
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find a process with the process identifier 71372.

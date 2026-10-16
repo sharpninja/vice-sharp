@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXUI-003",
+  "title": "InputContext observer over single authority",
+  "status": "pending",
+  "priority": "medium",
+  "body": "InputContext observer over the single XboxInputContext authority. Acceptance: verified by TEST-XBOXUI-003.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

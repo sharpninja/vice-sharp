@@ -1,0 +1,199 @@
+=== QUERY keyword=Store ===
+type: result
+payload:
+  requestId: req-20260811T145506Z-ae22
+  result:
+    items:
+    - id: PLAN-PAUSEMUTE-001
+      title: Mute sound before pausing the emulator; auto-unmute on resume
+      section: Hosting
+      priority: high
+      done: false
+      description:
+      - 'Requirement: mute SID/audio output BEFORE the emulator is paused, for ANY pause reason (user pause, focus-loss pause, snapshot/load pause, single-step/monitor break, dialog-modal pause, host-driven pause, etc.). A paused emulator must not leave a droning/held audio sample or partial buffer sounding.'
+      - 'On resume: if the mute was applied BY the pause path (auto-mute), restore the prior audio state (unmute). Do NOT unmute if the user had already muted manually before the pause - track whether the pause-applied mute was the one to reverse (e.g. a wasMutedByPause flag captured at pause time), so resume returns to the pre-pause user state rather than force-unmuting.'
+      - Cover every pause entry point uniformly (route through the single session pause/resume seam so no path can bypass the mute). Flush/silence the audio backend buffer at pause so nothing is held. Keep it deterministic and off the zero-alloc hot path (mute is a control-plane action, not per-cycle).
+      - 'Likely touch points: ViceSharp.Hosting emulator session pause/resume, the SID audio tap / IAudioBackend, and the UI shells (Avalonia/Console) pause controls. Add tests: pause mutes, resume restores pre-pause state, user-muted-then-paused stays muted on resume.'
+      technicalDetails: &o0 []
+      implementationTasks: &o1 []
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+    - id: BUG-DRVTRUE-001
+      title: Snapshot C64 state on True Drive toggle and restore after reset
+      section: True Drive
+      priority: high
+      done: false
+      description:
+      - BUG - Toggling True Drive rebuilds the session and resets the machine, losing all running state (RAM, CPU, program, screen).
+      - Snapshot the full C64 machine state (RAM, CPU registers, chip/SID/VIC/CIA registers, current program) when the True Drive toggle changes.
+      - Restore that snapshot after the session rebuild/reset so switching simulated <-> true drive preserves the running session instead of cold-booting.
+      technicalDetails: *o0
+      implementationTasks:
+      - task: Capture a machine-state snapshot in the host before SetTrueDrive rebuilds the session
+        done: false
+      - task: Re-apply the snapshot to the rebuilt machine after reset
+        done: false
+      - task: Cover with a test that toggles True Drive mid-run and asserts RAM/CPU continuity
+        done: false
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV device-family behaviors, Store cert)'
+      section: xbox-uwp
+      priority: low
+      done: false
+      estimate: L
+      note: 'HANDOFF (Tier C, DEFERRED to Store submission). The genuinely console-only bucket: actual console deploy of the AOT MSIX, on-console AppContainer resource budget + sustained PAL-50, real-TV overscan/focus-engagement/Guide-reservation, Microsoft Store cert (+ GPL section-6 vs Store license legal review). Not a development gate; requires a physical Dev-Mode console + Partner Center. Deferred until the operator prepares a Store submission. Tracked, not dropped.'
+      description:
+      - 'TIER C (DEFERRED to Microsoft Store submission; the genuinely console-only checks; NOT a development gate; tracked not dropped). Deps: S34 + S36-S41 (all dev-PC gates green). Tests-first: console/Store-submission checklist - actual console deploy of the AOT MSIX via Dev Mode; the AppContainer resource budget (~1GB RAM / 2-4 shared cores / 45% GPU headroom) and sustained PAL-50 perf ON the physical console; Xbox device-family behaviors (real-TV overscan, focus-engagement on the TV profile, Guide/Nexus shell reservation); Microsoft Store certification (behind a documented GPL section-6 no-further-restrictions vs Store Standard Application License Terms review). RED: not yet validated on a physical Dev-Mode console / not submitted. GREEN: console deploy runs within the resource budget at sustained PAL-50, TV device-family behaviors confirmed, Store cert passed (or GPL/Store legal review completed). Validation: on-console deploy (WinAppDeployCmd install -file <msix> -ip <console-ip> -pin <pin>) + on-console perf/telemetry capture + Partner Center submission. Acceptance: console deploy + resource budget + TV behaviors + Store cert recorded; this is the only console-required bucket. Requirements: TEST-XBOXDEPLOY-007, TEST-TESTGATE-010 (console-only subset); Store certification is a governance gate with no FR/TR mapping.'
+      technicalDetails: *o0
+      implementationTasks: *o1
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+    totalCount: 3
+  deprecated: true
+
+---
+=== QUERY keyword=Microsoft Store ===
+type: result
+payload:
+  requestId: req-20260811T145510Z-a8a2
+  result:
+    items:
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV device-family behaviors, Store cert)'
+      section: xbox-uwp
+      priority: low
+      done: false
+      estimate: L
+      note: 'HANDOFF (Tier C, DEFERRED to Store submission). The genuinely console-only bucket: actual console deploy of the AOT MSIX, on-console AppContainer resource budget + sustained PAL-50, real-TV overscan/focus-engagement/Guide-reservation, Microsoft Store cert (+ GPL section-6 vs Store license legal review). Not a development gate; requires a physical Dev-Mode console + Partner Center. Deferred until the operator prepares a Store submission. Tracked, not dropped.'
+      description:
+      - 'TIER C (DEFERRED to Microsoft Store submission; the genuinely console-only checks; NOT a development gate; tracked not dropped). Deps: S34 + S36-S41 (all dev-PC gates green). Tests-first: console/Store-submission checklist - actual console deploy of the AOT MSIX via Dev Mode; the AppContainer resource budget (~1GB RAM / 2-4 shared cores / 45% GPU headroom) and sustained PAL-50 perf ON the physical console; Xbox device-family behaviors (real-TV overscan, focus-engagement on the TV profile, Guide/Nexus shell reservation); Microsoft Store certification (behind a documented GPL section-6 no-further-restrictions vs Store Standard Application License Terms review). RED: not yet validated on a physical Dev-Mode console / not submitted. GREEN: console deploy runs within the resource budget at sustained PAL-50, TV device-family behaviors confirmed, Store cert passed (or GPL/Store legal review completed). Validation: on-console deploy (WinAppDeployCmd install -file <msix> -ip <console-ip> -pin <pin>) + on-console perf/telemetry capture + Partner Center submission. Acceptance: console deploy + resource budget + TV behaviors + Store cert recorded; this is the only console-required bucket. Requirements: TEST-XBOXDEPLOY-007, TEST-TESTGATE-010 (console-only subset); Store certification is a governance gate with no FR/TR mapping.'
+      technicalDetails: &o0 []
+      implementationTasks: []
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+    totalCount: 1
+  deprecated: true
+
+---
+=== QUERY keyword=Partner Center ===
+type: result
+payload:
+  requestId: req-20260811T145513Z-2066
+  result:
+    items:
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV device-family behaviors, Store cert)'
+      section: xbox-uwp
+      priority: low
+      done: false
+      estimate: L
+      note: 'HANDOFF (Tier C, DEFERRED to Store submission). The genuinely console-only bucket: actual console deploy of the AOT MSIX, on-console AppContainer resource budget + sustained PAL-50, real-TV overscan/focus-engagement/Guide-reservation, Microsoft Store cert (+ GPL section-6 vs Store license legal review). Not a development gate; requires a physical Dev-Mode console + Partner Center. Deferred until the operator prepares a Store submission. Tracked, not dropped.'
+      description:
+      - 'TIER C (DEFERRED to Microsoft Store submission; the genuinely console-only checks; NOT a development gate; tracked not dropped). Deps: S34 + S36-S41 (all dev-PC gates green). Tests-first: console/Store-submission checklist - actual console deploy of the AOT MSIX via Dev Mode; the AppContainer resource budget (~1GB RAM / 2-4 shared cores / 45% GPU headroom) and sustained PAL-50 perf ON the physical console; Xbox device-family behaviors (real-TV overscan, focus-engagement on the TV profile, Guide/Nexus shell reservation); Microsoft Store certification (behind a documented GPL section-6 no-further-restrictions vs Store Standard Application License Terms review). RED: not yet validated on a physical Dev-Mode console / not submitted. GREEN: console deploy runs within the resource budget at sustained PAL-50, TV device-family behaviors confirmed, Store cert passed (or GPL/Store legal review completed). Validation: on-console deploy (WinAppDeployCmd install -file <msix> -ip <console-ip> -pin <pin>) + on-console perf/telemetry capture + Partner Center submission. Acceptance: console deploy + resource budget + TV behaviors + Store cert recorded; this is the only console-required bucket. Requirements: TEST-XBOXDEPLOY-007, TEST-TESTGATE-010 (console-only subset); Store certification is a governance gate with no FR/TR mapping.'
+      technicalDetails: &o0 []
+      implementationTasks: []
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+    totalCount: 1
+  deprecated: true
+
+---
+=== QUERY keyword=Xbox Store ===
+type: result
+payload:
+  requestId: req-20260811T145516Z-a150
+  result:
+    items:
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV device-family behaviors, Store cert)'
+      section: xbox-uwp
+      priority: low
+      done: false
+      estimate: L
+      note: 'HANDOFF (Tier C, DEFERRED to Store submission). The genuinely console-only bucket: actual console deploy of the AOT MSIX, on-console AppContainer resource budget + sustained PAL-50, real-TV overscan/focus-engagement/Guide-reservation, Microsoft Store cert (+ GPL section-6 vs Store license legal review). Not a development gate; requires a physical Dev-Mode console + Partner Center. Deferred until the operator prepares a Store submission. Tracked, not dropped.'
+      description:
+      - 'TIER C (DEFERRED to Microsoft Store submission; the genuinely console-only checks; NOT a development gate; tracked not dropped). Deps: S34 + S36-S41 (all dev-PC gates green). Tests-first: console/Store-submission checklist - actual console deploy of the AOT MSIX via Dev Mode; the AppContainer resource budget (~1GB RAM / 2-4 shared cores / 45% GPU headroom) and sustained PAL-50 perf ON the physical console; Xbox device-family behaviors (real-TV overscan, focus-engagement on the TV profile, Guide/Nexus shell reservation); Microsoft Store certification (behind a documented GPL section-6 no-further-restrictions vs Store Standard Application License Terms review). RED: not yet validated on a physical Dev-Mode console / not submitted. GREEN: console deploy runs within the resource budget at sustained PAL-50, TV device-family behaviors confirmed, Store cert passed (or GPL/Store legal review completed). Validation: on-console deploy (WinAppDeployCmd install -file <msix> -ip <console-ip> -pin <pin>) + on-console perf/telemetry capture + Partner Center submission. Acceptance: console deploy + resource budget + TV behaviors + Store cert recorded; this is the only console-required bucket. Requirements: TEST-XBOXDEPLOY-007, TEST-TESTGATE-010 (console-only subset); Store certification is a governance gate with no FR/TR mapping.'
+      technicalDetails: &o0 []
+      implementationTasks: []
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+    totalCount: 1
+  deprecated: true
+
+---
+=== QUERY keyword=GPL store ===
+type: result
+payload:
+  requestId: req-20260811T145519Z-af7b
+  result:
+    items:
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV device-family behaviors, Store cert)'
+      section: xbox-uwp
+      priority: low
+      done: false
+      estimate: L
+      note: 'HANDOFF (Tier C, DEFERRED to Store submission). The genuinely console-only bucket: actual console deploy of the AOT MSIX, on-console AppContainer resource budget + sustained PAL-50, real-TV overscan/focus-engagement/Guide-reservation, Microsoft Store cert (+ GPL section-6 vs Store license legal review). Not a development gate; requires a physical Dev-Mode console + Partner Center. Deferred until the operator prepares a Store submission. Tracked, not dropped.'
+      description:
+      - 'TIER C (DEFERRED to Microsoft Store submission; the genuinely console-only checks; NOT a development gate; tracked not dropped). Deps: S34 + S36-S41 (all dev-PC gates green). Tests-first: console/Store-submission checklist - actual console deploy of the AOT MSIX via Dev Mode; the AppContainer resource budget (~1GB RAM / 2-4 shared cores / 45% GPU headroom) and sustained PAL-50 perf ON the physical console; Xbox device-family behaviors (real-TV overscan, focus-engagement on the TV profile, Guide/Nexus shell reservation); Microsoft Store certification (behind a documented GPL section-6 no-further-restrictions vs Store Standard Application License Terms review). RED: not yet validated on a physical Dev-Mode console / not submitted. GREEN: console deploy runs within the resource budget at sustained PAL-50, TV device-family behaviors confirmed, Store cert passed (or GPL/Store legal review completed). Validation: on-console deploy (WinAppDeployCmd install -file <msix> -ip <console-ip> -pin <pin>) + on-console perf/telemetry capture + Partner Center submission. Acceptance: console deploy + resource budget + TV behaviors + Store cert recorded; this is the only console-required bucket. Requirements: TEST-XBOXDEPLOY-007, TEST-TESTGATE-010 (console-only subset); Store certification is a governance gate with no FR/TR mapping.'
+      technicalDetails: &o0 []
+      implementationTasks: []
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+    totalCount: 1
+  deprecated: true
+
+---
+=== QUERY keyword=store listing ===
+type: result
+payload:
+  requestId: req-20260811T145523Z-5d2e
+  result:
+    items: []
+    totalCount: 0
+  deprecated: true
+
+---
+=== QUERY keyword=winget store ===
+type: result
+payload:
+  requestId: req-20260811T145527Z-bab0
+  result:
+    items: []
+    totalCount: 0
+  deprecated: true
+
+---
+=== QUERY keyword=S42 ===
+type: result
+payload:
+  requestId: req-20260811T145531Z-7fdc
+  result:
+    items:
+    - id: IMPL-XBOXUWP-042
+      title: 'S42: Console / Store-submission validation (deferred: console deploy, on-console resource budget, TV device-family behaviors, Store cert)'
+      section: xbox-uwp
+      priority: low
+      done: false
+      estimate: L
+      note: 'HANDOFF (Tier C, DEFERRED to Store submission). The genuinely console-only bucket: actual console deploy of the AOT MSIX, on-console AppContainer resource budget + sustained PAL-50, real-TV overscan/focus-engagement/Guide-reservation, Microsoft Store cert (+ GPL section-6 vs Store license legal review). Not a development gate; requires a physical Dev-Mode console + Partner Center. Deferred until the operator prepares a Store submission. Tracked, not dropped.'
+      description:
+      - 'TIER C (DEFERRED to Microsoft Store submission; the genuinely console-only checks; NOT a development gate; tracked not dropped). Deps: S34 + S36-S41 (all dev-PC gates green). Tests-first: console/Store-submission checklist - actual console deploy of the AOT MSIX via Dev Mode; the AppContainer resource budget (~1GB RAM / 2-4 shared cores / 45% GPU headroom) and sustained PAL-50 perf ON the physical console; Xbox device-family behaviors (real-TV overscan, focus-engagement on the TV profile, Guide/Nexus shell reservation); Microsoft Store certification (behind a documented GPL section-6 no-further-restrictions vs Store Standard Application License Terms review). RED: not yet validated on a physical Dev-Mode console / not submitted. GREEN: console deploy runs within the resource budget at sustained PAL-50, TV device-family behaviors confirmed, Store cert passed (or GPL/Store legal review completed). Validation: on-console deploy (WinAppDeployCmd install -file <msix> -ip <console-ip> -pin <pin>) + on-console perf/telemetry capture + Partner Center submission. Acceptance: console deploy + resource budget + TV behaviors + Store cert recorded; this is the only console-required bucket. Requirements: TEST-XBOXDEPLOY-007, TEST-TESTGATE-010 (console-only subset); Store certification is a governance gate with no FR/TR mapping.'
+      technicalDetails: &o0 []
+      implementationTasks: []
+      dependsOn: *o0
+      functionalRequirements: *o0
+      technicalRequirements: *o0
+    totalCount: 1
+  deprecated: true
+
+---

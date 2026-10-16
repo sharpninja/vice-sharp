@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CIA-007",
+  "title": "IRQ Generation from CIA1",
+  "status": "pending",
+  "priority": "high",
+  "body": "CIA1 generates Interrupt Requests (IRQ) to the CPU. IRQ sources mirror those of CIA2 (timers, TOD, serial, FLAG) but are connected to the IRQ line instead of NMI.\n\n## Acceptance Criteria\n- CIA1 interrupt output is connected to the CPU IRQ line.\n- Any enabled interrupt source in CIA1 ICR/IMR asserts IRQ.\n- IRQ is level-triggered: it remains asserted as long as any enabled source has its flag set.\n- Reading CIA1 ICR ($DC0D) clears all interrupt flags and deasserts the IRQ line (if no other sources remain).\n- The IRQ mask register ($DC0D write) selects which sources can generate IRQ (bit 7 = set/clear control).\n- Timer A, Timer B, TOD alarm, SDR complete, and FLAG are all independently maskable.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

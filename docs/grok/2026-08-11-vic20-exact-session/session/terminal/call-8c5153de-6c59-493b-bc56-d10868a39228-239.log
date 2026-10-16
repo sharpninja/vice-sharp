@@ -1,0 +1,19 @@
+
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs:101:    /// <summary>The layout tiles grouped into display 
+rows (top to bottom, left to right).</summary>
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs:103:    /// Display rows as <see cref="VirtualKeyRow"/> 
+(FEAT-XAOTBIND-001: named type for
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs:106:    public IReadOnlyList<VirtualKeyRow> Rows => 
+Layout.Rows;
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs:108:    /// <summary>The rows as named <see 
+cref="VirtualKeyboardRow"/> wrappers, so the nested keyboard
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs:110:    public IReadOnlyList<VirtualKeyboardRow> KeyRows => 
+Layout.Rows
+src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs:111:        .Select(row => new VirtualKeyboardRow(row, 
+IsSpaceRow(row)))
+Select-String: 
+Line |
+  16 |  . -String -Path "src","tests" -Pattern "VirtualKeyRow" -Recurse -Includ .
+     |                                                         ~~~~~~~~
+     | A parameter cannot be found that matches parameter name 'Recurse'.
+

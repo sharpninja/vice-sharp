@@ -11,6 +11,8 @@ Requires: cairosvg, pillow  (pip install cairosvg pillow)
 Output map:
   Windows  : src/ViceSharp.Avalonia/Assets/vicesharp.ico       (multi-res, transparent)
              src/ViceSharp.Avalonia/Assets/vicesharp-icon.png  (256, transparent, Avalonia WindowIcon)
+  UWP/Xbox : src/ViceSharp.Xbox/Assets/Square44x44Logo.png, Square150x150Logo.png, StoreLogo.png
+             Wide310x150Logo.png, SplashScreen.png (mark matches Avalonia; wide/splash on navy)
   macOS    : src/ViceSharp.Host.MacOS/Assets/AppIcon.icns      (transparent)
   iOS      : src/ViceSharp.Host.iOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png + Contents.json
              (opaque navy: iOS forbids alpha in app icons)
@@ -177,11 +179,36 @@ def gen_android() -> None:
     print(f"  {p.relative_to(ROOT)}")
 
 
+def gen_uwp_xbox() -> None:
+    """UWP/Xbox package logos: same mark as Avalonia; wide + splash on brand navy."""
+    print("UWP / Xbox:")
+    assets = ROOT / "src" / "ViceSharp.Xbox" / "Assets"
+    write(assets / "Square44x44Logo.png", square(44, bg=None, margin=0.06), format="PNG")
+    write(assets / "StoreLogo.png", square(50, bg=None, margin=0.06), format="PNG")
+    write(assets / "Square150x150Logo.png", square(150, bg=None, margin=0.08), format="PNG")
+
+    # Wide tile + splash: center the mark on brand navy (matches Android/iOS badge).
+    def banner(width: int, height: int, mark_max: int) -> Image.Image:
+        canvas = Image.new("RGBA", (width, height), NAVY)
+        m = mark()
+        side = min(mark_max, width - 16, height - 16)
+        w, h = m.size
+        scale = min(side / w, side / h)
+        nw, nh = max(1, round(w * scale)), max(1, round(h * scale))
+        resized = m.resize((nw, nh), Image.LANCZOS)
+        canvas.paste(resized, ((width - nw) // 2, (height - nh) // 2), resized)
+        return canvas
+
+    write(assets / "Wide310x150Logo.png", banner(310, 150, 120), format="PNG")
+    write(assets / "SplashScreen.png", banner(620, 300, 200), format="PNG")
+
+
 def main() -> None:
     if not SVG.exists():
         raise SystemExit(f"Source logo not found: {SVG}")
     print(f"Generating ViceSharp app icons from {SVG.relative_to(ROOT)}\n")
     gen_windows()
+    gen_uwp_xbox()
     gen_macos()
     gen_ios()
     gen_android()

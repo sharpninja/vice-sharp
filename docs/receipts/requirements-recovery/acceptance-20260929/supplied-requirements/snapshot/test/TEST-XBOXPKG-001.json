@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXPKG-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Csproj/slnx shape. Acceptance: core refs present, forbidden refs absent, slnx builds.",
+  "acceptanceCriteria": []
+}

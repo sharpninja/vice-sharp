@@ -1,0 +1,77 @@
+src\ViceSharp.Architectures\Vic20\Vic20Descriptor.cs:67:    public Vic20Descriptor WithExpansion(Vic20Expansion expansion)
+src\ViceSharp.Architectures\Vic20\Vic20Descriptor.cs:68:        => new(Profile with { Expansion = expansion }, Cartridge);
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:42:    Vic20Expansion Expansion = Vic20Expansion.Unexpanded,
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:55:    public string BoardModel => Expansion == Vic20Expansion.Unexpanded
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:57:        : $"Exp{(int)Expansion}K";
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:2:using CoreExpansion = ViceSharp.Core.Vic20.Vic20ExpansionKind;
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:10:public enum Vic20Expansion
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:27:    public static bool IsInstalledRam(Vic20Expansion expansion, ushort address)
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:28:        => CoreLayout.IsInstalledRam((CoreExpansion)(int)expansion, address);
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:30:    public static IReadOnlyList<(ushort Start, ushort End)> ExpansionRegions(Vic20Expansion expansion)
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs:31:        => CoreLayout.ExpansionRegions((CoreExpansion)(int)expansion);
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:22:public enum C64BoardModel
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:45:    C64BoardModel Board,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:62:    public string BoardModel => Board.ToString();
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:82:        C64BoardModel.Breadbox,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:95:        C64BoardModel.C64C,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:108:        C64BoardModel.BreadboxOld,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:122:        C64BoardModel.Breadbox,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:135:        C64BoardModel.C64C,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:148:        C64BoardModel.BreadboxOld,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:162:        C64BoardModel.Drean,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:175:        C64BoardModel.SX64,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:189:        C64BoardModel.SX64,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:203:        C64BoardModel.PET64,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:217:        C64BoardModel.PET64,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:231:        C64BoardModel.Ultimax,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:246:        C64BoardModel.C64GS,
+src\ViceSharp.Architectures\C64\C64MachineProfile.cs:262:        C64BoardModel.Japanese,
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:23:    C64BoardModel Board,
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:50:        C64BoardModel board,
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:54:        var pla = board == C64BoardModel.Ultimax
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:60:            C64BoardModel.SX64 => C64BusPolicy.Portable,
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:61:            C64BoardModel.Ultimax => C64BusPolicy.Max,
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:62:            C64BoardModel.C64GS => C64BusPolicy.GameSystem,
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:65:        var tapePortConnected = board is not (C64BoardModel.SX64 or C64BoardModel.C64GS);
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:66:        var iecBusConnected = board is not (C64BoardModel.Ultimax or C64BoardModel.C64GS);
+src\ViceSharp.Architectures\C64\C64SystemCoreDefinition.cs:67:        var cia2Connected = board is not C64BoardModel.Ultimax;
+src\ViceSharp.Core\C64MemoryMap.cs:77:    // Magic Desk (CRT type 19) state. _magicDeskCartridgeBank selects the
+src\ViceSharp.Core\C64MemoryMap.cs:85:    // Ocean (CRT type 5) state. Same ROML-only bank selection as Magic
+src\ViceSharp.Core\C64MemoryMap.cs:90:    // Final Cartridge III (CRT type 60) state. 16K banks (ROML+ROMH) and a
+src\ViceSharp.Core\C64MemoryMap.cs:97:    // Action Replay V4/V5 (CRT type 1) state. 32K image, 4 banks of 8K
+src\ViceSharp.Core\C64MemoryMap.cs:102:    // EasyFlash (CRT type 32) state. Up to 1024K image, banked 8K ROML.
+src\ViceSharp.Core\C64MemoryMap.cs:106:    // Super Snapshot V5 (CRT type 4) state. 64K image = 4 banks of 16K
+src\ViceSharp.Core\C64MemoryMap.cs:111:    // RR-Net (CRT type 25) state. 64K image = 4 banks of 16K (ROML+ROMH).
+src\ViceSharp.Core\C64MemoryMap.cs:248:        if (_attachedCartridgeMappingMode == CartridgeMappingMode.EasyFlash)
+src\ViceSharp.Core\C64MemoryMap.cs:999:        if (TryStoreEasyFlashBankRegister(address, value))
+src\ViceSharp.Core\C64MemoryMap.cs:1082:    /// Magic Desk (CRT type 19) bank-register store. Any write to $DE00-$DEFF
+src\ViceSharp.Core\C64MemoryMap.cs:1110:    /// Ocean (CRT type 5) bank-register store. Writes to $DE00-$DEFF select
+src\ViceSharp.Core\C64MemoryMap.cs:1134:    /// Final Cartridge III (CRT type 60) bank-register store at $DFFF.
+src\ViceSharp.Core\C64MemoryMap.cs:1158:    /// Action Replay V4/V5 (CRT type 1) $DE00 store. Bits 0-3 select bank
+src\ViceSharp.Core\C64MemoryMap.cs:1180:    /// EasyFlash (CRT type 32) $DE00 bank-select. Bits 0-5 = bank mod
+src\ViceSharp.Core\C64MemoryMap.cs:1182:    /// deferred to a follow-up EasyFlash slice.
+src\ViceSharp.Core\C64MemoryMap.cs:1184:    private bool TryStoreEasyFlashBankRegister(ushort address, byte value)
+src\ViceSharp.Core\C64MemoryMap.cs:1186:        if (_attachedCartridgeMappingMode != CartridgeMappingMode.EasyFlash ||
+src\ViceSharp.Core\C64MemoryMap.cs:1203:    /// Super Snapshot V5 (CRT type 4) $DE00 store. Bits 2-4 select bank
+src\ViceSharp.Core\C64MemoryMap.cs:1225:    /// RR-Net (CRT type 25) $DE00 store. Bits 0-3 select 16K bank (mod 4),
+src\ViceSharp.Core\C64MemoryMap.cs:1364:            // EasyFlash up to 1024K (128 banks of 8K); require at least 64K
+src\ViceSharp.Core\C64MemoryMap.cs:1365:            // (8 banks) since smaller images are unusual for EasyFlash.
+src\ViceSharp.Core\C64MemoryMap.cs:1366:            CartridgeMappingMode.EasyFlash =>
+src\ViceSharp.Core\C64MemoryMap.cs:1413:                // EasyFlash: 8K ROML banks.
+src\ViceSharp.Core\C64MemoryMap.cs:1414:                CartridgeMappingMode.EasyFlash
+src\ViceSharp.Core\C64MemoryMap.cs:1500:            CartridgeMappingMode.EasyFlash
+src\ViceSharp.Abstractions\ICartridgePort.cs:53:    /// Magic Desk / Domark / HES Australia (CRT type 19). 32K/64K/128K image
+src\ViceSharp.Abstractions\ICartridgePort.cs:60:    /// Ocean (CRT type 5). 32K to 512K image split into 8K ROML banks.
+src\ViceSharp.Abstractions\ICartridgePort.cs:67:    /// Final Cartridge III (CRT type 60). 64K image split into 4 banks of
+src\ViceSharp.Abstractions\ICartridgePort.cs:75:    /// Action Replay V4/V5 (CRT type 1). 32K image = 4 banks of 8K. Bank
+src\ViceSharp.Abstractions\ICartridgePort.cs:84:    /// EasyFlash (CRT type 32). Up to 1024K of flash split into 8K ROML
+src\ViceSharp.Abstractions\ICartridgePort.cs:89:    EasyFlash = 9,
+src\ViceSharp.Abstractions\ICartridgePort.cs:92:    /// Super Snapshot V5 (CRT type 4). 64K image = 4 banks of 16K (ROML +
+src\ViceSharp.Abstractions\ICartridgePort.cs:99:    /// RR-Net (CRT type 25). 64K image = 4 banks of 16K (ROML + ROMH) plus
+src\ViceSharp.Avalonia\VideoSurface.cs:66:    /// mode: "Square pixels" ignores the pixel aspect, "Force 4:3" pins the classic CRT frame,
+src\ViceSharp.Chips\VicIi\VicPalette.cs:9:/// build (:53) the internal non-CRT palette feeds the EVEN tables through
+src\ViceSharp.Xbox\Platform\DefaultCartridgeBoot.cs:34:    public const string DefaultCartridgeFileName = "sblox.CRT";
+src\ViceSharp.Core\StandardCartridgeImage.cs:14:    public const int CrtHeaderSize = 0x40;
+src\ViceSharp.Core\StandardCartridgeImage.cs:59:        if (image.Length < CrtHeaderSize)
+src\ViceSharp.Core\StandardCartridgeImage.cs:60:            throw new ArgumentException("CRT cartridge images must include a complete 64-byte header.", nameof(image));
+src\ViceSharp.Core\StandardCartridgeImage.cs:63:        if (headerLength < CrtHeaderSize || headerLength > image.Length)

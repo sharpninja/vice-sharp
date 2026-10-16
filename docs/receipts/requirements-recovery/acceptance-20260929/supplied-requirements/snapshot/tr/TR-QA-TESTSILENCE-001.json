@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-QA-TESTSILENCE-001",
+  "title": "Audio-producing tests self-mute the host process Windows audio session",
+  "status": "pending",
+  "priority": "low",
+  "body": "Test classes that drive the real WinMmAudioBackend (SidAudioWiring, WarpAudioDiscard, DemoWorkloadSpeedDiag, WinMmAudioThroughputDiag, ClockThroughputBenchmark) mute the current process Windows audio session (WASAPI ISimpleAudioVolume on the default session) for the duration of the class and restore the prior mute state on dispose, keeping a developer box silent during a run. Implemented with a raw function-pointer vtable COM helper, AOT and trim clean (no ComImport or reflection), that no-ops on non-Windows or headless hosts. Test infrastructure only; it changes nothing under test.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

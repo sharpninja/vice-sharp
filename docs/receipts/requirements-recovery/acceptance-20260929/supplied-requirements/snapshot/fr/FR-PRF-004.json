@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-PRF-004",
+  "title": "Commodore 128 Machine Profile",
+  "status": "pending",
+  "priority": "low",
+  "body": "The Commodore 128 features dual CPUs (MOS 8502 and Zilog Z80), 128KB RAM, an 80-column VDC display chip, and C64 compatibility mode. The C128 profile is a major expansion of the emulation capabilities.\n\n## Acceptance Criteria\n- CPU: MOS 8502 (enhanced 6510 with 2MHz mode per FR-CPU-005) and Z80 processor.\n- VIC-II: MOS 8564 (NTSC) or MOS 8566 (PAL) for the 40-column display.\n- VDC: MOS 8563 for the 80-column display (independent video output).\n- RAM: 128KB main RAM, 16KB or 64KB VDC RAM.\n- ROM: BASIC V7.0, C128 KERNAL, C64 mode KERNAL, Character Generator.\n- MMU (Memory Management Unit) at $D500 controls the expanded banking.\n- C64 compatibility mode (selectable at startup or via GO64 command).\n- The 2MHz mode is functional per FR-CPU-005.\n- Selectable via `IMachineProfile.LoadProfile(\"c128\")`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

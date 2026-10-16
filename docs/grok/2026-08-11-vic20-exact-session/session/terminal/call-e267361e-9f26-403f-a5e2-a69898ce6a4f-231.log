@@ -1,0 +1,31 @@
+a19906370e7a1be507b3eadac0c3ebeda317c453
+
+Lines Words Characters Property
+----- ----- ---------- --------
+   45                  
+Auto-merging src/ViceSharp.Xbox.ViewModels/VirtualKeyboardLayout.cs
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox.ViewModels/VirtualKeyboardLayout.cs
+Auto-merging src/ViceSharp.Xbox.ViewModels/VirtualKeyboardViewModel.cs
+Auto-merging src/ViceSharp.Xbox/App.xaml.cs
+Auto-merging src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml
+Auto-merging src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml.cs
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml.cs
+Auto-merging src/ViceSharp.Xbox/Views/AboutPage.xaml
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Views/AboutPage.xaml
+Auto-merging src/ViceSharp.Xbox/Views/AboutPage.xaml.cs
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Views/AboutPage.xaml.cs
+Auto-merging src/ViceSharp.Xbox/Views/HomePage.xaml
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Views/HomePage.xaml
+Auto-merging src/ViceSharp.Xbox/Views/HomePage.xaml.cs
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Views/HomePage.xaml.cs
+Auto-merging src/ViceSharp.Xbox/Views/InputMappingPage.xaml
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Views/InputMappingPage.xaml
+Auto-merging src/ViceSharp.Xbox/Views/InputMappingPage.xaml.cs
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Views/InputMappingPage.xaml.cs
+Auto-merging src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml.cs
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml.cs
+Auto-merging src/ViceSharp.Xbox/Views/SettingsPage.xaml
+CONFLICT (content): Merge conflict in src/ViceSharp.Xbox/Views/SettingsPage.xaml
+Automatic merge failed; fix conflicts and then commit the result.
+

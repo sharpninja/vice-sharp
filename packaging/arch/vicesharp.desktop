@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=ViceSharp
+Comment=Commodore computer emulator
+Exec=vicesharp %f
+TryExec=vicesharp
+Icon=vicesharp
+Terminal=false
+Categories=Game;Emulator;
+StartupWMClass=ViceSharp.Avalonia

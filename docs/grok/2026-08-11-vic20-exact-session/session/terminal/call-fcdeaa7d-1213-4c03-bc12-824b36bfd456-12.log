@@ -1,0 +1,125 @@
+
+Thursday, August 6, 2026 3:22:05 AM
+Thursday, August 6, 2026 3:22:12 AM
+Thursday, August 6, 2026 3:21:44 AM
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559248 matchedCycles=559247 budget=2216810
+Filename   : 2s-and-imm-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-and-imm-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559296 matchedCycles=559295 budget=2216810
+Filename   : 2s-bne-cmp-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-bne-cmp-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559273 matchedCycles=559272 budget=2216810
+Filename   : 2s-flag-only-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-flag-only-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559256 matchedCycles=559255 budget=2216810
+Filename   : 2s-jmp-after-jsr-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-jmp-after-jsr-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559254 matchedCycles=559253 budget=2216810
+Filename   : 2s-jsr-jmpind-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-jsr-jmpind-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559294 matchedCycles=559293 budget=2216810
+Filename   : 2s-lda-abs-bcc-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-lda-abs-bcc-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559287 matchedCycles=559286 budget=2216810
+Filename   : 2s-lda-sbc-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-lda-sbc-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559237 matchedCycles=559236 budget=2216810
+Filename   : 2s-ldax-tsx-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-ldax-tsx-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559266 matchedCycles=559265 budget=2216810
+Filename   : 2s-ldx-jmp-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-ldx-jmp-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559268 matchedCycles=559267 budget=2216810
+Filename   : 2s-sec-bne-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-sec-bne-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559234 matchedCycles=559233 budget=2216810
+Filename   : 2s-sta-irq-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-sta-irq-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+
+IgnoreCase : True
+LineNumber : 6
+Line       :    DIV first=559205 matchedCycles=559204 budget=2216810
+Filename   : 2s-sta-load-2026-08-06.log
+Path       : F:\GitHub\vice-sharp\docs\2s-sta-load-2026-08-06.log
+Pattern    : matchedCycles=55[89]|matchedCycles=56
+Context    : 
+Matches    : {0}
+
+

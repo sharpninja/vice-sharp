@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-AIREVIEW-ROUTING-001",
+  "title": "Auditable Astra xhigh AI review routing",
+  "status": "pending",
+  "priority": "high",
+  "body": "Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.\nAn xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.\nCritical and high findings are resolved and affected reviews rerun before completion.\n\n## Acceptance Criteria\n- **ac-01**: Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.\n- **ac-02**: An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.\n- **ac-03**: Critical and high findings are resolved and affected reviews rerun before completion.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Critical and high findings are resolved and affected reviews rerun before completion.",
+      "isSatisfied": false
+    }
+  ]
+}

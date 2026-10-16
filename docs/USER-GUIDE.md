@@ -6,9 +6,9 @@ This guide walks a new user from a fresh clone to a running C64 with a true-driv
 
 ### Prerequisites
 
-- **[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** (10.0.201 or later). Verify with `dotnet --version`.
+- **[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** compatible with [global.json](../global.json), currently 10.0.301 or a later 10.0 feature band. Verify with `dotnet --version`.
 - **Git**.
-- **Native VICE shim for Windows x64**. Download `vice-sharp-native-win-x64.zip` from [GitHub Releases](https://github.com/sharpninja/vice-sharp/releases), extract it at the repository root, and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Alternatively install **MSYS2 + mingw-w64 gcc** and let the build recreate the shim from source.
+- **For native parity validation: the VICE shim for Windows x64**. Download `vice-sharp-native-win-x64.zip` from [GitHub Releases](https://github.com/sharpninja/vice-sharp/releases), extract it at the repository root, and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Alternatively install **MSYS2 + mingw-w64 gcc** and let the build recreate the shim from source.
 
 ### Clone and build
 
@@ -18,23 +18,33 @@ cd vice-sharp
 dotnet build ViceSharp.slnx
 ```
 
-The build is `TreatWarningsAsErrors`; a clean checkout on a supported SDK builds with zero warnings. If you see SDK-version errors, re-check `dotnet --version`. If you do not install the release bundle first, Windows builds that touch native VICE will invoke `native/build-vice-shim.ps1` and require MSYS2 at `C:\msys64`.
+If you see SDK-version errors, compare `dotnet --version` with `global.json`. If you do not install the release bundle first, Windows builds that touch native VICE will invoke `native/build-vice-shim.ps1` and require MSYS2 at `C:\msys64`.
+
+Linux and macOS builds compile the managed test harness without invoking the Windows-only native oracle build. The hosted shim currently uses Win32 APIs; native parity validation requires Windows and its native prerequisites. Explicitly requesting the `BuildNative` target on another platform reports this limitation as an error. No test categories or assertions are disabled by this build distinction.
+
+### Linux installation for your user
+
+From the repository, run `./build.sh DeployUser` or `./build.ps1 DeployUser`, then launch `~/.local/bin/vicesharp` or the ViceSharp desktop entry. This installs a self-contained Release build inside your home directory and requires no `sudo`, `yay`, or system package installation. `DeployYay` is a compatibility alias for `DeployUser`; `PackYay` remains a separate package-only target.
+
+The default application directory is `~/.local/share/vicesharp`, with retained versioned releases and a `current` symlink. `XDG_DATA_HOME` can replace `~/.local/share` when it is an absolute path inside your home. Existing user data under `ViceSharp` and any system package remain intact. If `/usr/bin/vicesharp` is also installed, put `~/.local/bin` earlier in `PATH` and verify `command -v vicesharp`, or use the absolute user launcher. The desktop entry selects the user launcher without relying on shell `PATH`. See [Linux installation](../README.md#linux-install-for-your-user) for the complete layout and requirements.
 
 ### First-run verification
 
-Run the supported test gate (the same filter the Nuke `Test` target uses):
+Run the focused TestHarness project with the filter used by Nuke `Test`:
 
 ```pwsh
-dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"
+dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration"
 ```
 
-`./build.ps1 Test` runs the same gate. At the v1.0.2 release the baseline is Failed 0 / Passed 2594 / Skipped 21 / Total 2615 (single process). A failure here means your local environment is off (typically a missing native VICE bundle or a wrong .NET SDK) rather than a real regression.
+`./build.ps1 Test --configuration Release` applies that filter to the solution after building it. Native-dependent tests still need their own prerequisites; a managed Linux build does not establish native parity. Retain the command, TRX, output, and pass/fail/skip counts when reporting validation. Investigate failures as either environment problems or regressions, and report skipped tests separately from passing tests.
 
 Avoid an unfiltered `dotnet test ViceSharp.slnx`: it pulls in opt-in categories (determinism replays, AI reviews, quarantined parity suites), can exceed 5 minutes, and has hung historically.
 
 ## 2. Get ROMs
 
-ViceSharp does not ship Commodore ROM images. Use the data root from an installed VICE package or another legal source. The full sourcing rules are in [ROMs.md](ROMs.md); the short version:
+ViceSharp does not bundle Commodore ROM images. On local desktop startup, it reuses a complete configured C64 ROM set or downloads the default BASIC, KERNAL, and character ROMs from the VICE GitHub mirror with pinned SHA256 verification. The cache is normally `~/.local/share/ViceSharp/roms` on Linux (`XDG_DATA_HOME` is honored) or `%LOCALAPPDATA%\ViceSharp\roms` on Windows, and verified files are reused offline. A failed download produces a startup error with retry/configuration guidance.
+
+True-drive DOS ROMs and other machine variants require separate resources. Console/headless callers and remote-host connections do not trigger this desktop download. To use an existing VICE data root, follow [ROMs.md](ROMs.md); the short version:
 
 1. Set `VICESHARP_ROM_PATH` to your VICE data root, or put `x64sc.exe` on `PATH`:
    ```pwsh
@@ -43,7 +53,7 @@ ViceSharp does not ship Commodore ROM images. Use the data root from an installe
 2. Use the native VICE layout, for example `C64/basic-901226-01.bin`, `C64/kernal-901227-03.bin`, `C64/chargen-901225-01.bin`, and `DRIVES/dos1541-325302-01+901229-05.bin`. See [ROMs.md](ROMs.md#rom-directory-structure) for the full tree.
 3. The layout is checked at machine build time: known ROMs are validated by MD5 and a mismatch fails the load. See [ROMs.md](ROMs.md#rom-validation) for the known checksums.
 
-If you have classic VICE installed, the preferred value is the VICE data root that contains `C64/` and `DRIVES/`; pointing directly at `C64/` is normalized to the parent root. If not, the `ViceSharp.RomFetch` library can resolve and download ROMs from a user-supplied source (a standalone CLI is planned but does not ship yet); see [ROMs.md](ROMs.md#vicesharpromfetch-tool) for what it provides today.
+If you have classic VICE installed, the preferred value is the VICE data root that contains `C64/` and `DRIVES/`; pointing directly at `C64/` is normalized to the parent root. The `ViceSharp.RomFetch` library also exposes resolution and pinned-download APIs; a standalone RomFetch CLI does not ship yet. See [ROMs.md](ROMs.md#vicesharpromfetch-tool).
 
 ## 3. Run your first machine
 
@@ -167,8 +177,35 @@ D64 mounts go through `D64DiskImageDevice`. Sector reads are deterministic and e
 
 - Sector-stream fast path (`Buffered`) is the default when `fidelity:` is omitted. Under `fidelity: TrueDevice`, GCR track encoding and byte-level playback are implemented (`GcrCodec` plus `C1541DriveMechanismDevice`): the drive raises byte-ready through VIA2 at per-speed-zone intervals (32/30/28/26 cycles). Sub-byte bit-cell effects (weak bits, killer tracks used by some copy protections) are not modeled.
 - 1541 head step + motor control are wired (4-phase Gray accumulator on VIA2 PB0/PB1, motor on PB2); seek timing matches the substrate's quarter-track resolution.
-- D64 stream load, sector writes, and commit-to-stream are covered; launcher-level
-  save-as workflows and non-D64 formats are still future work.
+- D64 stream load, sector writes, and commit-to-stream are covered. The desktop converts T64 program archives to D64 as described below; G64, D71, and D81 disk images and launcher-level save-as workflows remain unsupported.
+
+## 6b. Avalonia desktop: attach, drop, and PRG load
+
+Launch the desktop UI with Nuke `RunAvalonia`. On Linux, install with `DeployUser` and start `~/.local/bin/vicesharp` or the desktop entry. On Windows, install the Release MSI (`./build.ps1 InstallMsi --configuration Release`) and start ViceSharp from the Start menu.
+
+The attach panel Browse buttons pick disk, tape, and cartridge images for the usual slots. You can also drop a local file onto the emulator video surface:
+
+- `.d64` / `.t64` attach to drive 8 and reset/autostart (`LOAD"*",8,1` then `RUN`).
+- `.crt` / `.bin` / `.rom` attach as a cartridge and cold-reset.
+- `.prg` does **not** attach as media. The host loads the file into the **current** session RAM at the PRG little-endian load address and does not reset. If that address equals the live BASIC start (zero-page TXTTAB at `$2B/$2C`), BASIC end pointers are updated and the host types `RUN`. Otherwise the bytes are loaded only.
+
+BASIC start is whatever the running machine wrote into TXTTAB after boot, so it follows the current machine and VIC-20 memory config (C64 `$0801`; VIC-20 unexpanded `$1001`, +3K `$0401`, +8K and above `$1201`). A C64 `$0801` BASIC PRG dropped on a VIC-20 unexpanded session is loaded and is not RUN.
+
+Unsupported extensions (for example `.txt`) are rejected on drag-over.
+
+T64 is a program archive, not tape pulse data. The host extracts its first loadable program into a separate cached D64 for drive 8. The source archive stays unchanged, and the initial display name and recent-file entry keep the original source identity. True Drive uses the converted disk when recreating the session, and attachment waits for that recreation before reporting success. This validates attachment and autostart requests; game compatibility still depends on the program and drive resources.
+
+### About dialog
+
+Help > About ViceSharp shows the project and license information. Dismiss it with **Close**, **Escape**, or **Enter**.
+
+## 6c. RomM library
+
+Open the **Library** tab, enter your RomM server URL and **Client API token**, then select **Connect**. For a server on the same computer, enter its URL explicitly, for example `http://127.0.0.1:8080/`; **Scan LAN** searches other hosts. The desktop reconnects to a remembered server on later launches.
+
+Search the C64 library and select a title. **Attach** downloads or reuses the cached file and attaches it without starting; **Attach + play** also requests autostart. **Recents** shows successful attachments and launches. Download, media-validation, and session-creation failures appear in the Library status so you can correct the cause and retry or choose another title. A failed attachment does not autostart the previously attached game.
+
+Downloads live under the per-user `ViceSharp/romm-cache` directory; connection metadata and recents are alongside it as `romm-connection.json` and `romm-recents.json`. On Linux the parent is normally `~/.local/share` or `XDG_DATA_HOME`. Credentials use the current user's Secret Service keyring on Linux (`secret-tool`, supplied by Arch's `libsecret`) and DPAPI on Windows. If the Linux keyring is missing or locked, a connection can succeed while the status reports that credentials could not be saved; there is no plaintext fallback. See the [RomM security and persistence notes](../src/ViceSharp.RomM/README.md#security-and-persistence).
 
 ## 7. What works today / what doesn't
 
@@ -181,7 +218,7 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | 1541 drive (true-drive: 6502 + VIA1 + VIA2 + IEC) | Bounded | IEC, head step, motor, D64 sector reads/writes, and stream commit are wired; drive-CPU lockstep and full KERNAL load validation remain Phase 1 work. |
 | CIA1 / CIA2 timers, TOD, ports | Working | Full solution test passes. |
 | SID hard sync + ring modulation | Working | Voice i syncs from voice ((i+2) % 3); triangle XOR with sync-source MSB. |
-| SID audio backend wiring | Working (default on desktop) | The Avalonia desktop app enables a WinMM audio backend by default on Windows (it sets `VICESHARP_AUDIO=1` at startup; set `VICESHARP_AUDIO=0` to force silence). Headless and test hosts stay silent. Library consumers pass an `IAudioBackend` to `Sid6581(IBus, IAudioBackend?)` to receive 256-sample batches. |
+| SID audio backend wiring | Windows and Linux desktop output | The Avalonia desktop app enables WinMM on Windows and SDL2 queued audio on Linux (`libSDL2-2.0.so.0` required). It sets `VICESHARP_AUDIO=1` at startup; set `VICESHARP_AUDIO=0` to force silence. Headless and test hosts stay silent unless explicitly enabled. Library consumers pass an `IAudioBackend` to `Sid6581(IBus, IAudioBackend?)` to receive 256-sample batches. macOS live output remains pending. |
 | Standard 8K / 16K cartridge mapping (raw + CRT) | Working | Image normalises to ROML/ROMH and drives the live C64 memory map with GAME/EXROM behaviour; broader mapper families are post-MVP. |
 | Tape (TAP pulse reads) | Bounded | TAP pulse stream, CIA1 FLAG integration, builder wiring, rewind, and seek are present; spin-up/spin-down timing and record state remain Phase 1 work. |
 | Snapshot save/load | Bounded | 64K + public CPU state round-trips; full chip, timing, and resume state remain Phase 1 work. |
@@ -189,8 +226,9 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | VIC-II pixel sequencer / sprite collisions | Partial | Visible sprite composition, sprite priority/collision coverage, display-mode pixel routing including invalid ECM priority/collision, managed continuous side-border behavior, VIC-II register readback masks/collision latch writes, and managed matrix idle/fill behavior are covered; native display-mode/register/matrix checkpoints, sprite fetch depth, and FLI/AFLI timing remain under `BACKFILL-VIDEO-001`. |
 | SID combined waveforms + ADSR-bug accuracy | Working | Combined waveform, ADSR, digi, filter, PCM-equivalence, and dual-SID coverage are in the focused suite; further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression. |
 | Cartridge ports / user port as live CPU attachment | Substrate ready | `IInterSystemBus` supports `UserPort` and `CartPort` bus kinds; chip-level bindings are in for CIA2 / VIA1 / VIA2 / GAME / EXROM. Cartridge-as-running-CPU sample topology is future work. |
-| C128 / VIC-20 / PET / Plus/4 / CBM-II | Not yet | Launcher binaries throw `NotSupportedException`. |
-| Host UI (Avalonia, monitor, gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Launcher-integrated always-on UI remains separate work. |
+| VIC-20 host (MOS 6502 + VIC-I + VIA x2 + 1540 default) | Working core | Managed core + 10 s every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` (PAL and NTSC). READY palette-index and native BGRA SequenceEqual are green for PAL/NTSC/busy captures (scoped Exact, not whole-machine). Settings provide BLK wrap toggles, FE3/Ultimem/Mega-Cart attach, and the [Flash Cart Builder](FlashCart-Builder.md). FE3 erase timing, cartridge persistence, and focused native VIC-I silence/tone audio comparisons are covered. |
+| C128 / PET / Plus/4 / CBM-II | Not yet | Launcher binaries throw `NotSupportedException` for those machines. |
+| Host UI (Avalonia desktop + Console; gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Supported product shells: Avalonia desktop and Console. Video-surface drop accepts disks/carts (attach + boot) and `*.prg` (load into current RAM; RUN when load address equals live TXTTAB). |
 
 ### Warp, speed limiter, and speed controls
 
@@ -216,11 +254,13 @@ Everything is also driveable over the gRPC `CaptureService` (capability discover
 
 ## 8. Diagnostics and debug attach
 
-When the Avalonia app starts its in-process gRPC host, it publishes a local attach file:
+When the Avalonia app starts its in-process gRPC host, it publishes a local attach file. On Windows:
 
 ```text
 %LOCALAPPDATA%\ViceSharp\debug-attach.json
 ```
+
+On Linux the file is `~/.local/share/ViceSharp/debug-attach.json`, or `$XDG_DATA_HOME/ViceSharp/debug-attach.json` when configured.
 
 The file records the process id, gRPC endpoint, protocol package, app version, current UI session id, auth mode, and timestamps. It is rewritten when the current UI session changes and is removed on clean shutdown.
 
@@ -229,7 +269,8 @@ For human debugging, use the Debug menu's **Copy Debug Attach Info** item. It co
 For tool debugging, read `debug-attach.json` and call the diagnostics service directly. Development builds or `VICESHARP_GRPC_REFLECTION=1` enable gRPC reflection, so `grpcurl` can discover the service surface:
 
 ```pwsh
-$attach = Get-Content "$env:LOCALAPPDATA\ViceSharp\debug-attach.json" | ConvertFrom-Json
+$attachPath = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'ViceSharp/debug-attach.json'
+$attach = Get-Content $attachPath | ConvertFrom-Json
 grpcurl -plaintext $attach.endpoint list
 grpcurl -plaintext -d "{}" $attach.endpoint vice_sharp.v1.DiagnosticsService/GetPerformanceSnapshot
 ```
@@ -240,7 +281,7 @@ grpcurl -plaintext -d "{}" $attach.endpoint vice_sharp.v1.DiagnosticsService/Get
 
 **`Failed to load multi-system YAML: ...`** - the loader is strict about schema. Re-check `kind:` (case-sensitive: `C64`, `C1541`), `busAttachments:` references resolve to a `buses:` entry, and `deviceNumber:` is 8..11.
 
-**Missing ROMs / `FileNotFoundException` on kernal/basic/chargen** - `VICESHARP_ROM_PATH` is unset or pointing at the wrong directory. Verify the layout in [ROMs.md](ROMs.md#rom-directory-structure).
+**Missing ROMs / startup download failure** - check connectivity and write access to the per-user ROM cache, then restart the desktop, or set `VICESHARP_ROM_PATH` to an existing complete VICE data root. Drive DOS ROMs are separate from the three automatically provisioned C64 ROMs. Verify the layout in [ROMs.md](ROMs.md#rom-directory-structure).
 
 **Drive sits idle / `PC` never moves** - true-drive emulation may be off. In YAML, set `fidelity: TrueDevice` (the launcher library's `+truedrive` flag maps to the same setting). The CPU on a buffered drive doesn't run by design.
 
@@ -249,6 +290,8 @@ grpcurl -plaintext -d "{}" $attach.endpoint vice_sharp.v1.DiagnosticsService/Get
 **`SetDriveTrueEmulation` returns non-zero** - VICE rejected the resource set. The most common cause is an out-of-range unit number; valid units are 8..11.
 
 **Wrong-sized D64 / load errors** - only the canonical 174,848-byte D64 layout (35 tracks, no error info block) is fully exercised. Larger images may load but sector mapping may be wrong; non-D64 disk formats (G64, D71, D81) are not yet supported.
+
+**RomM attach or launch fails** - read the Library status for the download, media, or session error. A T64 needs a loadable program entry; True Drive also needs a compatible DOS ROM. Correct the resource or choose another title and retry. The original T64 archive is preserved.
 
 **Em-dashes in commit messages or doc PRs** - repo policy is to use a colon, hyphen, semicolon, or parentheses instead. CI does not enforce this but reviews will flag it.
 

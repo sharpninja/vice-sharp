@@ -1,0 +1,8 @@
+
+  requestId: req-20260811T145640Z-7bbe
+    - id: PLAN-PAUSEMUTE-001
+      title: Mute sound before pausing the emulator; auto-unmute on resume
+    - id: BUG-DRVTRUE-001
+      title: Snapshot C64 state on True Drive toggle and restore after reset
+    totalCount: 2
+

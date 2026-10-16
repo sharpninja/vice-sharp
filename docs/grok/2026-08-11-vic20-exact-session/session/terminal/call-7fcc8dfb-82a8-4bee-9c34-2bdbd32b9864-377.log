@@ -1,0 +1,16 @@
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k.log:29:   DIV first=195405 
+matchedCycles=195404 budget=500000
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k.log:36:c=195400 nPC=$FDB7 
+mPC=$FDB7 nA=$00 mA=$00 nX=$0F mX=$0F nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$20 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k.log:37:c=195401 nPC=$FE91 
+mPC=$FE91 nA=$00 mA=$00 nX=$0F mX=$0F nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=4 op=$B1 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k.log:38:c=195402 nPC=$FE91 
+mPC=$FE91 nA=$00 mA=$00 nX=$0F mX=$0F nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=3 op=$B1 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k.log:39:c=195403 nPC=$FE91 
+mPC=$FE91 nA=$00 mA=$00 nX=$0F mX=$0F nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$B1 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k.log:40:c=195404 nPC=$FE91 
+mPC=$FE91 nA=$00 mA=$00 nX=$0F mX=$0F nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$B1 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k.log:41:c=195405 nPC=$FE91 
+mPC=$FE91 nA=$FF mA=$00 nX=$0F mX=$0F nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$B1 mis=True
+

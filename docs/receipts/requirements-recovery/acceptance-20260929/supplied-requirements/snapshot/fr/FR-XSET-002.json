@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XSET-002",
+  "title": "Rebuild-required changes flagged and gated",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Rebuild-required changes are flagged and gated as on desktop. Acceptance: profile/resource-mode -> RequiresRestart; Apply(restart:true) sends RestartSession=true; others keep false.\n\n## Acceptance Criteria\n- profile/resource-mode -> RequiresRestart; Apply(restart:true) sends RestartSession=true; others keep false.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

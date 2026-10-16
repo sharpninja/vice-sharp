@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXUI-003",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "InputContext observer: quick menu -> non-Gameplay; closing with empty stack -> Gameplay.",
+  "acceptanceCriteria": []
+}

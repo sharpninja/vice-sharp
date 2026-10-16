@@ -1,0 +1,100 @@
+
+docs\2s-bne-cmp-2026-08-06.log:6:   DIV first=559296 matchedCycles=559295 budget=2216810
+docs\2s-bne-cmp-2026-08-06.log:7:c=559285 nPC=$F755 mPC=$F755 nA=$B0 mA=$B0 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=3 op=$AD trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:8:c=559286 nPC=$F755 mPC=$F755 nA=$B0 mA=$B0 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=2 op=$AD trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:9:c=559287 nPC=$F755 mPC=$F755 nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=1 op=$AD trail=2 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:10:c=559288 nPC=$F758 mPC=$F758 nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=0 op=$AD trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:11:c=559289 nPC=$F758 mPC=$F758 nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=3 op=$CD trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:12:c=559290 nPC=$F758 mPC=$F758 nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=2 op=$CD trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:13:c=559291 nPC=$F758 mPC=$F758 nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=1 op=$CD trail=1 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:14:c=559292 nPC=$F75B mPC=$F75B nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$27 mP=$27 dbgCyc=0 op=$CD trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:15:c=559293 nPC=$F75B mPC=$F75B nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$27 mP=$27 dbgCyc=1 op=$D0 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:16:c=559294 nPC=$F75D mPC=$F75D nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$27 mP=$27 dbgCyc=0 op=$D0 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:17:c=559295 nPC=$F75D mPC=$F75D nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$27 mP=$27 dbgCyc=2 op=$85 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:18:c=559296 nPC=$F75F mPC=$F75D nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$27 mP=$27 dbgCyc=1 op=$85 trail=1 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=True
+[33m8838ced[m feat(cpu,vic,cia): exact snapshot resume; staged IRQ + RMW cycles [TR-LOCKSTEP-VSF-001]
+  +    /// across a run of NOPs (c=518739 first, c=518741 second) until a non-NOP.
+  +    /// </summary>
+> +    private bool _nopHoldOpcodePcOnFinal;
+  +    private bool _nopChainHoldAfterBranch;
+  +    /// <summary>
+  +            if (_opcode == 0xEA && (armAfterBranchLag || _nopChainHoldAfterBranch))
+  +            {
+> +                _nopHoldOpcodePcOnFinal = true;
+  +                _nopChainHoldAfterBranch = true;
+  +                _softDeferAfterNopChain = false;
+  +                // host still samples opcode PC on its final FETCH CLK (c=518751).
+  +                _softDeferAfterNopChain = _nopChainHoldAfterBranch && _opcode != 0xEA;
+> +                _nopHoldOpcodePcOnFinal = false;
+  +                _nopChainHoldAfterBranch = false;
+  +            }
+  +            // final FETCH CLK (INC_PC is after that sample). Suppress boundary
+  +            // so GetState returns visible opcode PC, not the post-fetch next PC.
+> +            if (_nopHoldOpcodePcOnFinal)
+  +            {
+> +                _nopHoldOpcodePcOnFinal = false;
+  +                _visiblePC = _opcodeAddress;
+  +                _suppressBootstrapBoundary = true;
+  +            // Non-overlapped clean first FETCH: VICE ST does INC_PC only after
+  +            // both FETCH CLKs (6510dtvcore ST + SET_ABS_*). Hold opcode PC here;
+> +            // FinishStagedMemoryWrite on cycle 1 makes the advance host-visible.
+  +            if (_nonOverlappedRegion || _nonOverlappedFetchPhase)
+  +            {
+               case 0x85:
+                   _bus.Write(ReadZeroPageOperand(), A);
+>                  FinishStagedMemoryWrite(2);
+  @@ -651,18 +1724,41 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
+>                  FinishStagedMemoryWrite(2);
+                   DelayNextFetchAfterDeferredIndexedStorePcAdvance();
+                   return true;
+               case 0x8D:
+                   _bus.Write(ReadAbsoluteOperand(), A);
+>                  FinishStagedMemoryWrite(3);
+  @@ -692,10 +1788,39 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
+                   DelayNextFetchAfterDeferredIndexedStorePcAdvance();
+  +                    _bus.Write(_effectiveAddress, _fetched);
+  +                    _zpRmwModifyCommitted = false;
+> +                    FinishStagedMemoryWrite(2);
+  +                    return true;
+  +                }
+               case 0x91:
+                   _bus.Write(ReadIndirectYOperand(), A);
+>                  FinishStagedMemoryWrite(2);
+  @@ -793,16 +1957,54 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
+               return false;
+  +        _takenBranchStagedFallthrough = false;
+  +        _skipSoftImmAfterStagedTakenBranch = false;
+> +        _nopHoldOpcodePcOnFinal = false;
+  +        _nopChainHoldAfterBranch = false;
+  +        _softDeferAfterNopChain = false;
+           if (!_deferImpliedRegisterCompletionAfterBranch || _cycle != 0)
+  @@ -1278,8 +2750,41 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
+>      private void FinishStagedMemoryWrite(int instructionLength)
+       {
+           _pc = (ushort)(_instructionPC + instructionLength);
+  +        {
+  +            var trail = DebugPriorTrailingAtNextPc;
+> +            var afterTakenBranch = _afterFullLengthTakenBranch || _afterShortTakenBranchLag;
+> +            var holdOpcodePc = trail == 0
+> +                || (trail == 1 && afterTakenBranch && !IsLoadOpcode(_previousOpcode));
+> +            if (holdOpcodePc)
+  +            {
+  +                _visiblePC = _opcodeAddress;
+  +        _takenBranchStagedFallthrough = false;
+  +        _skipSoftImmAfterStagedTakenBranch = false;
+> +        _nopHoldOpcodePcOnFinal = false;
+  +        _nopChainHoldAfterBranch = false;
+  +        _softDeferAfterNopChain = false;
+

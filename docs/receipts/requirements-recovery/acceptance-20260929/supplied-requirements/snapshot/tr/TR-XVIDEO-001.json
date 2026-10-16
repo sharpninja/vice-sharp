@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XVIDEO-001",
+  "title": "Win2D SwapChainPanel pure read-only sink",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Win2D SwapChainPanel pure read-only sink, BGRA passthrough, zero per-frame allocation, FrameGeometry-sized. Acceptance: verified by TEST-XVIDEO-001/002.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

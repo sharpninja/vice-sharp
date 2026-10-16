@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-HOST-001",
+  "title": "Host Service Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Host lifecycle, status, media, state, capture, diagnostics, and session ownership behavior are verified with in-process host service tests.",
+  "acceptanceCriteria": []
+}

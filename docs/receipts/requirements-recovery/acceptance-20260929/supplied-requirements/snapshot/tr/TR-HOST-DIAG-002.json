@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-HOST-DIAG-002",
+  "title": "Current UI Session Tracking Bridge",
+  "status": "pending",
+  "priority": "high",
+  "body": "The desktop UI and host diagnostics state shall keep the current UI-bound session id synchronized so external diagnostics tools can attach to the same session that the visible app is using.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

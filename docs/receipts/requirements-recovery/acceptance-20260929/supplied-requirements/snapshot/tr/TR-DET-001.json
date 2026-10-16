@@ -1,0 +1,23 @@
+{
+  "kind": "tr",
+  "id": "TR-DET-001",
+  "title": "Bit-Exact Reproducibility Given Same Initial State and Inputs",
+  "status": "completed",
+  "priority": "high",
+  "body": "Given the same initial machine state (snapshot) and the same sequence of input events (keyboard, joystick, timing), the emulator shall produce bit-exact identical output (video frames, audio samples, final machine state) across all runs, all platforms, and supported compilation modes (Debug and Release).\n\n## Acceptance Criteria\n- A \"replay determinism\" test loads a snapshot, replays 10 million cycles of recorded input, and compares the final state hash: the hash must be identical across 100 consecutive runs.\n- The same test produces identical hashes on Windows x64, Linux x64, macOS ARM64, and Linux ARM64.\n- The same test produces identical hashes for Debug and Release builds.\n- Video frame checksums (CRC32 of raw pixel data) match for every frame between two runs of the same replay.\n- Audio sample checksums match for every audio buffer between two runs of the same replay.\n- Determinism is verified mechanically by the `Category=Determinism` bit-exact replay suites (run by the Nuke `DeterminismTest` target, e.g. `SidDeterminismTests`) plus the cycle-exact lockstep comparison gates against VICE `x64sc` and VSF baselines (Nuke `ParityTest` target).",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-lockstep",
+      "text": "Lockstep and checkpoint suites continue to pass after performance optimizations.",
+      "isSatisfied": true,
+      "evidence": "dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Lockstep|FullyQualifiedName~Checkpoint => 333 passed, 0 failed, 0 skipped"
+    },
+    {
+      "id": "ac-no-public-state-regression",
+      "text": "Optimizations do not change public observable machine state signatures or behavior contracts.",
+      "isSatisfied": true,
+      "evidence": "PR #3 keeps public API signatures stable and lockstep/checkpoint evidence green"
+    }
+  ]
+}

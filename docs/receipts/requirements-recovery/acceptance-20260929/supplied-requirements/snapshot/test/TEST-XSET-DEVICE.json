@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XSET-DEVICE",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console first-run provisioning + persistence E2E. Acceptance: ROMs provisioned + boot to READY; setting persists across relaunch; d64 attach with drive-model selector.",
+  "acceptanceCriteria": []
+}

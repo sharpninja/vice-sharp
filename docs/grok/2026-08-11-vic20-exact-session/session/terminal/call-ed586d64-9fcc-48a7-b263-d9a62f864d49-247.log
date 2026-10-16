@@ -1,0 +1,28 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Library.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    12, Skipped:     0, Total:    12, Duration: 135 ms - ViceSharp.Library.Tests.dll (net10.0)
+05:07:50 [DBG]   ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\ViceSharp.Xbox.dll
+05:07:51 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').InstallLocation""
+05:07:52 [INF] > C:\Windows\System32\Robocopy.exe "F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64" "C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout" /S /XF AppxManifest.xml /XD AppX /NJH /NJS /NDL /NFL /NP
+05:07:52 [DBG] 
+05:07:52 [INF] Deployed Release-UWP build into the registered layout: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+05:07:52 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').PackageFamilyName""
+05:07:53 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""Start-Process 'shell:AppsFolder\sharpninja.ViceSharp.Xbox_wbxy578d68v3y!App'""
+05:07:53 [INF] Launched sharpninja.ViceSharp.Xbox_wbxy578d68v3y. Log: %LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+DeployXboxLocal    Succeeded       0:19
+───────────────────────────────────────
+Total                              0:19
+═══════════════════════════════════════
+​
+Build succeeded on 8/5/2026 5:07:53 AM. ＼（＾ᴗ＾）／

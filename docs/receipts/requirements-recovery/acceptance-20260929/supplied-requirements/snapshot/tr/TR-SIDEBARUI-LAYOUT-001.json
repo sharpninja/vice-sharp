@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-SIDEBARUI-LAYOUT-001",
+  "title": "Anchor-derived collapse expander + wrap-panel button groups",
+  "status": "pending",
+  "priority": "medium",
+  "body": "AttachPanelViewModel exposes CollapseExpanderDock (Avalonia Dock) and CollapseGlyph derived from DockSide and raised on change. AttachPanelView docks a full-height collapse Button on CollapseExpanderDock and re-docks it on change. The tab buttons, Monitor buttons and Settings action buttons use WrapPanel with per-button margins.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "CollapseExpanderDock is Dock.Right when DockSide is Left and Dock.Left when DockSide is Right",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Changing DockSide raises PropertyChanged for CollapseExpanderDock and CollapseGlyph",
+      "isSatisfied": true
+    }
+  ]
+}

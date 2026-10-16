@@ -2,7 +2,7 @@
 
 A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emulator) targeting .NET 10.
 
-> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`, and the validation baseline at the v1.0.2 release is `2594 passed / 21 skipped / 0 failed` (2615 total) in `ViceSharp.TestHarness`. See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md).
+> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`. **Iteration 2 (VIC-20)** every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` is green for **10 s PAL** (11_084_050 cycles) and **10 s NTSC** (10_227_270 cycles). See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md) and [HANDOFF.md](HANDOFF.md).
 
 ## Quick Start
 
@@ -22,11 +22,11 @@ dotnet run --project src/ViceSharp.Console -- `
     --cycles 1000000
 ```
 
-Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compatible argument parsing and binary-name topology dispatch (`x64`, `x64sc`, `c1541`), consumed by `ViceSharp.Console`, which accepts the usual `-8`, `-9`, `-cart`, `+truedrive` / `-truedrive` flags. Standalone VICE-named binaries are not yet shipped. See [docs/USER-GUIDE.md](docs/USER-GUIDE.md) for the full install and first-run walkthrough, and [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) for a side-by-side flag mapping.
+Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compatible argument parsing and binary-name topology dispatch (`x64`, `x64sc`, `c1541`), including the usual `-8`, `-9`, `-cart`, `+truedrive` / `-truedrive` flags. `ViceSharp.Console` consumes its testbench and PRG flags; use `--machine-yaml` for drive topologies because parsed disk/cartridge dispatch is not yet wired into the console. Standalone VICE-named binaries are not yet shipped. See [docs/USER-GUIDE.md](docs/USER-GUIDE.md) for the full install and first-run walkthrough, and [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) for a side-by-side flag mapping.
 
 ## Install
 
-The current release is **v1.0.2** (released 2026-07-08): 13 NuGet packages on [nuget.org](https://www.nuget.org/packages?q=ViceSharp) plus an MSI / winget desktop package.
+The current line is **v1.3.3** (GitVersion `next-version`; NuGet + MSI / winget packaging). Published nuget.org / winget packages may lag until the next release tag.
 
 ```pwsh
 # Desktop UI as a dotnet global tool (command: vicesharp)
@@ -39,11 +39,40 @@ dotnet tool install --global ViceSharp.Console
 dotnet add package ViceSharp.Core
 ```
 
-Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launcher`, `ViceSharp.AdhocHelper`, `ViceSharp.Host`, `ViceSharp.SourceGen`, and the `ViceSharp.Host.MacOS` / `Android` / `iOS` / `Xbox` shells) are published alongside the bundle. The Windows desktop app is also packaged as a self-contained MSI (Nuke `PublishMsi`) with winget metadata (`PublishWinget`, package id `sharpninja.ViceSharp`).
+Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launcher`, `ViceSharp.AdhocHelper`, `ViceSharp.Host`, `ViceSharp.SourceGen`, and the `ViceSharp.Host.MacOS` / `Android` / `iOS` shells) are published alongside the bundle. Xbox/UWP is outside the supported product scope; its source remains frozen legacy. The Windows desktop app is also packaged as a self-contained MSI (Nuke `PublishMsi`) with winget metadata (`PublishWinget`, package id `sharpninja.ViceSharp`).
+
+### Linux: install for your user
+
+Run Nuke `DeployUser` as your regular user on Linux with a .NET SDK compatible with [global.json](global.json) (currently 10.0.301 or a later 10.0 feature band). It publishes a self-contained Release build for `x86_64` or `aarch64` and installs the app, launcher, desktop entry, and icon inside your home directory.
+
+```bash
+./build.sh DeployUser
+~/.local/bin/vicesharp
+```
+
+The PowerShell equivalent is `./build.ps1 DeployUser`. `DeployYay` is a compatibility alias for the same user-local deployment; it does not invoke `yay`, `pacman`, or `sudo`.
+
+Application releases live under `~/.local/share/vicesharp/releases/<version>-<unique>/`; the `current` symlink selects the active release. The launcher is `~/.local/bin/vicesharp`, and the desktop entry is `~/.local/share/applications/vicesharp.desktop`. If `XDG_DATA_HOME` is set, it replaces `~/.local/share` and must be an absolute path inside your home. Installation rejects root execution and symlinked or unmanaged destination conflicts. Older releases and existing `ViceSharp` user data are preserved.
+
+An existing system package remains installed. Put `~/.local/bin` before `/usr/bin` in your shell's `PATH` to select the user deployment with `vicesharp`; check with `command -v vicesharp`, or invoke `~/.local/bin/vicesharp` directly. The desktop entry selects the absolute user launcher independently of shell `PATH`.
+
+The app includes C64 GTK3 and SDL keyboard layouts under `data/C64` in its release directory. Input settings discover these `.vkm` files automatically, after configured VICE data directories and per-user keymaps. No system .NET SDK or runtime is required to run the installed app.
+
+Saving RomM credentials on Linux requires the optional `libsecret` package (which provides `secret-tool`) and a running, unlocked Secret Service keyring, such as GNOME Keyring or KWallet with Secret Service support enabled.
+
+Linux audio uses the SDL2 shared library (`libSDL2-2.0.so.0`, also provided by Arch's `sdl2-compat`) and the current user's audio service/device. `DeployUser` does not install system dependencies. The desktop enables sound by default; `VICESHARP_AUDIO=0` disables it. Headless and test hosts remain silent unless explicitly enabled. The C64 BASIC READY screen is normally silent; use a program that produces sound to check playback.
+
+On first local desktop launch, missing default C64 ROMs are downloaded from the VICE GitHub mirror, hash-verified, and cached under `~/.local/share/ViceSharp/roms` (or `$XDG_DATA_HOME/ViceSharp/roms`). Set `VICESHARP_ROM_PATH` or `VICE_DATA_PATH` to prefer an existing ROM set; see [docs/ROMs.md](docs/ROMs.md). ROMs are not bundled. See the [RomM library guide](docs/USER-GUIDE.md#6c-romm-library) for connecting a server and attaching downloaded games, including T64 archives.
+
+### Optional Arch package build
+
+`./build.sh PackYay` (or `./build.ps1 PackYay`) remains a package-only target for explicit system-package workflows. It requires Arch Linux `base-devel`/`makepkg` and the native dependencies listed in the generated `PKGBUILD`; it does not install anything. Each build leaves `PKGBUILD`, `.SRCINFO`, a SHA256-pinned payload, and `vicesharp-<version>-1-<arch>.pkg.tar.zst` under `artifacts/yay/<version>/<arch>/`. Installing that archive is a separate system-administration action. Use `DeployUser` for user-local installation.
+
+Both targets accept `--package-version-override X.Y.Z`; when omitted, they use the release tag on HEAD or the GitVersion-derived default.
 
 ## User documentation
 
-- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, capture, diagnostics attach, what works today
+- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, RomM library, desktop drag-drop (including `*.prg` load/RUN), capture, diagnostics attach, what works today
 - [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) - binary + flag mapping, behaviour caveats, performance / accuracy, bug compatibility
 - [docs/ROMs.md](docs/ROMs.md) - legal ROM options, environment variable, directory layout
 - [docs/](docs/README.md) - full documentation index (architecture, public API, iteration plans, diagrams)
@@ -52,12 +81,26 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
 
 ✅ **Iteration 0 (Foundations)**: Complete. All core primitives implemented, lock-free and zero allocation.
 ✅ **Iteration 1 (C64 Bringup)**: **Complete (Phase 1 closed 2026-05-31; diagnostics/attach surface updated 2026-06-25)**:
-  - `ViceSharp.TestHarness` gate green at v1.0.2: 2594 passed / 21 skipped / 0 failed (2615 total, single process, filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`)
   - x64sc lockstep and D64 attach paths are covered across deterministic no-cartridge variants
   - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps; 1173% PAL real-time)
   - Snapshot/capture/input/testbench/launcher surfaces are in place, including gRPC capture and diagnostics services
   - Desktop packaging is self-contained JIT + ReadyToRun through Nuke `PublishMsi`; native ahead-of-time publishing is no longer a project requirement
   - External debuggers can attach deterministically through `%LOCALAPPDATA%\ViceSharp\debug-attach.json` and `DiagnosticsService`
+
+? **Iteration 2 (VIC-20)**: **Core + lockstep + present path + expansion persistence + flash040 timing + VIC-I audio (2026-08-17)**:
+  - Managed VIC-20 (PAL/NTSC), dual VIA, VIC-I, color RAM open-bus, default drive 8 = 1540
+  - Native oracle: `vice_xvic.dll` / `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
+  - Every-cycle A/X/Y/S/P/PC vs xvic: **TenSecondPal** 11_084_050 and **TenSecondNtsc** 10_227_270 green
+  - READY present geometry Exact-scoped: VICE `first_x` crop (PAL first_x=48), L+R border bands, paper origin 48
+  - Settings: wrap BLK toggles; FE3 / Ultimem / Mega-Cart attach; [Flash Cart Builder](docs/FlashCart-Builder.md) in Avalonia
+  - FE3 MODE_FLASH via managed `Flash040Core` (AM29F040B); VICE TYPE_B timeout/sector/chip erase budgets (50 / 1,000,000 / 8,000,000 cycles) advance on the VIC-20 machine clock
+  - Dirty FE3 and Ultimem flash images plus Mega-Cart NVRAM are written back atomically on detach
+  - VIC-I sound registers feed deterministic batched PCM; focused silence and tone batches match native xvic byte-for-byte
+  - xvic `capture_visible_frame` (PAL 448x284); READY PAL/NTSC/busy palette-index SequenceEqual is green; READY PAL/NTSC and busy PAL native BGRA SequenceEqual is green (xvic canvas RGB)
+  - Receipts: lockstep 10s PAL/NTSC; hostile AGREE borders + flash builder; FE3/pixel wrap receipt `docs/receipts/wrapup-fe3-flash040-pixel-fb-20260811.txt`
+  - Gates (env): `VICESHARP_LOCKSTEP_10S=1`, `VICESHARP_LOCKSTEP_2S=1`; filter `FullyQualifiedName~Vic20DivergeProbe`
+  - Still open: input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`)
+  - **Out of scope:** Microsoft Store and Xbox/UWP (`PLAN-XBOXUWP-END-001`). Supported product shells: Avalonia desktop and Console.
 
 Working chip layer implementations:
   - `Mos6510` CPU (opcodes + core)
@@ -70,7 +113,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-07-08` at HEAD `534cded` (v1.0.2 tagged and released; VIC-II per-cycle parity remediation and reSID re-baseline in progress; see `docs/handoff.md`). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. 8580 SID: real Chamberlin SVF on linear cutoff curve. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-17` on `main` (GitVersion **1.3.3-15** for this working tree; VIC-20 lockstep + pixel-index parity + timed FE3 flash + cartridge persistence + VIC-I audio; Xbox/UWP outside product scope; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki source export is automated through MCP requirements generation and `tools/Publish-Wiki.ps1`. Advanced cartridge mappers remain minimum-viable scaffolds outside the validated VIC-20 FE3 / Ultimem / Mega-Cart set.
 
 **Legend**: State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
@@ -114,7 +157,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Machine | Target Iteration | State | % |
 |---------|:----------------:|:----:|:----:|
 | SX-64 | 1 | ⚪ | 0% |
-| VIC-20 (MOS 6502 + VIC + VIA x2) | 2 | ⚪ | 0% |
+| VIC-20 (MOS 6502 + VIC-I + VIA x2) | 2 | ✅ | 97% |
 | C128 (MOS 8502 + VIC-IIe + Z80) | 3 | ⚪ | 0% |
 | PET (MOS 6502 + PIA/VIA + CRTC) | 4 | ⚪ | 0% |
 | Plus/4 / C16 (MOS 7501 + TED) | 5 | ⚪ | 0% |
@@ -127,10 +170,10 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | BenchmarkDotNet harness vs native VICE | 🟡 | 60% | `PERF-TUNING-001` Phase 1 close (slice 8; PerfProbe measured 11.5M+ cycles/sec = 47x the 25% target). `PERF-BENCHMARK-001` native baseline + sweep deferred post-Phase 1. |
 | Repository maintenance + github wiki | 🟢 | 35% | `REPO-MAINT-001` (audit + plan in [docs/maintenance/](docs/maintenance/), execution deferred) |
 | Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | 🟢 | 60% | `ARCH-ADHOCMACHINE-001` (schema + loader + `--machine-yaml` flag, helper app deferred) |
-| Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
+| Cross-platform hosts (Avalonia 12 mobile + MacOS; Xbox UWP cancelled) | 🟢 | 10% | `PLATFORM-CROSS-001` wireframes; Xbox UWP / Store / sideload cancelled 2026-08-11 (`PLAN-XBOXUWP-END-001`) |
 | Completion Dashboard (this section) | ✅ | 100% | `DOC-DASHBOARD-001` Phase 1 close (slice 9) |
 
-Dashboard is regenerated as subagent slices land. Latest validation gate at v1.0.2 (2026-07-08): `2594 passed / 21 skipped / 0 failed` (2615 total), single process, filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`.
+The dashboard is refreshed during repository wrap-up. VIC-20 every-cycle lockstep (2026-08-06): PAL 10 s and NTSC 10 s green (`Vic20DivergeProbe`); see durable receipts under `docs/receipts-lockstep-10s-*.txt`. Native-backed suites must run in process-isolated slices because a single process can hang after repeated native-machine use; see [HANDOFF.md](HANDOFF.md) for the current broad-suite diagnostics.
 
 ## Supported Machines (planned)
 
@@ -138,21 +181,21 @@ Dashboard is regenerated as subagent slices land. Latest validation gate at v1.0
 |---------|-------------|--------|
 | C64 / C64C | MOS 6510 + VIC-II + SID + CIA x2 | Iteration 1 |
 | SX-64 | Same as C64 (built-in monitor + 1541) | Iteration 1 |
-| VIC-20 | MOS 6502 + VIC + VIA x2 | Iteration 2 |
+| VIC-20 | MOS 6502 + VIC-I + VIA x2 | Iteration 2 (core + 10 s lockstep on `main`) |
 | C128 | MOS 8502 + VIC-IIe + SID + CIA x2 + Z80 | Iteration 3 |
 | PET | MOS 6502 + PIA/VIA + CRTC | Iteration 4 |
 | Plus/4 / C16 | MOS 7501 + TED | Iteration 5 |
 
 ## Building
 
-Prerequisites: [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.201 or later)
+Prerequisites: [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) compatible with [global.json](global.json), currently 10.0.301 or a later 10.0 feature band.
 
 ```bash
 # Restore and build
 dotnet build ViceSharp.slnx
 
-# Run tests
-dotnet test ViceSharp.slnx
+# Run the filtered Nuke test gate
+./build.sh Test --configuration Release
 
 # Using Nuke build system
 ./build.sh Compile    # Linux/macOS
@@ -166,18 +209,21 @@ build.cmd Compile     # Windows
 | `Clean` | Remove bin/obj/artifacts |
 | `Restore` | Restore NuGet packages |
 | `Compile` | Build with TreatWarningsAsErrors |
-| `Test` | Run unit tests with filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy` (excludes determinism, the on-demand aiUnit AI reviews, and the quarantined parity categories) |
+| `Test` | Run tests with filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration` (separate determinism, paid AI, quarantined parity, and external integration gates) |
 | `DeterminismTest` | Run determinism verification tests |
 | `RunConsole` | Run the console reference shell |
 | `RunAvalonia` | Run the Avalonia desktop UI |
+| `DeployUser` | Publish Release and install the Linux desktop app in the current user's home |
+| `DeployYay` | Compatibility alias for `DeployUser` |
+| `PackYay` | Build an Arch package without installing it |
 | `PublishWiki` | Generate requirements wiki exports |
 | `PublishMsi` | Publish the self-contained desktop app and package `artifacts/installer/ViceSharp.msi` |
 | `InstallMsi` | Install the locally built MSI |
 | `PublishWinget` | Generate winget package metadata for the MSI |
-| `CiTest` | CI variant of `Test`: restores and builds in-job, stages hash-pinned ROMs via `EnsureCiRomRoot` when the agent has no VICE data root (used by the `VICE-Sharp-CI` Azure DevOps pipeline) |
+| `CiTest` | CI-ready variant of `Test`: restores and builds in-job, then stages hash-pinned ROMs via `EnsureCiRomRoot` when the agent has no VICE data root |
 | `ParityTest` | Run the whole VICE-parity suite (`Category=Parity`), including quarantined `ParityPending` tests (remediation burn-down) |
 | `PackNuget` | Pack the `ViceSharp.Core` bundle and the individual NuGet packages into `artifacts/packages`, verifying package contents |
-| `PublishNuget` | Tag-gated release publish: pack from the tagged checkout and push to nuget.org (used by the `VICE-Sharp-Release` Azure DevOps pipeline; requires `NUGET_API_KEY`) |
+| `PublishNuget` | Tag-gated release publish: pack from the tagged checkout and push to nuget.org; requires `NUGET_API_KEY` |
 
 ## Architecture
 
@@ -186,7 +232,7 @@ ViceSharp is designed as a **library-first emulator**:
 - **ViceSharp.Abstractions** - 33+ public interfaces defining the emulator contract
 - **ViceSharp.Core** - bus, clock, devices, mutation queue, pub/sub
 - **ViceSharp.Chips** - CPU (6502/6510/8502), VIC-II, SID, CIA, VIA, PLA
-- **ViceSharp.Architectures** - machine definitions: C64 and the C1541 true drive today, plus ad-hoc and multisystem topologies (VIC-20, C128, PET, Plus/4 planned for iterations 2-5)
+- **ViceSharp.Architectures** - machine definitions: C64, VIC-20 (Iteration 2), and the C1541 true drive, plus ad-hoc and multisystem topologies (C128, PET, Plus/4 planned for iterations 3-5)
 - **ViceSharp.SourceGen** - Roslyn source generator for device registration boilerplate
 - **ViceSharp.Host** - composition boundary: emulator sessions, media, snapshots, diagnostics, and the gRPC host surface
 - **ViceSharp.Protocol** - gRPC/protobuf contracts and generated client/server types
@@ -207,7 +253,7 @@ See [docs/Architecture.md](docs/Architecture.md) for the full design.
 
 ## ROMs
 
-ViceSharp does not include Commodore ROMs. See [docs/ROMs.md](docs/ROMs.md) for legal ROM options and setup instructions.
+ViceSharp packages do not include Commodore ROMs. Local desktop startup downloads and verifies the default C64 ROMs when no complete local set is available, then reuses its per-user cache offline. Other variants and drive ROMs require separate resources. See [docs/ROMs.md](docs/ROMs.md) for ROM sources, cache locations, and overrides.
 
 ## License
 
@@ -217,9 +263,19 @@ Licensed under the **GNU General Public License v2.0 or later** (GPL-2.0-or-late
 
 ViceSharp is a derivative work of VICE, which is also licensed under GPL-2.0-or-later. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution details.
 
+### Commodore C= logo (CC BY-SA 4.0)
+
+Store and branding assets may include the **Commodore C= logo** from Wikimedia Commons:
+
+- **File:** [Commodore C= logo.svg](https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg)
+- **Author:** Alien426
+- **License:** [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/)
+
+Local copies and ShareAlike notes live under `docs/xbox/store-screenshots/` (`Commodore_C_logo.svg`, `LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt`).
+
 ## Contributing
 
-1. Fork on Azure DevOps (`dev.azure.com/McpServer/VICE-Sharp`)
+1. Fork the GitHub repository (`github.com/sharpninja/vice-sharp`)
 2. Follow the Byrd Development Process: tests first, then implementation
 3. All tests must pass before submitting a PR
 4. Optional: run the aiUnit AI Code Review / Project Review before a PR (see [docs/AI-Review.md](docs/AI-Review.md))

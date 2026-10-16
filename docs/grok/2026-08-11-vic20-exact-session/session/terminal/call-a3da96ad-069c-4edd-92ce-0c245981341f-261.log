@@ -1,0 +1,36 @@
+
+Id                    Ok Preview
+--                    -- -------
+FIX-XKBDNMI-001     True type: result payload: requestId: req-20260805T083550Z-25e8 result: success: true item: id: FIX-XKBDNMI-001 title: Wire C64 RESTORE trigger (IsRestorePressed) to the CPU NMI edge se
+FIX-ROMLESSVIC-001  True type: result payload: requestId: req-20260805T083552Z-c84f result: success: true item: id: FIX-ROMLESSVIC-001 title: 'Process romless-vic-badline-fix.md: VIC raises no bad lines on
+IMPL-XBOXUWP-000    True type: result payload: requestId: req-20260805T083554Z-4859 result: success: true item: id: IMPL-XBOXUWP-000 title: 'S0: FEASIBILITY GO/NO-GO (the one gate all production slices dep
+IMPL-XBOXUWP-035    True type: result payload: requestId: req-20260805T083557Z-c957 result: success: true item: id: IMPL-XBOXUWP-035 title: 'S35: Desktop-intact + full-suite + AOT regression guard' section
+IMPL-XBOXUWP-036    True type: result payload: requestId: req-20260805T083559Z-addd result: success: true item: id: IMPL-XBOXUWP-036 title: 'S36: On-console deploy + boot-to-menu + C64 render smoke' sectio
+IMPL-XBOXUWP-037    True type: result payload: requestId: req-20260805T083601Z-9e79 result: success: true item: id: IMPL-XBOXUWP-037 title: 'S37: On-console live gamepad smoke (JOY2/JOY1 + A/B fire + menu 
+IMPL-XBOXUWP-038    True type: result payload: requestId: req-20260805T083603Z-8c3e result: success: true item: id: IMPL-XBOXUWP-038 title: 'S38: On-console A/V smoke (Win2D video + XAudio2 audio + mute + 
+IMPL-XBOXUWP-039    True type: result payload: requestId: req-20260805T083605Z-ddf1 result: success: true item: id: IMPL-XBOXUWP-039 title: 'S39: On-console system-button + context smoke' section: xbox-uwp
+IMPL-XBOXUWP-040    True type: result payload: requestId: req-20260805T083607Z-1891 result: success: true item: id: IMPL-XBOXUWP-040 title: 'S40: On-console first-run ROM provisioning + settings persistenc
+IMPL-XBOXUWP-041    True type: result payload: requestId: req-20260805T083610Z-ec6b result: success: true item: id: IMPL-XBOXUWP-041 title: 'S41: On-console performance within resource budget (PAL 50)' sec
+PLAN-XKEYBOARD-001  True type: result payload: requestId: req-20260805T083613Z-2acf result: success: true item: id: PLAN-XKEYBOARD-001 title: UWP Virtual Keyboard should be a real C64 keyboard section: xbo
+PLAN-XBOXCLIENT-001 True type: result payload: requestId: req-20260805T083616Z-8f7d result: success: true item: id: PLAN-XBOXCLIENT-001 title: XBOX-compatible client (10-foot console front-end) section: UI
+PLAN-ROMM-001       True type: result payload: requestId: req-20260805T083619Z-eba3 result: success: true item: id: PLAN-ROMM-001 title: Create a RomM client library and UI for Avalonia and Xbox section: r
+IMPL-ROMM-001       True type: result payload: requestId: req-20260805T083621Z-30c6 result: success: true item: id: IMPL-ROMM-001 title: '[P0] Pin RomM packages + restore (AC-PKG-04, TR-ROMM-NUGET-001)' se
+IMPL-ROMM-002       True type: result payload: requestId: req-20260805T083623Z-3aba result: success: true item: id: IMPL-ROMM-002 title: '[L1] ViceSharp.Library.ViewModels seams + slug map (AC-PKG-03, AC-L
+IMPL-ROMM-003       True type: result payload: requestId: req-20260805T083625Z-3af2 result: success: true item: id: IMPL-ROMM-003 title: '[L2] ViceSharp.RomM adapter browse/detail/download + RomMJsonContex
+IMPL-ROMM-004       True type: result payload: requestId: req-20260805T083627Z-94ed result: success: true item: id: IMPL-ROMM-004 title: '[L3] LibraryBrowseViewModel (AC-BROWSE-04/05/06/07, AC-LAUNCH-03/04
+IMPL-ROMM-005       True type: result payload: requestId: req-20260805T083629Z-37be result: success: true item: id: IMPL-ROMM-005 title: '[L4] Launch orchestration seam (AC-LAUNCH-04/07)' section: romm pri
+IMPL-ROMM-006       True type: result payload: requestId: req-20260805T083631Z-0b23 result: success: true item: id: IMPL-ROMM-006 title: '[L5] Collections (AC-COLLECT-01..06, AC-DETAIL-02)' section: romm p
+IMPL-ROMM-007       True type: result payload: requestId: req-20260805T083634Z-fea9 result: success: true item: id: IMPL-ROMM-007 title: '[L6] CSDb gateways (AC-CSDB-01..06)' section: romm priority: medium
+IMPL-ROMM-008       True type: result payload: requestId: req-20260805T083636Z-c102 result: success: true item: id: IMPL-ROMM-008 title: '[L7] Covers + connection + pairing + refresh (AC-COVER-01..04, AC-C
+IMPL-ROMM-009       True type: result payload: requestId: req-20260805T083639Z-5d53 result: success: true item: id: IMPL-ROMM-009 title: '[L8] Packaging gate (AC-PKG-01/02)' section: romm priority: medium 
+IMPL-ROMM-010       True type: result payload: requestId: req-20260805T083641Z-380d result: success: true item: id: IMPL-ROMM-010 title: '[X1] XboxGameLauncher (AC-LAUNCH-05)' section: romm priority: mediu
+IMPL-ROMM-011       True type: result payload: requestId: req-20260805T083643Z-0fe9 result: success: true item: id: IMPL-ROMM-011 title: '[X2] XboxCoverImageLoader + XboxRomMConnectionStore' section: romm 
+IMPL-ROMM-012       True type: result payload: requestId: req-20260805T083645Z-e1af result: success: true item: id: IMPL-ROMM-012 title: '[X3] LibraryPage + GameDetailsPage + ListsPage + nav + pairing (AC-
+IMPL-ROMM-013       True type: result payload: requestId: req-20260805T083648Z-a399 result: success: true item: id: IMPL-ROMM-013 title: '[X4] Xbox CSDb tab (reuses L6 VM)' section: romm priority: low done
+IMPL-ROMM-014       True type: result payload: requestId: req-20260805T083650Z-e04b result: success: true item: id: IMPL-ROMM-014 title: '[A1] AvaloniaGameLauncher (AC-LAUNCH-06)' section: romm priority: m
+IMPL-ROMM-015       True type: result payload: requestId: req-20260805T083652Z-0327 result: success: true item: id: IMPL-ROMM-015 title: '[A2] AvaloniaCoverImageLoader + desktop store + gateway selection (
+IMPL-ROMM-016       True type: result payload: requestId: req-20260805T083655Z-01a4 result: success: true item: id: IMPL-ROMM-016 title: '[A3] LibraryView + GameDetailsView + ListsView + MainWindow + conne
+IMPL-ROMM-017       True type: result payload: requestId: req-20260805T083657Z-11de result: success: true item: id: IMPL-ROMM-017 title: '[A4] Avalonia CSDb tab' section: romm priority: low done: true desc
+
+
+OK count: 30 / 30

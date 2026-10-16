@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-ROMM-PKG-001",
+  "title": "NuGet packaging of RomM libraries",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. Ship ViceSharp.Library.ViewModels + ViceSharp.RomM as nuget.org packages. TR-ROMM-BOUNDARY-001, TR-ROMM-NUGET-001.\nAC-PKG-01: both libraries IsPackable with id + GPL-2.0-or-later metadata -> PackageMetadataTests.Ids_License.\nAC-PKG-02: PublishNuget packs both nupkgs with correct deps (RomM.Client, RomM.Client.Csdb, ViceSharp.*) -> PackageMetadataTests.Dependencies + build.ps1 PublishNuget --skip [V].\nAC-PKG-03: ViceSharp.Library.ViewModels references only Protocol; no RomM./Http/Grpc./Avalonia./Windows./engine names -> LibraryViewModelsBoundaryTests.\nAC-PKG-04: restore resolves RomM.Client/Csdb from nuget.org with the nuget.org-only config -> NuGetConfigTests.NugetOrgOnly + restore [V].\n\n## Acceptance Criteria\n- both libraries `IsPackable` with id + GPL-2.0-or-later metadata ->\n- `PublishNuget` packs both nupkgs with correct deps (RomM.Client, RomM.Client.Csdb,\n- `ViceSharp.Library.ViewModels` references only Protocol; assembly/source name no `RomM.`/\n- restore resolves RomM.Client/Csdb from nuget.org with the nuget.org-only config ->",
+  "condition": null,
+  "acceptanceCriteria": []
+}

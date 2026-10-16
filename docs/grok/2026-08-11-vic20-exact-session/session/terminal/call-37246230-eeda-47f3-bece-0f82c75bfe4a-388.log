@@ -1,0 +1,9 @@
+
+native\vice\vice\src\Makefile:2449:.PHONY: xvic-all xvic-program
+native\vice\vice\src\Makefile:2452:	$(MAKE) xvic-program
+native\vice\vice\src\Makefile:2454:xvic-program: \
+False
+
+Count : 0
+
+

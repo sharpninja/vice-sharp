@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-HOST-005",
+  "title": "Host-Owned Snapshot, Screenshot, and Diagnostic Operations",
+  "status": "pending",
+  "priority": "high",
+  "body": "The host shall expose state save/load, screenshot capture, and basic diagnostic commands without granting UI clients direct access to emulator internals.\n\n## Acceptance Criteria\n- Snapshot save requests produce a versioned artifact or artifact handle with checksum metadata.\n- Snapshot load requests validate the artifact before replacing the active machine state.\n- Screenshot requests capture the latest committed frame with dimensions, pixel format, and palette metadata.\n- State and capture commands coordinate with the emulation loop so snapshots and screenshots are not torn.\n- Long-running state operations report progress and can be cancelled before commit.\n- Diagnostic status includes active machine profile, lifecycle state, attached media, recent structured errors, and current frame/cycle counters.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

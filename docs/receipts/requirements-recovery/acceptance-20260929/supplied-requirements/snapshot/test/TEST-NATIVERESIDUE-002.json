@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-NATIVERESIDUE-002",
+  "title": "Drive attach/detach clock residue zeroed at machine boundary",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "A machine created after a scratch machine attaches/detaches a disk (or resumes a has_tde=0 .vsf) must present drive-8 attach_clk/detach_clk/attach_detach_clk == 0. Guards drive-snapshot.c uninitialized-stack + shim create-time re-baseline. Code: NativeResidueDiagTests.FreshMachine_DriveAttachDetachClocks_AreZero_AfterResidue (label TEST-NATIVE-RESIDUE-03).",
+  "acceptanceCriteria": []
+}

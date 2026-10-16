@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-BUILD-001",
+  "title": "Nuke Build System with GitHub origin as Source of Truth",
+  "status": "pending",
+  "priority": "high",
+  "body": "ViceSharp shall use the Nuke build system for all build, test, package, and publish operations. The build definition is a C# project (`build/_build.csproj`) that defines targets as code. GitHub `origin` (`https://github.com/sharpninja/vice-sharp.git`) is the git source of truth. Azure DevOps is retired and is not used. Historical `azure-pipelines.ci.yml` and `azure-pipelines.release.yml` files may remain in the tree; they are not the live git or wiki authority.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

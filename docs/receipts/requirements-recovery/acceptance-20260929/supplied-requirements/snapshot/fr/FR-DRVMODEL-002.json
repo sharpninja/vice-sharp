@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRVMODEL-002",
+  "title": "Drive model selection surface (UI, settings, launcher)",
+  "status": "pending",
+  "priority": "high",
+  "body": "The Avalonia drive card exposes a drive-model selector that drives SetTrueDriveAsync with the model and adjusts attach file filters per model; the launcher accepts -drive8type/-drive9type; the multisystem topology YAML accepts an optional model field on drive peripherals; the selection persists to vice.ini Drive8Type and restores at startup.\n\n## Acceptance Criteria\n- The Avalonia drive card exposes a drive-model selector that drives SetTrueDriveAsync with the model and adjusts attach file filters per model; the launcher accepts -drive8type/-drive9type; the multisystem topology YAML accepts an optional model field on drive peripherals; the selection persists to vice.ini Drive8Type and restores at startup.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

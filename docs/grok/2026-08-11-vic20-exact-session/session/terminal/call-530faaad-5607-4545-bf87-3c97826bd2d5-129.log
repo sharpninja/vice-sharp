@@ -1,0 +1,2 @@
+VirtualKeyboardOverlay.xaml:40: the nested ItemsSource never needs reflection {Binding}. -->
+HomePage.xaml:31: <!-- FEAT-XAOTBIND-001: compiled bind; reflection {Binding} dies under AOT. -->

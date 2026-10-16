@@ -1,0 +1,83 @@
+Action type: Octopus.Script
+GitDependencies:
+{
+  "Octopus.Action.Script.Syntax": "PowerShell",
+  "Octopus.Action.Script.ScriptSource": "Inline",
+  "Octopus.Action.RunOnServer": "false",
+  "Octopus.Action.Script.ScriptBody": "# Replicated from azure-pipelines.yml (sha256:315962657A25)\n$ErrorActionPreference = 'Stop'\nfunction Invoke-External([string]$Command, [string]$FailureMessage) {\n  Write-Host \">> $Command\"\n  cmd /c \"$Command 2>&1\"\n  if ($LASTEXITCODE -ne 0) { throw \"$FailureMessage exit $LASTEXITCODE\" }\n}\n$srcCandidates = @('C:\\\\deploy\\\\aiUnit', 'F:\\\\GitHub\\\\aiUnit')\n$src = $null; foreach ($c in $srcCandidates) { if (Test-Path $c) { $src = $c; break } }\nif (-not $src) { throw \"source directory not found\" }\nSet-Location $src\nWrite-Host \"Working directory: $src\"\nWrite-Host '=== Install .NET 8 SDK for Nuke ==='\nWrite-Host '=== Install .NET 10 SDK ==='\nInvoke-External 'dotnet --info' 'step failed'\nWrite-Host '=== Show .NET SDK info ==='\nInvoke-External './build.ps1 --target Test --configuration $(BuildConfiguration)' 'step failed'\nWrite-Host '=== Test (via Nuke) ==='\nWrite-Host '=== Publish test results ==='\nWrite-Host '=== Pack NuGet packages (via Nuke) ==='\nWrite-Host '=== Smoke test packed tools (via Nuke) ==='\nWrite-Host '=== Publish NuGet package artifact ==='\nWrite-Host '=== Push to NuGet (version tags only) ==='\nWrite-Host 'Completed replicated pipeline for azure-pipelines.yml'",
+  "Octopus.Action.PowerShell.ExecuteWithoutProfile": "True"
+}
+
+Name
+----
+Equals
+GetHashCode
+GetType
+ToString
+ActionType
+CanBeUsedForProjectVersioning
+Channels
+ChannelsVariable
+Condition
+Container
+Environments
+EnvironmentsVariable
+EnvironmentsVariables
+ExcludedEnvironments
+ExcludedEnvironmentsVariable
+ExcludedEnvironmentsVariables
+GitDependencies
+Id
+IsDisabled
+IsRequired
+Links
+Name
+Notes
+Packages
+Properties
+Slug
+TenantTags
+TenantTagsVariable
+TenantTagsVariables
+WorkerPoolId
+WorkerPoolVariable
+Octopus.Action.Script.Syntax
+Octopus.Action.Script.ScriptSource
+Octopus.Action.RunOnServer
+Octopus.Action.Script.ScriptBody
+Octopus.Action.PowerShell.ExecuteWithoutProfile
+{
+  "Name": "source",
+  "RepositoryUri": "https://github.com/sharpninja/aiUnit.git",
+  "DefaultBranch": "main",
+  "GitCredentialType": "Anonymous",
+  "FilePathFilters": [],
+  "GitCredentialId": null,
+  "GitHubConnectionId": null,
+  "StepPackageInputsReferenceId": null
+}
+# Replicated from azure-pipelines.yml (sha256:315962657A25)
+$ErrorActionPreference = 'Stop'
+function Invoke-External([string]$Command, [string]$FailureMessage) {
+  Write-Host ">> $Command"
+  cmd /c "$Command 2>&1"
+  if ($LASTEXITCODE -ne 0) { throw "$FailureMessage exit $LASTEXITCODE" }
+}
+$srcCandidates = @('C:\\deploy\\aiUnit', 'F:\\GitHub\\aiUnit')
+$src = $null; foreach ($c in $srcCandidates) { if (Test-Path $c) { $src = $c; break } }
+if (-not $src) { throw "source directory not found" }
+Set-Location $src
+Write-Host "Working directory: $src"
+Write-Host '=== Install .NET 8 SDK for Nuke ==='
+Write-Host '=== Install .NET 10 SDK ==='
+Invoke-External 'dotnet --info' 'step failed'
+Write-Host '=== Show .NET SDK info ==='
+Invoke-External './build.ps1 --target Test --configuration $(BuildConfiguration)' 'step failed'
+Write-Host '=== Test (via Nuke) ==='
+Write-Host '=== Publish test results ==='
+Write-Host '=== Pack NuGet packages (via Nuke) ==='
+Write-Host '=== Smoke test packed tools (via Nuke) ==='
+Write-Host '=== Publish NuGet package artifact ==='
+Write-Host '=== Push to NuGet (version tags only) ==='
+Write-Host 'Completed replicated pipeline for azure-pipelines.yml'
+

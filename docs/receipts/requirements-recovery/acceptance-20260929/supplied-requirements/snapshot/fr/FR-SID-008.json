@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-008",
+  "title": "Hard Sync (Oscillator Synchronization)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Hard sync resets a voice's phase accumulator to zero whenever the modulating voice's phase accumulator MSB transitions from 1 to 0. This produces harmonically rich timbres.\n\n## Acceptance Criteria\n- Hard sync is enabled by bit 1 of the control register ($D404/$D40B/$D412).\n- When the modulating voice's oscillator MSB transitions from 1 to 0, the synced voice's phase accumulator is reset to 0.\n- Voice sync chain: voice 1 synced by voice 3, voice 2 by voice 1, voice 3 by voice 2.\n- The synced voice's frequency determines the harmonic content; the modulating voice's frequency determines the fundamental.\n- Hard sync works with all waveform types.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

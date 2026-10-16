@@ -1,0 +1,5 @@
+# Receipt: Phases E-F
+Date: 2026-08-11
+Workload PAL+NTSC 250k: Passed (VICESHARP_LOCKSTEP_VIDEO=0)
+Keyboard+isolation: Passed 6/0/0
+Snapshot inventory+managed: Passed; native WriteSnapshot hang residual

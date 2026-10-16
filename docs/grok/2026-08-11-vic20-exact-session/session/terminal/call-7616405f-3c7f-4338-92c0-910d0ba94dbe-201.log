@@ -1,0 +1,48 @@
+
+native\vice\vice\src\vic20\vic20-resources.c:66:int ram_block_5_enabled;
+native\vice\vice\src\vic20\vic20-resources.c:134:static int set_ram_block_5_enabled(int value, void *param)
+native\vice\vice\src\vic20\vic20-resources.c:136:    ram_block_5_enabled = value ? 1 : 0;
+native\vice\vice\src\vic20\vic20-resources.c:202:    { "RAMBlock5", 0, RES_EVENT_SAME, NULL,
+native\vice\vice\src\vic20\vic20-resources.c:203:      &ram_block_5_enabled, set_ram_block_5_enabled, NULL },
+[xUnit.net 00:00:02.33]       c1: PC=$FD22 A=$00 X=$00 P=$26 peekA008=00
+[xUnit.net 00:00:02.33]       c2: PC=$FD22 A=$00 X=$00 P=$26 peekA008=00
+[xUnit.net 00:00:02.33]       c3: PC=$FD24 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c4: PC=$FD24 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c5: PC=$FD25 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c6: PC=$FD25 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c7: PC=$FD26 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c8: PC=$FD26 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c9: PC=$FD27 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c10: PC=$FD27 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c11: PC=$FD27 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c12: PC=$FD29 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c13: PC=$FD29 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c14: PC=$FD29 A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c15: PC=$FD3F A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c16: PC=$FD3F A=$00 X=$FF P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c17: PC=$FD41 A=$00 X=$05 P=$24 peekA008=00
+[xUnit.net 00:00:02.33]       c18: PC=$FD41 A=$00 X=$05 P=$24 peekA008=00
+[xUnit.net 00:00:02.33]       c19: PC=$FD41 A=$00 X=$05 P=$24 peekA008=00
+[xUnit.net 00:00:02.33]       c20: PC=$FD41 A=$CD X=$05 P=$24 peekA008=00
+[xUnit.net 00:00:02.33]       c21: PC=$FD44 A=$CD X=$05 P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c22: PC=$FD44 A=$CD X=$05 P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c23: PC=$FD44 A=$CD X=$05 P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c24: PC=$FD44 A=$CD X=$05 P=$A4 peekA008=00
+[xUnit.net 00:00:02.33]       c25: PC=$FD47 A=$CD X=$05 P=$A5 peekA008=00
+[xUnit.net 00:00:02.33]       c26: PC=$FD47 A=$CD X=$05 P=$A5 peekA008=00
+[xUnit.net 00:00:02.33]       c27: PC=$FD49 A=$CD X=$05 P=$A5 peekA008=00
+[xUnit.net 00:00:02.33]       c28: PC=$FD4C A=$CD X=$05 P=$A5 peekA008=00
+[xUnit.net 00:00:02.33]       c29: PC=$FD4C A=$CD X=$05 P=$A5 peekA008=00
+[xUnit.net 00:00:02.33]       c30: PC=$FD4C A=$CD X=$05 P=$A5 peekA008=00
+   c1: PC=$FD22 A=$00 X=$00 P=$26 peekA008=00
+c2: PC=$FD22 A=$00 X=$00 P=$26 peekA008=00
+c3: PC=$FD24 A=$00 X=$FF P=$A4 peekA008=00
+c4: PC=$FD24 A=$00 X=$FF P=$A4 peekA008=00
+c5: PC=$FD25 A=$00 X=$FF P=$A4 peekA008=00
+c6: PC=$FD25 A=$00 X=$FF P=$A4 peekA008=00
+c7: PC=$FD26 A=$00 X=$FF P=$A4 peekA008=00
+c8: PC=$FD26 A=$00 X=$FF P=$A4 peekA008=00
+c9: PC=$FD27 A=$00 X=$FF P=$A4 peekA008=00
+c10: PC=$FD27 A=$00 X=$FF P=$A4 peekA008=00
+EXIT=
+

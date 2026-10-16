@@ -112,6 +112,55 @@ public sealed class HostKeyboardAutomationTests
             memory[0x0277..0x0281]);
     }
 
+    /// <summary>
+    /// FR: FR-UIDROP-002, TR: TR-HOST-PRG-001, TEST-UIDROP-002.
+    /// Use case: a BASIC-start PRG drop must type RUN once the prompt is ready.
+    /// Acceptance: CreateBasicRun feeds RUN plus return into the KERNAL keyboard
+    /// buffer after READY and a blinking cursor.
+    /// </summary>
+    [Fact]
+    public void BasicRun_ReadyAndCursorBlinking_FeedsRun()
+    {
+        var memory = MemoryWithReady(cursorBlinkFlag: 0);
+        var machine = MachineWithMemory(memory);
+        var automation = HostKeyboardAutomation.CreateBasicRun();
+
+        for (var i = 0; i < 30; i++)
+            automation.AdvanceFrame(machine);
+
+        Assert.Equal(4, memory[0x00C6]);
+        Assert.Equal([(byte)'R', (byte)'U', (byte)'N', 13], memory[0x0277..0x027B]);
+        Assert.Equal("BASIC RUN", automation.Description);
+    }
+
+    /// <summary>
+    /// FR: FR-UIDROP-002, TR: TR-HOST-PRG-001, TEST-UIDROP-002.
+    /// Use case: VIC-20 unexpanded screen RAM is $1E00 (KERNAL HIBASE $0288 =
+    /// $1E), not C64 $0400. RUN after a BASIC-start PRG drop must wait on that
+    /// screen.
+    /// Acceptance: READY only at $1E00 with HIBASE $1E feeds RUN; $0400 stays
+    /// untouched.
+    /// </summary>
+    [Fact]
+    public void BasicRun_Vic20UnexpandedHibaseScreen_FeedsRun()
+    {
+        var memory = new byte[0x10000];
+        memory[0x0288] = 0x1E;
+        memory[CursorBlinkEnableFlag] = 0;
+        ReadOnlySpan<byte> ready = [18, 5, 1, 4, 25];
+        for (var i = 0; i < ready.Length; i++)
+            memory[0x1E00 + i] = ready[i];
+
+        var machine = MachineWithMemory(memory);
+        var automation = HostKeyboardAutomation.CreateBasicRun();
+        for (var i = 0; i < 30; i++)
+            automation.AdvanceFrame(machine);
+
+        Assert.Equal(4, memory[0x00C6]);
+        Assert.Equal([(byte)'R', (byte)'U', (byte)'N', 13], memory[0x0277..0x027B]);
+        Assert.Equal(0, memory[0x0400]);
+    }
+
     private sealed class MemoryBus(byte[] memory) : IBus
     {
         public byte Read(ushort address) => memory[address];

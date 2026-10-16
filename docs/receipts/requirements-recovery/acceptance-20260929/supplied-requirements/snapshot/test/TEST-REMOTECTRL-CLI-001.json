@@ -1,0 +1,36 @@
+{
+  "kind": "test",
+  "id": "TEST-REMOTECTRL-CLI-001",
+  "title": "Portable RemoteControl gRPC command line",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.\nUse a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.\nExercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.\nExercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.\nVerify capability/tree JSON and successful enabled control actions against generated gRPC contracts.\n\n## Acceptance Criteria\n- **ac-01**: Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.\n- **ac-02**: Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.\n- **ac-03**: Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.\n- **ac-04**: Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.\n- **ac-05**: Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.",
+      "isSatisfied": false
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+=== /api/Spaces-1/accounts/all ===
+=== /api/Spaces-1/feeds/all ===
+feeds-builtin Octopus Server (built-in) BuiltIn 
+feeds-builtin-releases Octopus Server Releases (built-in) OctopusProject 
+=== /api/gitcredentials ===
+Invoke-RestMethod: 
+Line |
+  14 |      $r = Invoke-RestMethod -Uri "$base$l" -Headers $headers -TimeoutS .
+     |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | 
+{
+  "ErrorMessage": "The resource you requested was not found."
+}
+=== /api/Spaces-1/lifecycles/all ===
+Lifecycles-4 AI Auto Repairman Auto Deploy  
+Lifecycles-1 Default Lifecycle  
+Lifecycles-3 EternalReddit Lifecycle  
+Lifecycles-2 FunWasHad Lifecycle  
+Lifecycles-5 RomM Auto Deploy  

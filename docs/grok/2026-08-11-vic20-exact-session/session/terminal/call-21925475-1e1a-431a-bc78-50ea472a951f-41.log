@@ -1,0 +1,23 @@
+=== run 1 ===
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual [4 s]
+  Error Message:
+Expected: 234
+Actual:   233
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 4 s - ViceSharp.TestHarness.dll 
+(net10.0)
+=== run 2 ===
+  Failed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual [4 s]
+  Error Message:
+Expected: 234
+Actual:   233
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 4 s - ViceSharp.TestHarness.dll 
+(net10.0)
+=== run 3 ===
+  Failed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual [4 s]
+  Error Message:
+Expected: 234
+Actual:   233
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 4 s - ViceSharp.TestHarness.dll 
+(net10.0)
+

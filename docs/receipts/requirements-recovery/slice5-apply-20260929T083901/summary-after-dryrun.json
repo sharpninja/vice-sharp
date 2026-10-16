@@ -1,0 +1,13 @@
+{
+  "dryOk": true,
+  "dryGet404": true,
+  "dryIdem": "slice5-dryrun-382a13f4c072",
+  "applyIdem": "slice5-apply-4db60f189336",
+  "itemCount": 279,
+  "skippedCount": 23,
+  "mappingOps": 140,
+  "deleteOps": 3,
+  "runDir": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\slice5-apply-20260929T083901",
+  "dryJsonPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\slice5-apply-20260929T083901\\dry-run-request.json",
+  "applyJsonPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\slice5-apply-20260929T083901\\apply-request.json"
+}

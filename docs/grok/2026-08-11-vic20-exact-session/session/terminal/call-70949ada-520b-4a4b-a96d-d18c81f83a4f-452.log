@@ -1,0 +1,26 @@
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:29:   DIV first=517829 
+matchedCycles=517828 budget=2216810
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:32:c=517820 nPC=$E3FB 
+mPC=$E3FB nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=0 op=$98 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:33:c=517821 nPC=$E3FB 
+mPC=$E3FB nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=5 op=$91 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:34:c=517822 nPC=$E3FD 
+mPC=$E3FD nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=4 op=$91 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:35:c=517823 nPC=$E3FD 
+mPC=$E3FD nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=3 op=$91 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:36:c=517824 nPC=$E3FD 
+mPC=$E3FD nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=2 op=$91 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:37:c=517825 nPC=$E3FD 
+mPC=$E3FD nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=1 op=$91 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:38:c=517826 nPC=$E3FD 
+mPC=$E3FD nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=0 op=$91 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:39:c=517827 nPC=$E3FD 
+mPC=$E3FD nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=4 op=$E6 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:40:c=517828 nPC=$E3FD 
+mPC=$E3FD nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$23 mP=$23 dbgCyc=3 op=$E6 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:41:c=517829 nPC=$E3FF 
+mPC=$E3FF nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$FD mS=$FD nP=$21 mP=$23 dbgCyc=2 op=$E6 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log:42:bus: m$C1=$00 
+m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+

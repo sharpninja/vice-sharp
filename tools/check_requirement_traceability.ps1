@@ -30,10 +30,14 @@ Get-ChildItem -LiteralPath $requirementsRoot -Recurse -File -Filter '*.md' | For
 
 foreach ($root in $sourceRoots) {
     Get-ChildItem -LiteralPath $root -Recurse -File | Where-Object {
-        $_.Extension -in @('.cs', '.md')
+        $_.Extension -in @('.cs', '.md') -and
+        $_.FullName -notmatch '[\\/](?:bin|obj)[\\/]'
     } | ForEach-Object {
         $relativePath = [System.IO.Path]::GetRelativePath($repoRoot, $_.FullName)
         $text = Get-Content -LiteralPath $_.FullName -Raw
+        if ($null -eq $text) {
+            $text = ''
+        }
         foreach ($match in [regex]::Matches($text, $referencePattern)) {
             $id = $match.Value
             if ($canonical.Contains($id)) {

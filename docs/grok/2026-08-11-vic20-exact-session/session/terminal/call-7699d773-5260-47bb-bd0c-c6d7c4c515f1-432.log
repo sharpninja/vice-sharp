@@ -1,0 +1,17 @@
+src\ViceSharp.Host.InProcess\Startup\Vic20RomBootstrap.cs:18:        Vic20ViceRomNames.KernalPal,
+src\ViceSharp.Host.InProcess\Startup\Vic20RomBootstrap.cs:19:        Vic20ViceRomNames.KernalNtsc,
+src\ViceSharp.Architectures\Vic20\Vic20Descriptor.cs:63:        Profile.KernalRomName,
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:36:    string KernalRomName = Vic20ViceRomNames.KernalPal,
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:80:        KernalRomName: Vic20ViceRomNames.KernalPal);
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:92:        KernalRomName: Vic20ViceRomNames.KernalNtsc);
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:17:            Vic20ViceRomNames.KernalPal,
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:34:        KernalRomName = string.IsNullOrWhiteSpace(kernalRomName)
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:35:            ? Vic20ViceRomNames.KernalPal
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:47:    public string KernalRomName { get; }
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:55:            && provider.IsAvailable(KernalRomName, Architecture)
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:19:    /// <summary>PAL KERNAL (8192 bytes) at $E000-$FFFF. VICE default for PAL.</summary>
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:20:    public const string KernalPal = "kernal.901486-07.bin";
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:22:    /// <summary>NTSC KERNAL (8192 bytes) at $E000-$FFFF. VICE default for NTSC.</summary>
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:23:    public const string KernalNtsc = "kernal.901486-06.bin";
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:26:    public const string KernalRev2 = "kernal.901486-02.bin";
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:38:    public const int KernalRomSize = 0x2000;

@@ -1,0 +1,84 @@
+{
+  "timestampUtc": "2026-09-04T03:43:43Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "workClass": "project-implementation",
+  "scope": "VIC-20 Exact-language closeout2 after 032339 DISAGREE",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "mcp": {
+    "agent": "GrokCode",
+    "sessionId": "GrokCode-20260904T033453Z-hostilevic20close",
+    "requestId": "req-20260904T033453Z-001-hostile-vic20-closeout2",
+    "beginTurnId": 43356,
+    "completeTurnStatus": "completed",
+    "persistenceProof": {
+      "method": "mcpserver__sessionlog_query",
+      "queryText": "Hostile validate VIC-20 Exact-language closeout2",
+      "totalCount": 1,
+      "turnStatus": "completed",
+      "dialogItemCount": 3,
+      "actionCount": 6,
+      "designDecisionCount": 2,
+      "filesModifiedCount": 2,
+      "blockerCount": 1,
+      "lastUpdated": "2026-09-04T03:46:58.1008421+00:00"
+    }
+  },
+  "overallVerdict": "DISAGREE",
+  "accuracyRating": 93,
+  "completenessRating": 94,
+  "failList": ["A8", "D3"],
+  "unevaluatedMandatorySurfaces": [],
+  "independentResults": {
+    "Bgra_ReadyNtsc_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "4 s testhost 8573 ms" },
+    "Index_ReadyPal_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "testhost 8160 ms" },
+    "Index_ReadyNtsc_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "testhost 7512 ms" },
+    "Index_BusyPal_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "testhost 7793 ms" },
+    "Bgra_ReadyPal_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "4 s testhost 7746 ms" },
+    "Bgra_BusyPal_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "testhost 7659 ms" },
+    "Flash040EraseLatencyTests": { "passed": 6, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "46 ms" },
+    "Vic20SnapshotRoundTripTests": { "passed": 4, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "1 s" },
+    "Vic20SoundLockstep_Tone_MatchesXvic": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "722 ms" },
+    "gitDiffCheck": { "exit": 0 },
+    "viceXvicDllNative": { "lastWriteTimeUtc": "2026-08-11T18:10:36.4494845Z", "length": 10930779 }
+  },
+  "wikiHashes": {
+    "auditEqualsWikiAudit": true,
+    "readmeEqualsProjectOverview": true,
+    "userGuideEqualsWikiUserGuide": true,
+    "iterationRoadmapEqualsWiki": true,
+    "trVic20EqualsWikiTrVic20": true,
+    "manifestGeneratedAtUtc": "2026-09-04T03:33:11.0619297+00:00"
+  },
+  "claims": [
+    { "id": "A1", "surface": "A", "summary": "Prior D1 audit L68/L88 and wiki audit SHA match Exact-scoped BGRA evidence", "verdict": "PASS" },
+    { "id": "A2", "surface": "A", "summary": "Prior D2 HANDOFF/USER-GUIDE/Iteration-Roadmap/README and wiki mirrors no longer list full-canvas BGRA Partial", "verdict": "PASS" },
+    { "id": "A3", "surface": "A", "summary": "MCP FR/TR/TEST bodies and wiki Functional/Technical/Testing after generateDocument 2026-09-04T03:33:11Z", "verdict": "PASS" },
+    { "id": "A4", "surface": "A", "summary": "Isolated index+BGRA READY PAL/NTSC/busy 1/0/0; independent Bgra_ReadyNtsc; native TryCaptureVisibleFrame", "verdict": "PASS" },
+    { "id": "A5", "surface": "A", "summary": "Flash040 6/0/0, Tone 1/0/0, snapshot 4/0/0; WriteSnapshot hang not a pass", "verdict": "PASS" },
+    { "id": "A6", "surface": "A", "summary": "git diff --check exit 0; vice_xvic.dll timestamp 2026-08-11", "verdict": "PASS" },
+    { "id": "A7", "surface": "A", "summary": "No whole-machine Exact; IEEE/rsuser/printer/niche carts/WriteSnapshot hang Explicit Missing; 10s not re-run", "verdict": "PASS" },
+    { "id": "A8", "surface": "A", "summary": "Plan hostile AGREE checkbox still [ ]; PAL/busy not this closeout", "verdict": "FAIL" },
+    { "id": "B1", "surface": "B", "summary": "Byrd v4 closeout; no FR-vs-mtime FAIL", "verdict": "PASS" },
+    { "id": "B2", "surface": "B", "summary": "Receipts re-verified by isolated named tests, hashes, MCP, git/dll", "verdict": "PASS" },
+    { "id": "B3", "surface": "B", "summary": "MCP-only TODO/session/requirements; todo.yaml not in git status", "verdict": "PASS" },
+    { "id": "B4", "surface": "B", "summary": "PowerShell only; no Python", "verdict": "PASS" },
+    { "id": "B5", "surface": "B", "summary": "Honesty on test counts and Explicit Missing; premature checkbox scored under A8/D3", "verdict": "PASS" },
+    { "id": "B6", "surface": "B", "summary": "Look-before-delete", "verdict": "N/A" },
+    { "id": "C1", "surface": "C", "summary": "FR-VIC20-001 / TR-VIC20-PIXEL-001 / TEST-VIC20-001 map exists", "verdict": "PASS" },
+    { "id": "C2", "surface": "C", "summary": "FR AC-PX-01..06 and TEST ACs including Bgra_ReadyNtsc covered by named tests", "verdict": "PASS" },
+    { "id": "D1", "surface": "D", "summary": "Audit Exact language matches READY PAL/NTSC/busy BGRA evidence", "verdict": "PASS" },
+    { "id": "D2", "surface": "D", "summary": "HANDOFF/README/USER-GUIDE/Iteration-Roadmap Exact language matches evidence", "verdict": "PASS" },
+    { "id": "D3", "surface": "D", "summary": "Independent hostile AGREE still required; 033542 docs-only AGREE plus checked box is not this closeout2", "verdict": "FAIL" }
+  ],
+  "followUpsNotOptionalForAgree": [
+    "Uncheck plan.md L41 Independent hostile AGREE",
+    "Do not treat 023329 PAL/busy or 033542 docs-only recheck as this closeout2 AGREE",
+    "Re-run closeout2 hostile after the checkbox is open, or obtain a later AGREE; this receipt is DISAGREE",
+    "Keep IEEE/rsuser/printer, niche carts, and native WriteSnapshot hang Explicit Missing"
+  ]
+}
