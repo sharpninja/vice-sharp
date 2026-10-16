@@ -18,7 +18,13 @@ done-state change is authorized. The original R0 work below remains paused.
 Private verified snapshots and incremental bundles for both worktrees are retained at
 `F:\GitHub\vice-sharp\.local-preservation\worktrees-20261016T101333`.
 Keep the branches and backups after worktree removal. Do not delete excluded Xbox work.
-Commit/push/removal results are recorded separately after execution, not predicted here.
+Completed at 2026-10-16T12:17:34: integration commit
+`8a5ca856e63ff05b971a596d0655d647db66db70` pushed to origin/main with matching remote
+readback. Both linked worktrees removed after fresh full-file hash and Git-bundle
+verification. Only the main checkout remains registered. Both original branches,
+snapshots and bundles remain recoverable. See
+[commit-push-removal.json](docs/receipts/worktree-integration/commit-push-removal.json).
+The subsequent documentation-only closeout commit does not change tested product code.
 
 ## Earlier R0/checkpoint handoff (preserved scope and history)
 

@@ -1,0 +1,42 @@
+{
+  "recordedAtLocal": "2026-10-16T12:17:34",
+  "commit": "8a5ca856e63ff05b971a596d0655d647db66db70",
+  "originVerified": true,
+  "worktrees": [
+    {
+      "source": "F:\\GitHub\\vice-sharp-romm",
+      "snapshot": "F:\\GitHub\\vice-sharp\\.local-preservation\\worktrees-20261016T101333\\vice-sharp-romm",
+      "files": 1510,
+      "hashMismatches": 0,
+      "branch": "feat/romm-integration",
+      "head": "3b422deed20e2dbed224dd8cdd6b013de3d145b3",
+      "manifestSha256": "2D82113EBA1665628D89B25616B52012913D8576C63E38C26E99B924FBBAF6AF",
+      "bundleSha256": "7AD7DB6ADF1D0FD292E7407BF170769DA1B30E9928AC49CBD381EA3AD537E5C1",
+      "verifiedAtLocal": "2026-10-16T12:17:30"
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp-romless",
+      "snapshot": "F:\\GitHub\\vice-sharp\\.local-preservation\\worktrees-20261016T101333\\vice-sharp-romless",
+      "files": 1284,
+      "hashMismatches": 0,
+      "branch": "fix/romless-vic-content",
+      "head": "7a85e95e5aa25cda82c3137e4df1cf50432d7a15",
+      "manifestSha256": "A2E0C7B10B4A706E414118A21E80D1CCD670DD794D2B6472238ACEA9C68EDDCA",
+      "bundleSha256": "04FB8673F1A92559639735C399AD0E0821EEE9CDCB283064332EF24DE27D540D",
+      "verifiedAtLocal": "2026-10-16T12:17:33"
+    }
+  ],
+  "removed": [
+    "F:\\GitHub\\vice-sharp-romm",
+    "F:\\GitHub\\vice-sharp-romless"
+  ],
+  "branchesRetained": true,
+  "backupRoot": "F:\\GitHub\\vice-sharp\\.local-preservation\\worktrees-20261016T101333",
+  "remainingWorktrees": [
+    "worktree F:/GitHub/vice-sharp",
+    "HEAD 8a5ca856e63ff05b971a596d0655d647db66db70",
+    "branch refs/heads/main",
+    ""
+  ],
+  "recovery": "Re-add a worktree on the retained branch, then overlay its verified snapshot excluding the saved .git pointer. Retain backup and bundles."
+}
