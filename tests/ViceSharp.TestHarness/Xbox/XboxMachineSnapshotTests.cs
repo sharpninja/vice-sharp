@@ -179,7 +179,7 @@ public sealed class XboxMachineSnapshotTests
         var host = new SnapshotServiceHost(registry);
         var captured = await host.CaptureSnapshotAsync(new SessionRequest(session.SessionId), ct);
         Assert.True(captured.Status.IsSuccess);
-        Assert.Equal(MachineSnapshotStager.FormatV2, captured.Snapshot!.Format);
+        Assert.Equal(MachineSnapshotStager.FormatV3, captured.Snapshot!.Format);
 
         lock (session.SyncRoot)
             Step(session.Machine, 300_000);

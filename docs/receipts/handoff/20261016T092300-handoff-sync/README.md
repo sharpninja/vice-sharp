@@ -38,3 +38,14 @@ Fetch found origin/main at `6530196ffa98e2fda691423f7d29d0f48b2d43df`, diverged 
 No new product build or emulator tests run. TestHarness invokes native/Vice.Native.proj, whose local legacy path can modify the immutable native tree. There is no claim of fresh compiled/green product acceptance. Existing failed/unrun gates remain visible in the canonical handoff. Documentation/link, publication, index, native-inventory and Git synchronization checks are operational evidence only.
 
 At `2026-10-16T09:40:24`, `validation.json` records zero excluded files left tracked, zero retained-original SHA256 mismatches, zero native status differences, unchanged native gitlink and zero broken handoff links. Final text scan covered 2,403 files / 466,500,025 bytes with no flagged findings. `git diff --cached --check` exited 2 with 13 preexisting Markdown whitespace diagnostics in four requirement documents (ten hard-break trailing-space lines and three terminal blank lines). Those pinned artifacts are preserved unchanged; this check is not reported as green. No product correctness claim is inferred from committing them.
+
+## Integration with origin
+
+Local preservation commit: `c01e6d32e8927ae5e3a8de5e28a1efa32c383a5d`, 2,499 files. A read-only `git merge-tree --write-tree` preview found five conflicts; the subsequent non-fast-forward merge had the same five paths. No history rewrite or force push is used.
+
+- `InterruptLine.cs`: retain the local edge acknowledgement method and the remote pending-edge/source capture/restore methods with unchanged bodies. This is additive merge resolution, not a new algorithm.
+- README and user guide: combine remote Linux deployment/build documentation with local launcher limitations, immutable-native warnings, plugin-only wiki guidance and strict acceptance caveats. No deployment runs.
+- `docs/wiki.yaml`: deserialize both complete documents, retain all common entries, add the remote-only `romm-library` entry, serialize the result. Both local plan entries remain. Result: 38 entries.
+- HANDOFF: preserve this chat's current R0/pause/approval state and reference a byte-exact copy of the incoming handoff. `HANDOFF.origin-main-6530196.md` hashes to the original Git blob `07657a6cf61d3c2d3622fc1dbc2f00848cb25ae9`. Other-chat product claims and instructions are attributed history, not new authority or locally re-run tests.
+
+At `2026-10-16T09:45:45`, no conflict markers remained in the five resolved files and the native status inventory was unchanged. Merge verification and actual sync results are appended to the current MCP turn. Neither preserving incoming fixes nor successful Git synchronization establishes fresh full-suite or HV acceptance.

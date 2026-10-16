@@ -1,0 +1,26 @@
+{
+  "measuredAtLocal": "2026-10-16T09:48:40",
+  "checkpoint": "c01e6d32e8927ae5e3a8de5e28a1efa32c383a5d",
+  "incoming": "6530196ffa98e2fda691423f7d29d0f48b2d43df",
+  "conflictPaths": [
+    "HANDOFF.md",
+    "README.md",
+    "docs/USER-GUIDE.md",
+    "docs/wiki.yaml",
+    "src/ViceSharp.Core/InterruptLine.cs"
+  ],
+  "unmergedPaths": [],
+  "mergeDiffCheckExit": 0,
+  "wikiDocuments": 38,
+  "wikiUniqueIds": 38,
+  "wikiSemanticDifferences": [],
+  "incomingHandoffBlob": "07657a6cf61d3c2d3622fc1dbc2f00848cb25ae9",
+  "copyHandoffBlob": "07657a6cf61d3c2d3622fc1dbc2f00848cb25ae9",
+  "nativeStatusDifferences": 0,
+  "nativeGitlinkDiff": [],
+  "scannedMergeFiles": 101,
+  "historicalCredentialMatches": [],
+  "genericScreenDisposition": "One file flagged: build/Build.cs lines 481 and 1803. Both captured values are the C# identifier Environment.GetEnvironmentVariable, not secret literals; calls read NUGET_API_KEY and CHOCO_API_KEY. False positives, no build source edit.",
+  "codeMerge": "Both preexisting InterruptLine method sets retained without body changes. No algorithm designed in this operation.",
+  "validationLimit": "No new product build, runtime test or HV; no implementation gate advanced."
+}

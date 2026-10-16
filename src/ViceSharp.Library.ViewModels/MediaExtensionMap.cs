@@ -13,9 +13,10 @@ public static class MediaExtensionMap
     private static readonly Dictionary<string, MediaMapping> Map = new(StringComparer.OrdinalIgnoreCase)
     {
         [".d64"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: true),
-        [".g64"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: true),
-        [".d71"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: true),
-        [".d81"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: true),
+        // Recognized for browsing, but the host currently has only a D64 disk parser.
+        [".g64"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: false),
+        [".d71"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: false),
+        [".d81"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: false),
         [".tap"] = new(MediaKind.Tape, MediaSlot.Tape, IsLaunchable: true),
         // T64 is a file archive (not TAP pulses). Attach materializes a single-file D64 on Drive 8.
         [".t64"] = new(MediaKind.Tape, MediaSlot.Drive8, IsLaunchable: true),
@@ -44,7 +45,7 @@ public static class MediaExtensionMap
 
     /// <summary>
     /// AC-LAUNCH-03. Whether a file can be attached and booted. Returns <c>false</c> for unknown
-    /// extensions and for a raw <c>.prg</c>.
+    /// extensions, unsupported disk formats, and a raw <c>.prg</c>.
     /// </summary>
     /// <param name="fileName">The file name to test.</param>
     public static bool IsLaunchable(string fileName) => Resolve(fileName)?.IsLaunchable ?? false;

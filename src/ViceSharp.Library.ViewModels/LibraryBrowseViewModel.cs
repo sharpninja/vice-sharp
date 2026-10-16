@@ -285,6 +285,7 @@ public sealed class LibraryBrowseViewModel : LibraryObservableObject, IDisposabl
     /// <summary>
     /// AC-LAUNCH-04/07: downloads the selected variant (two-phase status "Downloading N%" then "Starting")
     /// and hands it to the launcher for the resolved slot. A no-op when nothing launchable is selected.
+    /// Download and launch failures, including cancellation, are returned as visible failed outcomes.
     /// </summary>
     /// <param name="autostart">Whether to boot after attaching.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
@@ -308,14 +309,30 @@ public sealed class LibraryBrowseViewModel : LibraryObservableObject, IDisposabl
             StatusMessage = $"Downloading {fraction:P0}";
         });
 
-        AcquiredGame game = await _gateway
-            .DownloadAsync(tile.Id, tile.FileName, tile.SizeBytes ?? 0, _cacheDir, progress, cancellationToken)
-            .ConfigureAwait(false);
+        LaunchOutcome outcome;
+        string phase = "Download";
+        try
+        {
+            AcquiredGame game = await _gateway
+                .DownloadAsync(tile.Id, tile.FileName, tile.SizeBytes ?? 0, _cacheDir, progress, cancellationToken)
+                .ConfigureAwait(false);
 
-        StatusMessage = "Starting";
-        LaunchOutcome outcome = await _launcher
-            .LaunchAsync(game, slot, autostart, cancellationToken)
-            .ConfigureAwait(false);
+            phase = "Launch";
+            StatusMessage = "Starting";
+            outcome = await _launcher
+                .LaunchAsync(game, slot, autostart, cancellationToken)
+                .ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            outcome = new LaunchOutcome(false, "Launch canceled.");
+        }
+        catch (Exception ex)
+        {
+            // The attach button awaits this operation; a media or download failure is a
+            // retryable user-facing outcome, not an exception escaping its async handler.
+            outcome = new LaunchOutcome(false, $"{phase} failed: {ex.Message}");
+        }
 
         StatusMessage = outcome.Message;
 

@@ -6,6 +6,59 @@ using Xunit;
 public sealed class ViceDataPathResolverTests
 {
     /// <summary>
+    /// FR-CFG-002. Use case: Linux first run before XDG_DATA_HOME exists.
+    /// Acceptance: The cache resolves to the absolute user data path without creating it.
+    /// </summary>
+    [Fact]
+    public void DefaultDownloadDirectory_LinuxMissingDataHome_IsAbsolute()
+    {
+        Assert.SkipUnless(OperatingSystem.IsLinux(), "XDG data roots apply to Linux.");
+        var dataHome = Path.Combine(Path.GetTempPath(), "ViceSharpDataResolverTests", Guid.NewGuid().ToString("N"));
+        var previous = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
+        try
+        {
+            Environment.SetEnvironmentVariable("XDG_DATA_HOME", dataHome);
+            Assert.Equal(Path.Combine(dataHome, "ViceSharp", "roms"), ViceDataPathResolver.DefaultDownloadDirectory);
+            Assert.False(Directory.Exists(dataHome));
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("XDG_DATA_HOME", previous);
+        }
+    }
+
+    /// <summary>
+    /// FR-CFG-002. Use case: A configured VICE installation and downloaded cache both exist.
+    /// Acceptance: Discovery puts the configured root before the per-user cache.
+    /// </summary>
+    [Fact]
+    public void FindDataRoots_ConfiguredRootPrecedesDownloadedCache()
+    {
+        Assert.SkipUnless(OperatingSystem.IsLinux(), "Uses an isolated XDG data root.");
+        var root = CreateViceDataRoot();
+        var previousHome = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
+        var previousRoms = Environment.GetEnvironmentVariable("VICESHARP_ROM_PATH");
+        try
+        {
+            var dataHome = Path.Combine(root, "user-data");
+            var cache = Path.Combine(dataHome, "ViceSharp", "roms");
+            Directory.CreateDirectory(Path.Combine(cache, "C64"));
+            Environment.SetEnvironmentVariable("XDG_DATA_HOME", dataHome);
+            Environment.SetEnvironmentVariable("VICESHARP_ROM_PATH", root);
+
+            var roots = ViceDataPathResolver.FindDataRoots();
+            Assert.Equal(root, roots[0]);
+            Assert.True(Array.IndexOf(roots.ToArray(), cache) > 0);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("XDG_DATA_HOME", previousHome);
+            Environment.SetEnvironmentVariable("VICESHARP_ROM_PATH", previousRoms);
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// FR: FR-CFG-001.
     /// Use case: A user points ViceSharp at the root of a native VICE
     /// install, which contains machine folders such as C64 and DRIVES.

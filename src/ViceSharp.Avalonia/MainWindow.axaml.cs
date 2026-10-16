@@ -191,16 +191,24 @@ public partial class MainWindow : Window
     {
         // TR-MVVM-001 / AvaloniaBoundaryTests: do not reference Architectures or Chips
         // from the Avalonia head. PAR / content-height literals mirror VICE + VideoRenderer
-        // (PAL 0.93650794 / 272, NTSC 0.75 / 246). Profile id is the host-canonical selector
+        // (PAL 0.93650794 / 272, PAL-N 0.90769231 / 272, NTSC 0.75 / 246).
+        // Profile id is the host-canonical selector
         // already on the attach panel.
         var profileId = _attachViewModel.SelectedMachineProfile?.Id ?? string.Empty;
         // Vic20 aliases: vic20, vic20pal, vic20ntsc, xvic-ntsc (not bare C64 "pal"/"ntsc").
         var isVic20 = profileId.Contains("vic20", StringComparison.OrdinalIgnoreCase)
             || profileId.Contains("xvic", StringComparison.OrdinalIgnoreCase);
-        var isNtsc = profileId.Contains("ntsc", StringComparison.OrdinalIgnoreCase);
+        // Regional models such as the Japanese C64 and Ultimax are NTSC even
+        // though their canonical ids do not contain a video-standard suffix.
+        var canonicalProfileId = profileId.ToLowerInvariant();
+        var isNtsc = canonicalProfileId is "ntsc" or "newntsc" or "oldntsc"
+            or "sx64ntsc" or "pet64ntsc" or "ultimax" or "c64jap";
 
         // VIC-I is near-square pixels; C64 VIC-II uses classic PAL/NTSC PAR tables.
-        var pixelAspect = isVic20 ? 1.0 : (isNtsc ? 0.75 : 0.93650794);
+        var pixelAspect = isVic20 ? 1.0
+            : isNtsc ? 0.75
+            : canonicalProfileId == "paln" ? 0.90769231
+            : 0.93650794;
 
         _video.PixelAspect = pixelAspect;
         _video.AspectMode = _attachViewModel.SelectedAspectMode;
@@ -447,7 +455,7 @@ public partial class MainWindow : Window
 
         try
         {
-            var localHost = InProcessGrpcHost.StartAsync().GetAwaiter().GetResult();
+            var localHost = InProcessGrpcHost.StartAsync(provisionDefaultRoms: true).GetAwaiter().GetResult();
             return new HostConnection(new GrpcHostProtocolClient(localHost.Endpoint), localHost, localHost.VideoFrameSource);
         }
         catch (Exception ex)
@@ -874,6 +882,18 @@ public partial class MainWindow : Window
 
     private void OnMenuAbout(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
+        var closeButton = new Button
+        {
+            Content = "Close",
+            MinWidth = 80,
+            Margin = new global::Avalonia.Thickness(16),
+            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Right,
+            IsDefault = true,
+            IsCancel = true
+        };
+        DockPanel.SetDock(closeButton, Dock.Bottom);
+        var content = new DockPanel();
+        content.Children.Add(closeButton);
         // Legal text shared with the Xbox About surface (AboutInfo) so attributions
         // cannot drift between heads.
         var about = new Window
@@ -882,6 +902,10 @@ public partial class MainWindow : Window
             Width = 520,
             Height = 360,
             CanResize = true,
+            Content = content
+        };
+        content.Children.Add(new ScrollViewer
+        {
             Content = new TextBlock
             {
                 Margin = new global::Avalonia.Thickness(16),
@@ -894,7 +918,8 @@ public partial class MainWindow : Window
                     global::ViceSharp.Xbox.ViewModels.AboutInfo.SourceOfferText + "\n" +
                     global::ViceSharp.Xbox.ViewModels.AboutInfo.SourceUrl
             }
-        };
+        });
+        closeButton.Click += (_, _) => about.Close();
         about.ShowDialog(this);
     }
 

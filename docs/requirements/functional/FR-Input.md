@@ -204,6 +204,7 @@ The emulator shall use VICE keymap files to translate host keyboard events into 
 6. Invalid custom maps report diagnostics and do not replace the active map.
 7. Real-time key down/up events update the C64 keyboard matrix through the selected map without constructing UI-local emulator devices.
 8. Machine-specific keyboard translators can be registered for future non-C64 profiles.
+9. Desktop installations include all vendored C64 VICE keymap files and discover them without an external VICE installation. Explicit VICE data roots and per-user files retain priority over packaged resources.
 
 ### Source References
 
@@ -215,4 +216,4 @@ The emulator shall use VICE keymap files to translate host keyboard events into 
 - **Interfaces:** `IKeyboardInputMap`, `IKeyboardInputMapSelection`, `IKeyboardMatrix`, `IMachineKeyboardInput`, `HostInputService`
 - **Related FRs:** FR-INP-001, FR-HOST-004, FR-UI-001
 - **Technical Requirement:** TR-INPUT-VKM-001
-- **Test Suite:** `C64VkmKeyboardTests`, `HostInputServiceTests`, `GrpcInputMappingTests`
+- **Test Suite:** `C64VkmKeyboardTests`, `HostInputServiceTests`, `GrpcInputMappingTests`, `BundledKeyboardMapTests`, `tests/packaging/Verify-ArchPackage.ps1`

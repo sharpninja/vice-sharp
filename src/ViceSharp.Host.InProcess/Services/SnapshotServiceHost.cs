@@ -1,4 +1,5 @@
 using ViceSharp.Core.Snapshots;
+using ViceSharp.Core;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 
@@ -6,7 +7,7 @@ namespace ViceSharp.Host.Services;
 
 /// <summary>
 /// The host snapshot service. FIX-XSNAPWARP-001: C64 sessions capture and restore the
-/// v2 MACHINE snapshot (<see cref="MachineSnapshotStager"/>: true RAM, color RAM, 6510
+/// v3 MACHINE snapshot (<see cref="MachineSnapshotStager"/>: clock, true RAM, color RAM, 6510
 /// port, CPU, VIC, CIA1/2, SID) through the lockstep-proven chip injectors; the v1
 /// runtime snapshot's 64KB Bus.Write replay scrambled live I/O registers on restore
 /// (dead IRQ chain, the operator's "restarts in Warp mode"), so a v1 payload is
@@ -43,10 +44,12 @@ public sealed class SnapshotServiceHost : ISnapshotService
         {
             if (MachineSnapshotStager.CanSnapshot(session.Machine))
             {
-                var payload = _stager.Capture(session.Machine);
+                var hasClock = session.Machine.Clock is SystemClock;
+                var payload = hasClock ? _stager.CaptureWithClock(session.Machine) : _stager.Capture(session.Machine);
                 return ValueTask.FromResult(new CaptureSnapshotResponse(
-                    RpcStatus.Ok(),
-                    new SnapshotDto(MachineSnapshotStager.FormatV2, (ulong)session.Machine.GetState().Cycle, payload)));
+                    hasClock ? RpcStatus.Ok() : LegacyStatus(),
+                    new SnapshotDto(hasClock ? MachineSnapshotStager.FormatV3 : MachineSnapshotStager.FormatV2,
+                        (ulong)session.Machine.GetState().Cycle, payload)));
             }
 
             var snapshot = _legacyStore.Capture(session.Machine);
@@ -72,7 +75,8 @@ public sealed class SnapshotServiceHost : ISnapshotService
         {
             var isC64 = MachineSnapshotStager.CanSnapshot(session.Machine);
 
-            if (string.Equals(request.Snapshot.Format, MachineSnapshotStager.FormatV2, StringComparison.Ordinal))
+            var hasClock = string.Equals(request.Snapshot.Format, MachineSnapshotStager.FormatV3, StringComparison.Ordinal);
+            if (hasClock || string.Equals(request.Snapshot.Format, MachineSnapshotStager.FormatV2, StringComparison.Ordinal))
             {
                 if (!isC64)
                 {
@@ -81,8 +85,31 @@ public sealed class SnapshotServiceHost : ISnapshotService
                         null));
                 }
 
-                _stager.Restore(session.Machine, request.Snapshot.Payload);
-                return ValueTask.FromResult(new RestoreSnapshotResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session)));
+                if (request.Snapshot.Cycle > long.MaxValue)
+                    return ValueTask.FromResult(new RestoreSnapshotResponse(
+                        RpcStatus.InvalidArgument("Snapshot cycle exceeds the supported clock range."), null));
+                try
+                {
+                    if (hasClock)
+                        _stager.RestoreWithClock(session.Machine, request.Snapshot.Payload, request.Snapshot.Cycle);
+                    else
+                    {
+                        if (session.Machine is CoordinatorMachine rig)
+                            rig.Coordinator.ValidateLegacyPosition((long)request.Snapshot.Cycle);
+                        _stager.Restore(session.Machine, request.Snapshot.Payload);
+                        if (session.Machine is CoordinatorMachine coordinated)
+                            coordinated.Coordinator.RestoreLegacyPosition((long)request.Snapshot.Cycle);
+                        else if (session.Machine.Clock is SystemClock clock)
+                            clock.RestoreLegacyPosition((long)request.Snapshot.Cycle);
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    return ValueTask.FromResult(new RestoreSnapshotResponse(RpcStatus.InvalidArgument(ex.Message), null));
+                }
+                return ValueTask.FromResult(new RestoreSnapshotResponse(
+                    hasClock ? RpcStatus.Ok() : LegacyStatus(),
+                    HostProtocolMapper.ToStatusDto(session)));
             }
 
             if (string.Equals(request.Snapshot.Format, RuntimeSnapshotFormat, StringComparison.Ordinal))
@@ -107,4 +134,7 @@ public sealed class SnapshotServiceHost : ISnapshotService
                 null));
         }
     }
+
+    private static RpcStatus LegacyStatus() => new(RpcStatusCode.Ok,
+        "Best-effort legacy snapshot: clock positions rebased, but missing clock scheduling and peripheral state cannot be reconstructed; exact continuation is not guaranteed.");
 }

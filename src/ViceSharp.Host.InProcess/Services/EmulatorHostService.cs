@@ -45,8 +45,11 @@ public sealed class EmulatorHostService : IEmulatorHost
                     HostProtocolMapper.ToStatusDto(session)));
             }
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex) when (ex is InvalidOperationException or ArgumentException
+            or IOException or UnauthorizedAccessException)
         {
+            // FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: malformed, missing or unreadable
+            // media must retain its actionable reason across the gRPC boundary.
             return ValueTask.FromResult(new CreateEmulatorSessionResponse(
                 RpcStatus.InvalidArgument(ex.Message),
                 string.Empty,

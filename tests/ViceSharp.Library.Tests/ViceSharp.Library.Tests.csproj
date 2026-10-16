@@ -29,6 +29,8 @@
   <ItemGroup>
     <Compile Include="..\..\build\CompletionTestManifest.cs"
              Link="Build\CompletionTestManifest.cs" />
+    <Compile Include="..\..\build\UserLocalDeployment.cs"
+             Link="Build\UserLocalDeployment.cs" />
   </ItemGroup>
 
   <ItemGroup>

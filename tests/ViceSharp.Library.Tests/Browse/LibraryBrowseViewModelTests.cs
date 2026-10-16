@@ -1,6 +1,10 @@
+using System.Buffers.Binary;
+using System.Text;
 using FluentAssertions;
+using ViceSharp.Library.Tests.Adapter;
 using ViceSharp.Library.ViewModels;
 using ViceSharp.Protocol;
+using ViceSharp.RomM;
 using Xunit;
 
 namespace ViceSharp.Library.Tests.Browse;
@@ -261,6 +265,37 @@ public sealed class LibraryBrowseViewModelTests
         launcher.Calls.Should().BeEmpty();
     }
 
+    /// <summary>AC-LAUNCH-03: unsupported disks stay browsable but cannot download or launch.</summary>
+    [Theory]
+    [InlineData("g64", false)]
+    [InlineData("d71", false)]
+    [InlineData("d81", false)]
+    [InlineData("G64", true)]
+    [InlineData("D71", true)]
+    [InlineData("D81", true)]
+    [Trait("AC", "AC-LAUNCH-03")]
+    public async Task UnsupportedDisk_AttachDisabled(string extension, bool autostart)
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var handler = new FakeRomMHandler(request => request.RequestUri!.AbsolutePath == "/api/roms"
+            ? FakeRomMHandler.Json(RomMFixtures.RomsPageJson.Replace("boulderdash.d64", $"boulderdash.{extension}"))
+            : RomMFixtures.DefaultRouter(request));
+        await using var client = RomMFixtures.Client(handler);
+        var launcher = new FakeGameLauncher();
+        using var vm = new LibraryBrowseViewModel(
+            new RomMLibraryGateway(client), launcher, new FakeMachineProvider(), CacheDir);
+        await vm.InitializeAsync(ct);
+        vm.SelectedTile = vm.Items.Single(group => group.Primary.Id == 101).Primary;
+
+        vm.SelectedTile.Launchable.Should().BeFalse();
+        vm.CanAttach.Should().BeFalse();
+        LaunchOutcome outcome = await vm.AttachAsync(autostart, ct);
+
+        outcome.Success.Should().BeFalse();
+        launcher.Calls.Should().BeEmpty();
+        handler.CountPathPrefix("/api/roms/101/content/").Should().Be(0);
+    }
+
     /// <summary>AC-LAUNCH-04: attach+start invokes the launcher with the resolved slot and autostart flag.</summary>
     [Fact]
     [Trait("AC", "AC-LAUNCH-04")]
@@ -386,5 +421,180 @@ public sealed class LibraryBrowseViewModelTests
 
         downloadIndex.Should().BeGreaterThanOrEqualTo(0);
         startIndex.Should().BeGreaterThan(downloadIndex);
+    }
+
+    /// <summary>
+    /// FR-ROMM-LAUNCH-001, AC-LAUNCH-01/04/07: a T64 attach failure after download or cache reuse
+    /// becomes an outcome and visible status; retry reuses the intact file and records only success.
+    /// </summary>
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    [Trait("AC", "AC-LAUNCH-01")]
+    [Trait("AC", "AC-LAUNCH-04")]
+    [Trait("AC", "AC-LAUNCH-07")]
+    public async Task AttachT64_LaunchFailure_ReportsOutcomeAndRetries(bool cached, bool throws)
+    {
+        var ct = TestContext.Current.CancellationToken;
+        byte[] payload = CreateSyntheticT64();
+        var handler = new FakeRomMHandler(_ => FakeRomMHandler.Bytes(payload));
+        await using var client = RomMFixtures.Client(handler);
+        DirectoryInfo cache = Directory.CreateTempSubdirectory("vs-romm-t64-launch-");
+        string cachedPath = Path.Combine(cache.FullName, "101", "synthetic.t64");
+        const string failure = "True drive is unavailable.";
+        int launches = 0;
+        var launcher = new CallbackGameLauncher((game, slot, autostart, _) =>
+        {
+            game.LocalPath.Should().Be(cachedPath);
+            game.Kind.Should().Be(MediaKind.Tape);
+            slot.Should().Be(MediaSlot.Drive8);
+            autostart.Should().BeTrue();
+            File.ReadAllBytes(game.LocalPath).Should().Equal(payload);
+            if (++launches == 1)
+            {
+                return throws
+                    ? Task.FromException<LaunchOutcome>(new InvalidOperationException(failure))
+                    : Task.FromResult(new LaunchOutcome(false, failure));
+            }
+
+            return Task.FromResult(new LaunchOutcome(true, "Ready"));
+        });
+        var recents = new MemoryRecentsStore();
+        using var vm = new LibraryBrowseViewModel(
+            new RomMLibraryGateway(client), launcher, new FakeMachineProvider(), cache.FullName, recents: recents)
+        {
+            SelectedTile = Tile(101, "synthetic.t64", size: payload.Length),
+        };
+
+        try
+        {
+            if (cached)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(cachedPath)!);
+                await File.WriteAllBytesAsync(cachedPath, payload, ct);
+            }
+
+            LaunchOutcome failed = await vm.AttachAsync(autostart: true, ct);
+
+            failed.Success.Should().BeFalse();
+            failed.Message.Should().Contain(failure);
+            vm.StatusMessage.Should().Be(failed.Message);
+            vm.CanAttach.Should().BeTrue("a failed launch must remain retryable");
+            (await recents.LoadAsync(ct)).Should().BeEmpty();
+            File.ReadAllBytes(cachedPath).Should().Equal(payload);
+            handler.CountPathPrefix("/api/roms/101/content/").Should().Be(cached ? 0 : 1);
+
+            LaunchOutcome retried = await vm.AttachAsync(autostart: true, ct);
+
+            retried.Success.Should().BeTrue();
+            vm.StatusMessage.Should().Be("Ready");
+            launches.Should().Be(2);
+            handler.CountPathPrefix("/api/roms/101/content/").Should().Be(cached ? 0 : 1);
+            (await recents.LoadAsync(ct)).Should().ContainSingle().Which.Id.Should().Be(101);
+        }
+        finally
+        {
+            cache.Delete(recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// FR-ROMM-LAUNCH-001, AC-LAUNCH-01/07: an incomplete T64 download reports failure without
+    /// invoking the launcher; a later complete download can still attach successfully.
+    /// </summary>
+    [Fact]
+    [Trait("AC", "AC-LAUNCH-01")]
+    [Trait("AC", "AC-LAUNCH-07")]
+    public async Task AttachT64_DownloadFailure_ReportsOutcomeAndRetries()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        byte[] payload = CreateSyntheticT64();
+        bool truncated = true;
+        var handler = new FakeRomMHandler(_ => FakeRomMHandler.Bytes(truncated ? payload[..^1] : payload));
+        await using var client = RomMFixtures.Client(handler);
+        var launcher = new FakeGameLauncher();
+        DirectoryInfo cache = Directory.CreateTempSubdirectory("vs-romm-t64-download-");
+        using var vm = new LibraryBrowseViewModel(
+            new RomMLibraryGateway(client), launcher, new FakeMachineProvider(), cache.FullName)
+        {
+            SelectedTile = Tile(101, "synthetic.t64", size: payload.Length),
+        };
+
+        try
+        {
+            LaunchOutcome failed = await vm.AttachAsync(autostart: true, ct);
+
+            failed.Success.Should().BeFalse();
+            vm.StatusMessage.Should().Be(failed.Message);
+            failed.Message.Should().Contain("Download failed");
+            launcher.Calls.Should().BeEmpty();
+            File.Exists(Path.Combine(cache.FullName, "101", "synthetic.t64")).Should().BeFalse();
+
+            truncated = false;
+            LaunchOutcome retried = await vm.AttachAsync(autostart: true, ct);
+
+            retried.Success.Should().BeTrue();
+            vm.StatusMessage.Should().Be("Ready");
+            launcher.Calls.Should().ContainSingle();
+            File.ReadAllBytes(launcher.Calls[0].Game.LocalPath).Should().Equal(payload);
+            handler.CountPathPrefix("/api/roms/101/content/").Should().Be(2);
+        }
+        finally
+        {
+            cache.Delete(recursive: true);
+        }
+    }
+
+    /// <summary>AC-LAUNCH-07: caller cancellation is a visible failed outcome, safe for UI handlers.</summary>
+    [Fact]
+    [Trait("AC", "AC-LAUNCH-07")]
+    public async Task Attach_CanceledLaunch_ReturnsCanceledOutcome()
+    {
+        using var cancellation = new CancellationTokenSource();
+        var launcher = new CallbackGameLauncher((_, _, _, _) =>
+        {
+            cancellation.Cancel();
+            return Task.FromCanceled<LaunchOutcome>(cancellation.Token);
+        });
+        using var vm = new LibraryBrowseViewModel(
+            new FakeLibraryGateway(), launcher, new FakeMachineProvider(), CacheDir)
+        {
+            SelectedTile = Tile(101, "synthetic.t64"),
+        };
+
+        LaunchOutcome outcome = await vm.AttachAsync(autostart: true, cancellation.Token);
+
+        outcome.Success.Should().BeFalse();
+        outcome.Message.Should().Be("Launch canceled.");
+        vm.StatusMessage.Should().Be(outcome.Message);
+    }
+
+    private static byte[] CreateSyntheticT64()
+    {
+        // One PRG directory entry containing only the two-byte BASIC end marker; no game data.
+        byte[] image = new byte[98];
+        Encoding.ASCII.GetBytes("C64 tape image file").CopyTo(image, 0);
+        BinaryPrimitives.WriteUInt16LittleEndian(image.AsSpan(32), 0x0101);
+        BinaryPrimitives.WriteUInt16LittleEndian(image.AsSpan(34), 1);
+        BinaryPrimitives.WriteUInt16LittleEndian(image.AsSpan(36), 1);
+        image[64] = 1;
+        image[65] = 0x82;
+        BinaryPrimitives.WriteUInt16LittleEndian(image.AsSpan(66), 0x0801);
+        BinaryPrimitives.WriteUInt16LittleEndian(image.AsSpan(68), 0x0803);
+        BinaryPrimitives.WriteUInt32LittleEndian(image.AsSpan(72), 96);
+        Encoding.ASCII.GetBytes("SYNTHETIC").CopyTo(image, 80);
+        return image;
+    }
+
+    private sealed class CallbackGameLauncher(
+        Func<AcquiredGame, MediaSlot, bool, CancellationToken, Task<LaunchOutcome>> launch) : IGameLauncher
+    {
+        public Task<LaunchOutcome> LaunchAsync(
+            AcquiredGame game,
+            MediaSlot slot,
+            bool autostart,
+            CancellationToken cancellationToken = default) => launch(game, slot, autostart, cancellationToken);
     }
 }

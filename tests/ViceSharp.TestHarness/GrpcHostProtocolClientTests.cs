@@ -2,7 +2,11 @@ namespace ViceSharp.TestHarness;
 
 using Grpc.Core;
 using Grpc.Net.Client;
+using System.Collections.Concurrent;
 using ViceSharp.Avalonia.Host;
+using ViceSharp.Chips.IEC;
+using ViceSharp.Core;
+using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 using GrpcContracts = ViceSharp.Protocol.Grpc;
 using Xunit;
@@ -22,6 +26,147 @@ using Xunit;
 /// </summary>
 public sealed class GrpcHostProtocolClientTests
 {
+    /// <summary>
+    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: attach-only owns TrueDrive recreation, so it must
+    /// complete before reporting success rather than defer failure to a background status RPC.
+    /// </summary>
+    [Fact]
+    public async Task SetTrueDriveAsync_CompletesSessionCreationBeforeReturning()
+    {
+        await using var host = await C64MediaTestHost.StartAsync(TestContext.Current.CancellationToken);
+        using var client = new GrpcHostProtocolClient(host.Endpoint);
+
+        await client.SetTrueDriveAsync(true, 9, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(client.SessionId);
+        Assert.True(client.TrueDrive);
+        Assert.IsType<CoordinatorMachine>(Assert.Single(host.Registry.Snapshot()).Machine);
+        Assert.Equal(RpcStatusCode.Ok, (await client.GetStatusAsync(TestContext.Current.CancellationToken)).Status.Code);
+    }
+
+    /// <summary>
+    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: a rejected disk reports its original reason and
+    /// clears only that disk path; the next action can create an empty TrueDrive rig and attach again.
+    /// </summary>
+    [Fact]
+    public async Task SetTrueDriveAsync_RejectedDisk_DoesNotPoisonLaterSessions()
+    {
+        var directory = Directory.CreateTempSubdirectory("vs-client-truedrive-");
+        try
+        {
+            string invalid = Path.Combine(directory.FullName, "invalid.d64");
+            string valid = Path.Combine(directory.FullName, "valid.d64");
+            await File.WriteAllBytesAsync(invalid, [1, 2, 3], TestContext.Current.CancellationToken);
+            var disk = new D64Image();
+            disk.Format();
+            await File.WriteAllBytesAsync(valid, disk.ToArray(), TestContext.Current.CancellationToken);
+            var factory = new RecordingRuntimeFactory(C64MediaTestHost.CreateRuntimeFactory());
+            await using var host = await C64MediaTestHost.StartAsync(TestContext.Current.CancellationToken, factory);
+            using var client = new GrpcHostProtocolClient(host.Endpoint);
+
+            var error = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await client.SetTrueDriveAsync(true, 9, invalid, TestContext.Current.CancellationToken));
+
+            Assert.Contains("D64 disk image must be", error.Message);
+            Assert.True(client.TrueDrive);
+            Assert.Empty(client.SessionId);
+            Assert.Empty(host.Registry.Snapshot());
+
+            var recovered = await client.GetStatusAsync(TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.Ok, recovered.Status.Code);
+            Assert.IsType<CoordinatorMachine>(Assert.Single(host.Registry.Snapshot()).Machine);
+            var requests = factory.Requests.ToArray();
+            Assert.Equal(2, requests.Length);
+            Assert.Equal(invalid, requests[0].TrueDriveDiskImagePath);
+            Assert.Empty(requests[1].TrueDriveDiskImagePath);
+            Assert.True(requests[1].TrueDrive);
+            Assert.Equal(9, requests[1].TrueDriveDevice);
+
+            await client.SetTrueDriveAsync(true, 9, valid, TestContext.Current.CancellationToken);
+            var media = await client.ListMediaAsync(TestContext.Current.CancellationToken);
+            Assert.Equal(RpcStatusCode.Ok, media.Status.Code);
+            Assert.Contains(media.Attachments, attachment => attachment.Slot == MediaSlot.Drive9
+                && attachment.FilePath == valid && attachment.AppliedToRuntime);
+        }
+        finally
+        {
+            directory.Delete(recursive: true);
+        }
+    }
+
+    /// <summary>FR-DRVTRUE-001: transport failure/cancellation does not discard a valid requested disk.</summary>
+    [Theory]
+    [InlineData(StatusCode.Unavailable)]
+    [InlineData(StatusCode.Cancelled)]
+    public async Task SetTrueDriveAsync_TransportFailure_PreservesDiskForRetry(StatusCode failureCode)
+    {
+        var directory = Directory.CreateTempSubdirectory("vs-client-truedrive-transport-");
+        try
+        {
+            string path = Path.Combine(directory.FullName, "synthetic.d64");
+            var disk = new D64Image();
+            disk.Format();
+            await File.WriteAllBytesAsync(path, disk.ToArray(), TestContext.Current.CancellationToken);
+            var factory = new RecordingRuntimeFactory(C64MediaTestHost.CreateRuntimeFactory())
+            {
+                NextFailure = new RpcException(new Status(failureCode, "Synthetic transport failure.")),
+            };
+            await using var host = await C64MediaTestHost.StartAsync(TestContext.Current.CancellationToken, factory);
+            using var client = new GrpcHostProtocolClient(host.Endpoint);
+
+            var failure = await Assert.ThrowsAsync<RpcException>(async () =>
+                await client.SetTrueDriveAsync(true, 8, path, TestContext.Current.CancellationToken));
+
+            Assert.Equal(failureCode, failure.StatusCode);
+            Assert.True(client.TrueDrive);
+            Assert.Empty(client.SessionId);
+            await client.SetTrueDriveAsync(true, 8, path, TestContext.Current.CancellationToken);
+            Assert.NotEmpty(client.SessionId);
+            Assert.Equal(RpcStatusCode.Ok, (await client.GetStatusAsync(TestContext.Current.CancellationToken)).Status.Code);
+            Assert.Equal(2, factory.Requests.Count);
+            Assert.All(factory.Requests, request => Assert.Equal(path, request.TrueDriveDiskImagePath));
+        }
+        finally
+        {
+            directory.Delete(recursive: true);
+        }
+    }
+
+    /// <summary>FR-DRVTRUE-001: an already-canceled configuration change preserves the active rig.</summary>
+    [Fact]
+    public async Task SetTrueDriveAsync_PreCanceled_PreservesCurrentSessionAndSelection()
+    {
+        await using var host = await C64MediaTestHost.StartAsync(TestContext.Current.CancellationToken);
+        using var client = new GrpcHostProtocolClient(host.Endpoint);
+        await client.SetTrueDriveAsync(true, cancellationToken: TestContext.Current.CancellationToken);
+        await client.GetStatusAsync(TestContext.Current.CancellationToken);
+        string sessionId = client.SessionId;
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await client.SetTrueDriveAsync(false, cancellationToken: cancellation.Token));
+
+        Assert.True(client.TrueDrive);
+        Assert.Equal(sessionId, client.SessionId);
+        Assert.Equal(sessionId, Assert.Single(host.Registry.Snapshot()).SessionId);
+    }
+
+    private sealed class RecordingRuntimeFactory(IEmulatorRuntimeFactory inner) : IEmulatorRuntimeFactory
+    {
+        public ConcurrentQueue<CreateEmulatorSessionRequest> Requests { get; } = new();
+        public Exception? NextFailure { get; init; }
+
+        public EmulatorRuntimeSession Create(CreateEmulatorSessionRequest request)
+        {
+            Requests.Enqueue(request);
+            if (Requests.Count == 1 && NextFailure is { } error)
+                throw error;
+            return inner.Create(request);
+        }
+    }
+
     /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 GrpcHostProtocolClient).
     /// Use case: The Avalonia shell constructs a
@@ -59,7 +204,7 @@ public sealed class GrpcHostProtocolClientTests
     [Fact]
     public async Task SetTrueDriveAsync_RecreatesSessionOverProtocol()
     {
-        await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
+        await using var host = await C64MediaTestHost.StartAsync(TestContext.Current.CancellationToken);
         using var client = new GrpcHostProtocolClient(host.Endpoint);
 
         await client.GetStatusAsync(TestContext.Current.CancellationToken);
@@ -74,6 +219,7 @@ public sealed class GrpcHostProtocolClientTests
         Assert.Equal(RpcStatusCode.Ok, afterToggle.Status.Code);
         Assert.False(string.IsNullOrWhiteSpace(client.SessionId));
         Assert.NotEqual(firstSession, client.SessionId);
+        Assert.IsType<CoordinatorMachine>(Assert.Single(host.Registry.Snapshot()).Machine);
     }
 
     /// <summary>

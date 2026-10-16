@@ -177,7 +177,8 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
     // the machine. While nothing is recording the tap is a transparent pass-through.
     //
     // CRITICAL (parity): only install the tap when a REAL audio device exists. On
-    // non-Windows / headless / test hosts CreateDefault() returns null, and we must
+    // unsupported, device-unavailable, or non-opted-in headless/test hosts,
+    // CreateDefault() returns null, and we must
     // pass null through to the SID (not a tap wrapping null) so the SID never
     // touches the audio path - otherwise it would emit samples and become an audio
     // timing source, perturbing cycle-accurate parity and pacing tests.
@@ -229,7 +230,7 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
             : MinimalHostArchitectureDescriptor.ArchitectureId;
     }
 
-    private static bool TryFindC64RomBasePath(out string romBasePath)
+    internal static bool TryFindC64RomBasePath(out string romBasePath)
         => TryFindRomBasePath(out romBasePath, requireC64: true, requireVic20: false);
 
     private static bool TryFindRomBasePath(out string romBasePath, bool requireC64, bool requireVic20)

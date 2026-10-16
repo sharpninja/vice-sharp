@@ -3,7 +3,7 @@ using ViceSharp.Chips.Cpu;
 
 namespace ViceSharp.Core;
 
-public sealed class SystemClock : IClock
+public sealed partial class SystemClock : IClock
 {
     // PERF-CLOCK-001: pre-sorted dispatch arrays eliminate per-cycle Phase/ClockDivisor
     // virtual property reads and long modulo from the hot TickPhase path.

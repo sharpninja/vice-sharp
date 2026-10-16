@@ -27,6 +27,7 @@ public sealed class ShellViewModelTests
         host.ColdResetAsync(Arg.Any<CancellationToken>()).Returns(Command());
         host.WarmResetAsync(Arg.Any<CancellationToken>()).Returns(Command());
         host.ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>()).Returns(Command());
+        host.SetLimiterRateAsync(Arg.Any<double>(), Arg.Any<CancellationToken>()).Returns(Command());
         host.LoadProgramAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ValueTask<LoadProgramResponse>(
                 new LoadProgramResponse(RpcStatus.Ok(), 0, 0, false, null)));
@@ -52,6 +53,10 @@ public sealed class ShellViewModelTests
 
     private static MediaAttachmentDto Attachment(MediaSlot slot, string path)
         => new(slot, path, Path.GetFileName(path), IsAttached: true, IsReadOnly: false, AppliedToRuntime: true);
+
+    // Picker/drop inputs are local paths, so fixtures must use the current platform's separators.
+    private static string MediaPath(string fileName)
+        => Path.Combine(Path.GetTempPath(), "vicesharp-shell-tests", fileName);
 
     /// <summary>
     /// FR: FR-MED-001, TR: TR-MEDIA-001, TEST-MED-001 (x64sc screenshot parity).
@@ -114,7 +119,8 @@ public sealed class ShellViewModelTests
     /// the corresponding view-model state and push the change through the host
     /// settings pipeline.
     /// Acceptance: ToggleWarpAsync flips IsWarpMode and SwapJoysticksAsync flips
-    /// SwapJoystickPorts, and each results in an UpdateSettings host call.
+    /// SwapJoystickPorts, and each results in an UpdateSettings host call with
+    /// the limiter held at zero while warp is enabled.
     /// </summary>
     [Fact]
     public async Task WarpAndSwapJoysticks_ToggleVmStateAndApply()
@@ -125,12 +131,20 @@ public sealed class ShellViewModelTests
         Assert.False(panel.IsWarpMode);
         await shell.ToggleWarpAsync(ct);
         Assert.True(panel.IsWarpMode);
+        await host.Received(1).UpdateSettingsAsync(
+            Arg.Is<UpdateSettingsRequest>(request => request.Limiter != null && !request.Limiter.IsEnabled),
+            Arg.Any<CancellationToken>());
+        await host.Received(1).SetLimiterRateAsync(0, Arg.Any<CancellationToken>());
 
         Assert.False(panel.SwapJoystickPorts);
         await shell.SwapJoysticksAsync(ct);
         Assert.True(panel.SwapJoystickPorts);
 
-        await host.Received().UpdateSettingsAsync(Arg.Any<UpdateSettingsRequest>(), Arg.Any<CancellationToken>());
+        await host.Received(2).UpdateSettingsAsync(Arg.Any<UpdateSettingsRequest>(), Arg.Any<CancellationToken>());
+        await host.Received(1).UpdateSettingsAsync(
+            Arg.Is<UpdateSettingsRequest>(request => request.Input != null && request.Input.SwapJoystickPorts),
+            Arg.Any<CancellationToken>());
+        await host.Received(2).SetLimiterRateAsync(0, Arg.Any<CancellationToken>());
     }
 
     /// <summary>
@@ -213,7 +227,7 @@ public sealed class ShellViewModelTests
     public async Task AttachCommand_PicksThenRoutesToHost()
     {
         var (shell, host, panel) = CreateShell();
-        panel.FilePicker = _ => Task.FromResult<string?>(@"C:\does-not-exist\demo.d64");
+        panel.FilePicker = _ => Task.FromResult<string?>(MediaPath("demo.d64"));
 
         await shell.AttachAsync(MediaSlot.Drive8, TestContext.Current.CancellationToken);
 
@@ -232,7 +246,7 @@ public sealed class ShellViewModelTests
     public async Task DropAndStartFile_D64_AttachesDrive8AndAutostarts()
     {
         var (shell, host, panel) = CreateShell();
-        var path = @"C:\games\demo.d64";
+        var path = MediaPath("demo.d64");
         host.AttachMediaAsync(MediaSlot.Drive8, path, Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(new ValueTask<AttachMediaResponse>(
                 new AttachMediaResponse(RpcStatus.Ok(), Attachment(MediaSlot.Drive8, path))));
@@ -261,7 +275,7 @@ public sealed class ShellViewModelTests
     public async Task DropAndStartFile_Crt_AttachesCartridgeAndColdResets()
     {
         var (shell, host, panel) = CreateShell();
-        var path = @"C:\games\fastload.CRT";
+        var path = MediaPath("fastload.CRT");
         host.AttachMediaAsync(MediaSlot.Cartridge, path, Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(new ValueTask<AttachMediaResponse>(
                 new AttachMediaResponse(RpcStatus.Ok(), Attachment(MediaSlot.Cartridge, path))));
@@ -311,7 +325,7 @@ public sealed class ShellViewModelTests
         var focusCount = 0;
         shell.FocusEmulator = () => focusCount++;
 
-        var status = await shell.DropAndStartFileAsync(@"C:\notes\readme.txt", TestContext.Current.CancellationToken);
+        var status = await shell.DropAndStartFileAsync(MediaPath("readme.txt"), TestContext.Current.CancellationToken);
 
         Assert.Equal(RpcStatusCode.InvalidArgument, status.Code);
         Assert.Equal("Unsupported media file: readme.txt", panel.StatusText);
@@ -334,10 +348,10 @@ public sealed class ShellViewModelTests
     {
         var (shell, _, _) = CreateShell();
 
-        Assert.True(shell.IsDropStartSupported(@"C:\games\hello.prg"));
-        Assert.True(shell.IsDropStartSupported(@"C:\games\demo.D64"));
-        Assert.True(shell.IsDropStartSupported(@"C:\games\fastload.crt"));
-        Assert.False(shell.IsDropStartSupported(@"C:\notes\readme.txt"));
+        Assert.True(shell.IsDropStartSupported(MediaPath("hello.prg")));
+        Assert.True(shell.IsDropStartSupported(MediaPath("demo.D64")));
+        Assert.True(shell.IsDropStartSupported(MediaPath("fastload.crt")));
+        Assert.False(shell.IsDropStartSupported(MediaPath("readme.txt")));
         Assert.False(shell.IsDropStartSupported(null));
         Assert.False(shell.IsDropStartSupported(""));
     }
@@ -354,7 +368,7 @@ public sealed class ShellViewModelTests
     public async Task DropAndStartFile_Prg_LoadsIntoCurrentSessionWithoutAttach()
     {
         var (shell, host, panel) = CreateShell();
-        var path = @"C:\games\hello.prg";
+        var path = MediaPath("hello.prg");
         host.LoadProgramAsync(path, Arg.Any<CancellationToken>())
             .Returns(new ValueTask<LoadProgramResponse>(
                 new LoadProgramResponse(RpcStatus.Ok(), 0x0801, 12, true, null)));
@@ -383,7 +397,7 @@ public sealed class ShellViewModelTests
     public async Task DropAndStartFile_Prg_ReportsLoadedWhenHostDoesNotRun()
     {
         var (shell, host, panel) = CreateShell();
-        var path = @"C:\games\ml.PRG";
+        var path = MediaPath("ml.PRG");
         host.LoadProgramAsync(path, Arg.Any<CancellationToken>())
             .Returns(new ValueTask<LoadProgramResponse>(
                 new LoadProgramResponse(RpcStatus.Ok(), 0xC000, 3, false, null)));

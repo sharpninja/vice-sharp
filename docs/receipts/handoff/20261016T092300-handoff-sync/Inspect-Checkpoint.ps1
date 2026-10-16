@@ -2,12 +2,17 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$WorkspacePath,
-    [string[]]$ExcludePaths = @()
+    [string[]]$ExcludePaths = @(),
+    [string[]]$CandidatePaths
 )
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path -LiteralPath $WorkspacePath).ProviderPath
-$gitPaths = @(& git -C $root -c color.ui=false -c core.quotepath=false ls-files --modified --others --exclude-standard | Sort-Object -Unique)
-if ($LASTEXITCODE -ne 0) { throw 'Cannot enumerate checkpoint candidates.' }
+if ($PSBoundParameters.ContainsKey('CandidatePaths')) {
+    $gitPaths = @($CandidatePaths | Sort-Object -Unique)
+} else {
+    $gitPaths = @(& git -C $root -c color.ui=false -c core.quotepath=false ls-files --modified --others --exclude-standard | Sort-Object -Unique)
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot enumerate checkpoint candidates.' }
+}
 $excluded = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
 foreach ($entry in $ExcludePaths) { [void]$excluded.Add($entry.Replace('\', '/')) }
 $marker = Get-Content -LiteralPath (Join-Path $root 'AGENTS-README-FIRST.yaml') -Raw | ConvertFrom-Yaml

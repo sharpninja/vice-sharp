@@ -1,6 +1,7 @@
 namespace ViceSharp.TestHarness;
 
 using ViceSharp.Core;
+using ViceSharp.Chips.IEC;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;
 using ViceSharp.Protocol;
@@ -182,6 +183,159 @@ public sealed class MediaServiceHostTests
     }
 
     /// <summary>
+    /// FR-DRVTRUE-001 / FR-IECLOAD-001: attaching a T64 converts its first program to D64.
+    /// The attachment DTO must retain a readable D64 path after the old session is removed,
+    /// because True Drive recreation reopens that path rather than the in-memory payload.
+    /// Preserve the source archive, display name, read-only flag, and extracted program bytes.
+    /// </summary>
+    [Theory]
+    [InlineData(MediaSlot.Drive8, false)]
+    [InlineData(MediaSlot.Tape, false)]
+    [InlineData(MediaSlot.Drive8, true)]
+    public async Task AttachMediaAsync_T64_ReturnsD64PathForTrueDriveRecreation(
+        MediaSlot requestedSlot,
+        bool inlinePayload)
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ViceSharp.Tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        var sourcePath = Path.Combine(directory, "original.t64");
+        byte[] original = BuildMinimalT64();
+        File.WriteAllBytes(sourcePath, original);
+        string? effectivePath = null;
+
+        try
+        {
+            var registry = new EmulatorRuntimeRegistry();
+            var session = CreateMinimalSession();
+            registry.Add(session);
+            var service = new MediaServiceHost(registry);
+            const string displayName = "Synthetic tape.t64";
+
+            var response = await service.AttachMediaAsync(
+                new AttachMediaRequest(
+                    session.SessionId,
+                    requestedSlot,
+                    inlinePayload ? string.Empty : sourcePath,
+                    displayName,
+                    IsReadOnly: true,
+                    Payload: inlinePayload ? original : null),
+                TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+            Assert.NotNull(response.Attachment);
+            effectivePath = response.Attachment.FilePath;
+            Assert.Equal(MediaSlot.Drive8, response.Attachment.Slot);
+            Assert.Equal(displayName, response.Attachment.DisplayName);
+            Assert.True(response.Attachment.IsReadOnly);
+            Assert.Equal(original, File.ReadAllBytes(sourcePath));
+
+            var listed = await new MediaServiceHost(registry).ListMediaAsync(
+                new SessionRequest(session.SessionId), TestContext.Current.CancellationToken);
+            Assert.Equal(response.Attachment, Assert.Single(listed.Attachments));
+            Assert.True(registry.Remove(session.SessionId));
+
+            // This is the same D64 loader used when the True Drive rig reopens the DTO path.
+            var reopened = new D64Image(File.ReadAllBytes(effectivePath));
+            _ = new D64DiskImageDevice(reopened);
+            Assert.Equal(".d64", Path.GetExtension(effectivePath));
+            Assert.NotEqual(sourcePath, effectivePath);
+            var fileSystem = new D64FileSystem(reopened);
+            Assert.True(fileSystem.TryFindFile("*"u8, out D64DirectoryEntry entry));
+            Assert.Equal(
+                new byte[] { 0x01, 0x08, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17 },
+                fileSystem.ReadFileStream(entry.StartTrack, entry.StartSector));
+
+            var replacement = CreateMinimalSession();
+            registry.Add(replacement);
+            var reattached = await new MediaServiceHost(registry).AttachMediaAsync(
+                new AttachMediaRequest(replacement.SessionId, MediaSlot.Drive8, effectivePath, displayName),
+                TestContext.Current.CancellationToken);
+            Assert.Equal(RpcStatusCode.Ok, reattached.Status.Code);
+            Assert.Equal(effectivePath, reattached.Attachment!.FilePath);
+            Assert.Equal(original, File.ReadAllBytes(sourcePath));
+        }
+        finally
+        {
+            if (effectivePath is not null && effectivePath != sourcePath)
+                File.Delete(effectivePath);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// FR-DRVTRUE-001 / FR-IECLOAD-001: a normal D64 keeps its original path and bytes,
+    /// so adding durable T64 conversion does not redirect ordinary disk attachments.
+    /// </summary>
+    [Fact]
+    public async Task AttachMediaAsync_D64_PreservesOriginalPathAndBytes()
+    {
+        var sourcePath = Path.Combine(Path.GetTempPath(), $"ViceSharp-disk-{Guid.NewGuid():N}.d64");
+        byte[] original = D64SingleFileBuilder.FromPrg(new byte[] { 0x01, 0x08, 0x60 }, "PROGRAM");
+        File.WriteAllBytes(sourcePath, original);
+        try
+        {
+            var registry = new EmulatorRuntimeRegistry();
+            var session = CreateMinimalSession();
+            registry.Add(session);
+
+            var response = await new MediaServiceHost(registry).AttachMediaAsync(
+                new AttachMediaRequest(session.SessionId, MediaSlot.Drive8, sourcePath, "Existing disk.d64"),
+                TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+            Assert.NotNull(response.Attachment);
+            Assert.Equal(sourcePath, response.Attachment.FilePath);
+            Assert.Equal("Existing disk.d64", response.Attachment.DisplayName);
+            Assert.Equal(original, File.ReadAllBytes(sourcePath));
+            _ = new D64DiskImageDevice(new D64Image(File.ReadAllBytes(response.Attachment.FilePath)));
+        }
+        finally
+        {
+            File.Delete(sourcePath);
+        }
+    }
+
+    /// <summary>
+    /// FR-DRVTRUE-001 / FR-IECLOAD-001: malformed T64 data is rejected without creating
+    /// an attachment or modifying the source file, whether its directory or data offset is invalid.
+    /// </summary>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task AttachMediaAsync_MalformedT64_RejectsWithoutChangingSource(bool truncatedDirectory)
+    {
+        byte[] original = BuildMinimalT64();
+        if (truncatedDirectory)
+            original = original[..80];
+        else
+            original[0x48] = 0xFF; // The sole program points beyond the end of this archive.
+        var sourcePath = Path.Combine(Path.GetTempPath(), $"ViceSharp-invalid-{Guid.NewGuid():N}.t64");
+        File.WriteAllBytes(sourcePath, original);
+        try
+        {
+            var registry = new EmulatorRuntimeRegistry();
+            var session = CreateMinimalSession();
+            registry.Add(session);
+            var service = new MediaServiceHost(registry);
+
+            var response = await service.AttachMediaAsync(
+                new AttachMediaRequest(session.SessionId, MediaSlot.Tape, sourcePath),
+                TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);
+            Assert.Null(response.Attachment);
+            Assert.Equal(original, File.ReadAllBytes(sourcePath));
+            var listed = await service.ListMediaAsync(
+                new SessionRequest(session.SessionId), TestContext.Current.CancellationToken);
+            Assert.Empty(listed.Attachments);
+        }
+        finally
+        {
+            File.Delete(sourcePath);
+        }
+    }
+
+    /// <summary>
     /// FR/TR: FR-MED (BACKFILL-HOSTUI-001 Media RPC).
     /// Use case: A client calls AttachMedia targeting a MediaSlot value
     /// that is not defined in the enum (e.g. a future-proofing or
@@ -358,5 +512,26 @@ public sealed class MediaServiceHostTests
             [MinimalHostArchitectureDescriptor.Instance],
             MinimalHostArchitectureDescriptor.ArchitectureId);
         return factory.Create(new CreateEmulatorSessionRequest());
+    }
+
+    private static byte[] BuildMinimalT64()
+    {
+        var image = new byte[104]; // 64-byte header, one 32-byte entry, eight program bytes.
+        "C64S tape image file"u8.CopyTo(image);
+        image[0x20] = 1;
+        image[0x21] = 1;
+        image[0x22] = 1;
+        image[0x24] = 1;
+        image[0x40] = 1;
+        image[0x41] = 0x82;
+        image[0x42] = 0x01;
+        image[0x43] = 0x08;
+        image[0x44] = 0x09;
+        image[0x45] = 0x08;
+        image[0x48] = 96;
+        "PROGRAM"u8.CopyTo(image.AsSpan(0x50));
+        for (var index = 0; index < 8; index++)
+            image[96 + index] = (byte)(0x10 + index);
+        return image;
     }
 }

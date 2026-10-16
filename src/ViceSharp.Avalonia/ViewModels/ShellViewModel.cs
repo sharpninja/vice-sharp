@@ -196,7 +196,7 @@ public sealed class ShellViewModel : IGameLaunchTarget
         }
 
         await Panel.AttachAsync(target, filePath, ct).ConfigureAwait(true);
-        if (!target.IsAttached)
+        if (!target.IsAttached || target.HasValidationError)
         {
             var reason = string.IsNullOrWhiteSpace(target.ValidationError)
                 ? Panel.StatusText
@@ -242,7 +242,7 @@ public sealed class ShellViewModel : IGameLaunchTarget
         }
 
         await Panel.AttachAsync(target, filePath, ct).ConfigureAwait(true);
-        if (target.IsAttached)
+        if (target.IsAttached && !target.HasValidationError)
         {
             return RpcStatus.Ok();
         }

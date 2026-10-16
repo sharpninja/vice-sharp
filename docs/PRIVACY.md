@@ -1,6 +1,6 @@
 # Privacy Policy (ViceSharp)
 
-**Effective date:** 2026-08-05  
+**Effective date:** 2026-10-15  
 **Product:** ViceSharp (desktop Avalonia host, Xbox UWP host, libraries, and related tools)  
 **Publisher:** sharpninja / Payton Byrd  
 **Contact:** via https://github.com/sharpninja/vice-sharp/issues  
@@ -12,7 +12,7 @@ This policy describes how ViceSharp handles information when you use the applica
 - ViceSharp does **not** create a ViceSharp account.
 - ViceSharp does **not** sell personal data.
 - Most data stays **on your device**.
-- Network use is limited to **endpoints you configure** or that you choose to use (for example ROM download mirrors and a RomM library server).
+- Local desktop startup downloads missing default C64 firmware from the project's hash-pinned VICE GitHub mirror. Other network features use the endpoints you configure or select, such as a RomM library server.
 - Commodore system ROMs and game media are **your responsibility**; the app does not ship copyrighted Commodore ROM images.
 
 ## Information stored on your device
@@ -21,11 +21,13 @@ Depending on platform and features you use, ViceSharp may store locally:
 
 - Application settings (machine model, audio/video preferences, input bindings, UI preferences).
 - Paths or handles to media you attach (disks, tapes, cartridges) when you choose to open them.
-- Optional **RomM connection** details you provide (server URL, authentication token or credentials you enter). Tokens are stored so you do not re-enter them every session; treat them like passwords on a shared device.
+- Optional **RomM connection** details you provide. Linux stores the server URL and a keyring identifier in per-user metadata, while the token is held by Secret Service. Windows protects saved tokens with current-user DPAPI. If secure storage is unavailable, the connection can remain usable for the current session, but its token is not saved in plaintext.
 - Optional **recent items** or library cache files (downloaded game images and cover art cached for offline launch).
 - Diagnostic or log data you enable for troubleshooting (if present in a given build).
 
 On Xbox / UWP, app data typically lives under the app's sandboxed local storage. On desktop, settings and caches use the host's configured local data folders.
+
+On Linux, settings, firmware and the RomM download cache use `$XDG_DATA_HOME/ViceSharp` (normally `~/.local/share/ViceSharp`). User-local application releases are stored separately under `$XDG_DATA_HOME/vicesharp`; redeployment preserves the data directory and earlier releases.
 
 ## Network activity
 
@@ -33,7 +35,7 @@ ViceSharp may open network connections when you use features that require them:
 
 | Activity | When | Destination |
 | --- | --- | --- |
-| ROM acquisition | You start a download / provision flow | HTTPS hosts you or the project configure (for example verified VICE data mirrors). See [ROMs.md](ROMs.md). |
+| ROM acquisition | Local desktop startup needs missing default C64 firmware, or you start a provision flow | The hash-pinned VICE GitHub mirror for default C64 firmware; other configured sources for explicit provisioning. Existing verified local firmware can be reused offline. See [ROMs.md](ROMs.md). |
 | RomM library browse / download | You connect a RomM server | The **base URL you configure** (often a server on your LAN or self-hosted instance). |
 | RomM LAN discovery | You use "Scan LAN" | Local network probes to find a RomM service; requires local network permission on UWP. |
 | CSDb discovery / ingest | You use CSDb features | CSDb-related endpoints via RomM.Client.Csdb and/or a **csdb-bridge** you run; traffic depends on your setup. |
@@ -48,7 +50,7 @@ The Xbox / Store package may declare:
 - **internetClient** - HTTPS downloads and remote library access.
 - **privateNetworkClientServer** - LAN discovery and connection to a RomM server on your private network.
 
-You can decline or limit network features by not using library/download flows and by not granting local-network access where the OS prompts.
+You can avoid default desktop firmware downloads by providing an existing ROM set through `VICESHARP_ROM_PATH` or `VICE_DATA_PATH`, or by retaining the verified firmware cache. Library and discovery connections are controlled separately by their connection and scan actions and by local-network permissions where the OS prompts.
 
 ## Children
 

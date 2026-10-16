@@ -43,7 +43,10 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         _cacheDir = cacheDir ?? throw new ArgumentNullException(nameof(cacheDir));
         Directory.CreateDirectory(_cacheDir);
         string stateDir = Path.GetDirectoryName(_cacheDir) ?? _cacheDir;
-        _connectionStore = new FileRomMConnectionStore(Path.Combine(stateDir, "romm-connection.json"));
+        var connectionPath = Path.Combine(stateDir, "romm-connection.json");
+        _connectionStore = OperatingSystem.IsLinux()
+            ? new LinuxSecretServiceRomMConnectionStore(connectionPath)
+            : new FileRomMConnectionStore(connectionPath);
         _recentsStore = new FileRecentsStore(Path.Combine(stateDir, "romm-recents.json"));
     }
 
@@ -329,9 +332,9 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
                         cancellationToken)
                     .ConfigureAwait(true);
             }
-            catch
+            catch (Exception ex)
             {
-                // best-effort
+                Status = $"Connected; credentials could not be saved ({ex.Message}).";
             }
 
             RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
@@ -423,14 +426,37 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
             return new LaunchOutcome(false, "Not connected.");
         }
 
-        LaunchOutcome outcome = await Browse.AttachAsync(autostart, cancellationToken).ConfigureAwait(true);
-        Status = Browse.StatusMessage;
-        if (outcome.Success)
+        try
         {
-            RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
-        }
+            LaunchOutcome outcome = await Browse.AttachAsync(autostart, cancellationToken).ConfigureAwait(true);
+            Status = Browse.StatusMessage;
+            if (outcome.Success)
+            {
+                try
+                {
+                    RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+                }
+                catch (Exception ex)
+                {
+                    // FR-ROMM-RECENTS-001: a display refresh cannot undo a successful launch
+                    // or throw out of the LibraryView attach button's async event handler.
+                    Status = $"{outcome.Message} Recent games could not be refreshed: {ex.Message}".TrimStart();
+                }
+            }
 
-        return outcome;
+            return outcome;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            Status = "Launch canceled.";
+            return new LaunchOutcome(false, Status);
+        }
+        catch (Exception ex)
+        {
+            // FR-ROMM-LAUNCH-001 / AC-LAUNCH-06: this is the desktop user-action boundary.
+            Status = $"Attach failed: {ex.Message}";
+            return new LaunchOutcome(false, Status);
+        }
     }
 
     /// <summary>Loads members for a collection (or Recents) into <see cref="ListMemberTiles"/>.</summary>

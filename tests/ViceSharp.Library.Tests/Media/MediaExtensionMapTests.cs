@@ -16,8 +16,6 @@ public sealed class MediaExtensionMapTests
     [Theory]
     [Trait("AC", "AC-LAUNCH-02")]
     [InlineData("boulderdash.d64", MediaSlot.Drive8, MediaKind.Disk, true)]
-    [InlineData("game.g64", MediaSlot.Drive8, MediaKind.Disk, true)]
-    [InlineData("side.d81", MediaSlot.Drive8, MediaKind.Disk, true)]
     [InlineData("creatures.tap", MediaSlot.Tape, MediaKind.Tape, true)]
     [InlineData("game.t64", MediaSlot.Drive8, MediaKind.Tape, true)]
     [InlineData("wizball.crt", MediaSlot.Cartridge, MediaKind.Cartridge, true)]
@@ -44,6 +42,25 @@ public sealed class MediaExtensionMapTests
         mapping.Value.Slot.Should().BeNull();
         mapping.Value.IsLaunchable.Should().BeFalse();
         MediaExtensionMap.IsLaunchable("hello.prg").Should().BeFalse();
+    }
+
+    /// <summary>AC-LAUNCH-03: recognized disk formats without a host parser cannot be launched.</summary>
+    [Theory]
+    [Trait("AC", "AC-LAUNCH-03")]
+    [InlineData("game.g64")]
+    [InlineData("game.d71")]
+    [InlineData("game.d81")]
+    [InlineData("GAME.G64")]
+    [InlineData("GAME.D71")]
+    [InlineData("GAME.D81")]
+    public void UnsupportedDiskFormat_NotLaunchable(string fileName)
+    {
+        MediaMapping? mapping = MediaExtensionMap.Resolve(fileName);
+
+        mapping.Should().NotBeNull();
+        mapping!.Value.Kind.Should().Be(MediaKind.Disk);
+        mapping.Value.IsLaunchable.Should().BeFalse();
+        MediaExtensionMap.IsLaunchable(fileName).Should().BeFalse();
     }
 
     /// <summary>AC-LAUNCH-02: an unknown extension resolves to null (not attachable).</summary>

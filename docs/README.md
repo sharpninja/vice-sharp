@@ -6,6 +6,7 @@
 - [FlashCart-Builder.md](FlashCart-Builder.md) - VIC-20 FE3 / Ultimem / Mega-Cart flash image builder for the Avalonia product UI
 - [VICE-MIGRATION.md](VICE-MIGRATION.md) - swap classic VICE for ViceSharp: binary + flag mapping, behaviour caveats, bug compatibility
 - [ROMs.md](ROMs.md) - legal ROM options, environment variable, expected directory layout
+- [RomM Library](../src/ViceSharp.RomM/README.md) - connect, browse, cache and launch library images, with platform credential storage
 - [PRIVACY.md](PRIVACY.md) - privacy policy (historical Store listing source; Microsoft Store track cancelled)
 
 ## Archival (cancelled tracks)

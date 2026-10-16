@@ -14,9 +14,9 @@ ViceSharp is a clean-room C# port informed by VICE's architecture and behavior, 
 
 - **License:** GPL-2.0-or-later
 - **Origin:** VICE `data/C64/*.vkm` keyboard mapping files
-- **Redistributed in:** the Xbox (UWP) head packages these under `Assets/vice-data/C64/*.vkm`
+- **Redistributed in:** the desktop head packages these under `data/C64/*.vkm`; the Xbox (UWP) head packages these under `Assets/vice-data/C64/*.vkm`
 
-The C64 keyboard keymap files (`*.vkm`) shipped with the ViceSharp Xbox head are verbatim GPL-2.0-or-later VICE data. They are redistributed here unmodified, under the same GPL-2.0-or-later license as the VICE project, so the emulator can seed its writable keymap folder on first run. No Commodore ROM images (`kernal-*.bin`, `basic-*.bin`, `chargen-*.bin`) are bundled; ROMs remain user-provided or fetched at runtime.
+The C64 keyboard keymap files (`*.vkm`) shipped with ViceSharp are verbatim GPL-2.0-or-later VICE data. They are redistributed here unmodified, under the same GPL-2.0-or-later license as the VICE project. The desktop discovers the packaged files directly; the Xbox head seeds its writable keymap folder on first run. No Commodore ROM images (`kernal-*.bin`, `basic-*.bin`, `chargen-*.bin`) are bundled; ROMs remain user-provided or fetched at runtime.
 
 ### Bundled PetMe64 font (`PetMe64.ttf`)
 

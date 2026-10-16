@@ -49,10 +49,17 @@ public sealed class MediaServiceHost : IMediaService
             if (!string.IsNullOrEmpty(validationError))
                 return ValueTask.FromResult(new AttachMediaResponse(RpcStatus.InvalidArgument(validationError), null));
 
-            var appliedToRuntime = TryApplyMediaToRuntime(session, effectiveSlot, runtimePayload, mediaPath, out var applyError);
             var displayName = string.IsNullOrWhiteSpace(request.DisplayName)
                 ? Path.GetFileName(mediaPath)
                 : request.DisplayName;
+            if (effectiveSlot == MediaSlot.Drive8 && !ReferenceEquals(runtimePayload, payload))
+            {
+                // T64 validation converts to D64. Session recreation reopens FilePath, so keep
+                // those converted bytes in the host cache beyond the original session's lifetime.
+                mediaPath = WritePayloadToHostCache(runtimePayload, "converted.d64");
+            }
+
+            var appliedToRuntime = TryApplyMediaToRuntime(session, effectiveSlot, runtimePayload, mediaPath, out var applyError);
             var attachment = new MediaAttachmentDto(
                 effectiveSlot,
                 mediaPath,
@@ -123,10 +130,15 @@ public sealed class MediaServiceHost : IMediaService
         var displayName = string.IsNullOrWhiteSpace(request.DisplayName)
             ? $"{request.Slot.ToString().ToLowerInvariant()}-{Guid.NewGuid():N}.bin"
             : Path.GetFileName(request.DisplayName);
+        return WritePayloadToHostCache(request.Payload!, displayName);
+    }
+
+    private static string WritePayloadToHostCache(byte[] payload, string fileName)
+    {
         var directory = Path.Combine(Path.GetTempPath(), "ViceSharp", "media");
         Directory.CreateDirectory(directory);
-        var filePath = Path.Combine(directory, $"{Guid.NewGuid():N}-{displayName}");
-        File.WriteAllBytes(filePath, request.Payload!);
+        var filePath = Path.Combine(directory, $"{Guid.NewGuid():N}-{fileName}");
+        File.WriteAllBytes(filePath, payload);
         return filePath;
     }
 
