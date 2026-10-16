@@ -1,0 +1,204 @@
+{
+  "timestampLocal": "2026-10-08T13:53:54-05:00",
+  "scope": "Evidence/documentation and current corrective audit records only",
+  "requestId": "req-20261008T184031Z-prompt-336a",
+  "localCorrections": [
+    "F-04 native stdout retention claim",
+    "F-05 native RESET log correlation",
+    "F-06 binary mock chronology",
+    "F-11 explicit missing historical evidence",
+    "F-14 current corrective decision records with unchanged history"
+  ],
+  "changedFiles": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\README.md",
+      "sha256": "EFCD7BA2544B6B06A66AB3B59A1BA0918F157120BFDEB6FE62E71322DB4EC723"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+      "sha256": "9E9DFB8A920C6766F372675E442B336C1B46A0B0A44581085ACBE05936437BD5"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\README.md",
+      "sha256": "05CDA7597462CFF21E81887AD027BC4306AF15603195E0515CF72DC7D67B30A7"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-runtime\\README.md",
+      "sha256": "4B3248B94F450DA5D18A55673BEC60FBF8728F3F5F6E6B3381CABF7C9B1455D0"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.VsfCompatibility.Tests\\BINARY-MONITOR-SLICE.md",
+      "sha256": "A901E04AC57D75EB182E50A9C2B351F76781F8B13DE9EE26932A07A66437AB59"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+      "sha256": "D83C1D816C113D93235F813B52B47302971BA5799F574FC98547A97E9893D5F8"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "62D2EB5BF31200320026786004CE378688005FE45F3B66DD5152E1A6FDDD9EFE"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\README.md",
+      "sha256": "631CF8634A6EFC8C7C9AC1649E6116AF25A352E429A05733C02CD6C8C2004DD8"
+    }
+  ],
+  "preimages": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\preimage-copy-proof.json",
+  "historicalEvidenceReadback": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-evidence-readback.json",
+  "unchangedHistoricalFiles": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\permissions-a\\stdout.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\permissions-b\\stdout.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-eof\\stdout.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-invalid\\stdout.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-uppercase\\stdout.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-newline\\stdout.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-nul\\stdout.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100\\stdout.log",
+      "sha256": "A27F157C76125A97B61F2408C86A8C0775C9374C9429BA55C773812B9415539E",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100000-a\\stdout.log",
+      "sha256": "E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100000-b\\stdout.log",
+      "sha256": "E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-01\\result.json",
+      "sha256": "1C9A5638ED1B8840A666551F2382BE9083AE2A02AAD8334F263D10853C51CBF4",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-01\\binary-mock-01.trx",
+      "sha256": "50E532A64966FD5C93ABD55729FAE92C41853D1AFA41F552E3642E7C4424B1F5",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-02\\result.json",
+      "sha256": "15E754005F666B0DD97244DE71E369E19B6A78A3D7739DF170591D1B0D4DBCEC",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-02\\binary-mock-02.trx",
+      "sha256": "79B7FCA998CCE761049B2A54273741433E06C1EEB97AC9A5A1A8A7CF26D3BA61",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-03\\result.json",
+      "sha256": "7F8A8B6E4885E0D70C74A27FE09C78D0077623425DF8963E5B0DF549B5B650C9",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-03\\binary-mock-03.trx",
+      "sha256": "A0E9EB38DA3305E2F519E64355D7E521C0783527C3DF6726C941547D9DB2D9F0",
+      "unchanged": true
+    }
+  ],
+  "historicalTurnPreservation": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-turn-preservation-proof.json",
+  "exactCorrectiveDecisionPairs": 11,
+  "primaryCorrectiveReadback": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\current-corrective-decision-readback.json",
+  "compileCheck": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\comment-compile-02-result.json",
+  "compileExitCode": 0,
+  "firstCompileFailureRetained": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\comment-compile-result.json",
+  "nativeAndStockIntegrity": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\integrity-result.json",
+  "nativeUnchanged": true,
+  "stockOriginalFilesUnchanged": 3847,
+  "stockLinkInputsUnchanged": 99,
+  "originalProbeUnchanged": true,
+  "gitDiffCheckExitCode": 0,
+  "whitespaceChecks": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\README.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\README.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-runtime\\README.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.VsfCompatibility.Tests\\BINARY-MONITOR-SLICE.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\README.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    }
+  ],
+  "productionLogicChanged": false,
+  "testsChanged": false,
+  "runtimeRerun": false,
+  "testSuiteRerun": false,
+  "phaseAdvanced": false,
+  "hostileAccepted": false,
+  "remainingObligations": [
+    "Native stdout retention and stdio adapter mock-first coverage before behavior changes or harness integration",
+    "Original helper preimage and historical clock compiler log remain unavailable; later runs are not historical reconstruction",
+    "Current corrective records do not make historical logging retroactively compliant",
+    "All same-review findings and full original real-emulator acceptance gates still require independent acceptance"
+  ]
+}

@@ -1,0 +1,556 @@
+{
+  "timestampLocal": "2026-10-08T11:05:57.7633000-05:00",
+  "executable": "C:\\msys64\\mingw64\\bin\\c++.exe",
+  "arguments": [
+    "-Wl,--wrap=vic_cycle",
+    "-Wl,--trace-symbol=vic_cycle",
+    "-Wl,--trace-symbol=__wrap_vic_cycle",
+    "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\clock-observer.o",
+    "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\gate-observer.o",
+    "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\clock-gate.o",
+    "-std=c++11",
+    "-fopenmp",
+    "-g",
+    "-O3",
+    "-W",
+    "-Wall",
+    "-Wextra",
+    "-Wformat",
+    "-Wformat-signedness",
+    "-Wformat-security",
+    "-Wshadow",
+    "-Wpointer-arith",
+    "-Wmissing-prototypes",
+    "-Wstrict-prototypes",
+    "-Wuninitialized",
+    "-Wmissing-field-initializers",
+    "-Wunreachable-code",
+    "-Werror=implicit-function-declaration",
+    "-Wfatal-errors",
+    "-Wdiscarded-qualifiers",
+    "-Wno-unknown-pragmas",
+    "-Wunused-but-set-variable",
+    "-Wno-sign-compare",
+    "-Wno-ignored-qualifiers",
+    "-Wno-unused-parameter",
+    "-Wall",
+    "-Wno-unused-parameter",
+    "-Wno-sign-compare",
+    "-fopenmp",
+    "-o",
+    "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\xvic-gate-probe.exe",
+    "alarm.o",
+    "attach.o",
+    "autostart.o",
+    "autostart-prg.o",
+    "cbmdos.o",
+    "cbmimage.o",
+    "charset.o",
+    "clipboard.o",
+    "cmdline.o",
+    "color.o",
+    "crc32.o",
+    "crt.o",
+    "debug.o",
+    "dma.o",
+    "event.o",
+    "findpath.o",
+    "fliplist.o",
+    "gcr.o",
+    "info.o",
+    "init.o",
+    "initcmdline.o",
+    "interrupt.o",
+    "kbdbuf.o",
+    "keyboard.o",
+    "keymap.o",
+    "lib.o",
+    "log.o",
+    "machine-bus.o",
+    "machine.o",
+    "main.o",
+    "mainlock.o",
+    "m3u.o",
+    "network.o",
+    "opencbmlib.o",
+    "palette.o",
+    "profiler.o",
+    "ram.o",
+    "rawfile.o",
+    "rawnet.o",
+    "resources.o",
+    "romset.o",
+    "screenshot.o",
+    "sha1.o",
+    "snapshot.o",
+    "socket.o",
+    "sound.o",
+    "sysfile.o",
+    "traps.o",
+    "util.o",
+    "vicefeatures.o",
+    "vsync.o",
+    "zfile.o",
+    "zipcode.o",
+    "midi.o",
+    "../src/arch/shared/libarchdep.a",
+    "../src/tapeport/libtapeport.a",
+    "../src/datasette/libdatasette.a",
+    "../src/vic20/cart/libvic20cart.a",
+    "../src/vic20/libvic20.a",
+    "../src/c64/cart/libc64commoncart.a",
+    "../src/vic20/cart/libmascuerade.a",
+    "../src/drive/iec/libdriveiec.a",
+    "../src/drive/iecieee/libdriveiecieee.a",
+    "../src/drive/ieee/libdriveieee.a",
+    "../src/drive/libdrive.a",
+    "../src/drive/tcbm/libdrivetcbm.a",
+    "../src/lib/p64/libp64.a",
+    "../src/iecbus/libiecbus.a",
+    "../src/parallel/libparallel.a",
+    "../src/vdrive/libvdrive.a",
+    "../src/monitor/libmonitor.a",
+    "../src/sid/libsid.a",
+    "../src/joyport/libjoyport.a",
+    "../src/samplerdrv/libsamplerdrv.a",
+    "../src/arch/shared/sounddrv/libsounddrv.a",
+    "../src/arch/shared/mididrv/libmididrv.a",
+    "../src/arch/shared/socketdrv/libsocketdrv.a",
+    "../src/arch/shared/hwsiddrv/libhwsiddrv.a",
+    "../src/gfxoutputdrv/libgfxoutputdrv.a",
+    "../src/printerdrv/libprinterdrv.a",
+    "../src/diskimage/libdiskimage.a",
+    "../src/fsdevice/libfsdevice.a",
+    "../src/tape/libtape.a",
+    "../src/fileio/libfileio.a",
+    "../src/serial/libserial.a",
+    "../src/core/libcore.a",
+    "../src/rs232drv/librs232drv.a",
+    "../src/raster/libraster.a",
+    "../src/userport/libuserport.a",
+    "../src/diag/libdiag.a",
+    "../src/core/rtc/librtc.a",
+    "../src/video/libvideo.a",
+    "../src/arch/headless/libarch.a",
+    "../src/imagecontents/libimagecontents.a",
+    "../src/vic20/libvic20stubs.a",
+    "../src/resid/libresid.a",
+    "../src/hvsc/libhvsc.a",
+    "../src/lib/libzmbv/libzmbv.a",
+    "-ldsound",
+    "-lpng",
+    "-lz",
+    "../src/arch/headless/libarch.a",
+    "../src/arch/shared/libarchdep.a",
+    "../src/lib/linenoise-ng/liblinenoiseng.a",
+    "../src/vic20/cart/libmascuerade.a",
+    "-lm",
+    "-liconv",
+    "-lwinmm",
+    "-lntdll",
+    "-ld2d1",
+    "-ld3d11",
+    "-lavrt",
+    "-lws2_32",
+    "-lcurl"
+  ],
+  "workingDirectory": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src",
+  "stockInputs": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\arch\\headless\\libarch.a",
+      "sha256": "AC0D1C09628F4A845BF7FB63DA53AB34D6957CE0886A9D6C9D3D53B55BF61585"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\arch\\shared\\hwsiddrv\\libhwsiddrv.a",
+      "sha256": "13EC6305ABBE3DB8830B2CD201644E1F4A117CEC06057A022274DF3A0500CDC1"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\arch\\shared\\libarchdep.a",
+      "sha256": "C7CE7161FEB04BA93C2B67C0941F93C582F542E4BAC02C6CAA27BC186F11C151"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\arch\\shared\\mididrv\\libmididrv.a",
+      "sha256": "004BB742654416271EF2E0E92677BB87CCFA0283B115457D9D345F1CB4FE9A90"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\arch\\shared\\socketdrv\\libsocketdrv.a",
+      "sha256": "204B8552DD8CBD7B86E275D4E90E6A7666181B364F15DC4864A954920E5C5516"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\arch\\shared\\sounddrv\\libsounddrv.a",
+      "sha256": "E2CB15ABA275357F2A1E5B241A3B154876DD4F67558B7B6B9B074F61C42FDCF8"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\cart\\libc64commoncart.a",
+      "sha256": "E333BCAF1207AF0CB87866D39180AA30F4A17305A357CE9DAFE5322EC68FDD97"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\libcore.a",
+      "sha256": "62D90788A72399B83CC32BDD4E3541DF31971A1EB1D45C97F611212052142E38"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\rtc\\librtc.a",
+      "sha256": "DC9D202A01721BED5681D917A550B83A56DB3942A73D33AE3142E1BE6BC4F0D6"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\libdatasette.a",
+      "sha256": "82019258CF93D95962DC477D0FE08476CCE703EB87A4D36F4ED7B982CD122448"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diag\\libdiag.a",
+      "sha256": "B0AD692A88424582DA28509CF82AA6F1E03770D65A55B09D2841F676FB19023F"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\libdiskimage.a",
+      "sha256": "31732E117C6248F32A8F5C6383E235C18EADF2D1F91253E108FCEF766B4543EA"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\iec\\libdriveiec.a",
+      "sha256": "EA74D2F644FE53582493715F8A014C7EAB9AB296D38140C83684A4A105D809BE"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\iecieee\\libdriveiecieee.a",
+      "sha256": "5240936A053737A175D4E838AE1A05D37564561FA13EAD72F560E2DD07FA0EAE"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\ieee\\libdriveieee.a",
+      "sha256": "F3594B8143EECFB114EA59DD027E3E92B9C34B382CE2C497EC6FD91FF7600972"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\libdrive.a",
+      "sha256": "8B9DD56842C36B7DFE9DCBBD1970CCF2C4B78F30750BB320F0943F74BB6F41DD"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\tcbm\\libdrivetcbm.a",
+      "sha256": "73398A3FE9D4920A22225B8F6FFAB9A7A2818D1A0A31B1F80A1CE25613BB5277"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\fileio\\libfileio.a",
+      "sha256": "7E9B834E6B16FBF7A5CDB98145576EC33B9339465FC918934CF627293D8B25E1"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\fsdevice\\libfsdevice.a",
+      "sha256": "ADC024A12D62EC056B274C153A2710BA50034940E1831B4D5A9A5498348DDD29"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\gfxoutputdrv\\libgfxoutputdrv.a",
+      "sha256": "BEE1CB6EB65E2D7C5523867D3931F582F8215BA54B41192D2A540C17E085BCEC"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\hvsc\\libhvsc.a",
+      "sha256": "951F9119B9A2829A515DE2FEFC2F99AA5A4C55683EEABD6B18A4321F78348648"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\iecbus\\libiecbus.a",
+      "sha256": "5E8316EDFFDD3EF65AE3F2941406E72B5135CE5B222F1436D2D5A314845C86B6"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\imagecontents\\libimagecontents.a",
+      "sha256": "0B32321BD57281568CDD39D20912EF6D999A50CBA110203198BB1713D26A25ED"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\joyport\\libjoyport.a",
+      "sha256": "977E5906FA8E5F52540D687ED1BB906F676FDC64A957D3F1EC43521D06F3EFC5"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\lib\\libzmbv\\libzmbv.a",
+      "sha256": "F3AE3B4E64F7799BED83703737D12898E85BC24382BA9E5481EE68C01F6CED0A"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\lib\\linenoise-ng\\liblinenoiseng.a",
+      "sha256": "4D657463DD421808D6900F8793D785BF83A8333078A5CC3D047BB22DB128DC2D"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\lib\\p64\\libp64.a",
+      "sha256": "3FE72229564221E431B1FBF494BE3D447476C84C7A6FCB11887976BA496AF662"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\monitor\\libmonitor.a",
+      "sha256": "E21D73ABBCB3A4D68ED265F08915C084416705D1F02D3B8843E0CAE5BE12A40C"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\parallel\\libparallel.a",
+      "sha256": "F7CA1D33EBC3FDEB670500F1DE134749127FF2B706F91D11362B803024EC6A32"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\printerdrv\\libprinterdrv.a",
+      "sha256": "511E727B0ABBF374222BF3EF1191E8F7C44CA0C8F7786F12D6779284645B926C"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\raster\\libraster.a",
+      "sha256": "C150516EF149168A5AD119738D5CB0B157A8A8FD9FDC7524267BC5B897393339"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\resid\\libresid.a",
+      "sha256": "41A2DD20E6C0F8EB98025D233F13C547C6088CCAD3278C0F17915AD98BB69744"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\rs232drv\\librs232drv.a",
+      "sha256": "80F3CED84A9E49D2BA5828ACD39C0F1C512FC0CA4F79C68C570394B2B56D2D17"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\samplerdrv\\libsamplerdrv.a",
+      "sha256": "FFDFAAE877EBFC8D8D8A898442A9DB543718AFABC6153D054478F5820B2E4CC5"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\serial\\libserial.a",
+      "sha256": "B31A8C7D748AC3F3A1D976850856FD4D04BF65E64392C5FCF2843CB678A3B2AD"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\sid\\libsid.a",
+      "sha256": "281DF596C0D132918A18E9B4451AF9916504DE5F381E6F7AD2B461DC30832A28"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tape\\libtape.a",
+      "sha256": "5713AC1542A496B8AF5C060CD0BCE3888F7A4357EBB2F8B9E88885FE08EA28FE"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\libtapeport.a",
+      "sha256": "CF369EA5378BE399B53B2DF1379D07051D13B0A6235A6C0E75241E8EBFAD93F7"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\userport\\libuserport.a",
+      "sha256": "D160ECF716F6CD85C2FDE5A206B75BC83AB754A3C347FC583C04CC29375CB276"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vdrive\\libvdrive.a",
+      "sha256": "EB11B2239BAAD52288F4150D4D61F64E8000D204069445705EF9214CB3BE1120"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\cart\\libmascuerade.a",
+      "sha256": "057C08C205722621021A36B4506263720EE96CCC73BB3C2DD4CCF69EE5F89FE0"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\cart\\libvic20cart.a",
+      "sha256": "63C4A1B2749265ACA2EE270CC26BCF5124DBC6E19151ABF406AE7E0148975EAC"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\libvic20.a",
+      "sha256": "BA2CFD1B73BB63AAD3A1252CFF5FC08BDE221B7B818C3EC60CA2E6CA8CE84BA6"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\libvic20stubs.a",
+      "sha256": "EB44C498F1BBB7D434044689507049C6685A47774F95C1CE95C1C6ECC7E91D1F"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\video\\libvideo.a",
+      "sha256": "F3A144AC9251C1A4449AAAA083F78D8E0394640A97923157B35778BBB6F75E63"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\alarm.o",
+      "sha256": "37B76E513E19A0AFCA538EBCAC3086AC66CA0CD10E0F638D430477B8136D8BC6"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\attach.o",
+      "sha256": "7C12E5ADA415F06B5155384102B5C20741A3AAD30A116C570D5F3255C512EF5E"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\autostart-prg.o",
+      "sha256": "FEB780193C5C0C0A94AA81FFC503AEAF9A73BA4778F5E062BFE10ECA92C2F1F5"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\autostart.o",
+      "sha256": "72F087CB115156A987F515DDB9ADA4074C969C75E2FDF72AE307942486E82956"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\cbmdos.o",
+      "sha256": "C46CEEC6D8465A6A23DBEAE1EFC9E583C72BBD595EB740D516A75CE307F58860"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\cbmimage.o",
+      "sha256": "2151E717639FA2D16F19836D675063198641817353C68A2EF5553E8CDE9D746A"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\charset.o",
+      "sha256": "1111F00AC320BFBB1F72278D3216B0774F2E9478B344FB871502A492522960E7"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\clipboard.o",
+      "sha256": "9A04FB01E92408DBF4BB26A686BBA83BF5465D2D2BCE89501BDDE833DCD1FEF4"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\cmdline.o",
+      "sha256": "4E2F10AB023CCE255A1F91FA707CC3ADD87514BA1AB566CB2168A99F41B9C143"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\color.o",
+      "sha256": "9D5218C9556D957BB0817FA8A9E5B12F620564F754926EB2FD01F1C0704ADE4E"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\crc32.o",
+      "sha256": "043AECB542DC39BB0CD2195477D9AF19ED40D392F7BBD6B7401240576C08CDC3"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\crt.o",
+      "sha256": "96C34C71ABE46B7833D50FD4D770DDF36231C239B3C6C8DA8BC420653C5EDD82"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\debug.o",
+      "sha256": "95900DBE04022FF6B84A657F6F7728EFDB8959AC42C5831BC9C3458D9C7B2938"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\dma.o",
+      "sha256": "53D21B0724C2B2019BF5E7F314DCBE1FC8B9B85F631C078A26647AD6DBDCF547"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\event.o",
+      "sha256": "70E6B1080B08F100BA76454F3ECA981B6627EA7A832C552E9B93D17115213924"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\findpath.o",
+      "sha256": "8B18C7906A06D3C8D4C4B18D8E8E1B640237B53776D4AB48DE614C267FA0BBAE"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\fliplist.o",
+      "sha256": "BEC4B941ADE57381A9655916BB74FCDB77DCEBBFAC9B122AFA22DE5344CF515C"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\gcr.o",
+      "sha256": "2A8285FA6AA620C9705FA71CF2979E00521DF69EC57116D4F797AF9FB234F9FA"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\info.o",
+      "sha256": "0A3AA97371315CD76A227DEDF482F709636227145D8C1443ADFA9B7538029561"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\init.o",
+      "sha256": "990FF67CF86C223AB4A0EA1C8E4763D8F5B144E7A9D0649303D1C353C5F84672"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\initcmdline.o",
+      "sha256": "3B508E9C03D5AF7F5E281A485A0A473ACC637B24AA9AE11C1F33A26F73BCC0CD"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\interrupt.o",
+      "sha256": "DFA2E6C4BA05F3C50AB2822411E56CE88B4CEB4FC2FF61775098239315F59291"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\kbdbuf.o",
+      "sha256": "BB451CB136C3869969F433C0CA5B046803C6A66D628954CB2E94F0C6AC7437B6"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\keyboard.o",
+      "sha256": "C2D2E43802AD445C6A480E9E1BB1270A1BFC317C774B1676F165C0C3ACD61C37"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\keymap.o",
+      "sha256": "D342FDC7116771D8178C48DFFAC132B98FE083C48FBD887AFF7DBE52D3C01712"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\lib.o",
+      "sha256": "3047F3AF9716443D5B83F90A8CCB6E5882316297234258AABB28DC797C5C74DC"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\log.o",
+      "sha256": "9D303C7E2F622A541EE99E6874038F5DDF83C647D48DD91DEB723879ACF39FB1"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\m3u.o",
+      "sha256": "B1CFE118DF97A0764C634C359013985DE0BFDB9D9312293DD7B020FD8AC2CE91"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\machine-bus.o",
+      "sha256": "D96152B148CA43D09E8E1CBC1502FE29FE67BF2562C6989EA5C8DF4B93AAF0B4"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\machine.o",
+      "sha256": "C7AD7DA3292A88450CEEA7F42C69C31797881650672F4B78E4B8DEB3DCE61A2C"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\main.o",
+      "sha256": "D6E71258859495590EB2C9ABE9A1DE8CD67E0B37B8704E130C5D177C3544DC2C"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\mainlock.o",
+      "sha256": "001CB54EB166F11CA232FFDED0D11542CB2AC6E54FCD5733BE47ECADC4AF2AA9"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\midi.o",
+      "sha256": "B2359C7FDFB94319B5B5B67B5064EAF06A6FD1DE3C510CEAE9C6F644E6752285"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\network.o",
+      "sha256": "1DF6CD94F387A3A06A880C5EA77DD831C85AE3DECC8EB13BB50A0DA1725F1CFC"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\opencbmlib.o",
+      "sha256": "8DD0229BA868D913ED72655E96341BFC9C7DACA9DBF20F4791D98A91C6538F6C"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\palette.o",
+      "sha256": "B81C0E055496F4EB69CAAD98DD75C210421DC886CB3074652E7F6ABBE21DCDE4"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\profiler.o",
+      "sha256": "E557950E3107C433EED089165F564BA303AEE0F3806AE271A49A23F63E63AAFB"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\ram.o",
+      "sha256": "212F91DC2DD6943090530E154F4EADE9D9DB45B387903A9F6EE4BE682EE76B2D"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\rawfile.o",
+      "sha256": "08AA71F175E7B9C6C040C0206576171A56B863DD1E86F9B8EF6972582144D504"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\rawnet.o",
+      "sha256": "2459FEE1BA176E8985D0EE4BA63076EBB86EBFC5268F7EE31DDA076464CB4E48"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\resources.o",
+      "sha256": "D24E72F0CEEAA349DC4D387CBA7A0D9B158255CA64BBB4EA192460C5F72EED00"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\romset.o",
+      "sha256": "62D2072BFE055F8E0195997832F4FA1BA0206C9C6174B83A9F96A96760047A36"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\screenshot.o",
+      "sha256": "4E75ACCFEEA5DB5C895AF7CCAE6BB06C75A37B4AD1C17242879095C5B04F0CAD"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\sha1.o",
+      "sha256": "F5773ED095A35DD23663B4E600A76602464F263FE69F791DEEEA456628B69AD4"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\snapshot.o",
+      "sha256": "8C4A0BBD58E9A6ADC67A4C6376EC5F81B517382F24F1C4B5AC5447EAA038BD67"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\socket.o",
+      "sha256": "E8CA62DE576EEE3C6086EE0522D877B0B2F56C4F4D0805578A0F060D278C1FB7"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\sound.o",
+      "sha256": "ACF8599BC31D980E134626261364109DDC0E78D032B8C6C924E6AC9B0F637CFA"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\sysfile.o",
+      "sha256": "237A4BEE0DCCFB7CC865B59BBA98D59A2F86CB4D104D81768746C800BA69B0F2"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\traps.o",
+      "sha256": "07AF5F7B38067BAB3617DEED6C68E1080B69908F244BA55BFC391174FCEB124A"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\util.o",
+      "sha256": "30C70B1DB3E85F821F2CBB382B347E10C640543885117EF072145595AFAF3511"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vicefeatures.o",
+      "sha256": "34B08C728FD4406A2F6E4549C2F3687D52F7B314FFDFB76711964E707D63CAAF"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vsync.o",
+      "sha256": "D41B575994CDF846BD9F7F40D12F25469B8B3A612DE29104254F73C01EAF513A"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\zfile.o",
+      "sha256": "5C3408D403BD7644DDE5164E792A2A4281B72F67BA2755334A075E55C63417E6"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\zipcode.o",
+      "sha256": "1772F5C0CAF239FAD945504A834D41C90DB6158B46B0F123096CCE9761143C93"
+    }
+  ]
+}

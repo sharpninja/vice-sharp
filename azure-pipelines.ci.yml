@@ -42,8 +42,8 @@ stages:
               }
               $url = if ($env:OCTOPUS_URL) { $env:OCTOPUS_URL.TrimEnd('/') } else { 'http://PAYTON-LEGION2:8066' }
               if (-not (Test-NetConnection -ComputerName ([uri]$url).Host -Port ([uri]$url).Port -InformationLevel Quiet -WarningAction SilentlyContinue -ErrorAction SilentlyContinue)) {
-                # LEGION2 may be offline; fall back to PAYTON-DESKTOP Octopus.
-                $url = 'http://payton-desktop:8065'
+                # LEGION2 may be offline; fall back to LAB-OMARCHY Octopus.
+                $url = 'http://LAB-OMARCHY:8065'
               }
               $env:OCTOPUS_URL = $url
               $env:OCTOPUS_SPACE = if ($env:OCTOPUS_SPACE) { $env:OCTOPUS_SPACE } else { 'Default' }

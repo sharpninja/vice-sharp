@@ -2,7 +2,7 @@
 
 A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emulator) targeting .NET 10.
 
-> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`. **Iteration 2 (VIC-20)** every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` is green for **10 s PAL** (11_084_050 cycles) and **10 s NTSC** (10_227_270 cycles). See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md) and [HANDOFF.md](HANDOFF.md).
+> **Parity is under active re-audit.** Native VICE is the immutable behavioral oracle. Historical C64 and VIC-20 lockstep receipts prove bounded slices only; they do not establish whole-emulator parity. Canonical native VICE `.vsf` save/load remains a required, open product gate. See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md), [PLAN-VICE-IMMUTABLE-001](docs/plans/PLAN-VICE-IMMUTABLE-001.md), and [PLAN-VSFLOCKSTEP-001](docs/plans/PLAN-VSFLOCKSTEP-001.md).
 
 ## Quick Start
 
@@ -22,7 +22,7 @@ dotnet run --project src/ViceSharp.Console -- `
     --cycles 1000000
 ```
 
-Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compatible argument parsing and binary-name topology dispatch (`x64`, `x64sc`, `c1541`), consumed by `ViceSharp.Console`, which accepts the usual `-8`, `-9`, `-cart`, `+truedrive` / `-truedrive` flags. Standalone VICE-named binaries are not yet shipped. See [docs/USER-GUIDE.md](docs/USER-GUIDE.md) for the full install and first-run walkthrough, and [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) for a side-by-side flag mapping.
+Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compatible argument parsing and topology generation for `x64`, `x64sc`, `xvic`, and `c1541`. `ViceSharp.Console` still parses its process arguments as `x64sc`, and standalone VICE-named binaries are not shipped. The generated `xvic` topology is not yet an end-to-end console path because the generic multi-system kind dispatcher recognizes only `C64` and `C1541`. See [docs/USER-GUIDE.md](docs/USER-GUIDE.md) and [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md).
 
 ## Install
 
@@ -50,116 +50,35 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
 
 ## Status
 
-✅ **Iteration 0 (Foundations)**: Complete. All core primitives implemented, lock-free and zero allocation.
-✅ **Iteration 1 (C64 Bringup)**: **Complete (Phase 1 closed 2026-05-31; diagnostics/attach surface updated 2026-06-25)**:
-  - x64sc lockstep and D64 attach paths are covered across deterministic no-cartridge variants
-  - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps; 1173% PAL real-time)
-  - Snapshot/capture/input/testbench/launcher surfaces are in place, including gRPC capture and diagnostics services
-  - Desktop packaging is self-contained JIT + ReadyToRun through Nuke `PublishMsi`; native ahead-of-time publishing is no longer a project requirement
-  - External debuggers can attach deterministically through `%LOCALAPPDATA%\ViceSharp\debug-attach.json` and `DiagnosticsService`
+> Status audited 2026-10-04. Native VICE is the immutable behavioral oracle. Historical lockstep receipts remain valid only for the exact models, checkpoints, cycle budgets, and fields they name. They do not establish whole-machine or release-wide parity.
 
-? **Iteration 2 (VIC-20)**: **Core + lockstep + present path + expansion persistence + flash040 timing + VIC-I audio (2026-08-17)**:
-  - Managed VIC-20 (PAL/NTSC), dual VIA, VIC-I, color RAM open-bus, default drive 8 = 1540
-  - Native oracle: `vice_xvic.dll` / `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
-  - Every-cycle A/X/Y/S/P/PC vs xvic: **TenSecondPal** 11_084_050 and **TenSecondNtsc** 10_227_270 green
-  - READY present geometry Exact-scoped: VICE `first_x` crop (PAL first_x=48), L+R border bands, paper origin 48
-  - Settings: wrap BLK toggles; FE3 / Ultimem / Mega-Cart attach; [Flash Cart Builder](docs/FlashCart-Builder.md) in Avalonia
-  - FE3 MODE_FLASH via managed `Flash040Core` (AM29F040B); VICE TYPE_B timeout/sector/chip erase budgets (50 / 1,000,000 / 8,000,000 cycles) advance on the VIC-20 machine clock
-  - Dirty FE3 and Ultimem flash images plus Mega-Cart NVRAM are written back atomically on detach
-  - VIC-I sound registers feed deterministic batched PCM; focused silence and tone batches match native xvic byte-for-byte
-  - xvic `capture_visible_frame` (PAL 448x284); READY PAL/NTSC/busy palette-index SequenceEqual is green; READY PAL/NTSC and busy PAL native BGRA SequenceEqual is green (xvic canvas RGB)
-  - Receipts: lockstep 10s PAL/NTSC; hostile AGREE borders + flash builder; FE3/pixel wrap receipt `docs/receipts/wrapup-fe3-flash040-pixel-fb-20260811.txt`
-  - Gates (env): `VICESHARP_LOCKSTEP_10S=1`, `VICESHARP_LOCKSTEP_2S=1`; filter `FullyQualifiedName~Vic20DivergeProbe`
-  - Still open: input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`)
-  - **Out of scope:** Microsoft Store and Xbox/UWP (`PLAN-XBOXUWP-END-001`). Supported product shells: Avalonia desktop and Console.
+- **C64:** Bounded x64sc lockstep and checkpoint suites exist, including historical 100,000-cycle and multi-frame receipts. Full classic VICE behavior and edge-case parity are being re-audited against active FR/TR/TEST acceptance criteria.
+- **VIC-20:** Historical PAL and NTSC 10-second A/X/Y/S/P/PC receipts exist, plus scoped video, cartridge, flash, and audio tests. Full xvic parity is not yet accepted. Follow [PLAN-VICE-IMMUTABLE-001](docs/plans/PLAN-VICE-IMMUTABLE-001.md) and [PLAN-VSFLOCKSTEP-001](docs/plans/PLAN-VSFLOCKSTEP-001.md).
+- **Snapshots:** The current host routes C64 snapshots through `vice-sharp.machine-snapshot.v2` and non-C64 snapshots through `vice-sharp.runtime-snapshot.v1`. Managed VSF staging already exists in the test harness, but normal public and desktop save/load paths do not yet use canonical native VICE `.vsf`. Proprietary formats are not a substitute for the required VICE format.
+- **Native boundary:** The checked-in `native/vice` revision is the immutable reference. Remediation moves build, observation, stepping, compatibility, and snapshot integration into external wrappers. No parity result may depend on modifying native VICE.
+- **VIC-20 settings:** The current Avalonia working tree binds VIC-20 memory and expansion sections to `IsVic20Selected`, and the ViewModel raises visibility changes when the selected profile changes or settings load.
+- **Product scope:** Avalonia desktop and Console are supported product shells. Microsoft Store and Xbox/UWP are cancelled legacy source, not current targets.
 
-Working chip layer implementations:
-  - `Mos6510` CPU (opcodes + core)
-  - `Mos6569` VIC-II
-  - `Mos6526` CIA
-  - `Mos6581` SID (noise LFSR + voice 3 OSC3/ENV3 readback)
-  - Folders for Cpu/Cia/Sid/VicIi
+## Verification evidence
 
-Bounded runtime validation slices are implemented for 1541/D64 attach+sector reads, TAP datasette pulse reads, standard 8K/16K cartridge mapping, runtime snapshot save/load, and BMP frame capture. Full subsystem parity for advanced drive, tape, cartridge, snapshot, and media workflows remains future scope.
+Use exact receipts and acceptance tests, not percentage dashboards, to judge parity. Durable historical VIC-20 receipts are indexed in [docs/README.md](docs/README.md#lockstep-receipts-durable). Current remediation gates and their required zero-failed, zero-skipped evidence are defined in the two plans above.
 
-## Completion Dashboard
+The 2026-10-04 traceability audit found 235 canonical IDs, 149 referenced in source/tests, 86 canonical IDs without source/test references, and 1,011 noncanonical IDs in source/tests. This is an open remediation baseline, not a green gate.
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-17` on `main` (GitVersion **1.3.3-15** for this working tree; VIC-20 lockstep + pixel-index parity + timed FE3 flash + cartridge persistence + VIC-I audio; Xbox/UWP outside product scope; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki source export is automated through MCP requirements generation and `tools/Publish-Wiki.ps1`. Advanced cartridge mappers remain minimum-viable scaffolds outside the validated VIC-20 FE3 / Ultimem / Mega-Cart set.
-
-**Legend**: State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
-
-### Iteration 0: Foundations
-
-| Feature | State | % | Source |
-|---------|:----:|:----:|--------|
-| .NET 10 + Nuke build pipeline | ✅ | 100% | iteration0 batch 1 |
-| MCP Server + TODO workspace integration | ✅ | 100% | iteration0 batch 2 |
-| Documentation set (Architecture, Public API, Roadmap) | ✅ | 100% | iteration0 batch 3 |
-| GraphRAG ingest | ✅ | 100% | iteration0 batch 4 |
-
-### Iteration 1: C64 Bringup
-
-| Feature | State | % | Source |
-|---------|:----:|:----:|--------|
-| MOS 6510 CPU (official + illegal opcodes) | ✅ | 100% | `LockstepValidationTests.First100000CyclesMatch` |
-| Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ✅ | 100% | lockstep gate |
-| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + visible sprite composition + sprite priority + light pen + color/register read masks + $D018/$D016/$D011 decoding + display mode selection + VICE display-mode pixel color routing + $D015/$D010 sprite registers + managed continuous side-border behavior + managed matrix idle/fill behavior + RC window cycle-accurate + non-PAL sprite DMA tables + screen-RAM checkpoint) | ✅ | 100% | `BACKFILL-VIDEO-001` closed (Phase 1 slice 1; FLI/AFLI deepening continues post-Phase 1) |
-| MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + force-load + keyboard scan + joystick scan + ICR) | ✅ | 100% | `BACKFILL-CIA` + base input scan coverage |
-| MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + dual-SID + noise LFSR + determinism) | ✅ | 100% | `BACKFILL-SID-001` closed; 8580 filter deepening is post-MVP |
-| MOS 6522 VIA (timer-1 PB7 + timer-2 phi2+PB6 + SR modes + CA1/CB1 edge IRQ + CA2/CB2 handshake/manual/pulse) | ✅ | 100% | `BACKFILL-VIA` complete |
-| Mos6510 CPU interrupts (NMI vector + BRK B-flag + IRQ vector) | ✅ | 100% | `BACKFILL-CPU` complete |
-| PLA + Memory map ($0000-$FFFF) | ✅ | 100% | boot proof |
-| Reset sequencing (7-cycle + port init) | ✅ | 100% | reset tests |
-| ROM loader (KERNAL/BASIC/CHARGEN + SHA1) | ✅ | 100% | `BasicBootProofTests` |
-| 1541 / IEC / D64 (attach + deterministic sector reads + IEC ATN timing + 1541 motor ramp) | ✅ | 100% | `ARCH-TRUEDRIVE-1541-002` Phase 1 close (slice 2) |
-| Datasette / TAP (pulse reads + CIA1 FLAG + builder wiring + rewind/seek + 32k motor ramp + SenseLine + record buffer) | ✅ | 100% | `RUNTIME-TAPE-002` Phase 1 close (slice 3) |
-| Standard cartridge mapping (8K/16K raw + CRT + GAME/EXROM live map) | ✅ | 100% | `RUNTIME-CART-002` validated for standard cartridges; broad mapper families are post-MVP |
-| Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + VIC + CIA TOD + SID ADSR round-trip) | ✅ | 100% | `RUNTIME-SNAPSHOT-002` Phase 1 close (slice 4) |
-| Media export (PNG/BMP screenshot + WAV sound + BMP sequence all/unique + muxed MP4/MKV/AVI video via ffmpeg, over the gRPC capture surface) | ✅ | 100% | `RUNTIME-CAPTURE-002` + `FR-MED-002/003/004`; ffmpeg-backed muxed video mirrors VICE `ffmpegexedrv` |
-| Keyboard matrix + control-port parity (LoadFromFile + EnumerateDevices + 30-frame key-repeat hold) | ✅ | 100% | `BACKFILL-INPUT-001` Phase 1 close (slice 5) |
-| Host UI + Monitor control surface (10 services + 8 adapters + view model + registry + mapper + frame source + InProcessGrpcHost + 2 clients; ~230 tests) | ✅ | 100% | `BACKFILL-HOSTUI-001` closeable; launcher/UI shell work is tracked separately |
-| Core primitives (SystemClock + DoubleBufferedMutationQueue + LockFreePubSub + BasicBus + SimpleRam) | ✅ | 100% | TR-PUBSUB-PERFORMANCE + TR-Cycle-Accuracy + TR-System-Core |
-| Chip/package boundary audit (shared chips vs machine/device glue) | ✅ | 100% | `ARCH-CHIPGLUE-001` closed with `TEST-ARCH-CHIPGLUE-001`; focused gate 579/579 and lockstep/checkpoint 335/335 |
-| x64sc variant lockstep gate (10-frame depth across no-cart variants, 322 lockstep tests green) | ✅ | 100% | `BACKFILL-LOCKSTEP-001` Phase 1 close (slice 7) |
-| Upstream VICE testbench integration (debugcart + limitcycles + PRG autostart + help text + ROM-less smoke) | ✅ | 100% | `ARCH-TESTBENCH-001` + `CLI-LAUNCHER-001` Phase 1 close (slice 6) |
-
-### Iterations 2-5: Other Machines
-
-| Machine | Target Iteration | State | % |
-|---------|:----------------:|:----:|:----:|
-| SX-64 | 1 | ⚪ | 0% |
-| VIC-20 (MOS 6502 + VIC-I + VIA x2) | 2 | ✅ | 97% |
-| C128 (MOS 8502 + VIC-IIe + Z80) | 3 | ⚪ | 0% |
-| PET (MOS 6502 + PIA/VIA + CRTC) | 4 | ⚪ | 0% |
-| Plus/4 / C16 (MOS 7501 + TED) | 5 | ⚪ | 0% |
-
-### Tooling and Ecosystem
-
-| Feature | State | % | Source |
-|---------|:----:|:----:|--------|
-| XMLDOCS test contract (cite FR/TR, use case, acceptance) | ✅ | 100% | `QA-XMLDOCS-001` CLOSED: ratchet baseline at 0 (full retrofit + `XmlDocsConventionTests.ExpectedMaxViolations=0`) |
-| BenchmarkDotNet harness vs native VICE | 🟡 | 60% | `PERF-TUNING-001` Phase 1 close (slice 8; PerfProbe measured 11.5M+ cycles/sec = 47x the 25% target). `PERF-BENCHMARK-001` native baseline + sweep deferred post-Phase 1. |
-| Repository maintenance + github wiki | 🟢 | 35% | `REPO-MAINT-001` (audit + plan in [docs/maintenance/](docs/maintenance/), execution deferred) |
-| Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | 🟢 | 60% | `ARCH-ADHOCMACHINE-001` (schema + loader + `--machine-yaml` flag, helper app deferred) |
-| Cross-platform hosts (Avalonia 12 mobile + MacOS; Xbox UWP cancelled) | 🟢 | 10% | `PLATFORM-CROSS-001` wireframes; Xbox UWP / Store / sideload cancelled 2026-08-11 (`PLAN-XBOXUWP-END-001`) |
-| Completion Dashboard (this section) | ✅ | 100% | `DOC-DASHBOARD-001` Phase 1 close (slice 9) |
-
-The dashboard is refreshed during repository wrap-up. VIC-20 every-cycle lockstep (2026-08-06): PAL 10 s and NTSC 10 s green (`Vic20DivergeProbe`); see durable receipts under `docs/receipts-lockstep-10s-*.txt`. Native-backed suites must run in process-isolated slices because a single process can hang after repeated native-machine use; see [HANDOFF.md](HANDOFF.md) for the current broad-suite diagnostics.
-
-## Supported Machines (planned)
+## Machine roadmap
 
 | Machine | Architecture | Status |
 |---------|-------------|--------|
-| C64 / C64C | MOS 6510 + VIC-II + SID + CIA x2 | Iteration 1 |
-| SX-64 | Same as C64 (built-in monitor + 1541) | Iteration 1 |
-| VIC-20 | MOS 6502 + VIC-I + VIA x2 | Iteration 2 (core + 10 s lockstep on `main`) |
+| C64 / C64C | MOS 6510 + VIC-II + SID + CIA x2 | Implemented surfaces; full x64sc parity pending |
+| SX-64 | Same family as C64 with integrated drive/display differences | Bounded model coverage; full parity pending |
+| VIC-20 | MOS 6502 + VIC-I + VIA x2 | Implemented surfaces and bounded 10-second receipts; full xvic parity pending |
 | C128 | MOS 8502 + VIC-IIe + SID + CIA x2 + Z80 | Iteration 3 |
 | PET | MOS 6502 + PIA/VIA + CRTC | Iteration 4 |
 | Plus/4 / C16 | MOS 7501 + TED | Iteration 5 |
 
 ## Building
 
-Prerequisites: [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.201 or later)
+Prerequisites: [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.301 or later)
 
 ```bash
 # Restore and build
@@ -184,7 +103,7 @@ build.cmd Compile     # Windows
 | `DeterminismTest` | Run determinism verification tests |
 | `RunConsole` | Run the console reference shell |
 | `RunAvalonia` | Run the Avalonia desktop UI |
-| `PublishWiki` | Generate requirements wiki exports |
+| `PublishWiki` | Legacy wiki target. Do not use it for requirements regeneration until it is migrated from direct REST to the supported MCP plugin `workflow.requirements.generateDocument` path. |
 | `PublishMsi` | Publish the self-contained desktop app and package `artifacts/installer/ViceSharp.msi` |
 | `InstallMsi` | Install the locally built MSI |
 | `PublishWinget` | Generate winget package metadata for the MSI |
@@ -197,7 +116,7 @@ build.cmd Compile     # Windows
 
 ViceSharp is designed as a **library-first emulator**:
 
-- **ViceSharp.Abstractions** - 33+ public interfaces defining the emulator contract
+- **ViceSharp.Abstractions** - 55 public interface declarations defining the emulator contract
 - **ViceSharp.Core** - bus, clock, devices, mutation queue, pub/sub
 - **ViceSharp.Chips** - CPU (6502/6510/8502), VIC-II, SID, CIA, VIA, PLA
 - **ViceSharp.Architectures** - machine definitions: C64, VIC-20 (Iteration 2), and the C1541 true drive, plus ad-hoc and multisystem topologies (C128, PET, Plus/4 planned for iterations 3-5)
@@ -208,7 +127,10 @@ ViceSharp is designed as a **library-first emulator**:
 - **ViceSharp.Launcher** - VICE-compatible argument parsing and binary-name topology dispatch (library, consumed by the Console shell)
 - **ViceSharp.RomFetch** - ROM descriptors, load-time validation, and pinned download helpers
 - **ViceSharp.Console** - command-line reference shell
+- **ViceSharp.Library.ViewModels** - reusable library/catalog ViewModels shared by UI shells
+- **ViceSharp.RomM** - RomM integration surface
 - **ViceSharp.Avalonia** - Avalonia 12.x desktop UI
+- **ViceSharp.Xbox**, **ViceSharp.Xbox.ViewModels**, **ViceSharp.Xbox.Input**, and **ViceSharp.Host.Xbox** - frozen legacy projects retained in the solution; Xbox/UWP is outside supported product scope
 
 Key design principles:
 - **Zero allocation hot path** - per-cycle emulation allocates nothing

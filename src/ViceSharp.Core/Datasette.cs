@@ -50,14 +50,63 @@ public sealed class Datasette : ITapeDevice
 
     public bool MotorEnabled { get; set; }
 
-    public bool PlayPressed { get; set; }
+    private bool _playPressed;
+    private bool _recordPressed;
+    private Action<bool>? _playRecorder;
+    private Action<string, int, byte[]?>? _transportRecorder;
+    private Action<bool>? _recordRecorder;
+
+    /// <summary>
+    /// PLAY button. A change notifies an open recording. VICE
+    /// datasette_event_record stores EVENT_DATASETTE for the command.
+    /// A repeat of the same level is not another event.
+    /// </summary>
+    public bool PlayPressed
+    {
+        get => _playPressed;
+        set => SetButton(ref _playPressed, value, _playRecorder);
+    }
 
     /// <summary>
     /// True when the RECORD button is pressed. Enables TryWritePulse and
     /// asserts the SENSE line low (same as PlayPressed).
-    /// VICE datasette.c: RecordPressed drives record mode.
+    /// VICE datasette.c: RecordPressed drives record mode and is its own
+    /// EVENT_DATASETTE command.
     /// </summary>
-    public bool RecordPressed { get; set; }
+    public bool RecordPressed
+    {
+        get => _recordPressed;
+        set => SetButton(ref _recordPressed, value, _recordRecorder);
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Observes PLAY and RECORD edges. Playback applies the
+    /// stored edge with observation suppressed.
+    /// </summary>
+    internal void AttachControlRecorder(Action<bool>? playRecorder, Action<bool>? recordRecorder)
+    {
+        _playRecorder = playRecorder;
+        _recordRecorder = recordRecorder;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Observes rewind, eject, seek, and insert. VICE
+    /// datasette_control records EVENT_DATASETTE before applying the
+    /// command. Eject is an image detach on that same external path.
+    /// </summary>
+    internal void AttachTransportRecorder(Action<string, int, byte[]?>? recorder)
+    {
+        _transportRecorder = recorder;
+    }
+
+    private static void SetButton(ref bool field, bool value, Action<bool>? recorder)
+    {
+        if (field == value)
+            return;
+
+        field = value;
+        recorder?.Invoke(value);
+    }
 
     /// <summary>
     /// SENSE line state as driven by the Datasette hardware.
@@ -74,11 +123,69 @@ public sealed class Datasette : ITapeDevice
     /// </summary>
     public int RecordedPulseCount => _recordBuffer.Count;
 
+    /// <summary>
+    /// Puts the captured PLAY and RECORD levels back. Does not record an
+    /// edge. VICE restores the datasette control with the snapshot.
+    /// </summary>
+    internal void RestoreControls(bool playPressed, bool recordPressed)
+    {
+        _playPressed = playPressed;
+        _recordPressed = recordPressed;
+    }
+
+    /// <summary>Pulse-data cursor. Zero when no tape is loaded.</summary>
+    internal int PulseOffset => _reader?.Offset ?? 0;
+
+    /// <summary>TAP bytes for the mounted image. Null when no tape is loaded.</summary>
+    internal byte[]? CopyImage() => _image?.ToImageBytes();
+
+    /// <summary>
+    /// Puts the mounted image back without recording an insert or eject.
+    /// VICE restores the tape image from the datasette snapshot module.
+    /// </summary>
+    internal void RestoreImage(byte[]? image)
+    {
+        if (image is null || image.Length == 0)
+        {
+            _image = null;
+            _reader = null;
+            return;
+        }
+
+        if (!TapImage.TryAttach(image, out var parsed) || parsed is null)
+            return;
+
+        AttachCore(parsed);
+    }
+
+    /// <summary>
+    /// Puts the pulse cursor back. VICE tape_snapshot restores the image
+    /// position beside the pending alarm.
+    /// </summary>
+    internal void RestorePulseOffset(int offset)
+    {
+        _reader?.RestoreOffset(offset);
+    }
+
+    /// <summary>Motor spin-up counter. VICE saves motor_stop timing with the datasette.</summary>
+    internal long MotorRampCounter => _motorRampCounter;
+
+    internal bool MotorRampComplete => _motorRampComplete;
+
+    internal bool MotorRampStarted => _motorRampStarted;
+
+    internal void RestoreMotorRamp(long counter, bool complete, bool started)
+    {
+        _motorRampCounter = counter;
+        _motorRampComplete = complete;
+        _motorRampStarted = started;
+    }
+
     public void Reset()
     {
         MotorEnabled = false;
-        PlayPressed = false;
-        RecordPressed = false;
+        _playPressed = false;
+        _recordPressed = false;
         _reader = _image?.CreatePulseReader();
         _motorRampCounter = 0;
         _motorRampComplete = false;
@@ -86,30 +193,60 @@ public sealed class Datasette : ITapeDevice
         _recordBuffer.Clear();
     }
 
-    public void Attach() => IsAttached = true;
+    public void Attach()
+    {
+        if (IsAttached)
+            return;
 
-    public void Detach() => IsAttached = false;
+        IsAttached = true;
+        _transportRecorder?.Invoke("attach", 0, null);
+    }
+
+    public void Detach()
+    {
+        if (!IsAttached)
+            return;
+
+        IsAttached = false;
+        _transportRecorder?.Invoke("detach", 0, null);
+    }
+
+    /// <summary>
+    /// Puts the peripheral connection back without recording an edge.
+    /// </summary>
+    internal void RestoreAttached(bool attached) => IsAttached = attached;
 
     public void InsertTape(ReadOnlySpan<byte> tapeImage)
     {
         if (!TapImage.TryAttach(tapeImage, out var image))
             throw new ArgumentException("Tape image must be a supported TAP image.", nameof(tapeImage));
 
-        Attach(image!);
+        AttachCore(image!);
+        _transportRecorder?.Invoke("insert", 0, tapeImage.ToArray());
     }
 
     public void EjectTape()
     {
+        if (_image is null && _reader is null)
+            return;
+
         _image = null;
         _reader = null;
+        _transportRecorder?.Invoke("eject", 0, null);
     }
 
     public bool Attach(TapImage image)
     {
+        AttachCore(image);
+        _transportRecorder?.Invoke("insert", 0, image.ToImageBytes());
+        return true;
+    }
+
+    private void AttachCore(TapImage image)
+    {
         _image = image;
         _reader = image.CreatePulseReader();
         IsAttached = true;
-        return true;
     }
 
     /// <summary>
@@ -188,7 +325,11 @@ public sealed class Datasette : ITapeDevice
     /// </summary>
     public void Rewind()
     {
-        _reader?.Rewind();
+        if (_reader is null)
+            return;
+
+        _reader.Rewind();
+        _transportRecorder?.Invoke("rewind", 0, null);
     }
 
     /// <summary>
@@ -203,6 +344,10 @@ public sealed class Datasette : ITapeDevice
             return false;
         }
 
-        return _reader.TrySeekToPulse(pulseIndex);
+        var moved = _reader.TrySeekToPulse(pulseIndex);
+        if (moved)
+            _transportRecorder?.Invoke("seek", pulseIndex, null);
+
+        return moved;
     }
 }

@@ -1,0 +1,1610 @@
+{
+  "schema": "vice-sharp/tape-proposal-artifact-checks/v1",
+  "createdAtLocal": "2026-10-09T16:00:43-05:00",
+  "passed": true,
+  "checkCount": 250,
+  "failedCount": 0,
+  "checks": [
+    {
+      "name": "Exact eleven-record scope",
+      "passed": true,
+      "detail": [
+        "FR-RUNTIME-TAPE-002",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001",
+        "FR-TAP-001",
+        "FR-TAP-002",
+        "FR-TAP-003",
+        "FR-TAP-004",
+        "TEST-TAP-001",
+        "FR-BACKFILL-MEDIA-001"
+      ]
+    },
+    {
+      "name": "Retained baseline hash",
+      "passed": true,
+      "detail": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\effective-requirements.after.json"
+    },
+    {
+      "name": "Retained parent proposal hash",
+      "passed": true,
+      "detail": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T023102-0500-legacy-media-video-ac-proposal\\proposed-field-delta.json"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: exact retained preimage",
+      "passed": true,
+      "detail": "functional"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: unchanged identity",
+      "passed": true,
+      "detail": "FR-RUNTIME-TAPE-002"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body"
+      ]
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body"
+      ]
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06"
+      ]
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: unique nonempty AC",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002/ac-06: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002/ac-07: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002/ac-08: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: Markdown section exists",
+      "passed": true,
+      "detail": "FR-RUNTIME-TAPE-002"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: body, acceptanceCriteria"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: Markdown exact before values",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: Markdown exact after values",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "name": "TR-TAP-EDGE-001: exact retained preimage",
+      "passed": true,
+      "detail": "technical"
+    },
+    {
+      "name": "TR-TAP-EDGE-001: unchanged identity",
+      "passed": true,
+      "detail": "TR-TAP-EDGE-001"
+    },
+    {
+      "name": "TR-TAP-EDGE-001: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "TR-TAP-EDGE-001: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body",
+        "title"
+      ]
+    },
+    {
+      "name": "TR-TAP-EDGE-001: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body",
+        "title"
+      ]
+    },
+    {
+      "name": "TR-TAP-EDGE-001: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04"
+      ]
+    },
+    {
+      "name": "TR-TAP-EDGE-001: unique nonempty AC",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "TR-TAP-EDGE-001/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAP-EDGE-001/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAP-EDGE-001/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAP-EDGE-001/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAP-EDGE-001/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAP-EDGE-001/ac-06: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAP-EDGE-001: Markdown section exists",
+      "passed": true,
+      "detail": "TR-TAP-EDGE-001"
+    },
+    {
+      "name": "TR-TAP-EDGE-001: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: title, body, acceptanceCriteria"
+    },
+    {
+      "name": "TR-TAP-EDGE-001: Markdown exact before values",
+      "passed": true,
+      "detail": 4
+    },
+    {
+      "name": "TR-TAP-EDGE-001: Markdown exact after values",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: exact retained preimage",
+      "passed": true,
+      "detail": "technical"
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: unchanged identity",
+      "passed": true,
+      "detail": "TR-TAPE-EDGE-001"
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body",
+        "title"
+      ]
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body",
+        "title"
+      ]
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04"
+      ]
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: unique nonempty AC",
+      "passed": true,
+      "detail": 7
+    },
+    {
+      "name": "TR-TAPE-EDGE-001/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAPE-EDGE-001/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAPE-EDGE-001/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAPE-EDGE-001/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAPE-EDGE-001/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAPE-EDGE-001/ac-06: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAPE-EDGE-001/ac-07: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: Markdown section exists",
+      "passed": true,
+      "detail": "TR-TAPE-EDGE-001"
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: title, body, acceptanceCriteria"
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: Markdown exact before values",
+      "passed": true,
+      "detail": 4
+    },
+    {
+      "name": "TR-TAPE-EDGE-001: Markdown exact after values",
+      "passed": true,
+      "detail": 7
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: exact retained preimage",
+      "passed": true,
+      "detail": "testing"
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: unchanged identity",
+      "passed": true,
+      "detail": "TEST-TAPE-RAMP-001"
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "condition",
+        "title"
+      ]
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "condition",
+        "title"
+      ]
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04"
+      ]
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: unique nonempty AC",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: Markdown section exists",
+      "passed": true,
+      "detail": "TEST-TAPE-RAMP-001"
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: title, condition, acceptanceCriteria"
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: Markdown exact before values",
+      "passed": true,
+      "detail": 4
+    },
+    {
+      "name": "TEST-TAPE-RAMP-001: Markdown exact after values",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: exact retained preimage",
+      "passed": true,
+      "detail": "testing"
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: unchanged identity",
+      "passed": true,
+      "detail": "TEST-TAPE-SENSE-001"
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "condition",
+        "title"
+      ]
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "condition",
+        "title"
+      ]
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05"
+      ]
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: unique nonempty AC",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001/ac-06: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001/ac-07: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001/ac-08: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: Markdown section exists",
+      "passed": true,
+      "detail": "TEST-TAPE-SENSE-001"
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: title, condition, acceptanceCriteria"
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: Markdown exact before values",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "TEST-TAPE-SENSE-001: Markdown exact after values",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "name": "FR-TAP-001: exact retained preimage",
+      "passed": true,
+      "detail": "functional"
+    },
+    {
+      "name": "FR-TAP-001: unchanged identity",
+      "passed": true,
+      "detail": "FR-TAP-001"
+    },
+    {
+      "name": "FR-TAP-001: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "FR-TAP-001: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body"
+      ]
+    },
+    {
+      "name": "FR-TAP-001: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body"
+      ]
+    },
+    {
+      "name": "FR-TAP-001: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06"
+      ]
+    },
+    {
+      "name": "FR-TAP-001: unique nonempty AC",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "FR-TAP-001/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-001/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-001/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-001/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-001/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-001/ac-06: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-001: Markdown section exists",
+      "passed": true,
+      "detail": "FR-TAP-001"
+    },
+    {
+      "name": "FR-TAP-001: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: body, acceptanceCriteria"
+    },
+    {
+      "name": "FR-TAP-001: Markdown exact before values",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "FR-TAP-001: Markdown exact after values",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "FR-TAP-002: exact retained preimage",
+      "passed": true,
+      "detail": "functional"
+    },
+    {
+      "name": "FR-TAP-002: unchanged identity",
+      "passed": true,
+      "detail": "FR-TAP-002"
+    },
+    {
+      "name": "FR-TAP-002: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "FR-TAP-002: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body",
+        "title"
+      ]
+    },
+    {
+      "name": "FR-TAP-002: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body",
+        "title"
+      ]
+    },
+    {
+      "name": "FR-TAP-002: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06",
+        "ac-07"
+      ]
+    },
+    {
+      "name": "FR-TAP-002: unique nonempty AC",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "name": "FR-TAP-002/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-002/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-002/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-002/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-002/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-002/ac-06: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-002/ac-07: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-002/ac-08: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-002: Markdown section exists",
+      "passed": true,
+      "detail": "FR-TAP-002"
+    },
+    {
+      "name": "FR-TAP-002: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: title, body, acceptanceCriteria"
+    },
+    {
+      "name": "FR-TAP-002: Markdown exact before values",
+      "passed": true,
+      "detail": 7
+    },
+    {
+      "name": "FR-TAP-002: Markdown exact after values",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "name": "FR-TAP-003: exact retained preimage",
+      "passed": true,
+      "detail": "functional"
+    },
+    {
+      "name": "FR-TAP-003: unchanged identity",
+      "passed": true,
+      "detail": "FR-TAP-003"
+    },
+    {
+      "name": "FR-TAP-003: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "FR-TAP-003: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body"
+      ]
+    },
+    {
+      "name": "FR-TAP-003: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body"
+      ]
+    },
+    {
+      "name": "FR-TAP-003: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06"
+      ]
+    },
+    {
+      "name": "FR-TAP-003: unique nonempty AC",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "FR-TAP-003/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-003/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-003/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-003/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-003/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-003/ac-06: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-003: Markdown section exists",
+      "passed": true,
+      "detail": "FR-TAP-003"
+    },
+    {
+      "name": "FR-TAP-003: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: body, acceptanceCriteria"
+    },
+    {
+      "name": "FR-TAP-003: Markdown exact before values",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "FR-TAP-003: Markdown exact after values",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "name": "FR-TAP-004: exact retained preimage",
+      "passed": true,
+      "detail": "functional"
+    },
+    {
+      "name": "FR-TAP-004: unchanged identity",
+      "passed": true,
+      "detail": "FR-TAP-004"
+    },
+    {
+      "name": "FR-TAP-004: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "FR-TAP-004: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body"
+      ]
+    },
+    {
+      "name": "FR-TAP-004: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body"
+      ]
+    },
+    {
+      "name": "FR-TAP-004: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05"
+      ]
+    },
+    {
+      "name": "FR-TAP-004: unique nonempty AC",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "FR-TAP-004/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-004/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-004/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-004/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-004/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-TAP-004: Markdown section exists",
+      "passed": true,
+      "detail": "FR-TAP-004"
+    },
+    {
+      "name": "FR-TAP-004: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: body, acceptanceCriteria"
+    },
+    {
+      "name": "FR-TAP-004: Markdown exact before values",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "FR-TAP-004: Markdown exact after values",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "TEST-TAP-001: exact retained preimage",
+      "passed": true,
+      "detail": "testing"
+    },
+    {
+      "name": "TEST-TAP-001: unchanged identity",
+      "passed": true,
+      "detail": "TEST-TAP-001"
+    },
+    {
+      "name": "TEST-TAP-001: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "TEST-TAP-001: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "condition",
+        "title"
+      ]
+    },
+    {
+      "name": "TEST-TAP-001: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "condition",
+        "title"
+      ]
+    },
+    {
+      "name": "TEST-TAP-001: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        null
+      ]
+    },
+    {
+      "name": "TEST-TAP-001: unique nonempty AC",
+      "passed": true,
+      "detail": 7
+    },
+    {
+      "name": "TEST-TAP-001/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAP-001/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAP-001/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAP-001/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAP-001/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAP-001/ac-06: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAP-001/ac-07: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "TEST-TAP-001: Markdown section exists",
+      "passed": true,
+      "detail": "TEST-TAP-001"
+    },
+    {
+      "name": "TEST-TAP-001: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: title, condition, acceptanceCriteria"
+    },
+    {
+      "name": "TEST-TAP-001: Markdown exact before values",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "TEST-TAP-001: Markdown exact after values",
+      "passed": true,
+      "detail": 7
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: exact retained preimage",
+      "passed": true,
+      "detail": "functional"
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: unchanged identity",
+      "passed": true,
+      "detail": "FR-BACKFILL-MEDIA-001"
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: pending, unsatisfied",
+      "passed": true,
+      "detail": "pending"
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: exact changedFields",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body",
+        "status",
+        "title"
+      ]
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: no unapproved field changes",
+      "passed": true,
+      "detail": [
+        "acceptanceCriteria",
+        "body",
+        "status",
+        "title"
+      ]
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: old AC IDs preserved",
+      "passed": true,
+      "detail": [
+        null
+      ]
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: unique nonempty AC",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001/ac-01: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001/ac-02: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001/ac-03: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001/ac-04: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001/ac-05: named cases and sources",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: Markdown section exists",
+      "passed": true,
+      "detail": "FR-BACKFILL-MEDIA-001"
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: Markdown field list",
+      "passed": true,
+      "detail": "Fields changed: title, body, status, acceptanceCriteria"
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: Markdown exact before values",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: Markdown exact after values",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "47 old and 71 new criteria",
+      "passed": true,
+      "detail": [
+        47,
+        71
+      ]
+    },
+    {
+      "name": "Complete unique AC coverage",
+      "passed": true,
+      "detail": 71
+    },
+    {
+      "name": "Parent row reused exactly",
+      "passed": true,
+      "detail": "Other media/video proposal rows not imported"
+    },
+    {
+      "name": "Exact seven mapping rows",
+      "passed": true,
+      "detail": [
+        "FR-BACKFILL-MEDIA-001",
+        "FR-RUNTIME-TAPE-002",
+        "FR-TAP-001",
+        "FR-TAP-002",
+        "FR-TAP-003",
+        "FR-TAP-004",
+        "FR-TAP-005"
+      ]
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: exact mapping preimage",
+      "passed": true,
+      "detail": "FR-BACKFILL-MEDIA-001"
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: preserve trIds",
+      "passed": true,
+      "detail": [
+        "TR-DRV-EDGE-001",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001"
+      ]
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: unique trIds",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: preserve testIds",
+      "passed": true,
+      "detail": [
+        "TEST-DRV-MOTOR-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001"
+      ]
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: unique testIds",
+      "passed": true,
+      "detail": 5
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: preserve mapping field frId",
+      "passed": true,
+      "detail": "frId"
+    },
+    {
+      "name": "FR-BACKFILL-MEDIA-001: preserve mapping field workspaceId",
+      "passed": true,
+      "detail": "workspaceId"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: exact mapping preimage",
+      "passed": true,
+      "detail": "FR-RUNTIME-TAPE-002"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: preserve trIds",
+      "passed": true,
+      "detail": [
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001"
+      ]
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: unique trIds",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: preserve testIds",
+      "passed": true,
+      "detail": [
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001"
+      ]
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: unique testIds",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: preserve mapping field frId",
+      "passed": true,
+      "detail": "frId"
+    },
+    {
+      "name": "FR-RUNTIME-TAPE-002: preserve mapping field workspaceId",
+      "passed": true,
+      "detail": "workspaceId"
+    },
+    {
+      "name": "FR-TAP-001: exact mapping preimage",
+      "passed": true,
+      "detail": "FR-TAP-001"
+    },
+    {
+      "name": "FR-TAP-001: preserve trIds",
+      "passed": true,
+      "detail": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-001: unique trIds",
+      "passed": true,
+      "detail": 3
+    },
+    {
+      "name": "FR-TAP-001: preserve testIds",
+      "passed": true,
+      "detail": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-001: unique testIds",
+      "passed": true,
+      "detail": 4
+    },
+    {
+      "name": "FR-TAP-001: preserve mapping field frId",
+      "passed": true,
+      "detail": "frId"
+    },
+    {
+      "name": "FR-TAP-001: preserve mapping field workspaceId",
+      "passed": true,
+      "detail": "workspaceId"
+    },
+    {
+      "name": "FR-TAP-002: exact mapping preimage",
+      "passed": true,
+      "detail": "FR-TAP-002"
+    },
+    {
+      "name": "FR-TAP-002: preserve trIds",
+      "passed": true,
+      "detail": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-002: unique trIds",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "FR-TAP-002: preserve testIds",
+      "passed": true,
+      "detail": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-002: unique testIds",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "FR-TAP-002: preserve mapping field frId",
+      "passed": true,
+      "detail": "frId"
+    },
+    {
+      "name": "FR-TAP-002: preserve mapping field workspaceId",
+      "passed": true,
+      "detail": "workspaceId"
+    },
+    {
+      "name": "FR-TAP-003: exact mapping preimage",
+      "passed": true,
+      "detail": "FR-TAP-003"
+    },
+    {
+      "name": "FR-TAP-003: preserve trIds",
+      "passed": true,
+      "detail": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-003: unique trIds",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "FR-TAP-003: preserve testIds",
+      "passed": true,
+      "detail": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-003: unique testIds",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "FR-TAP-003: preserve mapping field frId",
+      "passed": true,
+      "detail": "frId"
+    },
+    {
+      "name": "FR-TAP-003: preserve mapping field workspaceId",
+      "passed": true,
+      "detail": "workspaceId"
+    },
+    {
+      "name": "FR-TAP-004: exact mapping preimage",
+      "passed": true,
+      "detail": "FR-TAP-004"
+    },
+    {
+      "name": "FR-TAP-004: preserve trIds",
+      "passed": true,
+      "detail": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-004: unique trIds",
+      "passed": true,
+      "detail": 3
+    },
+    {
+      "name": "FR-TAP-004: preserve testIds",
+      "passed": true,
+      "detail": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-004: unique testIds",
+      "passed": true,
+      "detail": 4
+    },
+    {
+      "name": "FR-TAP-004: preserve mapping field frId",
+      "passed": true,
+      "detail": "frId"
+    },
+    {
+      "name": "FR-TAP-004: preserve mapping field workspaceId",
+      "passed": true,
+      "detail": "workspaceId"
+    },
+    {
+      "name": "FR-TAP-005: exact mapping preimage",
+      "passed": true,
+      "detail": "FR-TAP-005"
+    },
+    {
+      "name": "FR-TAP-005: preserve trIds",
+      "passed": true,
+      "detail": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-005: unique trIds",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "FR-TAP-005: preserve testIds",
+      "passed": true,
+      "detail": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "FR-TAP-005: unique testIds",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "FR-TAP-005: preserve mapping field frId",
+      "passed": true,
+      "detail": "frId"
+    },
+    {
+      "name": "FR-TAP-005: preserve mapping field workspaceId",
+      "passed": true,
+      "detail": "workspaceId"
+    },
+    {
+      "name": "New-Proposal.ps1: PowerShell parse",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Verify-Proposal.ps1: PowerShell parse",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "uniqueNamedCaseGroupCount": 58,
+  "uniqueNamedCaseGroups": [
+    "CpClockF83_MotorWriteSenseTruthTable",
+    "Datasette_AttachDetachResetState",
+    "Datasette_EnableAndFluxGating",
+    "DatasetteAudio_ResourceBufferAndSamples",
+    "ExistingMediaProposal_ac-01",
+    "ExistingMediaProposal_ac-02",
+    "ExistingMediaProposal_ac-03",
+    "ExistingMediaProposal_ac-04",
+    "ExistingMediaProposal_ac-05",
+    "FastWind_ExistingReadAlarm_Replaced",
+    "FastWind_MotorOnBeforePendingCallback",
+    "FastWind_MotorStopped_CallbackBeforeMotorOn",
+    "MachineMotor_C64Bit5AndDdr",
+    "MachineMotor_Vic20PcrRawByte",
+    "MachineSense_C64CpuPortAndVic20Via1",
+    "MachineTape_Sx64Disconnected",
+    "MachineWrite_C64Bit3AndDdrEdges",
+    "MachineWrite_Vic20Pb3AndDdrEdges",
+    "MotorOff_NoPendingAlarm_StopsAtDeadline",
+    "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+    "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+    "MotorOff_RepeatedDoesNotExtend",
+    "MotorOff_StopModeWithExistingLateAlarm",
+    "MotorOn_AfterExecutedStop_Restarts",
+    "MotorOn_CancelsStopAfterDeadlineBeforeCallback",
+    "MotorOnThenRecord_FirstEdgeFromZero",
+    "Recording_AfterExecutedStop",
+    "Recording_AfterStopDeadlineBeforeCallback",
+    "Recording_DuringDelayedStop",
+    "Recording_DuringStartupWindow",
+    "Recording_EligibilityAndWriteEdges",
+    "Recording_GapEncodingAndFailures",
+    "Recording_LongGap_24BitBoundary",
+    "RecordThenMotorOn_FirstEdge",
+    "SenseDongle_EnableDisablePowerup",
+    "Startup_NoPendingAlarm_DeadlineBoundaries",
+    "Startup_PendingAlarm_NotOverwritten",
+    "Tap_BlockDecoderVersusDatasettePath",
+    "Tap_CbmThresholdBoundaries",
+    "Tap_ClockHeaderVersusSelectedMachine",
+    "Tap_HeaderWarningVersusRejection",
+    "Tap_TurboPilotHeaderBoundaries",
+    "TapeContract_FullCumulativeGate",
+    "TapeContract_RejectsMissingNativeEvidence",
+    "TapeContract_UnchangedAssertionsAcrossProviders",
+    "Tapeport_DispatchAndPowerupGating",
+    "TapePublicApi_MotorState",
+    "TapePublicApi_MountEject",
+    "TapeRead_CbmHeaderDataChecksum",
+    "TapeRead_NormalSpeedMachineTrace",
+    "TapeRead_PulseInterruptRouting",
+    "TapeRead_TimerInterruptTrace",
+    "TapeRead_TurboNamedLoaderMatrix",
+    "TapeWrite_KernalSaveAndReload",
+    "TapeWrite_NewExistingAndAppendPosition",
+    "TapV0_ZeroDoesNotConsumeExtension",
+    "TapV1V2_ExtensionAndTruncation",
+    "TransportSense_MediaCommandMatrix"
+  ],
+  "mappingAdditions": [
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "field": "trIds",
+      "id": "TR-IEC-EDGE-001"
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "field": "trIds",
+      "id": "TR-MEDIA-D64-001"
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "field": "testIds",
+      "id": "TEST-IEC-TIMING-001"
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "field": "testIds",
+      "id": "TEST-D64IO-001"
+    },
+    {
+      "frId": "FR-TAP-001",
+      "field": "trIds",
+      "id": "TR-TAPE-EDGE-001"
+    },
+    {
+      "frId": "FR-TAP-001",
+      "field": "trIds",
+      "id": "TR-TAP-EDGE-001"
+    },
+    {
+      "frId": "FR-TAP-001",
+      "field": "testIds",
+      "id": "TEST-TAPE-RAMP-001"
+    },
+    {
+      "frId": "FR-TAP-001",
+      "field": "testIds",
+      "id": "TEST-TAPE-SENSE-001"
+    },
+    {
+      "frId": "FR-TAP-002",
+      "field": "trIds",
+      "id": "TR-TAP-EDGE-001"
+    },
+    {
+      "frId": "FR-TAP-003",
+      "field": "trIds",
+      "id": "TR-TAP-EDGE-001"
+    },
+    {
+      "frId": "FR-TAP-004",
+      "field": "trIds",
+      "id": "TR-TAP-EDGE-001"
+    },
+    {
+      "frId": "FR-TAP-004",
+      "field": "trIds",
+      "id": "TR-TAPE-EDGE-001"
+    },
+    {
+      "frId": "FR-TAP-004",
+      "field": "testIds",
+      "id": "TEST-TAPE-RAMP-001"
+    },
+    {
+      "frId": "FR-TAP-004",
+      "field": "testIds",
+      "id": "TEST-TAPE-SENSE-001"
+    },
+    {
+      "frId": "FR-TAP-005",
+      "field": "trIds",
+      "id": "TR-TAP-EDGE-001"
+    }
+  ],
+  "applicationPerformed": false,
+  "emulatorTestsRun": 0,
+  "hostileAcceptance": false,
+  "freshPrimaryReadback": false,
+  "limitations": [
+    "Read-only structural checks do not establish semantic correctness or VICE parity.",
+    "No complete fresh MCP records or hidden metadata available; retained baseline only.",
+    "Local Opus max review and explicit exact-delta approval remain required."
+  ]
+}

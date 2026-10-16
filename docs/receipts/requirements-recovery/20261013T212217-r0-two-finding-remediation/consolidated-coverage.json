@@ -1,0 +1,1837 @@
+{
+  "schema": "vicesharp.r0-consolidated-coverage.v1",
+  "preparedAtLocal": "2026-10-13T21:31:02",
+  "proposalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\proposed-field-delta.json",
+  "proposalSha256": "98D42B84FBA5AB833BC41F199A9A9CE0C56B5CF8D5B3EF0689895FAAE3D73BC9",
+  "scope": "Single current16-record R0 review candidate. TEST AC coverage is specification traceability, not executable acceptance.",
+  "amendmentRows": [
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TransportSense_MediaCommandMatrix"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1156"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineSense_C64CpuPortAndVic20Via1",
+        "TapeRead_PulseInterruptRouting"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:51-95",
+        "src/vic20/vic20via1.c:221-260",
+        "src/c64/c64datasette.c",
+        "src/vic20/vic20datasette.c"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "FastWind_ExistingReadAlarm_Replaced",
+        "FastWind_MotorOnBeforePendingCallback",
+        "FastWind_MotorStopped_CallbackBeforeMotorOn",
+        "Start_CommandWhileMotorRunning_NoPendingAlarm",
+        "Start_CommandWhileMotorRunning_PendingAlarm",
+        "Startup_NoPendingAlarm_DeadlineBoundaries",
+        "Startup_PendingAlarm_NotOverwritten"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1000-1021",
+        "src/datasette/datasette.c:1059-1089",
+        "src/datasette/datasette.c:1069-1090",
+        "src/datasette/datasette.c:1117-1147",
+        "src/datasette/datasette.c:1127-1148",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851",
+        "src/datasette/datasette.c:925-949"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MotorOff_NoPendingAlarm_StopsAtDeadline",
+        "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+        "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+        "MotorOff_RepeatedDoesNotExtend",
+        "MotorOff_StopModeWithExistingLateAlarm",
+        "MotorOn_AfterExecutedStop_Restarts",
+        "MotorOn_CancelsPendingStop",
+        "MotorOn_CancelsStopAfterDeadlineBeforeCallback"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-06",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MotorOnThenRecord_FirstEdgeFromZero",
+        "Recording_FileCursor_BufferBoundary",
+        "Recording_FileCursor_CommandOrder",
+        "Recording_GapEncodingAndFailures",
+        "Recording_LongGap_24BitBoundary",
+        "RecordThenMotorOn_FirstEdge"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1005",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321",
+        "src/datasette/datasette.c:1238-1268",
+        "src/datasette/datasette.c:391-409"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-07",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-08",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Datasette_AttachDetachResetState",
+        "Datasette_EnableAndFluxGating",
+        "Lifecycle_AttachNewStopImage_PendingAlarm",
+        "Lifecycle_ControlDispatch_EventPlaybackAndNetwork",
+        "Lifecycle_Detach_ReplaysNoTapeMode",
+        "Lifecycle_Reset_CancelsStopWithoutClearingRunning",
+        "Tapeport_DispatchAndPowerupGating"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1169",
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-922",
+        "src/datasette/datasette.c:879-998",
+        "src/datasette/datasette.c:952-997",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAP-EDGE-001",
+      "acId": "ac-01",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "TransportSense_MediaCommandMatrix"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1156",
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-998",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAP-EDGE-001",
+      "acId": "ac-02",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "MachineSense_C64CpuPortAndVic20Via1",
+        "TapeRead_PulseInterruptRouting",
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:51-95",
+        "src/vic20/vic20via1.c:221-260",
+        "src/c64/c64datasette.c",
+        "src/vic20/vic20datasette.c",
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAP-EDGE-001",
+      "acId": "ac-03",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAP-EDGE-001",
+      "acId": "ac-04",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "RecordThenMotorOn_FirstEdge",
+        "MotorOnThenRecord_FirstEdgeFromZero",
+        "Recording_GapEncodingAndFailures",
+        "Recording_LongGap_24BitBoundary"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAP-EDGE-001",
+      "acId": "ac-05",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "Fixture_ProcessHistoryAndAttachScan",
+        "Tap_BlockDecoderVersusDatasettePath",
+        "Tap_ClockHeaderVersusSelectedMachine",
+        "Tap_HeaderWarningVersusRejection",
+        "TapOpen_ActualSize_ZeroOneTwoThree",
+        "TapUnknownVersion_BlockVsLive",
+        "TapV0_ZeroDoesNotConsumeExtension",
+        "TapV1V2_ExtensionAndTruncation"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:436-535",
+        "src/datasette/datasette.c:504-535",
+        "src/datasette/datasette.c:599-691",
+        "src/tape/tap.c:218-265",
+        "src/tape/tap.c:389-444",
+        "src/tape/tap.c:389-456",
+        "src/tape/tap.c:90-196"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAP-EDGE-001",
+      "acId": "ac-06",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "Tap_CbmThresholdBoundaries",
+        "Tap_TurboPilotHeaderBoundaries"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:52-82",
+        "src/tape/tap.c:970-992",
+        "src/tape/tap.c:1243-1385",
+        "src/tape/tap.c:1673-1680",
+        "src/c64/c64.c:231-249",
+        "src/vic20/vic20.c:267-285"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-01",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "Start_CommandWhileMotorRunning_NoPendingAlarm",
+        "Start_CommandWhileMotorRunning_PendingAlarm",
+        "Startup_NoPendingAlarm_DeadlineBoundaries",
+        "Startup_PendingAlarm_NotOverwritten"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1000-1021",
+        "src/datasette/datasette.c:1059-1089",
+        "src/datasette/datasette.c:1117-1147",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-02",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "MotorOff_NoPendingAlarm_StopsAtDeadline",
+        "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+        "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+        "MotorOff_RepeatedDoesNotExtend",
+        "MotorOff_StopModeWithExistingLateAlarm",
+        "MotorOn_AfterExecutedStop_Restarts",
+        "MotorOn_CancelsPendingStop",
+        "MotorOn_CancelsStopAfterDeadlineBeforeCallback"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-03",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "MotorOff_NoPendingAlarm_StopsAtDeadline",
+        "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+        "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+        "MotorOff_RepeatedDoesNotExtend",
+        "MotorOff_StopModeWithExistingLateAlarm",
+        "MotorOn_AfterExecutedStop_Restarts",
+        "MotorOn_CancelsPendingStop",
+        "MotorOn_CancelsStopAfterDeadlineBeforeCallback"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-04",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "Startup_NoPendingAlarm_DeadlineBoundaries",
+        "Startup_PendingAlarm_NotOverwritten",
+        "MotorOff_NoPendingAlarm_StopsAtDeadline",
+        "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+        "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+        "MotorOff_StopModeWithExistingLateAlarm",
+        "MotorOff_RepeatedDoesNotExtend",
+        "MotorOn_CancelsStopAfterDeadlineBeforeCallback",
+        "MotorOn_AfterExecutedStop_Restarts"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:695-851",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/alarm.h:147-183"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-05",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "FastWind_MotorStopped_CallbackBeforeMotorOn",
+        "FastWind_MotorOnBeforePendingCallback",
+        "FastWind_ExistingReadAlarm_Replaced"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:925-949",
+        "src/datasette/datasette.c:1069-1090",
+        "src/datasette/datasette.c:1127-1148"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-06",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "SenseDongle_EnableDisablePowerup",
+        "CpClockF83_MotorWriteSenseTruthTable"
+      ],
+      "sourceAnchors": [
+        "src/tapeport/sense-dongle.c:68-94",
+        "src/tapeport/cp-clockf83.c:161-190"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-07",
+      "kind": "tr",
+      "namedCaseGroups": [
+        "Datasette_AttachDetachResetState",
+        "Datasette_EnableAndFluxGating",
+        "Lifecycle_AttachNewStopImage_PendingAlarm",
+        "Lifecycle_ControlDispatch_EventPlaybackAndNetwork",
+        "Lifecycle_Detach_ReplaysNoTapeMode",
+        "Lifecycle_Reset_CancelsStopWithoutClearingRunning",
+        "Tapeport_DispatchAndPowerupGating"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1159-1169",
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-922",
+        "src/datasette/datasette.c:879-998",
+        "src/datasette/datasette.c:952-997",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "acId": "ac-01",
+      "kind": "test",
+      "namedCaseGroups": [
+        "Start_CommandWhileMotorRunning_NoPendingAlarm",
+        "Start_CommandWhileMotorRunning_PendingAlarm",
+        "Startup_NoPendingAlarm_DeadlineBoundaries",
+        "Startup_PendingAlarm_NotOverwritten"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1000-1021",
+        "src/datasette/datasette.c:1059-1089",
+        "src/datasette/datasette.c:1117-1147",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "acId": "ac-02",
+      "kind": "test",
+      "namedCaseGroups": [
+        "MotorOff_NoPendingAlarm_StopsAtDeadline",
+        "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+        "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+        "MotorOff_RepeatedDoesNotExtend",
+        "MotorOff_StopModeWithExistingLateAlarm",
+        "MotorOn_AfterExecutedStop_Restarts",
+        "MotorOn_CancelsPendingStop",
+        "MotorOn_CancelsStopAfterDeadlineBeforeCallback"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "acId": "ac-03",
+      "kind": "test",
+      "namedCaseGroups": [
+        "TapeContract_RejectsMissingNativeEvidence",
+        "TapeContract_UnchangedAssertionsAcrossProviders",
+        "TapeContract_FullCumulativeGate"
+      ],
+      "sourceAnchors": [
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "acId": "ac-04",
+      "kind": "test",
+      "namedCaseGroups": [
+        "TapeContract_RejectsMissingNativeEvidence",
+        "TapeContract_UnchangedAssertionsAcrossProviders",
+        "TapeContract_FullCumulativeGate"
+      ],
+      "sourceAnchors": [
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "acId": "ac-05",
+      "kind": "test",
+      "namedCaseGroups": [
+        "FastWind_MotorStopped_CallbackBeforeMotorOn",
+        "FastWind_MotorOnBeforePendingCallback",
+        "FastWind_ExistingReadAlarm_Replaced"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:925-949",
+        "src/datasette/datasette.c:1069-1090",
+        "src/datasette/datasette.c:1127-1148"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-SENSE-001",
+      "acId": "ac-01",
+      "kind": "test",
+      "namedCaseGroups": [
+        "TransportSense_MediaCommandMatrix"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1156",
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-998",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-SENSE-001",
+      "acId": "ac-02",
+      "kind": "test",
+      "namedCaseGroups": [
+        "MachineSense_C64CpuPortAndVic20Via1",
+        "TapeRead_PulseInterruptRouting"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:51-95",
+        "src/vic20/vic20via1.c:221-260",
+        "src/c64/c64datasette.c",
+        "src/vic20/vic20datasette.c"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-SENSE-001",
+      "acId": "ac-03",
+      "kind": "test",
+      "namedCaseGroups": [
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-SENSE-001",
+      "acId": "ac-04",
+      "kind": "test",
+      "namedCaseGroups": [
+        "RecordThenMotorOn_FirstEdge",
+        "MotorOnThenRecord_FirstEdgeFromZero",
+        "Recording_GapEncodingAndFailures",
+        "Recording_LongGap_24BitBoundary"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-SENSE-001",
+      "acId": "ac-05",
+      "kind": "test",
+      "namedCaseGroups": [
+        "TapeContract_RejectsMissingNativeEvidence",
+        "TapeContract_UnchangedAssertionsAcrossProviders",
+        "TapeContract_FullCumulativeGate"
+      ],
+      "sourceAnchors": [
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-SENSE-001",
+      "acId": "ac-06",
+      "kind": "test",
+      "namedCaseGroups": [
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-SENSE-001",
+      "acId": "ac-07",
+      "kind": "test",
+      "namedCaseGroups": [
+        "Datasette_EnableAndFluxGating",
+        "Tapeport_DispatchAndPowerupGating",
+        "Datasette_AttachDetachResetState"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-998",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAPE-SENSE-001",
+      "acId": "ac-08",
+      "kind": "test",
+      "namedCaseGroups": [
+        "SenseDongle_EnableDisablePowerup",
+        "CpClockF83_MotorWriteSenseTruthTable"
+      ],
+      "sourceAnchors": [
+        "src/tapeport/sense-dongle.c:68-94",
+        "src/tapeport/cp-clockf83.c:161-190"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-001",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-001",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Startup_NoPendingAlarm_DeadlineBoundaries",
+        "Startup_PendingAlarm_NotOverwritten",
+        "FastWind_MotorStopped_CallbackBeforeMotorOn",
+        "FastWind_MotorOnBeforePendingCallback",
+        "FastWind_ExistingReadAlarm_Replaced"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:695-851",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:925-949",
+        "src/datasette/datasette.c:1069-1090",
+        "src/datasette/datasette.c:1127-1148"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-001",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Startup_NoPendingAlarm_DeadlineBoundaries",
+        "Startup_PendingAlarm_NotOverwritten",
+        "MotorOff_NoPendingAlarm_StopsAtDeadline",
+        "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+        "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+        "MotorOff_StopModeWithExistingLateAlarm",
+        "MotorOff_RepeatedDoesNotExtend",
+        "MotorOn_CancelsStopAfterDeadlineBeforeCallback",
+        "MotorOn_AfterExecutedStop_Restarts",
+        "FastWind_MotorStopped_CallbackBeforeMotorOn",
+        "FastWind_MotorOnBeforePendingCallback",
+        "FastWind_ExistingReadAlarm_Replaced"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:695-851",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:925-949",
+        "src/datasette/datasette.c:1069-1090",
+        "src/datasette/datasette.c:1127-1148"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-001",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TransportSense_MediaCommandMatrix",
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop",
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1156",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321",
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-001",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapePublicApi_MotorState"
+      ],
+      "sourceAnchors": [
+        "retained FR-TAP-001 ac-05, unchanged public-interface obligation"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-001",
+      "acId": "ac-06",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "DatasetteAudio_ResourceBufferAndSamples"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette-sound.c:34-266",
+        "src/datasette/datasette.c:839-841"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-002",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapV0_ZeroDoesNotConsumeExtension",
+        "TapV1V2_ExtensionAndTruncation",
+        "Tap_BlockDecoderVersusDatasettePath",
+        "Tap_HeaderWarningVersusRejection",
+        "Tap_ClockHeaderVersusSelectedMachine"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:90-196",
+        "src/tape/tap.c:389-444",
+        "src/datasette/datasette.c:504-535",
+        "src/datasette/datasette.c:599-691"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-002",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapV0_ZeroDoesNotConsumeExtension",
+        "Tap_BlockDecoderVersusDatasettePath"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:90-196",
+        "src/tape/tap.c:389-444",
+        "src/datasette/datasette.c:504-535",
+        "src/datasette/datasette.c:599-691"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-002",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapV1V2_ExtensionAndTruncation",
+        "Tap_BlockDecoderVersusDatasettePath"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:90-196",
+        "src/tape/tap.c:389-444",
+        "src/datasette/datasette.c:504-535",
+        "src/datasette/datasette.c:599-691"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-002",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Tap_ClockHeaderVersusSelectedMachine",
+        "Tap_HeaderWarningVersusRejection",
+        "TapHeader_AllVersionBytes",
+        "TapOpen_ActualSize_ZeroOneTwoThree",
+        "TapOpen_DeclaredLength_IndependentOfActualSize"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:504-535",
+        "src/datasette/datasette.c:599-691",
+        "src/tape/tap.c:107-155",
+        "src/tape/tap.c:218-265",
+        "src/tape/tap.c:389-444",
+        "src/tape/tap.c:90-196"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-002",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapePublicApi_MountEject"
+      ],
+      "sourceAnchors": [
+        "retained FR-TAP-002 ac-05, unchanged public-interface obligation"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-002",
+      "acId": "ac-06",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop",
+        "RecordThenMotorOn_FirstEdge",
+        "MotorOnThenRecord_FirstEdgeFromZero",
+        "Recording_GapEncodingAndFailures",
+        "Recording_LongGap_24BitBoundary"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-002",
+      "acId": "ac-07",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Tap_ClockHeaderVersusSelectedMachine"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:90-196",
+        "src/tape/tap.c:389-444",
+        "src/datasette/datasette.c:504-535",
+        "src/datasette/datasette.c:599-691"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-002",
+      "acId": "ac-08",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Datasette_AttachDetachResetState",
+        "Datasette_EnableAndFluxGating",
+        "Tap_BlockDecoderVersusDatasettePath",
+        "Tap_ClockHeaderVersusSelectedMachine",
+        "Tap_HeaderWarningVersusRejection",
+        "TapeContract_FullCumulativeGate",
+        "TapeContract_RejectsMissingNativeEvidence",
+        "TapeContract_UnchangedAssertionsAcrossProviders",
+        "Tapeport_DispatchAndPowerupGating",
+        "TapUnknownVersion_BlockVsLive",
+        "TapV0_ZeroDoesNotConsumeExtension",
+        "TapV1V2_ExtensionAndTruncation",
+        "TapVersion2_TruncatedSecondHalfwave"
+      ],
+      "sourceAnchors": [
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit",
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:504-535",
+        "src/datasette/datasette.c:599-691",
+        "src/datasette/datasette.c:599-692",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-998",
+        "src/tape/tap.c:389-444",
+        "src/tape/tap.c:389-456",
+        "src/tape/tap.c:90-196",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-003",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineSense_C64CpuPortAndVic20Via1",
+        "TapeRead_PulseInterruptRouting"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:51-95",
+        "src/vic20/vic20via1.c:221-260",
+        "src/c64/c64datasette.c",
+        "src/vic20/vic20datasette.c"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-003",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapeRead_TimerInterruptTrace"
+      ],
+      "sourceAnchors": [
+        "src/core/ciacore.c:592-600,1594-1625",
+        "src/core/viacore.c:441-462",
+        "src/c64/c64datasette.c:36-49",
+        "src/vic20/vic20datasette.c:37-49"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-003",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Tap_CbmThresholdBoundaries"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:52-82",
+        "src/tape/tap.c:970-992",
+        "src/tape/tap.c:1243-1385",
+        "src/tape/tap.c:1673-1680",
+        "src/c64/c64.c:231-249",
+        "src/vic20/vic20.c:267-285"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-003",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapeRead_CbmHeaderDataChecksum"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:535-955",
+        "full original plan real oracle/workload prerequisites"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-003",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapeRead_NormalSpeedMachineTrace"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:695-851",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/alarm.h:147-183",
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-003",
+      "acId": "ac-06",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Tap_ClockHeaderVersusSelectedMachine",
+        "TapeRead_NormalSpeedMachineTrace"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:90-196",
+        "src/datasette/datasette.c:710-719"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-004",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-004",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "RecordThenMotorOn_FirstEdge",
+        "MotorOnThenRecord_FirstEdgeFromZero",
+        "Recording_GapEncodingAndFailures",
+        "Recording_LongGap_24BitBoundary"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-004",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TapeWrite_KernalSaveAndReload"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321",
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-004",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Recording_FileCursor_BufferBoundary",
+        "Recording_FileCursor_CommandOrder",
+        "TapeWrite_NewExistingAndAppendPosition"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1005",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1210-1291",
+        "src/datasette/datasette.c:1238-1268",
+        "src/datasette/datasette.c:391-409"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-004",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TransportSense_MediaCommandMatrix",
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1156",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAP-001",
+      "acId": "ac-01",
+      "kind": "test",
+      "namedCaseGroups": [
+        "TransportSense_MediaCommandMatrix",
+        "MachineSense_C64CpuPortAndVic20Via1",
+        "TapeRead_PulseInterruptRouting",
+        "Startup_NoPendingAlarm_DeadlineBoundaries",
+        "Startup_PendingAlarm_NotOverwritten",
+        "MotorOff_NoPendingAlarm_StopsAtDeadline",
+        "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+        "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+        "MotorOff_StopModeWithExistingLateAlarm",
+        "MotorOff_RepeatedDoesNotExtend",
+        "MotorOn_CancelsStopAfterDeadlineBeforeCallback",
+        "MotorOn_AfterExecutedStop_Restarts",
+        "FastWind_MotorStopped_CallbackBeforeMotorOn",
+        "FastWind_MotorOnBeforePendingCallback",
+        "FastWind_ExistingReadAlarm_Replaced",
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop",
+        "RecordThenMotorOn_FirstEdge",
+        "MotorOnThenRecord_FirstEdgeFromZero",
+        "Recording_GapEncodingAndFailures",
+        "Recording_LongGap_24BitBoundary",
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected",
+        "Datasette_EnableAndFluxGating",
+        "Tapeport_DispatchAndPowerupGating",
+        "Datasette_AttachDetachResetState"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1156",
+        "src/datasette/datasette.c:695-851",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321",
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724",
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-998",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAP-001",
+      "acId": "ac-02",
+      "kind": "test",
+      "namedCaseGroups": [
+        "TapV0_ZeroDoesNotConsumeExtension",
+        "TapV1V2_ExtensionAndTruncation",
+        "Tap_BlockDecoderVersusDatasettePath",
+        "Tap_HeaderWarningVersusRejection",
+        "Tap_ClockHeaderVersusSelectedMachine"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:90-196",
+        "src/tape/tap.c:389-444",
+        "src/datasette/datasette.c:504-535",
+        "src/datasette/datasette.c:599-691"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAP-001",
+      "acId": "ac-03",
+      "kind": "test",
+      "namedCaseGroups": [
+        "Tap_CbmThresholdBoundaries",
+        "Tap_TurboPilotHeaderBoundaries",
+        "TapeRead_TimerInterruptTrace",
+        "TapeRead_CbmHeaderDataChecksum",
+        "TapeRead_NormalSpeedMachineTrace",
+        "TapeRead_TurboNamedLoaderMatrix"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:52-82",
+        "src/tape/tap.c:970-992",
+        "src/tape/tap.c:1243-1385",
+        "src/tape/tap.c:1673-1680",
+        "src/c64/c64.c:231-249",
+        "src/vic20/vic20.c:267-285",
+        "src/c64/c64pla.c:51-95",
+        "src/vic20/vic20via1.c:221-260",
+        "src/c64/c64datasette.c",
+        "src/vic20/vic20datasette.c",
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAP-001",
+      "acId": "ac-04",
+      "kind": "test",
+      "namedCaseGroups": [
+        "TapePublicApi_MotorState",
+        "TapePublicApi_MountEject",
+        "DatasetteAudio_ResourceBufferAndSamples",
+        "TapeWrite_KernalSaveAndReload",
+        "TapeWrite_NewExistingAndAppendPosition"
+      ],
+      "sourceAnchors": [
+        "FR-TAP-001 ac-05/ac-06",
+        "FR-TAP-002 ac-05",
+        "FR-TAP-004 ac-01 through ac-05"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAP-001",
+      "acId": "ac-05",
+      "kind": "test",
+      "namedCaseGroups": [
+        "SenseDongle_EnableDisablePowerup",
+        "CpClockF83_MotorWriteSenseTruthTable"
+      ],
+      "sourceAnchors": [
+        "src/tapeport/sense-dongle.c:68-94",
+        "src/tapeport/cp-clockf83.c:161-190"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAP-001",
+      "acId": "ac-06",
+      "kind": "test",
+      "namedCaseGroups": [
+        "Fixture_AudioRingAndPhase",
+        "Fixture_MachinePortRetainedState",
+        "Fixture_ProcessHistoryAndAttachScan",
+        "Fixture_RtcPersistentAndHostClock",
+        "Fixture_WobbleAzimuthRounding",
+        "TapeContract_FullCumulativeGate",
+        "TapeContract_RejectsMissingNativeEvidence",
+        "TapeContract_UnchangedAssertionsAcrossProviders"
+      ],
+      "sourceAnchors": [
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit",
+        "src/core/rtc/pcf8583.c:136-161",
+        "src/core/rtc/pcf8583.c:213-249",
+        "src/core/rtc/rtc.c:192-195",
+        "src/core/viacore.c:378-424",
+        "src/datasette/datasette-sound.c:36-52",
+        "src/datasette/datasette.c:436-502",
+        "src/datasette/datasette.c:879-910"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "TEST-TAP-001",
+      "acId": "ac-07",
+      "kind": "test",
+      "namedCaseGroups": [
+        "TapeContract_RejectsMissingNativeEvidence",
+        "TapeContract_UnchangedAssertionsAcrossProviders",
+        "TapeContract_FullCumulativeGate"
+      ],
+      "sourceAnchors": [
+        "operator BDPv4 correction, 2026-10-08",
+        "original handoff completion plan, Locked decisions 6/10/12 and whole-plan exit"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-01",
+      "namedCaseGroups": [
+        "D64_AllStandardSectors",
+        "D64_RecognitionAndZoneBoundaries",
+        "D64_InvalidGeometry",
+        "D64_ErrorMapAllByteValues",
+        "D64_WriteReadReopen",
+        "D64_ReadOnlyPrecedence",
+        "D64_UnrecognizedLengths",
+        "D64_GeometryVersusExtent",
+        "D64_IoFailuresAndPartialEffects"
+      ],
+      "specification": "D64-CONTRACT.md",
+      "evidenceStatus": "source-derived specification; no test or native execution"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-02",
+      "namedCaseGroups": [
+        "Media_Vic20IecDigitalMatrix",
+        "Media_C64IecDigitalMatrix",
+        "Media_IecOrderedAtnEdges",
+        "Media_MotorZoneAndStopEdges",
+        "Media_DosBamAndModeSeparation"
+      ],
+      "specification": "MEDIA-COVERAGE.md",
+      "evidenceStatus": "digital/source expectations specified; runtime traces, observer and separate drive approval outstanding"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-03",
+      "namedCaseGroups": [
+        "Media_TapeFullContractBinding"
+      ],
+      "specification": "MEDIA-COVERAGE.md",
+      "evidenceStatus": "R0 requirement/specification binding defined; complete independent fixture and negative-control implementation remains mandatory at R2 before production."
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-04",
+      "namedCaseGroups": [
+        "Media_EvidenceIdentity",
+        "Media_ClockAndOrder",
+        "Media_FirstMismatch"
+      ],
+      "specification": "MEDIA-COVERAGE.md",
+      "evidenceStatus": "proposed assertion and negative-control contract; no implementation"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-05",
+      "namedCaseGroups": [
+        "Media_GateEvidenceBinding",
+        "Media_ApprovalAndAcceptanceBoundary"
+      ],
+      "specification": "MEDIA-COVERAGE.md",
+      "evidenceStatus": "proposed evidence-gate checks; no acceptance"
+    },
+    {
+      "requirementId": "FR-CPU-004",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "C64_PortMotorAndWrite_DdrTruthTable"
+      ],
+      "sourceAnchors": "src/c64/c64pla.c:77-89",
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-CPU-004",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "C64_PortBit5_ReadDirectionMatrix"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:53-63",
+        "src/c64/c64mem.c:277-324",
+        "src/c64/c64memsc.c:279-326"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-PRF-003",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Sx64_PortOutputs_AreDisconnected"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64mem.c:218-222",
+        "src/c64/c64pla.c:77-95"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-PRF-003",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Sx64_InputCapacitors_ResetAndIndependentBits",
+        "Sx64_InputCapacitors_StrictFalloffBoundary",
+        "Sx64_InputCapacitors_DeadlineSelection"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:106-123",
+        "src/c64/c64mem.c:277-324",
+        "src/c64/c64memsc.c:279-326",
+        "src/c64/c64mem.c:396-417",
+        "src/c64/c64memsc.c:395-416"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-005",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Turbo_PulseWidths_Around160_NoArtificialFloor"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:389-456",
+        "src/datasette/datasette.c:599-692",
+        "src/datasette/datasette.c:714-851",
+        "src/c64/c64datasette.c:36-49",
+        "src/vic20/vic20datasette.c:37-49"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-005",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Turbo_Novaload_LoadSuccess",
+        "Turbo_Biturbo_LoadSuccess",
+        "Turbo_Turbotape_LoadSuccess",
+        "Turbo_Cyberload_LoadSuccess",
+        "Turbo_Pavloda_LoadSuccess"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:389-456",
+        "src/datasette/datasette.c:599-692",
+        "src/datasette/datasette.c:714-851",
+        "src/c64/c64datasette.c:36-49",
+        "src/vic20/vic20datasette.c:37-49"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed",
+      "sourceAnchorLimitation": "Generic tape core sources do not establish named-loader success. Pin each lawful loader-specific asset/source, successful native workload and expected observations at R2 before using the real provider; currently unproved."
+    },
+    {
+      "requirementId": "FR-TAP-005",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Turbo_CustomEncoding_OrderedObservations"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:389-456",
+        "src/datasette/datasette.c:599-692",
+        "src/datasette/datasette.c:714-851",
+        "src/c64/c64datasette.c:36-49",
+        "src/vic20/vic20datasette.c:37-49"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-005",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Turbo_C64Flag_ExactClockAndPendingState",
+        "Turbo_Vic20Ca1_RemainsSeparate"
+      ],
+      "sourceAnchors": [
+        "src/core/ciacore.c:592-600,1594-1625",
+        "src/core/viacore.c:441-462",
+        "src/c64/c64datasette.c:36-49",
+        "src/vic20/vic20datasette.c:37-49"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-005",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Turbo_HalfFullWave_BlockVsLive"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:389-456",
+        "src/datasette/datasette.c:599-692",
+        "src/datasette/datasette.c:714-851",
+        "src/c64/c64datasette.c:36-49",
+        "src/vic20/vic20datasette.c:37-49"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-TAP-005",
+      "acId": "ac-06",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Turbo_MidLoadRateTransition_Continuity"
+      ],
+      "sourceAnchors": [
+        "src/tape/tap.c:389-456",
+        "src/datasette/datasette.c:599-692",
+        "src/datasette/datasette.c:714-851",
+        "src/c64/c64datasette.c:36-49",
+        "src/vic20/vic20datasette.c:37-49"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-CPU-004",
+      "acId": "ac-06",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "C64_Capacitor_DeadlineInclusiveJitter",
+        "C64_Capacitor_DdrTransitionMatrix",
+        "C64_Capacitor_RepeatedDataWrite",
+        "C64_Capacitor_ReadBoundaryAndLazyExpiry",
+        "C64_Capacitor_BoardPinMatrix",
+        "C64_Capacitor_RngConsumptionOrder",
+        "C64_Capacitor_ResetAndClockWrap",
+        "C64_Capacitor_PalNtscAndConfiguredModel"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "proposed source-derived fixture groups; no mock/production/native execution"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-01",
+      "kind": "test",
+      "namedCaseGroups": "C64_PortMotorAndWrite_DdrTruthTable",
+      "sourceAnchors": [
+        "src/c64/c64pla.c:77-89"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-03"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-02",
+      "kind": "test",
+      "namedCaseGroups": "C64_PortBit5_ReadDirectionMatrix",
+      "sourceAnchors": [
+        "src/c64/c64pla.c:53-63",
+        "src/c64/c64mem.c:277-324",
+        "src/c64/c64memsc.c:279-326"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-05"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-03",
+      "kind": "test",
+      "namedCaseGroups": "C64_Capacitor_DeadlineInclusiveJitter",
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-06"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-04",
+      "kind": "test",
+      "namedCaseGroups": "C64_Capacitor_DdrTransitionMatrix",
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-06"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-05",
+      "kind": "test",
+      "namedCaseGroups": "C64_Capacitor_RepeatedDataWrite",
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-06"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-06",
+      "kind": "test",
+      "namedCaseGroups": "C64_Capacitor_ReadBoundaryAndLazyExpiry",
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-06"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-07",
+      "kind": "test",
+      "namedCaseGroups": "C64_Capacitor_BoardPinMatrix",
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-06"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-08",
+      "kind": "test",
+      "namedCaseGroups": "C64_Capacitor_RngConsumptionOrder",
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-06"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-09",
+      "kind": "test",
+      "namedCaseGroups": "C64_Capacitor_ResetAndClockWrap",
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-06"
+    },
+    {
+      "requirementId": "TEST-CPU-001",
+      "acId": "ac-10",
+      "kind": "test",
+      "namedCaseGroups": "C64_Capacitor_PalNtscAndConfiguredModel",
+      "sourceAnchors": [
+        "src/c64/c64.h:74-89",
+        "src/c64/c64mem.c:262-336,366-495",
+        "src/c64/c64memsc.c:262-338,366-495",
+        "src/c64/c64pla.c:106-123",
+        "src/lib.c:944-1002,1029-1034",
+        "src/types.h:61-65"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-CPU-004/ac-06"
+    },
+    {
+      "requirementId": "TEST-PRF-001",
+      "acId": "ac-01",
+      "kind": "test",
+      "namedCaseGroups": "Sx64_PortOutputs_AreDisconnected",
+      "sourceAnchors": [
+        "src/c64/c64mem.c:218-222",
+        "src/c64/c64pla.c:77-95"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-PRF-003/ac-02"
+    },
+    {
+      "requirementId": "TEST-PRF-001",
+      "acId": "ac-02",
+      "kind": "test",
+      "namedCaseGroups": "Sx64_InputCapacitors_ResetAndIndependentBits",
+      "sourceAnchors": [
+        "src/c64/c64pla.c:106-123",
+        "src/c64/c64mem.c:277-324",
+        "src/c64/c64memsc.c:279-326",
+        "src/c64/c64mem.c:396-417",
+        "src/c64/c64memsc.c:395-416"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-PRF-003/ac-04"
+    },
+    {
+      "requirementId": "TEST-PRF-001",
+      "acId": "ac-03",
+      "kind": "test",
+      "namedCaseGroups": "Sx64_InputCapacitors_StrictFalloffBoundary",
+      "sourceAnchors": [
+        "src/c64/c64pla.c:106-123",
+        "src/c64/c64mem.c:277-324",
+        "src/c64/c64memsc.c:279-326",
+        "src/c64/c64mem.c:396-417",
+        "src/c64/c64memsc.c:395-416"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-PRF-003/ac-04"
+    },
+    {
+      "requirementId": "TEST-PRF-001",
+      "acId": "ac-04",
+      "kind": "test",
+      "namedCaseGroups": "Sx64_InputCapacitors_DeadlineSelection",
+      "sourceAnchors": [
+        "src/c64/c64pla.c:106-123",
+        "src/c64/c64mem.c:277-324",
+        "src/c64/c64memsc.c:279-326",
+        "src/c64/c64mem.c:396-417",
+        "src/c64/c64memsc.c:395-416"
+      ],
+      "evidenceStatus": "R2 specification only; mock and real execution both pending",
+      "frAcBinding": "FR-PRF-003/ac-04"
+    }
+  ],
+  "unchangedMandatoryRows": [
+    {
+      "requirementId": "FR-CPU-004",
+      "kind": "fr",
+      "acId": "ac-01",
+      "text": "Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.",
+      "binding": "Unchanged baseline obligation, retained in full-plan mock and real gates; not a newly specified amendment group",
+      "satisfied": false
+    },
+    {
+      "requirementId": "FR-CPU-004",
+      "kind": "fr",
+      "acId": "ac-02",
+      "text": "Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.",
+      "binding": "Unchanged baseline obligation, retained in full-plan mock and real gates; not a newly specified amendment group",
+      "satisfied": false
+    },
+    {
+      "requirementId": "FR-CPU-004",
+      "kind": "fr",
+      "acId": "ac-04",
+      "text": "Bit 4 reads the cassette switch sense (active low).",
+      "binding": "Unchanged baseline obligation, retained in full-plan mock and real gates; not a newly specified amendment group",
+      "satisfied": false
+    },
+    {
+      "requirementId": "FR-CPU-004",
+      "kind": "fr",
+      "acId": "ac-07",
+      "text": "The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+      "binding": "Unchanged baseline obligation, retained in full-plan mock and real gates; not a newly specified amendment group",
+      "satisfied": false
+    },
+    {
+      "requirementId": "FR-PRF-003",
+      "kind": "fr",
+      "acId": "ac-01",
+      "text": "KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).",
+      "binding": "Unchanged baseline obligation, retained in full-plan mock and real gates; not a newly specified amendment group",
+      "satisfied": false
+    },
+    {
+      "requirementId": "FR-PRF-003",
+      "kind": "fr",
+      "acId": "ac-03",
+      "text": "Built-in 1541 drive: device 8 is always present.",
+      "binding": "Unchanged baseline obligation, retained in full-plan mock and real gates; not a newly specified amendment group",
+      "satisfied": false
+    },
+    {
+      "requirementId": "FR-PRF-003",
+      "kind": "fr",
+      "acId": "ac-05",
+      "text": "All other hardware is identical to the C64 NMOS profile.",
+      "binding": "Unchanged baseline obligation, retained in full-plan mock and real gates; not a newly specified amendment group",
+      "satisfied": false
+    },
+    {
+      "requirementId": "FR-PRF-003",
+      "kind": "fr",
+      "acId": "ac-06",
+      "text": "Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+      "binding": "Unchanged baseline obligation, retained in full-plan mock and real gates; not a newly specified amendment group",
+      "satisfied": false
+    }
+  ],
+  "counts": {
+    "records": 16,
+    "beforeCriteria": 66,
+    "afterCriteria": 104,
+    "amendmentRows": 96,
+    "unchangedMandatoryRows": 8,
+    "uniqueProposedGroups": 117,
+    "executedTests": 0
+  },
+  "replacementPolicy": "This ledger replaces the previous consolidated ledger as current candidate coverage. Earlier versions remain historical. No case is counted as executed.",
+  "acceptanceBoundary": "R0 text/specification review only. R1 guards and application, R2 discriminating mocks, R3 real providers and all original gates remain mandatory and unexecuted here."
+}

@@ -1,0 +1,30 @@
+C:\msys64\mingw64\bin\ar.exe: `u' modifier ignored since `D' is the default (see `U')
+filter8580new.cc: In constructor 'reSID::Filter::Filter()':
+filter8580new.cc:333:54: warning: 'scaled_voltage' may be used uninitialized [-Wmaybe-uninitialized]
+  333 |       if (scaled_voltage[fi.opamp_voltage_size - 1][0] > 65535.) {
+      |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+filter8580new.cc:306:20: note: 'scaled_voltage' declared here
+  306 |       double_point scaled_voltage[50];
+      |                    ^~~~~~~~~~~~~~
+In file included from drivecpu.c:440:
+../../src/6510core.c: In function 'drivecpu_execute':
+../../src/6510core.c:855:2: warning: #warning "ANE_LOG_LEVEL not defined, disabling by default" [-Wcpp]
+  855 | #warning "ANE_LOG_LEVEL not defined, disabling by default"
+      |  ^~~~~~~
+../../src/6510core.c:1397:2: warning: #warning "LXA_LOG_LEVEL not defined, disabling by default" [-Wcpp]
+ 1397 | #warning "LXA_LOG_LEVEL not defined, disabling by default"
+      |  ^~~~~~~
+mmc64.c: In function 'set_mmc64_bios_filename':
+mmc64.c:606:14: warning: '%s' directive argument is null [-Wformat-overflow=]
+  606 |         LOG(("MMC64: set_mmc64_bios_filename done: %d '%s'", mmc64_enabled, mmc64_bios_filename));
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mmc64.c:81:30: note: in definition of macro 'LOG'
+   81 | #define LOG(_x_) log_printf  _x_
+      |                              ^~~
+mmc64.c:606:56: note: format string is defined here
+  606 |         LOG(("MMC64: set_mmc64_bios_filename done: %d '%s'", mmc64_enabled, mmc64_bios_filename));
+      |                                                        ^~
+c1541.c: In function 'read_geos_cmd':
+c1541.c:4350:19: warning: 'slot[2]' may be used uninitialized [-Wmaybe-uninitialized]
+ 4350 |     unsigned char slot[SLOT_SIZE];
+      |                   ^~~~

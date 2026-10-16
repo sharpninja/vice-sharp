@@ -212,6 +212,18 @@ documents:
     target: TR-Host-Prg.md
     platforms:
       - github
+  - id: plan-vice-immutable
+    title: Immutable Native VICE Remediation Plan
+    source: docs/plans/PLAN-VICE-IMMUTABLE-001.md
+    target: Plan-Immutable-Native-VICE.md
+    platforms:
+      - github
+  - id: plan-vsf-lockstep
+    title: Native VICE VSF Lockstep Plan
+    source: docs/plans/PLAN-VSFLOCKSTEP-001.md
+    target: Plan-Native-VICE-VSF-Lockstep.md
+    platforms:
+      - github
 navigation:
   - title: Home
     path: Home
@@ -263,3 +275,8 @@ navigation:
       - document: machine-architecture-schema
       - document: cross-platform-wireframes
       - document: desktop-windows-ui
+  - title: Current Plans
+    path: Current-Plans
+    children:
+      - document: plan-vice-immutable
+      - document: plan-vsf-lockstep

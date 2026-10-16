@@ -1,0 +1,2018 @@
+{
+  "schema": "vice-sharp/adjacent-tape-test-disposition/v1",
+  "preparedAt": "2026-10-11T12:01:26-05:00",
+  "status": "draft-unapproved-not-executed",
+  "requestId": "req-20261011T164636Z-adjacent-test-disposition",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "purpose": "Supplement the 63-method direct tape disposition with exact adjacent test bodies and bounded lexical classification. No amendment, code or done-state mutation.",
+  "priorDirectInventory": {
+    "fileCount": 13,
+    "sha256": "0A0738C2276196E0736B8F4381A6259ACBCE2BB380FA416B217551991F13267E",
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\disposition-ledger.json",
+    "methodCount": 63
+  },
+  "denominators": {
+    "theoryMethodCount": 1,
+    "activeAdjacentFiles": 8,
+    "legacyMethods": 15,
+    "broadAdditionalFiles": 19,
+    "executedCases": 0,
+    "legacyFiles": 2,
+    "activeAdjacentMethods": 32,
+    "explicitInlineDataRows": 7,
+    "methodCount": 47,
+    "lexicalFiles": 9,
+    "note": "Method counts are not tests executed or universal coverage. The seven literal theory rows belong to one selected method. No corpus-wide case denominator is inferred."
+  },
+  "execution": {
+    "doneStateWrites": 0,
+    "nativeTests": 0,
+    "managedTests": 0,
+    "requirementsWrites": 0,
+    "hvRuns": 0,
+    "testSourceEdits": 0,
+    "productSourceEdits": 0,
+    "nativeSourceEdits": 0,
+    "mockTests": 0
+  },
+  "sourceBoundary": "Exact complete selected bodies retained; whole test-file hashes pinned. Eight active adjacent groups and two legacy groups have method-level dispositions. Nine lexical files have bounded matching-context classification only. Transitive production/runtime graph and native execution are not certified.",
+  "requirementSemantics": "Records below are current effective MCP readback, not proposed after-values. Group references indicate related obligations, not asserted complete AC coverage. Existing test XMLDocs may contain legacy/noncanonical aliases. No new IDs or changes are applied.",
+  "currentRequirementRecords": [
+    {
+      "kind": "functional",
+      "record": {
+        "title": "Media devices (D64, tape) I/O functional parity",
+        "id": "FR-BACKFILL-MEDIA-001",
+        "priority": "medium",
+        "body": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+        "acceptanceCriteria": [],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "closed",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "functional",
+      "record": {
+        "title": "IRQ Generation from CIA1",
+        "id": "FR-CIA-007",
+        "priority": "high",
+        "body": "CIA1 generates Interrupt Requests (IRQ) to the CPU. IRQ sources mirror those of CIA2 (timers, TOD, serial, FLAG) but are connected to the IRQ line instead of NMI.\n\n## Acceptance Criteria\n- CIA1 interrupt output is connected to the CPU IRQ line.\n- Any enabled interrupt source in CIA1 ICR/IMR asserts IRQ.\n- IRQ is level-triggered: it remains asserted as long as any enabled source has its flag set.\n- Reading CIA1 ICR ($DC0D) clears all interrupt flags and deasserts the IRQ line (if no other sources remain).\n- The IRQ mask register ($DC0D write) selects which sources can generate IRQ (bit 7 = set/clear control).\n- Timer A, Timer B, TOD alarm, SDR complete, and FLAG are all independently maskable.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "CIA1 interrupt output is connected to the CPU IRQ line.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Any enabled interrupt source in CIA1 ICR/IMR asserts IRQ.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "IRQ is level-triggered: it remains asserted as long as any enabled source has its flag set.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Reading CIA1 ICR ($DC0D) clears all interrupt flags and deasserts the IRQ line (if no other sources remain).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "The IRQ mask register ($DC0D write) selects which sources can generate IRQ (bit 7 = set/clear control).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Timer A, Timer B, TOD alarm, SDR complete, and FLAG are all independently maskable.",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "functional",
+      "record": {
+        "title": "Download, attach, boot",
+        "id": "FR-ROMM-LAUNCH-001",
+        "priority": "medium",
+        "body": "PLAN-ROMM-001. Selecting a game downloads it, attaches to the right slot, and boots on the supported Avalonia product path. TR-ROMM-SEC-001. Xbox/UWP launch acceptance is archived and outside product scope.\nAC-LAUNCH-01: DownloadAsync accepts one relative filename, contains it under cacheDir/{romId}, reuses only on expected-size match, streams to a temporary file, rejects overflow/truncation, and atomically publishes complete content with progress -> RomMGatewayDownloadTests.Streams_Reuses_Progress + RejectsFileNamesOutsideRomCache + TruncatedDownload_DoesNotPublishPartialCacheEntry.\nAC-LAUNCH-02: slot = SelectedSlot or MediaExtensionMap default from fs_name -> MediaExtensionMapTests.Extension_MapsSlot.\nAC-LAUNCH-03: .prg is not launchable and Attach is disabled -> MediaExtensionMapTests.Prg_NotLaunchable + LibraryBrowseViewModelTests.Prg_AttachDisabled.\nAC-LAUNCH-04: attach/attach+start invoke IGameLauncher with resolved slot + autostart flag -> LibraryBrowseViewModelTests.AttachStart_InvokesLauncher.\nAC-LAUNCH-05: Avalonia launcher delegates to DropAndStartFileAsync(autostart)/AttachAsync(attach-only) -> AvaloniaGameLauncherTests.DelegatesToShell.\nAC-LAUNCH-06: two-phase status (Downloading N% then Starting) -> LibraryBrowseViewModelTests.Launch_TwoPhaseStatus.\n\n## Acceptance Criteria\n- `DownloadAsync` streams to `<cacheDir>/{romId}/{fs_name}`, reuses on size match, reports\n- slot = `SelectedSlot` or `MediaExtensionMap` default from `fs_name` ->\n- `.prg` is not launchable and Attach is disabled -> `MediaExtensionMapTests.Prg_NotLaunchable`\n- attach/attach+start invoke `IGameLauncher` with the resolved slot + autostart flag ->\n- Xbox launcher reads bytes -> `AttachMediaAsync` payload -> `AutostartDrive8Async`(disk)/\n- Avalonia launcher delegates to `DropAndStartFileAsync`(autostart)/`AttachAsync`\n- two-phase status (\"Downloading N%\" then \"Starting\") ->",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "`DownloadAsync` streams to `<cacheDir>/{romId}/{fs_name}`, reuses on size match, reports",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "slot = `SelectedSlot` or `MediaExtensionMap` default from `fs_name` ->",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "`.prg` is not launchable and Attach is disabled -> `MediaExtensionMapTests.Prg_NotLaunchable`",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "attach/attach+start invoke `IGameLauncher` with the resolved slot + autostart flag ->",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Xbox launcher reads bytes -> `AttachMediaAsync` payload -> `AutostartDrive8Async`(disk)/",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Avalonia launcher delegates to `DropAndStartFileAsync`(autostart)/`AttachAsync`",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-07",
+            "text": "two-phase status (\"Downloading N%\" then \"Starting\") ->",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "functional",
+      "record": {
+        "title": "Datasette motor ramp + sense line + record mode",
+        "id": "FR-RUNTIME-TAPE-002",
+        "priority": "medium",
+        "body": "Datasette transport, tape-sense, motor timing, and recording must reproduce pinned immutable VICE behavior for the same selected machine, tape media state, control sequence, and emulated clock sequence. Machine-specific tape-sense and pulse wiring belong in machine adapters. Internal pulse-buffer success or compatibility with managed-only tests does not establish VICE parity.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "functional",
+      "record": {
+        "title": "TAP File Format Support (v0 and v1)",
+        "id": "FR-TAP-002",
+        "priority": "medium",
+        "body": "The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengths as single bytes (with 0 indicating an overflow requiring 3 additional bytes). TAP v1 extends the overflow encoding. The emulator shall read and write both TAP format versions.\n\n## Acceptance Criteria\n- TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.\n- A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.\n- TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.\n- The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.\n- Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.\n- Writing to TAP format captures the pulse timing from emulated writes.\n- The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Writing to TAP format captures the pulse timing from emulated writes.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-07",
+            "text": "The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "functional",
+      "record": {
+        "title": "VICE-style menu bar",
+        "id": "FR-UIMENUBAR-001",
+        "priority": "medium",
+        "body": "A top menu bar with structure modeled on VICE's x64sc GTK UI: File (smart attach, attach/detach disk 8-11, tape + datasette controls, cartridge, reset soft/hard, exit), Snapshot (load/save, quick, media recording), Settings (full settings, machine/drive/audio/video/input categories, toggle warp, toggle true drive per drive, swap joysticks), Debug (monitor, step), Help (about). Menu commands bind to the existing view-model actions/host services.\n\n## Acceptance Criteria\n- A top menu bar with structure modeled on VICE's x64sc GTK UI: File (smart attach, attach/detach disk 8-11, tape + datasette controls, cartridge, reset soft/hard, exit), Snapshot (load/save, quick, media recording), Settings (full settings, machine/drive/audio/video/input categories, toggle warp, toggle true drive per drive, swap joysticks), Debug (monitor, step), Help (about).\n- Menu commands bind to the existing view-model actions/host services.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "A top menu bar with structure modeled on VICE's x64sc GTK UI: File (smart attach, attach/detach disk 8-11, tape + datasette controls, cartridge, reset soft/hard, exit), Snapshot (load/save, quick, media recording), Settings (full settings, machine/drive/audio/video/input categories, toggle warp, toggle true drive per drive, swap joysticks), Debug (monitor, step), Help (about).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Menu commands bind to the existing view-model actions/host services.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "functional",
+      "record": {
+        "title": "Device Setup attach/eject via host media",
+        "id": "FR-XDEV-001",
+        "priority": "medium",
+        "body": "Device Setup presents Drive8/Drive9/Tape/Cartridge cards with typed attach + eject through the host media boundary. Acceptance: patterns per slot; Attach reads bytes via IStoragePicker and calls AttachMediaAsync; Eject calls DetachMediaAsync; no runtime-internal calls.\n\n## Acceptance Criteria\n- AvailableDriveModels==DriveModelCatalog.Implemented; 1542 flows to SetTrueDriveAsync; single-rig invariant.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "AvailableDriveModels==DriveModelCatalog.Implemented; 1542 flows to SetTrueDriveAsync; single-rig invariant.",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "functional",
+      "record": {
+        "title": "Drive-model selector rebuilds true-drive rig",
+        "id": "FR-XDEV-002",
+        "priority": "medium",
+        "body": "Drive cards expose the implemented drive-model selector and rebuild the true-drive rig on model change. Acceptance: AvailableDriveModels==DriveModelCatalog.Implemented; active true-drive model change calls SetTrueDriveAsync(true, device, diskPath, (int)model) with 1542 for 1541-II; inactive-slot change is inert.\n\n## Acceptance Criteria\n- AvailableDriveModels==DriveModelCatalog.Implemented; active true-drive model change calls SetTrueDriveAsync(true, device, diskPath, (int)model) with 1542 for 1541-II; inactive-slot change is inert.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "AvailableDriveModels==DriveModelCatalog.Implemented; active true-drive model change calls SetTrueDriveAsync(true, device, diskPath, (int)model) with 1542 for 1541-II; inactive-slot change is inert.",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "functional",
+      "record": {
+        "title": "Single true-drive rig at a time",
+        "id": "FR-XDEV-003",
+        "priority": "medium",
+        "body": "Only one true-drive rig at a time. Acceptance: enabling Drive9 true-drive sets Drive8.TrueDrive=false with one rebuild; disabling all issues SetTrueDriveAsync(false).\n\n## Acceptance Criteria\n- enabling Drive9 true-drive sets Drive8.TrueDrive=false with one rebuild; disabling all issues SetTrueDriveAsync(false).",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "enabling Drive9 true-drive sets Drive8.TrueDrive=false with one rebuild; disabling all issues SetTrueDriveAsync(false).",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "technical",
+      "record": {
+        "title": "Xbox ViewModels reference only Abstractions + Protocol",
+        "id": "TR-XMVVM-001",
+        "priority": "medium",
+        "body": "Xbox ViewModels reference only Abstractions + Protocol; UWP APIs isolated behind the head. Acceptance: verified by TEST-XBOXUI-007, boundary tests.",
+        "acceptanceCriteria": [],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "testing",
+      "record": {
+        "title": "CIA and Keyboard Matrix Tests",
+        "id": "TEST-CIA-001",
+        "priority": "medium",
+        "condition": "CIA timers, TOD, keyboard matrix, joystick interaction, serial shift register, IRQ, and NMI behavior are verified with unit and integration tests.",
+        "acceptanceCriteria": [],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "testing",
+      "record": {
+        "title": "Datasette transport, sense wiring and recording parity",
+        "id": "TEST-TAPE-SENSE-001",
+        "priority": "medium",
+        "condition": "Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "testing",
+      "record": {
+        "title": "VICE-style menu bar",
+        "id": "TEST-UIMENUBAR-001",
+        "priority": "medium",
+        "condition": "VM: menu commands invoke the existing actions/host services (attach/eject, reset, snapshot, warp, true-drive toggle, swap joysticks). App-launch: menu structure matches the plan and commands work.",
+        "acceptanceCriteria": [],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    },
+    {
+      "kind": "testing",
+      "record": {
+        "title": "",
+        "id": "TEST-XSET-001",
+        "priority": "medium",
+        "condition": "Umbrella off-console suite (XboxDataPathBridgeTests, SettingsOptionCatalogTests, XboxSettingsViewModelTests, XboxDeviceSetupViewModelTests, RomProvisionEvaluatorTests, XboxRomProvisioningViewModelTests, XboxUiStateStoreTests, XboxViewModelBindabilityTests). Acceptance: 0 failed/0 skipped per slice filter.",
+        "acceptanceCriteria": [],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    }
+  ],
+  "currentRequirementCounts": {
+    "functional": 235,
+    "technical": 139,
+    "testing": 142,
+    "mappings": 233
+  },
+  "readbackGaps": [
+    "TEST-CIA-001 and TEST-UIMENUBAR-001 currently expose empty acceptanceCriteria arrays; they are retained, not treated as satisfied.",
+    "FR-ROMM-LAUNCH-001 current AC-01/02/04/05/06/07 contain visibly partial phrases; retain exact records and reconcile provenance before proposing any separate correction. This does not expand the 14-record tape write set."
+  ],
+  "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeSourcePins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\ciacore.c",
+      "sha256": "D7C2AA2931CB8073606AED832AB74B95617EECC3D3A4295673F716DAE18C75AE",
+      "gitBlob": "c8a431d927a1831c9d6f10161c87210d64820d75",
+      "expectedBlob": "c8a431d927a1831c9d6f10161c87210d64820d75",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via1.c",
+      "sha256": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+      "gitBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+      "expectedBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+      "matches": true
+    }
+  ],
+  "nativeAnchors": [
+    {
+      "observation": "FLAG sets irqflags/new_irqflags after catchup; asynchronous handling schedules idle no later than rclk+1 when needed. Exact IRQ assertion timing still depends on the CIA model and remaining IFR pipeline.",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\ciacore.c",
+      "lines": "592-600,1594-1625"
+    },
+    {
+      "observation": "Port A joins joystick bits and inverse tape-sense bit 6 with iec_pa_read, then applies the PRA/DDRA mask.",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via1.c",
+      "lines": "222-252"
+    }
+  ],
+  "testFilePins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\AttachPanelViewModelTests.cs",
+      "sha256": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+      "priorSha256": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+      "unchanged": true,
+      "classification": "adjacent-regression-requires-preservation"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Library.Tests\\Media\\MediaExtensionMapTests.cs",
+      "sha256": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+      "priorSha256": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+      "unchanged": true,
+      "classification": "adjacent-regression-requires-preservation"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CaptureServiceHostTests.cs",
+      "sha256": "A4245A7A309A4BB736F5D68014CDED533B23AFFC5C16A698CD9CCB10FFD85D23",
+      "priorSha256": "A4245A7A309A4BB736F5D68014CDED533B23AFFC5C16A698CD9CCB10FFD85D23",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CiaFlagPinTests.cs",
+      "sha256": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+      "priorSha256": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+      "unchanged": true,
+      "classification": "adjacent-regression-requires-preservation"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\FrMed005AcceptanceTests.cs",
+      "sha256": "AAC2CAB648095E3969898FE26EE1C8DC64F29CF4A3E35B947DC4D0DB614A5D39",
+      "priorSha256": "AAC2CAB648095E3969898FE26EE1C8DC64F29CF4A3E35B947DC4D0DB614A5D39",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\GrpcHostServiceAdaptersTests.cs",
+      "sha256": "5C24A45A1C8689F371F3F575CDFBC4CA9CB61B1DAFD2FEF5290F2216E175AE70",
+      "priorSha256": "5C24A45A1C8689F371F3F575CDFBC4CA9CB61B1DAFD2FEF5290F2216E175AE70",
+      "unchanged": true,
+      "classification": "adjacent-regression-requires-preservation"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\IEC\\T64ImageTests.cs",
+      "sha256": "48B11DFCA89EE766165A85029E5597551A894DBB28FE70B1EE8B33701FF3B1E1",
+      "priorSha256": "48B11DFCA89EE766165A85029E5597551A894DBB28FE70B1EE8B33701FF3B1E1",
+      "unchanged": true,
+      "classification": "adjacent-regression-requires-preservation"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "sha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "priorSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "unchanged": true,
+      "classification": "adjacent-regression-requires-preservation"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Media\\CaptureAudioTapTests.cs",
+      "sha256": "63166932B57AE76422058F2B0C802A2CA834C767EC053E647FC253B61849EDAA",
+      "priorSha256": "63166932B57AE76422058F2B0C802A2CA834C767EC053E647FC253B61849EDAA",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\ShellViewModelTests.cs",
+      "sha256": "A3A77872942964E2A0046018BF17FBA2D6B8C8D585C98BCC9A91E684BBBE9DFE",
+      "priorSha256": "A3A77872942964E2A0046018BF17FBA2D6B8C8D585C98BCC9A91E684BBBE9DFE",
+      "unchanged": true,
+      "classification": "adjacent-regression-requires-preservation"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidNoiseDivergentParityTests.cs",
+      "sha256": "07E7C412DA93FE5D306FA80253DC80B216E4548FBAC207192FC2540F15CCA595",
+      "priorSha256": "07E7C412DA93FE5D306FA80253DC80B216E4548FBAC207192FC2540F15CCA595",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidVoiceMixDivergentParityTests.cs",
+      "sha256": "84510C15535376D90F79F165729973E7549FBD7BD1ABC39A2FEC64E64C01E6DD",
+      "priorSha256": "84510C15535376D90F79F165729973E7549FBD7BD1ABC39A2FEC64E64C01E6DD",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidWaveOsc3DivergentParityTests.cs",
+      "sha256": "872C9A750ABA68D7FD41FC748C3698A321FD96FD40C97E03F5530B876C7B2435",
+      "priorSha256": "872C9A750ABA68D7FD41FC748C3698A321FD96FD40C97E03F5530B876C7B2435",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Vic20\\Vic20Via1IecPortTests.cs",
+      "sha256": "5EF92CBEDBCC82AC50A07EA121790B33957AD332396B36A5330D477F89B26005",
+      "priorSha256": "5EF92CBEDBCC82AC50A07EA121790B33957AD332396B36A5330D477F89B26005",
+      "unchanged": true,
+      "classification": "adjacent-regression-requires-preservation"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\WarpAudioDiscardTests.cs",
+      "sha256": "2EEC4B9F048CA468BF5BD2E094C3E5588D68D940864DCA5F2079DD59C26AC105",
+      "priorSha256": "2EEC4B9F048CA468BF5BD2E094C3E5588D68D940864DCA5F2079DD59C26AC105",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\GamepadMergeSocdTests.cs",
+      "sha256": "2BA29BEA1B0A894A683A77A9BEEB5E7FE044BB4F5F1200CD3F767D6AD8967740",
+      "priorSha256": "2BA29BEA1B0A894A683A77A9BEEB5E7FE044BB4F5F1200CD3F767D6AD8967740",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxAudioBackendFactoryTests.cs",
+      "sha256": "87D4FE2D74A89B5C2D53481F71055C0E8747037D8803FF6B6E0B4773C82EE554",
+      "priorSha256": "87D4FE2D74A89B5C2D53481F71055C0E8747037D8803FF6B6E0B4773C82EE554",
+      "unchanged": true,
+      "classification": "lexical-false-positive"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "sha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "priorSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "unchanged": true,
+      "classification": "retained-legacy-outside-implementation-scope"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDefaultCartridgeTests.cs",
+      "sha256": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+      "priorSha256": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+      "unchanged": true,
+      "classification": "retained-legacy-outside-implementation-scope"
+    }
+  ],
+  "supportingPins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\disposition-ledger.json",
+      "sha256": "0A0738C2276196E0736B8F4381A6259ACBCE2BB380FA416B217551991F13267E"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\search-disposition.json",
+      "sha256": "F1F1C60D6EF45D42307B8CB4AA55B228DC022EFBDB0E9D2395C7780AC0F52857"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+      "sha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Library.ViewModels\\MediaExtensionMap.cs",
+      "sha256": "B78896082C55FF1397BFA705EBC55334261164A993EA8959E89EB7E879CB9687"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\Fakes\\FakeXboxSettingsGateway.cs",
+      "sha256": "3D8DFCD31D42503CEED2554067E1DEE99DEC6C46F7F89A0F2EB6E64BEA2E5712"
+    }
+  ],
+  "groups": [
+    {
+      "selected": [
+        "Constructor_ProducesExpectedDefaultState",
+        "ApplyStatus_UpdatesDriveIecActivityFromHostTelemetry",
+        "PeripheralCard_BindingSurface_TrueDrivePerSlotKind",
+        "DriveLed_LightsForDrivesOnly"
+      ],
+      "id": "ADJ-UI",
+      "category": "active-adjacent",
+      "refs": [
+        "FR-UIMENUBAR-001"
+      ],
+      "file": "tests/ViceSharp.TestHarness/AttachPanelViewModelTests.cs",
+      "change": "Retain these assertions unchanged as UI regressions. Add independent tape status scenarios at the host/UI seam only where required; do not replace native transport tests with UI flags.",
+      "preserve": "Four ordered slots, default/disconnected/settings state, drive IEC activity transitions, true-drive capability and property-change checks, drive-only LED checks.",
+      "controls": [
+        "Swap Tape and Cartridge slots; reject exact ordered collection.",
+        "Set Tape true-drive capability or drive LED true; reject capability/LED assertions.",
+        "Drop drive property-change notification; reject existing notification check."
+      ],
+      "readScope": "Selected methods and TrackPropertyChanges/CreateStatus helpers.",
+      "gap": "No Datasette flux, sense, motor or write observation. Drive-only IEC/LED is not a prohibition on a separate tape transport indicator."
+    },
+    {
+      "selected": [
+        "*"
+      ],
+      "id": "ADJ-MAP",
+      "category": "active-adjacent",
+      "refs": [
+        "FR-ROMM-LAUNCH-001"
+      ],
+      "file": "tests/ViceSharp.Library.Tests/Media/MediaExtensionMapTests.cs",
+      "change": "Preserve existing rows; any extension/case/blank-path expansion must use approved launch contract. Never silently route T64 through TAP pulse decoding.",
+      "preserve": "Seven InlineData mappings plus PRG-disabled, unknown-extension and bare-extension methods. TAP is Tape/Tape; T64 is Drive8/Tape. Keep slot, kind and launchable assertions.",
+      "controls": [
+        "Route T64 to Tape rather than Drive8; reject slot comparison.",
+        "Route TAP to Drive8 or report Disk kind; reject both independent fields.",
+        "Allow PRG launch or resolve unknown extension; reject existing false/null assertions."
+      ],
+      "readScope": "Entire test file and entire MediaExtensionMap.cs.",
+      "gap": "Filename routing is not content validation, attach success or native loader execution. Current implementation additionally lists d71 and rom and is case-insensitive, but selected theory does not exercise those branches."
+    },
+    {
+      "selected": [
+        "*"
+      ],
+      "id": "ADJ-CIA",
+      "category": "active-adjacent",
+      "refs": [
+        "FR-CIA-007",
+        "TEST-CIA-001"
+      ],
+      "file": "tests/ViceSharp.TestHarness/CiaFlagPinTests.cs",
+      "change": "Keep API-level assertions as regression inputs. Add clock-indexed native CIA observations across trigger/ICR-read/mask-write ordering and model choice before accepting a timing correction. Bind actual Datasette edges separately.",
+      "preserve": "FLAG bit-4 latch, ICR read clear, masked/unmasked IRQ, second ICR read and repeated TriggerFlagPin behavior. Retain all five exact stimuli.",
+      "controls": [
+        "Clear bit 4 before first ICR read; reject latch assertion.",
+        "Retain flag on second read; reject clear assertion.",
+        "Ignore mask or fail to assert enabled IRQ; reject separate masked/unmasked outcomes.",
+        "Move native FLAG delivery one cycle early or late; new time-indexed assertions must reject both without a deliberately failing suite."
+      ],
+      "readScope": "Entire test file including BuildCiaWithIrq; immutable ciacore.c 592-600 and 1594-1625.",
+      "gap": "Direct TriggerFlagPin calls bypass tapeport and physical edge polarity. One cia.Tick is asserted in the enabled case, not a complete CIA-model timing contract; disabled case has no Tick."
+    },
+    {
+      "selected": [
+        "GrpcMediaServiceHost_AttachMedia_MarshalsSlotAndPayload",
+        "GrpcMediaServiceHost_ListMedia_MapsAllAttachments"
+      ],
+      "id": "ADJ-GRPC",
+      "category": "active-adjacent",
+      "refs": [
+        "FR-BACKFILL-MEDIA-001"
+      ],
+      "file": "tests/ViceSharp.TestHarness/GrpcHostServiceAdaptersTests.cs",
+      "change": "Strengthen contract assertions and scripted fake interaction ledger before using these tests as full media protocol evidence. Keep transport mapping distinct from actual runtime acceptance.",
+      "preserve": "Drive9 attach status, response/request slot and exact four payload bytes; list Ok, count three, Drive8/Tape/Cartridge ordering.",
+      "controls": [
+        "Mutate each Tape DTO field independently while retaining slots; strengthened field assertions must reject each.",
+        "Reorder or omit one list attachment; existing count/order checks reject it.",
+        "Alter one payload byte; existing payload equality rejects it.",
+        "Drop session id or cancellation token; added interaction assertions must reject it."
+      ],
+      "readScope": "Two complete methods; FakeMediaService 808-829 and ServerCallContext 706-735.",
+      "gap": "List uses a Tape DTO but does not assert its path, display name, read-only, attached or AppliedToRuntime fields. Attach does not assert session/path/display/read-only/token. FakeMediaService captures only LastAttachRequest; no list token/call recording."
+    },
+    {
+      "selected": [
+        "*"
+      ],
+      "id": "ADJ-T64",
+      "category": "active-adjacent",
+      "refs": [
+        "FR-BACKFILL-MEDIA-001",
+        "FR-TAP-002"
+      ],
+      "file": "tests/ViceSharp.TestHarness/IEC/T64ImageTests.cs",
+      "change": "Retain both tests and all original bytes. Add independent expected full PRG bytes and immutable-native fixture/corpus observations specified by the existing media-fixture supplement; do not self-generate expected bytes from T64Image.",
+      "preserve": "Synthetic 104-byte T64: one entry, load 0801, eight data bytes. Open/extract success, ten-byte PRG, load prefix, first/last data bytes; D64 length, IEC attach, file lookup/start track and full D64 file stream equality.",
+      "controls": [
+        "Change one interior extracted byte while preserving first/last; stronger full-payload assertion must reject it.",
+        "Swap load-address bytes; existing prefix rejects it.",
+        "Truncate directory or misreport entry offset; independent parser-result cases must discriminate native behavior.",
+        "Return a D64 file stream differing by one byte; existing FluentAssertions Equal(prg) rejects it."
+      ],
+      "readScope": "Entire file including BuildMinimalT64. Native T64 parser runtime behavior not newly validated in this supplement.",
+      "gap": "First extraction asserts endpoints, not all interior bytes or name. Managed T64-to-D64-to-managed IEC round trip is not native parser, native disk mount or loader execution evidence. No malformed/multiple-entry/offset edge in this file."
+    },
+    {
+      "selected": [
+        "*"
+      ],
+      "id": "ADJ-HOST",
+      "category": "active-adjacent",
+      "refs": [
+        "FR-BACKFILL-MEDIA-001"
+      ],
+      "file": "tests/ViceSharp.TestHarness/MediaServiceHostTests.cs",
+      "change": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "preserve": "All thirteen methods: three missing-session operations, absent path/payload, missing file, invalid disk payload, unsupported slot, empty Tape detach, fresh empty list, three pre-cancelled operations and null registry.",
+      "controls": [
+        "Change expected status or populate an attachment after failure; reject existing status/null assertions.",
+        "Swallow pre-cancellation; reject exception check.",
+        "Touch filesystem/registry/runtime then throw cancellation; added call ledger must reject the forbidden interaction.",
+        "Report positive attach without applying to the runtime; separate applied-state/actual-device assertions must reject false success."
+      ],
+      "readScope": "Entire file including CreateMinimalSession. Transitive full factory/descriptor/runtime graph is not audited here.",
+      "gap": "No positive TAP/T64 attach here. Minimal descriptor is not real C64/VIC20 integration. Cancelled tests assert OperationCanceledException but not the comment claim that filesystem/registry/runtime interactions were absent."
+    },
+    {
+      "selected": [
+        "ToggleTrueDrive_FlipsDrivesOnly"
+      ],
+      "id": "ADJ-SHELL",
+      "category": "active-adjacent",
+      "refs": [
+        "FR-UIMENUBAR-001",
+        "TEST-UIMENUBAR-001"
+      ],
+      "file": "tests/ViceSharp.TestHarness/ShellViewModelTests.cs",
+      "change": "Retain current case; use host call recording and approved per-slot cases to prove no Tape true-drive side effect. Keep same inputs/assertions across mock and real menu-adapter providers.",
+      "preserve": "Drive8 true-drive toggles true to false; Tape remains false.",
+      "controls": [
+        "Enable true-drive on Tape; reject existing false assertion.",
+        "Invoke host true-drive mutation for Tape while leaving UI false; new call ledger must reject it."
+      ],
+      "readScope": "Selected complete method plus CreateHost/CreateShell helpers 18-50.",
+      "gap": "No host-call absence assertion for Tape; this method does not exercise Drive9 or Cartridge. Mock host default success is not actual media execution."
+    },
+    {
+      "selected": [
+        "*"
+      ],
+      "id": "ADJ-VIA",
+      "category": "active-adjacent",
+      "refs": [
+        "FR-RUNTIME-TAPE-002",
+        "TEST-TAPE-SENSE-001"
+      ],
+      "file": "tests/ViceSharp.TestHarness/Vic20/Vic20Via1IecPortTests.cs",
+      "change": "Retain idle case. Use the prior recording/wiring contract for full sense/DDR/IEC/joystick vectors, no-handshake side effects and real machine edges. Native source computes sense bit as tape_sense ? 0 : 40 then applies DDRA.",
+      "preserve": "Reset VIC20 VIA1 at 9110; Peek and Read of no-handshake PA 911F plus bus Peek all equal 7E.",
+      "controls": [
+        "Invert sense bit or bypass DDRA; new port vector oracle must reject it.",
+        "Map peek to a destructive handshake read; new state/interrupt observer must reject it.",
+        "Deliver flux to the wrong VIA or edge polarity; real wiring assertions must reject it."
+      ],
+      "readScope": "Entire test file; immutable vic20via1.c 222-252. Complete MachineTestFactory graph not audited here.",
+      "gap": "Only idle aggregate port state. No tape-sense transitions, DDRA masking, joystick/IEC combinations, handshake register, CB1 flux, motor or record wiring. Real MachineTestFactory/ROM dependency remains."
+    },
+    {
+      "selected": [
+        "*"
+      ],
+      "id": "LEGACY-XSET",
+      "category": "retained-legacy-outside-implementation-scope",
+      "refs": [
+        "FR-XDEV-001",
+        "FR-XDEV-002",
+        "FR-XDEV-003",
+        "TR-XMVVM-001",
+        "TEST-XSET-001"
+      ],
+      "file": "tests/ViceSharp.TestHarness/Xbox/XboxDeviceSetupViewModelTests.cs",
+      "change": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "preserve": "All ten methods, including exact four slots/patterns/models and Tape attach/eject fake gateway regression. Other methods cover disk attach/payload, list, drive model and single-rig invariants.",
+      "controls": [],
+      "readScope": "Entire test file; fake gateway relevant media and true-drive bodies 159-209,233-247.",
+      "gap": "Gateway fake always creates AppliedToRuntime=true and does not decode TAP or run a machine. Tape eject checks slot/cleared UI, not native tape detach. No new Xbox work is authorized."
+    },
+    {
+      "selected": [
+        "*"
+      ],
+      "id": "LEGACY-XCART",
+      "category": "retained-legacy-outside-implementation-scope",
+      "refs": [],
+      "file": "tests/ViceSharp.TestHarness/Xbox/XboxDefaultCartridgeTests.cs",
+      "change": "Retain all five tests and legacy requirement references. Record untested Tape branch for later approved legacy validation; do not count the existing test as Tape behavior proof.",
+      "preserve": "Five tests: embedded resource signature, first boot extraction/settings, existing/missing path policy, user-selection persistence, source-text wiring guard.",
+      "controls": [],
+      "readScope": "Entire file. Source-text wiring test is structural only.",
+      "gap": "Disk/tape comment is broader than body: UserMediaSelection tests Drive8 but never MediaSlot.Tape. Wiring guard is token presence, not executed attachment. No new Xbox implementation is authorized."
+    }
+  ],
+  "methods": [
+    {
+      "id": "ADJ-UI/Constructor_ProducesExpectedDefaultState",
+      "groupId": "ADJ-UI",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\AttachPanelViewModelTests.cs",
+      "fileSha256": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+      "method": "Constructor_ProducesExpectedDefaultState",
+      "declarationLine": 36,
+      "endLine": 57,
+      "source": "    public void Constructor_ProducesExpectedDefaultState()\n    {\n        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());\n\n        Assert.Equal(AttachDockSide.Left, viewModel.DockSide);\n        Assert.Equal(SidebarTab.Peripherals, viewModel.ActiveTab);\n        Assert.Equal(\"Disconnected\", viewModel.StatusText);\n        Assert.Equal(100, viewModel.LimiterRatePercent);\n        Assert.True(viewModel.LimiterEnabled);\n        Assert.False(viewModel.HasPendingSettingsChanges);\n        Assert.False(viewModel.RequiresRestart);\n        Assert.False(viewModel.HasSettingsValidationResults);\n        Assert.Equal(4, viewModel.Slots.Count);\n        Assert.Collection(\n            viewModel.Slots,\n            slot => Assert.Equal(MediaSlot.Drive8, slot.Slot),\n            slot => Assert.Equal(MediaSlot.Drive9, slot.Slot),\n            slot => Assert.Equal(MediaSlot.Tape, slot.Slot),\n            slot => Assert.Equal(MediaSlot.Cartridge, slot.Slot));\n        Assert.NotEmpty(viewModel.MachineProfiles);\n        Assert.Equal(viewModel.MachineProfiles[0], viewModel.SelectedMachineProfile);\n    }",
+      "sourceLfSha256": "D91908C9389E4EF368A8BF8FE10A25B5929298EB16B05A4F7E1BE8CE8A7C78FF",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(AttachDockSide.Left, viewModel.DockSide);",
+        "        Assert.Equal(SidebarTab.Peripherals, viewModel.ActiveTab);",
+        "        Assert.Equal(\"Disconnected\", viewModel.StatusText);",
+        "        Assert.Equal(100, viewModel.LimiterRatePercent);",
+        "        Assert.True(viewModel.LimiterEnabled);",
+        "        Assert.False(viewModel.HasPendingSettingsChanges);",
+        "        Assert.False(viewModel.RequiresRestart);",
+        "        Assert.False(viewModel.HasSettingsValidationResults);",
+        "        Assert.Equal(4, viewModel.Slots.Count);",
+        "        Assert.Collection(",
+        "            slot => Assert.Equal(MediaSlot.Drive8, slot.Slot),",
+        "            slot => Assert.Equal(MediaSlot.Drive9, slot.Slot),",
+        "            slot => Assert.Equal(MediaSlot.Tape, slot.Slot),",
+        "            slot => Assert.Equal(MediaSlot.Cartridge, slot.Slot));",
+        "        Assert.NotEmpty(viewModel.MachineProfiles);",
+        "        Assert.Equal(viewModel.MachineProfiles[0], viewModel.SelectedMachineProfile);"
+      ],
+      "disposition": "Retain these assertions unchanged as UI regressions. Add independent tape status scenarios at the host/UI seam only where required; do not replace native transport tests with UI flags.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-UI/ApplyStatus_UpdatesDriveIecActivityFromHostTelemetry",
+      "groupId": "ADJ-UI",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\AttachPanelViewModelTests.cs",
+      "fileSha256": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+      "method": "ApplyStatus_UpdatesDriveIecActivityFromHostTelemetry",
+      "declarationLine": 639,
+      "endLine": 658,
+      "source": "    public void ApplyStatus_UpdatesDriveIecActivityFromHostTelemetry()\n    {\n        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());\n        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n        var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);\n        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);\n\n        viewModel.ApplyStatus(CreateStatus(iecActive: true, transitionCount: 6));\n\n        Assert.True(drive8.IsIecBusActive);\n        Assert.True(drive9.IsIecBusActive);\n        Assert.Equal(\"IEC Active\", drive8.IecActivityText);\n        Assert.False(tape.IsIecBusActive);\n\n        viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 6));\n\n        Assert.False(drive8.IsIecBusActive);\n        Assert.False(drive9.IsIecBusActive);\n        Assert.Equal(\"IEC Idle\", drive8.IecActivityText);\n    }",
+      "sourceLfSha256": "81F32CFB9A4AACDFC46A66BC137B5041AA8454DA1057C50E228697F51CD8F786",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.True(drive8.IsIecBusActive);",
+        "        Assert.True(drive9.IsIecBusActive);",
+        "        Assert.Equal(\"IEC Active\", drive8.IecActivityText);",
+        "        Assert.False(tape.IsIecBusActive);",
+        "        Assert.False(drive8.IsIecBusActive);",
+        "        Assert.False(drive9.IsIecBusActive);",
+        "        Assert.Equal(\"IEC Idle\", drive8.IecActivityText);"
+      ],
+      "disposition": "Retain these assertions unchanged as UI regressions. Add independent tape status scenarios at the host/UI seam only where required; do not replace native transport tests with UI flags.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-UI/PeripheralCard_BindingSurface_TrueDrivePerSlotKind",
+      "groupId": "ADJ-UI",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\AttachPanelViewModelTests.cs",
+      "fileSha256": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+      "method": "PeripheralCard_BindingSurface_TrueDrivePerSlotKind",
+      "declarationLine": 885,
+      "endLine": 904,
+      "source": "    public void PeripheralCard_BindingSurface_TrueDrivePerSlotKind()\n    {\n        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());\n        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n        var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);\n        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);\n        var cartridge = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Cartridge);\n\n        Assert.True(drive8.SupportsTrueDrive);\n        Assert.True(drive9.SupportsTrueDrive);\n        Assert.False(tape.SupportsTrueDrive);\n        Assert.False(cartridge.SupportsTrueDrive);\n\n        Assert.True(drive8.TrueDrive);\n        Assert.False(drive9.TrueDrive);\n        var changes = TrackPropertyChanges(drive8);\n        drive8.TrueDrive = false;\n        Assert.False(drive8.TrueDrive);\n        Assert.Contains(nameof(drive8.TrueDrive), changes);\n    }",
+      "sourceLfSha256": "4E3B5DDD00AE71CFFE6A18177359ABC5F3FC17FC425BFA75BA324B4CD0369DF8",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.True(drive8.SupportsTrueDrive);",
+        "        Assert.True(drive9.SupportsTrueDrive);",
+        "        Assert.False(tape.SupportsTrueDrive);",
+        "        Assert.False(cartridge.SupportsTrueDrive);",
+        "        Assert.True(drive8.TrueDrive);",
+        "        Assert.False(drive9.TrueDrive);",
+        "        Assert.False(drive8.TrueDrive);",
+        "        Assert.Contains(nameof(drive8.TrueDrive), changes);"
+      ],
+      "disposition": "Retain these assertions unchanged as UI regressions. Add independent tape status scenarios at the host/UI seam only where required; do not replace native transport tests with UI flags.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-UI/DriveLed_LightsForDrivesOnly",
+      "groupId": "ADJ-UI",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\AttachPanelViewModelTests.cs",
+      "fileSha256": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+      "method": "DriveLed_LightsForDrivesOnly",
+      "declarationLine": 1033,
+      "endLine": 1055,
+      "source": "    public void DriveLed_LightsForDrivesOnly()\n    {\n        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());\n        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);\n        var changes = TrackPropertyChanges(drive8);\n\n        drive8.SetIecActivity(true);\n        Assert.True(drive8.LedOn);\n        Assert.Contains(nameof(drive8.LedOn), changes);\n\n        drive8.SetIecActivity(false);\n        Assert.False(drive8.LedOn);\n\n        tape.SetIecActivity(true);\n        Assert.False(tape.LedOn);\n\n        drive8.SetDriveLed(true);\n        Assert.True(drive8.LedOn);\n\n        tape.SetDriveLed(true);\n        Assert.False(tape.LedOn);\n    }",
+      "sourceLfSha256": "D3342194637C24F7BA88E204B347BDF719E1E05A61E2C82FE7752672111CCAB0",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.True(drive8.LedOn);",
+        "        Assert.Contains(nameof(drive8.LedOn), changes);",
+        "        Assert.False(drive8.LedOn);",
+        "        Assert.False(tape.LedOn);",
+        "        Assert.True(drive8.LedOn);",
+        "        Assert.False(tape.LedOn);"
+      ],
+      "disposition": "Retain these assertions unchanged as UI regressions. Add independent tape status scenarios at the host/UI seam only where required; do not replace native transport tests with UI flags.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-MAP/Extension_MapsSlot",
+      "groupId": "ADJ-MAP",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Library.Tests\\Media\\MediaExtensionMapTests.cs",
+      "fileSha256": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+      "method": "Extension_MapsSlot",
+      "declarationLine": 25,
+      "endLine": 33,
+      "source": "    public void Extension_MapsSlot(string fileName, MediaSlot slot, MediaKind kind, bool launchable)\n    {\n        MediaMapping? mapping = MediaExtensionMap.Resolve(fileName);\n\n        mapping.Should().NotBeNull();\n        mapping!.Value.Slot.Should().Be(slot);\n        mapping.Value.Kind.Should().Be(kind);\n        mapping.Value.IsLaunchable.Should().Be(launchable);\n    }",
+      "sourceLfSha256": "93DA69447EF0A3CE24E73F1409506BBC25ED5E20835126F66D19E7C36F2F5A3C",
+      "attribute": "[Theory]",
+      "inlineData": [
+        "[InlineData(\"boulderdash.d64\", MediaSlot.Drive8, MediaKind.Disk, true)]",
+        "[InlineData(\"game.g64\", MediaSlot.Drive8, MediaKind.Disk, true)]",
+        "[InlineData(\"side.d81\", MediaSlot.Drive8, MediaKind.Disk, true)]",
+        "[InlineData(\"creatures.tap\", MediaSlot.Tape, MediaKind.Tape, true)]",
+        "[InlineData(\"game.t64\", MediaSlot.Drive8, MediaKind.Tape, true)]",
+        "[InlineData(\"wizball.crt\", MediaSlot.Cartridge, MediaKind.Cartridge, true)]",
+        "[InlineData(\"dump.bin\", MediaSlot.Cartridge, MediaKind.Cartridge, true)]"
+      ],
+      "assertionLines": [
+        "        mapping.Should().NotBeNull();",
+        "        mapping!.Value.Slot.Should().Be(slot);",
+        "        mapping.Value.Kind.Should().Be(kind);",
+        "        mapping.Value.IsLaunchable.Should().Be(launchable);"
+      ],
+      "disposition": "Preserve existing rows; any extension/case/blank-path expansion must use approved launch contract. Never silently route T64 through TAP pulse decoding.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-MAP/Prg_NotLaunchable",
+      "groupId": "ADJ-MAP",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Library.Tests\\Media\\MediaExtensionMapTests.cs",
+      "fileSha256": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+      "method": "Prg_NotLaunchable",
+      "declarationLine": 38,
+      "endLine": 47,
+      "source": "    public void Prg_NotLaunchable()\n    {\n        MediaMapping? mapping = MediaExtensionMap.Resolve(\"hello.prg\");\n\n        mapping.Should().NotBeNull();\n        mapping!.Value.Kind.Should().Be(MediaKind.Program);\n        mapping.Value.Slot.Should().BeNull();\n        mapping.Value.IsLaunchable.Should().BeFalse();\n        MediaExtensionMap.IsLaunchable(\"hello.prg\").Should().BeFalse();\n    }",
+      "sourceLfSha256": "50097E3CD0FD5CC3E2B59787BBC97AF07CD7ED58821B30BF7CC67FD1A2DE432E",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        mapping.Should().NotBeNull();",
+        "        mapping!.Value.Kind.Should().Be(MediaKind.Program);",
+        "        mapping.Value.Slot.Should().BeNull();",
+        "        mapping.Value.IsLaunchable.Should().BeFalse();",
+        "        MediaExtensionMap.IsLaunchable(\"hello.prg\").Should().BeFalse();"
+      ],
+      "disposition": "Preserve existing rows; any extension/case/blank-path expansion must use approved launch contract. Never silently route T64 through TAP pulse decoding.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-MAP/Unknown_ReturnsNull",
+      "groupId": "ADJ-MAP",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Library.Tests\\Media\\MediaExtensionMapTests.cs",
+      "fileSha256": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+      "method": "Unknown_ReturnsNull",
+      "declarationLine": 52,
+      "endLine": 56,
+      "source": "    public void Unknown_ReturnsNull()\n    {\n        MediaExtensionMap.Resolve(\"notes.txt\").Should().BeNull();\n        MediaExtensionMap.IsLaunchable(\"notes.txt\").Should().BeFalse();\n    }",
+      "sourceLfSha256": "4892707BC98ACDBC6A0D39D56E4500229880057DCAD3C125ECC2CD9D1FFFF708",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        MediaExtensionMap.Resolve(\"notes.txt\").Should().BeNull();",
+        "        MediaExtensionMap.IsLaunchable(\"notes.txt\").Should().BeFalse();"
+      ],
+      "disposition": "Preserve existing rows; any extension/case/blank-path expansion must use approved launch contract. Never silently route T64 through TAP pulse decoding.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-MAP/BareExtension_Resolves",
+      "groupId": "ADJ-MAP",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Library.Tests\\Media\\MediaExtensionMapTests.cs",
+      "fileSha256": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+      "method": "BareExtension_Resolves",
+      "declarationLine": 61,
+      "endLine": 64,
+      "source": "    public void BareExtension_Resolves()\n    {\n        MediaExtensionMap.Resolve(\".d64\")!.Value.Slot.Should().Be(MediaSlot.Drive8);\n    }",
+      "sourceLfSha256": "DB5F9B8C3C508B7FA0F481387D923264AE90DC2643A775E4CF0E17DEBD832DE9",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        MediaExtensionMap.Resolve(\".d64\")!.Value.Slot.Should().Be(MediaSlot.Drive8);"
+      ],
+      "disposition": "Preserve existing rows; any extension/case/blank-path expansion must use approved launch contract. Never silently route T64 through TAP pulse decoding.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-CIA/TriggerFlagPin_SetsIcrBit4Latch",
+      "groupId": "ADJ-CIA",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CiaFlagPinTests.cs",
+      "fileSha256": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+      "method": "TriggerFlagPin_SetsIcrBit4Latch",
+      "declarationLine": 40,
+      "endLine": 48,
+      "source": "    public void TriggerFlagPin_SetsIcrBit4Latch()\n    {\n        var (cia, _) = BuildCiaWithIrq();\n\n        cia.TriggerFlagPin();\n\n        var icr = cia.Read(0xDC0D);\n        (icr & 0x10).Should().Be(0x10, \"FLG pin transition latches ICR bit 4\");\n    }",
+      "sourceLfSha256": "D1CE816A1E7B06F3CAB1ACE1A50EAE5F73FF5CEBC95194852607A117AEE89E97",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        (icr & 0x10).Should().Be(0x10, \"FLG pin transition latches ICR bit 4\");"
+      ],
+      "disposition": "Keep API-level assertions as regression inputs. Add clock-indexed native CIA observations across trigger/ICR-read/mask-write ordering and model choice before accepting a timing correction. Bind actual Datasette edges separately.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-CIA/FlagLatch_IsClearedByIcrRead",
+      "groupId": "ADJ-CIA",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CiaFlagPinTests.cs",
+      "fileSha256": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+      "method": "FlagLatch_IsClearedByIcrRead",
+      "declarationLine": 60,
+      "endLine": 71,
+      "source": "    public void FlagLatch_IsClearedByIcrRead()\n    {\n        var (cia, _) = BuildCiaWithIrq();\n\n        cia.TriggerFlagPin();\n\n        var first = cia.Read(0xDC0D);\n        var second = cia.Read(0xDC0D);\n\n        (first & 0x10).Should().Be(0x10, \"first read observes the FLG latch\");\n        (second & 0x10).Should().Be(0x00, \"ICR read clears the FLG latch on real hardware\");\n    }",
+      "sourceLfSha256": "4BBD2CB341B59060534E83E77315C3940E0FC0783143BFCD5406B9CFF551D854",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        (first & 0x10).Should().Be(0x10, \"first read observes the FLG latch\");",
+        "        (second & 0x10).Should().Be(0x00, \"ICR read clears the FLG latch on real hardware\");"
+      ],
+      "disposition": "Keep API-level assertions as regression inputs. Add clock-indexed native CIA observations across trigger/ICR-read/mask-write ordering and model choice before accepting a timing correction. Bind actual Datasette edges separately.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-CIA/FlagIrq_AssertsWhenIcrBit4Enabled",
+      "groupId": "ADJ-CIA",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CiaFlagPinTests.cs",
+      "fileSha256": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+      "method": "FlagIrq_AssertsWhenIcrBit4Enabled",
+      "declarationLine": 83,
+      "endLine": 94,
+      "source": "    public void FlagIrq_AssertsWhenIcrBit4Enabled()\n    {\n        var (cia, irq) = BuildCiaWithIrq();\n\n        cia.Write(0xDC0D, 0x90);\n\n        cia.TriggerFlagPin();\n        cia.Tick();\n\n        irq.IsAsserted.Should().BeTrue(\"FLG IRQ enable + FLG transition must drive the IRQ output\");\n        cia.Read(0xDC0D).Should().Be(0x90, \"ICR read returns IR master bit plus FLG bit\");\n    }",
+      "sourceLfSha256": "B40C50FFCCF643DA851964FD8F56C5C71445C2F9B8ADD217A2F33E0390403893",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        irq.IsAsserted.Should().BeTrue(\"FLG IRQ enable + FLG transition must drive the IRQ output\");",
+        "        cia.Read(0xDC0D).Should().Be(0x90, \"ICR read returns IR master bit plus FLG bit\");"
+      ],
+      "disposition": "Keep API-level assertions as regression inputs. Add clock-indexed native CIA observations across trigger/ICR-read/mask-write ordering and model choice before accepting a timing correction. Bind actual Datasette edges separately.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-CIA/FlagIrq_DoesNotAssertWhenIcrBit4Disabled",
+      "groupId": "ADJ-CIA",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CiaFlagPinTests.cs",
+      "fileSha256": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+      "method": "FlagIrq_DoesNotAssertWhenIcrBit4Disabled",
+      "declarationLine": 106,
+      "endLine": 114,
+      "source": "    public void FlagIrq_DoesNotAssertWhenIcrBit4Disabled()\n    {\n        var (cia, irq) = BuildCiaWithIrq();\n\n        cia.TriggerFlagPin();\n\n        irq.IsAsserted.Should().BeFalse(\"FLG transition without IMR enable must not raise IRQ\");\n        cia.Read(0xDC0D).Should().Be(0x10, \"FLG latches even without IMR enable, IR bit stays clear\");\n    }",
+      "sourceLfSha256": "7A0255D69BAF13172CCB9394EB26D555EFA0DF13213FC97253EC284BAF814610",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        irq.IsAsserted.Should().BeFalse(\"FLG transition without IMR enable must not raise IRQ\");",
+        "        cia.Read(0xDC0D).Should().Be(0x10, \"FLG latches even without IMR enable, IR bit stays clear\");"
+      ],
+      "disposition": "Keep API-level assertions as regression inputs. Add clock-indexed native CIA observations across trigger/ICR-read/mask-write ordering and model choice before accepting a timing correction. Bind actual Datasette edges separately.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-CIA/TriggerFlagPin_IsIdempotentUntilIcrRead",
+      "groupId": "ADJ-CIA",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CiaFlagPinTests.cs",
+      "fileSha256": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+      "method": "TriggerFlagPin_IsIdempotentUntilIcrRead",
+      "declarationLine": 125,
+      "endLine": 134,
+      "source": "    public void TriggerFlagPin_IsIdempotentUntilIcrRead()\n    {\n        var (cia, _) = BuildCiaWithIrq();\n\n        cia.TriggerFlagPin();\n        cia.TriggerFlagPin();\n\n        var icr = cia.Read(0xDC0D);\n        (icr & 0x10).Should().Be(0x10, \"repeated FLG transitions keep the latch set; read clears it\");\n    }",
+      "sourceLfSha256": "DD8BB7637C31114ED1271F581A9DAE2EDC9A8EAC8B866110EC6ECC2DA15D18B9",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        (icr & 0x10).Should().Be(0x10, \"repeated FLG transitions keep the latch set; read clears it\");"
+      ],
+      "disposition": "Keep API-level assertions as regression inputs. Add clock-indexed native CIA observations across trigger/ICR-read/mask-write ordering and model choice before accepting a timing correction. Bind actual Datasette edges separately.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-GRPC/GrpcMediaServiceHost_AttachMedia_MarshalsSlotAndPayload",
+      "groupId": "ADJ-GRPC",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\GrpcHostServiceAdaptersTests.cs",
+      "fileSha256": "5C24A45A1C8689F371F3F575CDFBC4CA9CB61B1DAFD2FEF5290F2216E175AE70",
+      "method": "GrpcMediaServiceHost_AttachMedia_MarshalsSlotAndPayload",
+      "declarationLine": 252,
+      "endLine": 279,
+      "source": "    public async Task GrpcMediaServiceHost_AttachMedia_MarshalsSlotAndPayload()\n    {\n        var payload = new byte[] { 1, 2, 3, 4 };\n        var fake = new FakeMediaService\n        {\n            AttachResponse = new AttachMediaResponse(\n                RpcStatus.Ok(),\n                new MediaAttachmentDto(MediaSlot.Drive9, \"disk.d64\", \"Disk\", true, false, true))\n        };\n        var adapter = new GrpcMediaServiceHost(fake);\n\n        var response = await adapter.AttachMedia(\n            new GrpcContracts.AttachMediaRequest\n            {\n                SessionId = \"sess\",\n                Slot = GrpcContracts.MediaSlot.Drive9,\n                FilePath = \"disk.d64\",\n                DisplayName = \"Disk\",\n                IsReadOnly = false,\n                Payload = ByteString.CopyFrom(payload)\n            },\n            CreateContext());\n\n        Assert.Equal(GrpcContracts.RpcStatusCode.Ok, response.Status.Code);\n        Assert.Equal(GrpcContracts.MediaSlot.Drive9, response.Attachment!.Slot);\n        Assert.Equal(MediaSlot.Drive9, fake.LastAttachRequest!.Slot);\n        Assert.Equal(payload, fake.LastAttachRequest.Payload);\n    }",
+      "sourceLfSha256": "890C32BFF19178915CA43BAE3EFC8829B18D8370DEB84BA84ABDEFD20D51425D",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(GrpcContracts.RpcStatusCode.Ok, response.Status.Code);",
+        "        Assert.Equal(GrpcContracts.MediaSlot.Drive9, response.Attachment!.Slot);",
+        "        Assert.Equal(MediaSlot.Drive9, fake.LastAttachRequest!.Slot);",
+        "        Assert.Equal(payload, fake.LastAttachRequest.Payload);"
+      ],
+      "disposition": "Strengthen contract assertions and scripted fake interaction ledger before using these tests as full media protocol evidence. Keep transport mapping distinct from actual runtime acceptance.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-GRPC/GrpcMediaServiceHost_ListMedia_MapsAllAttachments",
+      "groupId": "ADJ-GRPC",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\GrpcHostServiceAdaptersTests.cs",
+      "fileSha256": "5C24A45A1C8689F371F3F575CDFBC4CA9CB61B1DAFD2FEF5290F2216E175AE70",
+      "method": "GrpcMediaServiceHost_ListMedia_MapsAllAttachments",
+      "declarationLine": 290,
+      "endLine": 313,
+      "source": "    public async Task GrpcMediaServiceHost_ListMedia_MapsAllAttachments()\n    {\n        var attachments = new[]\n        {\n            new MediaAttachmentDto(MediaSlot.Drive8, \"a.d64\", \"A\", true, false, true),\n            new MediaAttachmentDto(MediaSlot.Tape, \"b.tap\", \"B\", true, true, true),\n            new MediaAttachmentDto(MediaSlot.Cartridge, \"c.crt\", \"C\", true, false, true)\n        };\n        var fake = new FakeMediaService\n        {\n            ListResponse = new ListMediaResponse(RpcStatus.Ok(), attachments)\n        };\n        var adapter = new GrpcMediaServiceHost(fake);\n\n        var response = await adapter.ListMedia(\n            new GrpcContracts.SessionRequest { SessionId = \"sess\" },\n            CreateContext());\n\n        Assert.Equal(GrpcContracts.RpcStatusCode.Ok, response.Status.Code);\n        Assert.Equal(3, response.Attachments.Count);\n        Assert.Equal(GrpcContracts.MediaSlot.Drive8, response.Attachments[0].Slot);\n        Assert.Equal(GrpcContracts.MediaSlot.Tape, response.Attachments[1].Slot);\n        Assert.Equal(GrpcContracts.MediaSlot.Cartridge, response.Attachments[2].Slot);\n    }",
+      "sourceLfSha256": "0D8399094C550D21AB9276E92AF76C89C3FF88BF29E217A7A60D07AD5052E86F",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(GrpcContracts.RpcStatusCode.Ok, response.Status.Code);",
+        "        Assert.Equal(3, response.Attachments.Count);",
+        "        Assert.Equal(GrpcContracts.MediaSlot.Drive8, response.Attachments[0].Slot);",
+        "        Assert.Equal(GrpcContracts.MediaSlot.Tape, response.Attachments[1].Slot);",
+        "        Assert.Equal(GrpcContracts.MediaSlot.Cartridge, response.Attachments[2].Slot);"
+      ],
+      "disposition": "Strengthen contract assertions and scripted fake interaction ledger before using these tests as full media protocol evidence. Keep transport mapping distinct from actual runtime acceptance.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-T64/TryOpen_And_ExtractFirstProgram",
+      "groupId": "ADJ-T64",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\IEC\\T64ImageTests.cs",
+      "fileSha256": "48B11DFCA89EE766165A85029E5597551A894DBB28FE70B1EE8B33701FF3B1E1",
+      "method": "TryOpen_And_ExtractFirstProgram",
+      "declarationLine": 55,
+      "endLine": 65,
+      "source": "    public void TryOpen_And_ExtractFirstProgram()\n    {\n        byte[] t64 = BuildMinimalT64();\n        T64Image.TryOpen(t64, out T64Image? image).Should().BeTrue();\n        image!.TryExtractFirstProgram(out byte[] prg).Should().BeTrue();\n        prg.Should().HaveCount(10);\n        prg[0].Should().Be(0x01);\n        prg[1].Should().Be(0x08);\n        prg[2].Should().Be(0x10);\n        prg[9].Should().Be(0x17);\n    }",
+      "sourceLfSha256": "33BA3BB2B8C51FB0E6FD5B8D11B3B0433C48A8C290A0CB98E768B3E4955C68B4",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        T64Image.TryOpen(t64, out T64Image? image).Should().BeTrue();",
+        "        image!.TryExtractFirstProgram(out byte[] prg).Should().BeTrue();",
+        "        prg.Should().HaveCount(10);",
+        "        prg[0].Should().Be(0x01);",
+        "        prg[1].Should().Be(0x08);",
+        "        prg[2].Should().Be(0x10);",
+        "        prg[9].Should().Be(0x17);"
+      ],
+      "disposition": "Retain both tests and all original bytes. Add independent expected full PRG bytes and immutable-native fixture/corpus observations specified by the existing media-fixture supplement; do not self-generate expected bytes from T64Image.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-T64/FromPrg_BuildsD64ThatIecAccepts",
+      "groupId": "ADJ-T64",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\IEC\\T64ImageTests.cs",
+      "fileSha256": "48B11DFCA89EE766165A85029E5597551A894DBB28FE70B1EE8B33701FF3B1E1",
+      "method": "FromPrg_BuildsD64ThatIecAccepts",
+      "declarationLine": 68,
+      "endLine": 83,
+      "source": "    public void FromPrg_BuildsD64ThatIecAccepts()\n    {\n        byte[] t64 = BuildMinimalT64();\n        T64Image.TryOpen(t64, out T64Image? image).Should().BeTrue();\n        image!.TryExtractFirstProgram(out byte[] prg).Should().BeTrue();\n\n        byte[] d64 = D64SingleFileBuilder.FromPrg(prg, \"HELLO\");\n        d64.Should().HaveCount(D64Image.DiskSize35Track);\n        IecD64Attachment.TryAttach(8, d64, out _).Should().BeTrue();\n\n        var fs = new D64FileSystem(new D64Image(d64));\n        fs.TryFindFile(\"*\"u8, out D64DirectoryEntry entry).Should().BeTrue();\n        entry.StartTrack.Should().BeGreaterThan(0);\n        byte[] stream = fs.ReadFileStream(entry.StartTrack, entry.StartSector);\n        stream.Should().Equal(prg);\n    }",
+      "sourceLfSha256": "3AD444F47346E74FEDF74B9091D2534324D7B406E03FABB99E2A4F9680B20282",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        T64Image.TryOpen(t64, out T64Image? image).Should().BeTrue();",
+        "        image!.TryExtractFirstProgram(out byte[] prg).Should().BeTrue();",
+        "        d64.Should().HaveCount(D64Image.DiskSize35Track);",
+        "        IecD64Attachment.TryAttach(8, d64, out _).Should().BeTrue();",
+        "        fs.TryFindFile(\"*\"u8, out D64DirectoryEntry entry).Should().BeTrue();",
+        "        entry.StartTrack.Should().BeGreaterThan(0);",
+        "        stream.Should().Equal(prg);"
+      ],
+      "disposition": "Retain both tests and all original bytes. Add independent expected full PRG bytes and immutable-native fixture/corpus observations specified by the existing media-fixture supplement; do not self-generate expected bytes from T64Image.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/AttachMediaAsync_MissingSession_ReturnsMissingSessionStatus",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "AttachMediaAsync_MissingSession_ReturnsMissingSessionStatus",
+      "declarationLine": 39,
+      "endLine": 51,
+      "source": "    public async Task AttachMediaAsync_MissingSession_ReturnsMissingSessionStatus()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var service = new MediaServiceHost(registry);\n\n        var response = await service.AttachMediaAsync(\n            new AttachMediaRequest(\"ghost-session\", MediaSlot.Drive8, \"ignored.d64\"),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);\n        Assert.Contains(\"ghost-session\", response.Status.Message);\n        Assert.Null(response.Attachment);\n    }",
+      "sourceLfSha256": "24977E5CC3EEDFDE1C4BADFE92A48375768673C9A442D5E6DDCB8DCB6CDB478F",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);",
+        "        Assert.Contains(\"ghost-session\", response.Status.Message);",
+        "        Assert.Null(response.Attachment);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/DetachMediaAsync_MissingSession_ReturnsMissingSessionStatus",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "DetachMediaAsync_MissingSession_ReturnsMissingSessionStatus",
+      "declarationLine": 62,
+      "endLine": 74,
+      "source": "    public async Task DetachMediaAsync_MissingSession_ReturnsMissingSessionStatus()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var service = new MediaServiceHost(registry);\n\n        var response = await service.DetachMediaAsync(\n            new DetachMediaRequest(\"ghost-session\", MediaSlot.Drive8),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);\n        Assert.Contains(\"ghost-session\", response.Status.Message);\n        Assert.Null(response.Attachment);\n    }",
+      "sourceLfSha256": "59285C2E9F00131D4394AD725254BB50C1579F8FBF69961A7B188354A1FE3DF6",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);",
+        "        Assert.Contains(\"ghost-session\", response.Status.Message);",
+        "        Assert.Null(response.Attachment);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/ListMediaAsync_MissingSession_ReturnsMissingSessionStatus",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "ListMediaAsync_MissingSession_ReturnsMissingSessionStatus",
+      "declarationLine": 85,
+      "endLine": 98,
+      "source": "    public async Task ListMediaAsync_MissingSession_ReturnsMissingSessionStatus()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var service = new MediaServiceHost(registry);\n\n        var response = await service.ListMediaAsync(\n            new SessionRequest(\"ghost-session\"),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);\n        Assert.Contains(\"ghost-session\", response.Status.Message);\n        Assert.NotNull(response.Attachments);\n        Assert.Empty(response.Attachments);\n    }",
+      "sourceLfSha256": "18DC9E029E70E9FA7908E8258ECB5144EB9520F8983DE6E583A637FC73271C46",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);",
+        "        Assert.Contains(\"ghost-session\", response.Status.Message);",
+        "        Assert.NotNull(response.Attachments);",
+        "        Assert.Empty(response.Attachments);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/AttachMediaAsync_NoFilePathOrPayload_ReturnsInvalidArgument",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "AttachMediaAsync_NoFilePathOrPayload_ReturnsInvalidArgument",
+      "declarationLine": 110,
+      "endLine": 125,
+      "source": "    public async Task AttachMediaAsync_NoFilePathOrPayload_ReturnsInvalidArgument()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n\n        var response = await service.AttachMediaAsync(\n            new AttachMediaRequest(session.SessionId, MediaSlot.Drive8, \"   \"),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);\n        Assert.Contains(\"FilePath\", response.Status.Message);\n        Assert.Contains(\"Payload\", response.Status.Message);\n        Assert.Null(response.Attachment);\n    }",
+      "sourceLfSha256": "98AD09D9932A5F64BA1DB4DD4007082DC0F59B4B4786C30DAE8D80DFD0C2C3B0",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);",
+        "        Assert.Contains(\"FilePath\", response.Status.Message);",
+        "        Assert.Contains(\"Payload\", response.Status.Message);",
+        "        Assert.Null(response.Attachment);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/AttachMediaAsync_MissingFile_ReturnsNotFound",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "AttachMediaAsync_MissingFile_ReturnsNotFound",
+      "declarationLine": 136,
+      "endLine": 151,
+      "source": "    public async Task AttachMediaAsync_MissingFile_ReturnsNotFound()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n        var missingPath = Path.Combine(Path.GetTempPath(), $\"ViceSharp-missing-{Guid.NewGuid():N}.d64\");\n\n        var response = await service.AttachMediaAsync(\n            new AttachMediaRequest(session.SessionId, MediaSlot.Drive8, missingPath),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);\n        Assert.Contains(missingPath, response.Status.Message);\n        Assert.Null(response.Attachment);\n    }",
+      "sourceLfSha256": "F940363D7836C58042E1793A580D6C7FC5B874F42BC2FA23B7DDDE5EDD055CD1",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);",
+        "        Assert.Contains(missingPath, response.Status.Message);",
+        "        Assert.Null(response.Attachment);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/AttachMediaAsync_InvalidDiskPayload_ReturnsInvalidArgument",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "AttachMediaAsync_InvalidDiskPayload_ReturnsInvalidArgument",
+      "declarationLine": 163,
+      "endLine": 182,
+      "source": "    public async Task AttachMediaAsync_InvalidDiskPayload_ReturnsInvalidArgument()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n\n        var response = await service.AttachMediaAsync(\n            new AttachMediaRequest(\n                session.SessionId,\n                MediaSlot.Drive8,\n                string.Empty,\n                \"garbage.bin\",\n                Payload: new byte[] { 0x00, 0x01, 0x02, 0x03 }),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);\n        Assert.Contains(\"D64\", response.Status.Message);\n        Assert.Null(response.Attachment);\n    }",
+      "sourceLfSha256": "4151F231D080161FD2DB960A383393C4873CD90D14307F1CC6A0259DDD0AA603",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);",
+        "        Assert.Contains(\"D64\", response.Status.Message);",
+        "        Assert.Null(response.Attachment);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/AttachMediaAsync_UnsupportedSlot_ReturnsInvalidArgument",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "AttachMediaAsync_UnsupportedSlot_ReturnsInvalidArgument",
+      "declarationLine": 193,
+      "endLine": 212,
+      "source": "    public async Task AttachMediaAsync_UnsupportedSlot_ReturnsInvalidArgument()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n\n        var response = await service.AttachMediaAsync(\n            new AttachMediaRequest(\n                session.SessionId,\n                (MediaSlot)0x7F,\n                string.Empty,\n                \"bogus.bin\",\n                Payload: new byte[] { 0x00 }),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);\n        Assert.Contains(\"slot\", response.Status.Message, System.StringComparison.OrdinalIgnoreCase);\n        Assert.Null(response.Attachment);\n    }",
+      "sourceLfSha256": "B8A77748E31D06D4697A026CC04418CC513DAB1BEEE1FF6E5D8B376ABA1948B6",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);",
+        "        Assert.Contains(\"slot\", response.Status.Message, System.StringComparison.OrdinalIgnoreCase);",
+        "        Assert.Null(response.Attachment);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/DetachMediaAsync_EmptySlot_ReturnsNotFound",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "DetachMediaAsync_EmptySlot_ReturnsNotFound",
+      "declarationLine": 222,
+      "endLine": 236,
+      "source": "    public async Task DetachMediaAsync_EmptySlot_ReturnsNotFound()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n\n        var response = await service.DetachMediaAsync(\n            new DetachMediaRequest(session.SessionId, MediaSlot.Tape),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);\n        Assert.Contains(\"Tape\", response.Status.Message);\n        Assert.Null(response.Attachment);\n    }",
+      "sourceLfSha256": "1067A3211666A65EFA08666972678800D74EDD53EBB6CDB3A59C47A1DBDF1B50",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);",
+        "        Assert.Contains(\"Tape\", response.Status.Message);",
+        "        Assert.Null(response.Attachment);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/ListMediaAsync_FreshSession_ReturnsOkWithEmptyCollection",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "ListMediaAsync_FreshSession_ReturnsOkWithEmptyCollection",
+      "declarationLine": 247,
+      "endLine": 261,
+      "source": "    public async Task ListMediaAsync_FreshSession_ReturnsOkWithEmptyCollection()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n\n        var response = await service.ListMediaAsync(\n            new SessionRequest(session.SessionId),\n            TestContext.Current.CancellationToken);\n\n        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);\n        Assert.NotNull(response.Attachments);\n        Assert.Empty(response.Attachments);\n    }",
+      "sourceLfSha256": "CBD3DC5D403AAADAA5E00B690919425B875192DEF65AC4391853483A96121663",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);",
+        "        Assert.NotNull(response.Attachments);",
+        "        Assert.Empty(response.Attachments);"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/AttachMediaAsync_CancelledToken_Throws",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "AttachMediaAsync_CancelledToken_Throws",
+      "declarationLine": 273,
+      "endLine": 287,
+      "source": "    public async Task AttachMediaAsync_CancelledToken_Throws()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n\n        using var cts = new CancellationTokenSource();\n        cts.Cancel();\n\n        await Assert.ThrowsAsync<OperationCanceledException>(async () =>\n            await service.AttachMediaAsync(\n                new AttachMediaRequest(session.SessionId, MediaSlot.Drive8, \"ignored.d64\"),\n                cts.Token));\n    }",
+      "sourceLfSha256": "1E0F14B0F6FD130AE20B4D1CCEDCB0B4568BF1EDD185D5059AB49AF4AB033CDE",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        await Assert.ThrowsAsync<OperationCanceledException>(async () =>"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/DetachMediaAsync_CancelledToken_Throws",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "DetachMediaAsync_CancelledToken_Throws",
+      "declarationLine": 298,
+      "endLine": 312,
+      "source": "    public async Task DetachMediaAsync_CancelledToken_Throws()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n\n        using var cts = new CancellationTokenSource();\n        cts.Cancel();\n\n        await Assert.ThrowsAsync<OperationCanceledException>(async () =>\n            await service.DetachMediaAsync(\n                new DetachMediaRequest(session.SessionId, MediaSlot.Drive8),\n                cts.Token));\n    }",
+      "sourceLfSha256": "7BBA0C43F34ABD567FD28C6F7310C94130C78D78F2C27BD586CEC34183D909ED",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        await Assert.ThrowsAsync<OperationCanceledException>(async () =>"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/ListMediaAsync_CancelledToken_Throws",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "ListMediaAsync_CancelledToken_Throws",
+      "declarationLine": 323,
+      "endLine": 337,
+      "source": "    public async Task ListMediaAsync_CancelledToken_Throws()\n    {\n        var registry = new EmulatorRuntimeRegistry();\n        var session = CreateMinimalSession();\n        registry.Add(session);\n        var service = new MediaServiceHost(registry);\n\n        using var cts = new CancellationTokenSource();\n        cts.Cancel();\n\n        await Assert.ThrowsAsync<OperationCanceledException>(async () =>\n            await service.ListMediaAsync(\n                new SessionRequest(session.SessionId),\n                cts.Token));\n    }",
+      "sourceLfSha256": "7B35182C68E5F5C6512482C235C8752E7113EF53B201E68C1B88E65395A5F36C",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        await Assert.ThrowsAsync<OperationCanceledException>(async () =>"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-HOST/Constructor_NullRegistry_Throws",
+      "groupId": "ADJ-HOST",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "fileSha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "method": "Constructor_NullRegistry_Throws",
+      "declarationLine": 349,
+      "endLine": 352,
+      "source": "    public void Constructor_NullRegistry_Throws()\n    {\n        Assert.Throws<ArgumentNullException>(() => new MediaServiceHost(null!));\n    }",
+      "sourceLfSha256": "8253135BC69E786D3B08A7AA1937A110F1B435902D2665035674DE754F53B5A9",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Throws<ArgumentNullException>(() => new MediaServiceHost(null!));"
+      ],
+      "disposition": "Keep every status/message/null/empty/exception assertion. Add a recording dependency seam for forbidden side effects and positive runtime Tape results using the existing media contract, including Ok with AppliedToRuntime=false where required.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-SHELL/ToggleTrueDrive_FlipsDrivesOnly",
+      "groupId": "ADJ-SHELL",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\ShellViewModelTests.cs",
+      "fileSha256": "A3A77872942964E2A0046018BF17FBA2D6B8C8D585C98BCC9A91E684BBBE9DFE",
+      "method": "ToggleTrueDrive_FlipsDrivesOnly",
+      "declarationLine": 144,
+      "endLine": 156,
+      "source": "    public void ToggleTrueDrive_FlipsDrivesOnly()\n    {\n        var (shell, _, panel) = CreateShell();\n        var drive8 = panel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n        var tape = panel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);\n\n        Assert.True(drive8.TrueDrive);\n        shell.ToggleTrueDrive(MediaSlot.Drive8);\n        Assert.False(drive8.TrueDrive);\n\n        shell.ToggleTrueDrive(MediaSlot.Tape);\n        Assert.False(tape.TrueDrive);\n    }",
+      "sourceLfSha256": "0DBC132143A46D469C53AC0BC6A26890C87181833EA10A531711A879AE7A26B4",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.True(drive8.TrueDrive);",
+        "        Assert.False(drive8.TrueDrive);",
+        "        Assert.False(tape.TrueDrive);"
+      ],
+      "disposition": "Retain current case; use host call recording and approved per-slot cases to prove no Tape true-drive side effect. Keep same inputs/assertions across mock and real menu-adapter providers.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "ADJ-VIA/Via1_PortA_Idle_MatchesViceIecPaRead_7E",
+      "groupId": "ADJ-VIA",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Vic20\\Vic20Via1IecPortTests.cs",
+      "fileSha256": "5EF92CBEDBCC82AC50A07EA121790B33957AD332396B36A5330D477F89B26005",
+      "method": "Via1_PortA_Idle_MatchesViceIecPaRead_7E",
+      "declarationLine": 18,
+      "endLine": 31,
+      "source": "    public void Via1_PortA_Idle_MatchesViceIecPaRead_7E()\n    {\n        var machine = MachineTestFactory.CreateVic20Machine(\"vic20\");\n        machine.Reset();\n\n        // $911F = ORA no-handshake (same port A data as $9111 without CA clear).\n        var via1 = machine.Devices.GetAll<Via6522>().First(v => v.BaseAddress == 0x9110);\n        var peekF = via1.Peek(0x911F);\n        var readF = via1.Read(0x911F);\n\n        Assert.Equal(0x7E, peekF);\n        Assert.Equal(0x7E, readF);\n        Assert.Equal(0x7E, machine.Bus.Peek(0x911F));\n    }",
+      "sourceLfSha256": "24B71AF8D04BD7480F86312629695E01E686822038E5216035C6320E19EBBF8B",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(0x7E, peekF);",
+        "        Assert.Equal(0x7E, readF);",
+        "        Assert.Equal(0x7E, machine.Bus.Peek(0x911F));"
+      ],
+      "disposition": "Retain idle case. Use the prior recording/wiring contract for full sense/DDR/IEC/joystick vectors, no-handshake side effects and real machine edges. Native source computes sense bit as tape_sense ? 0 : 40 then applies DDRA.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/Slots_HaveExpectedKindsPatternsAndDriveModels",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "Slots_HaveExpectedKindsPatternsAndDriveModels",
+      "declarationLine": 39,
+      "endLine": 69,
+      "source": "    public void Slots_HaveExpectedKindsPatternsAndDriveModels()\n    {\n        var vm = new XboxDeviceSetupViewModel(new FakeXboxSettingsGateway());\n\n        Assert.Equal(4, vm.Slots.Count);\n\n        var drive8 = vm.Slots[0];\n        Assert.Equal(MediaSlot.Drive8, drive8.Slot);\n        Assert.Equal(new[] { \"*.d64\", \"*.g64\" }, drive8.FilePatterns);\n        Assert.True(drive8.SupportsTrueDrive);\n        Assert.Same(DriveModelCatalog.Implemented, drive8.AvailableDriveModels);\n        Assert.Equal(DriveModel.C1541, drive8.SelectedDriveModel);\n\n        var drive9 = vm.Slots[1];\n        Assert.Equal(MediaSlot.Drive9, drive9.Slot);\n        Assert.Equal(new[] { \"*.d64\", \"*.g64\" }, drive9.FilePatterns);\n        Assert.True(drive9.SupportsTrueDrive);\n        Assert.Same(DriveModelCatalog.Implemented, drive9.AvailableDriveModels);\n\n        var tape = vm.Slots[2];\n        Assert.Equal(MediaSlot.Tape, tape.Slot);\n        Assert.Equal(new[] { \"*.tap\" }, tape.FilePatterns);\n        Assert.False(tape.SupportsTrueDrive);\n        Assert.Empty(tape.AvailableDriveModels);\n\n        var cartridge = vm.Slots[3];\n        Assert.Equal(MediaSlot.Cartridge, cartridge.Slot);\n        Assert.Equal(new[] { \"*.crt\", \"*.bin\", \"*.rom\" }, cartridge.FilePatterns);\n        Assert.False(cartridge.SupportsTrueDrive);\n        Assert.Empty(cartridge.AvailableDriveModels);\n    }",
+      "sourceLfSha256": "853D65F4973E183D1DABFA466305559B1EC53C3AADAA332705407DA55E0DABB0",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(4, vm.Slots.Count);",
+        "        Assert.Equal(MediaSlot.Drive8, drive8.Slot);",
+        "        Assert.Equal(new[] { \"*.d64\", \"*.g64\" }, drive8.FilePatterns);",
+        "        Assert.True(drive8.SupportsTrueDrive);",
+        "        Assert.Same(DriveModelCatalog.Implemented, drive8.AvailableDriveModels);",
+        "        Assert.Equal(DriveModel.C1541, drive8.SelectedDriveModel);",
+        "        Assert.Equal(MediaSlot.Drive9, drive9.Slot);",
+        "        Assert.Equal(new[] { \"*.d64\", \"*.g64\" }, drive9.FilePatterns);",
+        "        Assert.True(drive9.SupportsTrueDrive);",
+        "        Assert.Same(DriveModelCatalog.Implemented, drive9.AvailableDriveModels);",
+        "        Assert.Equal(MediaSlot.Tape, tape.Slot);",
+        "        Assert.Equal(new[] { \"*.tap\" }, tape.FilePatterns);",
+        "        Assert.False(tape.SupportsTrueDrive);",
+        "        Assert.Empty(tape.AvailableDriveModels);",
+        "        Assert.Equal(MediaSlot.Cartridge, cartridge.Slot);",
+        "        Assert.Equal(new[] { \"*.crt\", \"*.bin\", \"*.rom\" }, cartridge.FilePatterns);",
+        "        Assert.False(cartridge.SupportsTrueDrive);",
+        "        Assert.Empty(cartridge.AvailableDriveModels);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/DriveModelCatalog_IsThe1541Family_With1541IIAs1542",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "DriveModelCatalog_IsThe1541Family_With1541IIAs1542",
+      "declarationLine": 81,
+      "endLine": 90,
+      "source": "    public void DriveModelCatalog_IsThe1541Family_With1541IIAs1542()\n    {\n        Assert.Equal(\n            new[] { DriveModel.C1541, DriveModel.C1540, DriveModel.C1541II },\n            DriveModelCatalog.Implemented);\n\n        Assert.Equal(1541, (int)DriveModel.C1541);\n        Assert.Equal(1540, (int)DriveModel.C1540);\n        Assert.Equal(1542, (int)DriveModel.C1541II);\n    }",
+      "sourceLfSha256": "D9FABA8DCFEB168D8F79BA1152B9F1DA91EB630D574B242376A73F10C28CDF07",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(",
+        "        Assert.Equal(1541, (int)DriveModel.C1541);",
+        "        Assert.Equal(1540, (int)DriveModel.C1540);",
+        "        Assert.Equal(1542, (int)DriveModel.C1541II);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/AttachAsync_SendsPathAndSlotToGateway_AndUpdatesSlot",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "AttachAsync_SendsPathAndSlotToGateway_AndUpdatesSlot",
+      "declarationLine": 102,
+      "endLine": 117,
+      "source": "    public async Task AttachAsync_SendsPathAndSlotToGateway_AndUpdatesSlot()\n    {\n        var ct = TestContext.Current.CancellationToken;\n        var gateway = new FakeXboxSettingsGateway();\n        var vm = new XboxDeviceSetupViewModel(gateway);\n        var drive8 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n\n        await vm.AttachAsync(drive8, @\"C:\\games\\zork.d64\", isReadOnly: true, cancellationToken: ct);\n\n        Assert.Equal(MediaSlot.Drive8, gateway.AttachedSlot);\n        Assert.Equal(@\"C:\\games\\zork.d64\", gateway.AttachedPath);\n        Assert.True(gateway.AttachedReadOnly);\n        Assert.True(drive8.IsAttached);\n        Assert.True(drive8.IsReadOnly);\n        Assert.Equal(@\"C:\\games\\zork.d64\", drive8.FilePath);\n    }",
+      "sourceLfSha256": "2503278CDB3D45A4CF7C4EDC12FA8EB4C6227CC50369253B02267A5E39C85F86",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(MediaSlot.Drive8, gateway.AttachedSlot);",
+        "        Assert.Equal(@\"C:\\games\\zork.d64\", gateway.AttachedPath);",
+        "        Assert.True(gateway.AttachedReadOnly);",
+        "        Assert.True(drive8.IsAttached);",
+        "        Assert.True(drive8.IsReadOnly);",
+        "        Assert.Equal(@\"C:\\games\\zork.d64\", drive8.FilePath);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/AttachAsync_WithPayload_UsesPayloadOverloadAndDisplayName",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "AttachAsync_WithPayload_UsesPayloadOverloadAndDisplayName",
+      "declarationLine": 129,
+      "endLine": 143,
+      "source": "    public async Task AttachAsync_WithPayload_UsesPayloadOverloadAndDisplayName()\n    {\n        var ct = TestContext.Current.CancellationToken;\n        var gateway = new FakeXboxSettingsGateway();\n        var vm = new XboxDeviceSetupViewModel(gateway);\n        var drive8 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n        var payload = new byte[] { 1, 2, 3, 4 };\n\n        await vm.AttachAsync(drive8, @\"C:\\games\\zork.d64\", isReadOnly: false, payload, \"zork.d64\", ct);\n\n        Assert.Equal(MediaSlot.Drive8, gateway.AttachedSlot);\n        Assert.Same(payload, gateway.AttachedPayload);\n        Assert.Equal(\"zork.d64\", gateway.AttachedDisplayName);\n        Assert.True(drive8.IsAttached);\n    }",
+      "sourceLfSha256": "F6A5C6643FC89E0B1BF0E6D6AE3089C014F3AA72E07B9F552F4C5D7A2AD9832C",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(MediaSlot.Drive8, gateway.AttachedSlot);",
+        "        Assert.Same(payload, gateway.AttachedPayload);",
+        "        Assert.Equal(\"zork.d64\", gateway.AttachedDisplayName);",
+        "        Assert.True(drive8.IsAttached);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/EjectAsync_DetachesSlot_AndClearsIt",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "EjectAsync_DetachesSlot_AndClearsIt",
+      "declarationLine": 154,
+      "endLine": 169,
+      "source": "    public async Task EjectAsync_DetachesSlot_AndClearsIt()\n    {\n        var ct = TestContext.Current.CancellationToken;\n        var gateway = new FakeXboxSettingsGateway();\n        var vm = new XboxDeviceSetupViewModel(gateway);\n        var tape = vm.Slots.Single(slot => slot.Slot == MediaSlot.Tape);\n\n        await vm.AttachAsync(tape, @\"C:\\tapes\\game.tap\", isReadOnly: false, cancellationToken: ct);\n        Assert.True(tape.IsAttached);\n\n        await vm.EjectAsync(tape, ct);\n\n        Assert.Equal(MediaSlot.Tape, gateway.DetachedSlot);\n        Assert.False(tape.IsAttached);\n        Assert.Equal(string.Empty, tape.FilePath);\n    }",
+      "sourceLfSha256": "4B3BBECF1376E65F6902E3DB7337AC0A858CA5B6830754A33C3E8E647AB01BCF",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.True(tape.IsAttached);",
+        "        Assert.Equal(MediaSlot.Tape, gateway.DetachedSlot);",
+        "        Assert.False(tape.IsAttached);",
+        "        Assert.Equal(string.Empty, tape.FilePath);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/RefreshAsync_PopulatesSlotsFromListMedia",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "RefreshAsync_PopulatesSlotsFromListMedia",
+      "declarationLine": 180,
+      "endLine": 194,
+      "source": "    public async Task RefreshAsync_PopulatesSlotsFromListMedia()\n    {\n        var ct = TestContext.Current.CancellationToken;\n        var gateway = new FakeXboxSettingsGateway();\n        await gateway.AttachMediaAsync(MediaSlot.Drive8, @\"C:\\a.d64\", isReadOnly: false, ct);\n        var vm = new XboxDeviceSetupViewModel(gateway);\n\n        await vm.RefreshAsync(ct);\n\n        var drive8 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n        var drive9 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);\n        Assert.True(drive8.IsAttached);\n        Assert.Equal(@\"C:\\a.d64\", drive8.FilePath);\n        Assert.False(drive9.IsAttached);\n    }",
+      "sourceLfSha256": "6B7E48389B06BBC92B0929F50682434E6C455DC39CBD2BD8C675ED8D20D199B3",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.True(drive8.IsAttached);",
+        "        Assert.Equal(@\"C:\\a.d64\", drive8.FilePath);",
+        "        Assert.False(drive9.IsAttached);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/SelectDriveModel_OnActiveTrueDrive_RebuildsRigWith1542For1541II",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "SelectDriveModel_OnActiveTrueDrive_RebuildsRigWith1542For1541II",
+      "declarationLine": 207,
+      "endLine": 226,
+      "source": "    public async Task SelectDriveModel_OnActiveTrueDrive_RebuildsRigWith1542For1541II()\n    {\n        var ct = TestContext.Current.CancellationToken;\n        var gateway = new FakeXboxSettingsGateway();\n        var vm = new XboxDeviceSetupViewModel(gateway);\n        var drive8 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n\n        await vm.AttachAsync(drive8, @\"C:\\disk.d64\", isReadOnly: false, cancellationToken: ct);\n        await vm.SetTrueDriveAsync(drive8, enabled: true, cancellationToken: ct);\n        var callsBefore = gateway.SetTrueDriveCallCount;\n\n        await vm.SelectDriveModelAsync(drive8, DriveModel.C1541II, ct);\n\n        Assert.Equal(DriveModel.C1541II, drive8.SelectedDriveModel);\n        Assert.True(gateway.SetTrueDriveCallCount > callsBefore);\n        Assert.True(gateway.TrueDrive);\n        Assert.Equal(8, gateway.TrueDriveDevice);\n        Assert.Equal(@\"C:\\disk.d64\", gateway.TrueDriveDiskImagePath);\n        Assert.Equal(1542, gateway.TrueDriveModel);\n    }",
+      "sourceLfSha256": "11FFC73320B48993E1FF4ADE71C981CDF88B16120D040853005085C949797646",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(DriveModel.C1541II, drive8.SelectedDriveModel);",
+        "        Assert.True(gateway.SetTrueDriveCallCount > callsBefore);",
+        "        Assert.True(gateway.TrueDrive);",
+        "        Assert.Equal(8, gateway.TrueDriveDevice);",
+        "        Assert.Equal(@\"C:\\disk.d64\", gateway.TrueDriveDiskImagePath);",
+        "        Assert.Equal(1542, gateway.TrueDriveModel);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/SelectDriveModel_OnInactiveSlot_MakesNoGatewayCall",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "SelectDriveModel_OnInactiveSlot_MakesNoGatewayCall",
+      "declarationLine": 237,
+      "endLine": 250,
+      "source": "    public async Task SelectDriveModel_OnInactiveSlot_MakesNoGatewayCall()\n    {\n        var ct = TestContext.Current.CancellationToken;\n        var gateway = new FakeXboxSettingsGateway();\n        var vm = new XboxDeviceSetupViewModel(gateway);\n        var drive8 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n\n        await vm.SelectDriveModelAsync(drive8, DriveModel.C1541II, ct);\n\n        Assert.Equal(DriveModel.C1541II, drive8.SelectedDriveModel);\n        Assert.False(drive8.IsTrueDrive);\n        Assert.Equal(0, gateway.SetTrueDriveCallCount);\n        Assert.Null(gateway.TrueDrive);\n    }",
+      "sourceLfSha256": "151A5A02B0571AE1E851EC9107432B0A9F260B025B3E7B99A1827F96B8225DB7",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(DriveModel.C1541II, drive8.SelectedDriveModel);",
+        "        Assert.False(drive8.IsTrueDrive);",
+        "        Assert.Equal(0, gateway.SetTrueDriveCallCount);",
+        "        Assert.Null(gateway.TrueDrive);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/EnablingTrueDriveOnSecondDrive_DisablesFirst_SingleRig",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "EnablingTrueDriveOnSecondDrive_DisablesFirst_SingleRig",
+      "declarationLine": 261,
+      "endLine": 279,
+      "source": "    public async Task EnablingTrueDriveOnSecondDrive_DisablesFirst_SingleRig()\n    {\n        var ct = TestContext.Current.CancellationToken;\n        var gateway = new FakeXboxSettingsGateway();\n        var vm = new XboxDeviceSetupViewModel(gateway);\n        var drive8 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n        var drive9 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);\n\n        await vm.SetTrueDriveAsync(drive8, enabled: true, cancellationToken: ct);\n        Assert.True(drive8.IsTrueDrive);\n\n        await vm.SetTrueDriveAsync(drive9, enabled: true, cancellationToken: ct);\n\n        Assert.False(drive8.IsTrueDrive);\n        Assert.True(drive9.IsTrueDrive);\n        Assert.Single(vm.Slots, slot => slot.IsTrueDrive);\n        Assert.True(gateway.TrueDrive);\n        Assert.Equal(9, gateway.TrueDriveDevice);\n    }",
+      "sourceLfSha256": "A81A0C8B5B9F01574D6A03EA2601F830ACF3C397F490342E5EE8A7F6E4B4511A",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.True(drive8.IsTrueDrive);",
+        "        Assert.False(drive8.IsTrueDrive);",
+        "        Assert.True(drive9.IsTrueDrive);",
+        "        Assert.Single(vm.Slots, slot => slot.IsTrueDrive);",
+        "        Assert.True(gateway.TrueDrive);",
+        "        Assert.Equal(9, gateway.TrueDriveDevice);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XSET/DisablingTrueDrive_IssuesSetTrueDriveFalse",
+      "groupId": "LEGACY-XSET",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "fileSha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "method": "DisablingTrueDrive_IssuesSetTrueDriveFalse",
+      "declarationLine": 290,
+      "endLine": 303,
+      "source": "    public async Task DisablingTrueDrive_IssuesSetTrueDriveFalse()\n    {\n        var ct = TestContext.Current.CancellationToken;\n        var gateway = new FakeXboxSettingsGateway();\n        var vm = new XboxDeviceSetupViewModel(gateway);\n        var drive8 = vm.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);\n\n        await vm.SetTrueDriveAsync(drive8, enabled: true, cancellationToken: ct);\n        await vm.SetTrueDriveAsync(drive8, enabled: false, cancellationToken: ct);\n\n        Assert.False(drive8.IsTrueDrive);\n        Assert.DoesNotContain(vm.Slots, slot => slot.IsTrueDrive);\n        Assert.False(gateway.TrueDrive);\n    }",
+      "sourceLfSha256": "80CCE77A7270399BDCF2C14AFA71C0AF3C27B4B36938342ECAF72423DF24EA5C",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.False(drive8.IsTrueDrive);",
+        "        Assert.DoesNotContain(vm.Slots, slot => slot.IsTrueDrive);",
+        "        Assert.False(gateway.TrueDrive);"
+      ],
+      "disposition": "Retain legacy requirements and tests, no retirement, deletion, skip or claim of tape parity. Do not add Xbox implementation to this R0 scope.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XCART/SbloxCartridge_IsAnEmbeddedResource",
+      "groupId": "LEGACY-XCART",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDefaultCartridgeTests.cs",
+      "fileSha256": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+      "method": "SbloxCartridge_IsAnEmbeddedResource",
+      "declarationLine": 59,
+      "endLine": 73,
+      "source": "    public void SbloxCartridge_IsAnEmbeddedResource()\n    {\n        // TEST-XCART-001a.\n        var assembly = typeof(DefaultCartridgeBoot).Assembly;\n        var name = assembly.GetManifestResourceNames()\n            .SingleOrDefault(n => n.EndsWith(\"sblox.CRT\", StringComparison.OrdinalIgnoreCase));\n\n        Assert.NotNull(name);\n\n        using var stream = assembly.GetManifestResourceStream(name!);\n        Assert.NotNull(stream);\n        var header = new byte[16];\n        Assert.Equal(16, stream!.Read(header, 0, 16));\n        Assert.StartsWith(\"C64 CARTRIDGE\", System.Text.Encoding.ASCII.GetString(header));\n    }",
+      "sourceLfSha256": "FD21E9E57801C38CD0652E9F35C4E66BA9137B4D5D4B17B90DAA663D45412B71",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.NotNull(name);",
+        "        Assert.NotNull(stream);",
+        "        Assert.Equal(16, stream!.Read(header, 0, 16));",
+        "        Assert.StartsWith(\"C64 CARTRIDGE\", System.Text.Encoding.ASCII.GetString(header));"
+      ],
+      "disposition": "Retain all five tests and legacy requirement references. Record untested Tape branch for later approved legacy validation; do not count the existing test as Tape behavior proof.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XCART/FirstBoot_ExtractsTheDefault_AndWritesViceIni",
+      "groupId": "LEGACY-XCART",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDefaultCartridgeTests.cs",
+      "fileSha256": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+      "method": "FirstBoot_ExtractsTheDefault_AndWritesViceIni",
+      "declarationLine": 76,
+      "endLine": 94,
+      "source": "    public void FirstBoot_ExtractsTheDefault_AndWritesViceIni()\n    {\n        // TEST-XCART-001b.\n        var settings = ViceSettings.OpenAt(_root);\n        var cartridgeDirectory = Path.Combine(_root, \"C64\");\n\n        var resolved = DefaultCartridgeBoot.ResolveBootCartridge(settings, cartridgeDirectory);\n\n        Assert.NotNull(resolved);\n        Assert.True(File.Exists(resolved));\n        Assert.StartsWith(\n            \"C64 CARTRIDGE\",\n            System.Text.Encoding.ASCII.GetString(File.ReadAllBytes(resolved!), 0, 13));\n\n        // vice.ini carries the canonical resources, exactly as VICE writes them.\n        var reopened = ViceSettings.OpenAt(_root);\n        Assert.Equal(resolved, reopened.Get(\"C64\", \"CartridgeFile\"));\n        Assert.Equal(\"0\", reopened.Get(\"C64\", \"CartridgeType\"));\n    }",
+      "sourceLfSha256": "0818179DC1E7A49F3D9EE4CBB6628F477FB6DCAEC026200C602223F369691A72",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.NotNull(resolved);",
+        "        Assert.True(File.Exists(resolved));",
+        "        Assert.StartsWith(",
+        "        Assert.Equal(resolved, reopened.Get(\"C64\", \"CartridgeFile\"));",
+        "        Assert.Equal(\"0\", reopened.Get(\"C64\", \"CartridgeType\"));"
+      ],
+      "disposition": "Retain all five tests and legacy requirement references. Record untested Tape branch for later approved legacy validation; do not count the existing test as Tape behavior proof.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XCART/ExistingCartridgeFile_IsHonored_AndMissingFileResolvesToNothing",
+      "groupId": "LEGACY-XCART",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDefaultCartridgeTests.cs",
+      "fileSha256": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+      "method": "ExistingCartridgeFile_IsHonored_AndMissingFileResolvesToNothing",
+      "declarationLine": 97,
+      "endLine": 113,
+      "source": "    public void ExistingCartridgeFile_IsHonored_AndMissingFileResolvesToNothing()\n    {\n        // TEST-XCART-001c: a user-chosen cartridge stays untouched.\n        var settings = ViceSettings.OpenAt(_root);\n        var userCart = Path.Combine(_root, \"user-cart.crt\");\n        File.WriteAllBytes(userCart, new byte[] { 1, 2, 3 });\n        settings.SetVice(\"C64\", \"CartridgeFile\", userCart);\n        settings.Save();\n\n        var resolved = DefaultCartridgeBoot.ResolveBootCartridge(settings, Path.Combine(_root, \"C64\"));\n        Assert.Equal(userCart, resolved);\n\n        // Pointing at a vanished file resolves to nothing (no forced re-default).\n        settings.SetVice(\"C64\", \"CartridgeFile\", Path.Combine(_root, \"gone.crt\"));\n        settings.Save();\n        Assert.Null(DefaultCartridgeBoot.ResolveBootCartridge(settings, Path.Combine(_root, \"C64\")));\n    }",
+      "sourceLfSha256": "FB86BC9DF5C82EA36D9069DFB9D73D8D54E3E95FE8BBFB80F57401FF0D12C2F2",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(userCart, resolved);",
+        "        Assert.Null(DefaultCartridgeBoot.ResolveBootCartridge(settings, Path.Combine(_root, \"C64\")));"
+      ],
+      "disposition": "Retain all five tests and legacy requirement references. Record untested Tape branch for later approved legacy validation; do not count the existing test as Tape behavior proof.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XCART/UserMediaSelection_UpdatesViceIni_AsNormal",
+      "groupId": "LEGACY-XCART",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDefaultCartridgeTests.cs",
+      "fileSha256": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+      "method": "UserMediaSelection_UpdatesViceIni_AsNormal",
+      "declarationLine": 116,
+      "endLine": 136,
+      "source": "    public void UserMediaSelection_UpdatesViceIni_AsNormal()\n    {\n        // TEST-XCART-001d.\n        var settings = ViceSettings.OpenAt(_root);\n        var cartridgeDirectory = Path.Combine(_root, \"C64\");\n        DefaultCartridgeBoot.ResolveBootCartridge(settings, cartridgeDirectory);\n\n        // Another cartridge replaces the resource.\n        var otherCart = Path.Combine(_root, \"other.crt\");\n        DefaultCartridgeBoot.NoteUserMediaSelection(settings, MediaSlot.Cartridge, otherCart);\n        Assert.Equal(otherCart, ViceSettings.OpenAt(_root).Get(\"C64\", \"CartridgeFile\"));\n\n        // Non-cartridge media clears it: the default must stop overriding the choice.\n        DefaultCartridgeBoot.NoteUserMediaSelection(settings, MediaSlot.Drive8, Path.Combine(_root, \"game.d64\"));\n        Assert.True(string.IsNullOrEmpty(ViceSettings.OpenAt(_root).Get(\"C64\", \"CartridgeFile\")));\n\n        // Detaching a cartridge (null path) also clears it.\n        DefaultCartridgeBoot.NoteUserMediaSelection(settings, MediaSlot.Cartridge, otherCart);\n        DefaultCartridgeBoot.NoteUserMediaSelection(settings, MediaSlot.Cartridge, null);\n        Assert.True(string.IsNullOrEmpty(ViceSettings.OpenAt(_root).Get(\"C64\", \"CartridgeFile\")));\n    }",
+      "sourceLfSha256": "56D07E5D36C3A41C80F8F3729C18F7427B5399CC01E325BB6189ECF6A2B29343",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Equal(otherCart, ViceSettings.OpenAt(_root).Get(\"C64\", \"CartridgeFile\"));",
+        "        Assert.True(string.IsNullOrEmpty(ViceSettings.OpenAt(_root).Get(\"C64\", \"CartridgeFile\")));",
+        "        Assert.True(string.IsNullOrEmpty(ViceSettings.OpenAt(_root).Get(\"C64\", \"CartridgeFile\")));"
+      ],
+      "disposition": "Retain all five tests and legacy requirement references. Record untested Tape branch for later approved legacy validation; do not count the existing test as Tape behavior proof.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    },
+    {
+      "id": "LEGACY-XCART/Head_WiresTheDefaultCartridge_AtBootAndOnUserAttach",
+      "groupId": "LEGACY-XCART",
+      "file": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDefaultCartridgeTests.cs",
+      "fileSha256": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+      "method": "Head_WiresTheDefaultCartridge_AtBootAndOnUserAttach",
+      "declarationLine": 139,
+      "endLine": 156,
+      "source": "    public void Head_WiresTheDefaultCartridge_AtBootAndOnUserAttach()\n    {\n        // TEST-XCART-001e.\n        var csproj = File.ReadAllText(Path.Combine(\n            RepoRoot, \"src\", \"ViceSharp.Xbox\", \"ViceSharp.Xbox.csproj\"));\n        Assert.Contains(\"EmbeddedResource\", csproj);\n        Assert.Contains(\"sblox.CRT\", csproj);\n\n        var app = File.ReadAllText(Path.Combine(RepoRoot, \"src\", \"ViceSharp.Xbox\", \"App.xaml.cs\"))\n            .ToLowerInvariant();\n        Assert.Contains(\"resolvebootcartridge\", app);\n        Assert.Contains(\"mediaselectionchanged\", app);\n\n        var facade = File.ReadAllText(Path.Combine(\n                RepoRoot, \"src\", \"ViceSharp.Xbox\", \"Platform\", \"InProcessSessionFacade.cs\"))\n            .ToLowerInvariant();\n        Assert.Contains(\"mediaselectionchanged\", facade);\n    }",
+      "sourceLfSha256": "86FBB591A86B16E721C2CDF25C428CE2252150402900662B61CDBFE0FF5B862B",
+      "attribute": "[Fact]",
+      "inlineData": [],
+      "assertionLines": [
+        "        Assert.Contains(\"EmbeddedResource\", csproj);",
+        "        Assert.Contains(\"sblox.CRT\", csproj);",
+        "        Assert.Contains(\"resolvebootcartridge\", app);",
+        "        Assert.Contains(\"mediaselectionchanged\", app);",
+        "        Assert.Contains(\"mediaselectionchanged\", facade);"
+      ],
+      "disposition": "Retain all five tests and legacy requirement references. Record untested Tape branch for later approved legacy validation; do not count the existing test as Tape behavior proof.",
+      "executionStatus": "not-run",
+      "approval": "draft-unapproved"
+    }
+  ],
+  "lexicalDisposition": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CaptureServiceHostTests.cs",
+      "sha256": "A4245A7A309A4BB736F5D68014CDED533B23AFFC5C16A698CD9CCB10FFD85D23",
+      "matchingLines": [
+        "524:    /// submits samples through the tap, and the client stops the recording.",
+        "526:    /// samples submitted through the live tap are written; StopCapture finalises",
+        "576:    /// live audio backend (headless / test rig - no tap installed).",
+        "795:    /// FR-MED (review finding: single audio tap not arbitrated).",
+        "796:    /// Use case: a second audio-consuming capture starts while the tap is in use."
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\FrMed005AcceptanceTests.cs",
+      "sha256": "AAC2CAB648095E3969898FE26EE1C8DC64F29CF4A3E35B947DC4D0DB614A5D39",
+      "matchingLines": [
+        "467:    /// Ok and the file starts with GIF89a when an audio tap is installed.",
+        "468:    /// Mapping that tap into the GIF mux fails in ffmpeg."
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Media\\CaptureAudioTapTests.cs",
+      "sha256": "63166932B57AE76422058F2B0C802A2CA834C767EC053E647FC253B61849EDAA",
+      "matchingLines": [
+        "12:/// FR-MED-003 / TR-MEDIA-SOUND-001: runtime-swappable sound-recording tap.",
+        "13:/// The tap is installed once in the SID -> output path and lets the host",
+        "42:        var tap = new CaptureAudioTap(downstream);",
+        "44:        tap.SubmitSamples(new[] { 0.25f, -0.5f, 0.75f });",
+        "46:        Assert.False(tap.IsRecording);",
+        "59:        var tap = new CaptureAudioTap(downstream);",
+        "63:        tap.AttachRecorder(recorder);",
+        "64:        Assert.True(tap.IsRecording);",
+        "67:        tap.SubmitSamples(input);",
+        "69:        var detached = tap.DetachRecorder();",
+        "71:        Assert.False(tap.IsRecording);",
+        "95:        var tap = new CaptureAudioTap(downstream: null);",
+        "99:        tap.AttachRecorder(recorder);",
+        "101:        Assert.Same(recorder, tap.DetachRecorder());",
+        "102:        Assert.Null(tap.DetachRecorder());"
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidNoiseDivergentParityTests.cs",
+      "sha256": "07E7C412DA93FE5D306FA80253DC80B216E4548FBAC207192FC2540F15CCA595",
+      "matchingLines": [
+        "44:    // 12-bit noise output tap packing (wave.h:354-367): SR bits 20,18,14,11,9,5,2,0",
+        "280:    /// scale and tap mapping from the 12-bit form.",
+        "318:                // Oracle OSC3 == 12-bit tap of oracle SR >> 4.",
+        "320:                // Managed OSC3 == 12-bit tap of managed SR >> 4.",
+        "446:    /// tap bits each cycle; after enough clocks the oracle SR[0] reaches 0.",
+        "717:    /// tap positions (wave.h:339-348), gradually corrupting the register.",
+        "766:    /// noise tap and the current waveform output bits. The managed code only AND'd",
+        "816:    /// Use case: combined waveforms including noise write zeros into the SR tap",
+        "850:            // (bit-19 rises every 16 cycles, each write zeros tap bits; 23 clocks needed)."
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidVoiceMixDivergentParityTests.cs",
+      "sha256": "84510C15535376D90F79F165729973E7549FBD7BD1ABC39A2FEC64E64C01E6DD",
+      "matchingLines": [
+        "24:/// when 3OFF is set (mode bit7), and apply LP/BP/HP tap select from mode",
+        "597:    /// $D418 upper nibble. Acceptance: LP mode ($D418 bit4) routes LP tap",
+        "598:    /// to output; BP mode (bit5) routes BP tap; HP mode (bit6) routes HP tap.",
+        "605:        // With voice1 routed to filter, LP/BP/HP mode bits must select the tap.",
+        "660:        // reSID: silence is DC bias, not 0. Key assertion: no-tap output != LP output.",
+        "663:        // Verify that setting LP mode (bit4) brings voice1 back via the filter tap.",
+        "667:        // LP filter has integrated voice1 signal -> output differs from no-tap silence",
+        "669:        Assert.NotEqual(filterOut, filterOutLp); // LP changes output vs no-tap",
+        "769:    /// Use case: filter-tap dc_offset = 32767 * ((1&lt;&lt;12) - filterGain)"
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidWaveOsc3DivergentParityTests.cs",
+      "sha256": "872C9A750ABA68D7FD41FC748C3698A321FD96FD40C97E03F5530B876C7B2435",
+      "matchingLines": [
+        "300:    /// 600 single cycles the oracle's read($1B) equals exactly the tap",
+        "302:    /// managed $D41B read equals exactly the identical tap packing of the"
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\WarpAudioDiscardTests.cs",
+      "sha256": "2EEC4B9F048CA468BF5BD2E094C3E5588D68D940864DCA5F2079DD59C26AC105",
+      "matchingLines": [
+        "19:/// while the capture tap still feeds any attached recorder; leaving warp",
+        "231:    /// tap the moment it is attached."
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\GamepadMergeSocdTests.cs",
+      "sha256": "2BA29BEA1B0A894A683A77A9BEEB5E7FE044BB4F5F1200CD3F767D6AD8967740",
+      "matchingLines": [
+        "44:    /// player can push the stick right and tap D-pad up for a diagonal, and the"
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxAudioBackendFactoryTests.cs",
+      "sha256": "87D4FE2D74A89B5C2D53481F71055C0E8747037D8803FF6B6E0B4773C82EE554",
+      "matchingLines": [
+        "43:    /// audio device (no live capture tap). With <c>VICESHARP_AUDIO=1</c> and no",
+        "83:            // A minimal session built headless engages no audio device (no live tap)."
+      ],
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "readScope": "All retained matching lines reviewed; selected surrounding bodies sampled to verify audio/oscillator/filter/controller sense. Not a full correctness or method inventory of these unrelated files.",
+      "disposition": "Not Datasette coverage. Retain in applicable full-suite regression; no retirement or blanket pass."
+    }
+  ],
+  "remaining": [
+    "Reconcile remaining full-packet HV findings with an explicit closure ledger, including observer feasibility/non-interference, hidden-state determinism, loader corpus and API write-guard protocol.",
+    "Confirm transitive mock/provider design and full-suite applicability before claiming the entire test migration exhaustive. This supplement does not prove callback/provider seams exist.",
+    "Local Opus-5.5 max review of the complete corrected R0 packet, then explicit operator approval of the exact amendment. Midnight DISAGREE 93/84 remains controlling until superseded.",
+    "After approval, discriminating mocks green first, same assertions bound to production/immutable VICE, full current-plus-prior suite and all real emulator/VSF/lockstep gates."
+  ]
+}

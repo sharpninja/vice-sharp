@@ -1,0 +1,17 @@
+// Diagnostic-only Windows API declarations, not production wrapper code.
+// Caller must verify the exact owned debugger child PID and executable before use.
+using System;
+using System.Runtime.InteropServices;
+public static class ViceProbeDebugBreak
+{
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern IntPtr OpenProcess(uint access, bool inherit, uint processId);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool DebugBreakProcess(IntPtr process);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool CloseHandle(IntPtr handle);
+}

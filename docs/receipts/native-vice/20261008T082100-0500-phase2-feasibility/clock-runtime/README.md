@@ -1,0 +1,74 @@
+# External stock-xvic clock observation
+
+Recorded 2026-10-08T10:52:40-05:00. This is partial Phase 2 feasibility evidence,
+not native acceptance, bus parity, or cycle-boundary pause/resume proof.
+
+## Build boundary
+
+`tools/immutable-vice/clock-observer.c` wraps `vic_cycle`, invokes the real function
+once, then forwards the actual `maincpu_clk` to an external observer. This
+directory's `stock-observer.c` prints that value; it does not generate clock
+values, change emulated state, or implement a control protocol.
+
+`link.launch.json` retains the original stock link command and complete new
+arguments. The new output is outside the stock source checkout. All 99 stock
+object/archive inputs are pinned and unchanged. Only the output path, external
+objects, wrapper and trace-symbol flags differ. `link.stderr.log` shows the
+`vic20cpu.o` reference redirected to `__wrap_vic_cycle`, the wrapper's reference
+to the real `vic_cycle`, and the native definition in `vic-cycle.o`.
+
+`link.result.json` records exit 0 and wrapped executable SHA256
+`EBACCD480620F4508A6EF2756F320B0F39931F72BE393267E3009A505FF85446`.
+The original stock executable remains SHA256
+`C01442BC1F15DD8C7006FABE0D35DFA9707664A3120DD1FA014A51EEB481B92C`.
+
+## Runtime observations
+
+Each run directory retains exact arguments, executable/hash, PID, result,
+stdout and stderr. Arguments use stock `-default -console -sound -sounddev dummy
+-warp -seed 1 -directory <pinned-data> -limitcycles <limit>`.
+
+- `stock-100`: exit 1, no observer records.
+- `wrapped-100`: exit 1, 100 observer records, first clock 7, last clock 104.
+- `wrapped-100000-a` and `wrapped-100000-b`: each exit 1, 99998 records, first
+  clock 7, last clock 100002. Both completed without diagnostic timeout.
+
+All four runs report `Error -  cycle limit reached.` in stdout.
+`exit-evidence-addendum.json` corrects the original integrity receipt's
+stderr-only message search. The original receipt is retained unchanged.
+The logs also retain missing optional 2000/4000/CMDHD drive-ROM diagnostics;
+these runs do not validate those devices. Exit 1 is not reported as a successful
+acceptance gate.
+
+Both longer runs' raw stdout SHA256 is
+`E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F`.
+Their ordered observer-line stream SHA256 is
+`0A1CBF116EC45B247BE1A01591396411760E649793EC4040A17392F45CEFD406`.
+The sequence begins `7,8,7,8,9,...`. The reversal at index 2 is preserved,
+not dropped or renumbered. In each of `wrapped-100`, `wrapped-100000-a` and
+`wrapped-100000-b`, stdout lines 26/27 contain the first `VICE_CLOCK,7` and
+`VICE_CLOCK,8`; line 28 is `Main CPU:  RESET.`; lines 29/30 contain the next
+`7,8` pair. This native reset message is correlated evidence, not a directly
+observed reset event proving the reversal's cause or an epoch boundary.
+No inferred epoch labels are emitted. This F-05 clarification was recorded
+2026-10-08T13:47:42-05:00; fresh hashes and exact excerpts are in
+`../../20261008T134300-0500-hv-evidence-corrections/historical-evidence-readback.json`.
+
+`observation-integrity-result.json` verifies zero changes among all 3847 original
+stock source files, all 99 stock link inputs, and the eight-field dirty
+`native/vice` baseline. The original stock executable is unchanged.
+
+## Test gate and limits
+
+See `tests/ViceSharp.NativeClockProbe.Tests/README.md` for the preceding mock
+gate, same-assertion compiled-C bindings, cumulative suites and retained failed
+attempts. `../clock-fixture-evidence/copy-verification.json` proves seven copied
+compile/run logs match their retained originals.
+
+The stock cycle limit is checked at an instruction boundary in
+`vice/src/mainviccpu.c`, not a per-cycle host handshake. Actual bus address,
+data, read/write, dummy/real, interrupt-stage and stolen-cycle observations
+remain unproven. Fast opcode fetch bypasses memory-function tables. Do not
+reconstruct those values from instruction history or call this a complete
+oracle. Noon Opus HV must include this slice, the preceding failed debugger
+probes and all other deferred work. No phase or requirement is marked done.

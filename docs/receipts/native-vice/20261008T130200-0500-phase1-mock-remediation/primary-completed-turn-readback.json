@@ -1,0 +1,91 @@
+{
+  "requestId": "req-20261008T175952Z-prompt-f7fb",
+  "timestamp": "2026-10-08T17:59:52.0000000+00:00",
+  "queryText": "Continue the full original ViceSharp goal with HV agree. Previous turn made progress by preserving the quota-stopped Opus review and draft. Remediate independently identified Phase 1 mock deficiencies within the current phase: single-fault postflight receipt controls, zero-test rejection, precise scenario AC mapping, and reusable provider seam where supported by approved plan. No production gate advancement, native edits, historical queue replay, reviewer substitution, commit or push.",
+  "queryTitle": "Remediate Phase 1 mock contract gaps",
+  "response": "2026-10-08T13:09:06-05:00: Concrete progress toward the full original ViceSharp goal: remediated draft F-07/F-08 mock-discrimination gaps and F-09 scenario mapping within the existing unaccepted Phase 1 gate. Added four independent postflight controls (correct transcript first; invert only receipt or only postflight argument for both outcomes) and an explicit all-zero receipt rejection. Existing assertions and all 82 prior cases remain; no production behavior or native source changed.\n\nFull unfiltered native-safe suites: 87 oracle-contract tests, 199 VSF-compatibility tests, 50 clock-probe tests. All 336 passed; failed/notExecuted/aborted/error/timeout 0, all exit 0. Supported edit verification succeeded. Every build/test native bracket and final 8-field native comparison remained unchanged. Both current gcc compiler logs retained with copy/hash verification. This does not prove real-emulator parity or close historical F-11.\n\nNew ledger contains all 87 TRX cases. Of 34 PHI2/AEC cases, exactly 16 missing/unknown/gap cases claim FR-VICE-001 AC4 and TEST-VICE-001 AC4; the other 18 only claim TR-CYCLE-001 AC4. Original reviewed ledger remains byte-identical. All rows are MockContractOnly, realGateSatisfied false. Effective FR/TR/TEST remain pending, all 13 selected criteria unsatisfied.\n\nReceipt root: F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation. README links commands, TRX, logs, native inventories, preimages, new ledger and result hashes. Updated test README and HANDOFF; git diff --check exit 0 and untracked source/docs whitespace checks have no errors. New post-review source/docs inputs must be pinned for the next HV.\n\nF-10 reusable fixture/provider binding is the next safe remediation before real adapters. Other draft findings and unknowns remain open. Opus has not re-reviewed these changes and no phase, TODO, requirement or whole-goal acceptance is claimed. The exact local Opus max review remains quota-stopped; no retry or replacement reviewer was launched. No native/production edit, historical queue replay, commit or push. Full original goal remains active, with all real-emulator gates mandatory.",
+  "interpretation": "Previous turn was progress, not a no-progress wait: recovered all partial HV findings and verified full primary preservation. Current work remediates existing mock-phase findings F-07/F-08/F-09/F-10 only, without accepting or advancing an implementation gate. Native and original source remain immutable.",
+  "status": "completed",
+  "actions": [
+    {
+      "order": 1,
+      "description": "Fresh effective layer-1 readback: FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001 remain pending with all 13 ACs unsatisfied. Read approved Phase 1 scope and full test sources. Verified standalone test project has no native/production references or Directory.Build.targets. Four pre-edit files copied and SHA256 verified with originals retained; native baseline unchanged.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\preimage-copy-proof.json"
+    },
+    {
+      "order": 2,
+      "description": "Fix F-07 using four single-fault lifecycle negative-control cases: false/true postflight with only receipt acceptance inverted, and false/true postflight with only postflight argument inverted. Each first demonstrates correct mock transcript acceptance. Fix F-08 with explicit all-zero receipt rejection and wrong-acceptance control via existing same DecisionIs assertions. No production implementation. Run complete oracle suite and all prior VSF/clock suites, no filters or skips, with native inventories before/after. Gate remains unaccepted until same Opus review completes.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": null
+    },
+    {
+      "order": 4,
+      "description": "F-07/F-08 test remediation compiled successfully with native before/after invariant. Full unfiltered suites: oracle 87/87, VSF 199/199, clock 50/50, total 336 passed, zero failed/notExecuted/aborted, all exit 0. Source adds four independent postflight/receipt controls and all-zero receipt rejection. Full logs, TRX, diag and native inventories retained. No production or real-emulator acceptance claim.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-review-f07-f08-oracle-01\\result.json"
+    },
+    {
+      "order": 5,
+      "description": "F-09 regenerated a new scenario ledger from current 87-test TRX. All original 82 test names remain, five new tests mapped. Of 34 PHI2/AEC rows, 16 missing/unknown/gap cases retain FR/TEST missing-observation ACs, 18 other cases map TR-CYCLE-001 AC4 only. Original reviewed ledger retained byte-identical, SHA256 B74F9AE910D09F7E72C832860539BD9609BC097EBD3895E5F1A4BA416B9F0556. No requirement satisfaction changed.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\scenario-ac-ledger.json"
+    },
+    {
+      "order": 6,
+      "description": "Do not rewrite historical 82-case receipt to look as if it had correct AC mapping at review time. Publish new 87-case ledger with original receipt/hash linkage and exact scenario rule. F-10 provider/fixture refactor remains an explicit next remediation before real binding, not claimed fixed by these five controls.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": null
+    },
+    {
+      "order": 7,
+      "description": "Updated OracleContract README and canonical HANDOFF with current 87/199/50 mock results, exact limitations, new ledger, F-10 remaining work and unaccepted HV status. Added remediation receipt README and native-safe result packet. Full git diff --check exit 0; explicit untracked source/docs whitespace checks emitted no errors. Source diff is additions only; prior fixtures/assertions retained.",
+      "type": "documentation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\README.md"
+    },
+    {
+      "order": 8,
+      "description": "Preserved and hash-verified BOTH compiler logs from current full clock run: clock-gate and clock-probe, each gcc exit 0, TimedOut False, empty stderr. This preserves current evidence; it does not reconstruct or close historical F-11 missing preimage. Final native baseline unchanged in all 8 fields.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\compiler-log-copy-proof.json"
+    }
+  ],
+  "model": "codex",
+  "modelProvider": null,
+  "tokenCount": 0,
+  "tags": null,
+  "contextList": null,
+  "failureNote": null,
+  "score": null,
+  "isPremium": null,
+  "rawContext": null,
+  "originalEntry": null,
+  "processingDialog": [
+    {
+      "timestamp": "2026-10-08T18:02:56.8153459+00:00",
+      "role": "model",
+      "content": "The draft exposed assertion-discrimination gaps, not authorization to weaken the acceptance contract. Preserve existing fixtures/assertions; add correct and single-fault wrong mock transcripts and reject vacuous zero-test receipts. Expected new full mock suite count is 87, retaining the prior 82 tests. This is remediation within the unaccepted Phase 1 mock gate and does not advance a production gate.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:07:56.9168866+00:00",
+      "role": "model",
+      "content": "A test-case count is not AC coverage. Preserve the historical over-mapped ledger and create a new current mapping for actual scenario outcomes. The 16 missing/unknown/gap rows test missing evidence; the other 18 PHI2/AEC rows do not. No emulator AC is satisfied by this mock ledger. Reusable fixtures and a real path-resolution boundary remain mandatory before production adapters.",
+      "category": "decision"
+    }
+  ],
+  "commits": null,
+  "designDecisions": null,
+  "requirementsDiscovered": null,
+  "filesModified": null,
+  "blockers": null,
+  "planFile": "None",
+  "todoId": "None"
+}

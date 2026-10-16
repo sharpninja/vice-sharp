@@ -1,0 +1,21 @@
+.echo VICE_HARDWARE_INSPECTION_BEGIN
+lm m xvic
+ba w8 xvic+0x262a10
+bl
+g
+.echo VICE_HARDWARE_POST_INTERRUPT
+~
+~0s
+r rip
+r dr0
+r dr1
+r dr2
+r dr3
+r dr6
+r dr7
+dq xvic+0x262a10 L1
+u @rip L5
+bl
+bc *
+.echo VICE_HARDWARE_INSPECTION_END
+q

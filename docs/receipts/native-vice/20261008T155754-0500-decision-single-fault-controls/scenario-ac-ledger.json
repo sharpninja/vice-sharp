@@ -1,0 +1,1176 @@
+{
+  "timestampLocal": "2026-10-08T16:01:42.2566537-05:00",
+  "scope": "Existing 87 mock cases plus two acceptance-field discrimination controls; no real gate satisfaction",
+  "testCount": 89,
+  "tests": [
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"write\", requested: \"F:/wrapper/output.vsf\", resolved: \"F:/wrapper/output.vsf\", unchanged: True, accepted: True, error: null)",
+      "testId": "aaddf0b8-4852-a3f8-e48e-34d63ec5020e",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.WrongReceiptAfterPostflightIsRejectedIndependently(unchanged: True)",
+      "testId": "e20559bb-4032-fe5c-5dcf-e8a0af265122",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"missing-first\", accepted: False, error: \"IntervalMissing\", firstError: null)",
+      "testId": "cdc4c0d7-97a0-d520-7ff9-aa49a48c58d1",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 99, aec: True, access: 1, accepted: False, error: \"PhaseUnknown\")",
+      "testId": "8071f3ef-9648-6a03-cf84-fadcb34cac18",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"duplicate-complete\", accepted: False, error: \"SequenceOrder\", firstError: 37)",
+      "testId": "b0003515-4b9b-9880-098c-f9f78fa99335",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"missing-hash\", accepted: False, error: \"WrapperHashMissing\")",
+      "testId": "3c2d084e-0fef-7d05-f6a1-9a7dadf9edc7",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.IdentityAndInventory(scenario: \"clean\", accepted: True, error: null)",
+      "testId": "f46b2e3e-0e24-398e-8e94-08c2daf7b379",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"empty\", accepted: False, error: \"ObservationMissing\", firstError: 36)",
+      "testId": "417b65d3-e68b-107e-9088-541239e1152f",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.IdentityAndInventory(scenario: \"wrong-commit\", accepted: False, error: \"CommitMismatch\")",
+      "testId": "a2695fa9-8589-752a-28b9-b71b45d10d18",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"write\", requested: \"f:/NATIVE/Vice/out\", resolved: \"F:/native/vice/out\", unchanged: True, accepted: False, error: \"ImmutableWrite\")",
+      "testId": "65b26e8f-1383-5e80-a26a-a848e220ed07",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 1, aec: False, access: 0, accepted: True, error: null)",
+      "testId": "0d99fa25-4f83-d12f-4bfd-890d8859dbed",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.OrderedLifecycle(preflight: True, postflight: True)",
+      "testId": "0ca3afa7-da22-a525-fda8-1f36d0432fbf",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"read\", requested: \"F:/wrapper/input.vsf\", resolved: \"F:/wrapper/input.vsf\", unchanged: True, accepted: True, error: null)",
+      "testId": "1759779c-edd8-28d2-e3b3-7d5c354abb45",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"changed-inventory\", accepted: False, error: \"InventoryChanged\")",
+      "testId": "41ca3bf4-bce3-226b-4a4a-da02477b3891",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 1, aec: True, access: 0, accepted: True, error: null)",
+      "testId": "676f8be8-b563-bcbe-ff11-7e53fc2679d3",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.WrongPostflightArgumentIsRejectedIndependently(unchanged: True)",
+      "testId": "98f7471f-29c0-de19-636b-d98496e36cf1",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"missing-version\", accepted: False, error: \"WrapperVersionMissing\")",
+      "testId": "7e67ee00-8434-a9fd-4527-efbed737d8ec",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"leading\", accepted: False, error: \"ObservationMissing\", firstError: 36)",
+      "testId": "412a2d57-d58e-2c91-75a7-bf63396c5daa",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"missing-last\", accepted: False, error: \"IntervalMissing\", firstError: null)",
+      "testId": "f0edffda-8dda-d65f-a830-db1f843d214a",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"dirty-before\", accepted: False, error: \"DirtyBefore\")",
+      "testId": "8343c9ec-cb76-8b9b-9eec-d12b490af7cd",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"zero-tests\", accepted: False, error: \"NoTestsExecuted\")",
+      "testId": "300936a1-a18c-077b-dc90-bd48164bff4d",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 0, aec: True, access: 1, accepted: False, error: \"PhaseUnknown\")",
+      "testId": "da63aa12-bca8-68fc-6fe1-84279cb43b0d",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.Vic20NativeBusEventTests.EveryCategoryRequiresActualCompleteObservations(category: \"timing\")",
+      "testId": "10130ab7-9888-eddc-7cf2-50c3181e5447",
+      "outcome": "Passed",
+      "group": "Vic20NativeBusEventTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC4",
+        "TR-VICE-ORACLE-001 AC3",
+        "TR-VICE-ORACLE-001 AC5",
+        "TEST-VICE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 1, aec: False, access: 2, accepted: False, error: \"AccessForbidden\")",
+      "testId": "24e36931-3b35-5a7e-aa3c-6adecc746b0c",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.DecisionAcceptanceControlTests.AcceptanceOnlyFaultIsRejected(scenario: \"clean\", accepted: True, error: null)",
+      "testId": "6f9cc540-c1f5-61ca-3b9d-473dd2739e85",
+      "outcome": "Passed",
+      "group": "DecisionAcceptanceControlTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockAssertionDiscriminationOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"failure\", accepted: False, error: \"FailedTests\")",
+      "testId": "152c82c0-cf08-4586-ec0f-4b992b880891",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"negative-aborted\", accepted: False, error: \"NegativeCount\")",
+      "testId": "5c1de0b7-b24f-cb08-6516-7083245e0293",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"out-of-order\", accepted: False, error: \"ObservationMissing\", firstError: 37)",
+      "testId": "fa684530-9385-d227-20bf-6b4d103ce771",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.IdentityAndInventory(scenario: \"post-inventory\", accepted: False, error: \"InventoryChanged\")",
+      "testId": "5364d12f-a124-e506-2cd5-e7147c407d8f",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.Vic20HalfCycleComparatorContractTests.EqualRegistersDifferentAddressAtHalfCycle37",
+      "testId": "d9f4e6b2-5881-aa13-6c10-9d43add2c4f6",
+      "outcome": "Passed",
+      "group": "Vic20HalfCycleComparatorContractTests",
+      "acceptanceCriteria": [
+        "FR-SNP-005 AC3 partial",
+        "TEST-SNP-002 AC4 partial"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"other-source\", accepted: False, error: \"SourceMismatch\")",
+      "testId": "4c9746c9-c5d4-74f0-b8a9-c2e524e86956",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.DecisionAcceptanceControlTests.AcceptanceOnlyFaultIsRejected(scenario: \"tracked-delta\", accepted: False, error: \"DirtyBefore\")",
+      "testId": "93d3ac75-c87c-f6be-9dc4-20abe929245f",
+      "outcome": "Passed",
+      "group": "DecisionAcceptanceControlTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockAssertionDiscriminationOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"missing-command\", accepted: False, error: \"CommandMissing\")",
+      "testId": "78d6d557-ffa3-c551-8fe0-132a940e929f",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"patch\", requested: \"F:/native/vice/cpu.c\", resolved: \"F:/native/vice/cpu.c\", unchanged: True, accepted: False, error: \"ImmutablePatch\")",
+      "testId": "3f6fa7d6-a1c2-f60a-a03d-3587c0527fe4",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"reversed\", accepted: False, error: \"IntervalInvalid\", firstError: null)",
+      "testId": "8466bb5b-df32-5751-2b3b-3298df8bcd5b",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: True, access: 0, accepted: True, error: null)",
+      "testId": "38e9843a-f86e-d55d-ec7e-70e2e72bc5a8",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"write\", requested: \"F:/wrapper/out\", resolved: \"F:/wrapper/out\", unchanged: False, accepted: False, error: \"InventoryChanged\")",
+      "testId": "f4d6463f-7e48-a126-92b5-9695d2e0342f",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: True, access: 1, accepted: True, error: null)",
+      "testId": "d6b3c69a-e28d-1211-a112-c37e9597c508",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.Vic20NativeBusEventTests.EveryCategoryRequiresActualCompleteObservations(category: \"snapshots\")",
+      "testId": "95f23a8f-dda3-4587-6b43-59d18b83bcb0",
+      "outcome": "Passed",
+      "group": "Vic20NativeBusEventTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC4",
+        "TR-VICE-ORACLE-001 AC3",
+        "TR-VICE-ORACLE-001 AC5",
+        "TEST-VICE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: null, access: 1, accepted: False, error: \"AecMissing\")",
+      "testId": "8cd476df-de64-036e-88dd-e6871dd60aba",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 1, aec: True, access: 1, accepted: False, error: \"AccessForbidden\")",
+      "testId": "a78814a1-39a6-e36f-7689-2ac69264e4f0",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"negative-skipped\", accepted: False, error: \"NegativeCount\")",
+      "testId": "85fc578e-5a1e-b508-97dc-97e330b2516b",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 1, aec: False, access: 1, accepted: False, error: \"AccessForbidden\")",
+      "testId": "d8a842c6-8768-e3bf-6fcd-b6260b4549f2",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: null, aec: True, access: 1, accepted: False, error: \"PhaseMissing\")",
+      "testId": "39a743b2-f84c-c9ab-fc31-3306d8a07e88",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"malformed-hash\", accepted: False, error: \"WrapperHashInvalid\")",
+      "testId": "2b610291-6bcf-105b-f247-d1da3d86ac72",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.OrderedLifecycle(preflight: False, postflight: False)",
+      "testId": "e282f693-c284-781a-b197-d327d335fb44",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"complete\", accepted: True, error: null, firstError: null)",
+      "testId": "d0932b9f-6032-3f59-7f28-2a6e504feead",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"missing-scope\", accepted: False, error: \"ScopeMissing\")",
+      "testId": "f6d96532-a942-0957-f993-6c79a9a4061e",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"interior\", accepted: False, error: \"ObservationMissing\", firstError: 37)",
+      "testId": "ab09eb24-9ab9-a53c-e056-bcac31a31f33",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: True, access: -1, accepted: False, error: \"AccessUnknown\")",
+      "testId": "464de233-a0fb-7923-55a2-8a5c5d1f87e9",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"skip\", accepted: False, error: \"SkippedTests\")",
+      "testId": "98d79a39-8d16-7684-2e76-5f2b25ff818b",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.IdentityAndInventory(scenario: \"different-source\", accepted: False, error: \"SourceMismatch\")",
+      "testId": "64859b99-46db-0813-aaf1-0e7b9cd50f29",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: False, access: 2, accepted: False, error: \"AccessForbidden\")",
+      "testId": "30a9fc66-a613-67d1-e43b-ddb7eb44cea2",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: True, access: 99, accepted: False, error: \"AccessUnknown\")",
+      "testId": "58fbcae1-d539-954a-ab46-22f5611a8290",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.IdentityAndInventory(scenario: \"patched\", accepted: False, error: \"PatchedOracle\")",
+      "testId": "883b9a38-d2ec-8a7f-1f97-117cd229526b",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"duplicate-gap\", accepted: False, error: \"ObservationMissing\", firstError: 37)",
+      "testId": "f87a0af5-2f6e-9d21-d441-cd67636fa0fa",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"write\", requested: \"F:/native/vice/out\", resolved: \"F:/native/vice/out\", unchanged: True, accepted: False, error: \"ImmutableWrite\")",
+      "testId": "141dd8be-acdd-54c2-7c6f-291e30253048",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"generate\", requested: \"F:/native/vice/generated.c\", resolved: \"F:/native/vice/generated.c\", unchanged: True, accepted: False, error: \"ImmutableGeneration\")",
+      "testId": "aa7a3f4e-03c1-41bf-bd55-2591c4949a68",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"abort\", accepted: False, error: \"AbortedTests\")",
+      "testId": "91e8172d-8210-fda8-e374-79f560536c16",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"write\", requested: \"F:/wrapper/../native/vice/out\", resolved: \"F:/native/vice/out\", unchanged: True, accepted: False, error: \"ImmutableWrite\")",
+      "testId": "f6b89832-8558-c4c2-2d20-4e0c0ebbac9a",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.WrongPostflightArgumentIsRejectedIndependently(unchanged: False)",
+      "testId": "b66b64e7-4306-9e57-400f-2ca9f17f8e5f",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"valid\", accepted: True, error: null)",
+      "testId": "f7ed2618-2f9a-db0d-0fd8-69424e5a099d",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"negative-failed\", accepted: False, error: \"NegativeCount\")",
+      "testId": "2c124a79-ef07-ab7b-bfd5-1a7d306fef94",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.Vic20NativeBusEventTests.EveryCategoryRequiresActualCompleteObservations(category: \"cpu-bus\")",
+      "testId": "0570410a-28fc-1581-15d0-c9a523ffe510",
+      "outcome": "Passed",
+      "group": "Vic20NativeBusEventTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC4",
+        "TR-VICE-ORACLE-001 AC3",
+        "TR-VICE-ORACLE-001 AC5",
+        "TEST-VICE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.WrongReceiptAfterPostflightIsRejectedIndependently(unchanged: False)",
+      "testId": "78550fef-4c64-250d-182a-e1d8af45affe",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 1, aec: False, access: null, accepted: False, error: \"AccessMissing\")",
+      "testId": "b78f5870-8f9d-cfd3-5722-4698563adb82",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.IdentityAndInventory(scenario: \"missing-commit\", accepted: False, error: \"CommitMissing\")",
+      "testId": "dee05bd7-53a4-4d52-0e70-f9b3c7ba8019",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"missing-commit\", accepted: False, error: \"CommitMissing\")",
+      "testId": "ffaeebb0-1921-cfe3-eb32-7bb0f51c06d9",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 1, aec: True, access: 2, accepted: False, error: \"AccessForbidden\")",
+      "testId": "825b1ae3-ff44-39ca-55cc-a26fde317691",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.IdentityAndInventory(scenario: \"dirty-after\", accepted: False, error: \"DirtyAfter\")",
+      "testId": "17815cf6-6d19-6217-1f02-10db7cd12600",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"write\", requested: \"F:/wrapper/link/out\", resolved: \"F:/native/vice/out\", unchanged: True, accepted: False, error: \"ImmutableWrite\")",
+      "testId": "e45a1f0c-afa9-d7cb-0781-3d3e1f670f30",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"extra\", accepted: False, error: \"UnexpectedObservation\", firstError: 39)",
+      "testId": "05165104-b9ca-f891-b260-27242720cc39",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: True, access: null, accepted: False, error: \"AccessMissing\")",
+      "testId": "906aca1e-32b0-1b07-a76e-7bed31edf3e8",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: True, access: 2, accepted: True, error: null)",
+      "testId": "72d5adca-b51b-371f-02ed-d17d8306847f",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.IdentityAndInventory(scenario: \"tracked-delta\", accepted: False, error: \"DirtyBefore\")",
+      "testId": "1122ba65-c48f-ac39-c975-c94cb0630a1e",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"negative-passed\", accepted: False, error: \"NegativeCount\")",
+      "testId": "3457cb4c-441d-afb0-a726-75b9e76db7ab",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: False, access: 0, accepted: True, error: null)",
+      "testId": "54dd8ffd-4f27-3eaa-4083-3900c36aff4a",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 1, aec: null, access: 0, accepted: False, error: \"AecMissing\")",
+      "testId": "16b2fb0c-747c-a641-a4e2-1b2680f1ea92",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.OrderedLifecycle(preflight: True, postflight: False)",
+      "testId": "c396e78f-bd35-9839-83d4-994d7d6a1ee8",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceWrapperBoundaryTests.DestinationAndAfterState(operation: \"write\", requested: \"F:/native/vice-copy/out\", resolved: \"F:/native/vice-copy/out\", unchanged: True, accepted: True, error: null)",
+      "testId": "85504a04-c413-33b5-7d0f-fe8606c0a41e",
+      "outcome": "Passed",
+      "group": "ImmutableViceWrapperBoundaryTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC2",
+        "TR-VICE-ORACLE-001 AC2",
+        "TEST-VICE-001 AC2"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: 2, aec: False, access: 1, accepted: False, error: \"AccessForbidden\")",
+      "testId": "dcdb3fed-bb6e-4ce8-b6fa-30829dc025ae",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceOraclePreflightTests.RunnerBeforeRecordedAcceptanceIsRejectedIndependently",
+      "testId": "f483c8c4-2dc8-cf4f-bd3c-b5a054a355e7",
+      "outcome": "Passed",
+      "group": "ImmutableViceOraclePreflightTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC1",
+        "TEST-VICE-001 AC1"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"missing-inventory\", accepted: False, error: \"InventoryMissing\")",
+      "testId": "7eae2f52-523f-d070-ab56-15d59fcd91e9",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.Vic20NativeBusEventTests.EveryCategoryRequiresActualCompleteObservations(category: \"lifecycle\")",
+      "testId": "135266da-ff65-5395-1725-f0fa3ee0a401",
+      "outcome": "Passed",
+      "group": "Vic20NativeBusEventTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC4",
+        "TR-VICE-ORACLE-001 AC3",
+        "TR-VICE-ORACLE-001 AC5",
+        "TEST-VICE-001 AC4"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"wrong-commit\", accepted: False, error: \"CommitMismatch\")",
+      "testId": "2a66ea1f-4fac-621d-5809-ff7c6547c5ea",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: \"trailing\", accepted: False, error: \"ObservationMissing\", firstError: 38)",
+      "testId": "83a63bbb-6f49-4bad-a503-be36809024eb",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"patched\", accepted: False, error: \"PatchedOracle\")",
+      "testId": "2b7c3558-2a6e-6f6d-9a7b-19557b15e4b5",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.ImmutableViceReceiptContractTests.RequiredProvenanceAndCounts(scenario: \"dirty-after\", accepted: False, error: \"DirtyAfter\")",
+      "testId": "76479c75-7a1d-d9ad-cd6b-2cbd09650319",
+      "outcome": "Passed",
+      "group": "ImmutableViceReceiptContractTests",
+      "acceptanceCriteria": [
+        "FR-VICE-001 AC1",
+        "FR-VICE-001 AC3",
+        "TR-VICE-ORACLE-001 AC4",
+        "TEST-VICE-001 AC3"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    },
+    {
+      "testName": "ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.PhaseAecAccessTruthTable(phase: null, aec: False, access: 0, accepted: False, error: \"PhaseMissing\")",
+      "testId": "1937114a-d616-c170-a760-1f0bb2f2fbb7",
+      "outcome": "Passed",
+      "group": "CpuPhi2AecContractTests",
+      "acceptanceCriteria": [
+        "TR-CYCLE-001 AC4",
+        "FR-VICE-001 AC4 missing observations",
+        "TEST-VICE-001 AC4 missing observations"
+      ],
+      "evidenceClass": "MockContractOnly",
+      "realGateSatisfied": false
+    }
+  ],
+  "previousLedger": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\scenario-ac-ledger.json",
+  "previousLedgerSha256": "ED15DC87604B7D26E0DF35ABB6C965DE70BF91E93C8878E43D9D6FC86AECEFAF",
+  "priorMissing": [],
+  "realGatesRemainMandatory": true,
+  "hvAccepted": false
+}

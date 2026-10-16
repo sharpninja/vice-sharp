@@ -1,0 +1,1249 @@
+{
+  "preparedAtLocal": "2026-10-13T21:33:52",
+  "candidatePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\proposed-field-delta.json",
+  "candidateSha256": "98D42B84FBA5AB833BC41F199A9A9CE0C56B5CF8D5B3EF0689895FAAE3D73BC9",
+  "classification": "Read-only document consistency checks, NOT executable mock/provider/emulator acceptance",
+  "checkCount": 177,
+  "failedCount": 0,
+  "checks": [
+    {
+      "name": "Exactly16 unique records",
+      "passed": true,
+      "evidence": [
+        "FR-RUNTIME-TAPE-002",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001",
+        "FR-TAP-001",
+        "FR-TAP-002",
+        "FR-TAP-003",
+        "FR-TAP-004",
+        "TEST-TAP-001",
+        "FR-BACKFILL-MEDIA-001",
+        "FR-CPU-004",
+        "FR-PRF-003",
+        "FR-TAP-005",
+        "TEST-CPU-001",
+        "TEST-PRF-001"
+      ]
+    },
+    {
+      "name": "Original payload preserved: FR-RUNTIME-TAPE-002",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: TR-TAP-EDGE-001",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: TR-TAPE-EDGE-001",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: TEST-TAPE-RAMP-001",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: TEST-TAPE-SENSE-001",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: FR-TAP-001",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: FR-TAP-002",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: FR-TAP-003",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: FR-TAP-004",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: TEST-TAP-001",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: FR-BACKFILL-MEDIA-001",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: FR-CPU-004",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: FR-PRF-003",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "Original payload preserved: FR-TAP-005",
+      "passed": true,
+      "evidence": "Whole record before/after and change metadata compared structurally, object order ignored; arrays and strings exact."
+    },
+    {
+      "name": "No satisfied criteria: FR-RUNTIME-TAPE-002",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-RUNTIME-TAPE-002",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06",
+        "ac-07",
+        "ac-08"
+      ]
+    },
+    {
+      "name": "Retain old AC: FR-RUNTIME-TAPE-002/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: FR-RUNTIME-TAPE-002/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: FR-RUNTIME-TAPE-002/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: FR-RUNTIME-TAPE-002/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: FR-RUNTIME-TAPE-002/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "Retain old AC: FR-RUNTIME-TAPE-002/ac-06",
+      "passed": true,
+      "evidence": "ac-06"
+    },
+    {
+      "name": "No satisfied criteria: TR-TAP-EDGE-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: TR-TAP-EDGE-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06"
+      ]
+    },
+    {
+      "name": "Retain old AC: TR-TAP-EDGE-001/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: TR-TAP-EDGE-001/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: TR-TAP-EDGE-001/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: TR-TAP-EDGE-001/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "No satisfied criteria: TR-TAPE-EDGE-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: TR-TAPE-EDGE-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06",
+        "ac-07"
+      ]
+    },
+    {
+      "name": "Retain old AC: TR-TAPE-EDGE-001/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: TR-TAPE-EDGE-001/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: TR-TAPE-EDGE-001/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: TR-TAPE-EDGE-001/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "No satisfied criteria: TEST-TAPE-RAMP-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: TEST-TAPE-RAMP-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05"
+      ]
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-RAMP-001/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-RAMP-001/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-RAMP-001/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-RAMP-001/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "No satisfied criteria: TEST-TAPE-SENSE-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: TEST-TAPE-SENSE-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06",
+        "ac-07",
+        "ac-08"
+      ]
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-SENSE-001/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-SENSE-001/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-SENSE-001/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-SENSE-001/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: TEST-TAPE-SENSE-001/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "No satisfied criteria: FR-TAP-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-TAP-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06"
+      ]
+    },
+    {
+      "name": "Retain old AC: FR-TAP-001/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-001/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-001/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-001/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-001/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-001/ac-06",
+      "passed": true,
+      "evidence": "ac-06"
+    },
+    {
+      "name": "No satisfied criteria: FR-TAP-002",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-TAP-002",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06",
+        "ac-07",
+        "ac-08"
+      ]
+    },
+    {
+      "name": "Retain old AC: FR-TAP-002/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-002/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-002/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-002/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-002/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-002/ac-06",
+      "passed": true,
+      "evidence": "ac-06"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-002/ac-07",
+      "passed": true,
+      "evidence": "ac-07"
+    },
+    {
+      "name": "No satisfied criteria: FR-TAP-003",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-TAP-003",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06"
+      ]
+    },
+    {
+      "name": "Retain old AC: FR-TAP-003/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-003/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-003/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-003/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-003/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-003/ac-06",
+      "passed": true,
+      "evidence": "ac-06"
+    },
+    {
+      "name": "No satisfied criteria: FR-TAP-004",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-TAP-004",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05"
+      ]
+    },
+    {
+      "name": "Retain old AC: FR-TAP-004/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-004/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-004/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-004/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-004/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "No satisfied criteria: TEST-TAP-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: TEST-TAP-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06",
+        "ac-07"
+      ]
+    },
+    {
+      "name": "No satisfied criteria: FR-BACKFILL-MEDIA-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-BACKFILL-MEDIA-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05"
+      ]
+    },
+    {
+      "name": "No satisfied criteria: FR-CPU-004",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-CPU-004",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06",
+        "ac-07"
+      ]
+    },
+    {
+      "name": "Retain old AC: FR-CPU-004/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: FR-CPU-004/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: FR-CPU-004/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: FR-CPU-004/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: FR-CPU-004/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "Retain old AC: FR-CPU-004/ac-06",
+      "passed": true,
+      "evidence": "ac-06"
+    },
+    {
+      "name": "Retain old AC: FR-CPU-004/ac-07",
+      "passed": true,
+      "evidence": "ac-07"
+    },
+    {
+      "name": "No satisfied criteria: FR-PRF-003",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-PRF-003",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06"
+      ]
+    },
+    {
+      "name": "Retain old AC: FR-PRF-003/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: FR-PRF-003/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: FR-PRF-003/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: FR-PRF-003/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: FR-PRF-003/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "Retain old AC: FR-PRF-003/ac-06",
+      "passed": true,
+      "evidence": "ac-06"
+    },
+    {
+      "name": "No satisfied criteria: FR-TAP-005",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: FR-TAP-005",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06"
+      ]
+    },
+    {
+      "name": "Retain old AC: FR-TAP-005/ac-01",
+      "passed": true,
+      "evidence": "ac-01"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-005/ac-02",
+      "passed": true,
+      "evidence": "ac-02"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-005/ac-03",
+      "passed": true,
+      "evidence": "ac-03"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-005/ac-04",
+      "passed": true,
+      "evidence": "ac-04"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-005/ac-05",
+      "passed": true,
+      "evidence": "ac-05"
+    },
+    {
+      "name": "Retain old AC: FR-TAP-005/ac-06",
+      "passed": true,
+      "evidence": "ac-06"
+    },
+    {
+      "name": "No satisfied criteria: TEST-CPU-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: TEST-CPU-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04",
+        "ac-05",
+        "ac-06",
+        "ac-07",
+        "ac-08",
+        "ac-09",
+        "ac-10"
+      ]
+    },
+    {
+      "name": "No satisfied criteria: TEST-PRF-001",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Unique AC IDs: TEST-PRF-001",
+      "passed": true,
+      "evidence": [
+        "ac-01",
+        "ac-02",
+        "ac-03",
+        "ac-04"
+      ]
+    },
+    {
+      "name": "AC denominator",
+      "passed": true,
+      "evidence": {
+        "before": 66,
+        "after": 104,
+        "retained": 66,
+        "rewritten": 56,
+        "unchanged": 10,
+        "added": 38
+      }
+    },
+    {
+      "name": "Only AC changed: TEST-CPU-001",
+      "passed": true,
+      "evidence": [
+        "acceptanceCriteria"
+      ]
+    },
+    {
+      "name": "Stable TEST field: TEST-CPU-001/id",
+      "passed": true,
+      "evidence": "TEST-CPU-001"
+    },
+    {
+      "name": "Stable TEST field: TEST-CPU-001/workspaceId",
+      "passed": true,
+      "evidence": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "name": "Stable TEST field: TEST-CPU-001/scopeStartLayerKey",
+      "passed": true,
+      "evidence": "layer-1"
+    },
+    {
+      "name": "Stable TEST field: TEST-CPU-001/condition",
+      "passed": true,
+      "evidence": "CPU instruction, timing, interrupt, and port behavior is verified with unit tests and VICE/Lorenz-style reference comparisons."
+    },
+    {
+      "name": "Stable TEST field: TEST-CPU-001/title",
+      "passed": true,
+      "evidence": "CPU Execution Reference Tests"
+    },
+    {
+      "name": "Stable TEST field: TEST-CPU-001/priority",
+      "passed": true,
+      "evidence": "medium"
+    },
+    {
+      "name": "Stable TEST field: TEST-CPU-001/status",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "Only AC changed: TEST-PRF-001",
+      "passed": true,
+      "evidence": [
+        "acceptanceCriteria"
+      ]
+    },
+    {
+      "name": "Stable TEST field: TEST-PRF-001/id",
+      "passed": true,
+      "evidence": "TEST-PRF-001"
+    },
+    {
+      "name": "Stable TEST field: TEST-PRF-001/workspaceId",
+      "passed": true,
+      "evidence": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "name": "Stable TEST field: TEST-PRF-001/scopeStartLayerKey",
+      "passed": true,
+      "evidence": "layer-1"
+    },
+    {
+      "name": "Stable TEST field: TEST-PRF-001/condition",
+      "passed": true,
+      "evidence": "C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for required devices, ROMs, clocks, and address maps."
+    },
+    {
+      "name": "Stable TEST field: TEST-PRF-001/title",
+      "passed": true,
+      "evidence": "Machine Profile Tests"
+    },
+    {
+      "name": "Stable TEST field: TEST-PRF-001/priority",
+      "passed": true,
+      "evidence": "medium"
+    },
+    {
+      "name": "Stable TEST field: TEST-PRF-001/status",
+      "passed": true,
+      "evidence": "pending"
+    },
+    {
+      "name": "FR/TEST trace: FR-CPU-004/ac-03",
+      "passed": true,
+      "evidence": {
+        "frId": "FR-CPU-004",
+        "frAcId": "ac-03",
+        "testId": "TEST-CPU-001",
+        "testAcIds": [
+          "ac-01"
+        ]
+      }
+    },
+    {
+      "name": "FR/TEST trace: FR-CPU-004/ac-05",
+      "passed": true,
+      "evidence": {
+        "frId": "FR-CPU-004",
+        "frAcId": "ac-05",
+        "testId": "TEST-CPU-001",
+        "testAcIds": [
+          "ac-02"
+        ]
+      }
+    },
+    {
+      "name": "FR/TEST trace: FR-CPU-004/ac-06",
+      "passed": true,
+      "evidence": {
+        "frId": "FR-CPU-004",
+        "frAcId": "ac-06",
+        "testId": "TEST-CPU-001",
+        "testAcIds": [
+          "ac-03",
+          "ac-04",
+          "ac-05",
+          "ac-06",
+          "ac-07",
+          "ac-08",
+          "ac-09",
+          "ac-10"
+        ]
+      }
+    },
+    {
+      "name": "FR/TEST trace: FR-PRF-003/ac-02",
+      "passed": true,
+      "evidence": {
+        "frId": "FR-PRF-003",
+        "frAcId": "ac-02",
+        "testId": "TEST-PRF-001",
+        "testAcIds": [
+          "ac-01"
+        ]
+      }
+    },
+    {
+      "name": "FR/TEST trace: FR-PRF-003/ac-04",
+      "passed": true,
+      "evidence": {
+        "frId": "FR-PRF-003",
+        "frAcId": "ac-04",
+        "testId": "TEST-PRF-001",
+        "testAcIds": [
+          "ac-02",
+          "ac-03",
+          "ac-04"
+        ]
+      }
+    },
+    {
+      "name": "Nine mapping rows",
+      "passed": true,
+      "evidence": [
+        "FR-BACKFILL-MEDIA-001",
+        "FR-RUNTIME-TAPE-002",
+        "FR-TAP-001",
+        "FR-TAP-002",
+        "FR-TAP-003",
+        "FR-TAP-004",
+        "FR-TAP-005",
+        "FR-CPU-004",
+        "FR-PRF-003"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-BACKFILL-MEDIA-001/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-DRV-EDGE-001",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-BACKFILL-MEDIA-001/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-DRV-EDGE-001",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001",
+        "TR-IEC-EDGE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-BACKFILL-MEDIA-001/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-DRV-MOTOR-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-BACKFILL-MEDIA-001/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-DRV-MOTOR-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001",
+        "TEST-IEC-TIMING-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-RUNTIME-TAPE-002/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-RUNTIME-TAPE-002/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-RUNTIME-TAPE-002/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-RUNTIME-TAPE-002/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-001/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-001/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001",
+        "TR-TAPE-EDGE-001",
+        "TR-TAP-EDGE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-001/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-001/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-002/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-002/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001",
+        "TR-TAP-EDGE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-002/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-002/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-003/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-003/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001",
+        "TR-TAP-EDGE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-003/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-003/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-004/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-004/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-004/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-004/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-005/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-005/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001",
+        "TR-TAP-EDGE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-TAP-005/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-TAP-005/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-TAP-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-CPU-004/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-CPU-004/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-CYCLE-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-CPU-004/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-CPU-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-CPU-004/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-CPU-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-PRF-003/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-DET-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-PRF-003/trIds",
+      "passed": true,
+      "evidence": [
+        "TR-DET-001"
+      ]
+    },
+    {
+      "name": "Mapping preimage: FR-PRF-003/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-PRF-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Preserved mapping edges: FR-PRF-003/testIds",
+      "passed": true,
+      "evidence": [
+        "TEST-PRF-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "name": "Projected preimages equal",
+      "passed": true,
+      "evidence": 112
+    },
+    {
+      "name": "All32 backlog names resolve",
+      "passed": true,
+      "evidence": [
+        "Tap_BlockDecoderVersusDatasettePath",
+        "Tap_ClockHeaderVersusSelectedMachine",
+        "Tap_HeaderWarningVersusRejection",
+        "TapV0_ZeroDoesNotConsumeExtension",
+        "TapV1V2_ExtensionAndTruncation",
+        "Tap_CbmThresholdBoundaries",
+        "Tap_TurboPilotHeaderBoundaries",
+        "SenseDongle_EnableDisablePowerup",
+        "CpClockF83_MotorWriteSenseTruthTable",
+        "TapeContract_RejectsMissingNativeEvidence",
+        "TapeContract_UnchangedAssertionsAcrossProviders",
+        "TapeContract_FullCumulativeGate",
+        "TapePublicApi_MotorState",
+        "TapePublicApi_MountEject",
+        "DatasetteAudio_ResourceBufferAndSamples",
+        "TapeRead_TimerInterruptTrace",
+        "TapeRead_CbmHeaderDataChecksum",
+        "TapeRead_NormalSpeedMachineTrace",
+        "TapeWrite_KernalSaveAndReload",
+        "TapeWrite_NewExistingAndAppendPosition",
+        "TapeRead_TurboNamedLoaderMatrix",
+        "Turbo_Biturbo_LoadSuccess",
+        "Turbo_C64Flag_ExactClockAndPendingState",
+        "Turbo_CustomEncoding_OrderedObservations",
+        "Turbo_Cyberload_LoadSuccess",
+        "Turbo_HalfFullWave_BlockVsLive",
+        "Turbo_MidLoadRateTransition_Continuity",
+        "Turbo_Novaload_LoadSuccess",
+        "Turbo_Pavloda_LoadSuccess",
+        "Turbo_PulseWidths_Around160_NoArtificialFloor",
+        "Turbo_Turbotape_LoadSuccess",
+        "Turbo_Vic20Ca1_RemainsSeparate"
+      ]
+    },
+    {
+      "name": "Coverage denominator",
+      "passed": true,
+      "evidence": {
+        "rows": 104,
+        "groups": 117,
+        "executedTests": 0
+      }
+    },
+    {
+      "name": "Unapplied review metadata",
+      "passed": true,
+      "evidence": "r0-review-candidate-unapplied-awaiting-HV-and-exact-operator-approval"
+    },
+    {
+      "name": "Parent candidate unchanged",
+      "passed": true,
+      "evidence": {
+        "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+        "sha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+        "disposition": "Historical superseded candidate; never apply in addition to this candidate."
+      }
+    }
+  ]
+}

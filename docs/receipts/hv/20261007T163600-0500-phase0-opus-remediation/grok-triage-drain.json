@@ -1,0 +1,10 @@
+{
+  "quarantined": 0,
+  "scanned": 1,
+  "failsafeDir": "F:\\GitHub\\vice-sharp\\.mcpServer\\grok\\reviews\\20261007T131928-0500-phase0-mock-scope\\failsafe\\pending",
+  "skipped": 0,
+  "replayed": 1,
+  "aborted": false,
+  "abortReason": "",
+  "failed": 0
+}

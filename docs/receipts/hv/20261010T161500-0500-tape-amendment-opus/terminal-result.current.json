@@ -1,0 +1,156 @@
+{
+  "time": "2026-10-10T16:30:44.3608121-05:00",
+  "reset": "2026-10-10T16:50:00-05:00",
+  "beforeReset": true,
+  "reviewExited": true,
+  "reviewExitCode": 1,
+  "matchingLiveProcesses": 0,
+  "responseEvents": 14,
+  "resultEvents": 1,
+  "assistantEvents": 1,
+  "markerHash": "96ACFE5069A1FC5D8E39A6248CA9CD1FD9328308E576B79FBEB4FFC85516B508",
+  "terminalReceiptHash": "BAB856848A54DF722DDAE3C256D39CF86B7BB2E5E3A673FDD3E0A3A06A29F4A9",
+  "resetSource": "HTTP429 local CLI transcript API error, retained in response.supplement.jsonl; no new quota request made",
+  "gateAdvancePossible": false,
+  "reason": "No HV verdict; expanded requirement delta lacks approval; downstream implementation cannot cross these gates",
+  "consecutiveGoalTurnsEncounteringBlocker": 3,
+  "automationScheduled": false,
+  "operatorRetryQuestionPending": true,
+  "responseBytes": 151212,
+  "responseSha256": "5D313D2CE4611B933ADD952B2FEFC133A1ADD883988D8C35A5A7CF0F31260C99",
+  "supersedesCountsIn": [
+    "terminal-result.json",
+    "README.md"
+  ],
+  "correction": "Earlier11events/zeroassistant/zeroresult counts were incorrect. Fresh read14events includes synthetic API error and terminal HTTP429 result. Cause of discrepancy unproven; no claim file changed.",
+  "terminalEvents": [
+    {
+      "type": "assistant",
+      "message": {
+        "diagnostics": null,
+        "id": "4b51180f-d20e-48fe-a682-d235a92bb06d",
+        "container": null,
+        "model": "<synthetic>",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "stop_sequence",
+        "stop_sequence": "",
+        "type": "message",
+        "usage": {
+          "output_tokens_details": null,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": null,
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": null,
+          "iterations": null,
+          "speed": null,
+          "fallback_credit": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "You've hit your session limit · resets 4:50pm (America/Chicago)"
+          }
+        ],
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+      "uuid": "e004130f-e4ae-4c3d-8748-c353f30f8511",
+      "timestamp": "2026-10-10T21:17:29.739Z",
+      "error": "rate_limit",
+      "request_id": "req_011CfuFaU9kkU1mKHQXArh7F",
+      "is_api_error_message": true,
+      "api_error": "usage_limit_reached",
+      "api_error_params": {
+        "rate_limit_info": {
+          "status": "rejected",
+          "resetsAt": 1791669000,
+          "rateLimitType": "five_hour",
+          "overageStatus": "rejected",
+          "overageDisabledReason": "out_of_credits",
+          "isUsingOverage": false
+        }
+      }
+    },
+    {
+      "duration_api_ms": 0,
+      "stop_reason": "stop_sequence",
+      "session_id": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+      "total_cost_usd": 0,
+      "usage": {
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 0,
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "modelUsage": {},
+      "permission_denials": [],
+      "terminal_reason": "api_error",
+      "fast_mode_state": "off",
+      "fast_mode_disabled_reason": "sdk_opt_in_required",
+      "subagent_stats": {
+        "spawned": 0,
+        "requested": {
+          "background": 0,
+          "foreground": 0,
+          "unset": 0
+        },
+        "started_in_background": 0,
+        "max_depth": 0,
+        "spawned_by_subagents": 0,
+        "completed": 0,
+        "failed": 0,
+        "killed": {
+          "parent": 0,
+          "user": 0,
+          "system": 0
+        },
+        "refused": {
+          "depth_limit": 0,
+          "concurrency_limit": 0,
+          "budget": 0
+        },
+        "by_type": {}
+      },
+      "safety_stops": 0,
+      "is_error": true,
+      "num_turns": 1,
+      "subtype": "success",
+      "api_error_status": 429,
+      "api_error": "usage_limit_reached",
+      "result": "You've hit your session limit · resets 4:50pm (America/Chicago)",
+      "type": "result",
+      "duration_ms": 9808,
+      "uuid": "caeb05a5-90b6-4674-8fab-9f0803ed40ac",
+      "queued_turn_count": 0,
+      "result_index": 0
+    }
+  ]
+}

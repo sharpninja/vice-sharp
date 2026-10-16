@@ -1,0 +1,12 @@
+{
+  "timestampLocal": "2026-10-08T15:55:43.3834477-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T204420Z-prompt-bbf1",
+  "status": "completed",
+  "actionCount": 3,
+  "dialogCount": 3,
+  "fullBodyExact": true,
+  "responseExact": true,
+  "receiptSha256": "0EB1EAE2D87F8CF1572D743351E62333BA5E3223BB51BA9F8A091FA8329DB210",
+  "verificationSha256": "CF544B531B309424A44A62497B3CB35F799FB3C5DC87DE1D21887E43ABD32BAE"
+}

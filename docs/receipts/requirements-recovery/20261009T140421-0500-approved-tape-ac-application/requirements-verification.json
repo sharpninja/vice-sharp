@@ -1,0 +1,65 @@
+{
+  "checkedAtLocal": "2026-10-09T14:06:07.2421390-05:00",
+  "primaryTool": "mcp__mcpserver__requirements_effective",
+  "changedRecords": [
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "fields": [
+        "acceptanceCriteria",
+        "body",
+        "status"
+      ]
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "fields": [
+        "acceptanceCriteria",
+        "body",
+        "status"
+      ]
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "fields": [
+        "acceptanceCriteria",
+        "body",
+        "status"
+      ]
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "fields": [
+        "acceptanceCriteria",
+        "condition",
+        "status",
+        "title"
+      ]
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "fields": [
+        "acceptanceCriteria",
+        "condition",
+        "status",
+        "title"
+      ]
+    }
+  ],
+  "errorCount": 0,
+  "errors": [],
+  "mappingsUnchanged": true,
+  "recordCountsBefore": {
+    "test": 142,
+    "fr": 235,
+    "tr": 139
+  },
+  "recordCountsAfter": {
+    "test": 142,
+    "fr": 235,
+    "tr": 139
+  },
+  "criteriaCount": 23,
+  "allUnsatisfied": true,
+  "applicationOnly": true,
+  "implementationAcceptance": false
+}

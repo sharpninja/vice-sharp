@@ -1,0 +1,380 @@
+{
+  "timestampLocal": "2026-10-07T17:42:55.8120842-05:00",
+  "queryPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.parent-primary-query.json",
+  "sessionId": "GrokCode-20261007T222539Z-phase0-remediation-hv",
+  "requestId": "req-20261007T222539Z-phase0-remediation-hv",
+  "model": "grok-4.7",
+  "status": "completed",
+  "fullResponseCharacters": 22855,
+  "entireVerdictMarkdownPresent": true,
+  "entireVerdictJsonPresent": true,
+  "onlyNormalization": "CRLF to LF",
+  "verdictMarkdownSha256": "2AD519BE241A877E4BEB9D5C68726E7EB2CDB23DEB57B817FC7A8951D6FFCBC1",
+  "verdictJsonSha256": "5042126C3DFF2F158953B345FEE85F20C7877DDCC8EDFC1AEACDE720CC7FBCB4",
+  "overallVerdict": "AGREE",
+  "accuracy": 99,
+  "completeness": 98,
+  "passCount": 26,
+  "failCount": 0,
+  "unknownCount": 0,
+  "evidencePinCount": 59,
+  "evidenceMismatches": 0,
+  "pins": [
+    {
+      "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+      "expectedSha256": "3D8FA83A509A2A0006091B20A5DDF280DDECEA34A2B378B0AFE9E7197547E39C",
+      "currentSha256": "3D8FA83A509A2A0006091B20A5DDF280DDECEA34A2B378B0AFE9E7197547E39C",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "expectedSha256": "54F13F8F303E330E107DF8B925B2A5F2F8F81CC89A8AEB03B9CF763F908EF991",
+      "currentSha256": "54F13F8F303E330E107DF8B925B2A5F2F8F81CC89A8AEB03B9CF763F908EF991",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+      "expectedSha256": "C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183",
+      "currentSha256": "C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Immutable-Native-VICE.md",
+      "expectedSha256": "54F13F8F303E330E107DF8B925B2A5F2F8F81CC89A8AEB03B9CF763F908EF991",
+      "currentSha256": "54F13F8F303E330E107DF8B925B2A5F2F8F81CC89A8AEB03B9CF763F908EF991",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Native-VICE-VSF-Lockstep.md",
+      "expectedSha256": "C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183",
+      "currentSha256": "C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\goal-plan.after-human-steering.md",
+      "expectedSha256": "AC8B715D6BA30DDAABEC1F6A53E88667334570347617DFBAEC8A8764C81BFCBF",
+      "currentSha256": "AC8B715D6BA30DDAABEC1F6A53E88667334570347617DFBAEC8A8764C81BFCBF",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\goal-plan.before-human-steering.md",
+      "expectedSha256": "8BC3A6818E5B0276870A22ACC559874BFE66FD6322A8C4B5F6E80B3571F373EC",
+      "currentSha256": "8BC3A6818E5B0276870A22ACC559874BFE66FD6322A8C4B5F6E80B3571F373EC",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\HANDOFF.after-human-steering.md",
+      "expectedSha256": "E5777C5847ED42A9E856B7F155AB85C6178432696879F655BDDD6711D30869D6",
+      "currentSha256": "E5777C5847ED42A9E856B7F155AB85C6178432696879F655BDDD6711D30869D6",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\HANDOFF.before-human-steering.md",
+      "expectedSha256": "24BC7C35F8A9BF565CECBFFDD7422CAFB300B4A6C387E812C90054FB026F197A",
+      "currentSha256": "24BC7C35F8A9BF565CECBFFDD7422CAFB300B4A6C387E812C90054FB026F197A",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\verification.json",
+      "expectedSha256": "39F087AF4A869CCA37C3D771602FF00225BD2199EB310982F18A96E387CBE028",
+      "currentSha256": "39F087AF4A869CCA37C3D771602FF00225BD2199EB310982F18A96E387CBE028",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok.cycle-status-remediation.json",
+      "expectedSha256": "3DE1E01BEE2245552C7962895D753085DF5DDD251B8820EE15643342AF72F761",
+      "currentSha256": "3DE1E01BEE2245552C7962895D753085DF5DDD251B8820EE15643342AF72F761",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok.parent-primary-proof.json",
+      "expectedSha256": "47E206EDDA0DDE08737F4130DCA803F2B10C40B9B7AA2C29F1736B2FEAE66223",
+      "currentSha256": "47E206EDDA0DDE08737F4130DCA803F2B10C40B9B7AA2C29F1736B2FEAE66223",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok.primary-query-response.json",
+      "expectedSha256": "8BA430EF0DB24BDC1BD7E3EDBB87C5BB0898A5BE7B1A474E328C447B26511271",
+      "currentSha256": "8BA430EF0DB24BDC1BD7E3EDBB87C5BB0898A5BE7B1A474E328C447B26511271",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok.wiki-after-cycle-proof.json",
+      "expectedSha256": "C2A3C27FC7D43AD61DFE79D7C64FAB558C3DE4EC93F1E653280D45A69E8E50D6",
+      "currentSha256": "C2A3C27FC7D43AD61DFE79D7C64FAB558C3DE4EC93F1E653280D45A69E8E50D6",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.parent-correction-query.json",
+      "expectedSha256": "E8A412A490ECD5F0A73F93C62CF9B484991E4EFD5E1894469DC7E0C3C885562C",
+      "currentSha256": "E8A412A490ECD5F0A73F93C62CF9B484991E4EFD5E1894469DC7E0C3C885562C",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.parent-primary-proof.json",
+      "expectedSha256": "49011C8330E6801BE15114B99690D9B54BB7F8992AA7D56BFF7856EF87B274A1",
+      "currentSha256": "49011C8330E6801BE15114B99690D9B54BB7F8992AA7D56BFF7856EF87B274A1",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.prompt.md",
+      "expectedSha256": "A37EDFF1794513FB852B2A32CA9AE4BBCC0113C87B3818AB35DD2F811A2F7A4F",
+      "currentSha256": "A37EDFF1794513FB852B2A32CA9AE4BBCC0113C87B3818AB35DD2F811A2F7A4F",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.request.jsonl",
+      "expectedSha256": "DB6BF26D43D10A17E4FE3A0C84DDF7DBE56C6096689CCAFF2336918EF473B606",
+      "currentSha256": "DB6BF26D43D10A17E4FE3A0C84DDF7DBE56C6096689CCAFF2336918EF473B606",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.exit.json",
+      "expectedSha256": "D1E7151BFE6AE6C8560E5A305B9BB31BD22E8257355BC164F9C4ED74DDC81DC7",
+      "currentSha256": "D1E7151BFE6AE6C8560E5A305B9BB31BD22E8257355BC164F9C4ED74DDC81DC7",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.prompt.md",
+      "expectedSha256": "254184C274C80443BEFD37F9050BCF3FC31E390209DDF4B7EA6CBA494C3247B6",
+      "currentSha256": "254184C274C80443BEFD37F9050BCF3FC31E390209DDF4B7EA6CBA494C3247B6",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.request.jsonl",
+      "expectedSha256": "6DB4F9B855F8E540C4ED09A53FACC226631D00C5F2A8CE61702E400B3BAD90E4",
+      "currentSha256": "6DB4F9B855F8E540C4ED09A53FACC226631D00C5F2A8CE61702E400B3BAD90E4",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.verdict.json",
+      "expectedSha256": "E4C0356B458B0749044BF4D96B13171B50DAE0C3C834E63D63CB0A33DB4C180D",
+      "currentSha256": "E4C0356B458B0749044BF4D96B13171B50DAE0C3C834E63D63CB0A33DB4C180D",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.verdict.md",
+      "expectedSha256": "9443FCBE61A9B1B4F30F0D8BF000D4D99633C9ACA5B77611561E4929FFE2BCAE",
+      "currentSha256": "9443FCBE61A9B1B4F30F0D8BF000D4D99633C9ACA5B77611561E4929FFE2BCAE",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\completed-turn-primary-readback.json",
+      "expectedSha256": "3A7788CF8E2DC522BA5086874DF4712FDFA9F1CB95B48A0FC2DF11B6BF399874",
+      "currentSha256": "3A7788CF8E2DC522BA5086874DF4712FDFA9F1CB95B48A0FC2DF11B6BF399874",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\diff-check-after-export.txt",
+      "expectedSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "currentSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\diff-check.txt",
+      "expectedSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "currentSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\disposition-audit-2-primary-query.json",
+      "expectedSha256": "3791CBA594223A133333588FA5C390729CCC04CB3A9506EA05F45BEC5ED93822",
+      "currentSha256": "3791CBA594223A133333588FA5C390729CCC04CB3A9506EA05F45BEC5ED93822",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\disposition-audit-2.json",
+      "expectedSha256": "BF64D21A4FEC36559E467E79EDF057D1617E6B1506A1EF02A60B19A74486D9F3",
+      "currentSha256": "BF64D21A4FEC36559E467E79EDF057D1617E6B1506A1EF02A60B19A74486D9F3",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\disposition-audit-3-primary-query.json",
+      "expectedSha256": "20115214E383BA0D0248DA89E9C616B043DFF80AAC472BD60B238445F35C25AF",
+      "currentSha256": "20115214E383BA0D0248DA89E9C616B043DFF80AAC472BD60B238445F35C25AF",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\disposition-audit-3.json",
+      "expectedSha256": "C39C5F0763DE2049096CB74EDC697D59713BA990E3CBACFEA31C050AD5328613",
+      "currentSha256": "C39C5F0763DE2049096CB74EDC697D59713BA990E3CBACFEA31C050AD5328613",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\drained-triage-primary-readbacks.json",
+      "expectedSha256": "799C193ABF1A4AB4C0B99EBFC9E1D0667EC3AD4D0D5663BA8F9204B1FE1214F0",
+      "currentSha256": "799C193ABF1A4AB4C0B99EBFC9E1D0667EC3AD4D0D5663BA8F9204B1FE1214F0",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\goal-plan.before.md",
+      "expectedSha256": "5EE5D2A2283551717ADB50B46A83A60A05458E33BEEF1267B0FB0A7DA52D7441",
+      "currentSha256": "5EE5D2A2283551717ADB50B46A83A60A05458E33BEEF1267B0FB0A7DA52D7441",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\goal-todo-primary-readback.json",
+      "expectedSha256": "C9D8E63DBBAFBED7DBEBA3E8BA209847C5E022AE145E2641F4CB9C5C6DBE8615",
+      "currentSha256": "C9D8E63DBBAFBED7DBEBA3E8BA209847C5E022AE145E2641F4CB9C5C6DBE8615",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\grok-triage-drain.json",
+      "expectedSha256": "F0CB21DC9D8A4AD2CCEBC7B35CCCDD7F2049F69A2B91AEE7A2E4286DA8A33C9D",
+      "currentSha256": "F0CB21DC9D8A4AD2CCEBC7B35CCCDD7F2049F69A2B91AEE7A2E4286DA8A33C9D",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\HANDOFF.before.md",
+      "expectedSha256": "CF53647121166D485564503C6245D3C6D756B0BC8468DA001F827D48BBC021DE",
+      "currentSha256": "CF53647121166D485564503C6245D3C6D756B0BC8468DA001F827D48BBC021DE",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\immutable-plan.before.md",
+      "expectedSha256": "C7E1FE6C3BB5598E79EBD4092FEB5CEE51FF8BAF5648D2CC704E6FD5FA398E06",
+      "currentSha256": "C7E1FE6C3BB5598E79EBD4092FEB5CEE51FF8BAF5648D2CC704E6FD5FA398E06",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\native-unchanged-proof.json",
+      "expectedSha256": "28200D2DBF6651FA8FC56B761517CB4D821831549431D821FE1736EDE8E786DB",
+      "currentSha256": "28200D2DBF6651FA8FC56B761517CB4D821831549431D821FE1736EDE8E786DB",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\parent-primary-after-safe-drain.json",
+      "expectedSha256": "27B1B4661D762A5B8BBCF4A938FA1429DDCB6C2D1D9C56C3F6DC91158D463FE4",
+      "currentSha256": "27B1B4661D762A5B8BBCF4A938FA1429DDCB6C2D1D9C56C3F6DC91158D463FE4",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\plan-checks.json",
+      "expectedSha256": "D8A7E04E9E13F952002F90B05DCA27739B457D02696532F144F67DB402F9072B",
+      "currentSha256": "D8A7E04E9E13F952002F90B05DCA27739B457D02696532F144F67DB402F9072B",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\remediation-receipt.json",
+      "expectedSha256": "439FAE8ADE61DE07C19E855E043E5B7B1093B8D5D201D4975B2BB9869E101E73",
+      "currentSha256": "439FAE8ADE61DE07C19E855E043E5B7B1093B8D5D201D4975B2BB9869E101E73",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\todo-primary-readback.json",
+      "expectedSha256": "88E2D19B80369DB846CBA67291CEF836EABB84324D0D34402F73C2E451675953",
+      "currentSha256": "88E2D19B80369DB846CBA67291CEF836EABB84324D0D34402F73C2E451675953",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\traceability.txt",
+      "expectedSha256": "F86E7074CF7130DB5F137025567838470F4A0EB69DD97C1F9BB74D703A1F6F90",
+      "currentSha256": "F86E7074CF7130DB5F137025567838470F4A0EB69DD97C1F9BB74D703A1F6F90",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\wiki-copy-proof.json",
+      "expectedSha256": "38F5D12AB024B3CF427B493020F8EB433C2239E8F96E9FBFD7F83F37CA1A7AA5",
+      "currentSha256": "38F5D12AB024B3CF427B493020F8EB433C2239E8F96E9FBFD7F83F37CA1A7AA5",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\wiki-export-result.json",
+      "expectedSha256": "55DC75CA7D0F18C74F4CCFEAE61E9120D299598F76E06DC13A64EF99743AE9B9",
+      "currentSha256": "55DC75CA7D0F18C74F4CCFEAE61E9120D299598F76E06DC13A64EF99743AE9B9",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\20261007T185015Z-session_submit-7dc1.yaml",
+      "expectedSha256": "8B9267389EA6E3585F86DC0D3CF439C70FD1DE1E45A73A1BB92CD6BA417FB48F",
+      "currentSha256": "8B9267389EA6E3585F86DC0D3CF439C70FD1DE1E45A73A1BB92CD6BA417FB48F",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\diff-check.txt",
+      "expectedSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "currentSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\goal-plan.before.md",
+      "expectedSha256": "B234DEDE7CAA8EBAEAD07AF7F51748E283D90AC4027207198BF2CC72F7BCFCB3",
+      "currentSha256": "B234DEDE7CAA8EBAEAD07AF7F51748E283D90AC4027207198BF2CC72F7BCFCB3",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\HANDOFF.before.md",
+      "expectedSha256": "4373E33F130AF25AB40982D31091222927E43B04CAB6AA0910FF20362C7B453A",
+      "currentSha256": "4373E33F130AF25AB40982D31091222927E43B04CAB6AA0910FF20362C7B453A",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\immutable-plan.before.md",
+      "expectedSha256": "6B63117B8F1F17F9E10A8260C0938465E34A1A69448676BC87CFE1F1ECA79070",
+      "currentSha256": "6B63117B8F1F17F9E10A8260C0938465E34A1A69448676BC87CFE1F1ECA79070",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\primary-after.json",
+      "expectedSha256": "BC3D95A06A977802FE0899C0CB47D8B912CFC18392F55AD5D866DDB5AFBE626F",
+      "currentSha256": "BC3D95A06A977802FE0899C0CB47D8B912CFC18392F55AD5D866DDB5AFBE626F",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\primary-before.json",
+      "expectedSha256": "BC3D95A06A977802FE0899C0CB47D8B912CFC18392F55AD5D866DDB5AFBE626F",
+      "currentSha256": "BC3D95A06A977802FE0899C0CB47D8B912CFC18392F55AD5D866DDB5AFBE626F",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\todo-primary-readback.json",
+      "expectedSha256": "33085B836E5F9B4211516734E9E23A178A35BA1922D97BD3A50FAE5E524EA3F0",
+      "currentSha256": "33085B836E5F9B4211516734E9E23A178A35BA1922D97BD3A50FAE5E524EA3F0",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\verification.json",
+      "expectedSha256": "88E641541B7AC3D88FC533714B434774E995F9A0FB77B8419FCDBA6807FED151",
+      "currentSha256": "88E641541B7AC3D88FC533714B434774E995F9A0FB77B8419FCDBA6807FED151",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\wiki-export-result.json",
+      "expectedSha256": "2E73C623C0FC734AED25C3AB9DA3254C1DFFCC4633F94576C9EA31C25501C8FA",
+      "currentSha256": "2E73C623C0FC734AED25C3AB9DA3254C1DFFCC4633F94576C9EA31C25501C8FA",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171002-0500-approved-7dc1-quarantine\\wiki-proof.json",
+      "expectedSha256": "21EF6B9E64B32C91700861EB7312B591B207AA0E912A019EA746F843EBA3C036",
+      "currentSha256": "21EF6B9E64B32C91700861EB7312B591B207AA0E912A019EA746F843EBA3C036",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261007T133100-0500-readonly-source-baseline.json",
+      "expectedSha256": "31381419D66EB1985C129FB3EEB23B4E3C9326EB96E922E1EB1FFBDAED6CCD59",
+      "currentSha256": "31381419D66EB1985C129FB3EEB23B4E3C9326EB96E922E1EB1FFBDAED6CCD59",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\technical\\TR-Cycle-Accuracy.md",
+      "expectedSha256": "BD2F3DB5662DE43C07F2C49F5EDABA27561492156365FEC263C5C6FDEE270F4C",
+      "currentSha256": "BD2F3DB5662DE43C07F2C49F5EDABA27561492156365FEC263C5C6FDEE270F4C",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\wiki.yaml",
+      "expectedSha256": "62EB5A5865C32241ACFABE61BB26C68DDA2B6ABC5793E62939D53262CA59EA75",
+      "currentSha256": "62EB5A5865C32241ACFABE61BB26C68DDA2B6ABC5793E62939D53262CA59EA75",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "expectedSha256": "EED74C13FC5E98DFCC4CEEFEC4F2CC39F48E6E006E8EB985DD8B7BA22701F69E",
+      "currentSha256": "EED74C13FC5E98DFCC4CEEFEC4F2CC39F48E6E006E8EB985DD8B7BA22701F69E",
+      "matches": true
+    }
+  ],
+  "phase0Accepted": true,
+  "wholeGoalComplete": false
+}

@@ -1,0 +1,57 @@
+[1mdiff --git "a/F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\OracleContractTests.cs.before" "b/tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs"[m
+[1mindex 13346e4..efb5615 100644[m
+[1m--- "a/F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\OracleContractTests.cs.before"[m
+[1m+++ "b/tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs"[m
+[36m@@ -92,6 +92,36 @@[m [mpublic sealed class ImmutableViceOraclePreflightTests[m
+         audit.Run(); audit.Preflight(true); audit.Postflight(true); audit.Receipt(true);[m
+         Rejects(() => AssertTranscript(audit, true, true));[m
+     }[m
+[32m+[m
+[32m+[m[32m    /// <summary>F-07: correct ordering cannot hide an inverted final receipt after either postflight result.</summary>[m
+[32m+[m[32m    [Theory][m
+[32m+[m[32m    [InlineData(false)][m
+[32m+[m[32m    [InlineData(true)][m
+[32m+[m[32m    public void WrongReceiptAfterPostflightIsRejectedIndependently(bool unchanged)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var audit = Substitute.For<IRunAudit>();[m
+[32m+[m[32m        audit.Preflight(true); audit.Run(); audit.Postflight(unchanged); audit.Receipt(unchanged);[m
+[32m+[m[32m        AssertTranscript(audit, true, unchanged);[m
+[32m+[m
+[32m+[m[32m        audit.ClearReceivedCalls();[m
+[32m+[m[32m        audit.Preflight(true); audit.Run(); audit.Postflight(unchanged); audit.Receipt(!unchanged);[m
+[32m+[m[32m        Rejects(() => AssertTranscript(audit, true, unchanged));[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /// <summary>F-07: an independently corrupted postflight argument is rejected even when the receipt is correct.</summary>[m
+[32m+[m[32m    [Theory][m
+[32m+[m[32m    [InlineData(false)][m
+[32m+[m[32m    [InlineData(true)][m
+[32m+[m[32m    public void WrongPostflightArgumentIsRejectedIndependently(bool unchanged)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var audit = Substitute.For<IRunAudit>();[m
+[32m+[m[32m        audit.Preflight(true); audit.Run(); audit.Postflight(unchanged); audit.Receipt(unchanged);[m
+[32m+[m[32m        AssertTranscript(audit, true, unchanged);[m
+[32m+[m
+[32m+[m[32m        audit.ClearReceivedCalls();[m
+[32m+[m[32m        audit.Preflight(true); audit.Run(); audit.Postflight(!unchanged); audit.Receipt(unchanged);[m
+[32m+[m[32m        Rejects(() => AssertTranscript(audit, true, unchanged));[m
+[32m+[m[32m    }[m
+ }[m
+ [m
+ /// <summary>FR-VICE-001 AC2; TR-VICE-ORACLE-001 AC2; TEST-VICE-001 AC2.</summary>[m
+[36m@@ -141,6 +171,7 @@[m [mpublic sealed class ImmutableViceReceiptContractTests[m
+     [InlineData("missing-version", false, "WrapperVersionMissing")][m
+     [InlineData("missing-command", false, "CommandMissing")][m
+     [InlineData("missing-scope", false, "ScopeMissing")][m
+[32m+[m[32m    [InlineData("zero-tests", false, "NoTestsExecuted")][m
+     [InlineData("negative-passed", false, "NegativeCount")][m
+     [InlineData("negative-failed", false, "NegativeCount")][m
+     [InlineData("negative-skipped", false, "NegativeCount")][m
+[36m@@ -168,6 +199,7 @@[m [mpublic sealed class ImmutableViceReceiptContractTests[m
+             "missing-version" => valid with { WrapperVersion = null },[m
+             "missing-command" => valid with { Command = null },[m
+             "missing-scope" => valid with { Scope = null },[m
+[32m+[m[32m            "zero-tests" => valid with { Passed = 0 },[m
+             "negative-passed" => valid with { Passed = -1 },[m
+             "negative-failed" => valid with { Failed = -1 },[m
+             "negative-skipped" => valid with { Skipped = -1 },[m

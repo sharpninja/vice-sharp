@@ -1,0 +1,50 @@
+[
+  {
+    "description": "IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "closed",
+    "title": "True-Drive 1541 IEC timing and motor ramp",
+    "createdAt": "2026-10-08T20:04:05.2162757+00:00",
+    "id": "FR-ARCH-TRUEDRIVE-1541-002",
+    "area": "ARCH",
+    "priority": "high",
+    "updatedAt": "2026-10-08T20:04:05.2163636+00:00",
+    "acceptanceCriteria": []
+  },
+  {
+    "description": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "closed",
+    "title": "Media devices (D64, tape) I/O functional parity",
+    "createdAt": "2026-10-08T20:04:06.9636291+00:00",
+    "id": "FR-BACKFILL-MEDIA-001",
+    "area": "BACKFILL",
+    "priority": "medium",
+    "updatedAt": "2026-10-08T20:04:06.9637221+00:00",
+    "acceptanceCriteria": []
+  },
+  {
+    "description": "VIC-II RC/VC state machine matches VICE cycle-accurate behavior (RC window). Native checkpoints validate sprite DMA for all 5 non-PAL models. Screen RAM survives one PAL frame unchanged. VICE viciisc/vicii-cycle.c:541-563, vicii-fetch.c:135-166.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "closed",
+    "title": "VIC-II visible-frame parity (RC window, DMA checkpoints, screen-RAM)",
+    "createdAt": "2026-10-08T20:04:08.7356178+00:00",
+    "id": "FR-BACKFILL-VIDEO-001",
+    "area": "BACKFILL",
+    "priority": "high",
+    "updatedAt": "2026-10-08T20:04:08.7357072+00:00",
+    "acceptanceCriteria": []
+  },
+  {
+    "description": "Datasette.Tick() enforces MOTOR_DELAY=32,000-cycle ramp (datasette.c:62) before pulse delivery when Tick is timing mechanism. SenseLine=!PlayPressed||!RecordPressed (CIA1  bit 4). TryWritePulse stores pulses in record mode.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "closed",
+    "title": "Datasette motor ramp + sense line + record mode",
+    "createdAt": "2026-10-08T20:04:10.4949001+00:00",
+    "id": "FR-RUNTIME-TAPE-002",
+    "area": "RUNTIME",
+    "priority": "medium",
+    "updatedAt": "2026-10-08T20:04:10.4949878+00:00",
+    "acceptanceCriteria": []
+  }
+]

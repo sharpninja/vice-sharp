@@ -73,6 +73,20 @@ public sealed class DatasetteCia1FlagBinding : IClockedDevice
     }
 
     /// <summary>
+    /// Pending READ countdown. VICE datasette_alarm_pending and the alarm
+    /// clock are the same in-flight pulse.
+    /// </summary>
+    internal (int CyclesUntilNextPulse, bool HavePendingPulse) CapturePulse()
+        => (_cyclesUntilNextPulse, _havePendingPulse);
+
+    /// <summary>Puts the in-flight pulse back without pulling another one.</summary>
+    internal void RestorePulse(int cyclesUntilNextPulse, bool havePendingPulse)
+    {
+        _cyclesUntilNextPulse = cyclesUntilNextPulse;
+        _havePendingPulse = havePendingPulse;
+    }
+
+    /// <summary>
     /// Advance the binding by one host phi2 cycle. When the pulse
     /// countdown elapses, trigger CIA1 FLAG and pull the next pulse.
     /// Idempotent when the datasette is idle (no tape, motor off, play

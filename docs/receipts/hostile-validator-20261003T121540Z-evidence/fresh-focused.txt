@@ -1,0 +1,19 @@
+TimestampUtc: 2026-10-03T12:24:33.8304366+00:00
+Command: dotnet vstest "F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" "/TestCaseFilter:FullyQualifiedName=ViceSharp.TestHarness.FrSnp003AcceptanceTests.SaveReplay_KeepsAttachedCartridgeBytesAndMapping" "/Logger:trx;LogFileName=fresh-focused.trx" "/ResultsDirectory:F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261003T121540Z-evidence" "/Logger:console;verbosity=normal"
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.12)
+[xUnit.net 00:00:00.31]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:02.38]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.74]   Starting:    ViceSharp.TestHarness
+[xUnit.net 00:00:03.25]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.FrSnp003AcceptanceTests.SaveReplay_KeepsAttachedCartridgeBytesAndMapping [336 ms]
+Results File: F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261003T121540Z-evidence\fresh-focused.trx
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 4.0322 Seconds
+EXIT=0

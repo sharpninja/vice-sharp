@@ -1235,9 +1235,10 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 && !IsBranchTaken(_previousOpcode)
                 && IsImmediateLoadOpcode(_opcode);
             _applySkipSoftImmThisInsn =
+                // Staged taken BEQ already exported the target. LDA # commits
+                // on the operand CLK (idle cycle 130: nA=$95 nPC=$FDEE).
                 (_skipSoftImmAfterStagedTakenBranch
-                    && IsTwoByteImmediateOpcode(_opcode)
-                    && !IsImmediateLoadOpcode(_opcode))
+                    && IsTwoByteImmediateOpcode(_opcode))
                 || ((_skipImmediateLoadAfterAbsoluteStoreBranch
                         || skipImmediateLoadAfterFusedImmediateBranch)
                     && IsImmediateLoadOpcode(_opcode));
@@ -1342,6 +1343,14 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 _cycle++;
                 fullLengthTakenBranch = true;
             }
+            else if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && _previousOpcode == 0x60)
+            {
+                // RTS JUMP has no CLK. The following taken branch still has
+                // two FETCH clocks at the opcode PC before BRANCH's dummy
+                // (idle lockstep cycle 35: BNE $FCEA, nPC=$FCEA mPC=$FCEC).
+                _cycle++;
+                fullLengthTakenBranch = true;
+            }
 
             if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && _afterLdaAbsHold
                 && !fullLengthTakenBranch)
@@ -1359,9 +1368,10 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             // on extra dummy CLKs; JUMP at cycle 0.
             _holdTakenBranchOpcodePc = IsBranchOpcode(_opcode)
                 && IsBranchTaken(_opcode)
-                && _afterLdaAbsHold
-                && !_skipAbsLoadLastClkHold
-                && !_ldaSkippedLastClkHold;
+                && ((_afterLdaAbsHold
+                        && !_skipAbsLoadLastClkHold
+                        && !_ldaSkippedLastClkHold)
+                    || _previousOpcode == 0x60);
 
             DebugFullLengthTakenBranch = fullLengthTakenBranch;
 
@@ -1413,12 +1423,19 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             _softDeferZpCompare = (IsZeroPageCompareOpcode(_opcode)
                     || IsUnstagedAbsoluteCompareOpcode(_opcode))
                 && (armAfterBranchLag || _afterFullLengthTakenBranch);
+            // STA (zp),Y leaves _softDeferCompareCommit set. CMP (zp),Y after
+            // that store with trail>=5 already shows flags and next PC on its
+            // last CLK (idle lockstep cycle 5401: nP=$27 nPC=$FD77).
+            if (_opcode == 0xD1
+                && _previousOpcode == 0x91
+                && priorTrailingAtNextPc >= 5)
+                _softDeferCompareCommit = false;
             // VICE CP(GET_ABS): GET_ABS CLK_INC still has opcode PC / pre-op P
             // when CMP FETCH was not overlapped (Wolf64 2060513 nPC=$F6BF nP=$A4).
             // After LDA abs whose last CLK already exported next-PC (trail>=1),
             // flags+INC_PC are visible on the last CMP CLK (Wolf64 2142604
             // nPC=$F6C2 nP=$27).
-            if (_opcode == 0xCD
+            if (_opcode is 0xCD or 0xDD
                 && (_nonOverlappedFetchPhase || _nonOverlappedRegion)
                 && priorTrailingAtNextPc == 0)
                 _softDeferCompareCommit = true;
@@ -1490,6 +1507,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             _fuseIndyLoadLastClkPc = IsIndirectYLoadOpcode(_opcode)
                 && !_deferIndirectYLoadCompletionAfterBranch
                 && !IsStoreOpcode(_previousOpcode)
+                && !IsZeroPageIncrementDecrementOpcode(_previousOpcode)
                 && (priorTrailingAtNextPc >= 1
                     || _fuseImpliedAfterIndyLoad
                     || IsImpliedRegisterOrFlagOpcode(_previousOpcode)
@@ -1549,6 +1567,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                             || IsAbsoluteAluOpcode(_previousOpcode)
                             || IsImmediateLoadOpcode(_previousOpcode)
                             || _previousOpcode == 0xA5
+                            || _previousOpcode == 0xAD
                             || IsTwoByteImmediateOpcode(_previousOpcode)
                             || IsImpliedRegisterOrFlagOpcode(_previousOpcode)
                             || _previousOpcode == 0xB9))
@@ -1657,7 +1676,14 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 _immediateLoadCompletedWithoutDistinctFetch;
             _immediateLoadCompletedWithoutDistinctFetch = false;
             var previousControlTransferHasDistinctSecondFetch =
-                EndsWithUnclockedControlTransfer(_previousOpcode)
+                // LDA # after the overlapped JSR at $FCF2 commits on the
+                // operand CLK (idle cycle 49: nA=$7F nPC=$FDA5, trail=4).
+                // LDX # after the reset JSR stays deferred (cycle 16, trail=3).
+                !(_previousOpcode == 0x20 && DebugPriorTrailingAtNextPc >= 4)
+                // JMP abs JUMP has no CLK. LDA # at $FF6E commits on the
+                // operand CLK (idle cycle 145: nA=$81 nPC=$FF70).
+                && _previousOpcode != 0x4C
+                && EndsWithUnclockedControlTransfer(_previousOpcode)
                 && (!IsBranchOpcode(_previousOpcode)
                     || _afterFullLengthTakenBranch
                     || _afterShortTakenBranchLag
@@ -1850,7 +1876,12 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 // fall through to ExecuteOpcode (fused)
             }
             else if (IsImpliedRegisterOrFlagOpcode(_opcode)
-                && ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                && ((IsImmediateLoadOpcode(_previousOpcode)
+                    // LD(GET_IMM) INC_PC has no CLK. The following implied's
+                    // two FETCH clocks still export opcode PC; SEI/TXS/CLD run
+                    // after that sample (idle lockstep cycle 4: nPC=$FCE4).
+                    && !_fuseImpliedAfterIndyLoad)
+                    || (_nonOverlappedFetchPhase || _nonOverlappedRegion)
                     // ST's INC_PC is unclocked and its write CLK is the last
                     // exported checkpoint. Until the store has enough trailing
                     // checkpoints to consume the following FETCH phase, the
@@ -2039,6 +2070,9 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             && !(IsStoreOpcode(_previousOpcode)
                 && !IsAbsoluteUnindexedStoreOpcode(_previousOpcode)
                 && DebugPriorTrailingAtNextPc is 1 or 2)
+            // STX abs whose last clocks already exported next-PC: JSR cycle 3
+            // is INC_PC + PUSH high (idle lockstep cycle 44: nPC=$FCF4 nS=$FE).
+            && !(_previousOpcode == 0x8E && DebugPriorTrailingAtNextPc == 2)
             // A not-taken branch already exported its fall-through PC. Its
             // following JSR is on INC_PC plus PUSH high at DebugCycle 3, so
             // mandatory BA cannot suppress that write (Wolf64 sample 14997).
@@ -2235,7 +2269,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             // VICE CP: flags + INC_PC after the final data-read CLK export. On the
             // non-overlapped path after STA (zp),Y, keep old flags and opcode PC
             // this tick; soft-commit at the next instruction's first FETCH.
-            if (_softDeferCompareCommit && IsStagedCompareOpcode(_opcode))
+            if (_softDeferCompareCommit && (IsStagedCompareOpcode(_opcode) || _opcode == 0xDD))
             {
                 _softDeferCompareCommit = false;
                 _pendingSoftCompareCommit = true;
@@ -2550,6 +2584,14 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             if (_holdZpIncDecAfterStaAbsY)
             {
                 _holdZpIncDecAfterStaAbsY = false;
+                _visiblePC = _opcodeAddress;
+                return true;
+            }
+
+            // STA zp already exported the INC opcode. INC cycle 2 still shows
+            // that opcode PC (idle lockstep cycle 5328: nPC=$FD6C mPC=$FD6E).
+            if (_previousOpcode == 0x85 && DebugPriorTrailingAtNextPc <= 1)
+            {
                 _visiblePC = _opcodeAddress;
                 return true;
             }
@@ -2941,7 +2983,10 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                     || (!afterTakenBranch
                         && !afterRts
                         && (!nonOverlappedAbsoluteLoad || predecessorConsumedFetch))
-                    || (_afterFullLengthTakenBranch && _loadAEarlyAfterStagedBranch))
+                    || (_afterFullLengthTakenBranch && _loadAEarlyAfterStagedBranch)
+                    // JMP target: GET_ABS already shows loaded A (idle cycle 167
+                    // nA=$47 at $EE8E) while PC and P stay pre-INC.
+                    || _previousOpcode == 0x4C)
                 {
                     A = aAbs;
                 }
@@ -3147,6 +3192,9 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 // data-read CLK (Wolf64 2406425 nA=$4C mA=$1F).
                 var indyCommitAOnDataRead = !_deferIndirectYLoadCompletionAfterBranch
                     && !IsStoreOpcode(_previousOpcode)
+                    // INC zp then LDA (zp),Y: this host cycle still has pre-load
+                    // A (idle lockstep cycle 5334: nA=$03 mA=$00 at $FD6E).
+                    && !IsZeroPageIncrementDecrementOpcode(_previousOpcode)
                     && (!_nonOverlappedFetchPhase && !_nonOverlappedRegion
                         || DebugPriorTrailingAtNextPc >= 1
                         || _fuseImpliedAfterIndyLoad
@@ -3161,6 +3209,17 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             case 0xCD:
                 CompareStagedMemory(ReadAbsoluteOperand(), 3);
                 return true;
+            case 0xDD:
+            {
+                // CMP abs,X. Same GET_ABS_X export as LDA abs,X: the data-read
+                // CLK keeps opcode PC and pre-op P. Page-cross inserts the
+                // dummy read. Idle lockstep cycle 24: nPC=$FD07 nP=$24.
+                var cmpAbsXBase = ReadAbsoluteOperand();
+                if (TryDelayIndexedLoadPageCross(cmpAbsXBase, X))
+                    return true;
+                CompareStagedMemory((ushort)(cmpAbsXBase + X), 3);
+                return true;
+            }
             case 0xD1:
                 CompareStagedMemory(_effectiveAddress, 2);
                 return true;
@@ -4328,11 +4387,11 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     /// execution JUMPs to the restored PC, and the per-run micro-op bookkeeping
     /// (opcode latch, staged/deferred completions, last_opcode_info equivalent) is
     /// cleared so the in-flight instruction RESTARTS from its first cycle. The
-    /// one-cycle resume stagger matches this core's visible-commit convention: the
-    /// managed pipeline runs one cycle behind the native per-cycle register export
-    /// (hosted CLK_INC in c64cpusc.c exports the committed instruction during the
-    /// NEXT instruction's first cycle), so the first tick after resume burns one
-    /// cycle before the boundary fetch, exactly like <see cref="Reset"/> does.
+    /// one-cycle resume stagger matches the measured x64sc resume timeline: the
+    /// first tick stays on the restored PC (native BNE cycle 1) and the opcode
+    /// fetch is the following tick. Power-on <see cref="Reset"/> does not use
+    /// that stagger. Hosted bootstrap JUMPs into FETCH_OPCODE, whose first
+    /// CLK_INC is the opcode fetch (c64cpusc.c).
     /// </summary>
     internal void InjectSnapshotResumeState(byte a, byte x, byte y, byte s, byte p, ushort pc)
     {
@@ -4356,14 +4415,20 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         PC = _bus.Read(0xFFFC);
         PC |= (ushort)(_bus.Read(0xFFFD) << 8);
         ResetInFlightState();
+        // vice_shim_reset_cpu_state_locked plus the hosted maincpu_mainloop
+        // bootstrap adopt the reset vector and enter FETCH_OPCODE with no
+        // preceding CLK. The shared in-flight clear arms the snapshot stagger;
+        // power-on must not spend that tick or LDX #$FF is still uncommitted
+        // when x64sc exports X=$FF P=$A4 PC=$FCE4 (idle lockstep cycle 3).
+        _bootstrapCycles = 0;
     }
 
     /// <summary>
     /// Clears the in-flight instruction micro-state and arms the one-cycle
-    /// bootstrap stagger shared by <see cref="Reset"/> and
-    /// <see cref="InjectSnapshotResumeState"/> (the native hosted bootstrap
-    /// clears last_opcode_info/stolen_cycles/check_ba_low the same way before
-    /// re-entering the fetch loop; mainc64cpu.c VICE_SHIM_HOSTED block).
+    /// snapshot-resume stagger. <see cref="Reset"/> clears that stagger because
+    /// the native hosted bootstrap (mainc64cpu.c VICE_SHIM_HOSTED block) enters
+    /// FETCH_OPCODE with no extra CLK. The clear still zeroes
+    /// last_opcode_info, stolen_cycles, and check_ba_low the same way.
     /// </summary>
     private void ResetInFlightState()
     {

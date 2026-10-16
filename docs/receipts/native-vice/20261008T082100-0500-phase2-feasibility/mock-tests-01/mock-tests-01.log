@@ -1,0 +1,490 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.VsfCompatibility.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\bin\Release\net10.0\ViceSharp.VsfCompatibility.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\bin\Release\net10.0\ViceSharp.VsfCompatibility.Tests.dll (.NETCoreApp,Version=v10.0)
+Logging Vstest Diagnostics in file: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\mock-tests-01\mock-tests-01.diag.log
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.20]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "trailing-module-overflow") [FAIL]
+[xUnit.net 00:00:02.25]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "empty") [FAIL]
+[xUnit.net 00:00:02.27]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "module-length-zero") [FAIL]
+[xUnit.net 00:00:02.29]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "legacy-32bit-clock-layout") [FAIL]
+[xUnit.net 00:00:02.30]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "version-size-disagreement") [FAIL]
+[xUnit.net 00:00:02.31]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "wrong-magic") [FAIL]
+[xUnit.net 00:00:02.32]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "truncated-module") [FAIL]
+[xUnit.net 00:00:02.32]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "missing-maincpu") [FAIL]
+[xUnit.net 00:00:02.34]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "truncated-container") [FAIL]
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "trailing-module-overflow") [147 ms]
+  Error Message:
+   System.IO.InvalidDataException : trailing-module-overflow
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "empty") [2 ms]
+  Error Message:
+   System.IO.InvalidDataException : empty
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "module-length-zero") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : module-length-zero
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "legacy-32bit-clock-layout") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : legacy-32bit-clock-layout
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "version-size-disagreement") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : version-size-disagreement
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "wrong-magic") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : wrong-magic
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "truncated-module") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : truncated-module
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "missing-maincpu") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : missing-maincpu
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "truncated-container") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : truncated-container
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:02.36]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "wrong-machine") [FAIL]
+[xUnit.net 00:00:02.37]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "duplicate-maincpu") [FAIL]
+[xUnit.net 00:00:02.38]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "no-modules") [FAIL]
+[xUnit.net 00:00:02.39]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "module-length-overflow") [FAIL]
+[xUnit.net 00:00:02.40]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "truncated-magic") [FAIL]
+[xUnit.net 00:00:02.41]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "wrong-file-major") [FAIL]
+[xUnit.net 00:00:02.42]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "unsupported-maincpu-old") [FAIL]
+[xUnit.net 00:00:02.43]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "unsupported-maincpu-future") [FAIL]
+[xUnit.net 00:00:02.44]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "truncated-version-header") [FAIL]
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "wrong-machine") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : wrong-machine
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "duplicate-maincpu") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : duplicate-maincpu
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "no-modules") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : no-modules
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "module-length-overflow") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : module-length-overflow
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "truncated-magic") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : truncated-magic
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "wrong-file-major") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : wrong-file-major
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "unsupported-maincpu-old") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : unsupported-maincpu-old
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "unsupported-maincpu-future") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : unsupported-maincpu-future
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "truncated-version-header") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : truncated-version-header
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:02.46]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "unterminated-maincpu-name") [FAIL]
+[xUnit.net 00:00:02.47]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "nonterminated-machine") [FAIL]
+[xUnit.net 00:00:02.48]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "module-length-short-header") [FAIL]
+[xUnit.net 00:00:02.49]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "wrong-file-minor") [FAIL]
+[xUnit.net 00:00:02.51]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "unsupported-maincpu-major") [FAIL]
+[xUnit.net 00:00:02.52]     ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "trailing-partial-header") [FAIL]
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "unterminated-maincpu-name") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : unterminated-maincpu-name
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "nonterminated-machine") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : nonterminated-machine
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "module-length-short-header") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : module-length-short-header
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "wrong-file-minor") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : wrong-file-minor
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "unsupported-maincpu-major") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : unsupported-maincpu-major
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(name: "trailing-partial-header") [< 1 ms]
+  Error Message:
+   System.IO.InvalidDataException : trailing-partial-header
+  Stack Trace:
+     at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.<>c__DisplayClass6_0.<Invalid_layout_must_throw_and_accepting_mock_is_detected>b__1(CallInfo _) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 65
+   at NSubstitute.Core.ReturnValueFromFunc`1.ReturnFor(CallInfo info)
+   at NSubstitute.Core.CallResults.ResultForCallSpec.GetResult(ICall call, ICallInfoFactory callInfoFactory)
+   at NSubstitute.Core.CallResults.TryGetResult(ICall call, Object& result)
+   at NSubstitute.Routing.Handlers.ReturnConfiguredResultHandler.Handle(ICall call)
+   at NSubstitute.Routing.Route.Handle(ICall call)
+   at NSubstitute.Core.CallRouter.Route(ICall call)
+   at NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at NSubstitute.Proxies.CastleDynamicProxy.ProxyIdInterceptor.Intercept(IInvocation invocation)
+   at Castle.DynamicProxy.AbstractInvocation.Proceed()
+   at Castle.Proxies.ObjectProxy.Normalize(Byte[] input)
+   at ViceSharp.VsfCompatibility.Tests.LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\LegacyMainCpuContractTests.cs:line 67
+   at InvokeStub_LegacyMainCpuContractTests.Invalid_layout_must_throw_and_accepting_mock_is_detected(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+Results File: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\mock-tests-01\mock-tests-01.trx
+
+Failed!  - Failed:    24, Passed:    13, Skipped:     0, Total:    37, Duration: 876 ms - ViceSharp.VsfCompatibility.Tests.dll (net10.0)

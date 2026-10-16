@@ -1,0 +1,137 @@
+{
+  "capturedAtLocal": "2026-10-08T14:29:46-05:00",
+  "classification": "Mock-only F-12 remediation, not independent acceptance",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T191836Z-prompt-faf5",
+  "casesAdded": 19,
+  "totalPassed": 355.0,
+  "totalFailed": 0.0,
+  "totalSkipped": 0.0,
+  "totalAborted": 0.0,
+  "diffCheckExit": 0,
+  "codePreservation": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockGateContractTests.cs",
+      "sha256": "7C9D45F4E85D2BE9DD64CD6F5EF92C373054D8207698F3A6D749355EEB7D2ADA",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockGateImplementationTests.cs",
+      "sha256": "C0C37C419464EDD5A7691B099C67476E411AC11F1813A5A053A592D688AEA83A",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockHookContractTests.cs",
+      "sha256": "EF9BD85FE60DFEF966EFB3B622A5D7785FCEA2F233A834A98180ADFBD6531946",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockHookImplementationTests.cs",
+      "sha256": "DF6260318FFA9A1B44EF8E3E77DC817BC3F3CD54B896C8001380A93887F25FB2",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\CompiledCFixture.cs",
+      "sha256": "BAC0B7FE7E0A78D2222A023263ABCD68874734B5D0228C6D7E8EFED3D0C49F8F",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ViceSharp.NativeClockProbe.Tests.csproj",
+      "sha256": "F5D6CEAC8AE216026C0915038CBF6F40608C45E63DE0C39BE1C61FB30C07E5E0",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.c",
+      "sha256": "673A7E7899FD022BFF5C45AB55D05568E6FB4DECAFBFF88EEF80D0157551BA4C",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.h",
+      "sha256": "E8EB1E690F4F0616E54B80EAFE347C516F12236F2A8B7AEF1A9A61388FFFE390",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+      "sha256": "9E9DFB8A920C6766F372675E442B336C1B46A0B0A44581085ACBE05936437BD5",
+      "unchanged": true
+    }
+  ],
+  "files": [
+    {
+      "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\StdioAdapterContractTests.cs",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\StdioAdapterContractTests.cs.after-copy",
+      "sha256": "EDC43F831C70183873AA38550291948A39DA3CB6081F565F13F4948132F82A8E"
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\STDIO-ADAPTER-SLICE.md",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\STDIO-ADAPTER-SLICE.md.after-copy",
+      "sha256": "AD5699E68514B3319A5A483AAE8187C50DD12F5EC95ECF705B43975FEFB47166"
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\GATE-SLICE.md.after-copy",
+      "sha256": "0A8787761A7569332D2DA899DF393BA6CEDF8664964A4AF909BE507AEFBC94FB"
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\HANDOFF.md.after-copy",
+      "sha256": "CF5B25D28071A32F01DF65FCBC8DC8524DB4436EAF4A0D20A4522F8CC649426B"
+    }
+  ],
+  "testResults": [
+    {
+      "project": "tests\\ViceSharp.NativeClockProbe.Tests\\ViceSharp.NativeClockProbe.Tests.csproj",
+      "timestampLocal": "2026-10-08T14:25:18.3524448-05:00",
+      "command": "dotnet test tests\\ViceSharp.NativeClockProbe.Tests\\ViceSharp.NativeClockProbe.Tests.csproj -c Release --logger trx;LogFileName=stdio-mock-clock-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stdio-mock-clock-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stdio-mock-clock-01\\stdio-mock-clock-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "filter": null,
+      "exitCode": 0,
+      "total": 69,
+      "passed": 69,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0,
+      "nativeUnchanged": true
+    },
+    {
+      "project": "tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj",
+      "timestampLocal": "2026-10-08T14:26:16.1755296-05:00",
+      "command": "dotnet test tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj -c Release --logger trx;LogFileName=stdio-mock-oracle-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stdio-mock-oracle-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stdio-mock-oracle-01\\stdio-mock-oracle-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "filter": null,
+      "exitCode": 0,
+      "total": 87,
+      "passed": 87,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0,
+      "nativeUnchanged": true
+    },
+    {
+      "project": "tests\\ViceSharp.VsfCompatibility.Tests\\ViceSharp.VsfCompatibility.Tests.csproj",
+      "timestampLocal": "2026-10-08T14:25:57.1653821-05:00",
+      "command": "dotnet test tests\\ViceSharp.VsfCompatibility.Tests\\ViceSharp.VsfCompatibility.Tests.csproj -c Release --logger trx;LogFileName=stdio-mock-vsf-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stdio-mock-vsf-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stdio-mock-vsf-01\\stdio-mock-vsf-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "filter": null,
+      "exitCode": 0,
+      "total": 199,
+      "passed": 199,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0,
+      "nativeUnchanged": true
+    }
+  ],
+  "requiredNext": [
+    "Independent mock acceptance in same Opus max catch-up review",
+    "Identical real C adapter binding after required gate",
+    "Native stdout retention and real broken-pipe proof",
+    "All original real-emulator and whole-plan acceptance gates"
+  ],
+  "operatorCredentialDisposition": "pending",
+  "hvAccepted": false,
+  "gateAdvanced": false
+}

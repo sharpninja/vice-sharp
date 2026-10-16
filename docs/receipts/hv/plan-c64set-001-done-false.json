@@ -1,0 +1,11 @@
+{
+  "receiptWrittenUtc": "2026-10-01T02:18:54Z",
+  "tool": "mcpserver__todo_get",
+  "workspacePath": "F:\\GitHub\\vice-sharp",
+  "id": "PLAN-C64SET-001",
+  "done": false,
+  "title": "C64 Settings RC, Computer/Model dropdowns, family visibility",
+  "completedDate": null,
+  "doneSummary": null,
+  "remaining": "Approved completion plan slices 4/5/8 pending; requirements reconciled, no implementation completion claimed."
+}

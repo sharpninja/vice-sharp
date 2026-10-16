@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\ClockHookContractTests.cs(44,24): error xUnit1013: Public method 'AssertProbe' on test class 'ClockHookContractTests' should be marked as a Theory. Reduce the visibility of the method, or add a Theory attribute to the method. (https://xunit.net/xunit.analyzers/rules/xUnit1013) [F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\ViceSharp.NativeClockProbe.Tests.csproj]
+
+Build FAILED.
+
+F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\ClockHookContractTests.cs(44,24): error xUnit1013: Public method 'AssertProbe' on test class 'ClockHookContractTests' should be marked as a Theory. Reduce the visibility of the method, or add a Theory attribute to the method. (https://xunit.net/xunit.analyzers/rules/xUnit1013) [F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\ViceSharp.NativeClockProbe.Tests.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.60

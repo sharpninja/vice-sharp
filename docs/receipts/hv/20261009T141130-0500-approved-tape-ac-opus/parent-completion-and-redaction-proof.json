@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-09T15:03:05-05:00",
+  "pid": 98664,
+  "exitCode": 0,
+  "resultSubtype": "success",
+  "resultIsError": false,
+  "originalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\response.jsonl",
+  "originalRetained": true,
+  "originalSha256": "E6BE723F1CEC1B5948FBBF27CE7C4BBD83115B7D42E6A84DC9B3A4D2D0945BF4",
+  "credentialOccurrencesReplaced": 2,
+  "redactedPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\response.redacted.jsonl",
+  "redactedSha256": "1BCB8FC0712153B620D0274256CDD897A9E17218AD53CF6D3270AF4291BF157A",
+  "exactReplacementMatch": true,
+  "lineEndingNormalizedReplacementMatch": true,
+  "validJsonlRecords": 2676,
+  "credentialOccurrencesAfter": 0,
+  "credentialRotated": false,
+  "parentVerdictPrimaryExactLfMatch": true,
+  "reviewerVerdictPrimaryMatchExceptOneTerminalLf": true
+}

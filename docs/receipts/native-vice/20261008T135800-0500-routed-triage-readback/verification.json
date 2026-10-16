@@ -1,0 +1,20 @@
+{
+  "timestampLocal": "2026-10-08T14:00:27-05:00",
+  "exactReportIdsVerified": true,
+  "routedWorkspaceVerified": true,
+  "originalWorkspaceVerified": true,
+  "bothStatusGrouped": true,
+  "primaryReceipt": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T135800-0500-routed-triage-readback\\primary-report-readback.json",
+  "primaryReceiptSha256": "63FA647B5222C1BF8DFA7298D32E421EC51B8682C8E1D4CFAF2C8DC4BB834801",
+  "handoffSha256": "2C05131E8D60A7BBB2570BBE2900445C1B02A7DE47D4B4E872AC0A32EDEF5F72",
+  "readmeSha256": "AF470D855BE33F72C59350A0FD3A0C5A617DFB4EC4D869DAD3323F323F916FAE",
+  "gitDiffCheckExitCode": 0,
+  "newReadmeWhitespaceExitCode": 1,
+  "newReadmeWhitespaceErrors": 0,
+  "serverRecordsChanged": false,
+  "productionCodeChanged": false,
+  "nativeChanged": false,
+  "hostileAccepted": false,
+  "phaseAdvanced": false,
+  "originalReviewerClaim": "UNKNOWN, unchanged pending independent reassessment"
+}

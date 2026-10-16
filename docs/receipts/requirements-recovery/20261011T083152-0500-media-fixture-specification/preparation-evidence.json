@@ -1,0 +1,368 @@
+{
+  "schema": "media-fixture-preparation/v1",
+  "preparedAtLocal": "2026-10-11T08:31:52.2284384-05:00",
+  "host": "PAYTON-LEGION2",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T132506Z-media-fixture-remediation",
+  "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "sourcePins": [
+    {
+      "relative": "vice/src/diskimage/fsimage-dxx.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage-dxx.c",
+      "expectedBlob": "001e2d021441d23311b741337560606fd005084a",
+      "actualBlob": "001e2d021441d23311b741337560606fd005084a",
+      "sha256": "7D2DAD50EEEE65644DE0EE2A45954EA5E7310474148CBF96B7AB18F787CA838E",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskimage/diskimage.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\diskimage.c",
+      "expectedBlob": "911f2e364c615c91fd1f164c987faf624cfa072d",
+      "actualBlob": "911f2e364c615c91fd1f164c987faf624cfa072d",
+      "sha256": "DDC53B5EBC6BF181DDA9F1088B26A760ACA4DF9F5CBA138A9CFA730CEA42E251",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskimage/fsimage-check.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage-check.c",
+      "expectedBlob": "9a9328b9cd3ec3513ef16b07a41e7114105196bf",
+      "actualBlob": "9a9328b9cd3ec3513ef16b07a41e7114105196bf",
+      "sha256": "FFDCAC825ED79140885FD8E1D872D762FA65F4FFDCD1CD92711F0108164153C3",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskimage/fsimage-probe.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage-probe.c",
+      "expectedBlob": "a6ff483fdf60df63dc33d7ca5426812d2ee3e694",
+      "actualBlob": "a6ff483fdf60df63dc33d7ca5426812d2ee3e694",
+      "sha256": "535AAD5521D4B077E68CC00FE76F49F6ECB8E31BA82A235CF66E15DA1A7FAEA7",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/util.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\util.c",
+      "expectedBlob": "ef60d991454797417754c438e08927868e96b16e",
+      "actualBlob": "ef60d991454797417754c438e08927868e96b16e",
+      "sha256": "CFFF1581EC5723C572190D97EAFC3BEAFDB371B9F9E6807F4304262E30353311",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/cbmdos.h",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\cbmdos.h",
+      "expectedBlob": "f6ad607f56bbdf883230524759fceb9866cf25bc",
+      "actualBlob": "f6ad607f56bbdf883230524759fceb9866cf25bc",
+      "sha256": "5E29E6486EF91AB2C8F025E91E5B9708CE3ED6C2D8C4C866F041FD60398CA5D8",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskconstants.h",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskconstants.h",
+      "expectedBlob": "117fc85da6ee25ef97bd03a9c5addc6162823ba2",
+      "actualBlob": "117fc85da6ee25ef97bd03a9c5addc6162823ba2",
+      "sha256": "085670F36751E8830248DACF491929896FB741ACF2EA41E4B94755B5B96AA295",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/vic20/vic20iec.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20iec.c",
+      "expectedBlob": "e9c62bd039e4ae96ae9b092a6db4192d7499be86",
+      "actualBlob": "e9c62bd039e4ae96ae9b092a6db4192d7499be86",
+      "sha256": "6B70D69988DEC4F7927E587ACC75B7AF679DF6C4E10DBF74EDE4AAFC192C05A2",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/c64/c64iec.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64iec.c",
+      "expectedBlob": "b216dbcca167591411724a78fed73cbdaa65ae28",
+      "actualBlob": "b216dbcca167591411724a78fed73cbdaa65ae28",
+      "sha256": "C6D79E742580474ECD7E117425391198E8E3D624A85B5EB72FB7A7122CF19950",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/iecbus/iecbus.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\iecbus\\iecbus.c",
+      "expectedBlob": "bcf3c609ac33336a6161012512e6c82320e75499",
+      "actualBlob": "bcf3c609ac33336a6161012512e6c82320e75499",
+      "sha256": "010BC96278C1D99A7EF2AEDFC3170D888DED174D7F174D18618945FCFEEABB25",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/drive/iecieee/via2d.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\iecieee\\via2d.c",
+      "expectedBlob": "876b9f895130f939a84621b476e5c1a1cc1a44ed",
+      "actualBlob": "876b9f895130f939a84621b476e5c1a1cc1a44ed",
+      "sha256": "D5AB80C9C47B56A4B95CB5984A4502D9AD706114C1610AFB2D946F400CABE9EC",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/drive/rotation.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\rotation.c",
+      "expectedBlob": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+      "actualBlob": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+      "sha256": "F8B10A8D383294D5357E769BB6FA91393C4EE28AC4F5BF629C1A187364BA55E9",
+      "exactMatch": true
+    }
+  ],
+  "recipe": "L little-endian at bytes0..1; track at2; sector at3; bytesJ4..255=(17*T+31*S+J)&255; optional all1 error map",
+  "recipeFixtures": [
+    {
+      "fixtureId": "D64-PATTERN-35-NOMAP",
+      "tracks": 35,
+      "sectors": 683,
+      "length": 174848,
+      "errorMap": false,
+      "sha256": "876711826FE3B15DFE3B95A80C62780C4E74EED78932A93DABC89BC2A994372B",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-35-MAP01",
+      "tracks": 35,
+      "sectors": 683,
+      "length": 175531,
+      "errorMap": true,
+      "sha256": "CC039D2B187195D38D7CF5EB1B697D1F41CA96DE39D7E3EABBB2D2B2490137F2",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-36-NOMAP",
+      "tracks": 36,
+      "sectors": 700,
+      "length": 179200,
+      "errorMap": false,
+      "sha256": "595BDBC3F8F076C205528064D08B826DC9226704965068A1E880058D9916B799",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-36-MAP01",
+      "tracks": 36,
+      "sectors": 700,
+      "length": 179900,
+      "errorMap": true,
+      "sha256": "FCF67FEC96E230F52A5CA65A97F707E73918C291BCF9B4A4B7B569D956794A21",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-37-NOMAP",
+      "tracks": 37,
+      "sectors": 717,
+      "length": 183552,
+      "errorMap": false,
+      "sha256": "58B04A569A2F89E8B24A78ED63BB051D3138F3CC82953CBD438E75E21450CAAF",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-37-MAP01",
+      "tracks": 37,
+      "sectors": 717,
+      "length": 184269,
+      "errorMap": true,
+      "sha256": "CFA40EA3BD220E6B1D74A6A52122123DBE9AA25D581DA7015CB3C0AF474768F4",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-38-NOMAP",
+      "tracks": 38,
+      "sectors": 734,
+      "length": 187904,
+      "errorMap": false,
+      "sha256": "636CB17397BBB9D5A821CE6F63AE726E84B62904A5AA0A0F2F09E8BC1AEF79C2",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-38-MAP01",
+      "tracks": 38,
+      "sectors": 734,
+      "length": 188638,
+      "errorMap": true,
+      "sha256": "27287BA9C97984C6BE0C4EA08B7703AD75D9CC0A80C46910BB059BE788BE7FFC",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-39-NOMAP",
+      "tracks": 39,
+      "sectors": 751,
+      "length": 192256,
+      "errorMap": false,
+      "sha256": "1119E920774ED2C59990210B399A7AC47F31052A980619FB2D22E4FEB64E0526",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-39-MAP01",
+      "tracks": 39,
+      "sectors": 751,
+      "length": 193007,
+      "errorMap": true,
+      "sha256": "1920EB78AC16A5AD3BF4F89AEED76E4FE40BA79907FE6D21693F36FC4580594E",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-40-NOMAP",
+      "tracks": 40,
+      "sectors": 768,
+      "length": 196608,
+      "errorMap": false,
+      "sha256": "463E983B0981B43E8947A691E8346B116171E9788FC70E758E0DCC61A299D729",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-40-MAP01",
+      "tracks": 40,
+      "sectors": 768,
+      "length": 197376,
+      "errorMap": true,
+      "sha256": "7D78BB84DB8587502C8B4A5A4F2A0C2999DA719F4D627F6A45B6F1E73F81DF51",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-41-NOMAP",
+      "tracks": 41,
+      "sectors": 785,
+      "length": 200960,
+      "errorMap": false,
+      "sha256": "B7DDBE7FAD05B16F6D1E2615B7B2438C69195F186E6A7776A273BCFBFB995CE6",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-41-MAP01",
+      "tracks": 41,
+      "sectors": 785,
+      "length": 201745,
+      "errorMap": true,
+      "sha256": "5BB882CC07CA071CFFB6748BE4D7CB9BD3D39D6260F2F19ECF4B466AAA08C251",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-42-NOMAP",
+      "tracks": 42,
+      "sectors": 802,
+      "length": 205312,
+      "errorMap": false,
+      "sha256": "15EB884A3AB860F7DA0F350C5E60EBDB65D61F7D8F1557BF11453BC560D229E3",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    },
+    {
+      "fixtureId": "D64-PATTERN-42-MAP01",
+      "tracks": 42,
+      "sectors": 802,
+      "length": 206114,
+      "errorMap": true,
+      "sha256": "33BCB2F9E8680D1F6C23FC9A10A1147924624AD8BE27CFC38A41D8AF94B2A1EB",
+      "materializedOnDisk": false,
+      "oracleRun": false
+    }
+  ],
+  "effectiveRequirements": {
+    "layer": "layer-1",
+    "functional": 235,
+    "technical": 139,
+    "testing": 142,
+    "mappings": 233,
+    "selectedFunctional": [
+      {
+        "title": "True-Drive 1541 IEC timing and motor ramp",
+        "id": "FR-ARCH-TRUEDRIVE-1541-002",
+        "priority": "high",
+        "body": "IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.",
+        "acceptanceCriteria": [],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "closed",
+        "scopeStartLayerKey": "layer-1"
+      },
+      {
+        "title": "Media devices (D64, tape) I/O functional parity",
+        "id": "FR-BACKFILL-MEDIA-001",
+        "priority": "medium",
+        "body": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+        "acceptanceCriteria": [],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "closed",
+        "scopeStartLayerKey": "layer-1"
+      },
+      {
+        "title": "Commodore 1541 Single Floppy Disk Drive Emulation",
+        "id": "FR-DRV-001",
+        "priority": "medium",
+        "body": "The 1541 floppy disk drive shall be emulated as a complete subsystem with its own 6502 CPU, 2KB RAM, two VIA 6522 chips, and drive ROM. The drive operates independently of the main computer, communicating via the IEC serial bus. True drive emulation (running the drive CPU in parallel with the main CPU) is required for compatibility with fast loaders and copy protection.\n\n## Acceptance Criteria\n- The 1541 is emulated with its own 6502 CPU running at 1MHz.\n- Drive RAM (2KB at $0000-$07FF) and ROM (16KB at $C000-$FFFF) are correctly mapped.\n- Two VIA 6522 chips are emulated (VIA1 at $1800, VIA2 at $1C00) per FR-VIA-005.\n- The drive firmware (ROM) executes the standard Commodore DOS 2.6 routines.\n- D64 disk images are supported (35 tracks, 683 sectors, 174,848 bytes).\n- G64 disk images are supported (raw GCR encoding for copy-protected disks).\n- The drive motor spin-up delay (approximately 300ms) is modeled.\n- Head stepping delay (approximately 8ms per half-track) is modeled.\n- The drive can be attached/detached at runtime via `IDiskDrive.Mount()`/`IDiskDrive.Eject()`.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "The 1541 is emulated with its own 6502 CPU running at 1MHz.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Drive RAM (2KB at $0000-$07FF) and ROM (16KB at $C000-$FFFF) are correctly mapped.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Two VIA 6522 chips are emulated (VIA1 at $1800, VIA2 at $1C00) per FR-VIA-005.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The drive firmware (ROM) executes the standard Commodore DOS 2.6 routines.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "D64 disk images are supported (35 tracks, 683 sectors, 174,848 bytes).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "G64 disk images are supported (raw GCR encoding for copy-protected disks).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-07",
+            "text": "The drive motor spin-up delay (approximately 300ms) is modeled.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-08",
+            "text": "Head stepping delay (approximately 8ms per half-track) is modeled.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-09",
+            "text": "The drive can be attached/detached at runtime via `IDiskDrive.Mount()`/`IDiskDrive.Eject()`.",
+            "isSatisfied": false
+          }
+        ],
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "scopeStartLayerKey": "layer-1"
+      }
+    ],
+    "d64TrExists": false,
+    "d64TestExists": false
+  },
+  "nativeCheckoutKnownDirty": true,
+  "nativeCheckoutStatusLines": 1160,
+  "workspaceStatusLines": 874,
+  "gitHead": "54131ffc868f55a0ec944e99aa9fa67af3613180",
+  "fullPlanPath": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+  "fullPlanSha256": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+  "mockTestsRun": 0,
+  "realTestsRun": 0,
+  "fixturesWritten": 0,
+  "requirementWrites": 0,
+  "scope": "Specification and static preparation only; not a passing mock or runtime gate"
+}

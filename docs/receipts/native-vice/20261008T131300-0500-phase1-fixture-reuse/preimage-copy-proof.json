@@ -1,0 +1,26 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\OracleContractTests.cs.before",
+    "sourceSha256": "EC9933731112B37577167E3932D0E84E064EDC2E13B2FCDC1B89447EA9192DD5",
+    "copySha256": "EC9933731112B37577167E3932D0E84E064EDC2E13B2FCDC1B89447EA9192DD5"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\ContractAssertions.cs.before",
+    "sourceSha256": "7043EE1A93DBB690A70881AA778F2D53FAE057B75C78CB2A07268D1911C3CBF5",
+    "copySha256": "7043EE1A93DBB690A70881AA778F2D53FAE057B75C78CB2A07268D1911C3CBF5"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\README.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\README.md.before",
+    "sourceSha256": "D5318BBCAF348252997BE80488D73D12423B242673BC4A40461CECF1332F3527",
+    "copySha256": "D5318BBCAF348252997BE80488D73D12423B242673BC4A40461CECF1332F3527"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\ViceSharp.OracleContract.Tests.csproj.before",
+    "sourceSha256": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445",
+    "copySha256": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445"
+  }
+]

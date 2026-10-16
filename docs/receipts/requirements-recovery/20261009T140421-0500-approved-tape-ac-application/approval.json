@@ -1,0 +1,57 @@
+{
+  "approvedAtLocal": "2026-10-09T14:02:16-05:00",
+  "operatorResponse": "Approved",
+  "attachment": "C:\\Users\\kingd\\.codex\\attachments\\da16206c-300e-4346-93a3-6394ac58e251\\Pasted text.txt",
+  "attachmentSha256": "7EE21E50CB6E39ADEC4D020AA0A2123A59B61DDEA260443277BF5E30C02FA1A5",
+  "proposalReadme": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\README.md",
+  "pastedTextMatchesReadme": true,
+  "approvedDelta": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\proposed-field-delta.json",
+  "approvedDeltaSha256": "5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A",
+  "scope": "Five records, 23 unsatisfied AC, closed-to-pending, two TEST titles. No product/native code or acceptance.",
+  "driftChecks": [
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "checks": {
+        "content": true,
+        "status": true,
+        "acceptanceCriteria": true
+      }
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "checks": {
+        "content": true,
+        "status": true,
+        "acceptanceCriteria": true
+      }
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "checks": {
+        "content": true,
+        "status": true,
+        "acceptanceCriteria": true
+      }
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "checks": {
+        "content": true,
+        "status": true,
+        "acceptanceCriteria": true,
+        "title": true
+      }
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "checks": {
+        "content": true,
+        "status": true,
+        "acceptanceCriteria": true,
+        "title": true
+      }
+    }
+  ],
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261009T190241Z-prompt-6646"
+}

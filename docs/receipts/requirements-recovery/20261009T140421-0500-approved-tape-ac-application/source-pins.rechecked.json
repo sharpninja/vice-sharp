@@ -1,0 +1,68 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+    "expected": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+    "actual": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64datasette.c",
+    "expected": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29",
+    "actual": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64pla.c",
+    "expected": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+    "actual": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64mem.c",
+    "expected": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+    "actual": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20datasette.c",
+    "expected": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31",
+    "actual": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via1.c",
+    "expected": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+    "actual": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\Datasette.cs",
+    "expected": "E4BFE3BD7CD381585B595AD75933A540A8666FC8DB60EB3FE1612FF94E39D250",
+    "actual": "E4BFE3BD7CD381585B595AD75933A540A8666FC8DB60EB3FE1612FF94E39D250",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\C64MemoryMap.cs",
+    "expected": "4FC0DFDB6BA93C72E8437D1D37870841298F0354F04FDBC95F7AC4A9AB7989B1",
+    "actual": "4FC0DFDB6BA93C72E8437D1D37870841298F0354F04FDBC95F7AC4A9AB7989B1",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\Wiring\\DatasetteCia1FlagBinding.cs",
+    "expected": "9DE4D879EDBCC66F3E7ECA089F64D0CC64920D6E48AF16C9C5718E518B8D2876",
+    "actual": "9DE4D879EDBCC66F3E7ECA089F64D0CC64920D6E48AF16C9C5718E518B8D2876",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Tape\\DatasetteSenseLineTests.cs",
+    "expected": "7DAC564E613CB660D523A56D3E68120DE5B30818824646BB5ABF2B564E69A54C",
+    "actual": "7DAC564E613CB660D523A56D3E68120DE5B30818824646BB5ABF2B564E69A54C",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Tape\\DatasetteMotorRampTests.cs",
+    "expected": "5C06136A1E4820558E4781214492043785EC4F4151CD8C50C2ED1E079901E408",
+    "actual": "5C06136A1E4820558E4781214492043785EC4F4151CD8C50C2ED1E079901E408",
+    "matches": true
+  }
+]

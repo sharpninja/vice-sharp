@@ -1,0 +1,20 @@
+{
+  "observedAtLocal": "2026-10-13T23:16:06",
+  "pid": 13176,
+  "exitCode": 0,
+  "captureTasksComplete": true,
+  "streamsFlushedAndClosed": true,
+  "eventCount": 2191,
+  "invalidJsonLines": 0,
+  "resultEvents": [
+    {
+      "type": "result",
+      "subtype": "success",
+      "is_error": false,
+      "session_id": "bab22fd4-f213-4011-9616-074b14def01b"
+    }
+  ],
+  "responseSha256": "18D882CEE7E25023E03A039AF8D8CCBA5A976ECA420A453AF8E34E66C2B895F5",
+  "responseBytes": 3760544,
+  "stderrBytes": 0
+}

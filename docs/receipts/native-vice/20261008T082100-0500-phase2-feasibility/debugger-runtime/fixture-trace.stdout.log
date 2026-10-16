@@ -1,0 +1,63 @@
+
+Microsoft (R) Windows Debugger Version 10.0.19041.685 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+CommandLine: "F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-probe-evidence\clock-probe.exe" 7 11
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+Symbol search path is: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+Executable search path is: 
+ModLoad: 00007ff6`1b790000 00007ff6`1b7d4000   image00007ff6`1b790000
+ModLoad: 00007fff`ad980000 00007fff`adbe7000   ntdll.dll
+ModLoad: 00007fff`ac1f0000 00007fff`ac2bb000   C:\WINDOWS\System32\KERNEL32.DLL
+ModLoad: 00007fff`aae30000 00007fff`ab232000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`ac8c0000 00007fff`ac969000   C:\WINDOWS\System32\msvcrt.dll
+(9dd4.13f1c): Break instruction exception - code 80000003 (first chance)
+ntdll!RtlGetReturnAddressHijackTarget+0x749:
+00007fff`adaa2239 cc              int     3
+0:000> .echo FIXTURE_TRACE_BEGIN
+FIXTURE_TRACE_BEGIN
+0:000> l-t
+Source options are 0:
+    None
+0:000> r rip
+rip=00007fffadaa2239
+0:000> t 0n10 ".echo FIXTURE_TRACE_TEN_COMPLETE; r rip; .lastevent; q"
+ntdll!RtlGetReturnAddressHijackTarget+0x74a:
+00007fff`adaa223a eb00            jmp     ntdll!RtlGetReturnAddressHijackTarget+0x74c (00007fff`adaa223c)
+ntdll!RtlGetReturnAddressHijackTarget+0x74c:
+00007fff`adaa223c 4883c438        add     rsp,38h
+ntdll!RtlGetReturnAddressHijackTarget+0x750:
+00007fff`adaa2240 c3              ret
+ntdll!EtwEventWriteNoRegistration+0x2854:
+00007fff`ada0df44 e803020200      call    ntdll!LdrShutdownProcess+0x3ac (00007fff`ada2e14c)
+ntdll!LdrShutdownProcess+0x3ac:
+00007fff`ada2e14c 4883ec28        sub     rsp,28h
+ntdll!LdrShutdownProcess+0x3b0:
+00007fff`ada2e150 65488b042530000000 mov   rax,qword ptr gs:[30h] gs:00000000`00000030=????????????????
+ntdll!LdrShutdownProcess+0x3b9:
+00007fff`ada2e159 b9ffef0000      mov     ecx,0EFFFh
+ntdll!LdrShutdownProcess+0x3be:
+00007fff`ada2e15e 662188ee170000  and     word ptr [rax+17EEh],cx ds:000000f6`df41d7ee=1420
+ntdll!LdrShutdownProcess+0x3c5:
+00007fff`ada2e165 488d0d14451200  lea     rcx,[ntdll!RtlpFreezeTimeBias+0x3fc0 (00007fff`adb52680)]
+FIXTURE_TRACE_TEN_COMPLETE
+rip=00007fffada2e16c
+Last event: <no event>
+quit:
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'

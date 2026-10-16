@@ -20,7 +20,7 @@
 ## Summary (curated by compaction step)
 
 Summary:
-1. Primary Request and Intent: Operator (Payton) wants VIC-20 managed code faithful to VICE xvic (no invent); hostile Grok sub-agent validation for Exact claims; video not just CPU lockstep; redeploy desktop+Xbox; screenshots vs xvic READY. Fixed present crop (first_x, L+R borders); wrap BLK toggles; UWP expansion-cart attach/eject; plan+impl flash cart image builder (FE3/MegaCart/Ultimem UI + C64 EasyFlash layout reuse; all FE3 features in scope except residual flash040 FSM). Latest explicit ask: /refresh-docs and /mcpserver:wrap-up with detailed handoff (MCP trust, wiki.yaml, requirements export, validation, session-log closeout, commit via commit-sync contract). Lab go-by-default on PAYTON-DESKTOP/LEGION2; accuracy/receipts; no em-dashes; PowerShell; MCP not raw YAML.
+1. Primary Request and Intent: Operator (Payton) wants VIC-20 managed code faithful to VICE xvic (no invent); hostile Grok sub-agent validation for Exact claims; video not just CPU lockstep; redeploy desktop+Xbox; screenshots vs xvic READY. Fixed present crop (first_x, L+R borders); wrap BLK toggles; UWP expansion-cart attach/eject; plan+impl flash cart image builder (FE3/MegaCart/Ultimem UI + C64 EasyFlash layout reuse; all FE3 features in scope except residual flash040 FSM). Latest explicit ask: /refresh-docs and /mcpserver:wrap-up with detailed handoff (MCP trust, wiki.yaml, requirements export, validation, session-log closeout, commit via commit-sync contract). Lab go-by-default on LAB-OMARCHY/LEGION2; accuracy/receipts; no em-dashes; PowerShell; MCP not raw YAML.
 
 2. Key Technical Concepts: VICE full line + border paint + viewport first_x (READY PAL L48+paper352+R48); src=0 was invent; CRT domain reason for borders; C64 flip-flop borders contrast; Byrd TDD; FlashCarts (IFlashCartProfile, FlashImageBuilder, FE3 512K / Ultimem 1MB / MegaCart+NVRAM / EasyFlash layout); Portable FlashCartImageBuilderViewModel; MediaSlot.Cartridge size detect attach; UWP VariableSizedWrapGrid (no WrapPanel); Hostile-validator AGREE receipts; MCP workflow.requirements.* / sessionlog / commit-sync; AGENTS-README-FIRST: port 7147, baseUrl PAYTON-LEGION2, workspace F:\GitHub\vice-sharp, Grok plugin.
 
@@ -1135,13 +1135,13 @@ Standing operating rules live in the global plus project `CLAUDE.md` and auto-lo
 [tool_response]
 1→---
 name: lab-authorization
-description: "authorization - Payton's lab is PAYTON-DESKTOP + PAYTON-LEGION2; take whatever actions are needed on his own assets there to complete assigned tasks; go-by-default at outward/irreversible boundaries"
+description: "authorization - Payton's lab is LAB-OMARCHY + PAYTON-LEGION2; take whatever actions are needed on his own assets there to complete assigned tasks; go-by-default at outward/irreversible boundaries"
 metadata:
   node_type: memory
   type: feedback
 ---
 
-Payton's lab machines are **PAYTON-DESKTOP** and **PAYTON-LEGION2**. Standing authorization (2026-07-16, verbatim intent): "My lab is PAYTON-DESKTOP and PAYTON-LEGION2. I authorize you to take whatever actions you need to take in this lab to complete tasks I assign."
+Payton's lab machines are **LAB-OMARCHY** and **PAYTON-LEGION2**. Standing authorization (2026-07-16, verbatim intent): "My lab is LAB-OMARCHY and PAYTON-LEGION2. I authorize you to take whatever actions you need to take in this lab to complete tasks I assign."
 10→
 **Why:** Payton hit repeated friction where Claude stalled at outward or irreversible boundaries (publishing his own nuget package, pushing to his own second remote, tagging a release to trigger his own CI) and made him override it step by step: "commit and sync origin and github" -> "tag a release so CI publishes" -> "Fucking do it." His verdict: "Right now, I cannot trust you to complete tasks." The grant removes that ambiguity; under-acting at these boundaries is the bug this memory exists to kill.
 
@@ -1275,7 +1275,7 @@ Payton Byrd (git "Payton", plbyrd@gmail.com). Author of **mcpserver-claude-code-
 - **Approve before execute.** Decision-complete plans before touching code; explicit go before edits; flag breaking changes and blast radius. **Amended 2026-07-13:** a PROBLEM REPORT is pre-approved - "When I report a problem, don't wait for my approval to fix it. If you follow the process, I trust you to fix it." State the plan and execute via Byrd immediately; explicit approval still required for unrequested features, breaking/architectural changes, and secret-store writes.
 - **Never take a shortcut around a known-correct fix because it's inconvenient.** If the precise fix costs more friction (a reload, extra steps), that is still the plan - do it, don't quietly downgrade to a workaround and call it handled. See `no-shortcuts-precision-over-convenience.md`.
 - **No attitude - it reads as a dishonesty tell.** Edge, curtness, blame-diffusion, or passive-voice failure descriptions signal covering a failure. Own failures in first person, active voice, with the specific acts and omissions; concede first, then facts, then fix. See `no-attitude-honesty-tell.md`.
-- **Lab authorization (2026-07-16):** his lab is PAYTON-DESKTOP + PAYTON-LEGION2. On those machines, outward or irreversible actions on his OWN assets (repos, remotes on Azure DevOps + GitHub, CI/pipelines and their releases, nuget of his own packages, plugin/cache management, tool installs, local services) under a task he assigned are **go-by-default** - execute via Byrd, bring receipts, do not re-ask the obvious in-scope step. Still surface, do not silently do: typing his secrets/keys into a field, effects that reach third parties outside the task, and deleting data I did not create when the target contradicts the task. See `lab-authorization.md`.
+- **Lab authorization (2026-07-16):** his lab is LAB-OMARCHY + PAYTON-LEGION2. On those machines, outward or irreversible actions on his OWN assets (repos, remotes on Azure DevOps + GitHub, CI/pipelines and their releases, nuget of his own packages, plugin/cache management, tool installs, local services) under a task he assigned are **go-by-default** - execute via Byrd, bring receipts, do not re-ask the obvious in-scope step. Still surface, do not silently do: typing his secrets/keys into a field, effects that reach third parties outside the task, and deleting data I did not create when the target contradicts the task. See `lab-authorization.md`.
 - **No em-dashes or en-dashes** anywhere (except numeric ranges). Use hyphen, colon, period, semicolon, or parentheses.
 - **PowerShell only** (`pwsh.exe -NoProfile -NonInteractive`); Bash only to install PowerShell; Node never for JSON/YAML; build payloads from native objects and serialize, never handwrite. No table-style output. Prefix replies with the response-timestamp.
 20→- **No Python (locked 2026-07-22).** Never use `python` / `python3` / `py` for any lab automation, parsing, freezes, or verification. See `no-python-lab.md`. MCP Global memory: `MEMORY-LAB-001`.
@@ -1419,7 +1419,7 @@ metadata:
 
 **Why:** Python is forbidden on lab machines for agent automation. PowerShell is the only approved shell scripting path.
 
-**How to apply:** Do not invoke `python`, `python3`, `py`, or Python one-liners for scripts, parsing, JSON/YAML construction, freezes, verification, scraping, or analysis. Use `pwsh.exe -NoProfile -NonInteractive` for shell work. Prefer native objects + `ConvertTo-Json` / `ConvertFrom-Json` / project helpers. .NET, Node only when the project already requires it for a non-agent path (never for JSON/YAML payload construction per existing lab rules). Applies on PAYTON-DESKTOP and PAYTON-LEGION2 and every workspace. Links: [[user-payton-byrd]], [[accuracy-first-verify-sources]], [[never-skip-explicit-actions]].
+**How to apply:** Do not invoke `python`, `python3`, `py`, or Python one-liners for scripts, parsing, JSON/YAML construction, freezes, verification, scraping, or analysis. Use `pwsh.exe -NoProfile -NonInteractive` for shell work. Prefer native objects + `ConvertTo-Json` / `ConvertFrom-Json` / project helpers. .NET, Node only when the project already requires it for a non-agent path (never for JSON/YAML payload construction per existing lab rules). Applies on LAB-OMARCHY and PAYTON-LEGION2 and every workspace. Links: [[user-payton-byrd]], [[accuracy-first-verify-sources]], [[never-skip-explicit-actions]].
 
 
 ### Turn 24 (Function)

@@ -1,0 +1,14 @@
+{
+  "verifiedAtLocal": "2026-10-07T14:04:31.5977086-05:00",
+  "source": "Direct inspection of retained raw primary tool response; fresh parent query returned backend_unavailable, not a successful read",
+  "rawPrimaryResponsePath": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a11799-a4d8-77b3-b60a-fd362d24b6e8\\mcp\\call-96c5f03e-d244-4b7b-8a70-7efb1de843ba-40.json",
+  "rawPrimaryResponseSha256": "8BA430EF0DB24BDC1BD7E3EDBB87C5BB0898A5BE7B1A474E328C447B26511271",
+  "sessionId": "GrokCode-20261007T182902Z-hv-phase0-mock-scope",
+  "requestId": "req-20261007T182902Z-001-hv-phase0-mock-scope-grok",
+  "status": "completed",
+  "model": "grok-4.7",
+  "wholeVerdictEqualsPrimaryResponse": true,
+  "parsedVerdictJsonEqual": true,
+  "verdictCharacters": 19873,
+  "cliExitCode": 0
+}

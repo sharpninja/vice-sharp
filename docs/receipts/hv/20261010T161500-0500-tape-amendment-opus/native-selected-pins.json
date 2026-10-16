@@ -1,0 +1,146 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+    "relativePath": "src/datasette/datasette.c",
+    "sha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+    "oldSha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+    "gitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+    "commitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\alarm.h",
+    "relativePath": "src/alarm.h",
+    "sha256": "BFD69D427573607D5934678739DE781C7F846636AA08A65C8B6A8D53451BDD3C",
+    "oldSha256": "BFD69D427573607D5934678739DE781C7F846636AA08A65C8B6A8D53451BDD3C",
+    "gitBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+    "commitBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\tapeport.c",
+    "relativePath": "src/tapeport/tapeport.c",
+    "sha256": "BC73131BF535AA57DEED1AD2080C92C0C1ECB8AE1F1338B1A2CCC7DD9CE26B15",
+    "oldSha256": "BC73131BF535AA57DEED1AD2080C92C0C1ECB8AE1F1338B1A2CCC7DD9CE26B15",
+    "gitBlob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+    "commitBlob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64pla.c",
+    "relativePath": "src/c64/c64pla.c",
+    "sha256": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+    "oldSha256": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+    "gitBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+    "commitBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64mem.c",
+    "relativePath": "src/c64/c64mem.c",
+    "sha256": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+    "oldSha256": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+    "gitBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+    "commitBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64datasette.c",
+    "relativePath": "src/c64/c64datasette.c",
+    "sha256": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29",
+    "oldSha256": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29",
+    "gitBlob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+    "commitBlob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via1.c",
+    "relativePath": "src/vic20/vic20via1.c",
+    "sha256": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+    "oldSha256": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+    "gitBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+    "commitBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via2.c",
+    "relativePath": "src/vic20/vic20via2.c",
+    "sha256": "21B686FB0414BDE42DA51AA9D5D558917AFC63A3E3D675FBDE79FFC07FA4ADB5",
+    "oldSha256": "21B686FB0414BDE42DA51AA9D5D558917AFC63A3E3D675FBDE79FFC07FA4ADB5",
+    "gitBlob": "432bc199e08fc0f580c7df0f2d637db592a2ed11",
+    "commitBlob": "432bc199e08fc0f580c7df0f2d637db592a2ed11",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20datasette.c",
+    "relativePath": "src/vic20/vic20datasette.c",
+    "sha256": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31",
+    "oldSha256": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31",
+    "gitBlob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+    "commitBlob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tape\\tap.c",
+    "relativePath": "src/tape/tap.c",
+    "sha256": "4061AB1719A95F939E96E7BB41DBB86842F71A1B9F03F8F85D38ED54E22DBB73",
+    "oldSha256": "4061AB1719A95F939E96E7BB41DBB86842F71A1B9F03F8F85D38ED54E22DBB73",
+    "gitBlob": "eed6d8e741622857369f8838f3cab5319eb3e4c1",
+    "commitBlob": "eed6d8e741622857369f8838f3cab5319eb3e4c1",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\sense-dongle.c",
+    "relativePath": "src/tapeport/sense-dongle.c",
+    "sha256": "C569B2502B6B37F34BDA16E34999AA4E8BBE2B5A8DCBF69BE15B251CE6B40D1F",
+    "oldSha256": "C569B2502B6B37F34BDA16E34999AA4E8BBE2B5A8DCBF69BE15B251CE6B40D1F",
+    "gitBlob": "7a4f685e368f31697949037c6821a858cee26f48",
+    "commitBlob": "7a4f685e368f31697949037c6821a858cee26f48",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\cp-clockf83.c",
+    "relativePath": "src/tapeport/cp-clockf83.c",
+    "sha256": "ED74CAD4F778CEDB433B5BC095D7615B9D1E44AC974DC82D190F49F834B93369",
+    "oldSha256": "ED74CAD4F778CEDB433B5BC095D7615B9D1E44AC974DC82D190F49F834B93369",
+    "gitBlob": "fe316ee9aeab843b0d91dcd992d3836394e8850e",
+    "commitBlob": "fe316ee9aeab843b0d91dcd992d3836394e8850e",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\viacore.c",
+    "relativePath": "src/core/viacore.c",
+    "sha256": "52836103F80B7AE65685F3077D0F37C6FE8163A112849266939D630FBF599EC0",
+    "oldSha256": "52836103F80B7AE65685F3077D0F37C6FE8163A112849266939D630FBF599EC0",
+    "gitBlob": "406a84720267a1821182ba9c33ab77e505507842",
+    "commitBlob": "406a84720267a1821182ba9c33ab77e505507842",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette-sound.c",
+    "relativePath": "src/datasette/datasette-sound.c",
+    "sha256": "B28ACECF95D404C0C67291BD0C7BE57FD9EA9994505BD8B7384C3DCC647A3BB6",
+    "oldSha256": "B28ACECF95D404C0C67291BD0C7BE57FD9EA9994505BD8B7384C3DCC647A3BB6",
+    "gitBlob": "aff23fc5985c616cfaa2e7481d36362d424df28b",
+    "commitBlob": "aff23fc5985c616cfaa2e7481d36362d424df28b",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64.c",
+    "relativePath": "src/c64/c64.c",
+    "sha256": "967A52413C31B43F0B51C793D608C171E34AA31728230B03391327BCCA1A9352",
+    "oldSha256": "967A52413C31B43F0B51C793D608C171E34AA31728230B03391327BCCA1A9352",
+    "gitBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+    "commitBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20.c",
+    "relativePath": "src/vic20/vic20.c",
+    "sha256": "AE776199B6ABD85E5FBFA58F12F575B4893519E19A60035A7E5B7B9EBDF2187F",
+    "oldSha256": "AE776199B6ABD85E5FBFA58F12F575B4893519E19A60035A7E5B7B9EBDF2187F",
+    "gitBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+    "commitBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+    "matches": true
+  }
+]

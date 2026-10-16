@@ -1,0 +1,14 @@
+[
+  {
+    "source": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+    "projection": "docs/Project/wiki/github/Plan-Immutable-Native-VICE.md",
+    "sourceSha256": "2F5DA8F3927B112EF709E9B297412A725D699C19160426C73BA9226EAC2A1079",
+    "projectionSha256": "2F5DA8F3927B112EF709E9B297412A725D699C19160426C73BA9226EAC2A1079"
+  },
+  {
+    "source": "docs/plans/PLAN-VSFLOCKSTEP-001.md",
+    "projection": "docs/Project/wiki/github/Plan-Native-VICE-VSF-Lockstep.md",
+    "sourceSha256": "C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183",
+    "projectionSha256": "C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183"
+  }
+]

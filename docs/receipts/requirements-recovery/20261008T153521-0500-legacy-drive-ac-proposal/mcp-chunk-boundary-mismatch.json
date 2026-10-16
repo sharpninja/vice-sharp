@@ -1,0 +1,12 @@
+{
+  "timestampLocal": "2026-10-08T15:42:00.3922796-05:00",
+  "expectedNormalizedLength": 20691,
+  "actualNormalizedLength": 20692,
+  "firstMismatch": 19699,
+  "part4FinalOriginalCharacter": 13,
+  "part5FirstOriginalCharacter": 10,
+  "expectedContext": "   \"workspaceId\": \"F:\\\\GitHub\\\\vice-sharp\"\n    }\n  ],\n  \"preservedFields\": [\n    \"id\",\n    \"workspaceId\",\n    ",
+  "actualContext": "   \"workspaceId\": \"F:\\\\GitHub\\\\vice-sharp\"\n    }\n\n  ],\n  \"preservedFields\": [\n    \"id\",\n    \"workspaceId\",\n    ",
+  "parsedJsonEquivalent": true,
+  "cause": "Agent split the original CRLF pair between parts 4 and 5. Per-chunk newline normalization produced one extra LF on reassembly. All parsed JSON fields match; exact text check correctly failed. Append a separate LF-normalized full-body series, preserve the original five entries and local file."
+}

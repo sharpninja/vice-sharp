@@ -1,0 +1,120 @@
+You are the HOSTILE VALIDATOR for the F Dev Drive migration tooling associated with F:\GitHub\vice-sharp. Run locally with Grok 4.7 at xhigh reasoning. No web search, cloud workspace, hosted agent, Python, raw REST, Bash, subagent, max-turn cap, or artificial deadline. Use PowerShell only through PowerShell.MCP. Perform a fresh, exhaustive, line-by-line code and artifact review. Do not inherit a prior verdict.
+
+MANDATORY BOOTSTRAP
+1. Read C:\Users\kingd\.grok\skills\hostile-validator\SKILL.md in full and follow it.
+2. Execute C:\Users\kingd\.grok\skills\add-profile\SKILL.md literally. Read all non-Grok markdown in C:\Users\kingd\.claude\profile, add-profile.md first, and record exact counts.
+3. Read F:\GitHub\vice-sharp\AGENTS-README-FIRST.yaml, AGENTS.md, and HANDOFF.md only for workflow constraints and audit routing.
+4. Read the four prior rejected receipts and the latest AGREE receipt, then independently verify every remediation against the current source:
+   F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261005T162750Z.md
+   F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261005T172424Z.md
+   F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261005T180849Z.md
+   F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261005T184242Z.md
+   F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261005T191258Z.md
+
+OPERATOR SCOPE CORRECTION
+Grok does not need to verify the environment. Do not call PowerShell.MCP get_current_location or any equivalent current-location, drive-inventory, or host-inventory operation. Do not use Get-Content; use Show-TextFiles for PowerShell text reads. The working directory is already supplied. If needed, use execute_command with Set-Location without querying location.
+Do not inspect, query, execute, or report the current computer name, disks, volumes, free space, Dev Drive flag, partitions, drive mappings, GPT attributes, BootExecute registry state, migration registry state, scheduled tasks, payload installation, boot time, UAC history, reboot history, or any other live machine-state precondition. Do not run Move-FDevDrive.ps1 in Plan, Status, Prepare, or Finalize mode, including an unconfirmed Prepare. Do not report environmental UNKNOWNs. Review runtime preflight, recovery, and safety behavior only from source. Builds, tests, static analyzer, AST inspection, hashes, PE/PDB inspection, and generated artifacts are permitted code/artifact evidence. If an accidental tool output contains environment data, exclude it from the receipt, findings, scores, and verdict.
+
+SAFETY
+Read-only except for your own hostile-review receipt pair and MCP session-log records. Never mutate migration state, request UAC, change a partition, volume, drive letter, registry value, task, or BootExecute, reboot, delete anything, or edit implementation.
+
+AUDIT PERSISTENCE
+Create and complete your own MCP Session Log turn through the supported Grok plugin/MCP surface. Persist the complete verdict, every finding and score, full receipt paths, request/response paths, and failsafe status. Query/read it back as proof. If normal persistence fails, immediately use supported MCP failsafe, record its path, retry through MCP, and disclose it. Never use raw REST or edit MCP state files.
+For every progress update emit:
+HV_PROGRESS {"timestamp":"yyyy-MM-ddTHH:mm:ss.fffK","completionPercent":N,"eta":"sortable local datetime, duration, or unknown","current":"...","next":"..."}
+Use truthful local timestamps with offset. Final completionPercent is 100 and eta is complete.
+
+CLASSIFICATION
+Class 2 operator-directed lab migration. ViceSharp product requirements are N/A. Evaluate source/artifact correctness, relevant operator rules, and the migration acceptance criteria.
+
+CURRENT ARTIFACTS
+PowerShell:
+E:\F-DevDrive-Migration\Move-FDevDrive.ps1
+Expected SHA-256 37C4B99FD86D9E89C4477D971B0A21001F0A6064925B40E6B481914DF455AFBA
+Expected length 50,916 bytes
+Expected numbered source lines 1 through 1057
+
+Rust:
+E:\F-DevDrive-Migration\FDevBootCopy
+Read Cargo.toml, Cargo.lock, build.rs, src\lib.rs, src\main.rs, and every checked-in cargo, linker, and config input in full.
+
+Pinned binary:
+E:\F-DevDrive-Migration\FDevBootCopy\target\release\fdev-boot-copy.exe
+Expected SHA-256 7C96CEDC9837DC2BE57C62B6BCB2E48F56567CE9E240546D4DFA1D249B7F509D
+Expected size 13,824 bytes
+The script hash pin must match it.
+
+EXPECTED INDEPENDENT GATES
+- cargo fmt --check exits 0.
+- cargo clippy --release --all-targets -- -D warnings exits 0.
+- cargo test --release reports 19 passed, 0 failed, 0 ignored, and 0 doc tests.
+- cargo build --release exits 0. Build in an isolated target directory if necessary so the pinned artifact is not overwritten. Prove executable code equivalence or explain deterministic metadata differences.
+- Pinned PE is AMD64 0x8664, Native subsystem 1, entry RVA 0x1000 NtProcessStartup, CLR/COM directory zero, no delay imports, and imports only ntdll.dll.
+- PowerShell parser errors 0.
+- PSScriptAnalyzer Warning/Error 0.
+- 38 functions.
+- Remove-Partition, Clear-Disk, Initialize-Disk, Format-Volume, Remove-Item, Invoke-Expression, dynamic invocation, and diskpart counts 0.
+- Exactly one Start-Process, the RunAs UAC boundary.
+- All confirmation-capable mutating cmdlet calls have explicit -Confirm:$false. Independently inspect installed command metadata for commands such as New-Partition and Register-ScheduledTask that may not expose Confirm.
+- Prepare post-protection control-plane order is: preflight, target creation/reuse, payload install/hash, source flush/dismount/read-only readback, pending registry initialization, SYSTEM finalizer registration/readback, BootExecute arm/readback, reboot.
+- Install-MigrationPayload contains zero Initialize-MigrationRegistry and zero Register-FinalizerTask calls.
+- Finalizer Pending/Running recovery order is: read registry, read source protection, read BootExecute, remove unsafe entry if any, mark failed, unregister task, emit truthful state. Verified cutover remains later.
+- Plan text states the same safe order as code.
+- Status text for Pending and Running requires both source protection and exact BootExecute arming before telling the operator a boot copy is ready.
+- Prepare exception cleanup after registry initialization begins writes Status Failed, VerifiedBytes 0, and failure NTSTATUS before unregistering the task.
+- Rust failure and SkipFailed text never asserts source read-only protection without readback.
+
+FINAL WORDING OBSERVATIONS THAT MUST BE REPROVED CLOSED
+The 20261005T191258Z AGREE receipt disclosed three wording observations. The implementation was changed only to remove those inaccuracies, so this review must establish that the new exact script still passes every gate:
+1. Plan says the finalizer script and Native boot image are installed, but only the Native boot image is hash-verified. It must not claim the finalizer script is hash-verified.
+2. Plan describes the actual readbacks: source remains online and mapped as F, IsReadOnly is true, and NoDefaultDriveLetter is true. It must not claim an attempted write test occurred.
+3. Protect-SourcePartition's entry progress text explicitly says no read-only claim is made until partition attributes and F mapping pass readback. It must not prospectively claim every later failure leaves F read-only before flush, dismount, Set-Partition, and readback have succeeded.
+4. Prove these are wording-only changes. Recompute script hash, bytes, lines, parser, analyzer, function count, AST order, confirmation coverage, and safety scan.
+5. Reprove the prior A16/A17/A19 and D9/D10/D11 closures remain intact.
+
+LATEST DEFECTS THAT MUST BE REPROVED CLOSED
+The 20261005T184242Z review found three unique defects duplicated as A16/A17/A19 and D9/D10/D11.
+1. A16/D9: Plan displayed payload/finalizer/registry before source protection. Prove Plan now says payload install/hash only before protection, then source flush/dismount/read-only readback, then registry and finalizer, then BootExecute.
+2. A17/D10: A caught Prepare exception after registry initialization began could remove BootExecute and the finalizer while leaving Status Pending. Prove a guard becomes true immediately before Initialize-MigrationRegistry. Prove catch writes terminal Failed, zero verified bytes, and failure NTSTATUS before unregistering the task whenever that attempt could have created or overwritten registry state. Prove failures before that guard do not falsely rewrite prior state. Prove Status Pending/Running text also checks source protection and BootExecute arming.
+3. A19/D11: display_failure and SkipFailed claimed original F was unchanged and read-only without readback. Prove both now explicitly say protection was not confirmed on that path and do not claim read-only success.
+Do not merely search for new strings. Trace the control flow and exception boundaries.
+
+PRIOR DEFECT THAT MUST REMAIN CLOSED
+The 20261005T180849Z A18/D8 defect was a power-loss window after pending registry/task setup but before source protection or BootExecute, followed by a false repeating Finalize message. Verify:
+1. Install-MigrationPayload only installs and hash-verifies payloads.
+2. Invoke-Prepare calls Protect-SourcePartition before Initialize-MigrationRegistry and Register-FinalizerTask.
+3. Protect-SourcePartition flushes and dismounts F, sets IsReadOnly and NoDefaultDriveLetter, and reads back IsReadOnly, online state, F mapping, and NoDefaultDriveLetter before returning.
+4. Only after that readback does Prepare persist Pending, register/read back the SYSTEM finalizer, arm/read back BootExecute, and reboot.
+5. Finalize initial text makes no unverified protection claim.
+6. Pending or Running Finalize independently reads source IsReadOnly and exact BootExecute arming.
+7. If either prerequisite is absent, Finalize removes an armed unsafe BootExecute entry, records Failed with zero verified bytes and failure NTSTATUS, unregisters the repeating task, truthfully distinguishes F as read-only versus writable and unchanged, and performs no copy or cutover.
+8. Only when both source read-only and BootExecute armed read back true does Finalize retain retry state and say so.
+9. Power loss before source protection leaves F unchanged and creates no Pending state or startup task.
+10. Power loss after source protection cannot leave F writable. A gap before task or registry can require rerunning Prepare but stays safe. A gap after task/registry but before BootExecute is converted by Finalize into truthful non-repeating Failed preparation.
+11. Rerunning Prepare can reuse the retained prepared layout, overwrite Failed back to Pending after re-verifying protection, replace the task, and arm BootExecute.
+12. No path deletes the old partition.
+
+FULL ATTACK SURFACES
+A. Trace every code path, state transition, exception, cleanup, retry, reboot/idempotency boundary, alignment, integer conversion, registry parse, GUID/partition identity check, geometry assertion, and native I/O call.
+B. Search direct and indirect destructive behavior: diskpart, CIM/WMI writes, shell escapes, aliases, variable commands, dynamic invocation, deletion, arbitrary paths, and any way old F becomes writable or deleted.
+C. Verify one explicit -ConfirmDestructive consent, exactly one RunAs UAC, elevated NonInteractive child, no later prompts, automated protected reboot path, Native BootExecute, and SYSTEM AtStartup finalizer independent of user logon.
+D. Verify raw copy starts at zero, writes exactly every source byte, flushes destination, then rereads both devices in a separate full comparison pass. Mismatch cannot flush or mark Verified. Only full success stores Verified and exact byte count.
+E. Verify terminal states skip disk I/O, unknown status fails closed, interrupted Running restarts from zero, and every Rust-visible state has truthful Completed, Current, and Next, including restart, failure, and panic.
+F. Verify Finalize permits no cutover for Pending, Running, Failed, or unknown. Verified requires exact bytes and NTSTATUS zero. Then source is preserved read-only/offline/unmapped, target is exposed temporarily, partition and ReFS expand to exactly double, volume is scanned and checked, Dev Drive/health/label/size are checked, target gets F, source postconditions are rechecked, and task is removed.
+G. Attack partial copy, exceptions and power loss at every boundary, stale or malformed registry data, wrong or duplicate GUIDs, wrong partition numbers and sizes, overlap, short I/O, overflow, misalignment, flush failure, compare mismatch, checkpoint ordering, BootExecute/task races, all drive letters occupied, and progress truthfulness.
+H. Audit whether the 19 tests genuinely cover pure transfer, layout, progress, and status fault logic. Identify source-inspection-only gaps without inflating them into UNKNOWN unless an implementation fact is unresolved.
+I. Recompute every hash, size, line count, analyzer, AST, build/test, PE, PDB symbol, and code-order claim with exact commands and meaningful output.
+J. Report every FAIL and code/artifact UNKNOWN without softening. Live environment facts are excluded, not UNKNOWN.
+
+FINDING AND VERDICT CONTRACT
+Create explicit A/B/C/D findings. Each needs ID, PASS/FAIL/UNKNOWN/N/A, claim, evidence, impact, and remediation where applicable.
+OverallVerdict may be AGREE only if every applicable finding passes, no code/artifact UNKNOWN remains, and both AccuracyPercent and CompletenessPercent are at least 98. Otherwise DISAGREE.
+
+RECEIPTS
+Parent request JSONL:
+F:\GitHub\vice-sharp\docs\receipts\hv\20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.request.jsonl
+Parent response JSONL is captured automatically from your stdout by the parent process:
+F:\GitHub\vice-sharp\docs\receipts\hv\20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.response.jsonl
+Do not open, write, append, or recreate the parent response JSONL. Emit normal streaming output only.
+Write docs\receipts\hostile-validator-<UTC>.md and matching .json with native objects/serializers. Include classification, profile receipt, commands and outputs, all findings, counts, complete FAIL/UNKNOWN lists, scores, OverallVerdict, completionPercent, eta, Grok MCP sessionId/requestId, MCP readback proof, failsafeUsed, and failsafePath.
+End with absolute receipt paths, scores, counts, failsafe status, MCP persistence proof, and OverallVerdict.

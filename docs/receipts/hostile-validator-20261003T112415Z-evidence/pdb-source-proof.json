@@ -1,0 +1,16 @@
+[
+  {
+    "Assembly": "ViceSharp.Core",
+    "Document": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\Snapshots\\RuntimeSnapshotStore.cs",
+    "PdbHash": "AC21058CD43A459A58ECB3CA544ED7B2314B3AE8984A66BC0A0B48010DE8BBF9",
+    "SourceHash": "AC21058CD43A459A58ECB3CA544ED7B2314B3AE8984A66BC0A0B48010DE8BBF9",
+    "Match": true
+  },
+  {
+    "Assembly": "ViceSharp.TestHarness",
+    "Document": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\FrSnp003AcceptanceTests.cs",
+    "PdbHash": "F441D381A95D396D0AB0EB88472066E4FD050512A9B6D175A0B7C9360863DE52",
+    "SourceHash": "F441D381A95D396D0AB0EB88472066E4FD050512A9B6D175A0B7C9360863DE52",
+    "Match": true
+  }
+]

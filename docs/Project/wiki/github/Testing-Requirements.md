@@ -9,11 +9,36 @@ Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override
 Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
 Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
 
+## Acceptance Criteria
+- **ac-01**: Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
+- **ac-02**: Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
+- **ac-03**: Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
+- **ac-04**: Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
+
 **Acceptance Criteria:**
 - [ ] Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
 - [ ] Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
 - [ ] Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
 - [ ] Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
+
+
+## TEST-ARCH-CHIPGLUE
+
+### TEST-ARCH-CHIPGLUE-001
+
+Source-boundary, focused integration, and lockstep/checkpoint tests verify that reusable chip implementations stay free of machine-specific board and device glue. Machine-specific wiring for C64, C1541, IEC, datasette, cartridge, input, and media helper behavior is owned by Core machine/device definitions or host services.
+
+## Acceptance Criteria
+- `ChipGlueBoundaryTests` prove moved and retired helper locations: duplicate/fake chip stubs are absent from `src/ViceSharp.Chips`, Core-owned device adapters exist, and shared chip files do not contain guarded C64/C1541 board policy.
+- Focused tests cover the moved or guarded behavior for C64 memory map, processor port, CIA, VIA, SID, VIC-II/video, IEC/drive, standard cartridge mapping, C64 input/VKM, datasette/TAP, and media capture.
+- The `ARCH-CHIPGLUE-001` audit document inventories every remaining `src/ViceSharp.Chips` type and maps each acceptance criterion to direct evidence.
+- The x64sc lockstep/checkpoint gate passes after the remediation with `0` failed and `0` skipped tests.
+
+**Acceptance Criteria:**
+- [ ] `ChipGlueBoundaryTests` prove moved and retired helper locations: duplicate/fake chip stubs are absent from `src/ViceSharp.Chips`, Core-owned device adapters exist, and shared chip files do not contain guarded C64/C1541 board policy.
+- [ ] Focused tests cover the moved or guarded behavior for C64 memory map, processor port, CIA, VIA, SID, VIC-II/video, IEC/drive, standard cartridge mapping, C64 input/VKM, datasette/TAP, and media capture.
+- [ ] The `ARCH-CHIPGLUE-001` audit document inventories every remaining `src/ViceSharp.Chips` type and maps each acceptance criterion to direct evidence.
+- [ ] The x64sc lockstep/checkpoint gate passes after the remediation with `0` failed and `0` skipped tests.
 
 
 ## TEST-BASELINE-CORRECTNESS
@@ -25,11 +50,25 @@ Add minimal branch-sequence red regressions for both machine families and compar
 Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.
 Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.
 
+## Acceptance Criteria
+- **ac-01**: Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.
+- **ac-02**: Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.
+- **ac-03**: Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.
+- **ac-04**: Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.
+
 **Acceptance Criteria:**
 - [ ] Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.
 - [ ] Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.
 - [ ] Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.
 - [ ] Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.
+
+
+## TEST-CFG
+
+### TEST-CFG-001
+
+Resource files, ROM/romset selection, palettes, hotkeys, autostart, peripherals, RAM init, debug resources, and limiter settings are verified with configuration and host service tests.
+
 
 
 ## TEST-CHIPSTATE
@@ -43,6 +82,22 @@ Recorder tests with a fake stateful device verify per-tick chip-state capture an
 - [x] Snapshot deep-copies chip state across ring rotation
 
 
+## TEST-CIA
+
+### TEST-CIA-001
+
+CIA timers, TOD, keyboard matrix, joystick interaction, serial shift register, IRQ, and NMI behavior are verified with unit and integration tests.
+
+
+
+## TEST-CLI-LAUNCHER
+
+### TEST-CLI-LAUNCHER-001
+
+VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`, PRG autostart dispatch, help text, and process smoke behavior are verified with parser, stub entrypoint, and real console process tests.
+
+
+
 ## TEST-COMPLETION
 
 ### TEST-COMPLETION-001
@@ -53,6 +108,14 @@ Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual
 Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
 Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.
 
+## Acceptance Criteria
+- **ac-01**: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+- **ac-02**: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
+- **ac-03**: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
+- **ac-04**: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
+- **ac-05**: Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.
+- **ac-06**: Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence.
+
 **Acceptance Criteria:**
 - [ ] Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
 - [ ] Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
@@ -62,11 +125,27 @@ Require final Astra agreement over combined diff, requirement evidence, owned-fi
 - [ ] Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence.
 
 
+## TEST-CPU
+
+### TEST-CPU-001
+
+CPU instruction, timing, interrupt, and port behavior is verified with unit tests and VICE/Lorenz-style reference comparisons.
+
+
+
 ## TEST-CPUTICK
 
 ### TEST-CPUTICK-001
 
 Unit tests covering ExecutedCycles increments per executed (non-stolen) cycle, per-CPU rate = executed/elapsed/target, reset zeroes counters, and the status surface lists host and peripheral CPU rates distinctly.
+
+
+
+## TEST-CRT
+
+### TEST-CRT-001
+
+Standard, Ocean, EasyFlash, Action Replay, Retro Replay, and Final Cartridge mapping behavior is verified with cartridge image and banking tests.
 
 
 
@@ -92,7 +171,7 @@ Each upgrade slice S1-S8 exits on: dotnet restore + Release build with TreatWarn
 
 ### TEST-DRV-001
 
-Focused integration tests shall prove D64 directory and file operations complete over the IEC bus and produce bus activity telemetry.
+Drive CPU/timing, image formats, GCR, IEC bus protocol, fast loader, and host media attachment behavior are verified with smoke, protocol, and reference tests.
 
 **Acceptance Criteria:**
 - [ ] Tests prove mounted D64 directory and file operations execute through IEC bus line activity.
@@ -182,6 +261,30 @@ Off-console converter/merge/SOCD/fire/profile/pump behavior. Acceptance: 0 faile
 ### TEST-GAMEPAD-002
 
 On-console live-controller smoke. Acceptance: live pad drives JOY2/JOY1 with fire per mapping.
+
+
+
+## TEST-GRPC
+
+### TEST-GRPC-001
+
+Protocol, status, control, input, monitor, media, snapshot, capture, and boundary enforcement paths are verified through generated clients and host integration tests.
+
+
+
+## TEST-HOST
+
+### TEST-HOST-001
+
+Host lifecycle, status, media, state, capture, diagnostics, and session ownership behavior are verified with in-process host service tests.
+
+
+
+## TEST-HOST-DIAG
+
+### TEST-HOST-DIAG-001
+
+Diagnostics protocol descriptors, session enumeration, host info, current UI session resolution, performance snapshots, streaming snapshots, attach file lifecycle, and development-scoped reflection are verified with red-first unit and in-process gRPC tests.
 
 
 
@@ -275,7 +378,28 @@ On-console boot throughput (>=100 frames/2s, unpinned, two emulation threads). A
 
 
 
+## TEST-INPUT
+
+### TEST-INPUT-001
+
+Keyboard, joystick, mouse, lightpen, paddle, and VICE VKM behavior is verified with parser, matrix, protocol, and machine integration tests.
+
+
+
+## TEST-INSTALL
+
+### TEST-INSTALL-001
+
+InstallerFileAssociationTests: wxs registers each DesktopFileAssociations entry and open command; TryGetOpenPath skips exe/flags and unknown extensions.
+
+
+
 ## TEST-MED
+
+### TEST-MED-001
+
+Screenshot, video, audio, synchronized capture, and format selection behavior are verified through capture metadata and round-trip output tests.
+
 
 ### TEST-MED-002
 
@@ -293,6 +417,22 @@ ffprobe-verified video+audio streams; Start failure cleanup; BackgroundByteWrite
 
 
 
+## TEST-MEM
+
+### TEST-MEM-001
+
+Address decoding, RAM-under-ROM, Ultimax, VIC bank selection, color RAM, and stack/zero-page behavior are verified with unit and integration tests.
+
+
+
+## TEST-MON
+
+### TEST-MON-001
+
+Disassembly, memory display, breakpoints, register operations, bank selection, watch expressions, and monitor RPC behavior are verified through monitor engine tests.
+
+
+
 ## TEST-NATIVE-LIFECYCLE
 
 ### TEST-NATIVE-LIFECYCLE-001
@@ -302,6 +442,13 @@ Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and N
 Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.
 Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.
 Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.
+
+## Acceptance Criteria
+- **ac-01**: Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.
+- **ac-02**: Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.
+- **ac-03**: Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.
+- **ac-04**: Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.
+- **ac-05**: Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.
 
 **Acceptance Criteria:**
 - [ ] Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.
@@ -347,13 +494,28 @@ PacingStrategySelectionTests (factory + live SetStrategy), SettingsServiceHostTe
 
 ### TEST-PERF-RUNFRAME-001
 
-The benchmark harness builds a real-ROM C64 PAL machine through ArchitectureBuilder, measures IMachine.RunFrame after warmup over the required 600-frame window, reports median and p95 frame time, and proves the measured hot path allocates zero bytes on the current thread.
+The benchmark harness builds a real-ROM C64 PAL machine through `ArchitectureBuilder`, measures `IMachine.RunFrame()` after warmup over the required 600-frame window, reports median and p95 frame time, and proves the measured hot path allocates zero bytes on the current thread.
+
+## Acceptance Criteria
+- `C64PalRunFrameBenchmark` builds Commodore 64 PAL through `ArchitectureBuilder` with the real ROM provider.
+- `RunFramePerfProbe` reports median `<= 18 ms`, p95 `<= 22 ms`, and `0` allocated bytes for the 60 warmup / 600 measured frame workflow.
+- Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID tests pass with `0` failed and `0` skipped.
+- Lockstep and checkpoint gates pass with `0` failed and `0` skipped.
+- BenchmarkDotNet completes `C64PalRunFrameBenchmark` and reports no managed allocation.
 
 **Acceptance Criteria:**
 - [x] Benchmark/probe builds Commodore 64 PAL through ArchitectureBuilder with the real ROM provider. (evidence: BenchmarksSmokeTests.C64PalRunFrameBenchmark_UsesRealC64Pal passed)
 - [x] RunFramePerfProbe 60/600 reports median <= 18 ms, p95 <= 22 ms, and 0 allocated bytes. (evidence: median=1.575ms; p95=2.753ms; allocated=0 bytes)
 - [x] Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID and Lockstep/Checkpoint gates pass with 0 failed and 0 skipped tests. (evidence: focused=182 passed; lockstep/checkpoint=333 passed)
 - [x] BenchmarkDotNet C64PalRunFrameBenchmark completes and reports no managed allocation. (evidence: BenchmarkDotNet mean=2.262ms median=2.255ms; Allocated reported none)
+
+
+## TEST-PRF
+
+### TEST-PRF-001
+
+C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for required devices, ROMs, clocks, and address maps.
+
 
 
 ## TEST-PUBSUB
@@ -384,6 +546,11 @@ Run all seven integration tests with zero failures and zero skips, including ser
 Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.
 Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.
 
+## Acceptance Criteria
+- **ac-01**: Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.
+- **ac-02**: Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.
+- **ac-03**: Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.
+
 **Acceptance Criteria:**
 - [ ] Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.
 - [ ] Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.
@@ -395,6 +562,12 @@ Verify authenticated discovery/download/launch of the required C64 seed against 
 ### TEST-REMOTECTRL-001
 
 Tests prove the RemoteControl integration is off by default (no host started when VICESHARP_REMOTECONTROL_ENABLE is unset) and fails closed when enabled without a token; and that, when enabled with a token, the configured IRemoteControlRootProvider returns the live MainWindow. App-launch gate: connect the RemoteControl client tool and confirm the visual tree is readable.
+
+## Acceptance Criteria
+- **ac-01**: Test unset enable switch and enabled-without-token startup; both expose no usable control host.
+- **ac-02**: Launch the owned app with explicit valid enable/token settings; read capabilities and the live MainWindow tree over gRPC.
+- **ac-03**: Verify missing/wrong bearer token rejection, loopback policy and separate denied/enabled action/frame permissions.
+- **ac-04**: Retain the two fresh final-binary live passes and real gRPC CLI contract evidence required by TEST-REMOTECTRL-CLI-001 and TEST-COMPLETION-001.
 
 **Acceptance Criteria:**
 - [ ] Test unset enable switch and enabled-without-token startup; both expose no usable control host.
@@ -413,6 +586,13 @@ Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malfo
 Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.
 Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.
 
+## Acceptance Criteria
+- **ac-01**: Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.
+- **ac-02**: Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.
+- **ac-03**: Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.
+- **ac-04**: Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.
+- **ac-05**: Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.
+
 **Acceptance Criteria:**
 - [ ] Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.
 - [ ] Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.
@@ -429,11 +609,35 @@ RewindCycle/RewindFrame restore exact prior state; step-then-rewind round-trips;
 
 
 
+## TEST-ROMM-AVUI
+
+### TEST-ROMM-AVUI-001
+
+Build, headless view-model, and end-to-end validation prove LibraryView and ListsView binding, connection, browse, search, list, collection, and launch behavior.
+
+
+
+## TEST-ROMM-DETAIL
+
+### TEST-ROMM-DETAIL-001
+
+RomMGateway detail mapping and RomDetailViewModel add-to-collection behavior are proven by deterministic automated tests for files, cover, summary, launchability, and collection mutation.
+
+
+
+## TEST-ROMM-PKG
+
+### TEST-ROMM-PKG-001
+
+Package metadata and pack-output tests prove both RomM libraries are packable with the approved package ids, GPL-2.0-or-later metadata, and exact dependency graph.
+
+
+
 ## TEST-ROMM-SEC
 
 ### TEST-ROMM-SEC-001
 
-RomMCoverImageSourceTests validates auth-origin rules. RomMGatewayDownloadTests validates filename containment, exact-size completion, and no partial publication. FileRomMConnectionStoreTests validates current-user DPAPI round-trip and immediate legacy plaintext migration.
+`RomMCoverImageSourceTests` verifies anonymous public covers and rejection of absolute authenticated-path inputs. `RomMGatewayDownloadTests` verifies filename containment and that truncated content never publishes a partial cache entry. `FileRomMConnectionStoreTests` verifies current-user DPAPI round-trip and immediate migration of legacy plaintext tokens.
 
 
 
@@ -450,6 +654,16 @@ Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and indep
 Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.
 Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.
 
+## Acceptance Criteria
+- **ac-01**: Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.
+- **ac-02**: Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.
+- **ac-03**: Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.
+- **ac-04**: Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.
+- **ac-05**: Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.
+- **ac-06**: Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.
+- **ac-07**: Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.
+- **ac-08**: Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.
+
 **Acceptance Criteria:**
 - [ ] Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.
 - [ ] Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.
@@ -463,9 +677,14 @@ Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behav
 
 ## TEST-SID
 
+### TEST-SID-001
+
+Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external input, and multi-SID behavior are verified with deterministic audio/register tests.
+
+
 ### TEST-SID-002
 
-Focused SID tests verify signed waveform centering and PCM equivalency; runtime capture verifies Pieces of Light at PAL pacing before and after Space exits the first segment.
+SID waveform centering, PCM equivalency, and Pieces of Light runtime capture validation prove that live audio back-pressure paces the emulator like VICE before and after runtime segment transitions.
 
 
 
@@ -510,6 +729,28 @@ ViceGateSoundRegulatorTests (13) cover EvaluateSound outcomes and boundary, gate
 - [x] Warp selects Warp regulator even when audio buffer is full
 
 
+## TEST-SNP
+
+### TEST-SNP-001
+
+Save/load, deterministic replay, and state diff behavior are verified through round-trip and byte/trace comparison tests.
+
+
+### TEST-SNP-002
+
+Prove native VICE .vsf as the canonical ViceSharp snapshot format using the existing managed resume bridge after productionization and completion: default public and desktop snapshot paths, native x64sc/xvic read and write, complete managed state transfer, bidirectional round trips, 100000-cycle lockstep, transactionality, corruption handling, and mandatory non-skipped prerequisites.
+
+**Acceptance Criteria:**
+- [ ] Load mandatory x64sc and xvic .vsf fixtures through the managed production path and compare every supported module field with the native VICE oracle.
+- [ ] Save C64 and VIC-20 state from ViceSharp as .vsf, load the files in x64sc and xvic, and prove matching represented state.
+- [ ] Run VICE-to-ViceSharp-to-VICE and ViceSharp-to-VICE-to-ViceSharp round trips and prove all supported module fields survive.
+- [ ] From each restored C64 and VIC-20 checkpoint, run at least 100000 cycles in lockstep and fail at the first CPU, bus, video, timer, interrupt, or mapped-memory divergence.
+- [ ] Accept pinned-reader-compatible 58-byte current and 37-byte legacy VICE headers; walk 22-byte module headers with little-endian inclusive total lengths to exact EOF; reject wrong machine, unsupported versions, invalid/missing/duplicate mandatory modules, truncated framing, invalid or overflowing lengths, trailing bytes, and corruption rejected by structure or native VICE without visible mutation. Do not claim arbitrary bit-flip detection because VSF has no general checksum.
+- [ ] Treat both shims, the pinned VICE commit, exact MSYS2 MINGW64 tool paths, exact ROM-hash allowlist, and fixture/state-transfer manifests as mandatory prerequisites. Missing or stale prerequisites fail Category=NativeViceSnapshot with zero skipped tests.
+- [ ] Verify CaptureSnapshot, Avalonia .vsf file save/load, quick save/load, and ten named slots use native VSF by default; unsupported hosts return unavailable without fallback. Only generated protobuf ImportLegacySnapshot accepts the two proprietary formats, normal restore rejects them, and no capture emits them. UWP/Xbox implementation is not changed or claimed complete.
+- [ ] Build and inspect the local win-x64 publish and MSI for both shims, the recursively verified loose PE closure staged after publish and before WiX, VICE license/source-offer files, and no ROMs; install locally and pass default C64/VIC-20 native-VSF capture/restore smoke from the installed app.
+
+
 ## TEST-SYSBTN
 
 ### TEST-SYSBTN-001
@@ -544,20 +785,39 @@ Tests that the drive CPU advances on its own clock (not host lockstep), IEC bus 
 
 
 
+## TEST-TAP
+
+### TEST-TAP-001
+
+Datasette motor, TAP parsing, pulse timing, write behavior, and turbo loader compatibility are verified with unit and timing tests.
+
+
+
 ## TEST-TAPE-RAMP
 
 ### TEST-TAPE-RAMP-001
 
-With tape inserted, MotorEnabled=true, PlayPressed=true: TryReadNextPulse returns false during first 12,808 Tick() calls; returns true after 32,000 Tick() calls. Motor off/on resets ramp. 4 pass.
+Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and every TR-TAPE-EDGE-001 criterion using shared clock/control/alarm fixtures. First prove correct and deliberately incorrect mock traces discriminate in an entirely passing native-safe suite. Then bind unchanged fixtures and assertions to managed behavior and immutable native VICE observations. Preserve historical results but remove fixed historical pass-count claims from the acceptance condition.
 
+**Acceptance Criteria:**
+- [ ] Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.
+- [ ] Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.
+- [ ] The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.
+- [ ] All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.
 
 
 ## TEST-TAPE-SENSE
 
 ### TEST-TAPE-SENSE-001
 
-SenseLine==false when PlayPressed or RecordPressed, true otherwise. TryWritePulse returns true only when MotorEnabled && RecordPressed, incrementing RecordedPulseCount. 7 pass.
+Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.
 
+**Acceptance Criteria:**
+- [ ] TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.
+- [ ] MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.
+- [ ] Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.
+- [ ] Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.
+- [ ] Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.
 
 
 ## TEST-TESTGATE
@@ -606,7 +866,7 @@ Verify the emulation pump does not capture when recording is disabled (default) 
 
 ### TEST-UI-001
 
-Focused ViewModel and protocol tests shall prove IEC activity appears in both peripherals and status surfaces from host telemetry.
+Sidebar, status bar, attach panel, settings, keyboard map selection, monitor dock/pop-out, focus, and startup behavior are verified with fake host clients.
 
 **Acceptance Criteria:**
 - [ ] ViewModel tests prove peripherals panel drive entries show IEC active and idle states from host telemetry.
@@ -620,6 +880,10 @@ Focused ViewModel and protocol tests shall prove IEC activity appears in both pe
 
 Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.
 Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.
+
+## Acceptance Criteria
+- **ac-01**: Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.
+- **ac-02**: Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.
 
 **Acceptance Criteria:**
 - [ ] Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.
@@ -644,11 +908,19 @@ DeviceArtHeadlessTests (AvaloniaFact): AvaloniaXamlLoader loads DeviceArt.axaml;
 
 
 
+## TEST-UI-DIAG
+
+### TEST-UI-DIAG-001
+
+The Avalonia shell exposes a Copy Debug Attach Info command and formats endpoint, current session id, app version, attach JSON, and latest status for clipboard use.
+
+
+
 ## TEST-UIDROP
 
 ### TEST-UIDROP-002
 
-Verify PRG drop acceptance and host RAM load: ShellViewModel routes *.prg to LoadProgramAsync without attach/reset; IsDropStartSupported is true for .prg and existing media and false for unsupported types; PrgMemoryLoader writes at the load address, updates BASIC pointers only when load equals TXTTAB, and reports ran; EmulatorHostService.LoadProgramAsync loads payload into the session, sets Ran, and starts BASIC RUN automation only for BASIC-start PRGs; invalid PRGs return InvalidArgument; GrpcEmulatorHostService maps LoadProgram request/response fields.
+Verify PRG drop acceptance and host RAM load: `ShellViewModel` routes `*.prg` to `LoadProgramAsync` without attach/reset; `IsDropStartSupported` is true for `.prg` and existing media and false for unsupported types; `PrgMemoryLoader` writes at the load address, updates BASIC pointers only when load equals TXTTAB, and reports ran; `EmulatorHostService.LoadProgramAsync` loads payload into the session, sets Ran, and starts BASIC RUN automation only for BASIC-start PRGs; invalid PRGs return InvalidArgument; `GrpcEmulatorHostService` maps LoadProgram request/response fields.
 
 
 
@@ -682,6 +954,10 @@ VM: AttachSlotViewModel exposes status/RO/activity/TrueDrive/SupportsTrueDrive a
 
 VIC-20 RAM settings acceptance verifies all selected BLK regions in fresh host/runtime state after Apply+Restart and exactly 28159 BASIC bytes free with the pinned ROM.
 
+## Acceptance Criteria
+- **ac-all-spec**: All+Apply+Restart keeps BLK checks and Vic20MemorySpec all.
+- **ac-bytes-free**: After pinned-ROM VIC-20 All RAM plus Apply+Restart, the READY BASIC boot reports exactly 28159 BYTES FREE; verify actual runtime memory as well as checked BLK controls.
+
 **Acceptance Criteria:**
 - [ ] All+Apply+Restart keeps BLK checks and Vic20MemorySpec all.
 - [ ] After pinned-ROM VIC-20 All RAM plus Apply+Restart, the READY BASIC boot reports exactly 28159 BYTES FREE; verify actual runtime memory as well as checked BLK controls.
@@ -689,6 +965,13 @@ VIC-20 RAM settings acceptance verifies all selected BLK regions in fresh host/r
 ### TEST-UISET-002
 
 Two fresh final-binary RemoteControl passes exercise every applicable VIC-20 Settings control. Verify effective visibility, Active/Accepted/Draft semantics, single-transaction Warp above150 percent, PAL/NTSC runtime geometry/clocks, Revert, cartridge persistence and actual uIEC I/O.
+
+## Acceptance Criteria
+- **ac-inventory**: In each of two fresh final-binary live passes, drive every applicable VIC-20 Settings control and verify effective visibility, fresh host Active/Accepted state and actual runtime effects, including image/bank/preset/writeback and uIEC I/O.
+- **ac-warp**: Warp via the single Settings transaction sets LIMITER WARP, LimiterRatePercent 0 and measured EffectiveClockPercent greater than 150 in WarpModeTests and live RemoteControl receipts.
+- **ac-palntsc**: PAL vs NTSC Apply+Restart yields CLOCK ~1.108 vs ~1.023 MHz and ContentHeight 284 vs 234 with READY.
+- **ac-revert**: Revert is exercised while dirty and restores Accepted values without cancelling an earlier accepted pending restart; save-on-exit preferences remain independent.
+- **ac-state-and-runtime**: Apply, Apply+Restart, validation failure, speed cycling, every RAM BLK, persistence preferences and builder open/close follow TEST-SETTINGS-TXN-001 and TEST-COMPLETION-001, with host/runtime oracles after refreshing owned-process debug attach and session IDs.
 
 **Acceptance Criteria:**
 - [ ] In each of two fresh final-binary live passes, drive every applicable VIC-20 Settings control and verify effective visibility, fresh host Active/Accepted state and actual runtime effects, including image/bank/preset/writeback and uIEC I/O.
@@ -700,6 +983,13 @@ Two fresh final-binary RemoteControl passes exercise every applicable VIC-20 Set
 ### TEST-UISET-003
 
 Headless and live RemoteControl tests for C64 variants (at least c64, c64c, ntsc from host catalog) mutate shared Settings controls, Apply+Restart PAL vs NTSC CLOCK ~0.985 vs ~1.023 MHz with READY, Warp LIMITER WARP and CLOCK percent well above 100, and assert VIC-20-only AutomationIds are not effectively visible on C64 and are visible on VIC-20.
+
+## Acceptance Criteria
+- **ac-c64-inventory**: Shared Settings inventory mutates and sticks for C64 models c64, c64c, and ntsc.
+- **ac-c64-palntsc-warp**: C64 PAL versus NTSC boots READY with clocks approximately 0.985 versus 1.023 MHz; Warp status and live runtime satisfy TR-WARP-STATUS-001, including EffectiveClockPercent greater than 150.
+- **ac-visibility**: VIC-20-only AutomationIds are not effectively visible on C64 Computer and are visible on VIC-20 Computer.
+- **ac-catalog-14**: Automatically cover all 14 available C64 host catalog profiles and live c64/c64c/ntsc representatives. Cover case-insensitive IDs, unavailable/out-of-family/null/reentry rejection, stable Models within family and disabled Apply with a visible explanation for unusable catalog.
+- **ac-draft-preservation**: Exercise shared synchronization for initial load, refresh, Apply, Revert and persisted state, preserving VIC-20 draft RAM/cart fields across family switches without attaching VIC-20 hardware to a C64 runtime.
 
 **Acceptance Criteria:**
 - [ ] Shared Settings inventory mutates and sticks for C64 models c64, c64c, and ntsc.
@@ -714,6 +1004,22 @@ Headless and live RemoteControl tests for C64 variants (at least c64, c64c, ntsc
 ### TEST-UISETTINGS-001
 
 VM: settings VM exposes machine/video/audio/input/limiter/resource selections + apply. App-launch: SettingsView renders + applies settings.
+
+
+
+## TEST-VIA
+
+### TEST-VIA-001
+
+VIA timer, shift register, port handshake, VIC-20, and drive integration behavior are verified with unit and machine integration tests.
+
+
+
+## TEST-VIC
+
+### TEST-VIC-001
+
+Raster timing, display modes, sprites, collisions, badlines, borders, FLI/AFLI, banking, and DMA timing are verified with deterministic frame or trace comparisons. The gate includes closed-border sprite masking, open-border sprite visibility, sprite priority over background/foreground pixels, per-model sprite DMA access timing, and VIC-II matrix/idle fetch behavior including prefetch `$ff` fill and ECM idle graphics addresses.
 
 
 
@@ -751,7 +1057,7 @@ Vic20PixelLockstep verifies normal-border geometry and named SequenceEqual facts
 
 ### TEST-VIC20-FLASH-001
 
-Flash040EraseLatencyTests verifies TYPE_B cycle budgets/status/cancel/suspend/resume. Vic20ExpansionCartTests, UltimemParityTests, MegaCartParityTests, and MediaServiceHostVic20ExpansionTests verify mapping, dirty-state separation, and atomic detach persistence.
+`Flash040EraseLatencyTests` verifies the VICE TYPE_B sector timeout, sector/chip cycle budgets, busy status, cancel, suspend, and resume behavior. `Vic20ExpansionCartTests`, `UltimemParityTests`, `MegaCartParityTests`, and `MediaServiceHostVic20ExpansionTests` verify mapping, dirty-state separation, and atomic detach persistence.
 
 
 
@@ -759,18 +1065,39 @@ Flash040EraseLatencyTests verifies TYPE_B cycle budgets/status/cancel/suspend/re
 
 ### TEST-VIC20-SOUND-001
 
-Vic20SoundLockstep verifies deterministic managed output, allocation-free silent stores after warmup, and byte-identical focused silence/tone batches versus native xvic. Vic20AudioWiringTests verifies machine-clock advancement and 256-sample backend delivery.
+`Vic20SoundLockstep` verifies deterministic managed silence/tone/multi-register output, no silent register-store allocation after warmup, and focused byte-identical silence/tone batches against native xvic. `Vic20AudioWiringTests` verifies machine-clock advancement and 256-sample delivery to the configured audio backend.
 
+
+
+## TEST-VICE
+
+### TEST-VICE-001
+
+Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable.
+
+**Acceptance Criteria:**
+- [ ] A clean-target preflight passes for the pinned native/vice commit and a simulated dirty-target fixture is rejected before parity execution.
+- [ ] The wrapper integration test proves no tracked native/vice file changes across build and execution.
+- [ ] Oracle receipts prove native commit identity, clean tracked source, wrapper provenance, exact commands, and failed 0 skipped 0 for the claimed gate.
+- [ ] When a required real bus or timing observation is unavailable, the test fails at that first missing observation and does not substitute PeekBus, PC inference, fabricated data, or a modified native build.
 
 
 ## TEST-VSFLOCKSTEP
 
 ### TEST-VSFLOCKSTEP-001
 
-SnapshotResumeSpikeTests.ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot loads the supplied ready-c64sc-truedrive.vsf through the shim and asserts rc==0 and that the resumed MAINCPU registers equal the snapshot's MAINCPU module. Evidence: PASS (rc=0, snapshot_last_error=0, A=C2 X=02 Y=00 SP=FA PC=5769 both sides); ShimRoundTrip + SID parity 8/8; X64ScVariantLockstep 306 pass / 0 fail / 1 skip.
+The current focused external-x64sc VSF acceptance gate must load the committed hash-pinned ready-c64sc-truedrive.vsf through the pinned native shim, prove the complete 24-module container frames exactly to EOF, assert rc=0 and snapshot_last_error=0, and compare resumed MAINCPU registers to the MAINCPU module. Historical pass or skip counts are not evidence; this record remains pending until current zero-skip execution proof exists.
 
 **Acceptance Criteria:**
-- [ ] dotnet test ...TestHarness --filter ExternalX64ScVsf_FullyResumes => passed; rc=0, err=0, MAINCPU regs match.
+- [ ] The focused ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot gate runs without skipped prerequisites, loads the hash-pinned 24-module fixture through pinned x64sc with rc=0 and snapshot_last_error=0, and proves resumed A, X, Y, SP, and PC equal the MAINCPU module values.
+
+
+## TEST-X64SC-LOCKSTEP
+
+### TEST-X64SC-LOCKSTEP-001
+
+Every required x64sc model profile is validated against native x64sc for deterministic startup, BASIC prompt, keyboard input, disk attach/autostart, cartridge boot, and reset scenarios. Validation compares CPU registers, flags, cycle count, selected memory windows, CIA/VIC/SID observable register state, IRQ/NMI state, and frame/raster checkpoints. Missing ROMs, unavailable native x64sc binaries, unsupported variants, skipped variants, or stubbed checks fail the gate.
+
 
 
 ## TEST-XAUDIO

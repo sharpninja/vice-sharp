@@ -112,7 +112,27 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
     private byte _sdr;
     private byte _sdrShiftRegister;
     private int _sdrShiftCount;
+    private int _srBits;
+    private int _sdrShifter;
+    private bool _sdrPending;
+    private bool _sdrValid;
     private bool _sdrTransmitting;
+    private int _sdrInputEdges;
+    private byte _sdrInputShifter;
+
+    /// <summary>
+    /// FR-CIA-005. Level of the serial port pin after the last output shift.
+    /// The bit is the MSB that was shifted, held until the next shift.
+    /// </summary>
+    public bool SerialPortPin { get; private set; }
+
+    /// <summary>FR-CIA-005. SP input sampled on a rising CNT edge.</summary>
+    public bool SerialDataIn { get; set; }
+
+    /// <summary>
+    /// FR-CIA-005. True after an output shift has produced a CNT edge.
+    /// </summary>
+    public bool SerialClockPin { get; private set; }
     
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
@@ -160,6 +180,11 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
 
     public void Tick()
     {
+        // Input mode pulses CNT for one tick. Output mode holds the VICE
+        // cnt_out_state until the next serial half-cycle.
+        if ((_timerA.Control & 0x40) == 0)
+            SerialClockPin = false;
+
         if (_cyclesSinceIcrRead < 100)
             _cyclesSinceIcrRead++;
 
@@ -235,6 +260,15 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         _sdrShiftRegister = 0;
         _sdrShiftCount = 0;
         _sdrTransmitting = false;
+        _srBits = 0;
+        _sdrShifter = 0;
+        _sdrPending = false;
+        _sdrValid = false;
+        _sdrInputShifter = 0;
+        // VICE ciacore_reset sets sr_bits to 0. A leftover count latches
+        // the next input byte before eight new CNT edges.
+        _sdrInputEdges = 0;
+        SerialDataIn = false;
         _irqLine.Release(this);
     }
 
@@ -269,6 +303,222 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         _interruptFlags,
         _interruptMask);
 
+    /// <summary>
+    /// FR-SNP-003. Partial SP input that has not yet latched SDR.
+    /// VICE ciacore saves <c>sr_bits</c> and the shifter beside the CIA
+    /// registers. These fields stay off <see cref="CiaSnapshotState"/> so
+    /// the fixed v2 machine-snapshot payload does not grow.
+    /// </summary>
+    internal (byte Shifter, int Edges, bool DataIn) CaptureSerialInput()
+        => (_sdrInputShifter, _sdrInputEdges, SerialDataIn);
+
+    /// <summary>
+    /// Puts an unfinished input byte back after <see cref="InjectSnapshotState"/>.
+    /// Register writes do not rebuild the shifter. VICE snapshots
+    /// <c>sp_in_state</c> with the shifter. The held SP pin is sampled by
+    /// later CNT edges.
+    /// </summary>
+    internal void InjectSerialInput(byte shifter, int edges, bool dataIn)
+    {
+        _sdrInputShifter = shifter;
+        _sdrInputEdges = edges;
+        SerialDataIn = dataIn;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Timer start pipeline. VICE ciat_save_snapshot stores the
+    /// timer state word. These delays stay off <see cref="CiaSnapshotState"/>
+    /// so the fixed v2 payload does not grow. <see cref="InjectSnapshotState"/>
+    /// clears them; <see cref="InjectTimerPipeline"/> puts the captured
+    /// values back.
+    /// </summary>
+    internal (int LoadA, int CountA, int LoadB, int CountB) CaptureTimerPipeline()
+        => (_timerA.LoadDelay, _timerA.CountDelay, _timerB.LoadDelay, _timerB.CountDelay);
+
+    /// <summary>Restores the timer start pipeline after register injection.</summary>
+    internal void InjectTimerPipeline(int loadA, int countA, int loadB, int countB)
+    {
+        _timerA.LoadDelay = loadA;
+        _timerA.CountDelay = countA;
+        _timerB.LoadDelay = loadB;
+        _timerB.CountDelay = countB;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Live timer run flags. <see cref="InjectSnapshotState"/>
+    /// treats a one-shot Timer B whose counter equals its latch as stopped.
+    /// That matches a completed VSF one-shot. A force-load that has not
+    /// counted yet has the same register picture and is still running.
+    /// These flags stay off <see cref="CiaSnapshotState"/>.
+    /// </summary>
+    internal (bool RunA, bool RunB) CaptureTimerRunning() => (_timerA.Running, _timerB.Running);
+
+    /// <summary>Puts the live run flags back after the VSF one-shot heuristic.</summary>
+    internal void InjectTimerRunning(bool runA, bool runB)
+    {
+        _timerA.Running = runA;
+        _timerB.Running = runB;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Completed SDR. VICE ciacore saves CIA_SDR. A bus write
+    /// cannot restore it while character ROM is mapped over I/O, and
+    /// <see cref="CiaSnapshotState"/> does not carry the byte.
+    /// </summary>
+    internal byte CaptureSdr() => _sdr;
+
+    /// <summary>Puts a completed SDR byte back after register injection.</summary>
+    internal void InjectSdr(byte value)
+    {
+        _sdr = value;
+        _registers[0x0C] = value;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Time-of-day clock, alarm, latch, and the cycle count
+    /// toward the next tick. VICE ciacore saves these beside the CIA
+    /// registers. They stay off <see cref="CiaSnapshotState"/>. A bus write
+    /// cannot reach them while character ROM covers I/O.
+    /// </summary>
+    internal readonly struct TodReplayState
+    {
+        public byte Tenths { get; init; }
+        public byte Seconds { get; init; }
+        public byte Minutes { get; init; }
+        public byte Hours { get; init; }
+        public byte AlarmTenths { get; init; }
+        public byte AlarmSeconds { get; init; }
+        public byte AlarmMinutes { get; init; }
+        public byte AlarmHours { get; init; }
+        public bool Latched { get; init; }
+        public byte LatchedTenths { get; init; }
+        public byte LatchedSeconds { get; init; }
+        public byte LatchedMinutes { get; init; }
+        public byte LatchedHours { get; init; }
+        public int CycleCounter { get; init; }
+    }
+
+    /// <summary>Copies the TOD clock that <see cref="InjectTod"/> writes back.</summary>
+    internal TodReplayState CaptureTod() => new()
+    {
+        Tenths = _todTenths,
+        Seconds = _todSeconds,
+        Minutes = _todMinutes,
+        Hours = _todHours,
+        AlarmTenths = _todAlarmTenths,
+        AlarmSeconds = _todAlarmSeconds,
+        AlarmMinutes = _todAlarmMinutes,
+        AlarmHours = _todAlarmHours,
+        Latched = _todLatched,
+        LatchedTenths = _todLatchedTenths,
+        LatchedSeconds = _todLatchedSeconds,
+        LatchedMinutes = _todLatchedMinutes,
+        LatchedHours = _todLatchedHours,
+        CycleCounter = _todCycleCounter
+    };
+
+    /// <summary>Puts the TOD clock back after register injection.</summary>
+    internal void InjectTod(TodReplayState state)
+    {
+        _todTenths = state.Tenths;
+        _todSeconds = state.Seconds;
+        _todMinutes = state.Minutes;
+        _todHours = state.Hours;
+        _todAlarmTenths = state.AlarmTenths;
+        _todAlarmSeconds = state.AlarmSeconds;
+        _todAlarmMinutes = state.AlarmMinutes;
+        _todAlarmHours = state.AlarmHours;
+        _todLatched = state.Latched;
+        _todLatchedTenths = state.LatchedTenths;
+        _todLatchedSeconds = state.LatchedSeconds;
+        _todLatchedMinutes = state.LatchedMinutes;
+        _todLatchedHours = state.LatchedHours;
+        _todCycleCounter = state.CycleCounter;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. In-progress SP output shift. VICE ciacore saves the
+    /// shifter and the bit count. <see cref="InjectSnapshotState"/> does
+    /// not carry them, and a fresh CIA would start the byte over.
+    /// </summary>
+    internal readonly struct SerialOutputReplayState
+    {
+        public byte ShiftRegister { get; init; }
+        public int ShiftCount { get; init; }
+        public bool Transmitting { get; init; }
+        public bool PortPin { get; init; }
+        public bool ClockPin { get; init; }
+        public int SrBits { get; init; }
+        public int Shifter { get; init; }
+        public bool Pending { get; init; }
+        public bool Valid { get; init; }
+    }
+
+    /// <summary>Copies the output shift that <see cref="InjectSerialOutput"/> writes back.</summary>
+    internal SerialOutputReplayState CaptureSerialOutput() => new()
+    {
+        ShiftRegister = _sdrShiftRegister,
+        ShiftCount = _sdrShiftCount,
+        Transmitting = _sdrTransmitting,
+        PortPin = SerialPortPin,
+        ClockPin = SerialClockPin,
+        SrBits = _srBits,
+        Shifter = _sdrShifter,
+        Pending = _sdrPending,
+        Valid = _sdrValid
+    };
+
+    /// <summary>Continues an output byte that was mid-shift at capture.</summary>
+    internal void InjectSerialOutput(SerialOutputReplayState state)
+    {
+        _sdrShiftRegister = state.ShiftRegister;
+        _sdrShiftCount = state.ShiftCount;
+        _sdrTransmitting = state.Transmitting;
+        SerialPortPin = state.PortPin;
+        SerialClockPin = state.ClockPin;
+        _srBits = state.SrBits;
+        _sdrShifter = state.Shifter;
+        _sdrPending = state.Pending;
+        _sdrValid = state.Valid;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. CIA IRQ raise pipeline. Restoring the flag byte calls
+    /// RefreshIrqLine immediately, so these counters go back afterwards.
+    /// </summary>
+    internal readonly struct IrqPipelineReplayState
+    {
+        public int RaiseDelay { get; init; }
+        public int CyclesSinceIcrRead { get; init; }
+        public bool LineAsserted { get; init; }
+    }
+
+    /// <summary>Copies the IRQ raise delay and the cycles since the last ICR read.</summary>
+    internal IrqPipelineReplayState CaptureIrqPipeline() => new()
+    {
+        RaiseDelay = _irqLineRaiseDelay,
+        CyclesSinceIcrRead = _cyclesSinceIcrRead,
+        LineAsserted = _irqAsserted
+    };
+
+    /// <summary>
+    /// Puts the IRQ pipeline back after <see cref="InjectSnapshotState"/>.
+    /// A captured delay must not already be asserting the line.
+    /// </summary>
+    internal void InjectIrqPipeline(IrqPipelineReplayState state)
+    {
+        _irqLineRaiseDelay = state.RaiseDelay;
+        _cyclesSinceIcrRead = state.CyclesSinceIcrRead;
+        if (state.LineAsserted == _irqAsserted)
+            return;
+
+        _irqAsserted = state.LineAsserted;
+        if (state.LineAsserted)
+            _irqLine.Assert(this);
+        else
+            _irqLine.Release(this);
+    }
+
     internal void InjectSnapshotState(
         byte portA,
         byte portB,
@@ -299,10 +549,9 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         _timerB.Counter = timerBCounter;
         _timerB.Latch = timerBLatch;
         _timerB.Control = (byte)(crb & 0xEF);
-        // VICE leaves the readable CRB start bit set after a one-shot timer
-        // stops. When a snapshot carries the counter at its reload latch, that
-        // combination represents the completed/stopped state, not a running
-        // timer (Wolf64 menu VSF: TB remains $04FF).
+        // VICE ciacore_read returns (CRB & ~START) | running. A one-shot
+        // saved with the counter at its reload latch is stopped, so the
+        // readable START bit is clear (Wolf64 menu VSF: TB remains $04FF).
         var timerBOneShotStoppedAtLatch =
             (crb & 0x09) == 0x09 && timerBCounter == timerBLatch;
         _timerB.Running = (crb & 0x01) != 0 && !timerBOneShotStoppedAtLatch;
@@ -313,6 +562,12 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         _interruptFlags = (byte)(interruptFlags & 0x7F);
         _interruptMask = (byte)(irqMask & 0x7F);
         RefreshIrqLine();
+        // VICE ciacore_snapshot_read_module calls undump_ciapa with
+        // PRA | ~DDRA. The live write path uses the same pin value.
+        // Assigning the latches alone leaves the VIC bank at power-up
+        // when the $DD00 write was not replayed through the bus.
+        PortAOutputChanged?.Invoke(ComposePortPins(_portA, _portADir));
+        PortBOutputChanged?.Invoke(ComposePortPins(_portB, _portBDir));
     }
 
     public byte Peek(ushort address)
@@ -336,6 +591,8 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
             0x0B => _todLatched ? _todLatchedHours : _todHours,
             0x0C => _sdr,
             0x0D => (byte)(_interruptFlags | (((_interruptFlags & _interruptMask) != 0) ? 0x80 : 0x00)),
+            0x0E => ReadControl(_timerA.Control, _timerA.Running),
+            0x0F => ReadControl(_timerB.Control, _timerB.Running),
             _ => _registers[register]
         };
     }
@@ -359,9 +616,15 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
             0x0B => ReadTodHours(),
             0x0C => _sdr,
             0x0D => ReadInterruptControlRegister(),
+            // VICE ciacore.c CIA_CRA and CIA_CRB: (c_cia & ~CIA_CR_START) | running.
+            0x0E => ReadControl(_timerA.Control, _timerA.Running),
+            0x0F => ReadControl(_timerB.Control, _timerB.Running),
             _ => _registers[register]
         };
     }
+
+    private static byte ReadControl(byte control, bool running)
+        => (byte)((control & 0xFE) | (running ? 1 : 0));
 
     private byte ReadTodTenths()
     {
@@ -407,9 +670,24 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
             case 0x0E:
                 {
                     var wasRunning = _timerA.Running;
+                    var wasOutput = (_timerA.Control & 0x40) != 0;
                     _timerA.Control = (byte)(value & 0xEF);
                     _registers[register] = _timerA.Control;
                     _timerA.Running = (value & 0x01) != 0;
+                    var nowOutput = (_timerA.Control & 0x40) != 0;
+                    if (wasOutput != nowOutput)
+                    {
+                        // VICE clears the shifter when SP mode changes and
+                        // drives CNT high on the switch into output mode.
+                        _srBits = 0;
+                        _sdrShifter = 0;
+                        _sdrPending = false;
+                        _sdrValid = false;
+                        _sdrTransmitting = false;
+                        if (nowOutput)
+                            SerialClockPin = true;
+                    }
+
                     ScheduleControlPipeline(ref _timerA, value, wasRunning);
                     break;
                 }
@@ -435,12 +713,24 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
             case 0x09: WriteTodOrAlarm(ref _todSeconds, ref _todAlarmSeconds, value); break;
             case 0x08: WriteTodOrAlarm(ref _todTenths, ref _todAlarmTenths, value); break;
 
-            // SDR ($DC0C): writes update the SDR latch. On a real 6526
-            // writing during an active shift queues the next byte; the
-            // current shift continues to completion. We model that by
-            // always updating _sdr; a fresh shift starts when the next
-            // Timer A underflow finds _sdrShiftCount == 0.
-            case 0x0C: _sdr = value; break;
+            // SDR ($DC0C): VICE stores the byte. A write while output mode
+            // is idle sets sdr_valid-equivalent pending. A write during a
+            // byte queues the next byte. A write before CRA bit 6 turns on
+            // is cleared by the mode switch and does not arm a transfer.
+            case 0x0C:
+                _sdr = value;
+                _registers[0x0C] = value;
+                if ((_timerA.Control & 0x40) != 0)
+                {
+                    // A write while idle arms the next 16 half-cycles.
+                    // A write during a byte is the buffered next byte.
+                    if (_srBits == 0)
+                        _sdrPending = true;
+                    else
+                        _sdrValid = true;
+                }
+
+                break;
                 
             // Ports
             case 0x00:
@@ -573,38 +863,56 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
 
         SetInterruptFlag(0x01);
 
-        // FR-CIA-SDR: in SP output mode (CRA bit 6 = 1) each Timer A
-        // underflow shifts one bit out. After 8 bits ICR bit 3 latches.
-        // CRA bit 6 = 0 selects input direction; the shift is then
-        // driven by the CNT pin (not plumbed in this slice).
+        // VICE ciacore_intta: output mode (CRA bit 6) advances one
+        // half-cycle per Timer A underflow. Input mode is CNT-driven.
         if ((_timerA.Control & 0x40) != 0)
-            ShiftSerialDataOutputBit();
+            AdvanceSerialOutput();
     }
 
-    private void ShiftSerialDataOutputBit()
+    private void AdvanceSerialOutput()
     {
-        if (!_sdrTransmitting)
+        // VICE ciacore_intta schedules a half-cycle only when a byte is
+        // in progress or a fresh SDR write is waiting. An idle shifter
+        // does not start another copy of the same byte.
+        if (_srBits == 0)
         {
-            // Latch the SDR contents into the working shift register at
-            // the start of a new byte. Writes to $DC0C during the shift
-            // update _sdr but do not disturb the in-flight byte.
-            _sdrShiftRegister = _sdr;
+            if (!_sdrPending && !_sdrValid)
+                return;
+
+            _srBits = 16;
+            _sdrShifter = _sdr << 1;
+            _sdrPending = false;
+            _sdrValid = false;
             _sdrTransmitting = true;
-            _sdrShiftCount = 0;
         }
 
-        // Shift one bit out of the working register. Real 6526 outputs
-        // MSB first on the SP pin; we drop the bit on the floor because
-        // SP is not wired to peripherals in this slice.
-        _sdrShiftRegister = (byte)(_sdrShiftRegister << 1);
-        _sdrShiftCount++;
-
-        if (_sdrShiftCount >= 8)
+        if ((_srBits & 1) == 0)
         {
-            _sdrShiftCount = 0;
-            _sdrTransmitting = false;
-            // ICR bit 3 = SP / SDR interrupt source.
-            SetInterruptFlag(0x08);
+            // Even count before the decrement: this phase drives CNT low
+            // and emits the bit just left of the byte.
+            _srBits--;
+            SerialPortPin = ((_sdrShifter >> 8) & 1) != 0;
+            SerialClockPin = false;
+            _sdrShiftRegister = (byte)(_sdrShifter & 0xFF);
+            if (_srBits == 1)
+            {
+                SetInterruptFlag(0x08);
+                if (_sdrValid)
+                {
+                    _sdrShifter |= _sdr;
+                    _sdrValid = false;
+                    _srBits = 17;
+                }
+            }
+        }
+        else
+        {
+            _srBits--;
+            _sdrShifter = (_sdrShifter << 1) & 0xFFFF;
+            SerialClockPin = true;
+            _sdrShiftRegister = (byte)(_sdrShifter & 0xFF);
+            if (_srBits == 0)
+                _sdrTransmitting = false;
         }
     }
 
@@ -616,6 +924,28 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
     /// Surfaces only the generic pin-edge contract so board-level glue can
     /// drive the latch.
     /// </summary>
+    /// <summary>
+    /// FR-CIA-005. One external CNT edge. In input mode (CRA bit 6 clear)
+    /// eight edges latch ICR bit 3. Output mode clocks from Timer A, so an
+    /// external edge does not shift.
+    /// </summary>
+    public void TriggerCntEdge()
+    {
+        if ((_timerA.Control & 0x40) != 0)
+            return;
+
+        // VICE ciacore_set_cnt samples SP on the rising edge and shifts it in.
+        _sdrInputShifter = (byte)((_sdrInputShifter << 1) | (SerialDataIn ? 1 : 0));
+        _sdrInputEdges++;
+        if (_sdrInputEdges < 8)
+            return;
+
+        _sdr = _sdrInputShifter;
+        _sdrInputEdges = 0;
+        _sdrInputShifter = 0;
+        SetInterruptFlag(0x08);
+    }
+
     public void TriggerFlagPin()
     {
         // ICR bit 4 = FLG interrupt source. SetInterruptFlag latches the

@@ -1,0 +1,190 @@
+{
+  "requestId": "req-20261008T184031Z-prompt-336a",
+  "timestamp": "2026-10-08T18:40:31.0000000+00:00",
+  "queryText": "Correct interrupted HV evidence and chronology. Continue the entire original ViceSharp goal: 100% completion of C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md with HV agree. Previous turn made concrete progress: F-10 shared fixtures/assertion seams, all 336 native-safe tests passed, source preservation proven. Current turn addresses existing draft F-04/F-05/F-06/F-11 evidence documentation, and supported corrective decision logging for F-14 if available. Do not fabricate historical evidence, modify native/vice or advance unaccepted implementation gates.",
+  "queryTitle": "Correct interrupted HV evidence and chronology",
+  "response": "Actions appended.",
+  "interpretation": "Previous goal turn made concrete progress, not a wait/no-progress turn. Continue full original plan through evidence remediations F-04/F-05/F-06/F-11 and traceable current corrective logging for F-14, preserving original evidence and historical records. No real implementation gate advances without accepted HV.",
+  "status": "in_progress",
+  "actions": [
+    {
+      "order": 1,
+      "description": "Evidence corrections are based on current readback, not reconstructed logs. Preserve originals before documentation/comment-only edits. Current corrective records carry eleven historical decisions with exact source linkage, leaving four completed source turns unchanged. Cannot restore unretained historical helper bytes or claim past compliance. Do not change diagnostic runtime behavior or advance any gate.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-evidence-readback.json"
+    },
+    {
+      "order": 2,
+      "description": "Corrective record added 2026-10-08T13:44:55-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T135637Z-prompt-5be7 at 2026-10-08T14:11:49.7482326+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nNative runtime proof stays distinct from successful stock build and byte-adapter units. First startup ROM failure was my incorrect search root: sysfile.c appends the machine subpath. Corrected to vice/data. Reset-boundary xvic save/step exited0, but load stalled and was terminated after retained observation. x64sc save/load exited0 but full post-resume VSF bytes differ and SID was not initialized under +sound. Neither is parity acceptance. Next independent probe uses BASIC-ready checkpoint and initialized dummy sound. Preserve all failed attempts and do not modify native source or waive reset-boundary coverage.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 3,
+      "description": "Corrective record added 2026-10-08T13:45:01-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T135637Z-prompt-5be7 at 2026-10-08T14:20:10.5918484+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nDecision: retain stock native snapshot differences as unresolved evidence and require explicit binary-monitor result acknowledgement before a fail-closed snapshot gate. Reason: mon_parse.y discards undump return status; same CPU registers cannot establish full-device equivalence. Consequence: TR-VSFLOCKSTEP-RESUME-001 remains pending, Phase2/whole goal remain active, no native edits or comparator weakening. Rejected alternatives: count process exit0 as success, ignore VIA/SID/drive differences, or infer half-cycle bus events from instruction steps. Noon Opus catch-up includes every runtime probe and failure. Affected files: HANDOFF.md, PLAN-VICE-IMMUTABLE-001.md and stock-runtime receipts.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 4,
+      "description": "Corrective record added 2026-10-08T13:45:06-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T142219Z-prompt-bc0b at 2026-10-08T14:32:18.6494631+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nChoose a small dependency-free API2 packet encoder/exact stream reader/acknowledgement guard in the existing external compatibility library. This follows approved Phase2 public-interface-first order; no native edits, no filesystem behavior, no new requirement. One-MiB body cap is an explicit fail-closed resource bound, reserved0xffffffff belongs only to native events. Keep nonzero native error packets as data and require matching request/type/length plus error0 before success. Detailed seam and fixtures documented before implementation in BINARY-MONITOR-SLICE.md. Mocks now green, so bind identical cases to production next under noon HV waiver.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 5,
+      "description": "Corrective record added 2026-10-08T13:45:11-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T142219Z-prompt-bc0b at 2026-10-08T15:00:17.0596783+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nRetain actual immutable VICE snapshot behavior as the target. VIA CABSTATE writer masks80,40,40,20,20 differ from reader masks80,40,20,10,08 and directly explain the observed e0-to-c0 and60-to40 re-encodings. Do not patch native or suppress differences. SID/drive field mappings are source-backed candidates, not proven runtime causes. Whole-file native self-roundtrip equality is diagnostic, not a new requirement; actual wrapper byte-preservation requirements and real lockstep gates remain unchanged. Consequence: continue external observability proof, no completion or comparator weakening.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 6,
+      "description": "Corrective record added 2026-10-08T13:45:16-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T142219Z-prompt-bc0b at 2026-10-08T15:03:50.7242289+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nApproved Phase2 external-process-control diagnostic: use installed local CDB with a hardware write watchpoint on stock xvic maincpu_clk, RVA0x262a10 from nm and ImageBase0x140000000, bound to executable C01442... Native CLK_INC increments clock then calls vic_cycle. Capture12 stops and instruction pointers, then quit only the launched probe. Symbol search is local-only. No native source edits, software emulator breakpoints, emulated memory/register writes, native cleanup or production integration. This proves only observed stopping boundaries, not bus reconstruction, deterministic replay or parity.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 7,
+      "description": "Corrective record added 2026-10-08T13:45:21-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T142219Z-prompt-bc0b at 2026-10-08T15:13:25.5371506+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nTwo failed local hardware-breakpoint diagnostics are retained failures, not evidence that every allowed external mechanism is infeasible. Do not add software emulator breakpoints or modify native to manufacture success. Source inspection identifies vic_cycle as an existing cycle callback and shows memory-table-only interception misses fast opcode fetches. Consequence: next approved work must investigate external debugger setup or external link/function-table interposition with fail-closed actual-observation coverage, and cannot claim cycle control or bus parity from existing instruction/packet evidence. All deferred successes and failures remain in noon Opus HV scope.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 8,
+      "description": "Corrective record added 2026-10-08T13:45:26-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T151514Z-prompt-9817 at 2026-10-08T15:27:11.4015201+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nProceed to approved external link-time interposition feasibility after public-interface limits and failed CDB diagnostics. Lock a minimal transparent vic_cycle wrapper: forward to real vic_cycle exactly once, then notify external observer with actual maincpu_clk, preserving native side effects. No bus values inferred and no full-cycle/parity claim. Validate shared assertions against correct and wrong mocks before wrapper C code; then bind the same cases to a compiled standalone C link-wrap fixture, with no VICE build or source writes. Empty sequence,zero,unchanged/changed native clock,nonmonotonic values and UInt64 boundaries must preserve order and actual after-call state. Only after cumulative green attempt link against stock artifacts in an external output directory. No requirement change or phase completion.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 9,
+      "description": "Corrective record added 2026-10-08T13:45:31-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T151514Z-prompt-9817 at 2026-10-08T15:53:14.4276570+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nExternal clock callback is a viable narrowly proven observation seam. Preserve every clock event including reset-like reversal; do not infer a reset epoch or reconstruct bus data. Stock limitcycles instruction-boundary exit is not cycle-boundary pause/resume. Continue wrapper-only feasibility under existing approved Phase2, with native and stock source immutable, and catch up all deferred work with Opus at noon before phase advancement.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 10,
+      "description": "Corrective record added 2026-10-08T13:45:36-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T151514Z-prompt-9817 at 2026-10-08T16:00:36.2266006+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\n2026-10-08T10:58:01-05:00 decision recorded before gate implementation in NativeClockProbe GATE-SLICE.md. A pure external gate publishes the actual uint64 clock, flushes, then reads exactly one command; only ASCII c returns permission, q/EOF/errors/invalid inputs stop. All missing dependencies validated before side effects. Fail-closed return codes 64-70 are fixed by literal independent fixtures. Same assertions will bind compiled C then actual host pipe. This proves only callback permission/control, not bus capture or freeze of all devices. Requirements effective local Layer1 FR-VICE-001/TR-VICE-ORACLE-001/TEST-VICE-001 remain pending with all AC false.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 11,
+      "description": "Corrective record added 2026-10-08T13:45:41-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T161608Z-prompt-c06c at 2026-10-08T16:47:50.1843546+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nPost-initialization external hardware debug attachment is now an observed viable diagnostic seam for original stock xvic. Startup hardware-breakpoint failures are not root-caused and are not evidence all hardware observation is infeasible. Actual host operand/load-result registers and store arguments are admissible raw evidence; do not invent bus bytes from emulated-PC peeks or expand a packed host load into fabricated per-cycle byte events. Complete regular/dummy read/write, interrupt and stolen-cycle observation plus alignment still required. All acceptance gates remain open pending noon Opus catch-up.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    },
+    {
+      "order": 12,
+      "description": "Corrective record added 2026-10-08T13:45:46-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T161608Z-prompt-c06c at 2026-10-08T17:15:37.7016194+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nThe noon timing waiver has ended. Freeze reviewed implementation inputs and keep the already-running same-session Opus review uncapped. Review completion is monitored in this same local chat; ordinary queued progress is not a blocker or acceptance. No further phase advancement until whole catch-up verdict has been read and persisted. Exact unresolved observation surfaces remain explicit; do not reinterpret diagnostic counts as complete bus/parity proof.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\historical-decision-readback-before.json"
+    }
+  ],
+  "model": "codex",
+  "modelProvider": null,
+  "tokenCount": 0,
+  "tags": null,
+  "contextList": [
+    "docs/receipts/hv/20261008-noon-catchup-opus.resume-02.terminal-summary.md",
+    "docs/receipts/native-vice/20261008T082100-0500-phase2-feasibility/gate-runtime/README.md",
+    "docs/receipts/native-vice/20261008T082100-0500-phase2-feasibility/README.md"
+  ],
+  "failureNote": null,
+  "score": null,
+  "isPremium": null,
+  "rawContext": null,
+  "originalEntry": null,
+  "processingDialog": [
+    {
+      "timestamp": "2026-10-08T18:44:52.4680809+00:00",
+      "role": "model",
+      "content": "Correct F-04/F-05/F-06 evidence descriptions from live receipt readback; retain all pre-edit documentation and raw evidence. Seven native stdout files are empty, reset lines correlate with clock reversal but do not prove cause, and binary-mock-01 belongs in the chronology with 125/125 before 13 added cases. F-11 historical helper preimage cannot be recreated; disclose missing proof and preserve current/future sources and every compiler log. F-14 source turns are completed and immutable under supported workflow, so append explicitly current corrective action/dialog records carrying exact original decisions and source linkage, never backdate or silently rewrite historical turns. This is local evidence remediation, not HV acceptance or phase advancement.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:44:57.8108130+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:44:55-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T135637Z-prompt-5be7 at 2026-10-08T14:11:49.7482326+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nNative runtime proof stays distinct from successful stock build and byte-adapter units. First startup ROM failure was my incorrect search root: sysfile.c appends the machine subpath. Corrected to vice/data. Reset-boundary xvic save/step exited0, but load stalled and was terminated after retained observation. x64sc save/load exited0 but full post-resume VSF bytes differ and SID was not initialized under +sound. Neither is parity acceptance. Next independent probe uses BASIC-ready checkpoint and initialized dummy sound. Preserve all failed attempts and do not modify native source or waive reset-boundary coverage.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:02.9034483+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:01-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T135637Z-prompt-5be7 at 2026-10-08T14:20:10.5918484+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nDecision: retain stock native snapshot differences as unresolved evidence and require explicit binary-monitor result acknowledgement before a fail-closed snapshot gate. Reason: mon_parse.y discards undump return status; same CPU registers cannot establish full-device equivalence. Consequence: TR-VSFLOCKSTEP-RESUME-001 remains pending, Phase2/whole goal remain active, no native edits or comparator weakening. Rejected alternatives: count process exit0 as success, ignore VIA/SID/drive differences, or infer half-cycle bus events from instruction steps. Noon Opus catch-up includes every runtime probe and failure. Affected files: HANDOFF.md, PLAN-VICE-IMMUTABLE-001.md and stock-runtime receipts.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:07.9627664+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:06-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T142219Z-prompt-bc0b at 2026-10-08T14:32:18.6494631+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nChoose a small dependency-free API2 packet encoder/exact stream reader/acknowledgement guard in the existing external compatibility library. This follows approved Phase2 public-interface-first order; no native edits, no filesystem behavior, no new requirement. One-MiB body cap is an explicit fail-closed resource bound, reserved0xffffffff belongs only to native events. Keep nonzero native error packets as data and require matching request/type/length plus error0 before success. Detailed seam and fixtures documented before implementation in BINARY-MONITOR-SLICE.md. Mocks now green, so bind identical cases to production next under noon HV waiver.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:13.1030841+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:11-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T142219Z-prompt-bc0b at 2026-10-08T15:00:17.0596783+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nRetain actual immutable VICE snapshot behavior as the target. VIA CABSTATE writer masks80,40,40,20,20 differ from reader masks80,40,20,10,08 and directly explain the observed e0-to-c0 and60-to40 re-encodings. Do not patch native or suppress differences. SID/drive field mappings are source-backed candidates, not proven runtime causes. Whole-file native self-roundtrip equality is diagnostic, not a new requirement; actual wrapper byte-preservation requirements and real lockstep gates remain unchanged. Consequence: continue external observability proof, no completion or comparator weakening.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:18.2011035+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:16-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T142219Z-prompt-bc0b at 2026-10-08T15:03:50.7242289+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nApproved Phase2 external-process-control diagnostic: use installed local CDB with a hardware write watchpoint on stock xvic maincpu_clk, RVA0x262a10 from nm and ImageBase0x140000000, bound to executable C01442... Native CLK_INC increments clock then calls vic_cycle. Capture12 stops and instruction pointers, then quit only the launched probe. Symbol search is local-only. No native source edits, software emulator breakpoints, emulated memory/register writes, native cleanup or production integration. This proves only observed stopping boundaries, not bus reconstruction, deterministic replay or parity.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:23.2860006+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:21-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T142219Z-prompt-bc0b at 2026-10-08T15:13:25.5371506+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nTwo failed local hardware-breakpoint diagnostics are retained failures, not evidence that every allowed external mechanism is infeasible. Do not add software emulator breakpoints or modify native to manufacture success. Source inspection identifies vic_cycle as an existing cycle callback and shows memory-table-only interception misses fast opcode fetches. Consequence: next approved work must investigate external debugger setup or external link/function-table interposition with fail-closed actual-observation coverage, and cannot claim cycle control or bus parity from existing instruction/packet evidence. All deferred successes and failures remain in noon Opus HV scope.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:28.4341511+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:26-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T151514Z-prompt-9817 at 2026-10-08T15:27:11.4015201+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nProceed to approved external link-time interposition feasibility after public-interface limits and failed CDB diagnostics. Lock a minimal transparent vic_cycle wrapper: forward to real vic_cycle exactly once, then notify external observer with actual maincpu_clk, preserving native side effects. No bus values inferred and no full-cycle/parity claim. Validate shared assertions against correct and wrong mocks before wrapper C code; then bind the same cases to a compiled standalone C link-wrap fixture, with no VICE build or source writes. Empty sequence,zero,unchanged/changed native clock,nonmonotonic values and UInt64 boundaries must preserve order and actual after-call state. Only after cumulative green attempt link against stock artifacts in an external output directory. No requirement change or phase completion.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:33.6154915+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:31-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T151514Z-prompt-9817 at 2026-10-08T15:53:14.4276570+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nExternal clock callback is a viable narrowly proven observation seam. Preserve every clock event including reset-like reversal; do not infer a reset epoch or reconstruct bus data. Stock limitcycles instruction-boundary exit is not cycle-boundary pause/resume. Continue wrapper-only feasibility under existing approved Phase2, with native and stock source immutable, and catch up all deferred work with Opus at noon before phase advancement.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:38.6848351+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:36-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T151514Z-prompt-9817 at 2026-10-08T16:00:36.2266006+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\n2026-10-08T10:58:01-05:00 decision recorded before gate implementation in NativeClockProbe GATE-SLICE.md. A pure external gate publishes the actual uint64 clock, flushes, then reads exactly one command; only ASCII c returns permission, q/EOF/errors/invalid inputs stop. All missing dependencies validated before side effects. Fail-closed return codes 64-70 are fixed by literal independent fixtures. Same assertions will bind compiled C then actual host pipe. This proves only callback permission/control, not bus capture or freeze of all devices. Requirements effective local Layer1 FR-VICE-001/TR-VICE-ORACLE-001/TEST-VICE-001 remain pending with all AC false.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:43.7811266+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:41-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T161608Z-prompt-c06c at 2026-10-08T16:47:50.1843546+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nPost-initialization external hardware debug attachment is now an observed viable diagnostic seam for original stock xvic. Startup hardware-breakpoint failures are not root-caused and are not evidence all hardware observation is infeasible. Actual host operand/load-result registers and store arguments are admissible raw evidence; do not invent bus bytes from emulated-PC peeks or expand a packed host load into fabricated per-cycle byte events. Complete regular/dummy read/write, interrupt and stolen-cycle observation plus alignment still required. All acceptance gates remain open pending noon Opus catch-up.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T18:45:48.8359806+00:00",
+      "role": "model",
+      "content": "Corrective record added 2026-10-08T13:45:46-05:00. Original decision from Codex-20261007T135626Z-plugin-session / req-20261008T161608Z-prompt-c06c at 2026-10-08T17:15:37.7016194+00:00. The historical completed turn was not modified; this does not assert retroactive compliance. Exact original decision follows:\nThe noon timing waiver has ended. Freeze reviewed implementation inputs and keep the already-running same-session Opus review uncapped. Review completion is monitored in this same local chat; ordinary queued progress is not a blocker or acceptance. No further phase advancement until whole catch-up verdict has been read and persisted. Exact unresolved observation surfaces remain explicit; do not reinterpret diagnostic counts as complete bus/parity proof.",
+      "category": "decision"
+    }
+  ],
+  "commits": null,
+  "designDecisions": null,
+  "requirementsDiscovered": null,
+  "filesModified": null,
+  "blockers": null,
+  "planFile": "None",
+  "todoId": "None"
+}

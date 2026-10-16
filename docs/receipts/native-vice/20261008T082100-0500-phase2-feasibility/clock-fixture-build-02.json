@@ -1,0 +1,22 @@
+{
+  "timestampLocal": "2026-10-08T10:33:10.2290082-05:00",
+  "exitCode": 0,
+  "compiler": "C:\\msys64\\mingw64\\bin\\gcc.exe",
+  "arguments": [
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-O0",
+    "-g",
+    "-Wl,--wrap=vic_cycle",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\clock-driver.c",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\native-cycle-double.c",
+    "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-observer.c",
+    "-o",
+    "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\clock-fixture.exe"
+  ],
+  "environment": "Child PATH prepends C:\\msys64\\mingw64\\bin; parent PATH unchanged",
+  "output": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\clock-fixture.exe",
+  "binaryHash": "AB09A9F026F629CD90055B7D61C78951ADBCA1AE2A5B5426127BAD4B41382F86"
+}

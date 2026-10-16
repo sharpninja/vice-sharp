@@ -1,0 +1,21 @@
+{
+  "groupId": "triage-group-1506db9162904d87",
+  "status": "collecting",
+  "reportCount": 1,
+  "workspacePath": "F:\\GitHub\\McpServer",
+  "title": "Requirement getTr returns read-time createdAt and updatedAt",
+  "summary": "Observed during ViceSharp immutable-VICE recovery, not its implementation target. Two consecutive supported workflow.requirements.getTr reads for TR-VSFLOCKSTEP-RESUME-001 without intervening mutation returned createdAt/updatedAt 2026-10-07T15:08:55.2011952+00:00 / 15:08:55.2013413, then 15:08:58.0418020 / 15:08:58.0419094. Description, status Pending and ACs were unchanged. Independent Grok review observed the same earlier. These response timestamps cannot establish durable creation/update time. Expected: persisted audit timestamps stay stable across pure reads, or unavailable timestamps are explicitly absent, never fabricated from the read clock. Determine whether DTO mapping or persistence is responsible; no server source edits made here. Acceptance: consecutive read regression proves unchanged persisted timestamps and no state mutation, including legacy records missing timestamp data. Local receipt docs/receipts/native-vice/20261007T092700-0500-phase0-primary-recovery/requirement-read-timestamp-drift.json. Workspace F:\\GitHub\\vice-sharp. Caller Codex-20261007T135626Z-plugin-session / req-20261007T145139Z-turn-a956. Codex plugin1.118.0; Grok plugin1.119.0 independently observed same. Separate transient verification invocation returned wrapper exit1/False at10:06 local; full bootstrap later True and retry succeeded, cause unconfirmed.",
+  "quietDeadlineUtc": "2026-10-07T10:36:31.8120222-05:00",
+  "reports": [
+    {
+      "reportId": "triage-report-9015f95eff514dc396825e180ce514f4",
+      "groupId": "triage-group-1506db9162904d87",
+      "status": "grouped",
+      "title": "Requirement getTr returns read-time createdAt and updatedAt",
+      "summary": "Observed during ViceSharp immutable-VICE recovery, not its implementation target. Two consecutive supported workflow.requirements.getTr reads for TR-VSFLOCKSTEP-RESUME-001 without intervening mutation returned createdAt/updatedAt 2026-10-07T15:08:55.2011952+00:00 / 15:08:55.2013413, then 15:08:58.0418020 / 15:08:58.0419094. Description, status Pending and ACs were unchanged. Independent Grok review observed the same earlier. These response timestamps cannot establish durable creation/update time. Expected: persisted audit timestamps stay stable across pure reads, or unavailable timestamps are explicitly absent, never fabricated from the read clock. Determine whether DTO mapping or persistence is responsible; no server source edits made here. Acceptance: consecutive read regression proves unchanged persisted timestamps and no state mutation, including legacy records missing timestamp data. Local receipt docs/receipts/native-vice/20261007T092700-0500-phase0-primary-recovery/requirement-read-timestamp-drift.json. Workspace F:\\GitHub\\vice-sharp. Caller Codex-20261007T135626Z-plugin-session / req-20261007T145139Z-turn-a956. Codex plugin1.118.0; Grok plugin1.119.0 independently observed same. Separate transient verification invocation returned wrapper exit1/False at10:06 local; full bootstrap later True and retry succeeded, cause unconfirmed.",
+      "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+      "workspacePath": "F:\\GitHub\\McpServer",
+      "createdUtc": "2026-10-07T10:21:31.8120222-05:00"
+    }
+  ]
+}

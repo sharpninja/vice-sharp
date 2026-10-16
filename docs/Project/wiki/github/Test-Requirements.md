@@ -243,6 +243,61 @@ Save/load, deterministic replay, and state diff behavior are verified through ro
 
 ---
 
+## TEST-SNP-002: Native VICE Snapshot Compatibility Gates
+
+**ID:** TEST-SNP-002
+**Title:** Native VICE Snapshot Compatibility Gates
+**Priority:** P0 -- Critical
+**Status:** Pending
+
+### Condition
+
+Native VICE `.vsf` is proven as the canonical ViceSharp snapshot format against the pinned x64sc and xvic implementations. The gate exercises every default public and desktop snapshot entry point plus the production managed-state bridge and host path, while the native shim invokes the pinned VICE implementation to read and write version-specific VSF modules and serves as the independent behavioral oracle.
+
+### Acceptance Criteria
+
+1. Load mandatory x64sc and xvic `.vsf` fixtures through the managed production path and compare every supported module field with the native VICE oracle.
+2. Save C64 and VIC-20 state from ViceSharp as `.vsf`, load the files in x64sc and xvic, and prove matching represented state.
+3. Run both VICE-to-ViceSharp-to-VICE and ViceSharp-to-VICE-to-ViceSharp round trips and prove all supported module fields survive.
+4. From each restored C64 and VIC-20 checkpoint, run at least 100,000 cycles in lockstep and fail at the first CPU, bus, video, timer, interrupt, or mapped-memory divergence.
+5. Accept both pinned-reader-compatible 58-byte current and 37-byte legacy VICE headers; walk 22-byte module headers with little-endian inclusive total lengths to exact EOF; and reject wrong-machine identity, unsupported container or mandatory-module version, manifest-invalid, missing, or duplicate mandatory modules, truncated framing, invalid/overflowing lengths, trailing bytes, and byte corruption that violates structural invariants or makes native VICE read fail, without partial visible mutation. Do not claim arbitrary payload bit-flip detection because VSF has no general payload checksum.
+6. Treat both native shims, the pinned VICE commit, the exact MSYS2 MINGW64 tool paths, the exact ROM-hash allowlist, and the fixture/state-transfer manifests as mandatory prerequisites. Missing or stale prerequisites fail the `Category=NativeViceSnapshot` gate with zero skipped tests.
+7. Verify `CaptureSnapshot`, Avalonia `.vsf` file save/load, quick save/load, and ten named slots emit and consume native VICE `.vsf` by default; an unsupported host returns unavailable without fallback. The generated protobuf `ImportLegacySnapshot` operation alone accepts the two existing proprietary snapshot formats, normal `RestoreSnapshotAsync` rejects them with a migration error, and no capture path emits them. UWP/Xbox implementation is not changed or claimed complete.
+8. Build and inspect the local `win-x64` publish and MSI for both shims, the recursively verified loose PE dependency closure staged after publish and before WiX, and VICE license/source-offer files with no bundled ROMs; install that MSI locally and pass default C64 and VIC-20 native-VSF capture/restore smoke tests from the installed application.
+
+### Traceability
+
+- **Related Functional Requirement:** FR-SNP-005
+- **Related Technical Requirement:** TR-LOCKSTEP-VSF-001
+- **Recovered Legacy Coverage:** FR-VSFLOCKSTEP-001, TR-VSFLOCKSTEP-RESUME-001, TEST-VSFLOCKSTEP-001
+- **Plan:** `docs/plans/PLAN-VSFLOCKSTEP-001.md`
+- **Gate 0 local evidence:** `docs/receipts/hv/20261003T100623-0500-vsf-gate0-local-evidence.md`
+
+---
+
+## TEST-VSFLOCKSTEP-001: External x64sc VSF Full-Resume Acceptance
+
+**ID:** TEST-VSFLOCKSTEP-001
+**Title:** External x64sc `.vsf` full-resume acceptance
+**Priority:** P1 -- High
+**Status:** Pending
+**Scope Layer:** `layer-1`
+
+### Condition
+
+The current focused external-x64sc VSF gate loads the committed hash-pinned `ready-c64sc-truedrive.vsf` through the pinned native shim, proves the complete 24-module container frames exactly to EOF, asserts `rc=0` and `snapshot_last_error=0`, and compares the resumed `MAINCPU` registers to the module values. Historical pass or skip counts are not evidence.
+
+### Acceptance Criteria
+
+1. `ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot` runs without skipped prerequisites, loads the hash-pinned 24-module fixture through pinned x64sc with `rc=0` and `snapshot_last_error=0`, and proves resumed A, X, Y, SP, and PC equal the `MAINCPU` module values.
+
+### Traceability
+
+- **Functional Requirements:** FR-VSFLOCKSTEP-001, FR-SNP-005
+- **Technical Requirements:** TR-VSFLOCKSTEP-RESUME-001, TR-LOCKSTEP-VSF-001
+
+---
+
 ## TEST-PRF-001: Machine Profile Tests
 
 **ID:** TEST-PRF-001

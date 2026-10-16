@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "github",
-  "generatedAtUtc": "2026-09-10T23:30:12.0399041+00:00",
+  "generatedAtUtc": "2026-10-09T19:08:28.0401113+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -37,6 +37,8 @@
     "FR-VIC20.md",
     "TR-VIC20.md",
     "TR-RomM-Security.md",
-    "TR-Host-Prg.md"
+    "TR-Host-Prg.md",
+    "Plan-Immutable-Native-VICE.md",
+    "Plan-Native-VICE-VSF-Lockstep.md"
   ]
 }

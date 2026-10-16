@@ -1047,4 +1047,133 @@ internal sealed class PixelSequencer
                 RenderBuffer[7] = ColD020;
         }
     }
+
+    /// <summary>
+    /// FR-SNP-003. Draw-cycle state VICE saves in vicii_draw_cycle_snapshot
+    /// plus the line buffer (vicii.dbuf). Not part of the serialized machine image.
+    /// </summary>
+    internal sealed class DrawReplay
+    {
+        public byte[] LineIndices { get; } = new byte[65 * 8];
+        public byte[] LinePriority { get; } = new byte[65 * 8];
+        public byte[] Cregs { get; } = new byte[0x2F];
+        public byte[] PixelBuffer { get; } = new byte[8];
+        public byte[] RenderBuffer { get; } = new byte[8];
+        public byte[] PriBuffer { get; } = new byte[8];
+        public int[] SpriteXPipe { get; } = new int[8];
+        public uint[] SbufReg { get; } = new uint[8];
+        public int[] SbufPixelReg { get; } = new int[8];
+        public int DbufOffset;
+        public int BorderState;
+        public byte GbufPipe0Reg;
+        public byte CbufPipe0Reg;
+        public byte VbufPipe0Reg;
+        public byte GbufPipe1Reg;
+        public byte CbufPipe1Reg;
+        public byte VbufPipe1Reg;
+        public byte XscrollPipe;
+        public byte Vmode11Pipe;
+        public byte Vmode16Pipe;
+        public byte Vmode16Pipe2;
+        public byte GbufReg;
+        public byte GbufMcFlop;
+        public byte GbufPixelReg;
+        public byte CbufReg;
+        public byte VbufReg;
+        public byte Dmli;
+        public byte LastColorReg;
+        public byte LastColorValue;
+        public byte SbufMcFlops;
+        public byte SbufExpxFlops;
+        public byte SpriteActiveBits;
+        public byte SpritePendingBits;
+        public byte SpriteHaltBits;
+        public byte SpritePriBits;
+        public byte SpriteExpxBits;
+        public byte SpriteMcBits;
+    }
+
+    internal DrawReplay CaptureDraw()
+    {
+        var state = new DrawReplay();
+        LineIndices.AsSpan().CopyTo(state.LineIndices);
+        LinePriority.AsSpan().CopyTo(state.LinePriority);
+        Cregs.AsSpan().CopyTo(state.Cregs);
+        PixelBuffer.AsSpan().CopyTo(state.PixelBuffer);
+        RenderBuffer.AsSpan().CopyTo(state.RenderBuffer);
+        PriBuffer.AsSpan().CopyTo(state.PriBuffer);
+        _spriteXPipe.AsSpan().CopyTo(state.SpriteXPipe);
+        _sbufReg.AsSpan().CopyTo(state.SbufReg);
+        _sbufPixelReg.AsSpan().CopyTo(state.SbufPixelReg);
+        state.DbufOffset = DbufOffset;
+        state.BorderState = BorderState;
+        state.GbufPipe0Reg = GbufPipe0Reg;
+        state.CbufPipe0Reg = CbufPipe0Reg;
+        state.VbufPipe0Reg = VbufPipe0Reg;
+        state.GbufPipe1Reg = GbufPipe1Reg;
+        state.CbufPipe1Reg = CbufPipe1Reg;
+        state.VbufPipe1Reg = VbufPipe1Reg;
+        state.XscrollPipe = XscrollPipe;
+        state.Vmode11Pipe = Vmode11Pipe;
+        state.Vmode16Pipe = Vmode16Pipe;
+        state.Vmode16Pipe2 = Vmode16Pipe2;
+        state.GbufReg = GbufReg;
+        state.GbufMcFlop = GbufMcFlop;
+        state.GbufPixelReg = GbufPixelReg;
+        state.CbufReg = CbufReg;
+        state.VbufReg = VbufReg;
+        state.Dmli = Dmli;
+        state.LastColorReg = LastColorReg;
+        state.LastColorValue = LastColorValue;
+        state.SbufMcFlops = _sbufMcFlops;
+        state.SbufExpxFlops = _sbufExpxFlops;
+        state.SpriteActiveBits = _spriteActiveBits;
+        state.SpritePendingBits = _spritePendingBits;
+        state.SpriteHaltBits = _spriteHaltBits;
+        state.SpritePriBits = _spritePriBits;
+        state.SpriteExpxBits = _spriteExpxBits;
+        state.SpriteMcBits = _spriteMcBits;
+        return state;
+    }
+
+    internal void InjectDraw(DrawReplay state)
+    {
+        state.LineIndices.AsSpan().CopyTo(LineIndices);
+        state.LinePriority.AsSpan().CopyTo(LinePriority);
+        state.Cregs.AsSpan().CopyTo(Cregs);
+        state.PixelBuffer.AsSpan().CopyTo(PixelBuffer);
+        state.RenderBuffer.AsSpan().CopyTo(RenderBuffer);
+        state.PriBuffer.AsSpan().CopyTo(PriBuffer);
+        state.SpriteXPipe.AsSpan().CopyTo(_spriteXPipe);
+        state.SbufReg.AsSpan().CopyTo(_sbufReg);
+        state.SbufPixelReg.AsSpan().CopyTo(_sbufPixelReg);
+        DbufOffset = state.DbufOffset;
+        BorderState = state.BorderState;
+        GbufPipe0Reg = state.GbufPipe0Reg;
+        CbufPipe0Reg = state.CbufPipe0Reg;
+        VbufPipe0Reg = state.VbufPipe0Reg;
+        GbufPipe1Reg = state.GbufPipe1Reg;
+        CbufPipe1Reg = state.CbufPipe1Reg;
+        VbufPipe1Reg = state.VbufPipe1Reg;
+        XscrollPipe = state.XscrollPipe;
+        Vmode11Pipe = state.Vmode11Pipe;
+        Vmode16Pipe = state.Vmode16Pipe;
+        Vmode16Pipe2 = state.Vmode16Pipe2;
+        GbufReg = state.GbufReg;
+        GbufMcFlop = state.GbufMcFlop;
+        GbufPixelReg = state.GbufPixelReg;
+        CbufReg = state.CbufReg;
+        VbufReg = state.VbufReg;
+        Dmli = state.Dmli;
+        LastColorReg = state.LastColorReg;
+        LastColorValue = state.LastColorValue;
+        _sbufMcFlops = state.SbufMcFlops;
+        _sbufExpxFlops = state.SbufExpxFlops;
+        _spriteActiveBits = state.SpriteActiveBits;
+        _spritePendingBits = state.SpritePendingBits;
+        _spriteHaltBits = state.SpriteHaltBits;
+        _spritePriBits = state.SpritePriBits;
+        _spriteExpxBits = state.SpriteExpxBits;
+        _spriteMcBits = state.SpriteMcBits;
+    }
 }

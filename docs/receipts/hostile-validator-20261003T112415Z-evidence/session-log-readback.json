@@ -1,0 +1,17 @@
+{
+  "TimestampUtc": "2026-10-03T11:47:35.7356233+00:00",
+  "ValidatorIdentity": "Codex",
+  "Method": "client.SessionLog.QueryAsync",
+  "Plugin": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.118.0\\Invoke-CodexMcpPlugin.ps1",
+  "SessionId": "Codex-20261002T175731Z-plugin-session",
+  "RequestId": "req-20261003T112752Z-cartridge-hv",
+  "Status": "completed",
+  "ResponseCharacters": 21066,
+  "ExpectedCharacters": 21066,
+  "ExactFullVerdictMatch": true,
+  "IncludesVerdictJson": true,
+  "IncludesRequestJsonl": true,
+  "IncludesResponseJsonl": true,
+  "Actions": 4,
+  "ResponseSha256": "72364F2CA821C9B1F9DDCA57FD295EDE4B8A1FE821EAEB13F38EA6AE73D66EF4"
+}

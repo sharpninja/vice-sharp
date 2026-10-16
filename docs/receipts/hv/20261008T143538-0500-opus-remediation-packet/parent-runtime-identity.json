@@ -1,0 +1,57 @@
+{
+  "capturedAtLocal": "2026-10-08T14:35:38-05:00",
+  "source": "C:\\Users\\kingd\\.codex\\sessions\\2026\\08\\16\\rollout-2026-08-16T18-26-23-01a00ce5-d30d-7451-ab45-fa3e4fbb825f.jsonl",
+  "sourceRecordType": "turn_context",
+  "sourceSelection": "Latest five runtime metadata records only; no hidden reasoning or transcript message bodies",
+  "records": [
+    {
+      "timestamp": "2026-10-08T18:55:36.573Z",
+      "model": "gpt-6-astra",
+      "cwd": "F:\\GitHub\\vice-sharp",
+      "effort": "xhigh",
+      "turnId": "01a11cde-f615-7333-b3ad-79d0b72a9979"
+    },
+    {
+      "timestamp": "2026-10-08T19:01:18.955Z",
+      "model": "gpt-6-astra",
+      "cwd": "F:\\GitHub\\vice-sharp",
+      "effort": "xhigh",
+      "turnId": "01a11ce4-2f6a-7712-b978-6c5711f7bc40"
+    },
+    {
+      "timestamp": "2026-10-08T19:11:37.924Z",
+      "model": "gpt-6-astra",
+      "cwd": "F:\\GitHub\\vice-sharp",
+      "effort": "xhigh",
+      "turnId": "01a11ce4-2f6a-7712-b978-6c5711f7bc40"
+    },
+    {
+      "timestamp": "2026-10-08T19:18:27.086Z",
+      "model": "gpt-6-astra",
+      "cwd": "F:\\GitHub\\vice-sharp",
+      "effort": "xhigh",
+      "turnId": "01a11cf3-df9f-7270-b09c-b36aebfee1e9"
+    },
+    {
+      "timestamp": "2026-10-08T19:31:11.167Z",
+      "model": "gpt-6-astra",
+      "cwd": "F:\\GitHub\\vice-sharp",
+      "effort": "xhigh",
+      "turnId": "01a11cff-885c-7793-bbc5-d430f4fe315d"
+    }
+  ],
+  "currentRuntimeIdentity": {
+    "timestamp": "2026-10-08T19:31:11.167Z",
+    "model": "gpt-6-astra",
+    "cwd": "F:\\GitHub\\vice-sharp",
+    "effort": "xhigh",
+    "turnId": "01a11cff-885c-7793-bbc5-d430f4fe315d"
+  },
+  "wrapperPath": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.118.0\\Invoke-CodexMcpPlugin.ps1",
+  "wrapperSha256": "C54BB7CF834D3674174DFFAE9BC3AC61F0FCF386B436914005944B65B8D88D0E",
+  "wrapperModelAssignmentLine": 123,
+  "wrapperModelAssignment": "MCP_SESSION_MODEL is unconditionally set to codex in child environment",
+  "updateTurnSupportsModel": false,
+  "historicalModelFieldsModified": false,
+  "limitation": "Current runtime identity is proven; no claim that every historical turn used this model. Wrapper model fields remain codex pending plugin repair."
+}

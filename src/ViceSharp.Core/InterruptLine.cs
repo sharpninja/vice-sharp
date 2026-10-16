@@ -41,4 +41,10 @@ public sealed class InterruptLine : IInterruptLine
         _risingEdge = false;
         return true;
     }
+
+    /// <summary>
+    /// Drops a 0-to-1 edge without releasing the line. Replay already
+    /// recorded when that edge happened.
+    /// </summary>
+    internal void AcknowledgeRisingEdge() => _risingEdge = false;
 }

@@ -72,8 +72,11 @@ public partial class Mos6569 : IStatefulDevice
         _pendingCollisionClear = 0;
         _lightPenTriggerCountdown = 0;
         _irqAssertPending = false;
+        // The replay image puts the rise back after this call. Leaving the
+        // line released here keeps a pending rise from asserting one tick early.
         // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08: seed the delayed $D011 copy so
         // the first post-injection g-access does not see a stale pre-injection mode.
+        // A replay image puts the saved reg11_delay back after this call.
         _reg11Delay = _registers[0x11];
         // PLAN-VICRENDER-001: seed the border + background colour-change logs from the injected registers.
         _borderEntryColour = _registers[0x20];
@@ -109,6 +112,324 @@ public partial class Mos6569 : IStatefulDevice
         // write replay. Equivalent to vicii_draw_cycle_init seeding the identity
         // table plus a snapshot-restore step for 0x20-0x2E.
         _pixelSequencer.SeedCregsFromRegisters();
+    }
+
+    /// <summary>
+    /// FR-SNP-003. VIC IRQ rise. InjectSnapshotState clears the pending flag
+    /// and does not drive the line, so this state goes back afterwards.
+    /// </summary>
+    internal readonly struct IrqPipelineReplayState
+    {
+        public bool AssertPending { get; init; }
+        public bool LineHeld { get; init; }
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Programmed raster compare. The register file mirrors the
+    /// live raster, so InjectSnapshotState rebuilds the compare from that
+    /// raster. VICE vicii-snapshot.c saves raster_irq_line and
+    /// raster_irq_triggered separately. This state goes back afterwards.
+    /// </summary>
+    internal readonly struct RasterCompareReplayState
+    {
+        public ushort Line { get; init; }
+        public bool Triggered { get; init; }
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Pending $D011. The register file already holds the new
+    /// byte, and InjectSnapshotState copies that byte into the delay.
+    /// VICE vicii-snapshot.c saves reg11_delay separately. This state goes
+    /// back afterwards.
+    /// </summary>
+    internal readonly struct Reg11DelayReplayState
+    {
+        public byte Delay { get; init; }
+    }
+
+    /// <summary>Copies the delayed $D011 byte.</summary>
+    internal Reg11DelayReplayState CaptureReg11Delay() => new()
+    {
+        Delay = _reg11Delay
+    };
+
+    /// <summary>
+    /// Puts the delayed $D011 byte back after <see cref="InjectSnapshotState"/>.
+    /// </summary>
+    internal void InjectReg11Delay(Reg11DelayReplayState state)
+    {
+        _reg11Delay = state.Delay;
+    }
+
+    /// <summary>Copies the programmed compare and its once-per-line edge guard.</summary>
+    internal RasterCompareReplayState CaptureRasterCompare() => new()
+    {
+        Line = _rasterIrqLine,
+        Triggered = _rasterIrqTriggered
+    };
+
+    /// <summary>
+    /// Puts the programmed compare back after <see cref="InjectSnapshotState"/>.
+    /// </summary>
+    internal void InjectRasterCompare(RasterCompareReplayState state)
+    {
+        _rasterIrqLine = (ushort)(state.Line & 0x01FF);
+        _rasterIrqTriggered = state.Triggered;
+    }
+
+    /// <summary>Copies the one-cycle rise and whether the line is already up.</summary>
+    internal IrqPipelineReplayState CaptureIrqPipeline() => new()
+    {
+        AssertPending = _irqAssertPending,
+        LineHeld = _irqLineHeld
+    };
+
+    /// <summary>
+    /// Puts the VIC IRQ rise back after <see cref="InjectSnapshotState"/>.
+    /// A pending rise stays off the line until the next tick. A line that
+    /// is already up matches vicii-snapshot.c interrupt_restore_irq.
+    /// </summary>
+    internal void InjectIrqPipeline(IrqPipelineReplayState state)
+    {
+        _irqAssertPending = state.AssertPending;
+        if (state.LineHeld)
+        {
+            RefreshInterruptLine();
+            _irqAssertPending = state.AssertPending;
+            return;
+        }
+
+        if (_irqLineHeld)
+        {
+            _irqLine.Release(this);
+            _irqLineHeld = false;
+        }
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Pending frame start. InjectSnapshotState clears the latch,
+    /// so this state goes back afterwards. VICE vicii-snapshot.c saves and
+    /// restores start_of_frame.
+    /// </summary>
+    internal readonly struct FrameStartReplayState
+    {
+        public bool StartOfFrame { get; init; }
+    }
+
+    /// <summary>Copies the armed frame-start latch.</summary>
+    internal FrameStartReplayState CaptureFrameStart() => new()
+    {
+        StartOfFrame = _startOfFrame
+    };
+
+    /// <summary>
+    /// Puts the frame-start latch back after <see cref="InjectSnapshotState"/>.
+    /// The next tick applies it when the raster cycle is 1.
+    /// </summary>
+    internal void InjectFrameStart(FrameStartReplayState state)
+    {
+        _startOfFrame = state.StartOfFrame;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Light-pen and sprite-collision latches. The register file
+    /// does not hold the live values $D013, $D014, $D01E, and $D01F return.
+    /// VICE vicii-snapshot.c saves the light-pen block and the collision
+    /// latches. InjectSnapshotState clears the pen countdown and the pending
+    /// collision clear, so this state goes back afterwards.
+    /// </summary>
+    internal readonly struct EventLatchReplay
+    {
+        public byte LightPenX { get; init; }
+        public byte LightPenY { get; init; }
+        public bool LightPenTriggered { get; init; }
+        public bool LightPenState { get; init; }
+        public byte LightPenExtraBits { get; init; }
+        public int LightPenCountdown { get; init; }
+        public byte SpriteSprite { get; init; }
+        public byte SpriteBackground { get; init; }
+        public byte PendingCollisionClear { get; init; }
+    }
+
+    /// <summary>Copies the light-pen and sprite-collision latches.</summary>
+    internal EventLatchReplay CaptureEventLatches() => new()
+    {
+        LightPenX = _lightPenLatchedX,
+        LightPenY = _lightPenLatchedY,
+        LightPenTriggered = _lightPenTriggeredThisFrame,
+        LightPenState = _lightPenState,
+        LightPenExtraBits = _lightPenXExtraBits,
+        LightPenCountdown = _lightPenTriggerCountdown,
+        SpriteSprite = _spriteSpriteCollisionLatch,
+        SpriteBackground = _spriteBackgroundCollisionLatch,
+        PendingCollisionClear = _pendingCollisionClear
+    };
+
+    /// <summary>
+    /// Puts the light-pen and collision latches back after
+    /// <see cref="InjectSnapshotState"/>.
+    /// </summary>
+    internal void InjectEventLatches(EventLatchReplay state)
+    {
+        _lightPenLatchedX = state.LightPenX;
+        _lightPenLatchedY = state.LightPenY;
+        _lightPenTriggeredThisFrame = state.LightPenTriggered;
+        _lightPenState = state.LightPenState;
+        _lightPenXExtraBits = state.LightPenExtraBits;
+        _lightPenTriggerCountdown = state.LightPenCountdown;
+        _spriteSpriteCollisionLatch = state.SpriteSprite;
+        _spriteBackgroundCollisionLatch = state.SpriteBackground;
+        _pendingCollisionClear = state.PendingCollisionClear;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Live border flip-flops. VICE vicii-snapshot saves
+    /// vborder, set_vborder, and main_border. InjectSnapshotState leaves
+    /// them at the reset values.
+    /// </summary>
+    internal readonly struct BorderReplayState
+    {
+        public bool VerticalBorder { get; init; }
+        public bool VerticalBorderNext { get; init; }
+        public bool MainBorder { get; init; }
+        public bool MainBorderOpenedThisLine { get; init; }
+    }
+
+    /// <summary>Copies the three border flip-flops VICE stores beside the registers.</summary>
+    internal BorderReplayState CaptureBorder() => new()
+    {
+        VerticalBorder = _verticalBorderActive,
+        VerticalBorderNext = _verticalBorderNextActive,
+        MainBorder = _mainBorderActive,
+        MainBorderOpenedThisLine = _mainBorderOpenedThisLine
+    };
+
+    /// <summary>
+    /// Puts the border flip-flops back after <see cref="InjectSnapshotState"/>.
+    /// Later cycles paint from these flags, so a copied frame is not enough.
+    /// </summary>
+    internal void InjectBorder(BorderReplayState state)
+    {
+        _verticalBorderActive = state.VerticalBorder;
+        _verticalBorderNextActive = state.VerticalBorderNext;
+        _mainBorderActive = state.MainBorder;
+        _mainBorderOpenedThisLine = state.MainBorderOpenedThisLine;
+    }
+
+    /// <summary>
+    /// Copies the matrix latches, the bad-line latch, and the draw pipeline.
+    /// VICE stores vbuf, cbuf, bad_line, dbuf, and prefetch_cycles beside
+    /// the border flip-flops.
+    /// </summary>
+    internal (PixelSequencer.DrawReplay Draw, byte[] Video, byte[] Color, bool BadLine, int RasterXPipe, byte SpriteDisplay, int PrefetchCycles) CaptureRendering()
+    {
+        return (
+            _pixelSequencer.CaptureDraw(),
+            _videoBuffer.ToArray(),
+            _colorBuffer.ToArray(),
+            _badLine,
+            _rasterXPipe,
+            _spriteDisplayBits,
+            _prefetchCycles);
+    }
+
+    /// <summary>
+    /// Puts the draw pipeline back after <see cref="InjectSnapshotState"/>.
+    /// That call seeds colours from the registers and does not restore dbuf.
+    /// </summary>
+    internal void InjectRendering(PixelSequencer.DrawReplay draw, ReadOnlySpan<byte> video, ReadOnlySpan<byte> color, bool badLine, int rasterXPipe, byte spriteDisplay, int prefetchCycles)
+    {
+        _pixelSequencer.InjectDraw(draw);
+        video.CopyTo(_videoBuffer.AsSpan());
+        color.CopyTo(_colorBuffer.AsSpan());
+        _badLine = badLine;
+        _rasterXPipe = rasterXPipe;
+        _spriteDisplayBits = spriteDisplay;
+        _prefetchCycles = prefetchCycles;
+    }
+
+    /// <summary>
+    /// Copies the per-line border record the renderer consults when a line
+    /// completes. The live flip-flops do not recreate lines already started.
+    /// </summary>
+    internal (bool[] Vertical, bool[] VerticalCaptured, bool[] HorizontalOpen, bool[] LeftOpen, bool[] RightOpen, bool[] HorizontalCaptured) CaptureBorderLines()
+    {
+        return (
+            _verticalBorderActiveByRasterLine.ToArray(),
+            _verticalBorderLineCaptured.ToArray(),
+            _horizontalDisplayOpenByRasterLine.ToArray(),
+            _leftBorderOpenByRasterLine.ToArray(),
+            _rightBorderOpenByRasterLine.ToArray(),
+            _horizontalBorderLineCaptured.ToArray());
+    }
+
+    /// <summary>Puts the per-line border record back after injection.</summary>
+    internal void InjectBorderLines(bool[] vertical, bool[] verticalCaptured, bool[] horizontalOpen, bool[] leftOpen, bool[] rightOpen, bool[] horizontalCaptured)
+    {
+        vertical.AsSpan().CopyTo(_verticalBorderActiveByRasterLine);
+        verticalCaptured.AsSpan().CopyTo(_verticalBorderLineCaptured);
+        horizontalOpen.AsSpan().CopyTo(_horizontalDisplayOpenByRasterLine);
+        leftOpen.AsSpan().CopyTo(_leftBorderOpenByRasterLine);
+        rightOpen.AsSpan().CopyTo(_rightBorderOpenByRasterLine);
+        horizontalCaptured.AsSpan().CopyTo(_horizontalBorderLineCaptured);
+    }
+
+    /// <summary>
+    /// FR-SNP-003. One sprite's execution image. VICE vicii-snapshot saves
+    /// data, mc, mcbase, pointer, exp_flop, and x. Y is written only by
+    /// the $D001 store, which replay does not repeat.
+    /// </summary>
+    internal struct SpriteReplay
+    {
+        public ushort X;
+        public byte Y;
+        public byte Pointer;
+        public byte Mc;
+        public byte McBase;
+        public bool ExpFlop;
+        public uint Data;
+        public bool DataValid;
+    }
+
+    /// <summary>Copies all eight sprites' execution fields.</summary>
+    internal SpriteReplay[] CaptureSprites()
+    {
+        var sprites = new SpriteReplay[_sprites.Length];
+        for (var i = 0; i < _sprites.Length; i++)
+        {
+            ref readonly var sprite = ref _sprites[i];
+            sprites[i] = new SpriteReplay
+            {
+                X = sprite.X,
+                Y = sprite.Y,
+                Pointer = sprite.Pointer,
+                Mc = sprite.Mc,
+                McBase = sprite.McBase,
+                ExpFlop = sprite.ExpFlop,
+                Data = sprite.Data,
+                DataValid = sprite.DataValid
+            };
+        }
+
+        return sprites;
+    }
+
+    /// <summary>Puts the sprite execution fields back after register injection.</summary>
+    internal void InjectSprites(ReadOnlySpan<SpriteReplay> sprites)
+    {
+        for (var i = 0; i < sprites.Length && i < _sprites.Length; i++)
+        {
+            ref var sprite = ref _sprites[i];
+            var state = sprites[i];
+            sprite.X = state.X;
+            sprite.Y = state.Y;
+            sprite.Pointer = state.Pointer;
+            sprite.Mc = state.Mc;
+            sprite.McBase = state.McBase;
+            sprite.ExpFlop = state.ExpFlop;
+            sprite.Data = state.Data;
+            sprite.DataValid = state.DataValid;
+        }
     }
 
     /// <summary>

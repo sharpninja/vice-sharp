@@ -24,16 +24,16 @@ public sealed class RomMBridgeConnectionSourceTests
 
         static HttpResponseMessage Router(HttpRequestMessage req) =>
             req.RequestUri!.AbsolutePath == "/romm/v1/connection"
-                ? FakeRomMHandler.Json("""{"url":"http://192.168.1.77:8080","token":"per-user-jwt"}""")
+                ? FakeRomMHandler.Json("""{"url":"http://192.168.1.182:8080","token":"per-user-jwt"}""")
                 : FakeRomMHandler.NotFound();
 
         var handler = new FakeRomMHandler(Router);
         var source = new RomMBridgeConnectionSource(handler);
 
-        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), "xbox-user-1", ct);
+        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.182:8090/"), "xbox-user-1", ct);
 
         conn.Should().NotBeNull();
-        conn!.BaseUrl.Should().Be("http://192.168.1.77:8080");
+        conn!.BaseUrl.Should().Be("http://192.168.1.182:8080");
         conn.Token.Should().Be("per-user-jwt");
         conn.Username.Should().BeNull();
         conn.AuthMode.Should().Be(RomMAuthMode.SubnetShared);
@@ -54,7 +54,7 @@ public sealed class RomMBridgeConnectionSourceTests
         var handler = new FakeRomMHandler(Router);
         var source = new RomMBridgeConnectionSource(handler);
 
-        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), "xbox-user-1", ct);
+        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.182:8090/"), "xbox-user-1", ct);
 
         conn.Should().BeNull();
     }
@@ -66,12 +66,12 @@ public sealed class RomMBridgeConnectionSourceTests
         var ct = TestContext.Current.CancellationToken;
 
         static HttpResponseMessage Router(HttpRequestMessage req) =>
-            FakeRomMHandler.Json("""{"url":"http://192.168.1.77:8080"}""");
+            FakeRomMHandler.Json("""{"url":"http://192.168.1.182:8080"}""");
 
         var handler = new FakeRomMHandler(Router);
         var source = new RomMBridgeConnectionSource(handler);
 
-        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), "xbox-user-1", ct);
+        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.182:8090/"), "xbox-user-1", ct);
 
         conn.Should().BeNull();
     }

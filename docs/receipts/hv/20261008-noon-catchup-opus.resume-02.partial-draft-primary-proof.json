@@ -1,0 +1,68 @@
+{
+  "timestampLocal": "2026-10-08T12:54:52.5017658-05:00",
+  "session": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T172748Z-prompt-d3fd",
+  "status": "in_progress",
+  "fullRecoveryChars": 73039,
+  "parts": [
+    {
+      "requestedOrder": 3,
+      "matches": true,
+      "expectedChars": 9099,
+      "actualChars": 8972
+    },
+    {
+      "requestedOrder": 4,
+      "matches": true,
+      "expectedChars": 9099,
+      "actualChars": 8931
+    },
+    {
+      "requestedOrder": 5,
+      "matches": true,
+      "expectedChars": 9099,
+      "actualChars": 8979
+    },
+    {
+      "requestedOrder": 6,
+      "matches": true,
+      "expectedChars": 9099,
+      "actualChars": 8991
+    },
+    {
+      "requestedOrder": 7,
+      "matches": true,
+      "expectedChars": 9099,
+      "actualChars": 9099
+    },
+    {
+      "requestedOrder": 8,
+      "matches": true,
+      "expectedChars": 9099,
+      "actualChars": 9073
+    },
+    {
+      "requestedOrder": 9,
+      "matches": true,
+      "expectedChars": 9099,
+      "actualChars": 9099
+    },
+    {
+      "requestedOrder": 10,
+      "matches": true,
+      "expectedChars": 9099,
+      "actualChars": 9073
+    },
+    {
+      "requestedOrder": 11,
+      "matches": true,
+      "expectedChars": 1138,
+      "actualChars": 1117
+    }
+  ],
+  "comparison": "Exact content except CRLF-to-LF normalization. Server returns ordered array without order property; matched each unique part prefix and complete body.",
+  "primaryConfirmed": true,
+  "reviewerTurnCompletionConfirmed": false,
+  "finalVerdictAvailable": false,
+  "readbackSha256": "AD7220072D0056D329F4754E19DFAF5BFCD9F93AF8905EF0C55F57650AB7F68E"
+}

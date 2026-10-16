@@ -1,0 +1,62 @@
+[
+  {
+    "Name": "fresh-focused",
+    "Exit": 0,
+    "Total": 1,
+    "Passed": 1,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Error": 0,
+    "Aborted": 0
+  },
+  {
+    "Name": "fresh-mock",
+    "Exit": 0,
+    "Total": 1,
+    "Passed": 1,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Error": 0,
+    "Aborted": 0
+  },
+  {
+    "Name": "fresh-class",
+    "Exit": 0,
+    "Total": 107,
+    "Passed": 107,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Error": 0,
+    "Aborted": 0
+  },
+  {
+    "Name": "fresh-phase2-first",
+    "Exit": 0,
+    "Total": 211,
+    "Passed": 211,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Error": 0,
+    "Aborted": 0
+  },
+  {
+    "Name": "fresh-phase2-second",
+    "Exit": 0,
+    "Total": 211,
+    "Passed": 211,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Error": 0,
+    "Aborted": 0
+  },
+  {
+    "Name": "fresh-idle",
+    "Exit": 0,
+    "Total": 2,
+    "Passed": 2,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Error": 0,
+    "Aborted": 0
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\compile.log",
+    "sha256": "8901AFE97ECD088459B9965ACBFCBFE6F66CC8F5AE2B9714CEEEAEC0B7936158",
+    "bytes": 511,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-04a7063283204547b295a0f8e5009427.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-04a7063283204547b295a0f8e5009427.log",
+    "sha256": "9D007FF666E93D56DB236B01015A4A9DB6E4635B2BA977A15721FBE3629219F6",
+    "bytes": 278,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-082260f1fc63446184210fd235981e04.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-082260f1fc63446184210fd235981e04.log",
+    "sha256": "4EA89A83163ECF0DC4DEE4FF89F2BC3CF7946F5CB02407E522BBBB7FF0FF6E4A",
+    "bytes": 293,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-0cbf5b336d1947ac9de257d295537a38.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-0cbf5b336d1947ac9de257d295537a38.log",
+    "sha256": "97E265E9A946495C95EB3CAB0878355CC0F3A6F8A7F75CBEB45843F9C002C16E",
+    "bytes": 279,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-0e409cf0c1164d1a8ed2cb431565bbfa.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-0e409cf0c1164d1a8ed2cb431565bbfa.log",
+    "sha256": "57FCBB44E5344D5907CAAD1511771E3859973E7A26135D663B4C9E0AF7ADC44C",
+    "bytes": 277,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-2c2ba7ca069c41999b6ce3c580b2340f.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-2c2ba7ca069c41999b6ce3c580b2340f.log",
+    "sha256": "DCAC8B7E3585DCAD0634A018780D6ABFAFF2C0A3D19ED6471D65FE8E54D155DE",
+    "bytes": 278,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-2f1b1518cdb84f12a5080c07966262cc.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-2f1b1518cdb84f12a5080c07966262cc.log",
+    "sha256": "1F736EC8811F7172F77DE5E3C31F4674859565074E09220E69E867960C53CAC0",
+    "bytes": 259,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-41f57d073ff1478fa464b928a1b3ae91.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-41f57d073ff1478fa464b928a1b3ae91.log",
+    "sha256": "D72C0F344137083C2C3A60261950B94F64734A28AF6CB20B4A7EA1FAEED4A2E3",
+    "bytes": 315,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-51c247aa2a4b44f3b2c8c2c41adad82a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-51c247aa2a4b44f3b2c8c2c41adad82a.log",
+    "sha256": "A7D10C7E415244398859C588B951AA382A63962C5497980123E28FD90BFB695B",
+    "bytes": 278,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-6bfc85e7ada54fe091edbd73eddebdd8.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-6bfc85e7ada54fe091edbd73eddebdd8.log",
+    "sha256": "918AEB434912089B9FE1FF2FF775BC6C9AC40C81E3B3A4561B011AE136835148",
+    "bytes": 278,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-6ed61a362b6c4282a52cc8094f43c0b1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-6ed61a362b6c4282a52cc8094f43c0b1.log",
+    "sha256": "74B7CAF79759B6452FEC6F9A9EA4A8BF8EE4159CA531804A1D2736ECF08767FA",
+    "bytes": 278,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-743a2e152f8744d4af5d9857834f7166.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-743a2e152f8744d4af5d9857834f7166.log",
+    "sha256": "284F8F7FCED2B4DA6E3A970179BB634FF05F121A5D86721B8E63B7D1B49BEDF7",
+    "bytes": 247,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-799a38501ecc48afa5f8a3d3f8e092a1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-799a38501ecc48afa5f8a3d3f8e092a1.log",
+    "sha256": "DF00315A55B3E8A5A44F553542A571A85C0F5931FF50197C190CA055E49530D9",
+    "bytes": 268,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-97dd1a8ee7b74f579206cf0e2292b1ea.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-97dd1a8ee7b74f579206cf0e2292b1ea.log",
+    "sha256": "979E3E4956095C1DC44DC0C2621F806ED211F5BCD1F11D5B9CE6F316F956ED31",
+    "bytes": 267,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a60c656f9f2d483eb1db4beff6ad8e91.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-a60c656f9f2d483eb1db4beff6ad8e91.log",
+    "sha256": "6B4E47631B7650336FFAC7D473DDC71D849F2C30E63119AB37FF9876BD631926",
+    "bytes": 277,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a9a0848e48564ee59522557488d2ad86.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-a9a0848e48564ee59522557488d2ad86.log",
+    "sha256": "D16157823982CC7887178C156FA85AC80A61671663B44D0AD660CF4A1DB81982",
+    "bytes": 247,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a9fac54ac58f421387a076747d6dc648.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-a9fac54ac58f421387a076747d6dc648.log",
+    "sha256": "51F20583CA9CE0ED9EEDAE7014940ACD3510EEECE1C736C6224583CFFAD6D63D",
+    "bytes": 258,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-cddb42a8935646a5953a52232c557518.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-cddb42a8935646a5953a52232c557518.log",
+    "sha256": "E745E35CC4CA8BE037CF3761CD30A41C221D32493B719457A7F6DF08D49E88DE",
+    "bytes": 247,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-eb5825719e4c4bb590a69abe36439842.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-eb5825719e4c4bb590a69abe36439842.log",
+    "sha256": "BD3AAC00E03C7BE91B214DB0A824312DD9E1A0ECD2CB881234CEC2250F3CF7FA",
+    "bytes": 247,
+    "originalRetained": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-f8acebba5f394c3ebe3cfbd6ed432b12.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-fixture-evidence\\run-f8acebba5f394c3ebe3cfbd6ed432b12.log",
+    "sha256": "9A2A57E1063BECE5EED744AAE175DA874D0CCB4FF738D62D3A3E1CD6CBF6EA70",
+    "bytes": 279,
+    "originalRetained": true
+  }
+]

@@ -1,0 +1,4 @@
+.echo FIXTURE_TRACE_BEGIN
+l-t
+r rip
+t 0n10 ".echo FIXTURE_TRACE_TEN_COMPLETE; r rip; .lastevent; q"

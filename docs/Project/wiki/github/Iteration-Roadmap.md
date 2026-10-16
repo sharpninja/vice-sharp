@@ -1,8 +1,10 @@
 # ViceSharp Iteration Roadmap
 
-## Iteration 0: Foundations ✅ COMPLETED
+## Iteration 0: Foundations (historical milestone)
 
 **Goal:** Runnable scaffolding with zero emulation.
+
+**Status:** Historical foundation milestone. Its artifacts remain in the repository, but this documentation refresh did not rerun the original full acceptance gate and does not use the old completion label as proof of current parity.
 
 - Solution structure and build system (Nuke)
 - 33+ public interfaces in ViceSharp.Abstractions
@@ -12,63 +14,44 @@
 - Comprehensive documentation and GraphRAG knowledge base
 - Determinism test harness (empty machine, bit-exact snapshots)
 
-**Exit criteria:** `dotnet test` passes, the managed console app starts and exits cleanly, all docs written.
+**Historical exit criteria:** `dotnet test` passes, the managed console app starts and exits cleanly, all docs are written. Current work must use the active zero-failed, zero-skipped gates rather than inherit this status.
 
-## Iteration 1: C64 (MVP) ✅ COMPLETED
+## Iteration 1: C64 (MVP)
 
-**Goal:** Playable Commodore 64 emulation.
+**Goal:** Playable Commodore 64 emulation with behavior derived from and proven against immutable VICE `x64sc`.
 
-**Status:** The managed C64 core now runs in cycle-exact lockstep with VICE's
-`x64sc`. An automated harness drives both the managed core and the native
-`x64sc` engine and diffs them at per-cycle checkpoints (CPU + bus, VIC-II
-raster/sprite state, CIA, SID register reads); 322 x64sc variant lockstep
-cases pass across the no-cartridge C64 family (C64 / C64C / SX-64, PAL + NTSC)
-at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
-100k-cycle parity. Gate at the v1.0.2 release: 2594 passed, 21 skipped,
-0 failed (2615 total, standard category filter).
+**Status (reopened 2026-10-04):** The repository contains broad C64 implementations and historical bounded lockstep evidence. Earlier “complete” labels and the v1.0.2 2594-passed/21-skipped baseline are not current acceptance evidence. Skipped tests are not passing tests, and named CPU/checkpoint windows do not prove whole-machine parity.
 
-- MOS 6510 CPU - full instruction set, cycle-accurate
-- VIC-II (6567/6569) - raster engine, sprites, border, badlines, DMA stealing
-- SID (6581/8580) - 3 voices, filters, envelope, ring mod, sync
-- CIA x2 (6526) - timers, TOD, keyboard matrix, joystick, IEC serial
-- PLA (906114) - memory banking, address decoding
-- 1541 drive emulation - GCR, IEC bus, DOS
-- Datasette - TAP playback, motor control
-- Cartridge support - Ocean, EasyFlash, Action Replay, Final Cartridge III
-- Keyboard, joystick, mouse, lightpen input
-- Media capture - screenshots (PNG), video (MP4 via FFmpeg), audio (WAV)
-- Monitor/debugger - disassembly, breakpoints, memory view, watch
-- Save/load state snapshots
-- Avalonia desktop UI
+Historical evidence includes a 100,000-cycle BASIC READY CPU path, multi-frame no-cartridge model variants, and focused chip and device gates. Each receipt applies only to its named model, state fields, workload, and cycle budget.
 
-**Exit criteria:** Loads and runs commercial C64 software, passes Klaus Dormann test suite, SID audio plays correctly, save/load state round-trips deterministically.
+Current acceptance work must:
+
+- reconcile every active FR, TR, TEST, and acceptance criterion with classic VICE behavior;
+- restore and prove the immutable `native/vice` boundary;
+- close CPU, bus, VIC-II, CIA, SID, IEC, drive, tape, cartridge, input, timing, and host gaps with source-pinned tests;
+- route supported C64 snapshots through native VICE `.vsf`, including complete state transfer and deterministic resume;
+- finish with zero failed, zero skipped, and no aborted prerequisites.
+
+**Exit criteria:** Pending. Commercial software, Klaus Dormann coverage, audio, media, and deterministic save/load must be proven by the current acceptance suite against unmodified VICE, not inferred from historical percentage dashboards.
 
 ## Iteration 2: VIC-20
 
-**Goal:** Add VIC-20 as a second architecture.
+**Goal:** Add VIC-20 as a second architecture with behavior measured against immutable native `xvic`.
 
-**Status (2026-08-11):** Core complete on `main`. Every-cycle native lockstep green for multi-second PAL and NTSC. READY present-path, expansion UX, FE3 flash040 command FSM, and xvic visible-frame capture landed.
+**Status (reopened 2026-10-04):** Historical receipts prove bounded PAL and NTSC CPU-register lockstep plus named video, cartridge, flash, persistence, and audio slices. They do not prove complete xvic parity. The current acceptance state remains pending under [PLAN-VICE-IMMUTABLE-001](plans/PLAN-VICE-IMMUTABLE-001.md) and [PLAN-VSFLOCKSTEP-001](plans/PLAN-VSFLOCKSTEP-001.md).
 
-- MOS 6502 CPU (reuse 6510 core minus I/O port)
-- VIC-I (6560/6561) character-mode video (`Mos6561`) with PAL/NTSC timing
-- VIA x2 (shared `Via6522`) at $9110 NMI / $9120 IRQ; keyboard matrix + joystick glue
-- VIA timer CPU `Read` uses pre-Tick bus-visible counters (VICE LOAD at `maincpu_clk` before `CLK_INC`); peeks stay post-Tick
-- Color RAM 4-bit + V-bus open-bus high nibble (`Vic20ColorRam` / `BasicBus`)
-- 5KB base RAM + expansion packs; Avalonia Settings wrap BLK0/1/2/3/5 toggles (product path)
-- Cartridge map: BLK PRG/raw + FE3 / Ultimem / Mega-Cart attach; Flash Cart Builder (`docs/FlashCart-Builder.md`); FE3 MODE_FLASH uses VICE TYPE_B erase-cycle budgets; dirty FE3/Ultimem flash and Mega-Cart NVRAM persist atomically on detach
-- READY present geometry Exact-scoped: VICE viewport `first_x` crop (PAL 48), L+R borders, paper origin
-- xvic pixel FB capture: PAL 448x284 and NTSC native BGRA SequenceEqual green (unpainted rows opaque black to match xvic clamp)
-- Default drive unit 8 = **1540** (`DriveModel.C1540`); C64 remains 1541
-- Launcher `xvic` topology; host session create; supported product shells Avalonia + Console
-- Native oracle: `native/vice_xvic.dll` via `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
-- Every-cycle A/X/Y/S/P/PC lockstep vs xvic:
-  - **PAL 10 s:** 11_084_050 cycles (`EveryCycle_CpuRegs_Match_TenSecondPal`)
-  - **NTSC 10 s:** 10_227_270 cycles (`EveryCycle_CpuRegs_Match_TenSecondNtsc`)
-  - Env: `VICESHARP_LOCKSTEP_10S=1` (and `VICESHARP_LOCKSTEP_2S=1` for 2 s PAL)
-  - Receipts: `docs/receipts-lockstep-10s-2026-08-06.txt`, `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`
-- Audit matrix: `docs/audit-vic20-vs-vice-2026-08-07.md` (Exact only for named rules)
+Implemented surfaces include the MOS 6502-based host, VIC-I, shared VIA implementation with machine-specific wiring, color RAM and open-bus behavior, RAM expansion selection, 1540 defaults, VIC-20 cartridge families, desktop settings, and scoped present/audio comparisons. The current Avalonia settings view hides VIC-20 memory and expansion controls unless a VIC-20 profile is selected.
 
-**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime, and multi-second every-cycle register lockstep vs native xvic. Met for READY fingerprint, character frames, session factory, focused `FullyQualifiedName~Vic20` gates, and the 10 s PAL + NTSC diverge probes. Timed FE3 erase, cartridge write-back, deterministic batched VIC-I sound, scoped pixel-index parity, and READY PAL/NTSC/busy native BGRA SequenceEqual are also covered. Remaining polish: input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`); see `HANDOFF.md`.
+Historical bounded evidence:
+
+- PAL 10-second A/X/Y/S/P/PC receipt: 11,084,050 cycles.
+- NTSC 10-second A/X/Y/S/P/PC receipt: 10,227,270 cycles.
+- Scoped READY and busy-frame capture comparisons, timed FE3 erase behavior, cartridge write-back, and deterministic batched VIC-I sound tests.
+- Receipt index: [docs/README.md](README.md#lockstep-receipts-durable).
+
+Open acceptance gates include immutable-oracle cleanup, requirement and acceptance-criteria reconciliation, complete xvic state checkpoints, canonical VICE `.vsf` save/load, deterministic resume, launcher/runtime completion, input end-to-end coverage, and a zero-failed, zero-skipped final suite.
+
+**Exit criteria:** Pending. The iteration is complete only when the current requirements matrix and approved plans pass against unmodified native xvic with zero failed and zero skipped tests.
 
 ## Iteration 3: C128
 

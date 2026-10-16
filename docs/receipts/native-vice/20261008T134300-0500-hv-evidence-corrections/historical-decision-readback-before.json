@@ -1,0 +1,104 @@
+[
+  {
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261008T135637Z-prompt-5be7",
+    "queryTitle": "Continue immutable stock VICE runtime validation",
+    "status": "completed",
+    "decisionDialogs": [
+      {
+        "timestamp": "2026-10-08T14:11:49.7482326+00:00",
+        "role": "model",
+        "content": "Native runtime proof stays distinct from successful stock build and byte-adapter units. First startup ROM failure was my incorrect search root: sysfile.c appends the machine subpath. Corrected to vice/data. Reset-boundary xvic save/step exited0, but load stalled and was terminated after retained observation. x64sc save/load exited0 but full post-resume VSF bytes differ and SID was not initialized under +sound. Neither is parity acceptance. Next independent probe uses BASIC-ready checkpoint and initialized dummy sound. Preserve all failed attempts and do not modify native source or waive reset-boundary coverage.",
+        "category": "decision"
+      },
+      {
+        "timestamp": "2026-10-08T14:20:10.5918484+00:00",
+        "role": "model",
+        "content": "Decision: retain stock native snapshot differences as unresolved evidence and require explicit binary-monitor result acknowledgement before a fail-closed snapshot gate. Reason: mon_parse.y discards undump return status; same CPU registers cannot establish full-device equivalence. Consequence: TR-VSFLOCKSTEP-RESUME-001 remains pending, Phase2/whole goal remain active, no native edits or comparator weakening. Rejected alternatives: count process exit0 as success, ignore VIA/SID/drive differences, or infer half-cycle bus events from instruction steps. Noon Opus catch-up includes every runtime probe and failure. Affected files: HANDOFF.md, PLAN-VICE-IMMUTABLE-001.md and stock-runtime receipts.",
+        "category": "decision"
+      }
+    ],
+    "designDecisionActions": []
+  },
+  {
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261008T142219Z-prompt-bc0b",
+    "queryTitle": "Prove fail-closed stock VICE snapshot acknowledgements",
+    "status": "completed",
+    "decisionDialogs": [
+      {
+        "timestamp": "2026-10-08T14:32:18.6494631+00:00",
+        "role": "model",
+        "content": "Choose a small dependency-free API2 packet encoder/exact stream reader/acknowledgement guard in the existing external compatibility library. This follows approved Phase2 public-interface-first order; no native edits, no filesystem behavior, no new requirement. One-MiB body cap is an explicit fail-closed resource bound, reserved0xffffffff belongs only to native events. Keep nonzero native error packets as data and require matching request/type/length plus error0 before success. Detailed seam and fixtures documented before implementation in BINARY-MONITOR-SLICE.md. Mocks now green, so bind identical cases to production next under noon HV waiver.",
+        "category": "decision"
+      },
+      {
+        "timestamp": "2026-10-08T15:00:17.0596783+00:00",
+        "role": "model",
+        "content": "Retain actual immutable VICE snapshot behavior as the target. VIA CABSTATE writer masks80,40,40,20,20 differ from reader masks80,40,20,10,08 and directly explain the observed e0-to-c0 and60-to40 re-encodings. Do not patch native or suppress differences. SID/drive field mappings are source-backed candidates, not proven runtime causes. Whole-file native self-roundtrip equality is diagnostic, not a new requirement; actual wrapper byte-preservation requirements and real lockstep gates remain unchanged. Consequence: continue external observability proof, no completion or comparator weakening.",
+        "category": "decision"
+      },
+      {
+        "timestamp": "2026-10-08T15:03:50.7242289+00:00",
+        "role": "model",
+        "content": "Approved Phase2 external-process-control diagnostic: use installed local CDB with a hardware write watchpoint on stock xvic maincpu_clk, RVA0x262a10 from nm and ImageBase0x140000000, bound to executable C01442... Native CLK_INC increments clock then calls vic_cycle. Capture12 stops and instruction pointers, then quit only the launched probe. Symbol search is local-only. No native source edits, software emulator breakpoints, emulated memory/register writes, native cleanup or production integration. This proves only observed stopping boundaries, not bus reconstruction, deterministic replay or parity.",
+        "category": "decision"
+      },
+      {
+        "timestamp": "2026-10-08T15:13:25.5371506+00:00",
+        "role": "model",
+        "content": "Two failed local hardware-breakpoint diagnostics are retained failures, not evidence that every allowed external mechanism is infeasible. Do not add software emulator breakpoints or modify native to manufacture success. Source inspection identifies vic_cycle as an existing cycle callback and shows memory-table-only interception misses fast opcode fetches. Consequence: next approved work must investigate external debugger setup or external link/function-table interposition with fail-closed actual-observation coverage, and cannot claim cycle control or bus parity from existing instruction/packet evidence. All deferred successes and failures remain in noon Opus HV scope.",
+        "category": "decision"
+      }
+    ],
+    "designDecisionActions": []
+  },
+  {
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261008T151514Z-prompt-9817",
+    "queryTitle": "Prove immutable VICE cycle observation",
+    "status": "completed",
+    "decisionDialogs": [
+      {
+        "timestamp": "2026-10-08T15:27:11.4015201+00:00",
+        "role": "model",
+        "content": "Proceed to approved external link-time interposition feasibility after public-interface limits and failed CDB diagnostics. Lock a minimal transparent vic_cycle wrapper: forward to real vic_cycle exactly once, then notify external observer with actual maincpu_clk, preserving native side effects. No bus values inferred and no full-cycle/parity claim. Validate shared assertions against correct and wrong mocks before wrapper C code; then bind the same cases to a compiled standalone C link-wrap fixture, with no VICE build or source writes. Empty sequence,zero,unchanged/changed native clock,nonmonotonic values and UInt64 boundaries must preserve order and actual after-call state. Only after cumulative green attempt link against stock artifacts in an external output directory. No requirement change or phase completion.",
+        "category": "decision"
+      },
+      {
+        "timestamp": "2026-10-08T15:53:14.4276570+00:00",
+        "role": "model",
+        "content": "External clock callback is a viable narrowly proven observation seam. Preserve every clock event including reset-like reversal; do not infer a reset epoch or reconstruct bus data. Stock limitcycles instruction-boundary exit is not cycle-boundary pause/resume. Continue wrapper-only feasibility under existing approved Phase2, with native and stock source immutable, and catch up all deferred work with Opus at noon before phase advancement.",
+        "category": "decision"
+      },
+      {
+        "timestamp": "2026-10-08T16:00:36.2266006+00:00",
+        "role": "model",
+        "content": "2026-10-08T10:58:01-05:00 decision recorded before gate implementation in NativeClockProbe GATE-SLICE.md. A pure external gate publishes the actual uint64 clock, flushes, then reads exactly one command; only ASCII c returns permission, q/EOF/errors/invalid inputs stop. All missing dependencies validated before side effects. Fail-closed return codes 64-70 are fixed by literal independent fixtures. Same assertions will bind compiled C then actual host pipe. This proves only callback permission/control, not bus capture or freeze of all devices. Requirements effective local Layer1 FR-VICE-001/TR-VICE-ORACLE-001/TEST-VICE-001 remain pending with all AC false.",
+        "category": "decision"
+      }
+    ],
+    "designDecisionActions": []
+  },
+  {
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261008T161608Z-prompt-c06c",
+    "queryTitle": "Prove actual immutable VICE bus observation",
+    "status": "completed",
+    "decisionDialogs": [
+      {
+        "timestamp": "2026-10-08T16:47:50.1843546+00:00",
+        "role": "model",
+        "content": "Post-initialization external hardware debug attachment is now an observed viable diagnostic seam for original stock xvic. Startup hardware-breakpoint failures are not root-caused and are not evidence all hardware observation is infeasible. Actual host operand/load-result registers and store arguments are admissible raw evidence; do not invent bus bytes from emulated-PC peeks or expand a packed host load into fabricated per-cycle byte events. Complete regular/dummy read/write, interrupt and stolen-cycle observation plus alignment still required. All acceptance gates remain open pending noon Opus catch-up.",
+        "category": "decision"
+      },
+      {
+        "timestamp": "2026-10-08T17:15:37.7016194+00:00",
+        "role": "model",
+        "content": "The noon timing waiver has ended. Freeze reviewed implementation inputs and keep the already-running same-session Opus review uncapped. Review completion is monitored in this same local chat; ordinary queued progress is not a blocker or acceptance. No further phase advancement until whole catch-up verdict has been read and persisted. Exact unresolved observation surfaces remain explicit; do not reinterpret diagnostic counts as complete bus/parity proof.",
+        "category": "decision"
+      }
+    ],
+    "designDecisionActions": []
+  }
+]

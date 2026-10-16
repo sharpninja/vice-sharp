@@ -1,0 +1,71 @@
+{
+  "timestampLocal": "2026-10-07T13:58:48.0260644-05:00",
+  "classification": "Reconstructed artifacts, not contemporaneously retained backups",
+  "method": "Copied the current pinned source files, reversed only the recorded 13:16 source edits in the copies, and matched both historical post-steering SHA256 values. Duplicated those recovered files, removed only each exact fallback paragraph plus following blank line, and matched both original Opus launch hashes. All four full files now retained read-only; live sources and original receipts unchanged.",
+  "historicalProof": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T120522-0500-mock-green-wiki-opus.mid-review-human-steering.json",
+  "artifacts": [
+    {
+      "Path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\HANDOFF.before-human-steering.md",
+      "Hash": "24BC7C35F8A9BF565CECBFFDD7422CAFB300B4A6C387E812C90054FB026F197A"
+    },
+    {
+      "Path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\goal-plan.before-human-steering.md",
+      "Hash": "8BC3A6818E5B0276870A22ACC559874BFE66FD6322A8C4B5F6E80B3571F373EC"
+    },
+    {
+      "Path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\HANDOFF.after-human-steering.md",
+      "Hash": "E5777C5847ED42A9E856B7F155AB85C6178432696879F655BDDD6711D30869D6"
+    },
+    {
+      "Path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction\\goal-plan.after-human-steering.md",
+      "Hash": "AC8B715D6BA30DDAABEC1F6A53E88667334570347617DFBAEC8A8764C81BFCBF"
+    }
+  ],
+  "allFourHashesMatch": true,
+  "originalReviewInputFilesUnchanged": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+      "unchanged": true
+    },
+    {
+      "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Immutable-Native-VICE.md",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Native-VICE-VSF-Lockstep.md",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\wiki.yaml",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T131928-0500-phase0-mock-scope-grok.wiki-proof.json",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T120522-0500-mock-green-wiki-opus.mid-review-human-steering.json",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T120522-0500-mock-green-wiki-opus.retry-helper-audit.json",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T125315-0500-failsafe-quarantine\\verification.json",
+      "unchanged": true
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using Avalonia;
 using Avalonia.Threading;
 using ViceSharp.Avalonia.Host;
@@ -33,6 +34,9 @@ public sealed class AttachPanelViewModel : ObservableObject
     private string _selectedCropMode = "Visible area";
     private string _selectedAspectMode = "VICE pixel aspect";
     private string _selectedPalette = "VICE default";
+    private string _activePaletteId = "vice";
+    private string _paletteRgb = "";
+    private readonly Dictionary<string, string> _discoveredPalettes = new(StringComparer.OrdinalIgnoreCase);
     private string _selectedAudioMode = "Enabled";
     private string _selectedInputMode = "Keyboard + joystick";
     private string _selectedPrimaryJoystickPort = "Joystick 2";
@@ -381,7 +385,8 @@ public sealed class AttachPanelViewModel : ObservableObject
             if (value is null)
                 return;
 
-            SetSettingsProperty(ref _selectedMachineProfile, value);
+            if (SetSettingsProperty(ref _selectedMachineProfile, value))
+                OnPropertyChanged(nameof(IsVic20Selected));
         }
     }
 
@@ -413,6 +418,32 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         get => _selectedPalette;
         set => SetSettingsProperty(ref _selectedPalette, value);
+    }
+
+    /// <summary>
+    /// FR-CFG-003: find VICE palette files (<c>*.vpl</c>) in
+    /// <paramref name="directory"/> so a later apply can send the file name
+    /// without its extension instead of the generic "vice" fallback.
+    /// </summary>
+    /// <param name="directory">Directory to scan. Missing directories yield no files.</param>
+    /// <returns>Full paths of the palette files that were found.</returns>
+    public IReadOnlyList<string> DiscoverPalettes(string directory)
+    {
+        if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            return [];
+
+        var found = new List<string>();
+        foreach (var path in Directory.EnumerateFiles(directory, "*.vpl"))
+        {
+            var id = Path.GetFileNameWithoutExtension(path);
+            if (string.IsNullOrWhiteSpace(id))
+                continue;
+
+            _discoveredPalettes[Path.GetFullPath(path)] = id;
+            found.Add(path);
+        }
+
+        return found;
     }
 
     public string SelectedAudioMode
@@ -956,7 +987,14 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     public async Task ApplySettingsAsync(bool restartRequired, CancellationToken cancellationToken = default)
     {
-        var response = await _hostClient.UpdateSettingsAsync(CreateUpdateSettingsRequest(restartRequired), cancellationToken).ConfigureAwait(true);
+        if (!TryResolveSelectedPalette(out var paletteId, out var paletteDiagnostic))
+        {
+            StatusText = paletteDiagnostic;
+            SettingsStatusText = paletteDiagnostic;
+            return;
+        }
+
+        var response = await _hostClient.UpdateSettingsAsync(CreateUpdateSettingsRequest(restartRequired, paletteId), cancellationToken).ConfigureAwait(true);
         if (!response.Status.IsSuccess)
         {
             StatusText = response.Status.Message;
@@ -965,7 +1003,15 @@ public sealed class AttachPanelViewModel : ObservableObject
         }
 
         if (response.Settings is not null)
+        {
             ApplySettingsFromHost(response.Settings);
+            if (!string.IsNullOrWhiteSpace(response.Settings.Display?.Palette))
+                _activePaletteId = response.Settings.Display.Palette;
+        }
+        else
+        {
+            _activePaletteId = paletteId;
+        }
 
         // Xbox/host warp entry is SetLimiterRate(0). A positive rate on that
         // RPC re-enables the limiter, so warp Apply must send 0 after the DTO.
@@ -1105,6 +1151,7 @@ public sealed class AttachPanelViewModel : ObservableObject
                 var selectedProfile = profiles.Profiles.FirstOrDefault(profile => profile.IsCurrent) ?? profiles.Profiles[0];
                 _selectedMachineProfile = MachineProfiles.First(profile => profile.Id == selectedProfile.Id);
                 OnPropertyChanged(nameof(SelectedMachineProfile));
+                OnPropertyChanged(nameof(IsVic20Selected));
             }
             finally
             {
@@ -1208,7 +1255,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SpeedCycleLabel));
     }
 
-    private UpdateSettingsRequest CreateUpdateSettingsRequest(bool restartSession)
+    private UpdateSettingsRequest CreateUpdateSettingsRequest(bool restartSession, string? paletteId = null)
     {
         return new UpdateSettingsRequest(
             _hostClient.SessionId,
@@ -1218,12 +1265,13 @@ public sealed class AttachPanelViewModel : ObservableObject
                 ToPacingStrategyId(SelectedPacingStrategy)),
             new DisplaySettingsDto(
                 ToRendererId(SelectedRenderer),
-                ToPaletteId(SelectedPalette),
+                paletteId ?? ResolvePaletteId(),
                 !string.Equals(SelectedCropMode, "Borderless", StringComparison.OrdinalIgnoreCase),
                 !string.Equals(SelectedAspectMode, "Square pixels", StringComparison.OrdinalIgnoreCase),
                 ToScaleId(SelectedDisplayScale),
                 ToCropModeId(SelectedCropMode),
-                ToAspectModeId(SelectedAspectMode)),
+                ToAspectModeId(SelectedAspectMode),
+                _paletteRgb),
             new InputSettingsDto(
                 SelectedKeyboardMap?.Id ?? "c64:gtk3_pos",
                 ToInputPort(SelectedPrimaryJoystickPort),
@@ -1238,7 +1286,8 @@ public sealed class AttachPanelViewModel : ObservableObject
             FileSystemIecUnit,
             SelectedExpansionCartKind,
             ExpansionCartWriteBack,
-            SelectedExpansionCartPreset);
+            SelectedExpansionCartPreset,
+            ApplyAt: "frame");
     }
 
     private ValidateSettingsResourcesRequest CreateValidateSettingsRequest()
@@ -1248,12 +1297,13 @@ public sealed class AttachPanelViewModel : ObservableObject
             new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled, ToPacingStrategyId(SelectedPacingStrategy)),
             new DisplaySettingsDto(
                 ToRendererId(SelectedRenderer),
-                ToPaletteId(SelectedPalette),
+                ResolvePaletteId(),
                 !string.Equals(SelectedCropMode, "Borderless", StringComparison.OrdinalIgnoreCase),
                 !string.Equals(SelectedAspectMode, "Square pixels", StringComparison.OrdinalIgnoreCase),
                 ToScaleId(SelectedDisplayScale),
                 ToCropModeId(SelectedCropMode),
-                ToAspectModeId(SelectedAspectMode)),
+                ToAspectModeId(SelectedAspectMode),
+                _paletteRgb),
             new InputSettingsDto(
                 SelectedKeyboardMap?.Id ?? "c64:gtk3_pos",
                 ToInputPort(SelectedPrimaryJoystickPort),
@@ -1278,6 +1328,140 @@ public sealed class AttachPanelViewModel : ObservableObject
             return "Settings applied.";
 
         return string.Join(" ", diagnostics.Select(diagnostic => diagnostic.Message));
+    }
+
+    private string ResolvePaletteId()
+    {
+        return TryResolveSelectedPalette(out var paletteId, out _)
+            ? paletteId
+            : _activePaletteId;
+    }
+
+    /// <summary>
+    /// Named palettes map to their ids. A discovered or existing .vpl file maps
+    /// to its file name without the extension. A missing .vpl does not replace
+    /// <see cref="_activePaletteId"/>.
+    /// </summary>
+    private bool TryResolveSelectedPalette(out string paletteId, out string diagnostic)
+    {
+        diagnostic = "";
+        _paletteRgb = "";
+        var selected = SelectedPalette ?? "";
+        if (selected.EndsWith(".vpl", StringComparison.OrdinalIgnoreCase))
+        {
+            if (!File.Exists(selected))
+            {
+                paletteId = _activePaletteId;
+                diagnostic = "Palette file was not found. The active palette was not replaced.";
+                return false;
+            }
+
+            var fullPath = Path.GetFullPath(selected);
+            if (!TryReadPaletteFile(fullPath, out var paletteRgb, out diagnostic))
+            {
+                paletteId = _activePaletteId;
+                return false;
+            }
+
+            _paletteRgb = paletteRgb;
+            if (_discoveredPalettes.TryGetValue(fullPath, out var discovered) && !string.IsNullOrWhiteSpace(discovered))
+            {
+                paletteId = discovered;
+                return true;
+            }
+
+            paletteId = Path.GetFileNameWithoutExtension(fullPath);
+            return true;
+        }
+
+        paletteId = ToPaletteId(selected);
+        return true;
+    }
+
+    /// <summary>VIC-II palette length. VICE rejects fewer or more entries.</summary>
+    private const int VicIiPaletteEntries = 16;
+
+    /// <summary>
+    /// VICE <c>palette_load_core</c> accepts a line when it yields three
+    /// hexadecimal channel values in 0..255. Extra tokens are a warning, not
+    /// a rejection. Blank lines and <c>#</c> comments are skipped. VIC-II
+    /// palettes have <see cref="VicIiPaletteEntries"/> colors: fewer or more
+    /// entries are errors and do not replace the active palette.
+    /// </summary>
+    private static bool PaletteFileHasColors(string path, out string diagnostic)
+        => TryReadPaletteFile(path, out _, out diagnostic);
+
+    private static bool TryReadPaletteFile(string path, out string paletteRgb, out string diagnostic)
+    {
+        paletteRgb = "";
+        diagnostic = "";
+        string text;
+        try
+        {
+            text = File.ReadAllText(path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            diagnostic = "Palette file could not be read. The active palette was not replaced.";
+            return false;
+        }
+
+        var colors = new string[VicIiPaletteEntries];
+        var entries = 0;
+        var lineNumber = 0;
+        using var reader = new StringReader(text);
+        while (reader.ReadLine() is { } line)
+        {
+            lineNumber++;
+            var trimmed = line.Trim();
+            if (trimmed.Length == 0 || trimmed[0] == '#')
+                continue;
+
+            if (!PaletteLineHasRgb(trimmed, out var rrggbb))
+            {
+                diagnostic = "Palette file line " + lineNumber.ToString(CultureInfo.InvariantCulture)
+                    + " is invalid. The active palette was not replaced.";
+                return false;
+            }
+
+            if (entries < colors.Length)
+                colors[entries] = rrggbb;
+            entries++;
+        }
+
+        if (entries != VicIiPaletteEntries)
+        {
+            diagnostic = "Palette file has " + entries.ToString(CultureInfo.InvariantCulture)
+                + " colors and VIC-II expects " + VicIiPaletteEntries.ToString(CultureInfo.InvariantCulture)
+                + ". The active palette was not replaced.";
+            return false;
+        }
+
+        paletteRgb = string.Concat(colors);
+        return paletteRgb.Length == VicIiPaletteEntries * 6;
+    }
+
+    private static bool PaletteLineHasRgb(string line, out string rrggbb)
+    {
+        rrggbb = "";
+        var parts = line.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 3)
+            return false;
+
+        Span<int> channels = stackalloc int[3];
+        for (var i = 0; i < 3; i++)
+        {
+            if (!int.TryParse(parts[i], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var value))
+                return false;
+            if ((uint)value > 255)
+                return false;
+            channels[i] = value;
+        }
+
+        rrggbb = channels[0].ToString("x2", CultureInfo.InvariantCulture)
+            + channels[1].ToString("x2", CultureInfo.InvariantCulture)
+            + channels[2].ToString("x2", CultureInfo.InvariantCulture);
+        return true;
     }
 
     private static string ToPaletteId(string palette)
@@ -1507,6 +1691,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp toggle in sync
         OnPropertyChanged(nameof(SpeedCycleLabel));
         OnPropertyChanged(nameof(SelectedMachineProfile));
+        OnPropertyChanged(nameof(IsVic20Selected));
         OnPropertyChanged(nameof(SelectedRenderer));
         OnPropertyChanged(nameof(SelectedDisplayScale));
         OnPropertyChanged(nameof(SelectedCropMode));

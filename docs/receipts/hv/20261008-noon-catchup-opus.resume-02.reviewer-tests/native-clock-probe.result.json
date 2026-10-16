@@ -1,0 +1,9 @@
+{
+  "name": "native-clock-probe",
+  "startedLocal": "2026-10-08T12:28:37.8280479-05:00",
+  "endedLocal": "2026-10-08T12:28:41.9266954-05:00",
+  "exitCode": 0,
+  "command": "dotnet test tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj -c Release --logger trx;LogFileName=native-clock-probe.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\native-clock-probe",
+  "stdout": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\native-clock-probe.stdout.log",
+  "stderr": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\native-clock-probe.stderr.log"
+}

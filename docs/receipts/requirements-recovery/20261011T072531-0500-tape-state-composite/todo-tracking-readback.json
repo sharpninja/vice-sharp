@@ -1,0 +1,498 @@
+{
+  "checkedAt": "2026-10-11T07:42:35.5848464-05:00",
+  "before": [
+    {
+      "result": {
+        "technicalRequirements": [],
+        "title": "Audit every requirement; add VICE-verified acceptance criteria; TDD the full AC set",
+        "functionalRequirements": [],
+        "id": "PLAN-REQAUDIT-001",
+        "priority": "high",
+        "section": "Requirements",
+        "dependsOn": [],
+        "description": [
+          "Perform a COMPLETE audit of every existing FR/TR/TEST requirement for completeness and correctness.",
+          "For every requirement, add acceptance criteria derived from VICE's implementation, verified by running VICE (the source of truth).",
+          "Drive the entire acceptance-criteria set with Byrd v4 TDD: red tests first, 100 percent green gate.",
+          "VICE is the specification. Any vice# behaviour that diverges from VICE is a bug, including where the same bug exists in VICE."
+        ],
+        "technicalDetails": [],
+        "done": false,
+        "note": "2026-09-28T20:24Z recovery checkpoint: owner clarified all FRs remain requirements, including legacy UWP/Xbox FRs, and every FR must have validation-appropriate AC. Generated immutable preflight plus staged 513-record ledger/preview under docs/receipts/requirements-recovery/20260928T195211Z. No MCP requirements mutated. Preview currently has 232 FRs, zero with zero proposed AC, zero active FR mapping gaps, no legacy retirement/scope changes, and three expected wrong-type placeholder removals. Next: tighten inferred AC, prove helper atomic rollback, hostile-review exact preview, then obtain owner approval before mutation.",
+        "implementationTasks": []
+      },
+      "id": "PLAN-REQAUDIT-001"
+    },
+    {
+      "result": {
+        "technicalRequirements": [
+          "TR-VICE-ORACLE-001",
+          "TR-CYCLE-001"
+        ],
+        "title": "Restore immutable VICE oracle boundary and prove all retained real parity gates",
+        "functionalRequirements": [
+          "FR-VICE-001"
+        ],
+        "id": "PLAN-VICEORACLE-001",
+        "priority": "high",
+        "remaining": "Phase0 accepted by local Grok4.7 xhigh AGREE99/98,26PASS0FAIL0UNKNOWN. Completed primary GrokCode-20261007T222539Z-phase0-remediation-hv / req-20261007T222539Z-phase0-remediation-hv contains full22855character verdict; parent independent proof docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json plus final .exit.json. Next: entire native-safe AC-mapped mock-contract suite green before real implementation; next reviewer Opus5.5 max. Five implementation tasks remain open. Real emulator/native VSF/whole-goal gates unwaived; no mock project or product implementation yet.",
+        "section": "Plans",
+        "dependsOn": [],
+        "description": [
+          "Execute docs/plans/PLAN-VICE-IMMUTABLE-001.md as a prerequisite within the entire approved Grok handoff completion plan. Remediate original VICE-as-target violations, not a new behavior requirement.",
+          "FR-VICE-001 AC1-4; TR-VICE-ORACLE-001 AC1-5; TEST-VICE-001 AC1-4; TR-CYCLE-001 all seven ACs, including actual PHI2/AEC AC4. No requirement is retired or marked satisfied by mocks."
+        ],
+        "technicalDetails": [
+          "Testing requirement: TEST-VICE-001. Related real snapshot gates: FR-SNP-005, TEST-SNP-002, TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001.",
+          "Phase 1: full native-safe tests/ViceSharp.OracleContract.Tests project, all six AC-mapped groups, valid mocks and discriminating incorrect mocks; no product/native build dependency.",
+          "Deferred XMLDoc correction: tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs incorrectly cites TR-CYCLE-001 AC4. Correct only after a native-safe harness build exists; retain fixture and single LockstepValidator ownership.",
+          "Named real evidence gate REAL-C64-PHI2-AEC-001: after wrapper feasibility and native-safe harness integration, require actual immutable x64sc half-cycle CPU access observations covering PHI1/PHI2, AEC low/high, idle/read/write, fail closed at missing/unknown access kind or first missing half-cycle. Exercise real managed behavior and native provenance; mock results cannot satisfy TR-CYCLE-001 AC4.",
+          "All seven TR-CYCLE-001 ACs and all existing real-emulator/current-plus-prior suites remain mandatory. Every executable exit has zero failed, skipped or aborted tests, unfiltered applicable suite, and local alternating Grok xhigh / Opus max HV AGREE >=98/98, zero FAIL/UNKNOWN."
+        ],
+        "done": false,
+        "implementationTasks": [
+          {
+            "task": "Reconcile Phase 0 preservation, primary requirements/projections and all workspace queues; obtain accepted HV",
+            "done": true
+          },
+          {
+            "task": "Prove the entire native-safe AC-mapped mock-contract suite green, including deliberate incorrect controls, then HV",
+            "done": false
+          },
+          {
+            "task": "Prove external-wrapper feasibility and snapshot compatibility on pinned immutable VICE without source mutation",
+            "done": false
+          },
+          {
+            "task": "Safely migrate preserved native modifications to external wrappers/managed code and establish native-safe harness builds",
+            "done": false
+          },
+          {
+            "task": "Correct deferred comparator XMLDoc mapping and pass REAL-C64-PHI2-AEC-001 with actual immutable x64sc evidence",
+            "done": false
+          },
+          {
+            "task": "Complete real xvic half-cycle parity, native VSF resume and all original whole-plan gates with full suites and HV",
+            "done": false
+          }
+        ]
+      },
+      "id": "PLAN-VICEORACLE-001"
+    }
+  ],
+  "requestedUpdates": [
+    {
+      "id": "PLAN-REQAUDIT-001",
+      "note": "2026-09-28T20:24Z recovery checkpoint: owner clarified all FRs remain requirements, including legacy UWP/Xbox FRs, and every FR must have validation-appropriate AC. Generated immutable preflight plus staged 513-record ledger/preview under docs/receipts/requirements-recovery/20260928T195211Z. No MCP requirements mutated. Preview currently has 232 FRs, zero with zero proposed AC, zero active FR mapping gaps, no legacy retirement/scope changes, and three expected wrong-type placeholder removals. Next: tighten inferred AC, prove helper atomic rollback, hostile-review exact preview, then obtain owner approval before mutation.\n\n2026-10-11T07:41:13.2835446-05:00 current tape correction: midnight Opus5.5 max review DISAGREE accuracy93/completeness84,35PASS6FAIL0UNKNOWN. Composite draft at docs/receipts/requirements-recovery/20261011T072531-0500-tape-state-composite/README.md contains14 existing-record updates,66 retained AC IDs,90 proposed AC, and fresh typed preimages. UNAPPLIED and not HV-ready. Remaining: CPU capacitor wording audit, complete fixture/case matrices and media dependencies, executable R0/R1 preservation/failure guards, root handoff reconciliation, then independent Opus HV >=98/98 zeroFAIL/UNKNOWN and explicit approval of exact expanded delta. Source/artifact checks are not mocks or runtime acceptance. Every real xvic/x64sc, native VSF, cumulative-suite, VIC20 settings and whole-plan gate remains mandatory. No goal/TODO/requirement done-state advances.",
+      "description": [
+        "Perform a COMPLETE audit of every existing FR/TR/TEST requirement for completeness and correctness.",
+        "For every requirement, add acceptance criteria derived from VICE's implementation, verified by running VICE (the source of truth).",
+        "Drive the entire acceptance-criteria set with BDPv4: requirement-derived assertions first pass against independent discriminating mocks and expected negative controls, then bind the same assertions to production; full applicable suites green before each gate. A red suite is not permission to implement.",
+        "VICE is the specification. Any vice# behaviour that diverges from VICE is a bug, including where the same bug exists in VICE."
+      ]
+    },
+    {
+      "id": "PLAN-VICEORACLE-001",
+      "technicalDetails": [
+        "Testing requirement: TEST-VICE-001. Related real snapshot gates: FR-SNP-005, TEST-SNP-002, TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001.",
+        "Phase 1: full native-safe tests/ViceSharp.OracleContract.Tests project, all six AC-mapped groups, valid mocks and discriminating incorrect mocks; no product/native build dependency.",
+        "Deferred XMLDoc correction: tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs incorrectly cites TR-CYCLE-001 AC4. Correct only after a native-safe harness build exists; retain fixture and single LockstepValidator ownership.",
+        "Named real evidence gate REAL-C64-PHI2-AEC-001: after wrapper feasibility and native-safe harness integration, require actual immutable x64sc half-cycle CPU access observations covering PHI1/PHI2, AEC low/high, idle/read/write, fail closed at missing/unknown access kind or first missing half-cycle. Exercise real managed behavior and native provenance; mock results cannot satisfy TR-CYCLE-001 AC4.",
+        "All seven TR-CYCLE-001 ACs and all existing real-emulator/current-plus-prior suites remain mandatory. Every executable exit has zero failed, skipped or aborted tests, unfiltered applicable suite, and local Opus5.5 max HV while Grok is unavailable AGREE >=98/98, zero FAIL/UNKNOWN."
+      ],
+      "remaining": "2026-10-11T07:41:13.2835446-05:00 current tape correction: midnight Opus5.5 max review DISAGREE accuracy93/completeness84,35PASS6FAIL0UNKNOWN. Composite draft at docs/receipts/requirements-recovery/20261011T072531-0500-tape-state-composite/README.md contains14 existing-record updates,66 retained AC IDs,90 proposed AC, and fresh typed preimages. UNAPPLIED and not HV-ready. Remaining: CPU capacitor wording audit, complete fixture/case matrices and media dependencies, executable R0/R1 preservation/failure guards, root handoff reconciliation, then independent Opus HV >=98/98 zeroFAIL/UNKNOWN and explicit approval of exact expanded delta. Source/artifact checks are not mocks or runtime acceptance. Every real xvic/x64sc, native VSF, cumulative-suite, VIC20 settings and whole-plan gate remains mandatory. No goal/TODO/requirement done-state advances.\n\nHistorical prior remaining text retained below; not a current-state assertion:\nPhase0 accepted by local Grok4.7 xhigh AGREE99/98,26PASS0FAIL0UNKNOWN. Completed primary GrokCode-20261007T222539Z-phase0-remediation-hv / req-20261007T222539Z-phase0-remediation-hv contains full22855character verdict; parent independent proof docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json plus final .exit.json. Next: entire native-safe AC-mapped mock-contract suite green before real implementation; next reviewer Opus5.5 max. Five implementation tasks remain open. Real emulator/native VSF/whole-goal gates unwaived; no mock project or product implementation yet."
+    }
+  ],
+  "after": [
+    {
+      "result": {
+        "technicalRequirements": [],
+        "title": "Audit every requirement; add VICE-verified acceptance criteria; TDD the full AC set",
+        "functionalRequirements": [],
+        "id": "PLAN-REQAUDIT-001",
+        "priority": "high",
+        "section": "Requirements",
+        "dependsOn": [],
+        "description": [
+          "Perform a COMPLETE audit of every existing FR/TR/TEST requirement for completeness and correctness.",
+          "For every requirement, add acceptance criteria derived from VICE's implementation, verified by running VICE (the source of truth).",
+          "Drive the entire acceptance-criteria set with BDPv4: requirement-derived assertions first pass against independent discriminating mocks and expected negative controls, then bind the same assertions to production; full applicable suites green before each gate. A red suite is not permission to implement.",
+          "VICE is the specification. Any vice# behaviour that diverges from VICE is a bug, including where the same bug exists in VICE."
+        ],
+        "technicalDetails": [],
+        "done": false,
+        "note": "2026-09-28T20:24Z recovery checkpoint: owner clarified all FRs remain requirements, including legacy UWP/Xbox FRs, and every FR must have validation-appropriate AC. Generated immutable preflight plus staged 513-record ledger/preview under docs/receipts/requirements-recovery/20260928T195211Z. No MCP requirements mutated. Preview currently has 232 FRs, zero with zero proposed AC, zero active FR mapping gaps, no legacy retirement/scope changes, and three expected wrong-type placeholder removals. Next: tighten inferred AC, prove helper atomic rollback, hostile-review exact preview, then obtain owner approval before mutation.\n\n2026-10-11T07:41:13.2835446-05:00 current tape correction: midnight Opus5.5 max review DISAGREE accuracy93/completeness84,35PASS6FAIL0UNKNOWN. Composite draft at docs/receipts/requirements-recovery/20261011T072531-0500-tape-state-composite/README.md contains14 existing-record updates,66 retained AC IDs,90 proposed AC, and fresh typed preimages. UNAPPLIED and not HV-ready. Remaining: CPU capacitor wording audit, complete fixture/case matrices and media dependencies, executable R0/R1 preservation/failure guards, root handoff reconciliation, then independent Opus HV >=98/98 zeroFAIL/UNKNOWN and explicit approval of exact expanded delta. Source/artifact checks are not mocks or runtime acceptance. Every real xvic/x64sc, native VSF, cumulative-suite, VIC20 settings and whole-plan gate remains mandatory. No goal/TODO/requirement done-state advances.",
+        "implementationTasks": []
+      },
+      "id": "PLAN-REQAUDIT-001"
+    },
+    {
+      "result": {
+        "technicalRequirements": [
+          "TR-VICE-ORACLE-001",
+          "TR-CYCLE-001"
+        ],
+        "title": "Restore immutable VICE oracle boundary and prove all retained real parity gates",
+        "functionalRequirements": [
+          "FR-VICE-001"
+        ],
+        "id": "PLAN-VICEORACLE-001",
+        "priority": "high",
+        "remaining": "2026-10-11T07:41:13.2835446-05:00 current tape correction: midnight Opus5.5 max review DISAGREE accuracy93/completeness84,35PASS6FAIL0UNKNOWN. Composite draft at docs/receipts/requirements-recovery/20261011T072531-0500-tape-state-composite/README.md contains14 existing-record updates,66 retained AC IDs,90 proposed AC, and fresh typed preimages. UNAPPLIED and not HV-ready. Remaining: CPU capacitor wording audit, complete fixture/case matrices and media dependencies, executable R0/R1 preservation/failure guards, root handoff reconciliation, then independent Opus HV >=98/98 zeroFAIL/UNKNOWN and explicit approval of exact expanded delta. Source/artifact checks are not mocks or runtime acceptance. Every real xvic/x64sc, native VSF, cumulative-suite, VIC20 settings and whole-plan gate remains mandatory. No goal/TODO/requirement done-state advances.\n\nHistorical prior remaining text retained below; not a current-state assertion:\nPhase0 accepted by local Grok4.7 xhigh AGREE99/98,26PASS0FAIL0UNKNOWN. Completed primary GrokCode-20261007T222539Z-phase0-remediation-hv / req-20261007T222539Z-phase0-remediation-hv contains full22855character verdict; parent independent proof docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json plus final .exit.json. Next: entire native-safe AC-mapped mock-contract suite green before real implementation; next reviewer Opus5.5 max. Five implementation tasks remain open. Real emulator/native VSF/whole-goal gates unwaived; no mock project or product implementation yet.",
+        "section": "Plans",
+        "dependsOn": [],
+        "description": [
+          "Execute docs/plans/PLAN-VICE-IMMUTABLE-001.md as a prerequisite within the entire approved Grok handoff completion plan. Remediate original VICE-as-target violations, not a new behavior requirement.",
+          "FR-VICE-001 AC1-4; TR-VICE-ORACLE-001 AC1-5; TEST-VICE-001 AC1-4; TR-CYCLE-001 all seven ACs, including actual PHI2/AEC AC4. No requirement is retired or marked satisfied by mocks."
+        ],
+        "technicalDetails": [
+          "Testing requirement: TEST-VICE-001. Related real snapshot gates: FR-SNP-005, TEST-SNP-002, TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001.",
+          "Phase 1: full native-safe tests/ViceSharp.OracleContract.Tests project, all six AC-mapped groups, valid mocks and discriminating incorrect mocks; no product/native build dependency.",
+          "Deferred XMLDoc correction: tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs incorrectly cites TR-CYCLE-001 AC4. Correct only after a native-safe harness build exists; retain fixture and single LockstepValidator ownership.",
+          "Named real evidence gate REAL-C64-PHI2-AEC-001: after wrapper feasibility and native-safe harness integration, require actual immutable x64sc half-cycle CPU access observations covering PHI1/PHI2, AEC low/high, idle/read/write, fail closed at missing/unknown access kind or first missing half-cycle. Exercise real managed behavior and native provenance; mock results cannot satisfy TR-CYCLE-001 AC4.",
+          "All seven TR-CYCLE-001 ACs and all existing real-emulator/current-plus-prior suites remain mandatory. Every executable exit has zero failed, skipped or aborted tests, unfiltered applicable suite, and local Opus5.5 max HV while Grok is unavailable AGREE >=98/98, zero FAIL/UNKNOWN."
+        ],
+        "done": false,
+        "implementationTasks": [
+          {
+            "task": "Reconcile Phase 0 preservation, primary requirements/projections and all workspace queues; obtain accepted HV",
+            "done": true
+          },
+          {
+            "task": "Prove the entire native-safe AC-mapped mock-contract suite green, including deliberate incorrect controls, then HV",
+            "done": false
+          },
+          {
+            "task": "Prove external-wrapper feasibility and snapshot compatibility on pinned immutable VICE without source mutation",
+            "done": false
+          },
+          {
+            "task": "Safely migrate preserved native modifications to external wrappers/managed code and establish native-safe harness builds",
+            "done": false
+          },
+          {
+            "task": "Correct deferred comparator XMLDoc mapping and pass REAL-C64-PHI2-AEC-001 with actual immutable x64sc evidence",
+            "done": false
+          },
+          {
+            "task": "Complete real xvic half-cycle parity, native VSF resume and all original whole-plan gates with full suites and HV",
+            "done": false
+          }
+        ]
+      },
+      "id": "PLAN-VICEORACLE-001"
+    }
+  ],
+  "initialFaultyChecks": [
+    {
+      "id": "PLAN-REQAUDIT-001",
+      "doneBefore": false,
+      "doneAfter": false,
+      "allFieldsMatch": false,
+      "fields": [
+        {
+          "field": "technicalRequirements",
+          "matches": false,
+          "wasUpdated": false
+        },
+        {
+          "field": "title",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "functionalRequirements",
+          "matches": false,
+          "wasUpdated": false
+        },
+        {
+          "field": "id",
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "priority",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "section",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "dependsOn",
+          "matches": false,
+          "wasUpdated": false
+        },
+        {
+          "field": "description",
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "technicalDetails",
+          "matches": false,
+          "wasUpdated": false
+        },
+        {
+          "field": "done",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "note",
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "implementationTasks",
+          "matches": false,
+          "wasUpdated": false
+        }
+      ]
+    },
+    {
+      "id": "PLAN-VICEORACLE-001",
+      "doneBefore": false,
+      "doneAfter": false,
+      "allFieldsMatch": false,
+      "fields": [
+        {
+          "field": "technicalRequirements",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "title",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "functionalRequirements",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "id",
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "priority",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "remaining",
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "section",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "dependsOn",
+          "matches": false,
+          "wasUpdated": false
+        },
+        {
+          "field": "description",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "technicalDetails",
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "done",
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "implementationTasks",
+          "matches": true,
+          "wasUpdated": false
+        }
+      ]
+    }
+  ],
+  "comparisonCorrection": "Initial expected assignment used output of an if block, which unrolled empty arrays to null. Corrected direct object assignment preserves empty arrays. Parent checker defect, not a server-state change. Initial results retained. Session action8 prematurely stated all fields verified; corrected checks below are actual proof. One correction command was rejected as a syntax error before execution and then corrected.",
+  "checks": [
+    {
+      "id": "PLAN-REQAUDIT-001",
+      "doneBefore": false,
+      "doneAfter": false,
+      "allFieldsMatch": true,
+      "fields": [
+        {
+          "field": "technicalRequirements",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "title",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "functionalRequirements",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "id",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "priority",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "section",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "dependsOn",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "description",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "technicalDetails",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "done",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "note",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "implementationTasks",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        }
+      ]
+    },
+    {
+      "id": "PLAN-VICEORACLE-001",
+      "doneBefore": false,
+      "doneAfter": false,
+      "allFieldsMatch": true,
+      "fields": [
+        {
+          "field": "technicalRequirements",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "title",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "functionalRequirements",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "id",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "priority",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "remaining",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "section",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "dependsOn",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "description",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "technicalDetails",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": true
+        },
+        {
+          "field": "done",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        },
+        {
+          "field": "implementationTasks",
+          "presentAfter": true,
+          "matches": true,
+          "wasUpdated": false
+        }
+      ]
+    }
+  ],
+  "emptyArrayControls": [
+    {
+      "passed": true,
+      "name": "Empty arrays compare equal"
+    },
+    {
+      "passed": true,
+      "name": "Null differs from empty array"
+    }
+  ],
+  "doneStateChanged": false
+}

@@ -1,0 +1,18 @@
+{
+  "timestampLocal": "2026-10-08T09:12:13.3160534-05:00",
+  "exitCode": 0,
+  "monitorCommand": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\save-step.mon",
+  "snapshots": [
+    {
+      "sha256": "5E5BBC52EAF5E266E8E824D1ECF42398F4BC905C2FB8CE2B71B55610C00F0685",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\xvic-03-ready\\after-step.vsf",
+      "length": 1051671
+    },
+    {
+      "sha256": "96D910334646E96F98E09C6A7C54B19E3817F82FC14AF6EA711A3BC8DBAADE18",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\xvic-03-ready\\fresh.vsf",
+      "length": 1051671
+    }
+  ],
+  "note": "BASIC-ready native save and instruction-step smoke only"
+}

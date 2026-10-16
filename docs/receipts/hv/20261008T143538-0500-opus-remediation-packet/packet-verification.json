@@ -1,0 +1,21 @@
+{
+  "verifiedAtLocal": "2026-10-08T14:46:22-05:00",
+  "status": "prepared-not-launched",
+  "candidateInputCount": 1123,
+  "candidateHashMismatches": 0,
+  "originalInputCount": 826,
+  "originalInputsMatching": 815,
+  "originalInputsChanged": 11,
+  "originalInputsMissing": 0,
+  "originalFindings": 16,
+  "originalFindingChanges": 0,
+  "originalProgressPrefixUnchanged": true,
+  "candidateCacheDoesNotExist": true,
+  "reviewerQueueRecordsUnmodified": "No queue mutation performed; four filenames confirmed present",
+  "executableHashMatchesOriginal": true,
+  "candidateInputPinsSha256": "2E5A5051BE1C53B2AF9EA00722D99D3BC3953A0EA318092BB6143EC0BD6070B2",
+  "preparedRequestSha256": "B17F8482FBB9C47980CA5A8A970338270CF2FD20FA0FF3DEB5DAA691E83E99AC",
+  "diffCheckExit": 0,
+  "newReviewStarted": false,
+  "gateAdvanced": false
+}

@@ -20,8 +20,7 @@ public sealed class Vic20VideoLockstep
     [Fact]
     public void EveryCycle_VicI_VideoState_Match_FocusedWindow()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         var matched = RunEveryCycleVideo(FocusedBudgetCycles);
         Assert.True(matched == FocusedBudgetCycles,
@@ -34,8 +33,7 @@ public sealed class Vic20VideoLockstep
     [Fact]
     public void EveryCycle_VicI_VideoState_Match_2k()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         var matched = RunEveryCycleVideo(2000);
         Assert.Equal(2000, matched);
@@ -45,8 +43,7 @@ public sealed class Vic20VideoLockstep
     [Fact]
     public void EveryCycle_VicI_VideoState_Match_2k_Ntsc()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         var matched = RunEveryCycleVideo(2000, "vic20ntsc");
         Assert.Equal(2000, matched);
@@ -56,8 +53,7 @@ public sealed class Vic20VideoLockstep
     [Fact]
     public void EveryCycle_VicI_VideoState_Match_FocusedWindow_Ntsc()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         var matched = RunEveryCycleVideo(FocusedBudgetCycles, "vic20ntsc");
         Assert.True(matched == FocusedBudgetCycles,

@@ -1,0 +1,111 @@
+{
+  "schema": "hv-parent-terminal/v1",
+  "measuredAtLocal": "2026-10-13T23:51:02",
+  "parentSessionId": "Codex-20261007T135626Z-plugin-session",
+  "parentRequestId": "req-20261014T021233Z-remediate-two-hv-failures",
+  "reviewerSessionId": "ClaudeCode-20261014T042517Z-plugin-session",
+  "reviewerRequestId": "req-20261014T042520Z-prompt-6807",
+  "cliSessionId": "bab22fd4-f213-4011-9616-074b14def01b",
+  "pid": 25752,
+  "startedAtLocal": "2026-10-13T23:25:08",
+  "processExitCode": 0,
+  "captureFlushedAndClosedAtLocal": "2026-10-13T23:50:26",
+  "captureTasksCompleted": true,
+  "jsonlEventCount": 1134,
+  "invalidJsonlLineCount": 0,
+  "resultEventCount": 1,
+  "resultSubtype": "success",
+  "runtimeModel": "claude-opus-5-5",
+  "requestedEffort": "max",
+  "effortEvidence": "request.jsonl arguments and launch-result.json; runtime init does not emit effort",
+  "OverallVerdict": "AGREE",
+  "accuracy": 99,
+  "completeness": 98,
+  "passCount": 49,
+  "failCount": 0,
+  "unknownCount": 0,
+  "notApplicableCount": 1,
+  "candidateSha256": "63386E9251185B101F53E9257CDA9270025A68006B83F243314E6E299A55D702",
+  "files": [
+    {
+      "name": "request.jsonl",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\request.jsonl",
+      "bytes": 16855,
+      "sha256": "895AFC38EA8E7E013B49FB175ECD26CB7EDC3E4E95B48636CDCBC1FD03417805"
+    },
+    {
+      "name": "response.jsonl",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\response.jsonl",
+      "bytes": 2663023,
+      "sha256": "ABBF914902CC3307FA9E13853FD77E91B0A29DB354435A459158E36E490D7B64"
+    },
+    {
+      "name": "stderr.log",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "name": "verdict.md",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\verdict.md",
+      "bytes": 32744,
+      "sha256": "B94E8FA19985F13FED9476CC686D2FDE8F39EBA20DF439EAC24E7ACAA780A1D9"
+    },
+    {
+      "name": "verdict.json",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\verdict.json",
+      "bytes": 18410,
+      "sha256": "36FD48D2B7D0F7441CFC929CBE3CDB06E60B8E151534D4879FA8EB7C6414F4E8"
+    },
+    {
+      "name": "verdict.persistence.json",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\verdict.persistence.json",
+      "bytes": 11654,
+      "sha256": "08E020AF06CA9C10F0C329CD5F5D30B447A2577F0FF0C033F6A5B71845075D85"
+    }
+  ],
+  "independentMcpReadback": {
+    "measuredAtLocal": "2026-10-13T23:49:18",
+    "method": "client.SessionLog.QueryAsync",
+    "turnStatus": "completed",
+    "model": "claude-opus-5-5",
+    "dialogCount": 23,
+    "actionCount": 10,
+    "normalization": "CRLF to LF; trailing LF trimmed; ordered bodies joined with LF",
+    "parts": [
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD-V2",
+        "parts": 6,
+        "declaredTotal": [
+          6
+        ],
+        "distinctParts": 6,
+        "expectedChars": 32283,
+        "actualChars": 32283,
+        "equal": true,
+        "sha256": "F138DB3306D6874D3E0DA35CE138F716CAFC7F6353293073FFD2AB9E13F2682A"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-JSON",
+        "parts": 3,
+        "declaredTotal": [
+          3
+        ],
+        "distinctParts": 3,
+        "expectedChars": 18039,
+        "actualChars": 18039,
+        "equal": true,
+        "sha256": "CE95124A0F34DE0098FC2CB5740BDCF2AFE609D378A3EC8B6619C573761E1C4B"
+      }
+    ]
+  },
+  "pinnedInputReadback": {
+    "measuredAtLocal": "2026-10-13T23:49:18",
+    "inputPinsPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\input-pins.json",
+    "total": 324,
+    "mismatches": []
+  },
+  "accepted": true,
+  "scope": "R0 unapplied amendment and remediation evidence only. No executable mock, production, native, real-emulator or whole-plan gate passed.",
+  "nextState": "Pause. No requirement application, R1 work, done-state mutation, commit or push."
+}

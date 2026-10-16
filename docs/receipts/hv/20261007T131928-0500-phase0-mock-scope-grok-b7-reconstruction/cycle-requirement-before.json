@@ -1,0 +1,56 @@
+{
+  "type": "result",
+  "payload": {
+    "deprecated": true,
+    "result": {
+      "priority": "high",
+      "updatedAt": "2026-10-07T18:53:41.6830379+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TR-CYCLE-001",
+      "createdAt": "2026-10-07T18:53:41.6828449+00:00",
+      "description": "The emulation core shall operate at sub-cycle granularity, modeling the two phases of the system clock (PHI1 and PHI2) and the bus ownership arbitration between the CPU and VIC-II. This level of accuracy is required to correctly emulate cycle-exact tricks used by C64 demos and games. The reference implementation for correctness is VICE x64sc (the cycle-exact VICE variant).\n\n## Acceptance Criteria\n- All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.\n- The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle.\n- CIA timer countdown occurs at the correct bus phase (PHI2 falling edge).\n- CPU memory accesses occur only during PHI2 when AEC is asserted.\n- The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).\n- The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.\n- Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "isSatisfied": false,
+          "text": "All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity."
+        },
+        {
+          "id": "ac-02",
+          "isSatisfied": false,
+          "text": "The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle."
+        },
+        {
+          "id": "ac-03",
+          "isSatisfied": false,
+          "text": "CIA timer countdown occurs at the correct bus phase (PHI2 falling edge)."
+        },
+        {
+          "id": "ac-04",
+          "isSatisfied": false,
+          "text": "CPU memory accesses occur only during PHI2 when AEC is asserted."
+        },
+        {
+          "id": "ac-05",
+          "isSatisfied": false,
+          "text": "The Lorenz test suite passes at 100% (same pass rate as VICE x64sc)."
+        },
+        {
+          "id": "ac-06",
+          "isSatisfied": false,
+          "text": "The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output."
+        },
+        {
+          "id": "ac-07",
+          "isSatisfied": false,
+          "text": "Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly."
+        }
+      ],
+      "title": "Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior",
+      "status": "closed",
+      "area": "CYCLE",
+      "subarea": 1
+    },
+    "requestId": "req-20261007T185327Z-4857"
+  }
+}

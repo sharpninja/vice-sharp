@@ -1,0 +1,12 @@
+{
+  "timestampLocal": "2026-10-08T09:40:19.4921157-05:00",
+  "machine": "xvic",
+  "requestId": 8,
+  "file": "missing-edfd622515b84a58857e371160de1b17.vsf",
+  "exists": false,
+  "type": 0,
+  "error": 143,
+  "bodyHex": "",
+  "guardRejected": true,
+  "exceptionType": "System.IO.InvalidDataException"
+}

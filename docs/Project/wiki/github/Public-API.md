@@ -1,6 +1,6 @@
 # ViceSharp Public API Reference
 
-This document describes the public interfaces defined in `ViceSharp.Abstractions` (50 interface files as of v1.0.2). The interfaces are explicit and trim-aware: no reflection on the hot path, no base classes, and all members are explicitly defined for source-generator discovery. Current application packaging is self-contained managed code with ReadyToRun, not native ahead-of-time publishing.
+This document describes the foundational public interfaces defined in `ViceSharp.Abstractions` (55 public interface declarations across 63 C# source files as audited 2026-10-04). The contracts are explicit and trim-aware: no reflection on the hot path, no required base-class hierarchy, and members are available for source-generator discovery. Current desktop packaging is self-contained managed code with ReadyToRun, not native ahead-of-time publishing.
 
 This reference covers the foundational contracts. Chip-level and machine-level contracts (`ICpu`, `IVideoChip`, `IAudioChip`, `ICiaChip`, `IMemory`, the input/storage port interfaces, `IStatefulDevice`, `ISystemCoordinator`, `IInterSystemBus`, the lockstep oracle `IViceNative`, and others) are documented by their XML doc comments in `src/ViceSharp.Abstractions`.
 

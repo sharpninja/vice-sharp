@@ -52,11 +52,10 @@ public static class FrameCapture
     }
 
     /// <summary>
-    /// Screenshot formats offered to the UI / parity with x64sc's selectable image drivers.
-    /// JPEG is intentionally excluded (the in-repo JPEG writer is grayscale scaffolding and
-    /// x64sc offers no JPEG).
+    /// Screenshot formats the host can write. PNG and BMP match the common
+    /// x64sc drivers. JPEG is FR-MED-005. GIF matches VICE gifdrv.
     /// </summary>
-    public static IReadOnlyList<string> ScreenshotFormats { get; } = ["png", "bmp"];
+    public static IReadOnlyList<string> ScreenshotFormats { get; } = ["png", "bmp", "jpeg", "gif"];
 
     /// <summary>
     /// Capture an already-copied BGRA frame to a file in the given format. Used by the host
@@ -69,7 +68,8 @@ public static class FrameCapture
         int height,
         string filePath,
         string format,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        int jpegQuality = 50)
     {
         ArgumentNullException.ThrowIfNull(frame);
         ArgumentException.ThrowIfNullOrWhiteSpace(format);
@@ -83,8 +83,15 @@ public static class FrameCapture
             case "png":
                 await PngFrameArtifactWriter.WriteBgraAsync(frame, width, height, filePath, cancellationToken).ConfigureAwait(false);
                 return "png";
+            case "jpeg":
+            case "jpg":
+                await JpegFrameArtifactWriter.WriteBgraAsync(frame, width, height, filePath, cancellationToken, jpegQuality).ConfigureAwait(false);
+                return "jpeg";
+            case "gif":
+                await GifFrameArtifactWriter.WriteBgraAsync(frame, width, height, filePath, cancellationToken).ConfigureAwait(false);
+                return "gif";
             default:
-                throw new ArgumentOutOfRangeException(nameof(format), format, "Unsupported screenshot format. Use png or bmp.");
+                throw new ArgumentOutOfRangeException(nameof(format), format, "Unsupported screenshot format. Use png, bmp, jpeg, or gif.");
         }
     }
 }

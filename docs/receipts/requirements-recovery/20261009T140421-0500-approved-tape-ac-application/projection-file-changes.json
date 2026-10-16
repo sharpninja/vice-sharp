@@ -1,0 +1,74 @@
+{
+  "created": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\legacy-tape-acceptance-correction.md",
+      "sha256": "FED0D46878DE1EDC8C19B3DC8F3CB4B980B80F6B4A75C4CEB3E9524D133D8CFF",
+      "bytes": 10721
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\Functional-Requirements.md",
+      "sha256": "391CFD0D4FC831530914EB7C69CCD2BD8C809CF29CA5A20B2D3262B64275498B",
+      "bytes": 297122
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\Technical-Requirements.md",
+      "sha256": "21F6F3C5815ED28089256B51E6F970CD24E2C8EF3C0CE852EDDA83BC764AA2B1",
+      "bytes": 114427
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\Testing-Requirements.md",
+      "sha256": "E7B1C93D17D4137347D67E636BA151BF6FA68189EDB92BF3C7F769B979C31E2B",
+      "bytes": 67385
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\TR-per-FR-Mapping.md",
+      "sha256": "0477D488B4F3AC1C2EE45128D2D5106C67E79B2C389390FFD3C2B960E5FEC160",
+      "bytes": 18266
+    }
+  ],
+  "deleted": [],
+  "changed": [
+    {
+      "change": "changed",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\Requirements-Matrix.md",
+      "after": "DA8662EC44B88C5320939DF837E44D2AD10CB213532584B0D3EFA612CA176427",
+      "before": "95F9F54BCB349AB8112A19DFE248BE26DA8575A79CA094FFAF3F781B0BDE80E6"
+    },
+    {
+      "change": "changed",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\azure\\.mcp-requirements-manifest.json",
+      "after": "D1BEAEEA62E13A06719782125BF274A61EDB4983C44440D43DCAE8236D722C26",
+      "before": "DA20A4CC154FAA1BB40F0B2E59D2BFA631B3C96FF85D85FA149D5964C4E1BD8A"
+    },
+    {
+      "change": "changed",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\.mcp-requirements-manifest.json",
+      "after": "39FB85880AEAC3BD590FBF0EBBC663409341A7072BEDA9651B64B73C2E68DE71",
+      "before": "56F72458C4181E6C50335519B311AFF53A0E32D7499D3427D1C6E56526F48CB2"
+    },
+    {
+      "change": "changed",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Functional-Requirements.md",
+      "after": "391CFD0D4FC831530914EB7C69CCD2BD8C809CF29CA5A20B2D3262B64275498B",
+      "before": "C4CFF59DF0172261567C31C8DEBF8568FBAD7E26A73E6581E158E41FFD40BE3A"
+    },
+    {
+      "change": "changed",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Immutable-Native-VICE.md",
+      "after": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "before": "ED59FCE292D62343FE4013BCACA6CC6D03813E1D48A85BBAF6905B79EB2D3B12"
+    },
+    {
+      "change": "changed",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Technical-Requirements.md",
+      "after": "21F6F3C5815ED28089256B51E6F970CD24E2C8EF3C0CE852EDDA83BC764AA2B1",
+      "before": "936A7E6853A84C484C0A2CE102F64DA719760793A31D749F05DE9B21CE7E3ACC"
+    },
+    {
+      "change": "changed",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Testing-Requirements.md",
+      "after": "E8DE980B80FEEE9DC0CC41E9FE69AB49EDE185B6BC1636CB2B672C4432B5D15A",
+      "before": "A740EA4DACC2B5FF15AE31D9ABD2BB3A72D1C6166353DA8506054681B08FC9E1"
+    }
+  ]
+}

@@ -1,0 +1,506 @@
+# Hostile review: Phase 0 readiness after PHI2/AEC and evidence remediation (Opus slot)
+
+TimestampLocal: 2026-10-07T16:08:58.321-05:00
+TimestampUtc: 2026-10-07T21:08:58.321Z
+ValidatorIdentity: ClaudeCode (local Claude Code CLI 2.1.292)
+Model: claude-opus-5-5 at effort max
+ClaudeCliSessionId: fa2d7384-f174-4f2e-8b3c-4a4cc6477893 (the quota-ended launch session, resumed once under the authorized retry)
+RotationSlot: Opus 5.5 max; this resume continues the same logical review and does not consume a new slot
+McpSessionId: ClaudeCode-20261007T191324Z-plugin-session
+McpRequestId: req-20261007T191327Z-prompt-be46
+add-profile: executed first on resume; 22 profile files read in full (every C:\Users\kingd\.claude\profile\*.md except add-profile.grok.md, add-profile.md first), plus C:\Users\kingd\.codex\skills\add-profile\SKILL.md and C:\Users\kingd\.grok\skills\hostile-validator\SKILL.md
+Work class: class 1 for the PLAN-VICE-IMMUTABLE-001 Phase 0 exit and Phase 1 decision-completeness (surfaces A to D); class 2 for the operator-approved five-record quarantine (surface C not applied).
+
+Streams:
+- Launch request (first launch, quota-only): F:\GitHub\vice-sharp\docs\receipts\hv\20261007T141100-0500-phi2-ac-remediation-opus.request.jsonl, SHA-256 DB6BF26D43D10A17E4FE3A0C84DDF7DBE56C6096689CCAFF2336918EF473B606
+- Launch response (first launch, quota-only: provider session limit, cliExitCode 1, numTurns 1, no review verdict): F:\GitHub\vice-sharp\docs\receipts\hv\20261007T141100-0500-phi2-ac-remediation-opus.response.jsonl, SHA-256 04AA3AC97B5FE3AD34FB8D616AF5CA983CD7D73225F941BFC8B01FC2E08448F8
+- Resume request (this review): F:\GitHub\vice-sharp\docs\receipts\hv\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.request.jsonl, SHA-256 6DB4F9B855F8E540C4ED09A53FACC226631D00C5F2A8CE61702E400B3BAD90E4
+- Resume response (this review, live stream retained by the parent): F:\GitHub\vice-sharp\docs\receipts\hv\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.response.jsonl
+- Stderr: F:\GitHub\vice-sharp\docs\receipts\hv\20261007T141100-0500-phi2-ac-remediation-opus.stderr.txt (0 bytes) and F:\GitHub\vice-sharp\docs\receipts\hv\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.stderr.txt
+- Prompts: original A37EDFF1794513FB852B2A32CA9AE4BBCC0113C87B3818AB35DD2F811A2F7A4F, resume 254184C274C80443BEFD37F9050BCF3FC31E390209DDF4B7EA6CBA494C3247B6
+
+OverallVerdict: DISAGREE
+Accuracy: 94. Every directly checkable fact in the brief was reproduced: 17 of 17 pins twice, the B7 bytes, TR-CYCLE-001 status and AC text, quarantine hashes, prior verdict persistence, the build boundary, the native inventory, and the absence of new code. Deduction: the brief presents Phase 0 as ready while plan L59 is unmet (four valid queued records, one now stale against a completed primary turn), and presents the PHI2/AEC matrix as covering missing observations when the missing access-kind and missing-sequence cases are absent.
+Completeness: 85. Four required elements are missing: queue drain and readback (or an operator disposition) for the Phase 0 exit; missing access-kind and empty or gapped sequence rejection in the PHI2/AEC contract; MCP TODO or requirements tracking for the active plan, its requirement IDs, and its deferred items; full-suite exits in goal-plan decision 10, Phase 4, and the whole-plan exit.
+Phase0Accepted: false
+MockValidatedTestPhasePermitted: false
+ProductionImplementationPermitted: false
+WholeGoalComplete: false
+NativeParity: false
+NativeRestoration: false
+VsfCompletion: false
+Counts: PASS 22, FAIL 4, UNKNOWN 0 (26 claims)
+completionPercent: 100
+eta: null
+
+## Decision
+
+Mock-contract tests must not begin yet. All three remediations from the Grok review hold up under independent checks: the bus-address comparator is no longer mapped to TR-CYCLE-001 AC4, TR-CYCLE-001 is pending with all seven ACs unchanged and unsatisfied, and the B7 steering hashes replay exactly from the retained bytes. The earlier PASS areas still hold: the five-record quarantine, prior verdict persistence, the build boundary, the unfiltered mock-suite scope, the retained real gates, the resume TR correction, the VSF zero-skip Test gate, and an unchanged native/vice.
+
+Two blocking gaps remain. First, plan L59 requires valid pending records across every workspace agent queue to be drained and read back before Phase 1 begins. Four valid records are still queued, and one of them (7dc1) is now stale against a completed primary turn, so it needs an operator disposition. Second, the new PHI2/AEC matrix does not reject a missing CPU access kind or an empty or gapped observation sequence, so a mock that silently infers idle passes every planned control.
+
+Two nonblocking process gaps also fail. The active immutable plan and its deferred items have no MCP TODO or requirements tracking, and the whole-goal plan still lets focused filters define some exits. Production implementation stays forbidden, and the whole goal stays open.
+
+## FAIL
+- B4: Deferred work and the active immutable plan are not tracked in MCP TODO or requirements state.
+- C6: The new PHI2/AEC contract matrix does not require rejection of every missing observation.
+- D1: The Phase 0 exit condition on pending records is not met, so Phase 1 may not begin yet.
+- D7: Whole-goal plan exit wording still lets focused filters define exits.
+
+## UNKNOWN
+- None.
+
+## Claims (A requested, B workspace rules, C requirements, D plan)
+### A1 [A] PASS
+All 17 pinned launch inputs match the request pins before and during this review; both prompt hashes match.
+Evidence: Get-FileHash SHA256 at 2026-10-07T15:36:30.672-05:00 and 2026-10-07T16:05:15.361-05:00: 17 of 17 equal to request.jsonl evidenceHashes (HANDOFF CF536471, immutable plan C7E1FE6C, VSF plan C15DA385, TR-Cycle-Accuracy BD2F3DB5, goal plan 5EE5D2A2, both wiki plan projections equal to their sources, wiki.yaml 62EB5A58, nine receipt files). Original prompt A37EDFF1 and resume prompt 254184C2 match their request records; launch request DB6BF26D and launch response 04AA3AC9 match launch-result.json.
+
+### A2 [A] PASS
+Remediation 1 mapping: group 5 no longer maps the bus-address comparator to TR-CYCLE-001 AC4; the stale fixture annotation is not counted; comparator coverage stays partial and its real gates stay mandatory.
+Evidence: PLAN-VICE-IMMUTABLE-001 L82 disclaims the AC4 association, keeps the single LockstepValidator comparator, forbids a second comparison algorithm, and keeps the FR-SNP-005 AC3 and TEST-SNP-002 AC4 restored-checkpoint, 100000-cycle, complete-state real gates. tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs L7 still names TR-CYCLE-001 AC4, but its behavioral assertions (L35-L43) check only HalfCycle 37, Field BusAddress, $1000 versus $1001, and the message. A tests-wide search finds this file as the only explicit TR-CYCLE-001 AC association. Live FR-SNP-005 ac-03 and TEST-SNP-002 ac-04 require 100000-cycle lockstep from a restored checkpoint.
+
+### A3 [A] PASS
+Remediation 2: TR-CYCLE-001 changed only from closed to pending; description and all seven ACs are unchanged and unsatisfied; canonical markdown and wiki projection agree.
+Evidence: Supported workflow.requirements.getTr ended 2026-10-07T15:44:37.243-05:00 (exit 0): status pending, ac-01 to ac-07 isSatisfied false, description 995 chars equal to cycle-status-remediation.json after.description. Before and after differ only in status, createdAt, updatedAt; live createdAt and updatedAt match the read time (20:44:36Z), confirming nonhistorical projection stamps. workflow.requirements.effective (layer-1, ended 2026-10-07T15:45:13.308-05:00) agrees. TR-Cycle-Accuracy.md L19 says Pending and its seven AC lines equal the live text ordinally. Wiki Technical-Requirements.md (written 14:09:40, after the 14:05 update) shows Status pending.
+
+### A4 [A] PASS
+Remediation 3 (B7 replay): removing each exact fallback paragraph plus its following blank line from the retained post-steering bytes reproduces the pre-steering bytes and launch hashes.
+Evidence: In-memory ordinal byte search: HANDOFF paragraph 737 bytes, one occurrence at offset 2762, preceded by LF and followed by LF LF; removal yields 32804 bytes, SHA 24BC7C35, byte-equal to HANDOFF.before-human-steering.md. Goal-plan paragraph 672 bytes, one occurrence at offset 516, followed by LF LF; removal yields 41947 bytes, SHA 8BC3A681, byte-equal to goal-plan.before-human-steering.md. The after files hash E5777C58 and AC8B715D, equal to the steering record currentSha256. Launch hashes are independently corroborated by 20261007T120522-0500-mock-green-wiki-opus.implementation-evidence.json, written 12:07:42-05:00, before the 12:08 Opus launch and the 13:16 steering record.
+
+### A5 [A] PASS
+The prior Grok verdict is fully persisted on its completed primary turn.
+Evidence: Retained .primary-query-response.json (SHA 8BA430EF) is byte-equal to the Grok session MCP call record call-96c5f03e-d244-4b7b-8a70-7efb1de843ba-40.json (50828 bytes). Turn req-20261007T182902Z-001-hv-phase0-mock-scope-grok is completed with model grok-4.7; its response and processingDialog[0].content each equal .verdict.md exactly (19873 chars, SHA 1B6844B1); the embedded VERDICT JSON re-serializes equal to .verdict.json (SHA 31924EB6). Its 22 claims count PASS 19, FAIL 2, UNKNOWN 1.
+
+### A6 [A] PASS
+The operator-approved five-record quarantine is intact and both historical primary sessions are unchanged (class 2 operation; surface C not applied).
+Evidence: All five backups and five quarantine copies match the recorded SHA-256 (560c E8DF8155, b7d6 BEE26210, f19e 17B96B05, 50e5 74BCB552, 9609 8003DDBC); backups are read-only; sources are absent; reason files exist. client.SessionLog.QueryAsync at 2026-10-07T15:57:07.841-05:00 shows ClaudeCode-20261007T153749Z-plugin-session and GrokCode-20261007T153754Z-plugin-session normalized-equal to primary-after.json, lastUpdated 16:01:16Z and 16:01:08Z, turns still in_progress. Replayed 0.
+
+### A7 [A] PASS
+Later valid fallback records are preserved byte-for-byte and the supported drain attempt is audited.
+Evidence: retitle-failsafe-replay/verification.json: workflow.failsafe.drain maxRecords 2 aborted (backend unreachable after 30 s), replayed 0, originals retained. Current queue files 978b (27600710) and 7058 (29933588) match the retained backups; Grok triage 40a8 (25C92432) matches the Grok readback disclosure; 7dc1 (8B926738) is the retained Codex submit for req-20261007T184921Z-prompt-ccb7. The sixth quarantined file, Codex triage_report-2b86, is the earlier plugin auto-quarantine disclosed in the 12:41 Opus receipt (A6b), not one of the five approved cancellations. Reconciliation status is judged in D1.
+
+### A8 [A] PASS
+No mock suite, production code, native change, or completion claim exists.
+Evidence: tests/ViceSharp.OracleContract.Tests is absent; zero files under src or tests were written on 2026-10-07 (excluding bin, obj, TestResults); superproject HEAD is 54131ffc; workflow.todo.get shows PLAN-GROKCOMPLETION-001, PLAN-C64SET-001, PLAN-ARCHVIC20-001, and PLAN-VSFLOCKSTEP-001 done false; every cited requirement is pending with all ACs unsatisfied; both plans state that Phase 0 and Gate 0 await acceptance.
+
+### B1 [B] PASS
+Trust bootstrap passed through the plugin bootstrap path, and the marker API key was never emitted.
+Evidence: Child pwsh -NoProfile -NonInteractive with process cwd F:\GitHub\vice-sharp ran marker-resolver.ps1 Test-MarkerSignature true and Invoke-FullBootstrap true (signature plus /health nonce) at 2026-10-07T15:39:33.654-05:00, exit 0. Marker 34229 bytes, lastWriteUtc 2026-10-07T16:47:09.3876824Z; the key value occurred three times and all occurrences were replaced before any display.
+
+### B2 [B] PASS
+Plugin identity, hook activity, and review model were checked; the genuine version mismatch is disclosed and triaged.
+Evidence: Installed C:\Users\kingd\.claude\plugins\cache\mcpserver-local\mcpserver\1.119.0 (.version and plugin.json 1.119.0, the only version present) versus marker agent_plugins.Claude.plugin_version 1.118.0. Active hooks are evidenced by the hook-created session ClaudeCode-20261007T191324Z-plugin-session and the resume SessionStart state; no settings audit was run (operator: no broad environment audit). The hook-created session and turns read back model claude; after this review updateTurn, the session and turn be46 read back claude-opus-5-5. Primary triage accepted: triage-report-211488b7fef94d8c81237210dde42bf7 (group triage-group-31e405e636a19a99) and triage-report-b294737ca70846a7bd42851a156ba444 (group triage-group-e932650b9cb8713d). The cache root also holds mcpserver-cowork; nothing was deleted because the brief forbids cleanup.
+
+### B3 [B] PASS
+Artifact hygiene holds for whitespace, conflict markers, the dash rule, and the TEST condition distinction.
+Evidence: git --no-optional-locks diff --check at 2026-10-07T15:47:27.605-05:00: exit 0, no output (tracked files). The eight reviewed artifacts, four of them untracked, have 0 trailing-whitespace lines, 0 conflict markers, 0 em dashes, and 0 en dashes. TEST-VICE-001 is judged by its condition field and ACs, not an FR/TR body.
+
+### B4 [B] FAIL
+Deferred work and the active immutable plan are not tracked in MCP TODO or requirements state.
+Evidence: CLAUDE.md BDP rule: put deferred work in MCP TODO/requirements state. Marker Planning Standard: include the requirement IDs in the TODO and session log. workflow.todo.query done false returned 37 open TODOs; none references PLAN-VICE-IMMUTABLE-001, FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001, TR-CYCLE-001, OracleContract, PHI2, or Vic20HalfCycleComparator. The deferred XMLDoc correction (plan L82) and the later real PHI2/AEC evidence gate (plan L83, no gate named) exist only in plan prose. PLAN-GROKCOMPLETION-001 remaining text is a 2026-09-06 pause note.
+
+### B5 [B] PASS
+This review stayed inside the operator boundaries.
+Evidence: PowerShell.MCP only (dedicated console, review environment copied from the request record); no Python; no build, test, Nuke, or native-mutating command; no product, plan, native, cache, or YAML edits; no queue drain or turn cancellation; supported plugin wrapper and native MCP query only, no raw REST. Receipts were written with the PowerShell.MCP text-append cmdlet using var1 to var4 content (UTF-8, CRLF line ends); session writes used plugin lib/repl-invoke.ps1 Invoke-ReplMethod in a child pwsh.
+
+### C1 [C] PASS
+Phase 1 groups 1-4 map all 13 integrity ACs, and every one is live, pending, and unsatisfied.
+Evidence: workflow.requirements.effective layer-1: FR-VICE-001 ac-01 to ac-04, TR-VICE-ORACLE-001 ac-01 to ac-05, TEST-VICE-001 ac-01 to ac-04, all pending and isSatisfied false. Group 1: FR AC1/AC3, TR AC1, TEST AC1. Group 2: FR AC2, TR AC2, TEST AC2. Group 3: FR AC1/AC3, TR AC4, TEST AC3. Group 4: FR AC4, TR AC3/AC5, TEST AC4. Each group names valid acceptance and discriminating incorrect-mock controls. See observations O1 and O2.
+
+### C2 [C] PASS
+TEST-VICE-001 has a nonempty condition and four ACs.
+Evidence: effective layer-1: condition 175 chars, Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable; four ACs pending and unsatisfied.
+
+### C3 [C] PASS
+TR-VSFLOCKSTEP-RESUME-001 carries the external-adapter correction in primary, and no projection mandates the legacy patch.
+Evidence: effective layer-1 body 460 chars (external compatibility adapter outside native/vice); ac-1 v1.2/v1.3/v1.4 MAINCPU normalization, fail-closed, zero failed/skipped/aborted; ac-2 out-of-tree materialized build with the patch diagnostic only and never applied; both pending and unsatisfied. Every vice-shim-runtime.patch mention under docs/Project/wiki/github is prohibitive (Plan-Immutable-Native-VICE.md L117, Plan-Native-VICE-VSF-Lockstep.md L234 and L338, Technical-Requirements.md L1115).
+
+### C4 [C] PASS
+Current-layer mappings match the plan.
+Evidence: effective mappings: FR-VICE-001 to TR-VICE-ORACLE-001 and TEST-VICE-001; FR-SNP-005 to TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001, TEST-SNP-002, TEST-VSFLOCKSTEP-001; TR-CYCLE-001 is mapped from 58 FRs, including FR-CPU-002, with TEST-X64SC-LOCKSTEP-001 among the tests.
+
+### C5 [C] PASS
+Group 5 is honest partial comparator coverage and does not satisfy FR-SNP-005 AC3 or TEST-SNP-002 AC4.
+Evidence: Plan L76 and L82 mark no AC satisfied from mocks and keep the restored-checkpoint, 100000-cycle, complete-state real gates; wrong-response controls cover missing mismatch, wrong half-cycle, wrong field, and wrong values.
+
+### C6 [C] FAIL
+The new PHI2/AEC contract matrix does not require rejection of every missing observation.
+Evidence: Plan L83 covers all 12 phase x AEC x access cases (accepts 6: no access in PHI1 at both AEC levels, no access in PHI2 with AEC low, none/read/write in PHI2 with AEC high; rejects 6: read or write in PHI1 at either AEC level and in PHI2 with AEC low), rejects missing phase and missing AEC, keeps idle legal, and requires wrong-accept and wrong-rejection controls. It does not require rejection of a missing or unknown CPU access kind, or of an empty or gapped half-cycle observation sequence. A mock that maps a missing access kind to none (the C# enum default when None is the first member) or validates zero observations passes every planned control, which is the inferred-data path the plan forbids elsewhere (FR-VICE-001 AC4, TEST-VICE-001 AC4). Brief claim 1 asked for missing-observation coverage.
+
+### D1 [D] FAIL
+The Phase 0 exit condition on pending records is not met, so Phase 1 may not begin yet.
+Evidence: Immutable plan L59: before Phase 1 begins, valid pending session/HV records across every workspace agent queue must be safely drained and read back; goal plan L100 also requires drain plus primary readback before any phase done-state change. Read-only snapshot at 2026-10-07T15:49:34.301-05:00 found four valid active records: Codex 20261007T182422Z-session_setTurnTitle-978b.yaml (27600710), Codex 20261007T182458Z-triage_report-7058.yaml (29933588), Codex 20261007T185015Z-session_submit-7dc1.yaml (8B926738), and Grok review 20261007T184705Z-triage_report-40a8.yaml (25C92432). Primary already shows the 978b title on turn ae30, while 7dc1 is an in_progress snapshot of turn req-20261007T184921Z-prompt-ccb7, which primary now shows completed, so 7dc1 needs an explicit disposition. Primary was reachable during this review (getTr, effective, queryHistory, QueryAsync, two triage reports, updateTurn), yet the records remain pending, so no successful drain has occurred since the 13:40 abort. The handoff and plans give no path or hash for 7dc1. This review also left redundant record 2b93 (see FailsafeRetained).
+
+### D2 [D] PASS
+The planned project boundary keeps Phase 1 outside the native-mutating build.
+Evidence: No Directory.Build.targets at F:\, F:\GitHub, the repo root, or tests; root and tests Directory.Build.props (SHA 15BEC422, 542AB9BC) and Directory.Packages.props (B1D7C954) match the preparation receipt and contain no native import; BuildViceNative exists only in tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj L68-L72 (BeforeTargets Build, conditioned on DesignTimeBuild and Exists), whose escape hatches the plan forbids. The planned project does not exist yet; no build was run.
+
+### D3 [D] PASS
+Phase 1 scope is the complete unfiltered AC-mapped mock-contract project, bracketed by read-only native evidence.
+Evidence: Plan L66-L72 and L89-L107: whole project unfiltered; valid and deliberately incorrect mocks green; no TestHarness, production, or native references; no DesignTimeBuild, nonexistent native path, disabled assertions, filters, or skips; exact dotnet test command with trx, diag, and blame-hang plus git diff --check; before and after gitlink, HEAD, binary diff, untracked list, inventory hash, and newest mtime; aborted is not green; focused filters do not advance; the project joins the solution only after the gate and a native-safe build path.
+
+### D4 [D] PASS
+The immutable and VSF plans retain every real gate, mocks never count as VICE evidence, and the VSF broad Test gate requires zero failed, skipped, and aborted.
+Evidence: Immutable plan L72 (real acceptance tests mandatory, historical reds not waived, existing failures remediated before the applicable real gate advances), L76, L104-L107, L125-L128, L143-L148, L165-L168. VSF plan L286-L291, L293, L508. Goal plan L11 and L19.
+
+### D5 [D] PASS
+native/vice is unchanged against the read-only baseline.
+Evidence: Re-hash at 2026-10-07T15:56:29.221-05:00 (45583 ms): 6374 files, 0 missing, 0 extra, 0 content differences against docs/receipts/native-vice/20261007T133100-0500-readonly-source-baseline.json (SHA 31381419, unchanged); newest write 2026-09-25T17:46:29.997Z; git ls-tree HEAD native/vice and git -C native/vice rev-parse HEAD both give cc67418cba58e71d8e70fd353e9de47199ad2075. The baseline remains dirty-source preservation evidence, not a clean oracle.
+
+### D6 [D] PASS
+Production implementation, parity, restoration, VSF capability, requirements, and the whole goal remain open and unclaimed.
+Evidence: Immutable plan L3 and L174-L182; VSF plan L3 and L514-L516; goal plan L21 and L345-L357; HANDOFF L9 and L13; TODO done false; requirements pending.
+
+### D7 [D] FAIL
+Whole-goal plan exit wording still lets focused filters define exits.
+Evidence: Goal plan locked decision 10 (L72): A Byrd exit is failed 0 and skipped 0 in the named filter. Phase 4 (L318-L324) defines its green gate as a filter with no full-suite step, and the whole-plan exit (L354) requires only that the Phase 4 filter is green. This conflicts with the operator correction restated at L19 (full applicable suite for the current increment and all prior work, zero failed and zero skipped) and L231 (a focused filter is diagnostic), and with immutable plan L72 and L105. It does not block starting Phase 1, but an executor could cite it to exit a later gate on a filter.
+
+## Observations (not scored)
+- O1: Group 1 should state that a rejected preflight prevents parity execution and validation (for example, a mocked parity runner receives no call), matching TEST-VICE-001 AC1 (rejected before parity execution) and TR-VICE-ORACLE-001 AC1 (fails before validation).
+- O2: Group 4 names bus-event provenance; TR-VICE-ORACLE-001 AC3 also covers timing, snapshot, and lifecycle observations, so their provenance rejections should be named.
+- O3: The group 6 contract names no later real-evidence gate or production observation adapter for C64 PHI2/AEC; neither plan names the gate that will satisfy any TR-CYCLE-001 AC (tracked under B4).
+- O4: getTr createdAt and updatedAt are read-time projection stamps, so excluding them from the before/after comparison was correct; the DTO exposes no historical timestamps.
+- O5: Generated wiki pages carry the server template em dash after bold titles (for example the TR-CYCLE-001 entry in Technical-Requirements.md); this is generator output, not parent-authored text, but it conflicts with the workspace dash rule.
+- O6: Parent turn req-20261007T184921Z-prompt-ccb7 shows a raw truncated prompt title on primary; its summarized title exists only in queued record 7dc1.
+- O7: The handoff and plan speak of five quarantined records; the Codex quarantine directory also holds triage_report-2b86 (plugin auto-quarantine accounted for in the 12:41 Opus receipt). Naming it would remove a five-versus-six ambiguity.
+- O8: HANDOFF L29 names turn req-20261007T135720Z-turn-866a for the new primary session; the current parent turn is req-20261007T203137Z-prompt-b5b8. Historical, not wrong, but stale for resumption.
+- O9: The first-launch hooks created duplicate turn req-20261007T191327Z-prompt-d929, auto-canceled as superseded by be46 at 19:13:27Z. This review did not cancel or edit it; it is triaged.
+
+## Remediation required before re-review
+- R1 (D1): Before Phase 1 begins, drain and read back the records whose primary effect is safe: Codex 978b (title already on primary), Codex 7058, Grok 40a8, and this review isolated 2b93 (title already on primary). For Codex 7dc1, an in_progress snapshot of turn ccb7 that primary already shows completed, obtain an operator disposition (preserve and quarantine, or replay only with proof it cannot regress the completed turn), then read back. Record every path, SHA-256, and outcome, or obtain an explicit operator amendment of plan L59.
+- R2 (C6): Amend group 6 to reject a missing or unknown CPU access kind (nullable or explicit Unknown, never a default None) and an empty or gapped half-cycle sequence (fail at the first missing half-cycle), each with a deliberately wrong accepting mock; keep idle legal.
+- R3 (B4): Create a canonical MCP TODO for the immutable-plan work (for example PLAN-VICEORACLE-001) that lists FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001, TR-CYCLE-001, the Phase 1 contract project, the deferred XMLDoc correction, and the named later real PHI2/AEC evidence gate, or record those items in requirements state.
+- R4 (D7): Change goal-plan decision 10, Phase 4, and the whole-plan exit so every exit requires the full applicable current-plus-prior suite with zero failed, skipped, and aborted tests; filters stay diagnostic.
+- R5 (O1, O2): Make the group 1 ordering assertion explicit and name the TR-VICE-ORACLE-001 AC3 snapshot and lifecycle provenance cases in group 4.
+
+## Persistence and receipts
+- Session and turn: the hook-created review session ClaudeCode-20261007T191324Z-plugin-session and turn req-20261007T191327Z-prompt-be46 were recovered, not handcrafted. No new turn was begun because the plugin beginTurn persists the cached in_progress turn as canceled when a new requestId arrives. The resume SessionStart minted local id ClaudeCode-20261007T203504Z-plugin-session, which has no server turns and served only as the plugin fallback.
+- Method: plugin 1.119.0 lib/repl-invoke.ps1 Invoke-ReplMethod in a child pwsh -NoProfile -NonInteractive at the workspace root, with YAML params serialized by ConvertTo-Yaml and passed on UTF-8 stdin.
+- Checkpoints before completion: setTurnTitle reported rejected (typed result did not confirm retitled=true), but primary readback shows the new title; its failsafe record stays retained at F:\GitHub\vice-sharp\.mcpServer\claude\reviews\20261007T141100-0500-phi2-ac-remediation\failsafe\pending\20261007T210305Z-session_setTurnTitle-2b93.yaml, SHA-256 6D623EA443D606B67A28E62C44EF26F5CD523FB64393AFDC8CECC3903DDCE920. updateTurn persisted at 2026-10-07T16:03:58.734-05:00 with a confirmed durable write; the session and turn be46 then read back model claude-opus-5-5, and the session start stayed 19:13:27Z.
+- Triage: triage-report-211488b7fef94d8c81237210dde42bf7 (group triage-group-31e405e636a19a99) and triage-report-b294737ca70846a7bd42851a156ba444 (group triage-group-e932650b9cb8713d), both accepted on primary and routed to the McpServer workspace.
+- Receipts: .verdict.md is this text (on-disk CRLF line ends from the PowerShell.MCP text cmdlet; the canonical LF text is stored in MCP), .verdict.json is the native ConvertTo-Json object (LF-normalized), .readback.json records the post-completion readback, and .primary-query-response.yaml retains the raw wrapper output of the successful post-completion query. Writer probes are in the .evidence folder.
+- Whole-text and parsed-JSON equality against primary readback is recorded in .readback.json, because this text cannot contain its own readback.
+
+## Limitations
+- No mock tests exist and none were run; no TestHarness, solution, or Nuke build ran, because that path mutates native/vice.
+- Hook settings files were not audited (no broad environment audit); hook activity is inferred from hook-created session state.
+- The resume response stream is live while this verdict is written; its final hash belongs to the parent.
+- Chat-channel disclosures by the parent about queued records were not visible to this reviewer; only artifacts and MCP state were checked.
+
+=== VERDICT JSON ===
+{
+  "TimestampLocal": "2026-10-07T16:08:58.321-05:00",
+  "TimestampUtc": "2026-10-07T21:08:58.321Z",
+  "ValidatorIdentity": "ClaudeCode",
+  "Model": "claude-opus-5-5",
+  "ReasoningEffort": "max",
+  "ClaudeCliSessionId": "fa2d7384-f174-4f2e-8b3c-4a4cc6477893",
+  "RotationSlot": "Opus 5.5 max, same logical review resumed once after the authorized quota reset; not a new rotation slot",
+  "Gate": "phase0-phi2-ac-remediation",
+  "McpSessionId": "ClaudeCode-20261007T191324Z-plugin-session",
+  "McpRequestId": "req-20261007T191327Z-prompt-be46",
+  "AddProfile": "Executed first on resume: 22 profile files (every C:\\Users\\kingd\\.claude\\profile\\*.md except add-profile.grok.md, add-profile.md first) plus C:\\Users\\kingd\\.codex\\skills\\add-profile\\SKILL.md and C:\\Users\\kingd\\.grok\\skills\\hostile-validator\\SKILL.md",
+  "AddProfileFilesRead": 22,
+  "WorkClass": "Class 1: PLAN-VICE-IMMUTABLE-001 Phase 0 exit and Phase 1 decision-completeness, surfaces A-D. Class 2: operator-approved five-record quarantine, surface C not applied.",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 94,
+  "AccuracyJustification": "Every directly checkable fact in the brief was reproduced: 17 of 17 pins twice, B7 bytes, TR-CYCLE-001 status and AC text, quarantine hashes, prior verdict persistence, build boundary, native inventory, absence of new code. Deduction: the brief presents Phase 0 as ready while plan L59 is unmet (four valid queued records, one now stale against a completed primary turn), and presents the PHI2/AEC matrix as covering missing observations when the missing access-kind and missing-sequence cases are absent.",
+  "Completeness": 85,
+  "CompletenessJustification": "Four required elements are missing: queue drain and readback (or operator disposition) for the Phase 0 exit; missing access-kind and empty or gapped sequence rejection in the PHI2/AEC contract; MCP TODO or requirements tracking for the active plan, its requirement IDs, and its deferred items; full-suite exits in goal-plan decision 10, Phase 4, and the whole-plan exit.",
+  "Phase0Accepted": false,
+  "MockValidatedTestPhasePermitted": false,
+  "ProductionImplementationPermitted": false,
+  "WholeGoalComplete": false,
+  "NativeParity": false,
+  "NativeRestoration": false,
+  "VsfCompletion": false,
+  "PassCount": 22,
+  "FailCount": 4,
+  "UnknownCount": 0,
+  "CompletionPercent": 100,
+  "Eta": null,
+  "FailList": [
+    "B4: Deferred work and the active immutable plan are not tracked in MCP TODO or requirements state.",
+    "C6: The new PHI2/AEC contract matrix does not require rejection of every missing observation.",
+    "D1: The Phase 0 exit condition on pending records is not met, so Phase 1 may not begin yet.",
+    "D7: Whole-goal plan exit wording still lets focused filters define exits."
+  ],
+  "UnknownList": [],
+  "Claims": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "All 17 pinned launch inputs match the request pins before and during this review; both prompt hashes match.",
+      "Evidence": "Get-FileHash SHA256 at 2026-10-07T15:36:30.672-05:00 and 2026-10-07T16:05:15.361-05:00: 17 of 17 equal to request.jsonl evidenceHashes (HANDOFF CF536471, immutable plan C7E1FE6C, VSF plan C15DA385, TR-Cycle-Accuracy BD2F3DB5, goal plan 5EE5D2A2, both wiki plan projections equal to their sources, wiki.yaml 62EB5A58, nine receipt files). Original prompt A37EDFF1 and resume prompt 254184C2 match their request records; launch request DB6BF26D and launch response 04AA3AC9 match launch-result.json."
+    },
+    {
+      "Id": "A2",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "Remediation 1 mapping: group 5 no longer maps the bus-address comparator to TR-CYCLE-001 AC4; the stale fixture annotation is not counted; comparator coverage stays partial and its real gates stay mandatory.",
+      "Evidence": "PLAN-VICE-IMMUTABLE-001 L82 disclaims the AC4 association, keeps the single LockstepValidator comparator, forbids a second comparison algorithm, and keeps the FR-SNP-005 AC3 and TEST-SNP-002 AC4 restored-checkpoint, 100000-cycle, complete-state real gates. tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs L7 still names TR-CYCLE-001 AC4, but its behavioral assertions (L35-L43) check only HalfCycle 37, Field BusAddress, $1000 versus $1001, and the message. A tests-wide search finds this file as the only explicit TR-CYCLE-001 AC association. Live FR-SNP-005 ac-03 and TEST-SNP-002 ac-04 require 100000-cycle lockstep from a restored checkpoint."
+    },
+    {
+      "Id": "A3",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "Remediation 2: TR-CYCLE-001 changed only from closed to pending; description and all seven ACs are unchanged and unsatisfied; canonical markdown and wiki projection agree.",
+      "Evidence": "Supported workflow.requirements.getTr ended 2026-10-07T15:44:37.243-05:00 (exit 0): status pending, ac-01 to ac-07 isSatisfied false, description 995 chars equal to cycle-status-remediation.json after.description. Before and after differ only in status, createdAt, updatedAt; live createdAt and updatedAt match the read time (20:44:36Z), confirming nonhistorical projection stamps. workflow.requirements.effective (layer-1, ended 2026-10-07T15:45:13.308-05:00) agrees. TR-Cycle-Accuracy.md L19 says Pending and its seven AC lines equal the live text ordinally. Wiki Technical-Requirements.md (written 14:09:40, after the 14:05 update) shows Status pending."
+    },
+    {
+      "Id": "A4",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "Remediation 3 (B7 replay): removing each exact fallback paragraph plus its following blank line from the retained post-steering bytes reproduces the pre-steering bytes and launch hashes.",
+      "Evidence": "In-memory ordinal byte search: HANDOFF paragraph 737 bytes, one occurrence at offset 2762, preceded by LF and followed by LF LF; removal yields 32804 bytes, SHA 24BC7C35, byte-equal to HANDOFF.before-human-steering.md. Goal-plan paragraph 672 bytes, one occurrence at offset 516, followed by LF LF; removal yields 41947 bytes, SHA 8BC3A681, byte-equal to goal-plan.before-human-steering.md. The after files hash E5777C58 and AC8B715D, equal to the steering record currentSha256. Launch hashes are independently corroborated by 20261007T120522-0500-mock-green-wiki-opus.implementation-evidence.json, written 12:07:42-05:00, before the 12:08 Opus launch and the 13:16 steering record."
+    },
+    {
+      "Id": "A5",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "The prior Grok verdict is fully persisted on its completed primary turn.",
+      "Evidence": "Retained .primary-query-response.json (SHA 8BA430EF) is byte-equal to the Grok session MCP call record call-96c5f03e-d244-4b7b-8a70-7efb1de843ba-40.json (50828 bytes). Turn req-20261007T182902Z-001-hv-phase0-mock-scope-grok is completed with model grok-4.7; its response and processingDialog[0].content each equal .verdict.md exactly (19873 chars, SHA 1B6844B1); the embedded VERDICT JSON re-serializes equal to .verdict.json (SHA 31924EB6). Its 22 claims count PASS 19, FAIL 2, UNKNOWN 1."
+    },
+    {
+      "Id": "A6",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "The operator-approved five-record quarantine is intact and both historical primary sessions are unchanged (class 2 operation; surface C not applied).",
+      "Evidence": "All five backups and five quarantine copies match the recorded SHA-256 (560c E8DF8155, b7d6 BEE26210, f19e 17B96B05, 50e5 74BCB552, 9609 8003DDBC); backups are read-only; sources are absent; reason files exist. client.SessionLog.QueryAsync at 2026-10-07T15:57:07.841-05:00 shows ClaudeCode-20261007T153749Z-plugin-session and GrokCode-20261007T153754Z-plugin-session normalized-equal to primary-after.json, lastUpdated 16:01:16Z and 16:01:08Z, turns still in_progress. Replayed 0."
+    },
+    {
+      "Id": "A7",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "Later valid fallback records are preserved byte-for-byte and the supported drain attempt is audited.",
+      "Evidence": "retitle-failsafe-replay/verification.json: workflow.failsafe.drain maxRecords 2 aborted (backend unreachable after 30 s), replayed 0, originals retained. Current queue files 978b (27600710) and 7058 (29933588) match the retained backups; Grok triage 40a8 (25C92432) matches the Grok readback disclosure; 7dc1 (8B926738) is the retained Codex submit for req-20261007T184921Z-prompt-ccb7. The sixth quarantined file, Codex triage_report-2b86, is the earlier plugin auto-quarantine disclosed in the 12:41 Opus receipt (A6b), not one of the five approved cancellations. Reconciliation status is judged in D1."
+    },
+    {
+      "Id": "A8",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "No mock suite, production code, native change, or completion claim exists.",
+      "Evidence": "tests/ViceSharp.OracleContract.Tests is absent; zero files under src or tests were written on 2026-10-07 (excluding bin, obj, TestResults); superproject HEAD is 54131ffc; workflow.todo.get shows PLAN-GROKCOMPLETION-001, PLAN-C64SET-001, PLAN-ARCHVIC20-001, and PLAN-VSFLOCKSTEP-001 done false; every cited requirement is pending with all ACs unsatisfied; both plans state that Phase 0 and Gate 0 await acceptance."
+    },
+    {
+      "Id": "B1",
+      "Surface": "B",
+      "Status": "PASS",
+      "Text": "Trust bootstrap passed through the plugin bootstrap path, and the marker API key was never emitted.",
+      "Evidence": "Child pwsh -NoProfile -NonInteractive with process cwd F:\\GitHub\\vice-sharp ran marker-resolver.ps1 Test-MarkerSignature true and Invoke-FullBootstrap true (signature plus /health nonce) at 2026-10-07T15:39:33.654-05:00, exit 0. Marker 34229 bytes, lastWriteUtc 2026-10-07T16:47:09.3876824Z; the key value occurred three times and all occurrences were replaced before any display."
+    },
+    {
+      "Id": "B2",
+      "Surface": "B",
+      "Status": "PASS",
+      "Text": "Plugin identity, hook activity, and review model were checked; the genuine version mismatch is disclosed and triaged.",
+      "Evidence": "Installed C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0 (.version and plugin.json 1.119.0, the only version present) versus marker agent_plugins.Claude.plugin_version 1.118.0. Active hooks are evidenced by the hook-created session ClaudeCode-20261007T191324Z-plugin-session and the resume SessionStart state; no settings audit was run (operator: no broad environment audit). The hook-created session and turns read back model claude; after this review updateTurn, the session and turn be46 read back claude-opus-5-5. Primary triage accepted: triage-report-211488b7fef94d8c81237210dde42bf7 (group triage-group-31e405e636a19a99) and triage-report-b294737ca70846a7bd42851a156ba444 (group triage-group-e932650b9cb8713d). The cache root also holds mcpserver-cowork; nothing was deleted because the brief forbids cleanup."
+    },
+    {
+      "Id": "B3",
+      "Surface": "B",
+      "Status": "PASS",
+      "Text": "Artifact hygiene holds for whitespace, conflict markers, the dash rule, and the TEST condition distinction.",
+      "Evidence": "git --no-optional-locks diff --check at 2026-10-07T15:47:27.605-05:00: exit 0, no output (tracked files). The eight reviewed artifacts, four of them untracked, have 0 trailing-whitespace lines, 0 conflict markers, 0 em dashes, and 0 en dashes. TEST-VICE-001 is judged by its condition field and ACs, not an FR/TR body."
+    },
+    {
+      "Id": "B4",
+      "Surface": "B",
+      "Status": "FAIL",
+      "Text": "Deferred work and the active immutable plan are not tracked in MCP TODO or requirements state.",
+      "Evidence": "CLAUDE.md BDP rule: put deferred work in MCP TODO/requirements state. Marker Planning Standard: include the requirement IDs in the TODO and session log. workflow.todo.query done false returned 37 open TODOs; none references PLAN-VICE-IMMUTABLE-001, FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001, TR-CYCLE-001, OracleContract, PHI2, or Vic20HalfCycleComparator. The deferred XMLDoc correction (plan L82) and the later real PHI2/AEC evidence gate (plan L83, no gate named) exist only in plan prose. PLAN-GROKCOMPLETION-001 remaining text is a 2026-09-06 pause note."
+    },
+    {
+      "Id": "B5",
+      "Surface": "B",
+      "Status": "PASS",
+      "Text": "This review stayed inside the operator boundaries.",
+      "Evidence": "PowerShell.MCP only (dedicated console, review environment copied from the request record); no Python; no build, test, Nuke, or native-mutating command; no product, plan, native, cache, or YAML edits; no queue drain or turn cancellation; supported plugin wrapper and native MCP query only, no raw REST. Receipts were written with the PowerShell.MCP text-append cmdlet using var1 to var4 content (UTF-8, CRLF line ends); session writes used plugin lib/repl-invoke.ps1 Invoke-ReplMethod in a child pwsh."
+    },
+    {
+      "Id": "C1",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "Phase 1 groups 1-4 map all 13 integrity ACs, and every one is live, pending, and unsatisfied.",
+      "Evidence": "workflow.requirements.effective layer-1: FR-VICE-001 ac-01 to ac-04, TR-VICE-ORACLE-001 ac-01 to ac-05, TEST-VICE-001 ac-01 to ac-04, all pending and isSatisfied false. Group 1: FR AC1/AC3, TR AC1, TEST AC1. Group 2: FR AC2, TR AC2, TEST AC2. Group 3: FR AC1/AC3, TR AC4, TEST AC3. Group 4: FR AC4, TR AC3/AC5, TEST AC4. Each group names valid acceptance and discriminating incorrect-mock controls. See observations O1 and O2."
+    },
+    {
+      "Id": "C2",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "TEST-VICE-001 has a nonempty condition and four ACs.",
+      "Evidence": "effective layer-1: condition 175 chars, Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable; four ACs pending and unsatisfied."
+    },
+    {
+      "Id": "C3",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "TR-VSFLOCKSTEP-RESUME-001 carries the external-adapter correction in primary, and no projection mandates the legacy patch.",
+      "Evidence": "effective layer-1 body 460 chars (external compatibility adapter outside native/vice); ac-1 v1.2/v1.3/v1.4 MAINCPU normalization, fail-closed, zero failed/skipped/aborted; ac-2 out-of-tree materialized build with the patch diagnostic only and never applied; both pending and unsatisfied. Every vice-shim-runtime.patch mention under docs/Project/wiki/github is prohibitive (Plan-Immutable-Native-VICE.md L117, Plan-Native-VICE-VSF-Lockstep.md L234 and L338, Technical-Requirements.md L1115)."
+    },
+    {
+      "Id": "C4",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "Current-layer mappings match the plan.",
+      "Evidence": "effective mappings: FR-VICE-001 to TR-VICE-ORACLE-001 and TEST-VICE-001; FR-SNP-005 to TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001, TEST-SNP-002, TEST-VSFLOCKSTEP-001; TR-CYCLE-001 is mapped from 58 FRs, including FR-CPU-002, with TEST-X64SC-LOCKSTEP-001 among the tests."
+    },
+    {
+      "Id": "C5",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "Group 5 is honest partial comparator coverage and does not satisfy FR-SNP-005 AC3 or TEST-SNP-002 AC4.",
+      "Evidence": "Plan L76 and L82 mark no AC satisfied from mocks and keep the restored-checkpoint, 100000-cycle, complete-state real gates; wrong-response controls cover missing mismatch, wrong half-cycle, wrong field, and wrong values."
+    },
+    {
+      "Id": "C6",
+      "Surface": "C",
+      "Status": "FAIL",
+      "Text": "The new PHI2/AEC contract matrix does not require rejection of every missing observation.",
+      "Evidence": "Plan L83 covers all 12 phase x AEC x access cases (accepts 6: no access in PHI1 at both AEC levels, no access in PHI2 with AEC low, none/read/write in PHI2 with AEC high; rejects 6: read or write in PHI1 at either AEC level and in PHI2 with AEC low), rejects missing phase and missing AEC, keeps idle legal, and requires wrong-accept and wrong-rejection controls. It does not require rejection of a missing or unknown CPU access kind, or of an empty or gapped half-cycle observation sequence. A mock that maps a missing access kind to none (the C# enum default when None is the first member) or validates zero observations passes every planned control, which is the inferred-data path the plan forbids elsewhere (FR-VICE-001 AC4, TEST-VICE-001 AC4). Brief claim 1 asked for missing-observation coverage."
+    },
+    {
+      "Id": "D1",
+      "Surface": "D",
+      "Status": "FAIL",
+      "Text": "The Phase 0 exit condition on pending records is not met, so Phase 1 may not begin yet.",
+      "Evidence": "Immutable plan L59: before Phase 1 begins, valid pending session/HV records across every workspace agent queue must be safely drained and read back; goal plan L100 also requires drain plus primary readback before any phase done-state change. Read-only snapshot at 2026-10-07T15:49:34.301-05:00 found four valid active records: Codex 20261007T182422Z-session_setTurnTitle-978b.yaml (27600710), Codex 20261007T182458Z-triage_report-7058.yaml (29933588), Codex 20261007T185015Z-session_submit-7dc1.yaml (8B926738), and Grok review 20261007T184705Z-triage_report-40a8.yaml (25C92432). Primary already shows the 978b title on turn ae30, while 7dc1 is an in_progress snapshot of turn req-20261007T184921Z-prompt-ccb7, which primary now shows completed, so 7dc1 needs an explicit disposition. Primary was reachable during this review (getTr, effective, queryHistory, QueryAsync, two triage reports, updateTurn), yet the records remain pending, so no successful drain has occurred since the 13:40 abort. The handoff and plans give no path or hash for 7dc1. This review also left redundant record 2b93 (see FailsafeRetained)."
+    },
+    {
+      "Id": "D2",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "The planned project boundary keeps Phase 1 outside the native-mutating build.",
+      "Evidence": "No Directory.Build.targets at F:\\, F:\\GitHub, the repo root, or tests; root and tests Directory.Build.props (SHA 15BEC422, 542AB9BC) and Directory.Packages.props (B1D7C954) match the preparation receipt and contain no native import; BuildViceNative exists only in tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj L68-L72 (BeforeTargets Build, conditioned on DesignTimeBuild and Exists), whose escape hatches the plan forbids. The planned project does not exist yet; no build was run."
+    },
+    {
+      "Id": "D3",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "Phase 1 scope is the complete unfiltered AC-mapped mock-contract project, bracketed by read-only native evidence.",
+      "Evidence": "Plan L66-L72 and L89-L107: whole project unfiltered; valid and deliberately incorrect mocks green; no TestHarness, production, or native references; no DesignTimeBuild, nonexistent native path, disabled assertions, filters, or skips; exact dotnet test command with trx, diag, and blame-hang plus git diff --check; before and after gitlink, HEAD, binary diff, untracked list, inventory hash, and newest mtime; aborted is not green; focused filters do not advance; the project joins the solution only after the gate and a native-safe build path."
+    },
+    {
+      "Id": "D4",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "The immutable and VSF plans retain every real gate, mocks never count as VICE evidence, and the VSF broad Test gate requires zero failed, skipped, and aborted.",
+      "Evidence": "Immutable plan L72 (real acceptance tests mandatory, historical reds not waived, existing failures remediated before the applicable real gate advances), L76, L104-L107, L125-L128, L143-L148, L165-L168. VSF plan L286-L291, L293, L508. Goal plan L11 and L19."
+    },
+    {
+      "Id": "D5",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "native/vice is unchanged against the read-only baseline.",
+      "Evidence": "Re-hash at 2026-10-07T15:56:29.221-05:00 (45583 ms): 6374 files, 0 missing, 0 extra, 0 content differences against docs/receipts/native-vice/20261007T133100-0500-readonly-source-baseline.json (SHA 31381419, unchanged); newest write 2026-09-25T17:46:29.997Z; git ls-tree HEAD native/vice and git -C native/vice rev-parse HEAD both give cc67418cba58e71d8e70fd353e9de47199ad2075. The baseline remains dirty-source preservation evidence, not a clean oracle."
+    },
+    {
+      "Id": "D6",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "Production implementation, parity, restoration, VSF capability, requirements, and the whole goal remain open and unclaimed.",
+      "Evidence": "Immutable plan L3 and L174-L182; VSF plan L3 and L514-L516; goal plan L21 and L345-L357; HANDOFF L9 and L13; TODO done false; requirements pending."
+    },
+    {
+      "Id": "D7",
+      "Surface": "D",
+      "Status": "FAIL",
+      "Text": "Whole-goal plan exit wording still lets focused filters define exits.",
+      "Evidence": "Goal plan locked decision 10 (L72): A Byrd exit is failed 0 and skipped 0 in the named filter. Phase 4 (L318-L324) defines its green gate as a filter with no full-suite step, and the whole-plan exit (L354) requires only that the Phase 4 filter is green. This conflicts with the operator correction restated at L19 (full applicable suite for the current increment and all prior work, zero failed and zero skipped) and L231 (a focused filter is diagnostic), and with immutable plan L72 and L105. It does not block starting Phase 1, but an executor could cite it to exit a later gate on a filter."
+    }
+  ],
+  "Observations": [
+    "O1: Group 1 should state that a rejected preflight prevents parity execution and validation (for example, a mocked parity runner receives no call), matching TEST-VICE-001 AC1 (rejected before parity execution) and TR-VICE-ORACLE-001 AC1 (fails before validation).",
+    "O2: Group 4 names bus-event provenance; TR-VICE-ORACLE-001 AC3 also covers timing, snapshot, and lifecycle observations, so their provenance rejections should be named.",
+    "O3: The group 6 contract names no later real-evidence gate or production observation adapter for C64 PHI2/AEC; neither plan names the gate that will satisfy any TR-CYCLE-001 AC (tracked under B4).",
+    "O4: getTr createdAt and updatedAt are read-time projection stamps, so excluding them from the before/after comparison was correct; the DTO exposes no historical timestamps.",
+    "O5: Generated wiki pages carry the server template em dash after bold titles (for example the TR-CYCLE-001 entry in Technical-Requirements.md); this is generator output, not parent-authored text, but it conflicts with the workspace dash rule.",
+    "O6: Parent turn req-20261007T184921Z-prompt-ccb7 shows a raw truncated prompt title on primary; its summarized title exists only in queued record 7dc1.",
+    "O7: The handoff and plan speak of five quarantined records; the Codex quarantine directory also holds triage_report-2b86 (plugin auto-quarantine accounted for in the 12:41 Opus receipt). Naming it would remove a five-versus-six ambiguity.",
+    "O8: HANDOFF L29 names turn req-20261007T135720Z-turn-866a for the new primary session; the current parent turn is req-20261007T203137Z-prompt-b5b8. Historical, not wrong, but stale for resumption.",
+    "O9: The first-launch hooks created duplicate turn req-20261007T191327Z-prompt-d929, auto-canceled as superseded by be46 at 19:13:27Z. This review did not cancel or edit it; it is triaged."
+  ],
+  "Remediation": [
+    "R1 (D1): Before Phase 1 begins, drain and read back the records whose primary effect is safe: Codex 978b (title already on primary), Codex 7058, Grok 40a8, and this review isolated 2b93 (title already on primary). For Codex 7dc1, an in_progress snapshot of turn ccb7 that primary already shows completed, obtain an operator disposition (preserve and quarantine, or replay only with proof it cannot regress the completed turn), then read back. Record every path, SHA-256, and outcome, or obtain an explicit operator amendment of plan L59.",
+    "R2 (C6): Amend group 6 to reject a missing or unknown CPU access kind (nullable or explicit Unknown, never a default None) and an empty or gapped half-cycle sequence (fail at the first missing half-cycle), each with a deliberately wrong accepting mock; keep idle legal.",
+    "R3 (B4): Create a canonical MCP TODO for the immutable-plan work (for example PLAN-VICEORACLE-001) that lists FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001, TR-CYCLE-001, the Phase 1 contract project, the deferred XMLDoc correction, and the named later real PHI2/AEC evidence gate, or record those items in requirements state.",
+    "R4 (D7): Change goal-plan decision 10, Phase 4, and the whole-plan exit so every exit requires the full applicable current-plus-prior suite with zero failed, skipped, and aborted tests; filters stay diagnostic.",
+    "R5 (O1, O2): Make the group 1 ordering assertion explicit and name the TR-VICE-ORACLE-001 AC3 snapshot and lifecycle provenance cases in group 4."
+  ],
+  "Streams": {
+    "LaunchRequest": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.request.jsonl (SHA-256 DB6BF26D43D10A17E4FE3A0C84DDF7DBE56C6096689CCAFF2336918EF473B606)",
+    "LaunchResponse": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.response.jsonl (SHA-256 04AA3AC97B5FE3AD34FB8D616AF5CA983CD7D73225F941BFC8B01FC2E08448F8); quota-only stream: provider session limit, cliExitCode 1, numTurns 1, no review verdict",
+    "LaunchResult": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.launch-result.json (SHA-256 3692403C392FC980C024F0FDD2D6B04C6BCF6910CB654C7518F038894EBE9B27)",
+    "LaunchStderr": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.stderr.txt (0 bytes)",
+    "LaunchPromptSha256": "A37EDFF1794513FB852B2A32CA9AE4BBCC0113C87B3818AB35DD2F811A2F7A4F",
+    "ResumeRequest": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.request.jsonl (SHA-256 6DB4F9B855F8E540C4ED09A53FACC226631D00C5F2A8CE61702E400B3BAD90E4)",
+    "ResumeResponse": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.response.jsonl (live stream of this review, retained by the parent)",
+    "ResumeStderr": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.stderr.txt",
+    "ResumeLaunch": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.launch.json (SHA-256 3E885933ED91F3282A691498637E62862D4A0C46750863B95127B66FB4785D19)",
+    "ResumePromptSha256": "254184C274C80443BEFD37F9050BCF3FC31E390209DDF4B7EA6CBA494C3247B6"
+  },
+  "Persistence": {
+    "Surface": "Recovered hook-created review session and turn; no handcrafted id. The resume SessionStart minted local id ClaudeCode-20261007T203504Z-plugin-session, which has no server turns and served only as the plugin fallback.",
+    "Method": "Plugin 1.119.0 lib/repl-invoke.ps1 Invoke-ReplMethod in a child pwsh -NoProfile -NonInteractive at the workspace root; YAML params serialized by ConvertTo-Yaml and passed on UTF-8 stdin; verbs setTurnTitle, updateTurn, appendDialog, appendActions, completeTurn.",
+    "WhyNoBeginTurn": "beginTurn with a new requestId persists the cached in_progress turn as canceled (Invoke-ReplSupersedeCurrentTurnIfInProgress), which the brief forbids.",
+    "TurnTitle": "Opus HV max: Phase 0 PHI2/AEC remediation readiness review",
+    "ReadbackReceipt": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.readback.json (written after completeTurn)"
+  },
+  "FailsafeRetained": [
+    {
+      "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261007T141100-0500-phi2-ac-remediation\\failsafe\\pending\\20261007T210305Z-session_setTurnTitle-2b93.yaml",
+      "Sha256": "6D623EA443D606B67A28E62C44EF26F5CD523FB64393AFDC8CECC3903DDCE920",
+      "Method": "client.SessionLog.SetTurnTitleAsync",
+      "Disposition": "Retained after a false rejection (typed result did not confirm retitled=true); primary readback already shows the new title. Not drained by this review."
+    }
+  ],
+  "Triage": [
+    {
+      "ReportId": "triage-report-211488b7fef94d8c81237210dde42bf7",
+      "GroupId": "triage-group-31e405e636a19a99",
+      "Status": "collecting",
+      "Title": "Claude plugin 1.119.0: marker version drift, duplicate hook turn on one prompt, generic hook model"
+    },
+    {
+      "ReportId": "triage-report-b294737ca70846a7bd42851a156ba444",
+      "GroupId": "triage-group-e932650b9cb8713d",
+      "Status": "collecting",
+      "Title": "Claude plugin setTurnTitle reports rejected and queues failsafe although primary retitle succeeded"
+    }
+  ],
+  "PinChecks": [
+    {
+      "AtLocal": "2026-10-07T15:36:30.672-05:00",
+      "Pinned": 17,
+      "Matched": 17
+    },
+    {
+      "AtLocal": "2026-10-07T16:05:15.361-05:00",
+      "Pinned": 17,
+      "Matched": 17
+    }
+  ],
+  "QueueSnapshot": {
+    "AtLocal": "2026-10-07T15:49:34.301-05:00",
+    "Active": [
+      {
+        "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T182422Z-session_setTurnTitle-978b.yaml",
+        "Sha256": "27600710759D1F58600172811B85DECE17E739994F466023733FFB7DB9A6B26B"
+      },
+      {
+        "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T182458Z-triage_report-7058.yaml",
+        "Sha256": "2993358803AF1831F92DF281844CE066BAF65AEDE4D4DBAAD5221BB1540BCA3F"
+      },
+      {
+        "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T185015Z-session_submit-7dc1.yaml",
+        "Sha256": "8B9267389EA6E3585F86DC0D3CF439C70FD1DE1E45A73A1BB92CD6BA417FB48F"
+      },
+      {
+        "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\grok\\reviews\\20261007T131928-0500-phase0-mock-scope\\failsafe\\pending\\20261007T184705Z-triage_report-40a8.yaml",
+        "Sha256": "25C92432A5C7B198EE6B1663F35C080EAFC1DA41CE65E8D6895FCACBF86C4975"
+      }
+    ],
+    "QuarantinedCount": 6
+  }
+}

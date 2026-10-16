@@ -66,7 +66,7 @@ $tf/
 *.coveragexml
 *.dmp
 
-# Raw Grok session stream is retained locally; commit its verified gzip archive.
+# Raw Grok stream and credential-bearing gzip stay local (see exclusions below).
 /docs/grok/2026-08-11-vic20-exact-session/session/updates.jsonl
 
 ## ROMs (user-provided, never committed)
@@ -109,3 +109,64 @@ tools/aiunit-grok-claude-shim/publish/
 # MCP plugin transient cache (session state, current-turn, locks, failsafe). Never commit.
 /cache/
 cache/
+
+# Retain this original HV stream locally; it contains a disclosed credential exposure.
+# Only the separately verified response.redacted.jsonl is suitable for version control.
+/docs/receipts/hv/20261009T141130-0500-approved-tape-ac-opus/response.jsonl
+
+# Keep complete raw reviewer streams local. Publish verified redacted copies only.
+/docs/receipts/hv/**/request*
+/docs/receipts/hv/**/*[._-]request[._-]*
+/docs/receipts/hv/**/response*
+/docs/receipts/hv/**/*[._-]response[._-]*
+/docs/receipts/hv/**/stderr*
+/docs/receipts/hv/**/*[._-]stderr[._-]*
+/docs/receipts/hv/**/*.clixml
+!/docs/receipts/hv/**/*.redacted.*
+
+# Historical credential-bearing transcripts: originals retained, not published.
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/04172430-e88a-468e-901b-1b91661a704a.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/132eafb1-4cb2-4971-8403-5e1f42217e3c.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/2bb783b1-5b3b-4551-b22f-be4c1a468abc.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/2cc64d92-cfe2-4f4c-9f81-972b2a8439c7.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/470d7221-659c-48e7-b5ab-c877e6a7e6ef.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/60789dd9-e305-4e57-838e-c9cd255fdcd6.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/8478f6f3-150d-42d4-8625-210637384aa9.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/a77a213b-c3b6-46d9-8429-809c68730c38.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/b3198f63-7932-45cd-bc49-c47e30c6d857.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/ce636d19-938d-4a02-897c-6a9578e51f83.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/e4de9323-7fb2-4cf3-ae75-0af8f93364b8.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/ee4521b0-ee5e-4be7-97a6-32b7d939cc38.json
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_000.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_001.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_002.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_003.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_004.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_007.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_011.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_012.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_013.md
+/docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_015.md
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/0c1e21b9-187b-442c-a0e1-e04f66f9ae3f.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/0e1af375-0354-4fe5-a101-e70ffd699a97.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/13add2b9-a4dc-4402-8e27-d7aac2bf3c9b.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/154e16c3-e02d-49cc-86d3-9f694ccd488c.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/19e4d021-63c4-4d86-bacd-02f4c75f6f7d.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/1c26565d-4360-4588-a372-d2d59bee0adf.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/26c10e1a-3a56-4322-a8c4-a84adb9ed1b9.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/2770cf4d-32de-4c7b-9661-df1f0511af6e.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/299d0a60-2384-4338-9e04-d692c5a83498.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/7e5afb62-91b4-4d04-b749-5a1cf4c20fd4.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/820a3f34-f2ba-4c79-b215-b4907412be45.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/8b1f4248-a006-4839-99b2-1625b762bd19.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/a301a8d0-67fd-414b-967b-013dee66cb07.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/ba36b65e-9598-40e4-8172-6ce91679bc9e.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/cb813d75-68a5-4da8-b1a5-c0ee28953f48.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/d50ae609-06e6-4ae4-b5d6-f480a860d5cd.json
+/docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/dcdd53e7-4b76-4132-9e49-6a8c45c573ee.json
+/docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-dce014b4-6ad4-4fa4-9ddb-8d0aaba29822-24.log
+/docs/grok/2026-08-11-vic20-exact-session/session/updates.jsonl.gz
+/docs/grok/2026-08-11-vic20-exact-session/TRANSCRIPT.md
+
+# Private phone attachments are unrelated to the ViceSharp source checkpoint.
+/.codex-remote-attachments/

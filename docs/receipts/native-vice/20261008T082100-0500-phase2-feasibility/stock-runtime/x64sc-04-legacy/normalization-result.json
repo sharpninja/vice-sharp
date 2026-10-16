@@ -1,0 +1,16 @@
+{
+  "timestampLocal": "2026-10-08T09:14:54.7254414-05:00",
+  "inputPath": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.VsfCompatibility.Tests\\Fixtures\\native-maincpu-1.2.vsf",
+  "inputLength": 190854,
+  "inputSha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+  "outputPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\x64sc-04-legacy\\fresh.vsf",
+  "outputLength": 190866,
+  "outputSha256": "CB4EB08D47A9C1F4BA7F6CD30A1ED5CAFEF0B8C50AAE57E9153E4B1831E8805E",
+  "assembly": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.ViceCompatibility\\bin\\Release\\net10.0\\ViceSharp.ViceCompatibility.dll",
+  "assemblySha256": "441607031D64833186A3F2E566C65013FC6168A4EDF9A4090BDDBC9BD895268D",
+  "invocationBridge": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\InvokeNormalizer.cs.txt",
+  "bridgeSha256": "36C56EAE3C02B5E5F1C5C43C381079B6505A844CB369EAD00307115F5346FCD9",
+  "inputUnchanged": true,
+  "normalization": "Calls real already-tested Normalize through byte[] to ReadOnlySpan diagnostic bridge; no duplicated transformation",
+  "nativeLoadProven": false
+}

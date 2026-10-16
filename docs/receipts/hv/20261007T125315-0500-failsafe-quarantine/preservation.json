@@ -1,0 +1,92 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\ClaudeCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T162453Z-session_submit-560c.yaml",
+    "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T125315-0500-failsafe-quarantine\\20261007T162453Z-session_submit-560c.yaml",
+    "sha256": "E8DF8155FC02A30793535A434A33C948C468A039FF056F1ADF37C4F9966D1428",
+    "sourceType": "ClaudeCode",
+    "sessionId": "ClaudeCode-20261007T153749Z-plugin-session",
+    "turns": [
+      {
+        "requestId": "req-20261007T160113Z-prompt-2e7a",
+        "status": "canceled",
+        "queryTitle": "Continue the local hostile review in Grok CLI session 01a116"
+      }
+    ],
+    "quarantine": null,
+    "reasonFile": null,
+    "preserved": true,
+    "quarantined": false
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\ClaudeCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T170859Z-session_submit-b7d6.yaml",
+    "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T125315-0500-failsafe-quarantine\\20261007T170859Z-session_submit-b7d6.yaml",
+    "sha256": "BEE26210DF59E43A91AE7C9DCB9ED4FC74F4079F0878E0112085BCFF9CE6F3CA",
+    "sourceType": "ClaudeCode",
+    "sessionId": "ClaudeCode-20261007T153749Z-plugin-session",
+    "turns": [
+      {
+        "requestId": "req-20261007T160113Z-prompt-2e7a",
+        "status": "canceled",
+        "queryTitle": "Continue the local hostile review in Grok CLI session 01a116"
+      }
+    ],
+    "quarantine": null,
+    "reasonFile": null,
+    "preserved": true,
+    "quarantined": false
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\ClaudeCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T170859Z-session_submit-f19e.yaml",
+    "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T125315-0500-failsafe-quarantine\\20261007T170859Z-session_submit-f19e.yaml",
+    "sha256": "17B96B057853A9DA2A859A7AA809954D0E144421058C68A48BBACE0F573D228A",
+    "sourceType": "ClaudeCode",
+    "sessionId": "ClaudeCode-20261007T153749Z-plugin-session",
+    "turns": [
+      {
+        "requestId": "req-20261007T160113Z-prompt-2e7a",
+        "status": "canceled",
+        "queryTitle": "Continue the local hostile review in Grok CLI session 01a116"
+      }
+    ],
+    "quarantine": null,
+    "reasonFile": null,
+    "preserved": true,
+    "quarantined": false
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\GrokCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T162437Z-session_submit-50e5.yaml",
+    "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T125315-0500-failsafe-quarantine\\20261007T162437Z-session_submit-50e5.yaml",
+    "sha256": "74BCB55290462C0A8907588F30B80130A230D9FF548D5E0BFF74941652FD3B93",
+    "sourceType": "GrokCode",
+    "sessionId": "GrokCode-20261007T153754Z-plugin-session",
+    "turns": [
+      {
+        "requestId": "req-20261007T160105Z-prompt-763e",
+        "status": "canceled",
+        "queryTitle": "Continue the local hostile review in Grok CLI session 01a116"
+      }
+    ],
+    "quarantine": null,
+    "reasonFile": null,
+    "preserved": true,
+    "quarantined": false
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\GrokCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T162503Z-session_submit-9609.yaml",
+    "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T125315-0500-failsafe-quarantine\\20261007T162503Z-session_submit-9609.yaml",
+    "sha256": "8003DDBCE8EC58B0B843F478B9B15F30F18DB9DEA60B6EC018319657640738DF",
+    "sourceType": "GrokCode",
+    "sessionId": "GrokCode-20261007T153754Z-plugin-session",
+    "turns": [
+      {
+        "requestId": "req-20261007T160105Z-prompt-763e",
+        "status": "canceled",
+        "queryTitle": "Continue the local hostile review in Grok CLI session 01a116"
+      }
+    ],
+    "quarantine": null,
+    "reasonFile": null,
+    "preserved": true,
+    "quarantined": false
+  }
+]

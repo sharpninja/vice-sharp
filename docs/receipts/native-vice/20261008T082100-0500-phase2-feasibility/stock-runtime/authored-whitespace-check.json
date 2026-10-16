@@ -1,0 +1,38 @@
+[
+  {
+    "path": "HANDOFF.md",
+    "exitCode": 1,
+    "whitespaceDiagnostics": [],
+    "noWhitespaceDiagnostics": true
+  },
+  {
+    "path": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+    "exitCode": 1,
+    "whitespaceDiagnostics": [],
+    "noWhitespaceDiagnostics": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\README.md",
+    "exitCode": 1,
+    "whitespaceDiagnostics": [],
+    "noWhitespaceDiagnostics": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\InvokeNormalizer.cs.txt",
+    "exitCode": 1,
+    "whitespaceDiagnostics": [],
+    "noWhitespaceDiagnostics": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\save-step.mon",
+    "exitCode": 1,
+    "whitespaceDiagnostics": [],
+    "noWhitespaceDiagnostics": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\load-step.mon",
+    "exitCode": 1,
+    "whitespaceDiagnostics": [],
+    "noWhitespaceDiagnostics": true
+  }
+]

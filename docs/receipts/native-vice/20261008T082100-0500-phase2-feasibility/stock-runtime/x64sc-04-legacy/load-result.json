@@ -1,0 +1,32 @@
+{
+  "timestampLocal": "2026-10-08T09:16:00.4234221-05:00",
+  "exitCode": 0,
+  "expectedFromPinnedMainCpuPayload": {
+    "clock": 109163946,
+    "a": 194,
+    "x": 2,
+    "y": 0,
+    "sp": 250,
+    "pc": 22377,
+    "p": 160
+  },
+  "observedMonitorRegisters": {
+    "clock": 109163946,
+    "a": 194,
+    "x": 2,
+    "y": 0,
+    "sp": 250,
+    "pc": 22377,
+    "p": 160
+  },
+  "registerDifferences": [],
+  "stepSnapshotExists": true,
+  "stepSnapshotSha256": "6084D82ED11246D2558DDC751E95C67A54372A5A2F54D4022338998DC5D2F435",
+  "limitations": [
+    "Text monitor ignores return status of undump; binary-monitor acknowledgement remains required for fail-closed automation",
+    "Register and clock recovery plus executed step only, not all device or half-cycle parity",
+    "Native T64 unsupported log retained; sound overflow warnings retained"
+  ],
+  "acceptanceGatePassed": false,
+  "hvPending": true
+}

@@ -1,0 +1,306 @@
+[
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"publish-negative\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"nul\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"flush-positive\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"unused-error-flag\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"newline\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"stop-write-failure\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"uppercase\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"stop-flush-failure\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"maximum-clock\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"input-error-negative\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"continue-zero-write\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"input-error-positive\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"flush-negative\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"quit\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"continue-positive-write\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"high-byte\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"publish-other-negative\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"eof\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  },
+  {
+    "testName": "ViceSharp.NativeClockProbe.Tests.StdioAdapterContractTests.Correct_mock_passes_and_wrong_stdio_observations_are_rejected(name: \"stop-both-failures\")",
+    "outcome": "Passed",
+    "scope": "Mock contract only; real stdio adapter binding unrun",
+    "requirements": [
+      "FR-VICE-001/ac-02",
+      "FR-VICE-001/ac-04",
+      "TR-VICE-ORACLE-001/ac-02",
+      "TR-VICE-ORACLE-001/ac-03",
+      "TR-VICE-ORACLE-001/ac-05",
+      "TEST-VICE-001/ac-02",
+      "TEST-VICE-001/ac-04"
+    ],
+    "mapping": "Supporting contract evidence, not satisfaction of real observation or integrity ACs",
+    "fixtures": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterContractTests.cs"
+  }
+]

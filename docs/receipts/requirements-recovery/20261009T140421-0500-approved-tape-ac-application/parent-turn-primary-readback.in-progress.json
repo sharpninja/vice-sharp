@@ -1,0 +1,98 @@
+{
+  "requestId": "req-20261009T190241Z-prompt-6646",
+  "timestamp": "2026-10-09T14:02:42-05:00",
+  "queryText": "Approve the exact legacy tape acceptance correction proposal pasted by the user. User response: Approved. Attachment: C:\\Users\\kingd\\.codex\\attachments\\da16206c-300e-4346-93a3-6394ac58e251\\Pasted text.txt. Full approved scope follows.\n# Legacy tape acceptance correction proposal\n\nPrepared 2026-10-08T15:11:05-05:00. **Not approved, not applied, not independently accepted.** This is a requirements correction proposal within the existing full-goal recovery work, not a new product implementation gate.\n\n## Decision requested\n\nApprove the exact five-record delta in [proposed-field-delta.json](proposed-field-delta.json): replace the behavior/condition text, add 23 unsatisfied acceptance criteria, change the existing `closed` statuses to `pending`, and remove historical test-count claims from the two TEST titles for:\n\n- `FR-RUNTIME-TAPE-002`: six criteria.\n- `TR-TAP-EDGE-001`: four criteria.\n- `TR-TAPE-EDGE-001`: four criteria.\n- `TEST-TAPE-RAMP-001`: four criteria.\n- `TEST-TAPE-SENSE-001`: five criteria.\n\nPreserve IDs, FR/TR titles, priorities, scope, mappings, and historical evidence. The TEST titles become \"Datasette motor startup and delayed-stop parity\" and \"Datasette transport, sense wiring and recording parity\". Nothing is retired or deleted. Approval of this delta would not approve product code, satisfy an AC, replace the full-goal plan, waive native VSF or real-emulator gates, or authorize changes to `native/vice`. The other three legacy emulator FRs and the MCP placeholder remain unresolved and unchanged.\n\nThese are **new corrective criteria derived from pinned source**, not verbatim recovered historical criteria. The JSON contains every old and proposed value. The initial draft, before removing the TEST-title count claims, is retained unchanged as `proposed-field-delta.initial.json` with SHA-256 `5004608206F617FEED8A45A7DB92C44AE6EBB48AEEF85580F0BD298280371650`. Use `proposed-field-delta.json`, not that initial draft, for the requested approval; its current hash is retained in `verification.json`.\n\n## Evidence that changes the next action\n\nThe four pre-rename legacy snapshots already contain zero structured AC. All four current titles, bodies and statuses match those snapshots. The September 28 recovery ledger explicitly labels all four proposed AC sets `inferred-from-surviving-fr-body`. These inspected artifacts do not establish whether additional historical criteria exist elsewhere. They do establish that copying the staged proposals is not a verified restoration of historical AC. See [rename-preservation-proof.json](rename-preservation-proof.json) and [historical-inferred-proposals.json](historical-inferred-proposals.json).\n\nFor the tape requirement specifically:\n\n1. The stored expression `!PlayPressed || !RecordPressed` disagrees with the managed `!(PlayPressed || RecordPressed)` in both single-button cases. [The four-row truth table](sense-expression-truth-table.json) proves the Boolean disagreement, not native runtime parity.\n2. VICE routes C64 tape sense to CPU port `$0001` bit 4, subject to direction masking. CIA1 FLAG receives pulse events. VIC-20 uses VIA1 port A bit 6 for sense and VIA2 CA1 for read pulses. The managed `C64MemoryMap.ReadVisibleProcessorPort` already uses CPU port bit 4 correctly; do not misreport that method as the wrong-port defect. The FR/TR and `DatasetteSenseLineTests` retain the wrong CIA1-port description.\n3. Native RECORD with no image is ignored. A read-only image does not accept RECORD. The existing managed test `TryWritePulse_StorePulse_WhenRecordPressed` creates no image yet expects recording success. This is an inspected expectation conflict, not a newly executed failure.\n4. Native motor-off schedules a delayed stop. Re-enabling before the stop executes cancels it without a new startup ramp. `MotorOff_ThenOn_ResetsRamp` instead demands a new ramp after one off tick. Copying that expectation into AC would perpetuate the divergence.\n5. The native writer consumes clocked write-line transitions and has gap encoding, remainder, first-write and write-failure behavior. A managed buffer-count increment alone cannot establish native recording parity.\n\nAll six native files examined match their exact Git blobs at `cc67418cba58e71d8e70fd353e9de47199ad2075`; see [native-source-pins.json](native-source-pins.json). Source inspection is not a substitute for native execution. A pulse-duration getter is not itself a machine-visible pulse event; the real comparison must include the owning machine's clocked binding.\n\n## Gated execution after approval\n\n1. Re-read all five effective records and compare the exact old content, status and AC arrays. Stop on drift. Use the supported requirements batch workflow for the approved fields, preserve every unrelated field, and prove all five records by primary readback. Do not reapply the old recovery bundle or modify its provenance receipts.\n2. Refresh the canonical projections through the supported requirements export path and run the traceability check. Keep every AC unsatisfied and all five statuses pending. Retain the original assertions and receipts as historical evidence, with explicit documentation of the expectations being superseded.\n3. Submit the complete correction, source evidence and planned test cases to the required local Opus max review. The existing review and phase gates remain in force. This proposal has no independent scores or acceptance verdict.\n4. Before product implementation, prepare the native-safe test seam and exact shared fixtures for the named cases in the TEST deltas. Correct mocks and single-fault negative controls must all execute within a green suite. No red production suite, test-count-only gate or copied production expectation is acceptable.\n5. Only after the applicable accepted mock gate and native-safe harness integration, bind the same fixtures and assertions to managed and immutable native providers. Validate machine-visible event order, not merely internal getters. Run all required current-plus-prior suites, including retained native VSF and real parity gates, then obtain independent HV before any satisfaction or done-state change.\n\nThis requirements proposal deliberately does not claim to be an implementation-ready native tape adapter design. That design depends on the still-unaccepted immutable-wrapper and native-safe harness work. No source/build/test execution, requirement mutation, or phase advancement was performed here.\n\n## Receipt boundaries\n\n`live-fr-readback.json` retains the four direct FR responses. Wrapper-returned timestamps are retained as returned but are not used as historical mutation proof. `source-excerpts.json` and `managed-input-pins.json` retain the inspected code/test evidence. The old recovery ledger, old provenance file and prior review packet are not rewritten. New evidence must be included and pinned in the next actual HV request.\n",
+  "queryTitle": "Apply approved five-record legacy tape AC correction",
+  "response": "Actions appended.",
+  "interpretation": "The user approved the exact pasted tape proposal, matching its retained README and delta SHA256 5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A. Approval covers five requirement records, 23 unsatisfied AC, closed-to-pending and two TEST-title corrections. It does not approve drive/media/video deltas, product code, native changes, AC satisfaction, or the original plan done state.",
+  "status": "in_progress",
+  "actions": [
+    {
+      "order": 1,
+      "description": "Apply only the user-approved five-record tape delta after exact live before-image verification. Use one supported mixed-kind batch, updating description/condition, pending status, unsatisfied AC and the two named TEST titles. Preserve all IDs, scope, priority, FR/TR titles, mappings and historical receipt files. Approval does not authorize production/native changes, drive/media/video deltas, acceptance claims or weakening the original real-emulator/VSF gates. Retain full before/request/after evidence and verify through primary readback. Then export canonical projections and seek the stipulated local Opus max review of this correction, not another blind retry of the old packet.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\approval.json"
+    },
+    {
+      "order": 2,
+      "description": "Supported workflow.requirements.updateBatch returned success=true, total=5, errors=[] for the exact approved tape fields. All five returned pending with 23 unsatisfied criteria. Primary readback and unchanged-field comparison are next; no acceptance claim.",
+      "type": "edit",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\batch-response.json"
+    },
+    {
+      "order": 3,
+      "description": "Primary effective-requirements readback confirms all five exact approved texts/titles/status/AC arrays. Exactly five records changed and only approved fields; 23 AC remain false, all five pending, all mappings unchanged. Full effective counts unchanged (235/139/142). No native/product/test changes.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\requirements-verification.json"
+    },
+    {
+      "order": 4,
+      "description": "Supported all-document export refreshed docs/Project and wiki projections; derived canonical tape projection contains exact primary-readback fields and 23 unsatisfied AC. Prior 108 projection files are copied and hash verified. Export markdown schema mismatch filed as triage-report-52b871ce6e7a4f2c8b157cde7c6f7da9; yaml selector succeeded. Failsafe retained, drain disabled. No publishing.",
+      "type": "edit",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\requirements\\legacy-tape-acceptance-correction.md"
+    },
+    {
+      "order": 5,
+      "description": "Canonical projection exact-text check has zero missing AC, 23 unsatisfied criteria. git diff --check exit 0. Traceability command exit 0 reports 238 canonical IDs, 152 referenced, 86 unreferenced, 1011 noncanonical references; not a no-gaps gate. All 11 native/managed tape input pins still match.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\projection-validation.json"
+    },
+    {
+      "order": 6,
+      "description": "Launched operator-approved local Opus 5.5 max requirements-correction HV, PID 98664, fresh CLI session 6f7d4013-8c6c-4347-8559-d5c9f7ae4e34, isolated MCP cache and failsafe, no artificial limits or model substitution, 94 pinned inputs. Full request and live response JSONL retained. No verdict yet.",
+      "type": "validation",
+      "status": "in_progress",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\request.jsonl"
+    },
+    {
+      "order": 7,
+      "description": "Profile recovery complete, counts 22/15/38 and marker SHA unchanged. Disclosed own marker redaction failure; no claim of secret-safe marker output.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "AGENTS-README-FIRST.yaml"
+    }
+  ],
+  "model": "codex",
+  "modelProvider": null,
+  "tokenCount": 0,
+  "tags": [
+    "FR-RUNTIME-TAPE-002",
+    "TR-TAP-EDGE-001",
+    "TR-TAPE-EDGE-001",
+    "TEST-TAPE-RAMP-001",
+    "TEST-TAPE-SENSE-001",
+    "approved-exact-delta"
+  ],
+  "contextList": null,
+  "failureNote": null,
+  "score": null,
+  "isPremium": null,
+  "rawContext": null,
+  "originalEntry": null,
+  "processingDialog": [
+    {
+      "timestamp": "2026-10-09T14:04:21.8117763-05:00",
+      "role": "model",
+      "content": "Apply only the user-approved five-record tape delta after exact live before-image verification. Use one supported mixed-kind batch, updating description/condition, pending status, unsatisfied AC and the two named TEST titles. Preserve all IDs, scope, priority, FR/TR titles, mappings and historical receipt files. Approval does not authorize production/native changes, drive/media/video deltas, acceptance claims or weakening the original real-emulator/VSF gates. Retain full before/request/after evidence and verify through primary readback. Then export canonical projections and seek the stipulated local Opus max review of this correction, not another blind retry of the old packet.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-09T14:19:20.7217576-05:00",
+      "role": "model",
+      "content": "Recovered after automatic context compaction. Fully reloaded fresh Global MCP inventory: 22 SHA-verified profile snapshots, 15 other memories plus manifest, 38 unique records; no paging or missing parts. Marker hash unchanged. Scope remains exact approved five-record tape delta, 23 unsatisfied AC, requirements-only; Opus PID 98664 still reviewing. During marker recovery I incorrectly redacted only top-level apiKey and printed two repeated credential fields in tool output. I disclosed the error, will not echo the value, and make no secret-safe claim for that read. No credentials were intentionally written to session records. No automatic credential rotation or deletion authorized.",
+      "category": "observation"
+    }
+  ],
+  "commits": null,
+  "designDecisions": null,
+  "requirementsDiscovered": null,
+  "filesModified": null,
+  "blockers": null,
+  "planFile": "None",
+  "todoId": "None"
+}

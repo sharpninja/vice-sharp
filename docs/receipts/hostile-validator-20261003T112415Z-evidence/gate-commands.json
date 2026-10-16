@@ -1,0 +1,37 @@
+[
+  {
+    "name": "focused",
+    "filter": "FullyQualifiedName=ViceSharp.TestHarness.FrSnp003AcceptanceTests.SaveReplay_KeepsAttachedCartridgeBytesAndMapping",
+    "exit": 0,
+    "startedUtc": "2026-10-03T11:29:47.4081271+00:00",
+    "Command": "dotnet vstest \"F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.TestHarness.dll\" \"/TestCaseFilter:FullyQualifiedName=ViceSharp.TestHarness.FrSnp003AcceptanceTests.SaveReplay_KeepsAttachedCartridgeBytesAndMapping\" \"/Logger:trx;LogFileName=focused.trx\" \"/ResultsDirectory:F:\\GitHub\\vice-sharp\\docs\\receipts\\hostile-validator-20261003T112415Z-evidence\" \"/Logger:console;verbosity=normal\""
+  },
+  {
+    "name": "replay-class",
+    "filter": "FullyQualifiedName~FrSnp003AcceptanceTests",
+    "exit": 0,
+    "startedUtc": "2026-10-03T11:29:57.9483648+00:00",
+    "Command": "dotnet vstest \"F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.TestHarness.dll\" \"/TestCaseFilter:FullyQualifiedName~FrSnp003AcceptanceTests\" \"/Logger:trx;LogFileName=replay-class.trx\" \"/ResultsDirectory:F:\\GitHub\\vice-sharp\\docs\\receipts\\hostile-validator-20261003T112415Z-evidence\" \"/Logger:console;verbosity=normal\""
+  },
+  {
+    "name": "phase2-first",
+    "filter": "FullyQualifiedName~PhaseAcceptanceCoverageTests|FullyQualifiedName~FrCpu004|FullyQualifiedName~FrMem006|FullyQualifiedName~FrMem004|FullyQualifiedName~FrSid004|FullyQualifiedName~FrSid009|FullyQualifiedName~FrUi004|FullyQualifiedName~FrCfg003|FullyQualifiedName~FrCfg004|FullyQualifiedName~FrCia005|FullyQualifiedName~FrCrt002|FullyQualifiedName~FrInp003|FullyQualifiedName~FrMed005|FullyQualifiedName~FrMon005|FullyQualifiedName~FrMon006|FullyQualifiedName~FrSid005|FullyQualifiedName~FrSnp003|FullyQualifiedName~FrVic20005",
+    "exit": 0,
+    "startedUtc": "2026-10-03T11:30:11.5314664+00:00",
+    "Command": "dotnet vstest \"F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.TestHarness.dll\" \"/TestCaseFilter:FullyQualifiedName~PhaseAcceptanceCoverageTests|FullyQualifiedName~FrCpu004|FullyQualifiedName~FrMem006|FullyQualifiedName~FrMem004|FullyQualifiedName~FrSid004|FullyQualifiedName~FrSid009|FullyQualifiedName~FrUi004|FullyQualifiedName~FrCfg003|FullyQualifiedName~FrCfg004|FullyQualifiedName~FrCia005|FullyQualifiedName~FrCrt002|FullyQualifiedName~FrInp003|FullyQualifiedName~FrMed005|FullyQualifiedName~FrMon005|FullyQualifiedName~FrMon006|FullyQualifiedName~FrSid005|FullyQualifiedName~FrSnp003|FullyQualifiedName~FrVic20005\" \"/Logger:trx;LogFileName=phase2-first.trx\" \"/ResultsDirectory:F:\\GitHub\\vice-sharp\\docs\\receipts\\hostile-validator-20261003T112415Z-evidence\" \"/Logger:console;verbosity=normal\""
+  },
+  {
+    "name": "phase2-second",
+    "filter": "FullyQualifiedName~PhaseAcceptanceCoverageTests|FullyQualifiedName~FrCpu004|FullyQualifiedName~FrMem006|FullyQualifiedName~FrMem004|FullyQualifiedName~FrSid004|FullyQualifiedName~FrSid009|FullyQualifiedName~FrUi004|FullyQualifiedName~FrCfg003|FullyQualifiedName~FrCfg004|FullyQualifiedName~FrCia005|FullyQualifiedName~FrCrt002|FullyQualifiedName~FrInp003|FullyQualifiedName~FrMed005|FullyQualifiedName~FrMon005|FullyQualifiedName~FrMon006|FullyQualifiedName~FrSid005|FullyQualifiedName~FrSnp003|FullyQualifiedName~FrVic20005",
+    "exit": 0,
+    "startedUtc": "2026-10-03T11:30:28.6877229+00:00",
+    "Command": "dotnet vstest \"F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.TestHarness.dll\" \"/TestCaseFilter:FullyQualifiedName~PhaseAcceptanceCoverageTests|FullyQualifiedName~FrCpu004|FullyQualifiedName~FrMem006|FullyQualifiedName~FrMem004|FullyQualifiedName~FrSid004|FullyQualifiedName~FrSid009|FullyQualifiedName~FrUi004|FullyQualifiedName~FrCfg003|FullyQualifiedName~FrCfg004|FullyQualifiedName~FrCia005|FullyQualifiedName~FrCrt002|FullyQualifiedName~FrInp003|FullyQualifiedName~FrMed005|FullyQualifiedName~FrMon005|FullyQualifiedName~FrMon006|FullyQualifiedName~FrSid005|FullyQualifiedName~FrSnp003|FullyQualifiedName~FrVic20005\" \"/Logger:trx;LogFileName=phase2-second.trx\" \"/ResultsDirectory:F:\\GitHub\\vice-sharp\\docs\\receipts\\hostile-validator-20261003T112415Z-evidence\" \"/Logger:console;verbosity=normal\""
+  },
+  {
+    "name": "idle-lockstep",
+    "filter": "FullyQualifiedName~LockstepValidationTests.First10000CyclesMatch|FullyQualifiedName~LockstepValidationTests.First100000CyclesMatch",
+    "exit": 0,
+    "startedUtc": "2026-10-03T11:30:47.2848979+00:00",
+    "Command": "dotnet vstest \"F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.TestHarness.dll\" \"/TestCaseFilter:FullyQualifiedName~LockstepValidationTests.First10000CyclesMatch|FullyQualifiedName~LockstepValidationTests.First100000CyclesMatch\" \"/Logger:trx;LogFileName=idle-lockstep.trx\" \"/ResultsDirectory:F:\\GitHub\\vice-sharp\\docs\\receipts\\hostile-validator-20261003T112415Z-evidence\" \"/Logger:console;verbosity=normal\""
+  }
+]

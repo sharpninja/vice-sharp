@@ -1,0 +1,9 @@
+{
+  "name": "vsf-compatibility",
+  "startedLocal": "2026-10-08T12:28:32.2942185-05:00",
+  "endedLocal": "2026-10-08T12:28:37.8252060-05:00",
+  "exitCode": 0,
+  "command": "dotnet test .\\tests\\ViceSharp.VsfCompatibility.Tests\\ViceSharp.VsfCompatibility.Tests.csproj -c Release --logger trx;LogFileName=vsf-compatibility.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\vsf-compatibility --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\vsf-compatibility\\vstest.diag.log --blame-hang --blame-hang-timeout 2m",
+  "stdout": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\vsf-compatibility.stdout.log",
+  "stderr": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\vsf-compatibility.stderr.log"
+}

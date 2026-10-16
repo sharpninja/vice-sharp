@@ -1,0 +1,63 @@
+{
+  "timestampLocal": "2026-10-08T15:31:31.6484157-05:00",
+  "scope": "read-only source audit plus new receipt artifacts",
+  "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeCommitPins": 7,
+  "nativeCommitPinMismatches": 0,
+  "managedPins": 9,
+  "inputHashChanges": 0,
+  "nativeBaselineComparison": [
+    {
+      "field": "gitlink",
+      "unchanged": true
+    },
+    {
+      "field": "head",
+      "unchanged": true
+    },
+    {
+      "field": "trackedDiffSha256",
+      "unchanged": true
+    },
+    {
+      "field": "untrackedListSha256",
+      "unchanged": true
+    },
+    {
+      "field": "inventorySha256",
+      "unchanged": true
+    },
+    {
+      "field": "newestSourceWriteUtc",
+      "unchanged": true
+    },
+    {
+      "field": "fileCount",
+      "unchanged": true
+    },
+    {
+      "field": "untrackedCount",
+      "unchanged": true
+    }
+  ],
+  "requirementComparisonAgainst": "20261008T150905-0500-legacy-tape-ac-proposal/effective-requirements.after.json",
+  "requirementSectionChanges": [],
+  "counts": {
+    "technical": 139,
+    "mappings": 233,
+    "testing": 142,
+    "functional": 235
+  },
+  "gitDiffCheckExit": 0,
+  "gitDiffCheckOutputLines": 0,
+  "testsExecuted": 0,
+  "buildsExecuted": 0,
+  "hvStatus": "not reviewed",
+  "accuracyScore": null,
+  "completenessScore": null,
+  "requirementMutations": 0,
+  "productionSourceEdits": 0,
+  "testSourceEdits": 0,
+  "goalStatusChanged": false,
+  "receiptRoot": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T152823-0500-legacy-drive-source-audit"
+}

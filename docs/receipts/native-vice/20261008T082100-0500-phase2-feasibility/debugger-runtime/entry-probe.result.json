@@ -1,0 +1,7 @@
+{
+  "timestampLocal": "2026-10-08T10:09:00.7845144-05:00",
+  "completed": false,
+  "entryHits": 0,
+  "termination": "Stopped verified owned xvic2580 and debugger52164 after no hardware execute hit",
+  "cause": "Unknown. Disassembly at rebased0x50b80 matches nm-pinned maincpu_mainloop prologue; USE_VICE_THREAD is undefined. No broader infeasibility conclusion."
+}

@@ -1,0 +1,3 @@
+line one
+line two with e-acute: é and a $dollar and `backtick
+last line no newline

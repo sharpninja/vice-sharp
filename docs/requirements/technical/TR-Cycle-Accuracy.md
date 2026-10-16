@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Accuracy / Fidelity            |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-10-07                     |
 
 ---
 
@@ -16,6 +16,9 @@
 **Title:** Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior
 **Priority:** P0 -- Critical
 **Category:** Accuracy
+**Status:** Pending; all seven structured acceptance criteria remain unsatisfied.
+
+The supported MCP update/readback on 2026-10-07 corrected an unsupported `closed` status without changing the requirement description or any acceptance criterion. Receipt: `docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.cycle-status-remediation.json`. A bus-address comparator fixture alone does not cover criterion 4; PHI2/AEC gating requires its own evidence.
 
 ### Description
 

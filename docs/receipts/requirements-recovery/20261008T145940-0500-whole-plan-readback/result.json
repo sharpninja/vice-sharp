@@ -1,0 +1,131 @@
+{
+  "timestampLocal": "2026-10-08T15:00:41.6208565-05:00",
+  "kind": "read-only whole-goal dependency audit",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T194908Z-prompt-7723",
+  "profile": {
+    "totalUniqueRecords": 38,
+    "verifiedParts": 22,
+    "otherGlobal": 15
+  },
+  "goalPlan": {
+    "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+    "sha256": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+    "bytes": 48261
+  },
+  "effectiveLayer": "layer-1",
+  "counts": {
+    "technical": 139,
+    "mappings": 233,
+    "testing": 142,
+    "functional": 235
+  },
+  "semanticRecordDeltaFromF12": [],
+  "addedOrRemovedRecordIds": [
+    {
+      "kind": "functional",
+      "before": 235,
+      "now": 235,
+      "added": [],
+      "removed": []
+    },
+    {
+      "kind": "technical",
+      "before": 139,
+      "now": 139,
+      "added": [],
+      "removed": []
+    },
+    {
+      "kind": "testing",
+      "before": 142,
+      "now": 142,
+      "added": [],
+      "removed": []
+    }
+  ],
+  "structuredAcInventoryFile": "structured-ac-inventory.json",
+  "structuredAcCaveat": "Zero structured criteria is a schema-level observation, not a complete semantic assessment of prose conditions. TEST uses condition, not body. None of these records is changed, retired or marked satisfied.",
+  "frMissingStructuredAc": [
+    "FR-ARCH-TRUEDRIVE-1541-002",
+    "FR-BACKFILL-MEDIA-001",
+    "FR-BACKFILL-VIDEO-001",
+    "FR-MCP-TRIAGE-002",
+    "FR-RUNTIME-TAPE-002"
+  ],
+  "placeholderIds": [
+    "FR-MCP-TRIAGE-002",
+    "TR-MCP-TRIAGE-004"
+  ],
+  "mappingReferenceErrors": [],
+  "frWithoutMapping": [
+    "FR-MCP-TRIAGE-002",
+    "FR-ROMM-XBOXUI-001"
+  ],
+  "legacyLedger": {
+    "closedIds": [
+      2,
+      4,
+      5,
+      8,
+      9
+    ],
+    "mutated": false,
+    "accepted": false,
+    "openIds": [
+      1,
+      3,
+      6,
+      7,
+      10,
+      11
+    ],
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\acceptance-20260929\\nine-defect-ledger.json"
+  },
+  "oraclePins": {
+    "proves": "Current bytes equal existing manifest hashes only",
+    "doesNotProve": "Source-to-executable provenance, immutable wrapper compatibility, half-cycle observations, VSF interoperability, or managed parity",
+    "matched": 7,
+    "checked": 7
+  },
+  "denseSmoke": {
+    "conclusion": "Retained historical receipt, not a fresh timing proof on current deployment",
+    "executedThisTurn": false,
+    "currentMarkerServer": "1.4.41+fc75387043f8337855e34d92eb3a0e03aa82ce48",
+    "historicalServer": "1.4.41+c195837ac888b6f02724221de6a040e63b3e6b47",
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\acceptance-20260929\\dense-session-smoke.json"
+  },
+  "phaseState": {
+    "recoveryAcceptance": "Six ledger rows remain open; appropriate AC and executable semantic coverage not established",
+    "realParityAndNativeVsf": "Mandatory and uncompleted",
+    "excludedGoalExitTodos": [
+      "PLAN-GRAPHRAG-001",
+      "PLAN-RASPBIAN-001"
+    ],
+    "handoff": "Final whole-goal replacement not ready",
+    "immutableMockGate": "355 locally passing tests in earlier receipts, independent HV unaccepted",
+    "vic20Settings": "Narrow historical focused acceptance only, PLAN-C64SET-001 overall false",
+    "nativeWrapperFeasibility": "Incomplete",
+    "immutablePhase0": "Accepted previously, not reaccepted here"
+  },
+  "nextSafeScope": "Recover exact existing legacy AC/provenance and prepare a field-level delta for approval; do not infer replacement criteria or mutate records. Reconcile recovery audit findings in the pending complete Opus review.",
+  "implementationGateAdvanced": false,
+  "independentHvAccepted": false,
+  "testsExecutedThisTurn": 0,
+  "productionEdits": 0,
+  "requirementWrites": 0,
+  "todoWrites": 0,
+  "nativeWrites": 0,
+  "nativeBaselineFieldsMatched": 8,
+  "nativeBaselineFieldCount": 8,
+  "gitDiffCheckExitCode": 0,
+  "existingReviewPacketUnchanged": true,
+  "reviewPacket": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008T143538-0500-opus-remediation-packet",
+  "newEvidenceMustBePinnedAtActualReviewLaunch": true,
+  "executionCorrections": [
+    "An invalid foreach-to-pipeline command was rejected by parser before execution; corrected with array subexpression.",
+    "Initial diagnostic read TEST body, a field absent from TEST records; corrected to condition before audit conclusions. All 142 condition fields are nonempty.",
+    "Initial newest-write comparison compared DateTime and string representations; actual timestamps normalize to identical UTC ticks.",
+    "Requirements count discrepancy existed only in compacted narrative; direct F12 snapshot has the same 235/139/142 counts and zero record content differences."
+  ]
+}

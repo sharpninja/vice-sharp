@@ -1,0 +1,3 @@
+# Retain complete local streams. Hooks may include sensitive marker content.
+response.jsonl
+stderr.log

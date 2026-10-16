@@ -1,0 +1,201 @@
+[
+  {
+    "Key": "fr|ARCH-TRUEDRIVE-1541-002",
+    "Kind": "fr",
+    "Id": "ARCH-TRUEDRIVE-1541-002",
+    "IsLegacy": false,
+    "CurrentCanonicalPresent": false,
+    "HistoricalPresent": false,
+    "PlanAuditRecoveredPresent": false,
+    "LivePresent": true,
+    "SourceClass": "live-only",
+    "AcSourceClass": "inferred-from-surviving-fr-body",
+    "AcSourcePath": "",
+    "AcSourceLine": null,
+    "AcInferred": true,
+    "Classification": "update",
+    "Issues": [
+      "Acceptance criteria are inferred from the surviving FR body and require owner review."
+    ],
+    "Live": {
+      "Key": "fr|ARCH-TRUEDRIVE-1541-002",
+      "Kind": "fr",
+      "Id": "ARCH-TRUEDRIVE-1541-002",
+      "Title": "True-Drive 1541 IEC timing and motor ramp",
+      "Body": "IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.",
+      "Priority": "high",
+      "Status": "closed",
+      "Notes": null,
+      "AcceptanceCriteria": [],
+      "AcceptanceCriteriaRaw": [],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    "Proposed": {
+      "Kind": "fr",
+      "Id": "ARCH-TRUEDRIVE-1541-002",
+      "Title": "True-Drive 1541 IEC timing and motor ramp",
+      "Body": "IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.",
+      "Priority": "high",
+      "Status": "closed",
+      "Notes": null,
+      "AcceptanceCriteria": [
+        "IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert).",
+        "IecDrive.Tick() implements 300,000-cycle motor ramp before rotation.",
+        "IecDrive.ReadSector(18,0) returns BAM bytes from D64.",
+        "At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR."
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    }
+  },
+  {
+    "Key": "fr|BACKFILL-MEDIA-001",
+    "Kind": "fr",
+    "Id": "BACKFILL-MEDIA-001",
+    "IsLegacy": false,
+    "CurrentCanonicalPresent": false,
+    "HistoricalPresent": false,
+    "PlanAuditRecoveredPresent": false,
+    "LivePresent": true,
+    "SourceClass": "live-only",
+    "AcSourceClass": "inferred-from-surviving-fr-body",
+    "AcSourcePath": "",
+    "AcSourceLine": null,
+    "AcInferred": true,
+    "Classification": "update",
+    "Issues": [
+      "Acceptance criteria are inferred from the surviving FR body and require owner review."
+    ],
+    "Live": {
+      "Key": "fr|BACKFILL-MEDIA-001",
+      "Kind": "fr",
+      "Id": "BACKFILL-MEDIA-001",
+      "Title": "Media devices (D64, tape) I/O functional parity",
+      "Body": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+      "Priority": "medium",
+      "Status": "closed",
+      "Notes": null,
+      "AcceptanceCriteria": [],
+      "AcceptanceCriteriaRaw": [],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    "Proposed": {
+      "Kind": "fr",
+      "Id": "BACKFILL-MEDIA-001",
+      "Title": "Media devices (D64, tape) I/O functional parity",
+      "Body": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+      "Priority": "medium",
+      "Status": "closed",
+      "Notes": null,
+      "AcceptanceCriteria": [
+        "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented.",
+        "Datasette motor ramp, sense line, and record mode complete.",
+        "At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR."
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    }
+  },
+  {
+    "Key": "fr|BACKFILL-VIDEO-001",
+    "Kind": "fr",
+    "Id": "BACKFILL-VIDEO-001",
+    "IsLegacy": false,
+    "CurrentCanonicalPresent": false,
+    "HistoricalPresent": false,
+    "PlanAuditRecoveredPresent": false,
+    "LivePresent": true,
+    "SourceClass": "live-only",
+    "AcSourceClass": "inferred-from-surviving-fr-body",
+    "AcSourcePath": "",
+    "AcSourceLine": null,
+    "AcInferred": true,
+    "Classification": "update",
+    "Issues": [
+      "Acceptance criteria are inferred from the surviving FR body and require owner review."
+    ],
+    "Live": {
+      "Key": "fr|BACKFILL-VIDEO-001",
+      "Kind": "fr",
+      "Id": "BACKFILL-VIDEO-001",
+      "Title": "VIC-II visible-frame parity (RC window, DMA checkpoints, screen-RAM)",
+      "Body": "VIC-II RC/VC state machine matches VICE cycle-accurate behavior (RC window). Native checkpoints validate sprite DMA for all 5 non-PAL models. Screen RAM survives one PAL frame unchanged. VICE viciisc/vicii-cycle.c:541-563, vicii-fetch.c:135-166.",
+      "Priority": "high",
+      "Status": "closed",
+      "Notes": null,
+      "AcceptanceCriteria": [],
+      "AcceptanceCriteriaRaw": [],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    "Proposed": {
+      "Kind": "fr",
+      "Id": "BACKFILL-VIDEO-001",
+      "Title": "VIC-II visible-frame parity (RC window, DMA checkpoints, screen-RAM)",
+      "Body": "VIC-II RC/VC state machine matches VICE cycle-accurate behavior (RC window). Native checkpoints validate sprite DMA for all 5 non-PAL models. Screen RAM survives one PAL frame unchanged. VICE viciisc/vicii-cycle.c:541-563, vicii-fetch.c:135-166.",
+      "Priority": "high",
+      "Status": "closed",
+      "Notes": null,
+      "AcceptanceCriteria": [
+        "VIC-II RC/VC state machine matches VICE cycle-accurate behavior (RC window).",
+        "Native checkpoints validate sprite DMA for all 5 non-PAL models.",
+        "Screen RAM survives one PAL frame unchanged.",
+        "At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR."
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    }
+  },
+  {
+    "Key": "fr|RUNTIME-TAPE-002",
+    "Kind": "fr",
+    "Id": "RUNTIME-TAPE-002",
+    "IsLegacy": false,
+    "CurrentCanonicalPresent": false,
+    "HistoricalPresent": false,
+    "PlanAuditRecoveredPresent": false,
+    "LivePresent": true,
+    "SourceClass": "live-only",
+    "AcSourceClass": "inferred-from-surviving-fr-body",
+    "AcSourcePath": "",
+    "AcSourceLine": null,
+    "AcInferred": true,
+    "Classification": "update",
+    "Issues": [
+      "Acceptance criteria are inferred from the surviving FR body and require owner review."
+    ],
+    "Live": {
+      "Key": "fr|RUNTIME-TAPE-002",
+      "Kind": "fr",
+      "Id": "RUNTIME-TAPE-002",
+      "Title": "Datasette motor ramp + sense line + record mode",
+      "Body": "Datasette.Tick() enforces MOTOR_DELAY=32,000-cycle ramp (datasette.c:62) before pulse delivery when Tick is timing mechanism. SenseLine=!PlayPressed||!RecordPressed (CIA1  bit 4). TryWritePulse stores pulses in record mode.",
+      "Priority": "medium",
+      "Status": "closed",
+      "Notes": null,
+      "AcceptanceCriteria": [],
+      "AcceptanceCriteriaRaw": [],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    "Proposed": {
+      "Kind": "fr",
+      "Id": "RUNTIME-TAPE-002",
+      "Title": "Datasette motor ramp + sense line + record mode",
+      "Body": "Datasette.Tick() enforces MOTOR_DELAY=32,000-cycle ramp (datasette.c:62) before pulse delivery when Tick is timing mechanism. SenseLine=!PlayPressed||!RecordPressed (CIA1  bit 4). TryWritePulse stores pulses in record mode.",
+      "Priority": "medium",
+      "Status": "closed",
+      "Notes": null,
+      "AcceptanceCriteria": [
+        "Datasette.Tick() enforces MOTOR_DELAY=32,000-cycle ramp (datasette.c:62) before pulse delivery when Tick is timing mechanism.",
+        "SenseLine=!PlayPressed||!RecordPressed (CIA1  bit 4).",
+        "TryWritePulse stores pulses in record mode.",
+        "At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR."
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    }
+  }
+]

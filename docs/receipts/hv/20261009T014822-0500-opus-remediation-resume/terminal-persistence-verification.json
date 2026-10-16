@@ -1,0 +1,10 @@
+{
+  "timestampLocal": "2026-10-09T02:05:22-05:00",
+  "exactBody": true,
+  "expectedChars": 7535,
+  "actualChars": 7535,
+  "primaryPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T014822-0500-opus-remediation-resume\\parent-terminal-primary-readback.json",
+  "primarySha256": "7319D2E41E96181C08DDB53DF1CFD52B9AA8C1F5D06610AAA0752D7DEA46954C",
+  "reviewerVerdictPresent": false,
+  "reviewAccepted": false
+}

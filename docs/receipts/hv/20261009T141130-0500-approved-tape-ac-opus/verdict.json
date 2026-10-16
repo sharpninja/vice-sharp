@@ -1,0 +1,614 @@
+{
+  "receiptType": "hostile-validation-verdict",
+  "timestampLocal": "2026-10-09T14:48:38-05:00",
+  "timestampUtc": "2026-10-09T19:48:38Z",
+  "reviewer": {
+    "agent": "ClaudeCode",
+    "model": "claude-opus-5-5",
+    "modelName": "Claude Opus 5.5",
+    "effort": "max",
+    "host": "PAYTON-LEGION2",
+    "cliSessionId": "6f7d4013-8c6c-4347-8559-d5c9f7ae4e34",
+    "console": "PowerShell.MCP sub-agent console sa-cfc6534b (pid 88188)",
+    "signature": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+  },
+  "parent": {
+    "agent": "Codex",
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261009T190241Z-prompt-6646"
+  },
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "classification": "Project requirements correction (requirements phase only). No product implementation. The export failure is a tooling defect, not an emulator finding.",
+  "gate": "Approved five-record legacy tape requirements correction only; full implementation goal remains incomplete.",
+  "addProfile": {
+    "executed": true,
+    "skillPath": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "source": "Global MCP memories",
+    "profileParts": 22,
+    "profilePartsHashVerified": 22,
+    "manifest": "MEMORY-PROFILE-000",
+    "otherGlobalMemories": 15,
+    "totalGlobalRecords": 38,
+    "listTotalCount": 38
+  },
+  "trust": {
+    "marker": "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml",
+    "markerLastWriteUtc": "2026-10-08T14:14:02.6099161Z",
+    "markerSha256": "3A13AA1CA3A69A247FDE327CFBF4C289757B120541909977616001156C68817F",
+    "signatureVerified": true,
+    "healthNonceVerified": true,
+    "method": "plugin lib/marker-resolver.ps1 Test-MarkerSignature and Invoke-FullBootstrap",
+    "plugin": "mcpserver 1.119.0 at C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0",
+    "cacheDir": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261009T141130-0500-approved-tape-ac-opus",
+    "failsafeDir": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261009T141130-0500-approved-tape-ac-opus\\failsafe\\pending",
+    "drainDisabled": true
+  },
+  "session": {
+    "sessionId": "ClaudeCode-20261009T191359Z-plugin-session",
+    "requestId": "req-20261009T191402Z-prompt-e6c7"
+  },
+  "inputPins": {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\input-pins.json",
+    "total": 94,
+    "matched": 94,
+    "drift": 0
+  },
+  "supplementalPins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\alarm.h",
+      "sha256": "BFD69D427573607D5934678739DE781C7F846636AA08A65C8B6A8D53451BDD3C",
+      "bytes": 5408
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\tapeport.c",
+      "sha256": "BC73131BF535AA57DEED1AD2080C92C0C1ECB8AE1F1338B1A2CCC7DD9CE26B15",
+      "bytes": 20059
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\backfill\\Classic-VICE-Edge-Case-TR-Backfill.md",
+      "sha256": "3592F14190843AD880F9B0D0C980ED7A406D8DE5573DBB636894FFD78F369717",
+      "bytes": 28855
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tools\\check_requirement_traceability.ps1",
+      "sha256": "266EDF8D74E43C8DC4171C726ABB1C6B72DDD758C43217DC6F53CFA3E4D508E3",
+      "bytes": 3757
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\projection-file-changes.json",
+      "sha256": "478626F16617C74F11056D2506EB5EA9EAD904AF16C525923A8BA33C5D9DAE0B",
+      "bytes": 3253
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\parent-turn-primary-readback.in-progress.json",
+      "sha256": "2BA06FDDCDEE9C8B89DF225249693D1A2CF599CEA278C6E69EB839DC94B26495",
+      "bytes": 14010
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261009T190733Z-requirements_export_schema-3bbf.yaml",
+      "sha256": "DCFFBB906C6F1D9E9A9E99A8D9928B926C3DEEAD15E1E7B93AF6FEBE5BED27FE",
+      "bytes": 1553
+    },
+    {
+      "path": "C:\\Users\\kingd\\.codex\\attachments\\da16206c-300e-4346-93a3-6394ac58e251\\Pasted text.txt",
+      "sha256": "7EE21E50CB6E39ADEC4D020AA0A2123A59B61DDEA260443277BF5E30C02FA1A5",
+      "bytes": 6655
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\prompt.md",
+      "sha256": "6F4A6EEF8E3CDF4A20F699B428ACB1AE99D42F3BC9741DBEE9379C94ED75FB3E",
+      "bytes": 10597
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\request.jsonl",
+      "sha256": "E2327863A589DCEA32B0B3880B6D08B75D58A7334D5DE239FCD646861ABB5B73",
+      "bytes": 13707
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\input-pins.json",
+      "sha256": "0188E14718C12C59EB3109349F69F2A96983FA77AC5A4078181AE07A40EF4A0C",
+      "bytes": 21511
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "B7A13C695B04D2A2560AEEA3C174189594D8F0F776402662E688C86352E909E8",
+      "bytes": 76615
+    }
+  ],
+  "supplementalNativeBlobs": {
+    "alarm.h": "993ae410910e17264d4cebb9f4a251b56739b6db (computed, not independently compared to the commit tree)",
+    "tapeport/tapeport.c": "09a23aec4c553353ef63e93f6d380585378e9a06 (computed, not independently compared to the commit tree)",
+    "datasette/datasette.c": "06579175a8ae151fc83972487234d417a4743ec4 (computed, equals pinned blob)"
+  },
+  "assertions": [
+    {
+      "id": "A1.1",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Attachment authorized exactly the five-record delta.",
+      "evidence": "Attachment SHA256 7EE21E50CB6E39ADEC4D020AA0A2123A59B61DDEA260443277BF5E30C02FA1A5 is byte-identical to proposal README.md; README requests exactly proposed-field-delta.json; approved delta SHA256 5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A matches; initial draft 5004608206F617FEED8A45A7DB92C44AE6EBB48AEEF85580F0BD298280371650 is distinct and was not applied; delta has 5 records and 6+4+4+4+5=23 AC."
+    },
+    {
+      "id": "A1.2",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Live before-images matched old content, status, AC and TEST titles before the batch.",
+      "evidence": "effective-requirements.before.json equals delta.before for all 5 records (body/condition, status closed, empty AC, both TEST titles). Proposal-time snapshot (2026-10-08 15:15) is order-insensitively identical to the application before snapshot (2026-10-09 14:04) across 516 records, 233 mappings and currentLayer."
+    },
+    {
+      "id": "A1.3",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Unrelated records and mappings preserved; no requirement retired.",
+      "evidence": "Before vs after: 235/139/142 records, 0 added, 0 removed, exactly 5 changed; 233 mappings unchanged; currentLayer unchanged. Live plugin readback now equals the after snapshot (0 differences)."
+    },
+    {
+      "id": "A1.4",
+      "surface": "A",
+      "result": "UNKNOWN",
+      "assertion": "All unrelated fields of the changed records preserved.",
+      "evidence": "Proven for every effective-projection field and for FR-RUNTIME-TAPE-002 area (RUNTIME before and after). TR area/subarea/notes and TEST area/testType/notes of the four changed TR/TEST records have no retained before-image (effective API and exports omit them). Current values (notes empty, subarea EDGE, testType unit) are consistent with ID conventions and defaults but preservation is not provable from retained evidence."
+    },
+    {
+      "id": "A1.5",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Historical evidence preserved.",
+      "evidence": "All 94 input pins rehash to pinned SHA256 and bytes; no receipt outside the new application directory and this review directory was written after 13:55 local."
+    },
+    {
+      "id": "A2.1",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Supported workflow.requirements.updateBatch returned success, total 5, errors [].",
+      "evidence": "batch-response.json: success true, total 5, errors empty, 5 items echo approved fields."
+    },
+    {
+      "id": "A2.2",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Independent readback matched approved text, titles and AC arrays.",
+      "evidence": "After snapshot equals delta.proposed for content, status, AC arrays and TEST titles (5 of 5). Reviewer live workflow.requirements.effective readback (plugin 1.119.0, own cache) equals the after snapshot for all 516 records and 233 mappings."
+    },
+    {
+      "id": "A2.3",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Exactly five records changed, all pending, all 23 criteria false; product behavior not accepted.",
+      "evidence": "Changed fields: FR/TR acceptanceCriteria,body,status; TEST acceptanceCriteria,condition,status,title. Live: 5 pending, 23 AC with Boolean false, 0 true. No tests or acceptance claimed."
+    },
+    {
+      "id": "A3.1",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "108 existing projection files copied, SHA-verified and retained before export.",
+      "evidence": "108 of 108 backups exist with pinned SHA256 and bytes; no unlisted backup files; pins written 14:06:35, before the 14:06:36 failed call and the 14:07:42 export."
+    },
+    {
+      "id": "A3.2",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Supported exports refreshed document projections.",
+      "evidence": "export-response.json success with 5 text/markdown files; wiki export application/zip has 42 entries byte-identical to docs/Project/wiki on disk; FR/TR exports contain every approved needle; no superseded phrases remain. Note: Testing export format omits TEST titles."
+    },
+    {
+      "id": "A3.3",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Canonical tape file mechanically projects exact primary-readback fields and all AC.",
+      "evidence": "docs/requirements/legacy-tape-acceptance-correction.md (SHA256 FED0D46878DE1EDC8C19B3DC8F3CB4B980B80F6B4A75C4CEB3E9524D133D8CFF): 48 of 48 expected exact lines present (title, ID, status, priority, content x5 plus 23 AC), 0 checked boxes, 0 em/en dashes."
+    },
+    {
+      "id": "A3.4",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "No product source, test or native VICE edits in this slice.",
+      "evidence": "No file under src, tests, tools, native or artifacts/immutable-vice written after 13:55; native/vice 6374 of 6374 files content-identical to the proposal-time inventory with 0 missing and 0 extra; 11 tape source pins match; tracked status changed only for docs/Project/Requirements-Matrix.md."
+    },
+    {
+      "id": "A4.1",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "The format=markdown export failed schema validation, not the requirement batch.",
+      "evidence": "Contemporaneous failsafe YAML (14:07:33, SHA256 DCFFBB906C6F1D9E9A9E99A8D9928B926C3DEEAD15E1E7B93AF6FEBE5BED27FE) and accepted triage record: wrapper exit 1, schema_validation_failed, no export output; batch persisted at 14:04:37 and was read back. Raw stderr not retained (finding F-10)."
+    },
+    {
+      "id": "A4.2",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "format=yaml/docType=all then returned five Markdown documents.",
+      "evidence": "export-response.json: docType all, 5 text/markdown files. The request parameters were not retained and the result reports format markdown, so the yaml selector itself is not independently evidenced (finding F-10)."
+    },
+    {
+      "id": "A4.3",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Wiki export returned application/zip and refreshed wiki files.",
+      "evidence": "contentType application/zip, fileName requirements-wiki-documents.zip, decoded in memory: 42 entries, all byte-identical to disk, no extra disk files."
+    },
+    {
+      "id": "A4.4",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Initial ZIP-as-JSON parse failure corrected; no hidden successful parse claimed.",
+      "evidence": "Self-disclosed; retained response keeps contentType and base64 archive; final wiki bytes verified. Nothing contradicts the disclosure."
+    },
+    {
+      "id": "A4.5",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Triage 52b871ce6e7a4f2c8b157cde7c6f7da9 accepted; normal failsafe retained with drain disabled.",
+      "evidence": "triage_status (workspace F:\\GitHub\\McpServer) returns status grouped, created 2026-10-09T19:07:39Z; exactly one pending Codex failsafe file retained and not drained; this review ran with MCP_FAILSAFE_DRAIN_DISABLED=1 in its own empty failsafe directory."
+    },
+    {
+      "id": "A4.6",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Tooling defect, not an emulator finding.",
+      "evidence": "Failure is in generateDocument parameter validation; no emulator behavior involved."
+    },
+    {
+      "id": "A5.1",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "git diff --check returned 0.",
+      "evidence": "Reviewer rerun: exit 0, no output. Untracked new files checked separately: 0 trailing-whitespace lines."
+    },
+    {
+      "id": "A5.2",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Traceability returned 0 with 238/152/86/1011 and full output retained.",
+      "evidence": "Reviewer rerun of tools/check_requirement_traceability.ps1 (read-only script) is byte-identical to the retained 1110-line output. FR-RUNTIME-TAPE-002, TEST-TAPE-RAMP-001 and TEST-TAPE-SENSE-001 are unreferenced; both TR IDs are referenced only by code/tests asserting superseded behavior (finding F-11)."
+    },
+    {
+      "id": "A5.3",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Not a clean traceability or implementation acceptance claim.",
+      "evidence": "Retained note states the exit code is not a no-gaps assertion; no acceptance claimed."
+    },
+    {
+      "id": "A6.1",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Six immutable native and five managed tape source pins still match.",
+      "evidence": "Reviewer rehash of all 11 matches; reviewer git-blob SHA1 of datasette.c reproduces pinned blob 06579175a8ae151fc83972487234d417a4743ec4."
+    },
+    {
+      "id": "A6.2",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "No new tests, no product code, no mock/native/runtime gate claimed green.",
+      "evidence": "No TestResults written after 13:55; no product writes; no gate claims in receipts."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "BDPv4 and requirement-change-plan-first.",
+      "evidence": "Proposal and plan retained 2026-10-08, operator approval 2026-10-09 before mutation; requirements-only slice; corrected TEST AC require discriminating mocks and single-fault negative controls in a passing harness before product code, same-assertion real binding, full cumulative and real-emulator gates and HV."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Always bring the receipts.",
+      "evidence": "Pinned, re-verifiable receipts for approval, before/after, batch, readback, projections, exports, traceability and source pins. Specific gaps itemized as findings F-09 and F-10."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "MCP-only requirement storage.",
+      "evidence": "Mutation through supported workflow.requirements.updateBatch; no direct storage edit found; canonical tape doc is a labeled derived projection."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "PowerShell only, no Python.",
+      "evidence": "Parent launched this reviewer from a PowerShell.MCP console; receipts show PowerShell serialization; no contrary evidence. Parent tool calls not directly observable."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Honesty, no fabricated results.",
+      "evidence": "Every verified claim matched artifacts; parent disclosed the export failure, ZIP parse error and prior replay incident."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "result": "FAIL",
+      "assertion": "No em-dashes or en-dashes in docs (vice-sharp CLAUDE.md).",
+      "evidence": "New export docs/Project/Technical-Requirements.md contains 139 U+2014, including both corrected TR sections, from the supported generator title separator. Pre-existing in committed wiki (139 before and after). Parent-authored files contain 0. Not triaged (finding F-08)."
+    },
+    {
+      "id": "B7",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "native/vice immutable.",
+      "evidence": "6374 of 6374 files content-identical to proposal inventory; no git commands run in the submodule by this reviewer."
+    },
+    {
+      "id": "B8",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "No commit or push without order.",
+      "evidence": "HEAD 54131ff dated 2026-10-03 unchanged; no commit during the slice."
+    },
+    {
+      "id": "B9",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Drain-disabled protection; no historical queue or session mutation.",
+      "evidence": "One retained pending failsafe, not drained; prior replay incident untouched; no historical receipt modified."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "result": "PASS",
+      "assertion": "Structured, testable AC exist on all five records.",
+      "evidence": "23 AC with ids, deterministic observables and explicit non-acceptance of count-only or mock-only evidence."
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "result": "FAIL",
+      "assertion": "AC accurate against pinned immutable VICE.",
+      "evidence": "Most numerics verified (see findings). Inaccuracy: TR-TAPE-EDGE-001 ac-02 and TEST-TAPE-RAMP-001 ac-02 fix the stop at t+32000 and its deadline-1/deadline/deadline+1 frame. With an image in START/FORWARD/REWIND the stop alarm set at datasette.c:743 is rescheduled by the next read alarm at datasette.c:846/850 (alarm.h:176-183 modifies a pending alarm), so the stop executes at the first datasette alarm at or after t+32000 and running state persists past the deadline (finding F-01)."
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "result": "FAIL",
+      "assertion": "AC complete for in-scope transport, motor timing and recording.",
+      "evidence": "Missing: FORWARD/REWIND MOTOR_DELAY_FAST=1000 scheduling (F-02); running-motor semantics for writes during startup and delayed-stop windows (F-03); RECORD pressed while motor already runs, first edge measured from clock 0 (F-04); machine motor and write-line wiring, with FR-TAP-001 ac-01 contradicting pinned source (F-05); lower-severity scenarios (F-14)."
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "result": "FAIL",
+      "assertion": "Proposed named tests discriminate wrong results.",
+      "evidence": "Negative-control design is strong for listed scenarios, but no named case would reject a FORWARD/REWIND mock using 32000 instead of 1000, a mock stopping exactly at the deadline during active playback, a mock blocking writes during the startup window or ignoring the delayed-stop window, or a mock treating RECORD-after-motor-on as a normal first gap."
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "result": "FAIL",
+      "assertion": "Corrected records are unambiguous within the requirement corpus.",
+      "evidence": "Committed docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md:391-432 (and wiki copy) define TR-TAP-EDGE-001 and TR-TAPE-EDGE-001 with different titles, scope and traceability; undisclosed (F-06). FR-BACKFILL-MEDIA-001 stays closed claiming tape work complete while mapped to the reopened TR/TEST; canonical projection mapping section omits that mapping (F-07)."
+    },
+    {
+      "id": "C6",
+      "surface": "C",
+      "result": "N/A",
+      "assertion": "AC-mapped executable tests exist.",
+      "evidence": "Not applicable to a requirements-only correction; parent correctly did not claim tests exist from proposed names."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "result": "PASS",
+      "assertion": "Slice consistent with controlling plans.",
+      "evidence": "Original plan locked decisions 2 (separately approved exact delta), 3 (no legacy ID recreation or deletion), 11 (no commit), 12 (no done-state) and the immutable-native amendment are honored."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "result": "PASS",
+      "assertion": "No plan step, phase or goal claimed complete.",
+      "evidence": "Full goal acknowledged incomplete: Phase 1 immutable mock gate HV pending after prior quota termination, drive and media deltas unapplied, native VSF, xvic/x64sc lockstep and real-emulator gates open."
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "result": "PASS",
+      "assertion": "Deferred work kept in MCP requirements state.",
+      "evidence": "Follow-on tape work is visible as 5 pending records with 23 unsatisfied AC. No open TODO references the applied correction or remaining legacy FRs; PLAN-REQAUDIT-001 note stale (finding F-13)."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-01",
+      "severity": "medium-high",
+      "surface": "C2/C4",
+      "title": "Delayed-stop execution time is misdescribed for active playback",
+      "detail": "TR-TAPE-EDGE-001 ac-02 says running state is retained before the stop executes at t+32000, and TEST-TAPE-RAMP-001 ac-02 fixes observations at deadline-1, deadline, deadline+1. Native read_bit re-arms the stop alarm and then reschedules the same alarm to the next read gap, so with an attached image in START, FORWARD or REWIND the motor stops at the first datasette alarm at or after t+32000 (bounded by DATASETTE_MAX_GAP=100000 scaled by tape speed) and pulses continue until then. Exact t+32000 holds only without an active read-alarm stream (no image, STOP or RECORD mode). Mock fixtures derived from the TR text would encode the wrong expectation.",
+      "evidence": "datasette.c:729-745 (unset, re-arm at motor_stop_clk), :806-851 (alarm_set to next gap), :735-739 (stop only when maincpu_clk >= motor_stop_clk), alarm.h:176-183 (pending alarm modified in place).",
+      "recommendation": "Operator decision: amend TR-TAPE-EDGE-001 ac-02 and TEST-TAPE-RAMP-001 ac-02 to distinguish stop timing with and without an active read stream; add a named active-playback MotorOff case. No rewrite performed by this review."
+    },
+    {
+      "id": "F-02",
+      "severity": "medium",
+      "surface": "C3/C4",
+      "title": "FORWARD/REWIND fast-wind scheduling (MOTOR_DELAY_FAST=1000) not covered",
+      "detail": "FORWARD and REWIND schedule the datasette alarm at maincpu_clk+1000 regardless of motor state; the unset branch in datasette_forward/datasette_rewind never runs because mode is assigned before the call. A subsequent motor-on therefore does not add a 32000 startup alarm while that alarm is pending. No AC or named case covers this timing, so a mock using 32000 for fast-wind would pass.",
+      "evidence": "datasette.c:63, :925-949, :1069-1090, :1127-1148, :1006-1008.",
+      "recommendation": "Operator decision: add fast-wind timing criteria and named cases."
+    },
+    {
+      "id": "F-03",
+      "severity": "medium",
+      "surface": "C3/C4",
+      "title": "Running-motor semantics for recording are undefined",
+      "detail": "Writes are accepted as soon as the motor flag is set at motor-on (no startup wait) and continue during the 32000-cycle delayed-stop window until the stop executes. AC say running motor without defining it; no named case writes during the startup window or the delayed-stop window.",
+      "evidence": "datasette.c:1182-1191 (motor flag set immediately), :1303-1305 (write eligibility checks the motor flag only), :735-739 (flag cleared only when the stop executes), FIXME at :1010-1013.",
+      "recommendation": "Operator decision: define running motor for recording and add window cases."
+    },
+    {
+      "id": "F-04",
+      "severity": "medium-low",
+      "surface": "C3/C4",
+      "title": "RECORD pressed while the motor already runs is not enumerated",
+      "detail": "Accepted RECORD calls tap_reset_gap (last_write_clk=0) but not start_motor, so the first qualifying 0-to-1 edge measures write_time from clock 0 and emits a long gap of maincpu_clk (low 24 bits in v1/v2). Covered only generically by first-write state and known native quirks; the named case list does not distinguish motor-on-then-RECORD from RECORD-then-motor-on.",
+      "evidence": "datasette.c:1091-1099, :1035-1038, :1215, :1233-1264, :1311-1318, :1010-1020.",
+      "recommendation": "Operator decision: enumerate both orderings in Recording_GapEncodingAndFailures."
+    },
+    {
+      "id": "F-05",
+      "severity": "medium",
+      "surface": "C3",
+      "title": "Machine motor-line and write-line wiring uncovered; related requirement contradicts pinned source",
+      "detail": "The corrected AC cover sense input and read-pulse routing only. C64 motor is CPU port $0001 bit 5 (active low, and DDR input yields motor on) and the write line is bit 3 (DDR input yields line high, so DDR changes can create write edges); VIC-20 motor is VIA1 PCR CA2. The only existing C64 motor wiring requirement, FR-TAP-001 ac-01, says bit 3, contradicting c64pla.c. FR-TAP-001 is outside the approved five and unchanged.",
+      "evidence": "c64pla.c:77-89, vic20via1.c:185-203, live FR-TAP-001 ac-01. Managed C64MemoryMap.ApplyCassetteMotor already uses bit 5.",
+      "recommendation": "Operator decision: add machine motor/write wiring criteria and correct FR-TAP-001 through a separately approved delta."
+    },
+    {
+      "id": "F-06",
+      "severity": "medium",
+      "surface": "C5",
+      "title": "TR ID semantic collision with committed backfill document",
+      "detail": "docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md and its wiki copy define TR-TAP-EDGE-001 as TAP version, long-pulse and TurboTape thresholds (traceability FR-TAP-002/003/005, TEST-TAP-001) and TR-TAPE-EDGE-001 as tapeport sense, motor and RTC/dongle semantics (FR-TAP-001/004). MCP records use the same IDs for datasette sense/record and motor timing. The approved proposal neither disclosed nor resolved the collision, and the traceability script treats both files as canonical sources.",
+      "evidence": "Classic-VICE-Edge-Case-TR-Backfill.md:391-432 (SHA256 3592F14190843AD880F9B0D0C980ED7A406D8DE5573DBB636894FFD78F369717); wiki/github copy pinned input 21.",
+      "recommendation": "Operator decision: reconcile ID ownership (rename or re-scope one set) before tests bind to these IDs."
+    },
+    {
+      "id": "F-07",
+      "severity": "low-medium",
+      "surface": "C5",
+      "title": "Closed parent FR still claims the reopened tape behavior complete",
+      "detail": "FR-BACKFILL-MEDIA-001 (closed, 0 AC) says datasette motor ramp, sense line and record mode are complete and maps to TR-TAP-EDGE-001, TR-TAPE-EDGE-001, TEST-TAPE-RAMP-001 and TEST-TAPE-SENSE-001, now pending with 23 unsatisfied AC. Disclosed only generically as one of the three unresolved legacy FRs. The canonical projection section Unchanged mapping lists only the FR-RUNTIME-TAPE-002 mapping.",
+      "evidence": "Live mappings; rename-preservation-proof.json; legacy-tape-acceptance-correction.md:92-96.",
+      "recommendation": "Operator decision on FR-BACKFILL-MEDIA-001 status/AC; list both mappings in the projection."
+    },
+    {
+      "id": "F-08",
+      "severity": "low",
+      "surface": "B6",
+      "title": "Generated export contains em-dashes",
+      "detail": "docs/Project/Technical-Requirements.md (new in this slice) contains 139 U+2014 from the generator title separator, including both corrected TR sections; same count in the committed wiki before and after. Parent-authored files contain none. Not triaged.",
+      "evidence": "Reviewer scan; wiki before-export backup count 139.",
+      "recommendation": "Triage the generateDocument separator against the workspace no-dash rule; do not hand-edit generated projections."
+    },
+    {
+      "id": "F-09",
+      "severity": "low",
+      "surface": "A1.4/B2",
+      "title": "No before-image for non-projected fields of changed TR/TEST records",
+      "detail": "Effective API and exports omit TR area/subarea/notes and TEST area/testType/notes; the application retained no full-field before-image, so preservation of those fields cannot be proven. FR area is proven via live-fr-readback.json.",
+      "evidence": "requirements-verification.json, five-records.before.json key sets, plugin listTr/listTest current values.",
+      "recommendation": "Capture full-field getFr/listTr/listTest snapshots before future batches."
+    },
+    {
+      "id": "F-10",
+      "severity": "low",
+      "surface": "A4/B2",
+      "title": "Export failure receipts incomplete; triage attribution imprecise",
+      "detail": "The failing markdown export raw output and the yaml export request parameters were not retained; export-response.json reports format markdown. The JSON schema in both the installed Codex 1.118.0 cache and the Claude 1.119.0 cache lists markdown as valid, so the rejecting validator is elsewhere (likely the REPL executable); the triage title attributes it to the wrapper schema.",
+      "evidence": "export-response.json; failsafe YAML; repl-yaml-message.schema.json:750,775 in both caches.",
+      "recommendation": "Retain raw failure output and request parameters; refine triage attribution if confirmed."
+    },
+    {
+      "id": "F-11",
+      "severity": "low",
+      "surface": "A5",
+      "title": "Traceability gaps touching the corrected records",
+      "detail": "FR-RUNTIME-TAPE-002, TEST-TAPE-RAMP-001 and TEST-TAPE-SENSE-001 are unreferenced in src/tests. TR-TAP-EDGE-001 and TR-TAPE-EDGE-001 count as referenced only because existing code and tests that assert superseded behavior cite them (Datasette.cs XML docs, DatasetteSenseLineTests, DatasetteMotorRampTests). The script derives 238 canonical IDs from docs/requirements **ID:** lines versus 516 MCP records.",
+      "evidence": "Reviewer rerun byte-identical to retained output; tools/check_requirement_traceability.ps1 lines 11-27.",
+      "recommendation": "Treat referenced status of the two TR IDs as non-evidence until new tests bind; extend the traceability source to MCP records."
+    },
+    {
+      "id": "F-12",
+      "severity": "low",
+      "surface": "A3",
+      "title": "Corrected TEST titles not rendered by the supported Testing export",
+      "detail": "The Testing-Requirements export renders ID: condition plus AC with no title; corrected TEST titles are visible only in MCP and the canonical projection.",
+      "evidence": "docs/Project/Testing-Requirements.md around TEST-TAPE-RAMP-001.",
+      "recommendation": "Informational; consider generator support for TEST titles."
+    },
+    {
+      "id": "F-13",
+      "severity": "low",
+      "surface": "D3",
+      "title": "Deferred work not referenced by any open TODO",
+      "detail": "No open TODO references the five records, the follow-on BDPv4 tape mock gate, or the remaining three legacy FRs; PLAN-REQAUDIT-001 note is dated 2026-09-28; HANDOFF.md predates the slice (not claimed updated).",
+      "evidence": "todo_list done=false (39 items) keyword scan.",
+      "recommendation": "Record the correction and follow-on gate in the relevant PLAN TODO and handoff when authorized."
+    },
+    {
+      "id": "F-14",
+      "severity": "low",
+      "surface": "C3",
+      "title": "Lower-severity native scenarios not enumerated",
+      "detail": "Datasette-enabled gating and other tapeport sense sources; image attach/detach and CPU-reset side effects on mode, sense and alarms; SX-64 boards with CPU port bits 3-5 unconnected; long gaps above 0xFFFFFF truncated to 24 bits; FR-TAP-002 says v0 and v1 while TEST-TAPE-SENSE-001 ac-04 cites v0/v1/v2.",
+      "evidence": "datasette.c:169-174, :879-922, :952-998, :1260-1263; c64mem.c:218-220; live FR-TAP-002.",
+      "recommendation": "Operator decision on scope."
+    },
+    {
+      "id": "F-15",
+      "severity": "high",
+      "surface": "Reviewer conduct",
+      "title": "Reviewer exposed the workspace API key in its tool output",
+      "detail": "My redaction regex missed the inline X-Api-Key line in the marker Authentication section, so the current workspace API key appears in my tool output and therefore in the parent-captured response.jsonl in this review directory. The marker itself is gitignored; response.jsonl is not gitignored. I did not modify the parent capture file.",
+      "evidence": "git check-ignore results; response.jsonl contains the key (verified by in-console comparison, value never re-printed).",
+      "recommendation": "Do not commit response.jsonl unredacted; rotate the key by a supported server restart; treat the exposure as a reviewer error."
+    },
+    {
+      "id": "F-16",
+      "severity": "info",
+      "surface": "Process",
+      "title": "Unpinned post-launch evidence files",
+      "detail": "projection-file-changes.json (14:14:50) and parent-turn-primary-readback.in-progress.json (14:20:41) were written after the HV launch and are not in input-pins.json. Their contents agree with the reviewer independent measurements.",
+      "evidence": "Reviewer SHA256 478626F1... and 2BA06FDD...",
+      "recommendation": "Pin post-launch evidence in the next review packet."
+    },
+    {
+      "id": "F-17",
+      "severity": "info",
+      "surface": "Process",
+      "title": "Reviewer environment and bootstrap notes",
+      "detail": "The PowerShell.MCP console does not inherit the claude.exe environment, so the reviewer applied the request.jsonl environment (including MCP_CACHE_DIR_OVERRIDE and MCP_FAILSAFE_DRAIN_DISABLED=1) to its own console process before any plugin call. CLAUDE.md stale-cache deletion and hook installation were not performed because the operator directed a read-only review with no global settings edits. The plugin hook generated requestId req-20261009T191402Z-prompt-e6c7, which differs from the global canonical seq/slug format.",
+      "evidence": "Process tree and env listing; plugin status output.",
+      "recommendation": "Informational."
+    }
+  ],
+  "verifiedNativeFacts": [
+    "MOTOR_DELAY 32000 for PLAY and RECORD, MOTOR_DELAY_FAST 1000 for fast wind (datasette.c:62-63).",
+    "Startup alarm at clock+32000 only when no datasette alarm is pending (datasette.c:1006-1008).",
+    "Motor-on aborts a pending stop and starts the motor only from stopped state (datasette.c:1182-1193).",
+    "Motor-off on a running motor sets the stop deadline once; repeated motor-off does not extend it (datasette.c:1195-1201).",
+    "RECORD ignored without image and with read-only image; accepted RECORD asserts sense (datasette.c:1091-1099, 1149-1151).",
+    "C64 sense: CPU port $0001 bit 4 reads low when sense asserted and DDR bit 4 is input; pullup 0x17 (c64pla.c:65-66, c64mem.c:222, 1012-1015).",
+    "VIC-20 sense: VIA1 port A bit 6 low when asserted, masked by DDRA (vic20via1.c:246-251).",
+    "Read pulses: C64 CIA1 FLAG (c64datasette.c:39), VIC-20 VIA2 CA1 falling (vic20datasette.c:40).",
+    "Write eligibility: image, RECORD mode, motor flag; 0-to-1 transition; last write bit updated unconditionally (datasette.c:1303-1321).",
+    "Gap encoding: write_time below 7 carried; below 2047 one byte write_time/8 with remainder carry (7 emits 0x00); 2047 and above zero byte plus 3-byte length for v1/v2; failures stop the tape; has_changed only after success (datasette.c:1215-1290)."
+  ],
+  "scopeLimitations": [
+    "Source inspection and stored-state comparison only; no native or managed execution (none was authorized or needed for this requirements review).",
+    "alarm.h and tapeport.c were read from the immutable materialization; their blobs were computed but not compared against the commit tree.",
+    "VIC-20 write-line wiring source (vic20via2.c) was not read.",
+    "The parent tool calls were not directly observable; PowerShell and no-Python compliance is inferred from receipts and launch context.",
+    "The failing markdown export was not reproduced because export calls write files; this review was read-only.",
+    "Non-projected TR/TEST fields lack before-images (A1.4 UNKNOWN).",
+    "General host environment was not audited, per operator instruction."
+  ],
+  "scores": {
+    "accuracy": 95,
+    "completeness": 88,
+    "accuracyRationale": "Every verified implementer claim matched artifacts and the approved delta was applied byte-exactly; deductions for the native stop-timing inaccuracy in TR-TAPE-EDGE-001 ac-02/TEST-TAPE-RAMP-001 ac-02, the imprecise triage attribution and misleading referenced status of superseded TR citations.",
+    "completenessRationale": "Application, projection and receipts are thorough; deductions for missing in-scope native scenarios (fast-wind timing, recording windows, RECORD-after-motor-on, machine motor/write wiring), undisclosed TR ID collision, contradictory closed parent FR, unprovable non-projected fields, receipt gaps and thin deferred-work tracking."
+  },
+  "counts": {
+    "pass": 34,
+    "fail": 5,
+    "unknown": 1,
+    "notApplicable": 1,
+    "total": 41
+  },
+  "overallVerdict": "DISAGREE",
+  "verdictBasis": "AGREE requires every applicable assertion PASS, zero FAIL/UNKNOWN and both scores at least 98. FAIL: B6, C2, C3, C4, C5. UNKNOWN: A1.4. Scores 95/88.",
+  "acceptanceDistinction": "The approved delta was applied faithfully and every application claim A1-A6 except the unprovable A1.4 field-preservation detail is verified. DISAGREE arises from requirements adequacy findings and one tooling-rule finding. This verdict authorizes no requirement satisfaction, TODO, phase, plan or goal done-state change. The full ViceSharp goal remains incomplete.",
+  "receiptPaths": {
+    "verdictMarkdown": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.md",
+    "verdictJson": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.json",
+    "persistenceProof": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.persistence.json",
+    "requestJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\request.jsonl",
+    "responseJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\response.jsonl",
+    "prompt": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\prompt.md",
+    "inputPins": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\input-pins.json"
+  },
+  "persistenceStatus": "Written before MCP persistence; primary persistence attempt and readback proof are recorded in verdict.persistence.json and the final response."
+}

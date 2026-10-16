@@ -1,0 +1,58 @@
+Opening monitor command playback file: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\load-step.mon
+ 
+*** VICE Version 3.10 ***
+ 
+This is the condensed log, for the full log use --verbose or --debug.
+ 
+Main: random seed was: 0x1
+Main: command line was: F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\xvic.exe -default -console -sound -sounddev dummy -warp -seed 1 -directory F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data -monlog -monlogname F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\xvic-03-ready\load-monitor.log -logfile F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\xvic-03-ready\load-vice.log -initbreak ready -moncommands F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\load-step.mon
+Main: VICE system file directory: 'F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src'.
+Main: VICE system file search path: 'F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data'.
+Sysfile: Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\kernal.901486-07.bin'.
+Sysfile: Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\basic-901486-01.bin'.
+Sysfile: Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\chargen-901460-03.bin'.
+DriveROM: Error - 2000 ROM image not found. Hardware-level 2000 emulation is not available.
+DriveROM: Error - 4000 ROM image not found. Hardware-level 4000 emulation is not available.
+DriveROM: Error - CMDHD ROM image not found. Hardware-level CMDHD emulation is not available.
+Sysfile: Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\DRIVES\dos1540-325302+3-01.bin'.
+Sound: Available sound devices: dx wmm dummy dump fs wav voc iff aiff soundmovie
+Joystick: Warning - Failed to open `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\headless-joymap-VIC20.vjm'.
+Joystick: Warning - using minimal default mapping.
+Main CPU: 
+Main CPU: starting at ($FFFC).
+Main CPU: RESET.
+Unit 8: RESET.
+Main CPU: RESET.
+Sound: Opened device `dummy', speed 48000Hz, fragment size 2.67ms, buffer size 32.00ms
+Sound: reSID: MOS6581, filter on, sampling rate 48000Hz - resampling, pass to 21600Hz
+VSync: Sync reset
+Unit 8: RESET.
+Monitor playback command: undump "fresh.vsf"
+Sound: Opened device `dummy', speed 48000Hz, fragment size 2.67ms, buffer size 32.00ms
+Sound: reSID: MOS6581, filter on, sampling rate 48000Hz - resampling, pass to 21600Hz
+Unit 8: RESET (For undump).
+Error - T64 snapshot support is not implemented
+Monitor playback command: registers
+Monitor:   ADDR A  X  Y  SP 00 01 NV-BDIZC 
+Monitor: LIN CYC  STOPWATCH
+Monitor: .;e5ea 00 00 0a f3 4c 48 00100010
+Monitor:  000 001
+Monitor:      575953
+Monitor playback command: stopwatch
+Monitor: Stopwatch:     575953
+Monitor playback command: step 1
+Monitor: Stepping through the next 1 instruction(s).
+Monitor: .C:e5ec  8D 92 02    STA $0292      - A:00 X:00 Y:0A SP:f3 ..-...Z. 
+Monitor:     575956
+Monitor playback command: registers
+Monitor:   ADDR A  X  Y  SP 00 01 NV-BDIZC 
+Monitor: LIN CYC  STOPWATCH
+Monitor: .;e5ec 00 00 0a f3 4c 48 00100010
+Monitor:  000 004
+Monitor:      575956
+Monitor playback command: stopwatch
+Monitor: Stopwatch:     575956
+Monitor playback command: dump "after-resume-step.vsf"
+Monitor playback command: quit
+
+Closed monitor command playback file: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\load-step.mon

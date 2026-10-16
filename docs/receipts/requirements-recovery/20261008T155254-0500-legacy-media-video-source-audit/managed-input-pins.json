@@ -1,0 +1,27 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIiCheckpointTests.cs",
+    "bytes": 10272,
+    "sha256": "AC62A6C9335F39B254FA3AC55219253F4288579C456EF423FDD11D3BE7434075"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIIRcWindowTests.cs",
+    "bytes": 8987,
+    "sha256": "A6E5EBD795DA020C4F972B69742C5AAD3A2656B04BEA5A652826C73843C710E6"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIISpriteDmaNativeCheckpointTests.cs",
+    "bytes": 9850,
+    "sha256": "4A92CB2629B0352D8A6922524CE04D2A41F1E666F409617FB775B1EF979FD9A8"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Chips\\VicIi\\Mos8565.cs",
+    "bytes": 1095,
+    "sha256": "FBC2E2217992BB196A6FD856F633F95E8928498609B0411E5AB706A549E0233E"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Chips\\VicIi\\Mos6569.cs",
+    "bytes": 162696,
+    "sha256": "F6E9CD4E3E08D643A0C417B10554A43046C94889E1DF0425A538C60FA3A4738E"
+  }
+]

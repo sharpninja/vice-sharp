@@ -1,0 +1,18 @@
+[
+  {
+    "read": 1,
+    "id": "TR-VSFLOCKSTEP-RESUME-001",
+    "createdAt": "2026-10-07T15:08:55.2011952+00:00",
+    "updatedAt": "2026-10-07T15:08:55.2013413+00:00",
+    "status": "pending",
+    "description": "An external compatibility adapter outside `native/vice` shall normalize legacy x64sc `MAINCPU` v1.2 and v1.3 modules for the pinned, unmodified VICE reader while current v1.4 modules remain byte-identical. The wrapper shall align the VIC-II model before `machine_read_snapshot` and normalize wrapper-reported `snapshot_last_error` after a successful read. No part of this compatibility path may edit, patch, generate into, or behaviorally change `native/vice`."
+  },
+  {
+    "read": 2,
+    "id": "TR-VSFLOCKSTEP-RESUME-001",
+    "createdAt": "2026-10-07T15:08:58.0418020+00:00",
+    "updatedAt": "2026-10-07T15:08:58.0419094+00:00",
+    "status": "pending",
+    "description": "An external compatibility adapter outside `native/vice` shall normalize legacy x64sc `MAINCPU` v1.2 and v1.3 modules for the pinned, unmodified VICE reader while current v1.4 modules remain byte-identical. The wrapper shall align the VIC-II model before `machine_read_snapshot` and normalize wrapper-reported `snapshot_last_error` after a successful read. No part of this compatibility path may edit, patch, generate into, or behaviorally change `native/vice`."
+  }
+]

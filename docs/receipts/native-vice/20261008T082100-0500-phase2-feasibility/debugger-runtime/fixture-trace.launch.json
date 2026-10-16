@@ -1,0 +1,15 @@
+{
+  "timestampLocal": "2026-10-08T11:26:48.0133543-05:00",
+  "pid": 25404,
+  "arguments": [
+    "-y",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\"",
+    "-cf",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\\fixture-trace.cdb\"",
+    "\"F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\clock-probe.exe\"",
+    "7",
+    "11"
+  ],
+  "fixtureSha256": "4056243984FE8B596CE24D6531BDFF7781728BA86E446331E863DAAE080D5D31",
+  "purpose": "Ten instruction trace diagnostic, no native VICE process; no explicit software breakpoint."
+}

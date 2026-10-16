@@ -15,7 +15,7 @@ Microsoft Store and Xbox/UWP were removed from product scope (`PLAN-XBOXUWP-END-
 ## Architecture and Design
 
 - [Architecture.md](Architecture.md) - POCO model, MVVM, mutation queue, device model, architectures
-- [Public-API.md](Public-API.md) - 33+ public interfaces with XML doc summaries
+- [Public-API.md](Public-API.md) - foundational reference for the 55 public interface declarations in `ViceSharp.Abstractions`
 - [StateWindow.md](StateWindow.md) - Configuration surface, presets, memory math
 - [Decoupling.md](Decoupling.md) - Video and audio decoupling, refresh strategies
 - [PubSub.md](PubSub.md) - Pool, arena, handle lifecycle, refcount, hot-path cost
@@ -30,7 +30,11 @@ Microsoft Store and Xbox/UWP were removed from product scope (`PLAN-XBOXUWP-END-
 ## Iteration Plans
 
 - [Iteration-00-Foundations.md](Iteration-00-Foundations.md) - Scaffolding, interfaces, source generator, CI/CD
-- [Iteration-Roadmap.md](Iteration-Roadmap.md) - Full roadmap through MVP (Iteration 2 VIC-20 includes 10 s PAL/NTSC every-cycle lockstep)
+- [Iteration-Roadmap.md](Iteration-Roadmap.md) - roadmap plus bounded historical evidence; broad C64/VIC-20 completion is reopened pending the current parity audit
+- [plans/PLAN-VICE-IMMUTABLE-001.md](plans/PLAN-VICE-IMMUTABLE-001.md) - restore the immutable native VICE oracle boundary and move integration into external wrappers
+- [plans/PLAN-VSFLOCKSTEP-001.md](plans/PLAN-VSFLOCKSTEP-001.md) - make native VICE `.vsf` the canonical product snapshot format and prove deterministic x64sc/xvic resume
+
+The current plans are the controlling forward-looking documents. Historical iteration plans and receipts remain evidence for their named slices only; they are not proof of whole-machine parity or current release completion.
 
 ## Lockstep receipts (durable)
 

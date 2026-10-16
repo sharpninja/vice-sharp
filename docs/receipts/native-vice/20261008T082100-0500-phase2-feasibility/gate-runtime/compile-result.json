@@ -1,0 +1,44 @@
+[
+  {
+    "timestampLocal": "2026-10-08T11:05:57.3449011-05:00",
+    "source": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.c",
+    "sourceSha256": "673A7E7899FD022BFF5C45AB55D05568E6FB4DECAFBFF88EEF80D0157551BA4C",
+    "arguments": [
+      "-c",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-O0",
+      "-g",
+      "-IF:\\GitHub\\vice-sharp\\tools\\immutable-vice",
+      "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.c",
+      "-o",
+      "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\clock-gate.o"
+    ],
+    "output": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\clock-gate.o",
+    "outputSha256": "FE302FCA2C1B9F8578046728301A0FF26598A3FB11A31286E25E1BF7D806AE5D",
+    "exitCode": 0
+  },
+  {
+    "timestampLocal": "2026-10-08T11:05:57.4847032-05:00",
+    "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+    "sourceSha256": "F3BFC89E125B762219EA1E7FCF7A6F12920ED634A7F61858A256178CDB3F6380",
+    "arguments": [
+      "-c",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-O0",
+      "-g",
+      "-IF:\\GitHub\\vice-sharp\\tools\\immutable-vice",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+      "-o",
+      "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\gate-observer.o"
+    ],
+    "output": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\gate-observer.o",
+    "outputSha256": "EA180684F610CCF6DBC4AA2C0599CA06FEBE33A045BB864D8F4C1844FE334C6B",
+    "exitCode": 0
+  }
+]

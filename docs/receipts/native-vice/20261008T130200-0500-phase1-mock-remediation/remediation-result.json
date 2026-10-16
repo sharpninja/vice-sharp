@@ -1,0 +1,89 @@
+{
+  "timestampLocal": "2026-10-08T13:09:06.0410199-05:00",
+  "findings": [
+    "F-07",
+    "F-08",
+    "F-09"
+  ],
+  "state": "Locally remediated; independent HV outstanding",
+  "claimsOfRealParity": false,
+  "productionChanged": false,
+  "nativeChanged": false,
+  "fullSuites": [
+    {
+      "timestampLocal": "2026-10-08T13:03:29.509997-05:00",
+      "project": "tests/ViceSharp.OracleContract.Tests/ViceSharp.OracleContract.Tests.csproj",
+      "command": "dotnet test tests/ViceSharp.OracleContract.Tests/ViceSharp.OracleContract.Tests.csproj -c Release --logger trx;LogFileName=phase1-review-f07-f08-oracle-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-review-f07-f08-oracle-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-review-f07-f08-oracle-01\\phase1-review-f07-f08-oracle-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "exitCode": 0,
+      "total": 87,
+      "passed": 87,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0
+    },
+    {
+      "timestampLocal": "2026-10-08T13:03:38.8063949-05:00",
+      "project": "tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj",
+      "command": "dotnet test tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj -c Release --logger trx;LogFileName=phase1-review-f07-f08-vsf-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-review-f07-f08-vsf-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-review-f07-f08-vsf-01\\phase1-review-f07-f08-vsf-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "exitCode": 0,
+      "total": 199,
+      "passed": 199,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0
+    },
+    {
+      "timestampLocal": "2026-10-08T13:03:47.3067082-05:00",
+      "project": "tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj",
+      "command": "dotnet test tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj -c Release --logger trx;LogFileName=phase1-review-f07-f08-clock-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-review-f07-f08-clock-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-review-f07-f08-clock-01\\phase1-review-f07-f08-clock-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "exitCode": 0,
+      "total": 50,
+      "passed": 50,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0
+    }
+  ],
+  "prior82CaseNamesPreserved": true,
+  "newCases": 5,
+  "sourceComparison": "test-source.diff shows additions only, no old assertion or fixture removed",
+  "gitDiffCheckExit": 0,
+  "files": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+      "sha256": "EC9933731112B37577167E3932D0E84E064EDC2E13B2FCDC1B89447EA9192DD5",
+      "bytes": 20163
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\README.md",
+      "sha256": "D5318BBCAF348252997BE80488D73D12423B242673BC4A40461CECF1332F3527",
+      "bytes": 6393
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "B31676AD6A4C6B59844DA43F7A2FA9698A159919E0ABFEF7BC72B6CDB4A24510",
+      "bytes": 64810
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\README.md",
+      "sha256": "7B7242C9BEB5A9184E6870AE21785816834648BB48748FC71EA890843EFAFE1D",
+      "bytes": 5061
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\scenario-ac-ledger.json",
+      "sha256": "83B2C096DD999D155874FDD5F372DE8BA4F4295DF218A4D88281F94A87117401",
+      "bytes": 49703
+    }
+  ],
+  "pendingFinding": "F-10 reusable fixtures/provider binding",
+  "reviewer": "claude-opus-5-5 max",
+  "reviewerAcceptance": false,
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T175952Z-prompt-f7fb"
+}

@@ -1,0 +1,11 @@
+method: workflow.triage.report
+label: triage_report
+timestamp: 20261007T184705Z
+params:
+  title: Installed Grok plugin 1.119.0 disagrees with marker and source 1.118.0
+  component: mcpserver-grok-plugin
+  errorSignature: plugin_version_mismatch installed=1.119.0 marker=1.118.0 source=1.118.0
+  dedupeKey: grok-plugin-installed-1.119.0-marker-source-1.118.0-20261007
+  reporterAgent: GrokCode
+  workspacePath: F:\GitHub\vice-sharp
+  summary: Installed plugin .version and plugin.json files read 1.119.0. Marker Grok plugin_version and source checkout .version read 1.118.0. Signature and health bootstrap returned true. No plugin update was performed. Native triage_report and workflow.triage.report both failed; this record is the isolated failsafe retention.

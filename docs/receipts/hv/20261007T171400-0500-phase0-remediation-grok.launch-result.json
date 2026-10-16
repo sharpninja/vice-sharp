@@ -1,0 +1,17 @@
+{
+  "timestampLocal": "2026-10-07T17:21:16.0148529-05:00",
+  "pid": 61032,
+  "startTime": "2026-10-07T17:21:16.0091820-05:00",
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.request.jsonl",
+  "requestSha256": "360A12834CB39F92B33AF1EC4FBED115AEBF8DA4F30516BCF9C0DD6E3650224A",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.response.jsonl",
+  "stderrPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.stderr.txt",
+  "model": "grok-4.7",
+  "effort": "xhigh",
+  "localComputer": "PAYTON-LEGION2",
+  "artificialTurnLimit": null,
+  "artificialTimeout": null,
+  "isolatedCache": "F:\\GitHub\\vice-sharp\\.mcpServer\\grok\\reviews\\20261007T171400-0500-phase0-remediation",
+  "completionPercent": 0,
+  "eta": null
+}

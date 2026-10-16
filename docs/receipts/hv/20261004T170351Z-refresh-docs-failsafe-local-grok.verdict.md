@@ -1,0 +1,26 @@
+I will run this as a local hostile review only: load the operator profile, read the workspace marker, then check the refresh-docs slice against the code and receipts without editing the repo.Profile load starts with `add-profile.md` through PowerShell.MCP, then every other profile file in full.Profile is loaded (22 files). Next I will identify the local Grok plugin from its own files and open the review turn through that plugin, using failsafe if the backend is down.Marker signature matches, and the health check timed out, so this review stays on the local Grok plugin failsafe. I am opening a dedicated turn and checking the docs against the code.The checks match the code and the re-run receipts. I am writing the verdict outside the repo and submitting it through the plugin failsafe.The refresh-docs slice agrees. Accuracy is 99 and completeness is 98. Fail count is 0 and unknown count is 0. This agrees to the documentation slice only. Primary readback is false, so it does not authorize a requirement, TODO, goal, or plan done-state change.
+
+Work class: project documentation. Profile load: yes, 22 non-skill files. Model: grok-4.7. Local PowerShell.MCP agent: `sa-7275ad5f`. Plugin: `mcpserver-grok-plugin` 1.119.0 from the plugin's own `.version` (the marker still says 1.118.0). Session: `GrokCode-20261004T171038Z-refresh-docs-hv`. Request: `req-20261004T171038Z-turn-fcf5`. Marker signature matched. Health timed out at 5 seconds, so the result is `MCP_UNTRUSTED`.
+
+Failsafe was used. PrimaryReadback is false. Pending count is 10. Quarantine count is 0. The plugin labels the completion `rejected` because `MCP_UNTRUSTED` is not the timeout/503 queued path, and the YAML was still retained.
+
+Completing payload: `F:\GitHub\vice-sharp\.mcpServer\failsafe\GrokCode\workspaces\RjpcR2l0SHViXHZpY2Utc2hhcnA\pending\20261004T171957Z-session_submit-b5ce.yaml`
+SHA-256: `6A3FEF2943037A128B9D6D4CA0EC7BC363B5997AB4A7EA9624EEBDD72EDC6468`
+It contains this verdict, accuracy 99, and `PrimaryReadback: false`. Local `current-turn.yaml` is still `in_progress` because the plugin rejected the complete after writing that file. `appendDialog` was rejected with an empty failsafe path, so the decision is in the completion payload rather than a separate dialog file.
+
+Request jsonl: `C:\Users\kingd\.grok\hv-receipts\vice-sharp\20261004T171038Z-refresh-docs.request.jsonl` SHA-256 `5FCF753950E997ABFB0D92DEEE99BC9ACA558CF9962F2DF0793CAB373BAEE0A5`
+Response jsonl: `C:\Users\kingd\.grok\hv-receipts\vice-sharp\20261004T171038Z-refresh-docs.response.jsonl` SHA-256 `6250B7DCF623494055AC7EF73E1867A37D71B8721EDEB581F6EB62663A85F2D9`
+Verdict copy: `C:\Users\kingd\.grok\hv-receipts\vice-sharp\20261004T171038Z-refresh-docs.verdict.md`
+
+A1 through A11 pass. The docs keep parity bounded, keep `.vsf` canonical, and describe managed VSF staging as harness-only. The console hardcodes `x64sc` at `Program.cs` line 85. Kind dispatch recognizes only `C64` and `C1541`. The VIC-20 settings re-run was total 8, passed 8, failed 0, skipped 0. Wiki object audit: schema `mcp-wiki-export/v1`, 37 documents, and all six error counts are 0. Traceability re-run: 235 canonical, 149 referenced, 86 missing, 1011 noncanonical; FR 132/101/31, TR 59/32/27, TEST 44/16/28. Nested `native/vice` is pre-existing dirt: 12 tracked modifications and 2527 untracked paths. The superproject diff has no `native` paths.
+
+B, C, and D pass. No commit, no deletions, no plan `[x]`, and neither plan claims implementation or primary MCP persistence. The immutable-plan AGREE citation matches the existing verdict file and still blocks done-state.
+
+Two observations do not fail the slice. USER-GUIDE says every other `kind` raises a loader error; `BuildKind` does that only when no machine yaml is supplied. `HANDOFF.md`, last written 2026-10-03, still says `SelectedMachineProfile` does not raise `IsVic20Selected`. Today's code and the passing notification test contradict that sentence, and this review did not edit `HANDOFF.md`.
+
+FAIL list: none.
+UNKNOWN list: none.
+
+```json
+{"TimestampUtc":"2026-10-04T17:19:57Z","ValidatorIdentity":"GrokSubagentHostile","Model":"grok-4.7","Effort":"not exposed by this harness","AgentId":"sa-7275ad5f","SessionId":"GrokCode-20261004T171038Z-refresh-docs-hv","RequestId":"req-20261004T171038Z-turn-fcf5","Plugin":"mcpserver-grok-plugin","PluginVersion":"1.119.0","AddProfile":"yes","ProfileFileCount":22,"FailsafeUsed":true,"PrimaryReadback":false,"PendingCount":10,"QuarantineCount":0,"CompletingFailsafePath":"F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\GrokCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261004T171957Z-session_submit-b5ce.yaml","CompletingFailsafeSha256":"6A3FEF2943037A128B9D6D4CA0EC7BC363B5997AB4A7EA9624EEBDD72EDC6468","PluginDisposition":"rejected","LocalTurnStatus":"in_progress","RequestJsonl":"C:\\Users\\kingd\\.grok\\hv-receipts\\vice-sharp\\20261004T171038Z-refresh-docs.request.jsonl","ResponseJsonl":"C:\\Users\\kingd\\.grok\\hv-receipts\\vice-sharp\\20261004T171038Z-refresh-docs.response.jsonl","PassCount":21,"FailCount":0,"UnknownCount":0,"AccuracyScore":99,"CompletenessScore":98,"OverallVerdict":"AGREE","AuthorizesDoneState":false,"FailList":[],"UnknownList":[]}
+```

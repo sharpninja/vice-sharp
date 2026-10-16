@@ -1,0 +1,22 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\Datasette.cs",
+    "sha256": "E4BFE3BD7CD381585B595AD75933A540A8666FC8DB60EB3FE1612FF94E39D250"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\C64MemoryMap.cs",
+    "sha256": "4FC0DFDB6BA93C72E8437D1D37870841298F0354F04FDBC95F7AC4A9AB7989B1"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\Wiring\\DatasetteCia1FlagBinding.cs",
+    "sha256": "9DE4D879EDBCC66F3E7ECA089F64D0CC64920D6E48AF16C9C5718E518B8D2876"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Tape\\DatasetteSenseLineTests.cs",
+    "sha256": "7DAC564E613CB660D523A56D3E68120DE5B30818824646BB5ABF2B564E69A54C"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Tape\\DatasetteMotorRampTests.cs",
+    "sha256": "5C06136A1E4820558E4781214492043785EC4F4151CD8C50C2ED1E079901E408"
+  }
+]

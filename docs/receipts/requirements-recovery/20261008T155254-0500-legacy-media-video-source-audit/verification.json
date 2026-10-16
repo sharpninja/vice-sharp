@@ -1,0 +1,90 @@
+{
+  "timestampLocal": "2026-10-08T15:55:01.0799510-05:00",
+  "scope": "source audit only",
+  "nativeChecks": [
+    {
+      "field": "gitlink",
+      "unchanged": true
+    },
+    {
+      "field": "head",
+      "unchanged": true
+    },
+    {
+      "field": "trackedDiffSha256",
+      "unchanged": true
+    },
+    {
+      "field": "untrackedListSha256",
+      "unchanged": true
+    },
+    {
+      "field": "inventorySha256",
+      "unchanged": true
+    },
+    {
+      "field": "newestSourceWriteUtc",
+      "unchanged": true
+    },
+    {
+      "field": "fileCount",
+      "unchanged": true
+    },
+    {
+      "field": "untrackedCount",
+      "unchanged": true
+    }
+  ],
+  "pinReadback": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIiCheckpointTests.cs",
+      "sha256": "AC62A6C9335F39B254FA3AC55219253F4288579C456EF423FDD11D3BE7434075",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIIRcWindowTests.cs",
+      "sha256": "A6E5EBD795DA020C4F972B69742C5AAD3A2656B04BEA5A652826C73843C710E6",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIISpriteDmaNativeCheckpointTests.cs",
+      "sha256": "4A92CB2629B0352D8A6922524CE04D2A41F1E666F409617FB775B1EF979FD9A8",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Chips\\VicIi\\Mos8565.cs",
+      "sha256": "FBC2E2217992BB196A6FD856F633F95E8928498609B0411E5AB706A549E0233E",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Chips\\VicIi\\Mos6569.cs",
+      "sha256": "F6E9CD4E3E08D643A0C417B10554A43046C94889E1DF0425A538C60FA3A4738E",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-cycle.c",
+      "sha256": "561876187FDE8BFE8636E64593543AA77A5E0855EBBD9FE56D9DA4FA6EB564BA",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-chip-model.c",
+      "sha256": "95EA3EF61E59A1C850FF516C1A827AE849521DCE3199307586E061AF97DB639D",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-fetch.c",
+      "sha256": "83FE621BFD6C3F9AADFE7C725F02392BA04DB70C36248CDFEA88D79883BB21D0",
+      "unchanged": true
+    }
+  ],
+  "effectiveRequirementsUnchanged": true,
+  "fullAuditBodyPrimaryReadbackExact": true,
+  "decisionPairExact": true,
+  "gitDiffCheckExitCode": 0,
+  "sourceInspectedRecords": 17,
+  "testsExecuted": 0,
+  "runtimeParityProven": false,
+  "canonicalRequirementsChanged": false,
+  "reviewLaunched": false,
+  "gateAdvanced": false
+}

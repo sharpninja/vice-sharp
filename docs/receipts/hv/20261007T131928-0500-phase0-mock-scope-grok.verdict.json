@@ -1,0 +1,194 @@
+{
+  "TimestampLocal": "2026-10-07T13:49:04.9048738-05:00",
+  "TimestampUtc": "2026-10-07T18:49:04.9048738+00:00",
+  "ValidatorIdentity": "GrokCode",
+  "Model": "grok-4.7",
+  "ReasoningEffort": "xhigh",
+  "SessionId": "GrokCode-20261007T182902Z-hv-phase0-mock-scope",
+  "RequestId": "req-20261007T182902Z-001-hv-phase0-mock-scope-grok",
+  "AddProfileFilesRead": 22,
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 90,
+  "Completeness": 84,
+  "Phase0Accepted": false,
+  "MockValidatedTestPhasePermitted": false,
+  "ProductionImplementationPermitted": false,
+  "WholeGoalComplete": false,
+  "NativeParity": false,
+  "NativeRestoration": false,
+  "VsfCompletion": false,
+  "PassCount": 19,
+  "FailCount": 2,
+  "UnknownCount": 1,
+  "CompletionPercent": 100,
+  "Eta": null,
+  "FailList": [
+    "C-cycle-ac4: Phase 1 group 5 maps the bus-address fixture to TR-CYCLE-001 AC4, but that AC is PHI2/AEC memory-access timing.",
+    "C-cycle-status: TR-CYCLE-001 status is closed while every structured AC is unsatisfied."
+  ],
+  "UnknownList": [
+    "B7-replay: The paragraph-removal hash was not recomputed because the intermediate file bytes are not retained."
+  ],
+  "Claims": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "All 11 launch evidence hashes match the current files.",
+      "Evidence": "Get-FileHash SHA256 matched every evidenceHashes entry in the request jsonl, including both plans, both wiki projections, HANDOFF, the external plan, wiki.yaml, the wiki proof, the steering json, the retry audit, and quarantine verification.json."
+    },
+    {
+      "Id": "A3d",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "The VSF Slice 7 Test gate requires zero failed, skipped, and aborted tests, and the wiki projection is byte-identical to the plan.",
+      "Evidence": "PLAN-VSFLOCKSTEP-001.md lines 500-508. No pre-existing skip allowance remains. Plan-Native-VICE-VSF-Lockstep.md SHA256 equals C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183."
+    },
+    {
+      "Id": "B7-retain",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "The fallback paragraph is still in both files, and those files were not restored to the pre-insertion hashes.",
+      "Evidence": "HANDOFF.md and the external plan both contain the fallback sentence. Current hashes differ from steering launch snapshots 24BC7C35 and 8BC3A681. The steering receipt hash matches this launch."
+    },
+    {
+      "Id": "B7-replay",
+      "Surface": "A",
+      "Status": "UNKNOWN",
+      "Text": "The paragraph-removal hash was not recomputed because the intermediate file bytes are not retained.",
+      "Evidence": "The steering json asserts reconstructed hashes equal the launch snapshots. Intermediate hashes E5777C58 and AC8B715D are not the current files, and no retained blob was found."
+    },
+    {
+      "Id": "C-fr-tr-test",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "Live FR-VICE-001 AC1-4, TR-VICE-ORACLE-001 AC1-5, and TEST-VICE-001 AC1-4 match Phase 1 groups 1-4 and are unsatisfied.",
+      "Evidence": "workflow.requirements.getFr, getTr, and getTest. All cited criteria are isSatisfied false and status pending. Plan lines 78-81 name those groups."
+    },
+    {
+      "Id": "C-condition",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "TEST-VICE-001 has a nonempty effective condition.",
+      "Evidence": "workflow.requirements.effective layer-1 shows condition text beginning Verify that every native parity oracle. getTest projects that same text as description."
+    },
+    {
+      "Id": "C-resume",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "TR-VSFLOCKSTEP-RESUME-001 is pending, both ACs are unsatisfied, and the legacy patch is never applied.",
+      "Evidence": "getTr description and both AC texts. Generated technical requirements and both plan projections say the patch is diagnostic and never applied."
+    },
+    {
+      "Id": "C-map",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "FR-VICE-001 maps to TR-VICE-ORACLE-001 and TEST-VICE-001. FR-SNP-005 maps to the resume TR and TEST-SNP-002.",
+      "Evidence": "listMappings totalCount 2 for FR-VICE-001 and totalCount 4 for FR-SNP-005, including TR-VSFLOCKSTEP-RESUME-001 and TEST-SNP-002."
+    },
+    {
+      "Id": "C-group5-defer",
+      "Surface": "C",
+      "Status": "PASS",
+      "Text": "FR-SNP-005 AC3 and TEST-SNP-002 AC4 stay mandatory 100000-cycle criteria. The half-cycle mock does not satisfy them.",
+      "Evidence": "Live AC text requires 100000-cycle lockstep. Plan lines 76 and 82 defer native fulfillment. The existing fixture uses bus addresses 0x1000 and 0x1001 at half-cycle 37."
+    },
+    {
+      "Id": "C-cycle-ac4",
+      "Surface": "C",
+      "Status": "FAIL",
+      "Text": "Phase 1 group 5 maps the bus-address fixture to TR-CYCLE-001 AC4, but that AC is PHI2/AEC memory-access timing.",
+      "Evidence": "getTr ac-04: CPU memory accesses occur only during PHI2 when AEC is asserted. isSatisfied false. Plan line 82 and Vic20HalfCycleComparatorTests assert a bus-address mismatch, not PHI2 or AEC."
+    },
+    {
+      "Id": "C-cycle-status",
+      "Surface": "C",
+      "Status": "FAIL",
+      "Text": "TR-CYCLE-001 status is closed while every structured AC is unsatisfied.",
+      "Evidence": "getTr status closed and ac-01 through ac-07 isSatisfied false."
+    },
+    {
+      "Id": "D2",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "The five quarantine copies match, the sources are gone, reason files exist, and saved primary sessions normalize equal.",
+      "Evidence": "Recomputed SHA256 matched all five backup and quarantine files. sourceStillThere false. reason true. primary-before.json and primary-after.json normalized equal at 11968 chars. replayed 0. permanentlyDeleted 0."
+    },
+    {
+      "Id": "D2-pending",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "Pending count was zero in the 13:19:28 receipt. Two later Codex records exist and were not replayed.",
+      "Evidence": "verification.json pendingWorkspaceRecords 0. Recheck found session_setTurnTitle-978b.yaml and triage_report-7058.yaml. This review did not drain them."
+    },
+    {
+      "Id": "D3",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "The planned contract project is absent and repository imports do not attach BuildViceNative.",
+      "Evidence": "Oracle csproj missing. Solution has no OracleContract project. No Directory.Build.targets. BuildViceNative is only in ViceSharp.TestHarness.csproj lines 10 and 68. Central packages include Microsoft.NET.Test.Sdk 18.7.0, xunit.v3 3.2.2, and NSubstitute 5.3.0. No solution or TestHarness build was run."
+    },
+    {
+      "Id": "D4",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "The human approved the mock-contract suite as the pre-implementation gate and kept real gates mandatory.",
+      "Evidence": "Primary queryText at 2026-10-07T18:03:09Z: Yes, mocks first; retain all real gates. Plan lines 66-72 and external plan lines 11-12 do not waive historical failures."
+    },
+    {
+      "Id": "A6c",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "The retry audit contains the native triage payload, the corrected helper call, and the retained hash. The report is grouped.",
+      "Evidence": "Audit records labeled 71612, 71759, 71766, 71768, and 71769. The 71612 payload includes dedupeKey vice-sharp-sessionlog-append-30s-timeout-20261007. The 71768 result records hash 9384B50C03AE7482A15A4386D2E6ED2E416E8A3E2520D2316F62438270D749D6. McpServer triage_status returned grouped report triage-report-2cc694977df94070a70488d4538d735f and group triage-group-f4975763232ade3a. The server DTO did not echo dedupeKey."
+    },
+    {
+      "Id": "D-native",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "native/vice is still the pinned dirty tree. This review did not modify it.",
+      "Evidence": "Gitlink and checkout HEAD are both cc67418cba58e71d8e70fd353e9de47199ad2075. Tracked modifications 12. Untracked paths 2527."
+    },
+    {
+      "Id": "D-scope",
+      "Surface": "D",
+      "Status": "PASS",
+      "Text": "Production implementation, native parity, restoration, VSF completion, and the whole goal stay open.",
+      "Evidence": "Immutable plan lines 3, 99-104, and 171-179. External plan lines 9-11 and 350-355. The contract project does not exist."
+    },
+    {
+      "Id": "B-process",
+      "Surface": "B",
+      "Status": "PASS",
+      "Text": "This review used PowerShell.MCP, left product and plan files unchanged, and did not edit MCP storage files or use Python.",
+      "Evidence": "Shell work went through pwsh execute_command. Requirements and session calls used the supported tools."
+    },
+    {
+      "Id": "B-bootstrap",
+      "Surface": "B",
+      "Status": "PASS",
+      "Text": "Marker trust succeeded and the review session model read back as grok-4.7.",
+      "Evidence": "Test-MarkerSignature and Invoke-FullBootstrap returned true. sessionlog_query model is grok-4.7. Installed plugin version is 1.119.0. Marker and source checkout versions are 1.118.0."
+    },
+    {
+      "Id": "D4-quarantine-approval",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "The human approved preserving and quarantining the five hook records.",
+      "Evidence": "Primary queryText at 2026-10-07T17:52:38Z begins Yes, preserve and quarantine them. This is class 2 ops, not a new product requirement."
+    },
+    {
+      "Id": "A-fallback",
+      "Surface": "A",
+      "Status": "PASS",
+      "Text": "The retained insertion is the human fallback authorization.",
+      "Evidence": "Primary queryText at 2026-10-07T17:12:25Z is If you genuinely cannot save to MCP, you must use the fallback."
+    }
+  ],
+  "PluginInstalledVersion": "1.119.0",
+  "PluginMarkerVersion": "1.118.0",
+  "PluginSourceVersion": "1.118.0",
+  "TriageFailsafePath": "F:\\GitHub\\vice-sharp\\.mcpServer\\grok\\reviews\\20261007T131928-0500-phase0-mock-scope\\failsafe\\pending\\20261007T184705Z-triage_report-40a8.yaml",
+  "TriageFailsafeSha256": "25C92432A5C7B198EE6B1663F35C080EAFC1DA41CE65E8D6895FCACBF86C4975",
+  "TriagePrimaryPersistence": false
+}

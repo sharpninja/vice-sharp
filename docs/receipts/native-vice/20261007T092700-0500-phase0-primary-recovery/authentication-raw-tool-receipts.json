@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-10-07T13:59:57.2710000+00:00",
+  "source": "Codex local rollout raw tool response",
+  "rolloutPath": "C:\\Users\\kingd\\.codex\\sessions\\2026\\08\\16\\rollout-2026-08-16T18-26-23-01a00ce5-d30d-7451-ab45-fa3e4fbb825f.jsonl",
+  "callId": "call_qfgwcENzT2tZA8YdsY2iXmnn",
+  "toolOutput": [
+    {
+      "type": "input_text",
+      "text": "Script completed\nWall time 2.1 seconds\nOutput:\n"
+    },
+    {
+      "type": "input_text",
+      "text": "{\"content\":[{\"type\":\"text\",\"text\":\"✗ Pipeline executed with errors | Window: #28296 Falcon | Status: Ready | Pipeline: Import-Module powershell-ya... | Duration: 1.50s | Errors: 1 | Location [FileSystem]: F:\\\\GitHub\\\\vice-sharp\\r\\n\\n=== EXCEPTIONS ===\\nResponse status code does not indicate success: 401 (Unauthorized).\\n\\n⚠️ Preferred cmdlets for PowerShell.MCP console:\\n• Use Show-TextFiles instead of Get-Content (aliases: gc, cat, type)\"}]}"
+    }
+  ]
+}

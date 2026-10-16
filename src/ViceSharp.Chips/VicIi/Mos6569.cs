@@ -49,6 +49,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // single vicii_irq_set_line path. System-level equivalence is proven by
     // the READY snapshot lockstep gates.
     private bool _irqAssertPending;
+    // Distinct from _irqAssertPending. The pending flag is the one-cycle
+    // rise that has not reached the line yet. This flag is the line VICE
+    // restores with interrupt_restore_irq when irq_status bit 7 is set.
+    private bool _irqLineHeld;
     // PLAN-VICEPARITY-001 FR-VIC-REGISTERS AC-12/AC-13/AC-14: VICE
     // clear_collisions. A $D01E/$D01F read copies the accumulator and schedules
     // the clear; the accumulator is zeroed in the NEXT cycle
@@ -76,6 +80,13 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     
     /// <inheritdoc />
     public byte[] FrameBuffer => _renderer.FrameBuffer;
+
+    /// <summary>FR-CFG-003. Install the model VIC-II palette.</summary>
+    public void ResetPaletteToModel() => _renderer.ResetPaletteToModel();
+
+    /// <summary>FR-CFG-003. Replace one rendered palette entry. Index is 0..15.</summary>
+    public void SetPaletteColor(int index, byte red, byte green, byte blue)
+        => _renderer.SetPaletteColor(index, red, green, blue);
     
     /// <inheritdoc />
     public int FrameWidth => VideoRenderer.ScreenWidth;
@@ -297,6 +308,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private bool _lightPenState;
     private byte _lightPenXExtraBits;
     private int _lightPenTriggerCountdown;
+    private Action<bool>? _lightPenStateRecorder;
+    private Action? _lightPenTriggerRecorder;
+    private Action<int, int>? _lightPenTimingRecorder;
 
     /// <summary>
     /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-07: chip-model colour latency
@@ -1587,6 +1601,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _startOfFrame = false;
         _pendingCollisionClear = 0;
         _irqAssertPending = false;
+        if (_irqLineHeld)
+        {
+            _irqLine.Release(this);
+            _irqLineHeld = false;
+        }
         _verticalBorderActive = true;
         _verticalBorderNextActive = true;
         _mainBorderActive = true;
@@ -2131,6 +2150,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // unit testing without a full C64MemoryMap.
     /// <summary>Test-only: data counter mc for sprite N (vicii.sprite[N].mc).</summary>
     public byte GetSpriteMc(int n) => _sprites[n].Mc;
+
+    /// <summary>FR-SNP-003. The p-access pointer VICE stores as sprite[i].pointer.</summary>
+    public byte GetSpritePointer(int n) => _sprites[n].Pointer;
     /// <summary>Test-only: line-base counter mcbase for sprite N (vicii.sprite[N].mcbase).</summary>
     public byte GetSpriteMcBase(int n) => _sprites[n].McBase;
     /// <summary>Test-only: Y-expansion flip-flop for sprite N (vicii.sprite[N].exp_flop).</summary>
@@ -2596,6 +2618,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// every bad line.
     /// </summary>
     public bool IsPrefetchActive => _prefetchCycles != 0;
+
+    /// <summary>
+    /// VICE <c>vicii.prefetch_cycles</c>. The BA countdown is 3 plus one
+    /// while BA is high, and it decrements on each BA-low cycle.
+    /// </summary>
+    public int PrefetchCycles => _prefetchCycles;
 
     /// <summary>
     /// PLAN-VICEPARITY-001 audit M15/L7: the VICE TOBIAS_COLORS palette group
@@ -3133,11 +3161,13 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         {
             _registers[0x19] |= 0x80;
             _irqLine.Assert(this);
+            _irqLineHeld = true;
         }
         else
         {
             _registers[0x19] &= 0x7F;
             _irqLine.Release(this);
+            _irqLineHeld = false;
         }
     }
 
@@ -3174,7 +3204,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// frame are ignored; the frame start re-arms the latch
     /// (viciisc/vicii-cycle.c:210).
     /// </summary>
-    public void TriggerLightPen() => TriggerLightPenInternal(retrigger: false);
+    public void TriggerLightPen()
+    {
+        // VICE has no light-pen event. The latches ride in the VIC snapshot.
+        // A trigger after that snapshot is still an external input, so an
+        // open recording stamps it at the current clock.
+        _lightPenTriggerRecorder?.Invoke();
+        TriggerLightPenInternal(retrigger: false);
+    }
 
     /// <summary>
     /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-06/AC-07/AC-08/AC-14: light-pen
@@ -3189,6 +3226,39 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     /// <param name="state">True when the LP line is pulled low (pen pressed).</param>
     public void SetLightPen(bool state)
+    {
+        SetLightPenLevel(state);
+        // Host line changes are external input. The CIA port-B bit 4 path
+        // uses SetLightPenFromPort: that store is replayed by the CPU and
+        // must not append a second event.
+        _lightPenStateRecorder?.Invoke(state);
+    }
+
+    /// <summary>
+    /// CIA1 port store path. c64cia1.c cia1_internal_lightpen_check calls
+    /// vicii_set_light_pen after a port or DDR write. The write itself is
+    /// bus activity, not a separate recorded input.
+    /// </summary>
+    /// <param name="state">True when port B bit 4 reads low.</param>
+    public void SetLightPenFromPort(bool state) => SetLightPenLevel(state);
+
+    /// <summary>
+    /// FR-SNP-003. While a recording is open, a host light-pen edge is an
+    /// input event. The snapshot already holds a pen that fired before the
+    /// first key. VICE keeps the latches in the VIC snapshot and has no
+    /// light-pen event type.
+    /// </summary>
+    /// <param name="stateRecorder">Called after a host <see cref="SetLightPen"/>.</param>
+    /// <param name="triggerRecorder">Called before a host <see cref="TriggerLightPen"/>.</param>
+    /// <param name="timingRecorder">Called after a host <see cref="SetLightPenTiming"/> that schedules a trigger.</param>
+    public void AttachLightPenRecorder(Action<bool>? stateRecorder, Action? triggerRecorder, Action<int, int>? timingRecorder = null)
+    {
+        _lightPenStateRecorder = stateRecorder;
+        _lightPenTriggerRecorder = triggerRecorder;
+        _lightPenTimingRecorder = timingRecorder;
+    }
+
+    private void SetLightPenLevel(bool state)
     {
         if (state)
         {
@@ -3213,6 +3283,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public void SetLightPenTiming(int x, int y)
     {
+        // VICE vicii_lightpen_timing has no event type. The countdown lives
+        // in the VIC image. A call after the recording snapshot is still a
+        // host input, so an open recording stamps the caller's coordinates.
+        var hostX = x;
+        var hostY = y;
         x += 0x80 - 0x20;
         y += IsNtscVideo ? 0x1C : 0x10;
 
@@ -3223,6 +3298,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         _lightPenXExtraBits = (byte)((x >> 1) & 0x3);
         _lightPenTriggerCountdown = (x / 8) + (y * CyclesPerLine);
+        _lightPenTimingRecorder?.Invoke(hostX, hostY);
     }
 
     /// <summary>

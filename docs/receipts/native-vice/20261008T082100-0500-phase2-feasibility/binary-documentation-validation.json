@@ -1,0 +1,62 @@
+{
+  "timestampLocal": "2026-10-08T10:12:25.5439751-05:00",
+  "trackedDiffCheckExit": 0,
+  "authoredFiles": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "17655C95A321CBB08A0E9A44A2EC347CAC37B61E0CF0D0A78213900AADD22745",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "sha256": "0955769AB1D850D25903B693E7D872E51B0B7986D592999E2052781D75492A5C",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.ViceCompatibility\\README.md",
+      "sha256": "31C5CCE9AE9C8855C4D129366DCFD6F76DFFA152632AA161B69CC14FF951CF48",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.VsfCompatibility.Tests\\README.md",
+      "sha256": "87DF88825F51E5DF3A03F0F1434A80DEF55309816DABC4EED917EF05288AC45E",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.VsfCompatibility.Tests\\BINARY-MONITOR-SLICE.md",
+      "sha256": "1A07A9E0C999115BB760719DD813A1C9362172989DAC5B4FFC833DD223234E3C",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-runtime\\README.md",
+      "sha256": "6C823247BFA1A650B9C6DB98F6361A4FCA738AE5556018AA13A961EA8FC51BBB",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\\README.md",
+      "sha256": "1845838248AF71CEC0342D520B9806286DFDCEBF8E404AA7FD32EDA1DD45362D",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\\clock-probe.cdb",
+      "sha256": "A81B9CCE27A721A4B190F87FC24AF4FD8C89AA9CEF8148A7795FD51C19A16B9E",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\\entry-probe.cdb",
+      "sha256": "0C1AF4C0FF25154005BEC7D9FF0566E0815E5A52E0F7A0DA75B3A5B7C6A4B448",
+      "whitespaceOutput": [],
+      "noIndexCheckExit": 1
+    }
+  ],
+  "probeSurvivors": [],
+  "productionCodecHash": "862F7B2FE4399075D944D470E6ABCB67ACA7C1C97C0469D96BC62EA162D4A560"
+}

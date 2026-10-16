@@ -1,0 +1,160 @@
+{
+  "schema": "vice-sharp/tape-motor-remediation-supplement/v1",
+  "status": "unapplied-partial-draft-not-an-approval-packet",
+  "createdAtLocal": "2026-10-11T07:04:48.0707018-05:00",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "baseProposalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\proposed-field-delta.json",
+  "baseProposalSha256": "1D8A442588ADD7883693694352954DF2077D166FB47ED4E2924AFE738A481507",
+  "sourceDocumentPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\N05-N06-EXACT-SUPPLEMENT.md",
+  "sourceDocumentSha256": "CEBA40FC3C1B0379CD42FA3035A45AD448AE355A90DB1D330C7E9A6796E8515B",
+  "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeSourceCheck": {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+    "gitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+    "actualGitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+    "sha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368"
+  },
+  "fieldDeltas": [
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "kind": "fr",
+      "acId": "ac-03",
+      "beforeProposedText": "A stopped motor with no pending alarm schedules the ordinary startup callback at current clock plus 32000; retain an existing alarm as VICE does. FORWARD/REWIND commands schedule their 1000-cycle alarm independently of motor-running state, including motor-on before and after that alarm dispatch. Compare ordered scheduled and actual events, not a pulse-duration getter.",
+      "appendText": "Also cover START while the motor is already running, with absent, read-only and writable media, with no pending alarm and with an existing pending alarm. The command reaches the start helper after resetting the gap: install t+32000 only when no alarm is pending, otherwise preserve the existing alarm; match attached-image seek, current-clock write-clock seeding and write-bit zeroing, including clock zero. Contrast START with running-motor FORWARD/REWIND, whose earlier t+1000 alarm survives the helper, and preserve any stop deadline that the command does not clear.",
+      "afterProposedText": "A stopped motor with no pending alarm schedules the ordinary startup callback at current clock plus 32000; retain an existing alarm as VICE does. FORWARD/REWIND commands schedule their 1000-cycle alarm independently of motor-running state, including motor-on before and after that alarm dispatch. Compare ordered scheduled and actual events, not a pulse-duration getter. Also cover START while the motor is already running, with absent, read-only and writable media, with no pending alarm and with an existing pending alarm. The command reaches the start helper after resetting the gap: install t+32000 only when no alarm is pending, otherwise preserve the existing alarm; match attached-image seek, current-clock write-clock seeding and write-bit zeroing, including clock zero. Contrast START with running-motor FORWARD/REWIND, whose earlier t+1000 alarm survives the helper, and preserve any stop deadline that the command does not clear.",
+      "isSatisfied": false
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "kind": "tr",
+      "acId": "ac-01",
+      "beforeProposedText": "Assert stopped-motor ordinary startup at t+32000 with no pending alarm and preservation of an existing pending alarm. Observe callback dispatch separately from scheduled time; no first-Tick bypass.",
+      "appendText": "Exercise the separate command-entry path: START on an already-running motor invokes the start helper with and without media, schedules t+32000 only without a pending alarm, and preserves a pending alarm while still performing the native seek and write-state initialization. Distinguish command START from motor-line re-enable, and preserve the t+1000 alarm already installed by FORWARD/REWIND before their helper call.",
+      "afterProposedText": "Assert stopped-motor ordinary startup at t+32000 with no pending alarm and preservation of an existing pending alarm. Observe callback dispatch separately from scheduled time; no first-Tick bypass. Exercise the separate command-entry path: START on an already-running motor invokes the start helper with and without media, schedules t+32000 only without a pending alarm, and preserves a pending alarm while still performing the native seek and write-state initialization. Distinguish command START from motor-line re-enable, and preserve the t+1000 alarm already installed by FORWARD/REWIND before their helper call.",
+      "isSatisfied": false
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "kind": "test",
+      "acId": "ac-01",
+      "beforeProposedText": "Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert ordered schedules, callback times and events; incorrect early/late/missing/duplicated/reordered events are rejected within a passing mock harness.",
+      "appendText": "Start_CommandWhileMotorRunning_NoPendingAlarm and Start_CommandWhileMotorRunning_PendingAlarm cover absent/read-only/writable media, clock zero/nonzero, seek/no-seek, retained write state and a pending stop deadline; reject omission of the command helper path, wrong alarm replacement or absence, wrong seek, wrong write-clock/bit seeding, and clearing a stop deadline that START leaves intact.",
+      "afterProposedText": "Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert ordered schedules, callback times and events; incorrect early/late/missing/duplicated/reordered events are rejected within a passing mock harness. Start_CommandWhileMotorRunning_NoPendingAlarm and Start_CommandWhileMotorRunning_PendingAlarm cover absent/read-only/writable media, clock zero/nonzero, seek/no-seek, retained write state and a pending stop deadline; reject omission of the command helper path, wrong alarm replacement or absence, wrong seek, wrong write-clock/bit seeding, and clearing a stop deadline that START leaves intact.",
+      "isSatisfied": false
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "kind": "fr",
+      "acId": "ac-04",
+      "beforeProposedText": "Motor-off on a running motor sets a stop deadline of current clock plus 32000 without immediate stopping or replacing an already pending alarm. Actual stopping occurs when a datasette callback observes the deadline reached. Cover callbacks before, at and beyond the deadline, active read rescheduling, STOP with a retained later alarm, repeated off preserving the deadline, and motor-on cancellation even after the deadline but before stop execution. A stopped motor starts again through the native pending-alarm rule.",
+      "appendText": "Explicitly include motor-on before the stop deadline and at the deadline before callback dispatch, preserving the already-running motor, pending alarm and write state while clearing the stop deadline; neither case starts a new ramp.",
+      "afterProposedText": "Motor-off on a running motor sets a stop deadline of current clock plus 32000 without immediate stopping or replacing an already pending alarm. Actual stopping occurs when a datasette callback observes the deadline reached. Cover callbacks before, at and beyond the deadline, active read rescheduling, STOP with a retained later alarm, repeated off preserving the deadline, and motor-on cancellation even after the deadline but before stop execution. A stopped motor starts again through the native pending-alarm rule. Explicitly include motor-on before the stop deadline and at the deadline before callback dispatch, preserving the already-running motor, pending alarm and write state while clearing the stop deadline; neither case starts a new ramp.",
+      "isSatisfied": false
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "kind": "tr",
+      "acId": "ac-03",
+      "beforeProposedText": "Assert motor-on cancels a stop not yet executed, including after the nominal deadline but before a late callback, without imposing a new startup delay on an already-running motor. After an executed stop, obey the ordinary start helper and its pending-alarm preservation.",
+      "appendText": "Include cancellation before the deadline and same-clock cancellation before callback dispatch as separate cases from cancellation after the deadline; for an already-running motor, preserve the existing alarm and write state and clear only the stop deadline in this path.",
+      "afterProposedText": "Assert motor-on cancels a stop not yet executed, including after the nominal deadline but before a late callback, without imposing a new startup delay on an already-running motor. After an executed stop, obey the ordinary start helper and its pending-alarm preservation. Include cancellation before the deadline and same-clock cancellation before callback dispatch as separate cases from cancellation after the deadline; for an already-running motor, preserve the existing alarm and write state and clear only the stop deadline in this path.",
+      "isSatisfied": false
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "kind": "test",
+      "acId": "ac-02",
+      "beforeProposedText": "Run all named delayed-stop and cancellation cases in the amendment ledger, retaining deadline and callback boundaries separately. Reject immediate stop, guaranteed-deadline stop despite an existing late alarm, repeated-off deadline extension and unconditional off/on restart.",
+      "appendText": "MotorOn_CancelsPendingStop covers deadline-1 and the exact deadline with motor-on ordered before callback dispatch; assert stop-clock clearing, unchanged running/alarm/write state and no startup ramp, and reject wrong mocks that restart only in these earlier cancellation cases.",
+      "afterProposedText": "Run all named delayed-stop and cancellation cases in the amendment ledger, retaining deadline and callback boundaries separately. Reject immediate stop, guaranteed-deadline stop despite an existing late alarm, repeated-off deadline extension and unconditional off/on restart. MotorOn_CancelsPendingStop covers deadline-1 and the exact deadline with motor-on ordered before callback dispatch; assert stop-clock clearing, unchanged running/alarm/write state and no startup ramp, and reject wrong mocks that restart only in these earlier cancellation cases.",
+      "isSatisfied": false
+    }
+  ],
+  "coverageAdditions": [
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-03",
+      "addCaseGroups": [
+        "Start_CommandWhileMotorRunning_NoPendingAlarm",
+        "Start_CommandWhileMotorRunning_PendingAlarm"
+      ],
+      "addSourceAnchors": [
+        "src/datasette/datasette.c:1000-1021",
+        "src/datasette/datasette.c:1059-1089",
+        "src/datasette/datasette.c:1117-1147"
+      ]
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-01",
+      "addCaseGroups": [
+        "Start_CommandWhileMotorRunning_NoPendingAlarm",
+        "Start_CommandWhileMotorRunning_PendingAlarm"
+      ],
+      "addSourceAnchors": [
+        "src/datasette/datasette.c:1000-1021",
+        "src/datasette/datasette.c:1059-1089",
+        "src/datasette/datasette.c:1117-1147"
+      ]
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "acId": "ac-01",
+      "addCaseGroups": [
+        "Start_CommandWhileMotorRunning_NoPendingAlarm",
+        "Start_CommandWhileMotorRunning_PendingAlarm"
+      ],
+      "addSourceAnchors": [
+        "src/datasette/datasette.c:1000-1021",
+        "src/datasette/datasette.c:1059-1089",
+        "src/datasette/datasette.c:1117-1147"
+      ]
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-04",
+      "addCaseGroups": [
+        "MotorOn_CancelsPendingStop"
+      ],
+      "addSourceAnchors": [
+        "src/datasette/datasette.c:1172-1205"
+      ]
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-02",
+      "addCaseGroups": [
+        "MotorOn_CancelsPendingStop"
+      ],
+      "addSourceAnchors": [
+        "src/datasette/datasette.c:1172-1205"
+      ]
+    },
+    {
+      "requirementId": "TR-TAPE-EDGE-001",
+      "acId": "ac-03",
+      "addCaseGroups": [
+        "MotorOn_CancelsPendingStop"
+      ],
+      "addSourceAnchors": [
+        "src/datasette/datasette.c:1172-1205"
+      ]
+    },
+    {
+      "requirementId": "TEST-TAPE-RAMP-001",
+      "acId": "ac-02",
+      "addCaseGroups": [
+        "MotorOn_CancelsPendingStop"
+      ],
+      "addSourceAnchors": [
+        "src/datasette/datasette.c:1172-1205"
+      ]
+    }
+  ],
+  "removedCriteria": [],
+  "removedCaseGroups": [],
+  "newUniqueCaseGroups": 3,
+  "nativeRuntimeExecuted": false,
+  "mockTestsExecuted": false,
+  "implementationPermission": false
+}

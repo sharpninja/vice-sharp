@@ -1,0 +1,52 @@
+[
+  {
+    "title": "Datasette motor ramp + sense line + record mode",
+    "id": "FR-RUNTIME-TAPE-002",
+    "priority": "medium",
+    "body": "Datasette.Tick() enforces MOTOR_DELAY=32,000-cycle ramp (datasette.c:62) before pulse delivery when Tick is timing mechanism. SenseLine=!PlayPressed||!RecordPressed (CIA1  bit 4). TryWritePulse stores pulses in record mode.",
+    "acceptanceCriteria": [],
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "title": "Datasette sense line and record mode",
+    "id": "TR-TAP-EDGE-001",
+    "priority": "medium",
+    "body": "Datasette.SenseLine = false when PlayPressed or RecordPressed (CIA1  bit 4 active-low). TryWritePulse stores pulse when MotorEnabled && RecordPressed. RecordedPulseCount tracks stored pulses.",
+    "acceptanceCriteria": [],
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "title": "Datasette motor 32,000-cycle ramp before pulse delivery",
+    "id": "TR-TAPE-EDGE-001",
+    "priority": "medium",
+    "body": "Datasette.Tick() enforces 32,000-cycle motor ramp (MOTOR_DELAY=32000, datasette/datasette.c:62) before TryReadNextPulse delivers pulses. Ramp only activates when Tick() is used as timing. Motor off resets ramp.",
+    "acceptanceCriteria": [],
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "title": "DatasetteMotorRampTests: 32,000-cycle motor ramp (4 tests)",
+    "id": "TEST-TAPE-RAMP-001",
+    "priority": "medium",
+    "condition": "With tape inserted, MotorEnabled=true, PlayPressed=true: TryReadNextPulse returns false during first 12,808 Tick() calls; returns true after 32,000 Tick() calls. Motor off/on resets ramp. 4 pass.",
+    "acceptanceCriteria": [],
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "title": "DatasetteSenseLineTests: sense line + record mode (7 tests)",
+    "id": "TEST-TAPE-SENSE-001",
+    "priority": "medium",
+    "condition": "SenseLine==false when PlayPressed or RecordPressed, true otherwise. TryWritePulse returns true only when MotorEnabled && RecordPressed, incrementing RecordedPulseCount. 7 pass.",
+    "acceptanceCriteria": [],
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "scopeStartLayerKey": "layer-1"
+  }
+]

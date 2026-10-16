@@ -1,0 +1,356 @@
+[
+  {
+    "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+    "expected": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+    "actual": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\.github\\copilot-instructions.md",
+    "expected": "74B669ABED9473B345B5E08EBE74A8B8CF2E48C6CFF99A4BC0C8E5CDC3429AC7",
+    "actual": "74B669ABED9473B345B5E08EBE74A8B8CF2E48C6CFF99A4BC0C8E5CDC3429AC7",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\AGENTS.md",
+    "expected": "5649ACD0870C000119185DF3C911EEF009407AA09C43C5A4C68182F1CB26D727",
+    "actual": "5649ACD0870C000119185DF3C911EEF009407AA09C43C5A4C68182F1CB26D727",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\Directory.Build.props",
+    "expected": "15BEC422A7EBA6C62F1EBD76562AAD8A3598C4DCEB9F84BF30AA65754091FC62",
+    "actual": "15BEC422A7EBA6C62F1EBD76562AAD8A3598C4DCEB9F84BF30AA65754091FC62",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\Directory.Packages.props",
+    "expected": "B1D7C95481E78B419EF4ABB5762C3748D86CAF4838F923BEAD9FD9D7F6136724",
+    "actual": "B1D7C95481E78B419EF4ABB5762C3748D86CAF4838F923BEAD9FD9D7F6136724",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+    "expected": "797EDBB86DD2845678A1E32405459E296993336AD4026AA1C7B87B9B26853CED",
+    "actual": "797EDBB86DD2845678A1E32405459E296993336AD4026AA1C7B87B9B26853CED",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+    "expected": "61597EDDF5346E69CDDA0B44BC9F835EA29B6B43C6F166BC948DD98448CE9F58",
+    "actual": "61597EDDF5346E69CDDA0B44BC9F835EA29B6B43C6F166BC948DD98448CE9F58",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.parent-final-primary-query.json",
+    "expected": "5F1E9EEB7A53C84C175F42249990241FCBBE05805C2EA7154EF1E5C8D00E6027",
+    "actual": "5F1E9EEB7A53C84C175F42249990241FCBBE05805C2EA7154EF1E5C8D00E6027",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json",
+    "expected": "A432A7284C99673E76CD79A7FE1D93A45FFDC8C231FDD97E545D3414B5E05AD5",
+    "actual": "A432A7284C99673E76CD79A7FE1D93A45FFDC8C231FDD97E545D3414B5E05AD5",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.verdict.json",
+    "expected": "5042126C3DFF2F158953B345FEE85F20C7877DDCC8EDFC1AEACDE720CC7FBCB4",
+    "actual": "5042126C3DFF2F158953B345FEE85F20C7877DDCC8EDFC1AEACDE720CC7FBCB4",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.verdict.md",
+    "expected": "2AD519BE241A877E4BEB9D5C68726E7EB2CDB23DEB57B817FC7A8951D6FFCBC1",
+    "actual": "2AD519BE241A877E4BEB9D5C68726E7EB2CDB23DEB57B817FC7A8951D6FFCBC1",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008T073800-0500-phase1-oracle-contracts-opus.mcp-config.json",
+    "expected": "780F5F1A8B7CAB15D5BD1A078DEDA9520B803E43DC219E460ADCA2958AC3BE52",
+    "actual": "780F5F1A8B7CAB15D5BD1A078DEDA9520B803E43DC219E460ADCA2958AC3BE52",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008T073800-0500-phase1-oracle-contracts-opus.prompt.md",
+    "expected": "946C9FCB33A27B109BE64CEB6DC6963EF5E79D76AE7B45516E19E9FE14ECBA4D",
+    "actual": "946C9FCB33A27B109BE64CEB6DC6963EF5E79D76AE7B45516E19E9FE14ECBA4D",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-code-verify-01.json",
+    "expected": "E910483E268A3EFCF5F289E69E71E45361BA9DBA86EEA694404DE84F381C630E",
+    "actual": "E910483E268A3EFCF5F289E69E71E45361BA9DBA86EEA694404DE84F381C630E",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-code-verify-02.json",
+    "expected": "37A81C96D65641E5852790328B2C45F4716220834DE6EF25F5EA282D828EF816",
+    "actual": "37A81C96D65641E5852790328B2C45F4716220834DE6EF25F5EA282D828EF816",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-code-verify-03.json",
+    "expected": "2F2C1BC764B2A79058D6F2850E908FEBEEDB79FE513E75A6BA95BE75EBAFEF54",
+    "actual": "2F2C1BC764B2A79058D6F2850E908FEBEEDB79FE513E75A6BA95BE75EBAFEF54",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-code-verify-04.json",
+    "expected": "8A6ADD6BC82015BCF2DD72333DB7FE3B7C96F2AE45D6AA05FDF93436124D05BD",
+    "actual": "8A6ADD6BC82015BCF2DD72333DB7FE3B7C96F2AE45D6AA05FDF93436124D05BD",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-full-tests-01.json",
+    "expected": "9BEBE83129A9829E848ED3FAD29DB47A0EC48C3E51866BDB9D096B6DCC4C9317",
+    "actual": "9BEBE83129A9829E848ED3FAD29DB47A0EC48C3E51866BDB9D096B6DCC4C9317",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-full-tests-02.json",
+    "expected": "0C0090922D4DDBDCB415943957FA8CA16DD3FE7D83426F82C8226D1283FC67F4",
+    "actual": "0C0090922D4DDBDCB415943957FA8CA16DD3FE7D83426F82C8226D1283FC67F4",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-code-verify-01.json",
+    "expected": "06E2A9CC24490D8F8912AEB45774A9FB698997AD65D79B4D8A179661C3857607",
+    "actual": "06E2A9CC24490D8F8912AEB45774A9FB698997AD65D79B4D8A179661C3857607",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-code-verify-02.json",
+    "expected": "E720BF5A8642FC5AD6975850FBBFD9E49D544B38023769668FFBC56FFAA9E4F5",
+    "actual": "E720BF5A8642FC5AD6975850FBBFD9E49D544B38023769668FFBC56FFAA9E4F5",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-code-verify-03.json",
+    "expected": "45A41DD7D99CE56C9DCA713F540CA7E8E62EB4EEAB694443F1DA297C12A9A6FE",
+    "actual": "45A41DD7D99CE56C9DCA713F540CA7E8E62EB4EEAB694443F1DA297C12A9A6FE",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-code-verify-04.json",
+    "expected": "EFFD778FAB238A744BE22ABD11CF59D147A6A7A147C2E1267DCEA3AD05664921",
+    "actual": "EFFD778FAB238A744BE22ABD11CF59D147A6A7A147C2E1267DCEA3AD05664921",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-edits.json",
+    "expected": "CB2CC9E4108150368C04937C845C8A7D1937F463D1208B966935079A013E22F0",
+    "actual": "CB2CC9E4108150368C04937C845C8A7D1937F463D1208B966935079A013E22F0",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-full-tests-01.json",
+    "expected": "C63258C0925AE07D8CF0A6C3EAF7E916C5C9A9435F3295450C0534905F567753",
+    "actual": "C63258C0925AE07D8CF0A6C3EAF7E916C5C9A9435F3295450C0534905F567753",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-full-tests-02.json",
+    "expected": "0CE351E363256EFD74312831DDE1DE6E8E2F172DCD538F6E39BB5F7F1FC22D2F",
+    "actual": "0CE351E363256EFD74312831DDE1DE6E8E2F172DCD538F6E39BB5F7F1FC22D2F",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-01-build.log",
+    "expected": "1CD112F9F091EE21297F2ED61A304AFC5982F81C696FDCDA8CD12402448EB292",
+    "actual": "1CD112F9F091EE21297F2ED61A304AFC5982F81C696FDCDA8CD12402448EB292",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-01.log",
+    "expected": "43EF1BB413B29D0DE5DB4FFE2777D66507AE67BFFFFCB2E2E5D3669715E69261",
+    "actual": "43EF1BB413B29D0DE5DB4FFE2777D66507AE67BFFFFCB2E2E5D3669715E69261",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-02-build.log",
+    "expected": "C547E2121D17C37D897ED0404D7825BD4354911F79F53B5ABA306DF437C0815B",
+    "actual": "C547E2121D17C37D897ED0404D7825BD4354911F79F53B5ABA306DF437C0815B",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-02.log",
+    "expected": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+    "actual": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-03-build.log",
+    "expected": "6851F17FA10411CB729B1F432FAC261A0E7A10D7F7C2059D4261682CF7B6B66F",
+    "actual": "6851F17FA10411CB729B1F432FAC261A0E7A10D7F7C2059D4261682CF7B6B66F",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-03.log",
+    "expected": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+    "actual": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-04-build.log",
+    "expected": "AE4E9D332E26D57F52D117231AABB376899B84C9BF424598EB1239D24A6CB032",
+    "actual": "AE4E9D332E26D57F52D117231AABB376899B84C9BF424598EB1239D24A6CB032",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-04.log",
+    "expected": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+    "actual": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\diff-check.json",
+    "expected": "E59D2468792A8B6E6800B7DE42511E6BDF034A5A68460CF2929FC8332E9F346C",
+    "actual": "E59D2468792A8B6E6800B7DE42511E6BDF034A5A68460CF2929FC8332E9F346C",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\effective-requirements.json",
+    "expected": "F13985E5A32D71B5ACBE9F192357F5F31F2DCAB94A2FA2668C6EDB1325D3726F",
+    "actual": "F13985E5A32D71B5ACBE9F192357F5F31F2DCAB94A2FA2668C6EDB1325D3726F",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-01-result.json",
+    "expected": "B173B9490BB599CAD04FBB01FA695A016040883710C2799DB5EEF4C3D158A59E",
+    "actual": "B173B9490BB599CAD04FBB01FA695A016040883710C2799DB5EEF4C3D158A59E",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-01.diag.log",
+    "expected": "C6B88DFA1AD73FEBB257E61835C7F30C1D82D38635E6A1532F0183B0E86C0F7F",
+    "actual": "C6B88DFA1AD73FEBB257E61835C7F30C1D82D38635E6A1532F0183B0E86C0F7F",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-01.log",
+    "expected": "A7EF30D599E9C5E404CFEA763B9BE7908E76EA1706B869B8769FDBA29821E0FC",
+    "actual": "A7EF30D599E9C5E404CFEA763B9BE7908E76EA1706B869B8769FDBA29821E0FC",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-01.trx",
+    "expected": "58810B4390B2E9C5A2DF1DAE9233B11A532624E570FC51D0DCEED4B11B91C7BB",
+    "actual": "58810B4390B2E9C5A2DF1DAE9233B11A532624E570FC51D0DCEED4B11B91C7BB",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-02-result.json",
+    "expected": "22DA586113A1A6BA9B6E5C7EB4273DDE676935D25515ED78B8E90B97FB2B94FE",
+    "actual": "22DA586113A1A6BA9B6E5C7EB4273DDE676935D25515ED78B8E90B97FB2B94FE",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-02.diag.log",
+    "expected": "C4FA819C24E00A5C42BC7F4CE273F52647E0B5C8D43A9245E36167E275C4A2AE",
+    "actual": "C4FA819C24E00A5C42BC7F4CE273F52647E0B5C8D43A9245E36167E275C4A2AE",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-02.log",
+    "expected": "2124D6D71A65DF46AD3833B4579BCEE0B679613B80BE6994F72EA599DE4794CC",
+    "actual": "2124D6D71A65DF46AD3833B4579BCEE0B679613B80BE6994F72EA599DE4794CC",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-02.trx",
+    "expected": "ECED7D118927771B95B59EA62B2991E046DE61FA95754FCF0DA4672CB37F791C",
+    "actual": "ECED7D118927771B95B59EA62B2991E046DE61FA95754FCF0DA4672CB37F791C",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\native-comparison.json",
+    "expected": "F4B3279A9C2BB2795972AEEAA819E8D3B4B20A7025C72462483C3EA3B9DA7350",
+    "actual": "F4B3279A9C2BB2795972AEEAA819E8D3B4B20A7025C72462483C3EA3B9DA7350",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\scenario-ac-ledger.json",
+    "expected": "B74F9AE910D09F7E72C832860539BD9609BC097EBD3895E5F1A4BA416B9F0556",
+    "actual": "B74F9AE910D09F7E72C832860539BD9609BC097EBD3895E5F1A4BA416B9F0556",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\functional\\FR-Snapshot.md",
+    "expected": "32CD698E996290AB3A93F5CDFE99F65875166F60B3FF27579D6C021E30F565D8",
+    "actual": "32CD698E996290AB3A93F5CDFE99F65875166F60B3FF27579D6C021E30F565D8",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\functional\\FR-Vice-Reference.md",
+    "expected": "634CE192E9A202D90F6FEA16D2000ED89C334278F9A163C9B683B442C077E003",
+    "actual": "634CE192E9A202D90F6FEA16D2000ED89C334278F9A163C9B683B442C077E003",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\technical\\TR-Cycle-Accuracy.md",
+    "expected": "BD2F3DB5662DE43C07F2C49F5EDABA27561492156365FEC263C5C6FDEE270F4C",
+    "actual": "BD2F3DB5662DE43C07F2C49F5EDABA27561492156365FEC263C5C6FDEE270F4C",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\technical\\TR-Vice-Oracle.md",
+    "expected": "66F487A572815998BFC5662168F015710BCCC1B809CD920FB839CA845446DF36",
+    "actual": "66F487A572815998BFC5662168F015710BCCC1B809CD920FB839CA845446DF36",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\test\\TEST-Requirements.md",
+    "expected": "982130856C3326FA0DF5BE3993268B70C88D11FF00ABF0396661F8E878C487F6",
+    "actual": "982130856C3326FA0DF5BE3993268B70C88D11FF00ABF0396661F8E878C487F6",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\test\\TEST-Vice-Oracle.md",
+    "expected": "32FFCD6F3E1965862480873B1A7CF52EB04ED7B09C9FDCA1CA93FC6DA48487E7",
+    "actual": "32FFCD6F3E1965862480873B1A7CF52EB04ED7B09C9FDCA1CA93FC6DA48487E7",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\global.json",
+    "expected": "DDD94EFBAA73CBD137C7ADB70C4AB3314ABDB37055635F370211FA716A16682B",
+    "actual": "DDD94EFBAA73CBD137C7ADB70C4AB3314ABDB37055635F370211FA716A16682B",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+    "expected": "A2162CD906FA7D327A0C3FA2DE1110E8053F433A6769BA2D11DCF981E15C4085",
+    "actual": "A2162CD906FA7D327A0C3FA2DE1110E8053F433A6769BA2D11DCF981E15C4085",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\Directory.Build.props",
+    "expected": "542AB9BC622E06D936A16A2F79EE0DF575336CEFAE06771F30B1C73E7C24782D",
+    "actual": "542AB9BC622E06D936A16A2F79EE0DF575336CEFAE06771F30B1C73E7C24782D",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs",
+    "expected": "7043EE1A93DBB690A70881AA778F2D53FAE057B75C78CB2A07268D1911C3CBF5",
+    "actual": "7043EE1A93DBB690A70881AA778F2D53FAE057B75C78CB2A07268D1911C3CBF5",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+    "expected": "3D7272B4C271F995FECCDD7707B11E8A95B11CB35C4202FFDF03260FCDE08751",
+    "actual": "3D7272B4C271F995FECCDD7707B11E8A95B11CB35C4202FFDF03260FCDE08751",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\README.md",
+    "expected": "7F07A4275D0F06F3620EA3966817801247D19CB993FC4146F3DC352917971F5C",
+    "actual": "7F07A4275D0F06F3620EA3966817801247D19CB993FC4146F3DC352917971F5C",
+    "matches": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj",
+    "expected": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445",
+    "actual": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445",
+    "matches": true
+  }
+]

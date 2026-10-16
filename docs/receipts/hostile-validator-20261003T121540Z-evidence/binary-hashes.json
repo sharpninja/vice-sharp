@@ -1,0 +1,26 @@
+[
+  {
+    "Path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.Core.dll",
+    "SHA256": "05FE046E60DE8FA6888A7EF03471E270944C39CAC7E7EC583F9D40B15D9C3DF4",
+    "Expected": "05FE046E60DE8FA6888A7EF03471E270944C39CAC7E7EC583F9D40B15D9C3DF4",
+    "Match": true
+  },
+  {
+    "Path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.Core.pdb",
+    "SHA256": "F2B2D6759BAAFE2304E1AC2229DB488D58C0A90B21270FE1976167F68553D87F",
+    "Expected": "F2B2D6759BAAFE2304E1AC2229DB488D58C0A90B21270FE1976167F68553D87F",
+    "Match": true
+  },
+  {
+    "Path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.TestHarness.dll",
+    "SHA256": "31EF73CD49D284AC47CD23CC0C5908B3E9264F9A1CDCA06B31A5AD6F26CFA8C0",
+    "Expected": "31EF73CD49D284AC47CD23CC0C5908B3E9264F9A1CDCA06B31A5AD6F26CFA8C0",
+    "Match": true
+  },
+  {
+    "Path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.TestHarness.pdb",
+    "SHA256": "DA13E51CBB2C8DA04B4FC917445F394B53B9B00AFE95444661D80C89B8FDF4CD",
+    "Expected": "DA13E51CBB2C8DA04B4FC917445F394B53B9B00AFE95444661D80C89B8FDF4CD",
+    "Match": true
+  }
+]

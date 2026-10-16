@@ -1,0 +1,17 @@
+{
+  "timestampLocal": "2026-10-07T15:34:44.9886702-05:00",
+  "pid": 30952,
+  "startTime": "2026-10-07T15:34:44.9785800-05:00",
+  "cliSessionId": "fa2d7384-f174-4f2e-8b3c-4a4cc6477893",
+  "requestedModel": "claude-opus-5-5",
+  "effort": "max",
+  "hasExited": false,
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.request.jsonl",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.response.jsonl",
+  "stderrPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.stderr.txt",
+  "requestSha256": "6DB4F9B855F8E540C4ED09A53FACC226631D00C5F2A8CE61702E400B3BAD90E4",
+  "matchingInputPins": 17,
+  "inputPinCount": 17,
+  "completionPercent": 0,
+  "eta": null
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T182422Z-session_setTurnTitle-978b.yaml",
+    "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T133800-0500-retitle-failsafe-replay\\20261007T182422Z-session_setTurnTitle-978b.yaml",
+    "sha256": "27600710759D1F58600172811B85DECE17E739994F466023733FFB7DB9A6B26B",
+    "equal": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T182458Z-triage_report-7058.yaml",
+    "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T133800-0500-retitle-failsafe-replay\\20261007T182458Z-triage_report-7058.yaml",
+    "sha256": "2993358803AF1831F92DF281844CE066BAF65AEDE4D4DBAAD5221BB1540BCA3F",
+    "equal": true
+  }
+]

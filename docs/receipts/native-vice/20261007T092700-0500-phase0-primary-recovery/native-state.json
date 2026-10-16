@@ -1,0 +1,20 @@
+{
+  "capturedAt": "2026-10-07T09:28:09.3534123-05:00",
+  "head": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "trackedCount": 12,
+  "untrackedCount": 2527,
+  "tracked": [
+    " \u001b[31mM\u001b[m vice/src/c64/c64cpusc.c",
+    " \u001b[31mM\u001b[m vice/src/drive/drive-snapshot.c",
+    " \u001b[31mM\u001b[m vice/src/drive/drivecpu.c",
+    " \u001b[31mM\u001b[m vice/src/drive/drivecpu65c02.c",
+    " \u001b[31mM\u001b[m vice/src/mainc64cpu.c",
+    " \u001b[31mM\u001b[m vice/src/mainviccpu.c",
+    " \u001b[31mM\u001b[m vice/src/resid/filter8580new.h",
+    " \u001b[31mM\u001b[m vice/src/resid/sid.h",
+    " \u001b[31mM\u001b[m vice/src/sid/resid.cc",
+    " \u001b[31mM\u001b[m vice/src/vic20/vic20cpu.c",
+    " \u001b[31mM\u001b[m vice/src/vic20/vic20sound.c",
+    " \u001b[31mM\u001b[m vice/src/vic20/vic20sound.h"
+  ]
+}

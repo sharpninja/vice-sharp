@@ -23,6 +23,9 @@ public interface IVic20ExpansionCartPort : IDevice
     /// <summary>Attach Mega-Cart ROM image (and optional NVRAM seed).</summary>
     void AttachMegaCart(ReadOnlySpan<byte> romImage, ReadOnlySpan<byte> nvram = default);
 
+    /// <summary>Attach a plain 8K, 16K, or 24K BLK image.</summary>
+    void AttachStandardBlock(ReadOnlySpan<byte> image);
+
     void Eject();
 
     /// <summary>Apply a named configuration preset (cart-specific).</summary>

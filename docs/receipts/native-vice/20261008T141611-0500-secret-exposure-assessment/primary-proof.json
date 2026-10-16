@@ -1,0 +1,12 @@
+{
+  "verifiedAtLocal": "2026-10-08T14:18:10-05:00",
+  "requestId": "req-20261008T190255Z-prompt-b8db",
+  "status": "completed",
+  "responseExact": true,
+  "fullSanitizedAssessmentExact": true,
+  "actionCount": 4,
+  "dialogCount": 4,
+  "decisionActionCount": 2,
+  "decisionDialogCount": 2,
+  "primaryReadbackSha256": "B62404BC40FBB1FB4088CD6C14C181EECAAC84302E078B539F5C18C525333486"
+}

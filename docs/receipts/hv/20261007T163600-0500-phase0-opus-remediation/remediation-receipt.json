@@ -1,0 +1,117 @@
+{
+  "timestampLocal": "2026-10-07T16:50:28.6089095-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261007T213226Z-prompt-8b0b",
+  "previousGoalTurn": "progress: completed and persisted Opus review changed next actions",
+  "fullGoalComplete": false,
+  "phase0Accepted": false,
+  "newHvRun": false,
+  "nextReviewer": "local grok-4.7 xhigh",
+  "priorHv": {
+    "unknown": 0,
+    "pass": 22,
+    "fail": 4,
+    "accuracy": 94,
+    "completeness": 85,
+    "verdict": "DISAGREE"
+  },
+  "beforeFiles": [
+    {
+      "source": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\immutable-plan.before.md",
+      "sha256": "C7E1FE6C3BB5598E79EBD4092FEB5CEE51FF8BAF5648D2CC704E6FD5FA398E06",
+      "backupSha256": "C7E1FE6C3BB5598E79EBD4092FEB5CEE51FF8BAF5648D2CC704E6FD5FA398E06"
+    },
+    {
+      "source": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+      "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\goal-plan.before.md",
+      "sha256": "5EE5D2A2283551717ADB50B46A83A60A05458E33BEEF1267B0FB0A7DA52D7441",
+      "backupSha256": "5EE5D2A2283551717ADB50B46A83A60A05458E33BEEF1267B0FB0A7DA52D7441"
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\HANDOFF.before.md",
+      "sha256": "CF53647121166D485564503C6245D3C6D756B0BC8468DA001F827D48BBC021DE",
+      "backupSha256": "CF53647121166D485564503C6245D3C6D756B0BC8468DA001F827D48BBC021DE"
+    }
+  ],
+  "afterFiles": [
+    {
+      "sha256": "6B63117B8F1F17F9E10A8260C0938465E34A1A69448676BC87CFE1F1ECA79070",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md"
+    },
+    {
+      "sha256": "B234DEDE7CAA8EBAEAD07AF7F51748E283D90AC4027207198BF2CC72F7BCFCB3",
+      "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md"
+    },
+    {
+      "sha256": "4373E33F130AF25AB40982D31091222927E43B04CAB6AA0910FF20362C7B453A",
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md"
+    }
+  ],
+  "todo": {
+    "readback": "todo-primary-readback.json",
+    "id": "PLAN-VICEORACLE-001",
+    "done": false,
+    "allSixTasksOpen": true
+  },
+  "queues": {
+    "unsafeSnapshotStatus": "in_progress",
+    "quarantinedTotal": 6,
+    "primaryStatus": "completed",
+    "parentReadback": "parent-primary-after-safe-drain.json",
+    "safeReplayed": 3,
+    "records": [
+      {
+        "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T182422Z-session_setTurnTitle-978b.yaml",
+        "Backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\queue-before\\20261007T182422Z-session_setTurnTitle-978b.yaml",
+        "BackupSha256": "27600710759D1F58600172811B85DECE17E739994F466023733FFB7DB9A6B26B",
+        "Pending": false,
+        "ExpectedSha256": "27600710759D1F58600172811B85DECE17E739994F466023733FFB7DB9A6B26B"
+      },
+      {
+        "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T182458Z-triage_report-7058.yaml",
+        "Backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\queue-before\\20261007T182458Z-triage_report-7058.yaml",
+        "BackupSha256": "2993358803AF1831F92DF281844CE066BAF65AEDE4D4DBAAD5221BB1540BCA3F",
+        "Pending": false,
+        "ExpectedSha256": "2993358803AF1831F92DF281844CE066BAF65AEDE4D4DBAAD5221BB1540BCA3F"
+      },
+      {
+        "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T185015Z-session_submit-7dc1.yaml",
+        "Backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\queue-before\\20261007T185015Z-session_submit-7dc1.yaml",
+        "BackupSha256": "8B9267389EA6E3585F86DC0D3CF439C70FD1DE1E45A73A1BB92CD6BA417FB48F",
+        "Pending": true,
+        "ExpectedSha256": "8B9267389EA6E3585F86DC0D3CF439C70FD1DE1E45A73A1BB92CD6BA417FB48F"
+      },
+      {
+        "Path": "F:\\GitHub\\vice-sharp\\.mcpServer\\grok\\reviews\\20261007T131928-0500-phase0-mock-scope\\failsafe\\pending\\20261007T184705Z-triage_report-40a8.yaml",
+        "Backup": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T163600-0500-phase0-opus-remediation\\queue-before\\20261007T184705Z-triage_report-40a8.yaml",
+        "BackupSha256": "25C92432A5C7B198EE6B1663F35C080EAFC1DA41CE65E8D6895FCACBF86C4975",
+        "Pending": false,
+        "ExpectedSha256": "25C92432A5C7B198EE6B1663F35C080EAFC1DA41CE65E8D6895FCACBF86C4975"
+      }
+    ],
+    "newQuarantined": 0,
+    "failed": 0,
+    "remainingPending": [
+      "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T185015Z-session_submit-7dc1.yaml"
+    ],
+    "unsafeSnapshotRequest": "req-20261007T184921Z-prompt-ccb7",
+    "operatorDisposition": "Requested; not received",
+    "triageReadback": "drained-triage-primary-readbacks.json",
+    "automaticDrainDisabled": "1"
+  },
+  "checks": {
+    "traceabilityCanonical": 235,
+    "traceabilityReferenced": 149,
+    "diffCheckExit": 0,
+    "wiki": "wiki-copy-proof.json",
+    "traceabilityNoncanonical": 1011,
+    "native": "native-unchanged-proof.json",
+    "traceabilityIsAcceptance": false,
+    "traceabilityUnreferenced": 86,
+    "plans": "plan-checks.json",
+    "traceabilityExit": 0
+  },
+  "remaining": "D1: operator disposition required for stale 7dc1 before next independent Phase 0 acceptance review. All subsequent mock and real gates remain open."
+}

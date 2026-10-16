@@ -1,0 +1,31 @@
+{
+  "timestampLocal": "2026-10-08T16:05:24.8729937-05:00",
+  "helperOnlyPlannedMutation": true,
+  "fixtureSourceUnchanged": [
+    {
+      "path": "tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+      "unchanged": true
+    },
+    {
+      "path": "tests\\ViceSharp.OracleContract.Tests\\OracleContractFixtures.cs",
+      "unchanged": true
+    }
+  ],
+  "priorCaseCount": 87,
+  "newCaseCount": 2,
+  "currentCaseCount": 89,
+  "priorMissing": [],
+  "all89Passed": true,
+  "preHelperTotal": 357,
+  "postHelperTotal": 357,
+  "effectiveRequirementsUnchanged": true,
+  "whitespaceExitCode": 0,
+  "noIndexDiffExitCode": 1,
+  "firstClockCompileLogsRetained": false,
+  "latestClockCompileLogsRetained": true,
+  "cFixtureCopies": 192,
+  "readmeFinalSha256": "4C9FA6E12D86E354F1EE9862180516A364BBDC1E60CB656D5526073EC025600B",
+  "hvAccepted": false,
+  "gateAdvanced": false,
+  "realEmulatorParityProven": false
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "relative": "vice/src/datasette/datasette.c",
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+    "expectedBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+    "actualBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+    "matches": true,
+    "sha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368"
+  },
+  {
+    "relative": "vice/src/c64/c64datasette.c",
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64datasette.c",
+    "expectedBlob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+    "actualBlob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+    "matches": true,
+    "sha256": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29"
+  },
+  {
+    "relative": "vice/src/c64/c64pla.c",
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64pla.c",
+    "expectedBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+    "actualBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+    "matches": true,
+    "sha256": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737"
+  },
+  {
+    "relative": "vice/src/c64/c64mem.c",
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64mem.c",
+    "expectedBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+    "actualBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+    "matches": true,
+    "sha256": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95"
+  },
+  {
+    "relative": "vice/src/vic20/vic20datasette.c",
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20datasette.c",
+    "expectedBlob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+    "actualBlob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+    "matches": true,
+    "sha256": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31"
+  },
+  {
+    "relative": "vice/src/vic20/vic20via1.c",
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via1.c",
+    "expectedBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+    "actualBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+    "matches": true,
+    "sha256": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9"
+  }
+]

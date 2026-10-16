@@ -69,8 +69,7 @@ public sealed class Vic20SnapshotRoundTripTests
     [Fact]
     public void Unexpanded_ManagedBlob_ResumeLockstep_Short()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         const int preCycles = 50_000;
         const int postCycles = 2_000;

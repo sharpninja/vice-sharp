@@ -34,7 +34,7 @@
   "ExtensionSettings": [],
   "Name": "RomM",
   "Slug": "romm",
-  "Description": "RomM + CSDb bridge on PAYTON-DESKTOP. Triggered by GitHub Release (RomM-GB64).",
+  "Description": "RomM + CSDb bridge on LAB-OMARCHY. Triggered by GitHub Release (RomM-GB64).",
   "IsDisabled": false,
   "ProjectGroupId": "ProjectGroups-1",
   "LifecycleId": "Lifecycles-5",

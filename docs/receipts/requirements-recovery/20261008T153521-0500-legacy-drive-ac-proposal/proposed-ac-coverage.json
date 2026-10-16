@@ -1,0 +1,83 @@
+{
+  "frId": "FR-ARCH-TRUEDRIVE-1541-002",
+  "status": "proposed-not-implemented",
+  "rows": [
+    {
+      "frAc": "ac-01",
+      "tr": [
+        "TR-IEC-EDGE-001/ac-01",
+        "TR-IEC-EDGE-001/ac-02",
+        "TR-IEC-EDGE-001/ac-04"
+      ],
+      "test": "TEST-IEC-TIMING-001",
+      "plannedTestGroups": [
+        "C64IecSynchronizationTrace",
+        "Vic20IecSynchronizationTrace",
+        "IecAtnTransitionTrace"
+      ]
+    },
+    {
+      "frAc": "ac-02",
+      "tr": [
+        "TR-IEC-EDGE-001/ac-03"
+      ],
+      "test": "TEST-IEC-TIMING-001",
+      "plannedTestGroups": [
+        "IecSingleDriveControlMatrix",
+        "IecMultiDriveContention",
+        "IecEnabledDriveFiltering"
+      ]
+    },
+    {
+      "frAc": "ac-03",
+      "tr": [
+        "TR-DRV-EDGE-001/ac-01",
+        "TR-DRV-EDGE-001/ac-02",
+        "TR-DRV-EDGE-001/ac-03"
+      ],
+      "test": "TEST-DRV-MOTOR-001",
+      "plannedTestGroups": [
+        "DriveMotorTransitionTrace",
+        "DriveZoneRotationTrace",
+        "DriveByteReadyVsRotationTrace",
+        "DriveImageVisibilityDeadlineTrace"
+      ]
+    },
+    {
+      "frAc": "ac-04",
+      "tr": [
+        "TR-DRV-EDGE-001/ac-04"
+      ],
+      "test": "TEST-DRV-MOTOR-001",
+      "plannedTestGroups": [
+        "DriveDosBamReadTrace",
+        "DriveDosReadFailureTrace",
+        "BufferedD64ReadRegression"
+      ]
+    },
+    {
+      "frAc": "ac-05",
+      "tr": [
+        "TR-DRV-EDGE-001/ac-01",
+        "TR-DRV-EDGE-001/ac-02",
+        "TR-DRV-EDGE-001/ac-03",
+        "TR-DRV-EDGE-001/ac-04",
+        "TR-IEC-EDGE-001/ac-01",
+        "TR-IEC-EDGE-001/ac-02",
+        "TR-IEC-EDGE-001/ac-03",
+        "TR-IEC-EDGE-001/ac-04"
+      ],
+      "test": [
+        "TEST-DRV-MOTOR-001",
+        "TEST-IEC-TIMING-001"
+      ],
+      "plannedTestGroups": [
+        "EveryMappedCorrectMock",
+        "EveryMappedSingleFaultNegativeControl",
+        "IdenticalRealProviderBindings",
+        "MandatoryCumulativeAndVsfGates"
+      ]
+    }
+  ],
+  "note": "Test group names describe future cases, not existing passing tests. The already accepted native-safe suite scope does not waive real-emulator gates. Adapter design and native trace extraction remain dependent on the current unaccepted oracle/HV gate."
+}

@@ -1,0 +1,1771 @@
+{
+  "timestampLocal": "2026-10-08T11:48:50-05:00",
+  "sourceLogSha256": "660921BD12E83A4A9FC918BC4D343D9E0F0B9D92A986473A3CF0AFA0B6709F4A",
+  "scope": "Diagnostic extraction only, not a production bus decoder or acceptance proof",
+  "events": [
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc26",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc27",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc27",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc27",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc28",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc29",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc2a",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc2a",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc2b",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc2b",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc2b",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc2c",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc2d",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc2e",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc2e",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc2e",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc2f",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc30",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc31",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc31",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc31",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc32",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc33",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc33",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc34",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc34",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc34",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc35",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc36",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc37",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc37",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc38",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc38",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc38",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc39",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc3a",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc3b",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc3b",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc3b",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc3c",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc3d",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc3e",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc3e",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc3e",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc3f",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc40",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc40",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc41",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc41",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc41",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc42",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc43",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc44",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc44",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc45",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc45",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc45",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc46",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc47",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc48",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc48",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc48",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc49",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc4a",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc4b",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc4b",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc4b",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc4c",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc4d",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc4d",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc4e",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc4e",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc4e",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc4f",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc50",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc51",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc51",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc52",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc52",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc52",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc53",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc54",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc55",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc55",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc55",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc56",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc57",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc58",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc58",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc58",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc59",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc5a",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc5a",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc5b",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc5b",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc5b",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc5c",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc5d",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc5e",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc5e",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc5f",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc5f",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc5f",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc60",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc61",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc62",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc62",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc62",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc63",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc64",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc65",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc65",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc65",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc66",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc67",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc67",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc68",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc68",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc68",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc69",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc6a",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc6b",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc6b",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc6c",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc6c",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc6c",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc6d",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc6e",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc6f",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc6f",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc6f",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc70",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc71",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc72",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc72",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc72",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc73",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc74",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc74",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc75",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc75",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc75",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc76",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc77",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc78",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc78",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc79",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc79",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc79",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc7a",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc7b",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc7c",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc7c",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc7c",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc7d",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc7e",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc7f",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc7f",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc7f",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc80",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc81",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc81",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc82",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc82",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc82",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc83",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc84",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc85",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc85",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc86",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc86",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc86",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc87",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc88",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc89",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc89",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc89",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc8a",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc8b",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc8c",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc8c",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc8c",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc8d",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc8e",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc8e",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc8f",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc8f",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc8f",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc90",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc91",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc92",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc92",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc93",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc93",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc93",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc94",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc95",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc96",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc96",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc96",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc97",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc98",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc99",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc99",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ea",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc99",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "928dcc85"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc9a",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc9b",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc9b",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "cc",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc9c",
+      "registers": {
+        "rip": "00007ff63f9d36cd"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fc9c",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ec",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fc9c",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "f002928d"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc9d",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc9e",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fc9f",
+      "registers": {
+        "rip": "00007ff63f9d0ee6"
+      }
+    },
+    {
+      "kind": "STORE",
+      "clockHex": "000000000075fc9f",
+      "registers": {
+        "rip": "00007ff63f9d07c0",
+        "ecx": "292",
+        "edx": "0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fca0",
+      "registers": {
+        "rip": "00007ff63f9d5520"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fca0",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5ef",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fca0",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "a578f7f0"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fca1",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fca2",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fca3",
+      "registers": {
+        "rip": "00007ff63f9d21c0"
+      }
+    },
+    {
+      "kind": "FETCH_BEFORE",
+      "clockHex": "000000000075fca3",
+      "registers": {
+        "rip": "00007ff63f9d0ce4",
+        "rax": "000000000000e5e8",
+        "rdx": "00007ff63fbed020"
+      }
+    },
+    {
+      "kind": "FETCH_AFTER",
+      "clockHex": "000000000075fca3",
+      "registers": {
+        "rip": "00007ff63f9d0ce7",
+        "eax": "cc85c6a5"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fca4",
+      "registers": {
+        "rip": "00007ff63f9d0d67"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fca5",
+      "registers": {
+        "rip": "00007ff63f9d0d74"
+      }
+    },
+    {
+      "kind": "CLOCK",
+      "clockHex": "000000000075fca6",
+      "registers": {
+        "rip": "00007ff63f9d5e4c"
+      }
+    }
+  ],
+  "counts": [
+    {
+      "Name": "CLOCK",
+      "Count": 128
+    },
+    {
+      "Name": "FETCH_AFTER",
+      "Count": 39
+    },
+    {
+      "Name": "FETCH_BEFORE",
+      "Count": 39
+    },
+    {
+      "Name": "STORE",
+      "Count": 20
+    }
+  ],
+  "clockDeltaCounts": [
+    {
+      "Name": "1",
+      "Count": 127
+    }
+  ],
+  "emptyClockCount": 0
+}

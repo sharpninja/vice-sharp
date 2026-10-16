@@ -1,0 +1,899 @@
+{
+  "receiptType": "hostile-validation-verdict",
+  "timestampLocal": "2026-10-11T00:43:55-05:00",
+  "timestampUtc": "2026-10-11T05:43:55Z",
+  "reviewer": {
+    "agent": "ClaudeCode",
+    "model": "claude-opus-5-5",
+    "modelName": "Claude Opus 5.5",
+    "effort": "max",
+    "host": "PAYTON-LEGION2",
+    "cliSessionId": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+    "console": "PowerShell.MCP sub-agent console sa-5bb1338b (PID 87788)",
+    "signature": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+  },
+  "parent": {
+    "agent": "Codex",
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261011T050131Z-midnight-opus-retry",
+    "earlierLinkage": [
+      "req-20261010T211205Z-tape-amendment-hv",
+      "req-20261011T005547Z-resume-opus-after-reset"
+    ]
+  },
+  "logicalReview": "Same eleven-record tape amendment review; midnight retry after two HTTP 429 attempts; not a new reviewer slot and not a replacement of the completed five-record review",
+  "classification": "Project requirement work, requirements phase only: approval-readiness and semantic adequacy of an UNAPPLIED exact requirement amendment. No implementation, acceptance-state or requirement mutation authorized or performed.",
+  "gate": "Exact unapplied eleven-record tape amendment approval-readiness (before separate explicit operator approval)",
+  "addProfile": {
+    "executed": true,
+    "skillPath": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "source": "Global MCP memories via plugin workflow.memory.list/get",
+    "listTotalCount": 38,
+    "profilePartsVerified": 22,
+    "manifest": "MEMORY-PROFILE-000",
+    "otherGlobalMemories": 15,
+    "totalGlobalRecords": 38,
+    "failures": 0
+  },
+  "trust": {
+    "marker": "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml",
+    "markerSha256": "96ACFE5069A1FC5D8E39A6248CA9CD1FD9328308E576B79FBEB4FFC85516B508",
+    "markerWrittenAtUtc": "2026-10-10T21:00:39.0413705Z",
+    "signatureVerified": true,
+    "healthNonceVerified": true,
+    "method": "plugin lib/marker-resolver.ps1 Test-MarkerSignature and Invoke-FullBootstrap plus independent /health nonce echo",
+    "serverVersion": "1.4.40+67e0b325f3991c57af4f017ee3f7ed91280f6147",
+    "plugin": "mcpserver 1.119.0 (marker declares Claude 1.118.0; disclosed, not repaired)",
+    "cacheDir": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261010T161500-0500-tape-amendment-opus",
+    "failsafeDir": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261010T161500-0500-tape-amendment-opus\\failsafe\\pending",
+    "drainDisabled": true
+  },
+  "session": {
+    "sessionId": "ClaudeCode-20261011T050449Z-plugin-session",
+    "requestId": "req-20261011T050452Z-prompt-ba39"
+  },
+  "inputPins": {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\input-pins.json",
+    "total": 146,
+    "matched": 146,
+    "drift": 0,
+    "missing": 0,
+    "checkedAtLocal": [
+      "2026-10-11T00:16:41-05:00",
+      "2026-10-11T00:39:59-05:00"
+    ],
+    "priorReviewPins": {
+      "total": 94,
+      "unchanged": 93,
+      "changed": 1,
+      "changedPath": "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml",
+      "missing": 0
+    }
+  },
+  "liveRequirementState": {
+    "counts": "FR 235, TR 139, TEST 142, mappings 233, layer-1",
+    "driftVsRecoveryBaseline": 0,
+    "recheckedAtLocal": [
+      "2026-10-11T00:14:48-05:00",
+      "2026-10-11T00:39:59.315-05:00"
+    ]
+  },
+  "assertions": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Exact eleven-record scope, kinds and operations.",
+      "evidence": "proposed-field-delta.json (SHA256 1D8A442588ADD7883693694352954DF2077D166FB47ED4E2924AFE738A481507) contains exactly FR-RUNTIME-TAPE-002, TR-TAP-EDGE-001, TR-TAPE-EDGE-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001, FR-TAP-001, FR-TAP-002, FR-TAP-003, FR-TAP-004, TEST-TAP-001 and FR-BACKFILL-MEDIA-001; every operation is update and every approvalStatus is unapplied.",
+      "findings": []
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Declared changedFields equal the actual before/after differences.",
+      "evidence": "Reviewer JSON-canonical comparison of every before/after property: 11 of 11 declared lists equal the computed differences (FR: body and acceptanceCriteria, plus title for FR-TAP-002 and title/status for FR-BACKFILL-MEDIA-001; TR: title, body, acceptanceCriteria; TEST: title, condition, acceptanceCriteria).",
+      "findings": []
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Unrelated fields are preserved.",
+      "evidence": "id, priority, workspaceId and scopeStartLayerKey are identical before and after for all 11; no field outside title/body/condition/status/acceptanceCriteria changes; notes is absent from the delta and null in the live store for all 11 records (live effective, listTr and listTest, 2026-10-11T00:14 to 00:16).",
+      "findings": []
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "All 47 prior acceptance-criterion identities are retained and 71 criteria are proposed.",
+      "evidence": "Per-record before to after counts 6 to 8, 4 to 6, 4 to 7, 4 to 5, 5 to 8, 6 to 6, 7 to 8, 6 to 6, 5 to 5, 0 to 7, 0 to 5; zero missing old IDs, zero duplicates, every ID matches ac-NN. Retention is identity continuity: 45 of 47 retained IDs carry rewritten text (N-14).",
+      "findings": [
+        "N-14"
+      ]
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "After-state is pending and unsatisfied; the closed parent FR is reopened as pending.",
+      "evidence": "All 11 after.status values are pending; all 71 isSatisfied values are Boolean false; FR-BACKFILL-MEDIA-001 changes closed to pending.",
+      "findings": []
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "The coverage ledger has one row per proposed criterion and names 58 case groups.",
+      "evidence": "71 rows with 71 unique (requirementId, acId) keys equal to the 71 after criteria; 286 group references and 58 unique names, of which 5 are ExistingMediaProposal_ac-01..05 placeholders (N-13); evidenceStatus states no mocks, providers or acceptance were executed.",
+      "findings": [
+        "N-13"
+      ]
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Seven mapping rows with 15 additive links and zero removals; every old edge retained.",
+      "evidence": "Additions: FR-BACKFILL-MEDIA-001 +2 TR +2 TEST; FR-TAP-001 +2 TR +2 TEST; FR-TAP-004 +2 TR +2 TEST; FR-TAP-002, FR-TAP-003 and FR-TAP-005 +1 TR each; FR-RUNTIME-TAPE-002 row is a no-op. Removals 0; TR-CYCLE-001 and TEST-X64SC-LOCKSTEP-001 links retained.",
+      "findings": []
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "result": "FAIL",
+      "assertion": "Every proposed additive link targets an existing requirement, so the exact delta is applicable as an independent unit.",
+      "evidence": "The live store (516 records, read 2026-10-11T00:14:48 and 00:39:59) has no TR-MEDIA-D64-001 or TEST-D64IO-001. Both exist only as op=create rows of the excluded, unapproved parent media/video proposal (SHA256 4CF5B9A3A8FA47A5904F53FC3DC39140FDB7E5A8A852F8B65AA723A285D0C1AD). Two of the 15 additive links dangle. Verify-Proposal.ps1 and New-Proposal.ps1 never check target existence.",
+      "findings": [
+        "N-01"
+      ]
+    },
+    {
+      "id": "A9",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "The parent FR-BACKFILL-MEDIA-001 record and mapping row are reused exactly and no other parent row is included.",
+      "evidence": "Record row is JSON-identical to the parent record (before, after, changedFields); mapping trIds/testIds/workspaceId are identical and in the same order (only property order differs); no FR-BACKFILL-VIDEO-001, TR-VIC-EDGE-*, TEST-VIC-*, TR-MEDIA-D64-001 or TEST-D64IO-001 row is present.",
+      "findings": []
+    },
+    {
+      "id": "A10",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "The 250 structural artifact checks reproduce.",
+      "evidence": "Reviewer rerun of Verify-Proposal.ps1 at 2026-10-11T00:27:00-05:00: 250 checks, 0 failed, names and results identical to retained artifact-checks.json, proposal directory unchanged by the run; the initial run 8 failures (FR-TAP-001..004 Markdown before/after) are explained by the section-parser fix; the parent 2026-10-10 rerun is also 250/0. Structural only, not behavioral evidence.",
+      "findings": []
+    },
+    {
+      "id": "A11",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Packet and baseline hashes.",
+      "evidence": "proposed-field-delta.json 1D8A442588ADD7883693694352954DF2077D166FB47ED4E2924AFE738A481507; draft1 7020A59D11EEF640919579EC404E3DC237B70C9E7C33272D5195F7B3B3F4845C; parent proposal 4CF5B9A3A8FA47A5904F53FC3DC39140FDB7E5A8A852F8B65AA723A285D0C1AD; tape-preimages.json 470F6E228C95EE45D17082AF2158EBCE2ADB0853AD1CA96FAC5B93CC8D399550; recovery.json F69733AAA3ED2C21477A776D46846501E0D2B1453A3D025336D313F1E46935EB.",
+      "findings": []
+    },
+    {
+      "id": "A12",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Proposal before-values equal the fresh baseline (88 record fields, 28 mapping fields).",
+      "evidence": "Reviewer recompute against the retained effective response in tape-preimages.json (captured 2026-10-10T16:09:28): 88 of 88 record fields and 28 of 28 mapping fields equal with non-null values; against live workflow.requirements.effective at 2026-10-11T00:14:48: 88 of 88 equal.",
+      "findings": [
+        "N-04"
+      ]
+    },
+    {
+      "id": "A13",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "No requirement drift since the recovery baseline.",
+      "evidence": "Live 235 FR, 139 TR, 142 TEST, 233 mappings, layer-1. Canonical comparison of all 516 records and 233 mappings, retained 2026-10-10 versus live 2026-10-11T00:14:48 and again 00:39:59: 0 changed, 0 added, 0 removed.",
+      "findings": []
+    },
+    {
+      "id": "A14",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "The sixteen selected native files are the immutable commit blobs.",
+      "evidence": "For 16 of 16 files the reviewer-computed git blob SHA1 equals git ls-tree cc67418cba58e71d8e70fd353e9de47199ad2075 -- vice/<path> (read through --git-dir of .git/modules/native/vice, no working-tree access) and the pinned blob; SHA256 values equal. Selected-file identity only, not whole-checkout cleanliness or runtime parity.",
+      "findings": []
+    },
+    {
+      "id": "A15",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "Current and prior input pins.",
+      "evidence": "Current 146 of 146 pins match SHA256 and byte length at 2026-10-11T00:16:41 and again at 00:39:59; prior review 94 pins: 93 unchanged, 1 changed (AGENTS-README-FIRST.yaml 3A13AA1C... to 96ACFE5069A1FC5D8E39A6248CA9CD1FD9328308E576B79FBEB4FFC85516B508), 0 missing.",
+      "findings": []
+    },
+    {
+      "id": "A16",
+      "surface": "A",
+      "result": "PASS",
+      "assertion": "The proposal claims no product code, tests, requirement or mapping writes, phase advancement or parity.",
+      "evidence": "README, JSON invariants and verification.json (requirementsWrites 0, mappingWrites 0, emulatorTestsRun 0, buildsRun 0, gateAdvancement false); live store unchanged (A13).",
+      "findings": []
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "BDPv4 sequencing: discriminating mocks green before production (MEMORY-PROCEDURE-002).",
+      "evidence": "README R2/R3 and TEST criteria (TEST-TAPE-RAMP-001 ac-01..ac-05, TEST-TAPE-SENSE-001 ac-05, TEST-TAP-001 ac-06/ac-07): correct mocks pass, wrong mocks are rejected as expected negative controls inside a passing suite, the same assertions bind to real providers, full cumulative suites follow, and no red gate is accepted.",
+      "findings": []
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Approval boundary and requirement-change-plan-first.",
+      "evidence": "The delta is unapplied (approvalStatus unapplied-awaiting-exact-operator-approval); the README states the prior five-record approval does not cover the eleven-record expansion; the live store is unchanged; the 2026-10-10 MCP recovery is labelled operational evidence, not hostile acceptance.",
+      "findings": []
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "MCP-only requirement storage.",
+      "evidence": "No direct storage edit found. R1 specifies supported workflow.requirements.updateBatch and mapping operations with readback. Reviewed generator and verifier source: no MCP calls and no file writes.",
+      "findings": []
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "PowerShell only, no Python, native-object serialization.",
+      "evidence": "Packet scripts are PowerShell and build ordered objects; receipts are JSON produced by serialization. Parent tool calls are not directly observable; no contrary evidence.",
+      "findings": []
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Receipt honesty: claims match artifacts.",
+      "evidence": "Every substantive verified claim matched artifacts. Defect recorded: tape-preimages.json comparison entries carry null values although the recovery README calls them individual comparisons (N-04). The earlier 11-event miscount is corrected by EVIDENCE-CORRECTION.md. Triage reports 25583068... and b0d27fb... independently read back as grouped.",
+      "findings": [
+        "N-04"
+      ]
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Reviewer secret handling.",
+      "evidence": "Marker parsed only in-console. apiKey (3 occurrences, including inline X-Api-Key and query-parameter forms), the signature value and 8 secret-like environment values were replaced before any rendering. 62 evidence files were scanned for current credential values before reading (0 hits); raw response.jsonl streams of earlier attempts and the old review were not read. Scan of this attempt response stream: see persistence receipt.",
+      "findings": []
+    },
+    {
+      "id": "B7",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Isolated console and environment applied before plugin use.",
+      "evidence": "Own PowerShell.MCP sub-agent console sa-5bb1338b (PID 87788). Six inherited MCP_/GROK_ names removed and the 17-variable request.jsonl environment applied with 0 mismatches before the first plugin call (Status at 2026-10-11T00:07:43-05:00). MCP_FAILSAFE_DRAIN_DISABLED=1.",
+      "findings": []
+    },
+    {
+      "id": "B8",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Accurate source identity and supported own-session usage.",
+      "evidence": "Agent ClaudeCode; plugin-hook session ClaudeCode-20261011T050449Z-plugin-session, turn req-20261011T050452Z-prompt-ba39 (primary persisted). Structured model field is the host default claude; exact model claude-opus-5-5 is carried in tags and dialog. Duplicate hook turn req-20261011T050452Z-prompt-75df and both earlier attempt sessions left untouched.",
+      "findings": [
+        "N-16"
+      ]
+    },
+    {
+      "id": "B9",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Preservation of queues and historical turns.",
+      "evidence": "No drain or replay. Plugin status pendingCount 0, failsafeCount 0, quarantine 0. No writes to parent turns or earlier review turns. Parent failsafe 20261011T005552Z-session_submit-8629.yaml untouched.",
+      "findings": []
+    },
+    {
+      "id": "B10",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "Native VICE immutability.",
+      "evidence": "No writes under native/vice or the immutable materialization. Only read-only git cat-file -t and ls-tree through --git-dir on the object store.",
+      "findings": []
+    },
+    {
+      "id": "B11",
+      "surface": "B",
+      "result": "PASS",
+      "assertion": "No em-dashes or en-dashes in parent-authored packet, audit, recovery and review-root files.",
+      "evidence": "41 files scanned: 0 U+2014 and 0 U+2013. The generated exports remain prior finding F-08.",
+      "findings": []
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "result": "PASS",
+      "assertion": "Structured, testable acceptance criteria on all eleven records.",
+      "evidence": "71 criteria with explicit observables, negative controls and fail-closed missing-evidence rules.",
+      "findings": []
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "result": "PASS",
+      "assertion": "Accuracy of the amended text against immutable VICE.",
+      "evidence": "Verified against pinned source: datasette.c:62-63 (32000/1000); 1006-1008 (startup alarm only when none pending); 1182-1205 (motor-on cancels a stop without restarting; repeated off keeps the deadline; stop alarm set only when none pending); 729-751 and 806-851 with alarm.h:176-183 (stop only when clk >= deadline; read rescheduling replaces the same alarm); 1052-1058 (STOP keeps a pending alarm); 925-949 and 1069-1090 (mode assigned first, 1000-cycle alarm regardless of motor); 1303-1321 (image + RECORD + motor flag, 0 to nonzero edge, line always retained); 1035-1038, 1091-1099, 1010-1020 (gaps 100 and 1200 for the two orderings); 1215-1291 (below 7 carried, 7 emits 0x00, 2047 long gap, low 24 bits, partial/failed write effects); c64pla.c:61-89; c64mem.c:219-220; vic20via1.c:188-198 and 246-251; vic20via2.c:115-117; viacore.c:717-724; c64datasette.c:39; vic20datasette.c:40; tapeport.c:245-312; sense-dongle.c:68-94; cp-clockf83.c:161-192; tap.c:121-197, 389-444, 1673-1680 with c64.c:231-248 and vic20.c:267-284 (36-54/55-73/74-100); datasette.c:504-535; datasette-sound.c:36-224. No inaccuracy found in the amended text itself.",
+      "findings": []
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "result": "FAIL",
+      "assertion": "Acceptance criteria are complete for in-scope tape behavior.",
+      "evidence": "Missing: the start helper reached by START/FORWARD/REWIND while the motor already runs (N-05); hidden process-lifetime state that changes expected observations (N-07); attach/detach/reset quirks (N-08); RECORD-with-running-motor write offset (N-09); unknown TAP versions and the size-below-3 rejection (N-10).",
+      "findings": [
+        "N-05",
+        "N-07",
+        "N-08",
+        "N-09",
+        "N-10"
+      ]
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "result": "FAIL",
+      "assertion": "Planned named cases discriminate incorrect mocks.",
+      "evidence": "No named case rejects a mock that schedules the 32000-cycle startup only on motor-on transitions (N-05). Dropping MotorOn_CancelsPendingStop leaves before-deadline cancellation without a discriminating case (N-06).",
+      "findings": [
+        "N-05",
+        "N-06"
+      ]
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "result": "FAIL",
+      "assertion": "The corrected records are consistent with the requirement corpus.",
+      "evidence": "Pending FR-CPU-004 ac-03/ac-05 and FR-PRF-003 ac-02/ac-04 contradict the amended FR-TAP-001 ac-01 and FR-RUNTIME-TAPE-002 ac-07 and pinned VICE (N-02). Reused FR-BACKFILL-MEDIA-001 text depends on unapproved or stale criteria (N-11). Newly linked FR-TAP-005 is unaudited (N-12).",
+      "findings": [
+        "N-02",
+        "N-11",
+        "N-12"
+      ]
+    },
+    {
+      "id": "C6",
+      "surface": "C",
+      "result": "PASS",
+      "assertion": "The union TR contracts preserve both historical meanings and trace links.",
+      "evidence": "Backfill document lines 391-434 (TAP version/long-pulse/v2/clock/header/CBM/TurboTape; sense dongle and CP Clock F83) are carried by TR-TAP-EDGE-001 ac-05/ac-06 and TR-TAPE-EDGE-001 ac-06; historical traceability FR-TAP-002/003/005 to TR-TAP-EDGE-001 and FR-TAP-001/004 to TR-TAPE-EDGE-001 is added; nothing is retired or renamed. Reconciling the backfill document remains an R1 step.",
+      "findings": []
+    },
+    {
+      "id": "C7",
+      "surface": "C",
+      "result": "PASS",
+      "assertion": "The closed parent FR is proposed pending with criteria, not falsely complete.",
+      "evidence": "FR-BACKFILL-MEDIA-001 closed with 0 criteria becomes pending with 5 unsatisfied criteria.",
+      "findings": []
+    },
+    {
+      "id": "C8",
+      "surface": "C",
+      "result": "PASS",
+      "assertion": "Plans are not presented as existing tests; retained public API and named loader obligations are kept.",
+      "evidence": "Ledger is labelled proposed with no mocks executed; FR-TAP-001 ac-05 and FR-TAP-002 ac-05 are unchanged; TEST-TAP-001 ac-03 names Novaload, Biturbo, Turbotape, Cyberload and Pavloda; README discloses that src/tests contain no ITapeUnit or MotorState (reviewer search: 0 hits; Datasette implements ITapeDevice).",
+      "findings": []
+    },
+    {
+      "id": "C9",
+      "surface": "C",
+      "result": "FAIL",
+      "assertion": "R0/R1 decisions and pre-application safeguards are sufficient for this exact delta.",
+      "evidence": "R1 lacks a mapping-target existence and ordering check against the parent proposal (N-01), an exclusion of read-synthesized createdAt/updatedAt from metadata preservation evidence (N-03), value-bearing comparison receipts (N-04) and a cross-record contradiction check (N-02).",
+      "findings": [
+        "N-01",
+        "N-02",
+        "N-03",
+        "N-04"
+      ]
+    },
+    {
+      "id": "C10",
+      "surface": "C",
+      "result": "N/A",
+      "assertion": "Executable AC-mapped tests exist.",
+      "evidence": "Not applicable to an unapplied requirement-only amendment; no test existence is claimed.",
+      "findings": []
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "result": "PASS",
+      "assertion": "Consistent with the controlling plan locked decisions.",
+      "evidence": "Decisions 2 (exact delta, separate approval), 3 (no legacy ID recreation or deletion), 6 (Phase 3 gating), 10 (missing oracle fails), 11 (no commit) and 12 (no done-state) and the immutable-native amendment are honored.",
+      "findings": []
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "result": "PASS",
+      "assertion": "No plan step, phase, requirement, TODO or goal is claimed complete; the whole goal stays open.",
+      "evidence": "Recovered-requirements acceptance, dense session proof scope, full immutable xvic/x64sc parity, native VSF as canonical snapshot format, settings visibility, full cumulative and real-emulator gates, and the truthful final handoff remain open in the packet and in this verdict.",
+      "findings": []
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "result": "PASS",
+      "assertion": "Deferred tape work is visible in durable state.",
+      "evidence": "The five applied records are pending with 23 unsatisfied criteria in the live store; the amendment, source audit, recovery and review attempts are retained as receipts and parent session turns.",
+      "findings": []
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "result": "FAIL",
+      "assertion": "The root handoff and MCP TODO tracking reflect current state.",
+      "evidence": "HANDOFF.md was last written 2026-10-08T14:44:01 local, before the 2026-10-09 application, source audit and this proposal, the 2026-10-10 service replacement and recovery, and three review attempts. Of 39 open TODOs none references the tape records or amendment; PLAN-REQAUDIT-001 note is dated 2026-09-28 and still says red tests first; PLAN-VICEORACLE-001 remaining text is stale.",
+      "findings": [
+        "N-18"
+      ]
+    },
+    {
+      "id": "D5",
+      "surface": "D",
+      "result": "PASS",
+      "assertion": "This review is not mislabelled as acceptance.",
+      "evidence": "Approval-readiness review of an unapplied delta only: no acceptance of the five-record application, no phase, TODO, requirement or goal completion.",
+      "findings": []
+    }
+  ],
+  "failList": [
+    "A8: Every proposed additive link targets an existing requirement, so the exact delta is applicable as an independent unit.",
+    "C3: Acceptance criteria are complete for in-scope tape behavior.",
+    "C4: Planned named cases discriminate incorrect mocks.",
+    "C5: The corrected records are consistent with the requirement corpus.",
+    "C9: R0/R1 decisions and pre-application safeguards are sufficient for this exact delta.",
+    "D4: The root handoff and MCP TODO tracking reflect current state."
+  ],
+  "unknownList": [],
+  "notApplicableList": [
+    "C10: Executable AC-mapped tests exist."
+  ],
+  "newFindings": [
+    {
+      "id": "N-01",
+      "severity": "high",
+      "blocking": "must fix before approval",
+      "surface": "A8/C9",
+      "title": "Two of the 15 additive mapping links target records that do not exist",
+      "detail": "The reused FR-BACKFILL-MEDIA-001 mapping row adds TR-MEDIA-D64-001 and TEST-D64IO-001. Neither exists in the live store; both are op=create rows of the unapproved parent media/video proposal, which this amendment deliberately excludes. Applying R1 mapping operations would fail or create dangling links, and the README presents 15 additive edges without disclosing the dependency.",
+      "evidence": "Live effective store 516 records (2026-10-11T00:14:48 and 00:39:59); parent proposal records TR-MEDIA-D64-001 and TEST-D64IO-001 operation create; New-Proposal.ps1 lines 209-214 import the full parent mapping; Verify-Proposal.ps1 has no existence check.",
+      "recommendation": "Either drop or defer the two links from this exact delta, or explicitly include the two creation rows with their own approval and apply them first; add a target-existence pre-check to R1."
+    },
+    {
+      "id": "N-02",
+      "severity": "medium-high",
+      "blocking": "must fix or explicitly acknowledge before approval",
+      "surface": "C5",
+      "title": "Other pending requirements contradict the corrected C64 and SX-64 port wiring",
+      "detail": "FR-CPU-004 ac-03 says Bit 3 controls the cassette motor (active low) and ac-05 says Bit 5 is unused on C64; FR-PRF-003 ac-02/ac-04 say SX-64 cassette sense always reads no tape and bit 4 is permanently pulled high. Pinned VICE drives the motor from bit 5, writes on bit 3, reads input bit 5 as 0, and on SX-64 reads input bits 3-5 as 0. The amendment corrects FR-TAP-001 and adds SX-64 behavior to FR-RUNTIME-TAPE-002 but leaves these contradictions, so the corpus would hold mutually unsatisfiable criteria. The existing FrCpu004AcceptanceTests.cs:67-90 already asserts bit 5 under the name PortBit3_ControlsTheCassetteMotorActiveLow and documents that the FR text is wrong. The prior review F-05 statement that FR-TAP-001 was the only C64 motor wiring requirement was inaccurate.",
+      "evidence": "Live FR-CPU-004 ac-03/ac-05 and FR-PRF-003 ac-02/ac-04 (pending, unsatisfied); c64pla.c:61-63, 65-67, 77-89; c64mem.c:218-222 (SX-64 config 1,1,1,1,0x07).",
+      "recommendation": "Add exact corrections for FR-CPU-004 ac-03/ac-05 and FR-PRF-003 ac-02/ac-04 in an expanded delta for explicit approval, or have the operator explicitly accept a recorded open contradiction with a tracked follow-up before this approval."
+    },
+    {
+      "id": "N-03",
+      "severity": "medium",
+      "blocking": "must fix before application (R1 safeguard)",
+      "surface": "C9",
+      "title": "Requirement timestamps are synthesized per read across getFr, listTr and listTest",
+      "detail": "Eight getFr reads (seven FRs; FR-RUNTIME-TAPE-002 twice) each returned createdAt/updatedAt equal to the instant of the read; listTr returned 139 distinct createdAt values inside 2026-10-11T05:16:09.75Z to 05:16:09.83Z and listTest 142 inside 05:16:12.12Z to 05:16:12.19Z. The anomaly is systemic, not a single-FR projection quirk. R0 step 3 (capture timestamps before mutation) and R1 step 3 (compare full metadata, stop on mismatch) would either always stop or rely on meaningless values. Triage report 25583068 describes only the single-FR case.",
+      "evidence": "reviewer-evidence.json getFrReads and listTimestampObservations; triage-report-25583068f60e48b19d678d556ea2b304 grouped in F:\\GitHub\\McpServer.",
+      "recommendation": "Amend R1: exclude createdAt/updatedAt from preservation evidence, compare stable fields (area, subarea, testType, notes, priority, scope, workspace plus the effective projection), and have the parent append the broadened observation to the existing triage report."
+    },
+    {
+      "id": "N-04",
+      "severity": "low",
+      "blocking": "must fix before application (receipt quality)",
+      "surface": "B5/C9",
+      "title": "Retained baseline comparison entries carry no compared values",
+      "detail": "All 88 recordChecks in tape-preimages.json store before=null and current=null with equal=true, while the recovery README says the file contains individual comparisons, not merely counts. The equality claim is true (independently recomputed 88/88 and 28/28 with non-null values), but the receipt cannot show it by itself.",
+      "evidence": "tape-preimages.json recordChecks (88 entries, all null values); reviewer recompute in reviewer-evidence.json baseline section.",
+      "recommendation": "R1 readback comparisons must retain compared values or their hashes per field."
+    },
+    {
+      "id": "N-05",
+      "severity": "medium",
+      "blocking": "must fix before approval (AC wording and named case)",
+      "surface": "C3/C4",
+      "title": "The second entry point of the ordinary start helper is not specified or tested",
+      "detail": "datasette_start_motor runs on a stopped-motor motor-on transition and also when START, FORWARD or REWIND is accepted while the motor already runs (with and without an image). That path schedules the 32000-cycle startup alarm when none is pending and seeds last_write_clk/last_write_bit. FR-RUNTIME-TAPE-002 ac-03 describes ordinary startup only for a stopped motor, and no named case covers PLAY pressed with the motor already on (for example the C64 DDR-input motor-on state after reset). A mock that schedules startup only on motor transitions passes every named case.",
+      "evidence": "datasette.c:1000-1021, 1065-1067, 1076-1078, 1087-1089, 1123-1125, 1134-1136, 1145-1147, 1186-1190; c64pla.c:77-81.",
+      "recommendation": "State both entry points in FR-RUNTIME-TAPE-002 ac-03 and TR-TAPE-EDGE-001 ac-01 and add a named case such as Start_CommandWhileMotorRunning with pending and no-pending alarm variants."
+    },
+    {
+      "id": "N-06",
+      "severity": "low-medium",
+      "blocking": "should fix before approval",
+      "surface": "C4",
+      "title": "Before-deadline cancellation lost its named case",
+      "detail": "The previously approved named case MotorOn_CancelsPendingStop is absent from the 58 groups; only MotorOn_CancelsStopAfterDeadlineBeforeCallback remains. A mock that mishandles motor-on before the deadline (for example restarting with a new startup delay only before the deadline) is not rejected by any named group.",
+      "evidence": "Previous TEST-TAPE-RAMP-001 ac-02 text versus proposed coverage ledger; datasette.c:1182-1193.",
+      "recommendation": "Restore an explicit before-deadline cancellation case."
+    },
+    {
+      "id": "N-07",
+      "severity": "medium",
+      "blocking": "later mandatory gate; must be explicit before tests",
+      "surface": "C3",
+      "title": "Hidden process-lifetime native state is not required to be pinned",
+      "detail": "Expected observations depend on state not reset by attach, detach or reset: tape wobble is on by default (3 Hz, 0.5 percent) with function-static wobble_sin_count/restf advanced even by the attach-time full-image gap scan; azimuth error draws lib_unsigned_rand when nonzero; last_write_bit starts at -1; C64 old_port_* statics start at 0xff and survive pport reset; VIA reset sets oldpb=0 while the effective PB output is 0xFF; datasette sound ring and sign statics; CP Clock F83 RTC wall clock. The criteria require identical resource state but do not require pinning or neutralizing these hidden states (only TR-TAP-EDGE-001 ac-05 names wobble/azimuth for the live decode path).",
+      "evidence": "datasette.c:86, 436-502, 897-901; datasette.h:58-74; c64pla.c:40-46, 106-123; viacore.c:378-424; datasette-sound.c:36-45; cp-clockf83.c:86-108.",
+      "recommendation": "Name hidden static state and wobble/azimuth/speed resources in the fixture/provider contract (or pin them to neutral values) before writing mocks."
+    },
+    {
+      "id": "N-08",
+      "severity": "low",
+      "blocking": "later mandatory gate",
+      "surface": "C3",
+      "title": "Attach, detach and reset quirks are not enumerated",
+      "detail": "Attach and reset set motor_stop_clk=0 without clearing datasette_motor, cancelling a pending delayed stop and leaving the motor running indefinitely; a stale read alarm survives attach because internal_reset inspects the new image STOP mode; detach and no-image reset re-apply the stale notape_mode command, which can schedule fast-wind or startup alarms and transiently assert sense before attach clears it. Only the generic Datasette_AttachDetachResetState group covers this.",
+      "evidence": "datasette.c:879-922, 952-984, 1041-1157.",
+      "recommendation": "Enumerate these cases in the lifecycle group."
+    },
+    {
+      "id": "N-09",
+      "severity": "low",
+      "blocking": "later mandatory gate (fixture scope decision)",
+      "surface": "C3",
+      "title": "Recording file position depends on command order",
+      "detail": "fseek happens only in datasette_start_motor. RECORD accepted while the motor already runs performs no fseek, so writes go to the stdio position left by earlier buffered reads, and C requires a positioning call between input and output on update streams. FR-TAP-004 ac-04 existing-image current-position recording could bind to platform-dependent native behavior.",
+      "evidence": "datasette.c:391-409, 1000-1005, 1091-1099, 1238-1268.",
+      "recommendation": "Decide in the fixture design whether this ordering is in scope and how the native oracle is pinned."
+    },
+    {
+      "id": "N-10",
+      "severity": "low",
+      "blocking": "later mandatory gate",
+      "surface": "C3",
+      "title": "Unknown TAP versions and the minimum-size rejection are not enumerated",
+      "detail": "The header reader stores any version byte; the block decoder returns 0 for a zero byte without consuming an extension for versions other than 0, 1 and 2, while the live path consumes a three-byte extension for any version of 1 or more. tap_open also ignores the declared data length and rejects images with fewer than 3 data bytes.",
+      "evidence": "tap.c:141, 218-265, 404-415; datasette.c:512-531.",
+      "recommendation": "Name these cases under FR-TAP-002 ac-04/ac-08 or record them as explicit scope decisions."
+    },
+    {
+      "id": "N-11",
+      "severity": "low",
+      "blocking": "should fix before approval (wording)",
+      "surface": "C5",
+      "title": "Reused media row text depends on unapproved or stale criteria",
+      "detail": "FR-BACKFILL-MEDIA-001 ac-02 requires the separately proposed FR-ARCH-TRUEDRIVE-1541-002 criteria; that live record is closed with 0 criteria and its criteria exist only in an unapproved drive proposal. ac-03 cites the separately proposed FR-RUNTIME-TAPE-002 criteria, which were applied on 2026-10-09 and are amended by this packet.",
+      "evidence": "Live FR-ARCH-TRUEDRIVE-1541-002 status closed, 0 AC; proposed FR-BACKFILL-MEDIA-001 ac-02/ac-03 text.",
+      "recommendation": "Reword to reference the live records and state the dependency on the separate drive approval explicitly."
+    },
+    {
+      "id": "N-12",
+      "severity": "low",
+      "blocking": "later mandatory gate",
+      "surface": "C5",
+      "title": "Newly linked FR-TAP-005 was not audited",
+      "detail": "FR-TAP-005 is now mapped to the union TR-TAP-EDGE-001 but keeps hardware approximations (down to approximately 160 cycles per pulse; CIA FLAG timing accurate to 1 cycle, C64 only) of the same class the amendment corrects in FR-TAP-001 ac-02 and FR-TAP-003 ac-03.",
+      "evidence": "Live FR-TAP-005 ac-01..ac-06.",
+      "recommendation": "Audit FR-TAP-005 against tap.c and the live datasette path in a follow-up delta."
+    },
+    {
+      "id": "N-13",
+      "severity": "info",
+      "blocking": "disclosure",
+      "surface": "A6",
+      "title": "Five of the 58 case-group names are placeholders",
+      "detail": "ExistingMediaProposal_ac-01..05 point to another proposal ledger; 53 names are tape case groups.",
+      "evidence": "Coverage ledger.",
+      "recommendation": "State 53 tape groups plus 5 media placeholders."
+    },
+    {
+      "id": "N-14",
+      "severity": "info",
+      "blocking": "disclosure for the approval text",
+      "surface": "A4",
+      "title": "Retained criterion IDs carry rewritten, sometimes inverted, meanings",
+      "detail": "45 of 47 retained IDs have new text; only FR-TAP-001 ac-05 and FR-TAP-002 ac-05 are unchanged. Examples: FR-TAP-001 ac-04 reverses the PLAY prerequisite; FR-TAP-002 ac-02 reverses v0 extension consumption. Evidence citing those IDs refers to superseded meanings.",
+      "evidence": "Reviewer before/after text comparison.",
+      "recommendation": "Say explicitly in the approval request that ID continuity is not obligation continuity."
+    },
+    {
+      "id": "N-15",
+      "severity": "low-medium",
+      "blocking": "later mandatory gate (before R2)",
+      "surface": "C/D",
+      "title": "Existing tests cite amended IDs with superseded expectations",
+      "detail": "StorageRuntimeTests.cs:181-199 (v0 zero byte followed by a 24-bit overflow, citing FR-TAP-002) and :202-206 (reject a header length larger than the data, citing FR-TAP-002; native ignores the declared length), DatasetteSenseLineTests and DatasetteMotorRampTests (TR IDs) and FrCpu004AcceptanceTests (naming) encode superseded behavior. R2/R3 require full cumulative suites green; without a superseded-test disposition ledger the suites either cannot be green after correct implementation or old expectations would be changed silently.",
+      "evidence": "Reviewer search of src/tests; tap.c:250-256.",
+      "recommendation": "Add a requirement-traceable superseded-test disposition step before R2."
+    },
+    {
+      "id": "N-16",
+      "severity": "info",
+      "blocking": "disclosure",
+      "surface": "B8",
+      "title": "Hook-created duplicate turn and leftover attempt sessions",
+      "detail": "Hooks created two in-progress turns for this launch in the same second (req-20261011T050452Z-prompt-75df and -ba39; the plugin binds -ba39). The two quota-failed attempts left in-progress hook sessions ClaudeCode-20261010T211713Z-plugin-session and ClaudeCode-20261011T005900Z-plugin-session with 2 turns each. Hook request IDs do not follow the canonical sequence/slug format, and the structured model field is the host default claude.",
+      "evidence": "client.SessionLog.QueryAsync and workflow.sessionlog.queryHistory readbacks; Invoke-McpPlugin.ps1 lines 174-255.",
+      "recommendation": "Parent may disposition the leftover turns; this review did not mutate them."
+    },
+    {
+      "id": "N-17",
+      "severity": "info",
+      "blocking": "reviewer self-disclosure",
+      "surface": "B",
+      "title": "Reviewer conduct notes",
+      "detail": "Interim status lines labelled 00:08, 00:10 and four approx stamps (00:09:30, 00:11:40, 00:12:30, 00:13:30) were estimates, not console-measured; corrected inline. One scratch file was created and deleted in %TEMP%, and PowerShell.MCP spilled large outputs to its own Temp files. reviewer-evidence.json and verdict.json were written with .NET WriteAllText because the console file-append cmdlet guard only accepts literal var1 content; both are serializations of in-memory native objects and were read back exactly. Two read-only native MCP triage_status calls ran outside the console environment.",
+      "evidence": "This review transcript and console history.",
+      "recommendation": "None for the proposal."
+    },
+    {
+      "id": "N-18",
+      "severity": "low",
+      "blocking": "current process gap (D4)",
+      "surface": "D",
+      "title": "Root handoff and TODO tracking are stale",
+      "detail": "HANDOFF.md predates the 2026-10-09 application, source audit and proposal, the 2026-10-10 service replacement and recovery, and three review attempts; no open TODO references the tape records or amendment; PLAN-REQAUDIT-001 still says red tests first; PLAN-VICEORACLE-001 remaining text is stale.",
+      "evidence": "HANDOFF.md LastWriteTime 2026-10-08T14:44:01; workflow.todo.query done=false (39); workflow.todo.get PLAN-REQAUDIT-001 and PLAN-VICEORACLE-001.",
+      "recommendation": "Update the relevant PLAN TODO and HANDOFF through supported operations when authorized (R1 step 5), without marking anything done."
+    }
+  ],
+  "priorFindingDispositions": [
+    {
+      "id": "F-01",
+      "priorTitle": "Delayed-stop execution time misdescribed for active playback",
+      "disposition": "resolved by proposed text (unapplied); executable proof is a future mandatory gate",
+      "evidence": "FR-RUNTIME-TAPE-002 ac-04, TR-TAPE-EDGE-001 ac-02/ac-04, TEST-TAPE-RAMP-001 ac-02 and five MotorOff/MotorOn groups separate deadline from callback, cover pending later alarms, STOP with a retained alarm and post-deadline cancellation. Verified datasette.c:729-751, 806-851, 1052-1058, 1182-1205 and alarm.h:176-183. The prior shorthand that STOP implies exact-deadline stopping is correctly narrowed."
+    },
+    {
+      "id": "F-02",
+      "priorTitle": "FORWARD/REWIND MOTOR_DELAY_FAST=1000 not covered",
+      "disposition": "resolved by proposed text with a residual gap (N-05)",
+      "evidence": "TR-TAPE-EDGE-001 ac-05, TEST-TAPE-RAMP-001 ac-05 and three FastWind groups; verified datasette.c:925-949, 1069-1090, 1006-1008. Residual: the START/FORWARD/REWIND command path that invokes the start helper while the motor runs is not specified (N-05)."
+    },
+    {
+      "id": "F-03",
+      "priorTitle": "Running-motor semantics for recording undefined",
+      "disposition": "resolved by proposed text (unapplied); future mandatory gate",
+      "evidence": "FR-RUNTIME-TAPE-002 ac-05, TR-TAP-EDGE-001 ac-03, TEST-TAPE-SENSE-001 ac-03 and four Recording window groups; verified datasette.c:735-739, 1182-1191, 1303-1321."
+    },
+    {
+      "id": "F-04",
+      "priorTitle": "RECORD pressed while the motor already runs",
+      "disposition": "resolved by proposed text (unapplied); future mandatory gate",
+      "evidence": "FR-RUNTIME-TAPE-002 ac-06 with RecordThenMotorOn_FirstEdge and MotorOnThenRecord_FirstEdgeFromZero; reviewer recomputed gap 100 (byte 12, remainder 4 carried) and gap 1200 (byte 150) from datasette.c:1010-1020, 1035-1038, 1091-1099, 1210-1322."
+    },
+    {
+      "id": "F-05",
+      "priorTitle": "Machine motor/write wiring uncovered; FR-TAP-001 bit 3 contradicts source",
+      "disposition": "partially resolved; new defect N-02",
+      "evidence": "FR-TAP-001 ac-01 corrected to bit 5 and FR-RUNTIME-TAPE-002 ac-07 adds C64, VIC-20 and SX-64 wiring (verified c64pla.c:61-89, c64mem.c:218-222, vic20via1.c:188-198, vic20via2.c:115-117, viacore.c:717-724). FR-CPU-004 ac-03/ac-05 and FR-PRF-003 ac-02/ac-04 still contradict; the prior finding wrongly called FR-TAP-001 the only C64 motor wiring requirement."
+    },
+    {
+      "id": "F-06",
+      "priorTitle": "TR ID semantic collision with the backfill document",
+      "disposition": "resolved by proposed union text and mappings; projection reconciliation is a future R1 step",
+      "evidence": "Union titles, bodies and criteria cover both backfill meanings (Classic-VICE-Edge-Case-TR-Backfill.md:391-434, SHA256 3592F141...) and the historical trace links are added; nothing renamed or retired. The backfill and wiki documents still show the old split until R1 reconciliation."
+    },
+    {
+      "id": "F-07",
+      "priorTitle": "Closed parent FR claims reopened behavior complete",
+      "disposition": "resolved in text by the reused parent row; new defects N-01 and N-11",
+      "evidence": "FR-BACKFILL-MEDIA-001 becomes pending with 5 criteria, but its reused mapping row links two nonexistent records (N-01) and its text cites unapproved or stale criteria (N-11)."
+    },
+    {
+      "id": "F-08",
+      "priorTitle": "Generated export contains em-dashes",
+      "disposition": "still open (tooling); R1 export regeneration will reproduce it unless fixed",
+      "evidence": "docs/Project/Technical-Requirements.md and docs/Project/wiki/github/Technical-Requirements.md each contain 139 U+2014 at 2026-10-11T00:32:45; no triage receipt for the separator was found in the reviewed packet."
+    },
+    {
+      "id": "F-09",
+      "priorTitle": "No before-image for non-projected fields",
+      "disposition": "partially addressed going forward; still-open historical limitation",
+      "evidence": "Fresh listTr/listTest preimages (2026-10-10) and this review live reads capture area, subarea, testType and notes for the eleven records (stable; notes null). Pre-2026-10-09 values remain unrecoverable, and timestamps are read-synthesized (N-03)."
+    },
+    {
+      "id": "F-10",
+      "priorTitle": "Export failure receipts incomplete; triage attribution imprecise",
+      "disposition": "still-open historical limitation; future gate in R1 step 4",
+      "evidence": "No new export was run. R1 step 4 commits to retaining raw request parameters, stdout/stderr and returned formats."
+    },
+    {
+      "id": "F-11",
+      "priorTitle": "Traceability gaps touching corrected records",
+      "disposition": "still open and widened (N-15); future mandatory gate",
+      "evidence": "Reviewer search: FR-RUNTIME-TAPE-002, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001, FR-TAP-004, FR-TAP-005, TEST-TAP-001 and FR-BACKFILL-MEDIA-001 have 0 references in src/tests; TR-TAP-EDGE-001, TR-TAPE-EDGE-001 and FR-TAP-001/002/003 are cited only by pre-existing tests and code with superseded expectations."
+    },
+    {
+      "id": "F-12",
+      "priorTitle": "Corrected TEST titles not rendered by the Testing export",
+      "disposition": "still open (tooling); affects the four retitled TEST records after application",
+      "evidence": "No exporter change in scope; future projection gate."
+    },
+    {
+      "id": "F-13",
+      "priorTitle": "Deferred work not referenced by any open TODO",
+      "disposition": "still open (D4, N-18)",
+      "evidence": "workflow.todo.query done=false returned 39 TODOs, none referencing the tape records or amendment; HANDOFF.md last written 2026-10-08T14:44:01; R1 step 5 defers the update until after approval."
+    },
+    {
+      "id": "F-14",
+      "priorTitle": "Lower-severity native scenarios not enumerated",
+      "disposition": "largely resolved by proposed text; residual gaps N-07, N-08, N-09, N-10",
+      "evidence": "Enable gating, other sense sources, attach/detach/reset, SX-64, 24-bit truncation and v0/v1/v2 scope are now in FR-RUNTIME-TAPE-002 ac-07/ac-08, TR-TAPE-EDGE-001 ac-06/ac-07 and TEST-TAPE-SENSE-001 ac-04/ac-06..ac-08."
+    },
+    {
+      "id": "F-15",
+      "priorTitle": "Prior reviewer exposed the workspace API key",
+      "disposition": "still-open historical limitation; not repeated in this review",
+      "evidence": "The marker key has since changed with the 2026-10-10 service replacement (marker hash 3A13AA1C... to 96ACFE50...); invalidation of the old key is inferred, not directly verified. The old raw response.jsonl was not read. This review redacted all marker credential occurrences before rendering; see the persistence receipt for the scan of this attempt response stream."
+    },
+    {
+      "id": "F-16",
+      "priorTitle": "Unpinned post-launch evidence files",
+      "disposition": "resolved",
+      "evidence": "projection-file-changes.json and parent-turn-primary-readback.in-progress.json are in the proposal verification.json additionalEvidencePins and in the current 146 pins, and both rehash to their pinned values."
+    },
+    {
+      "id": "F-17",
+      "priorTitle": "Reviewer environment and bootstrap notes",
+      "disposition": "still-open process observation (informational); see N-16",
+      "evidence": "This review again had to apply the request environment to its own console before the first plugin call; hook request IDs remain non-canonical; a duplicate hook turn was created at launch."
+    }
+  ],
+  "mustFixBeforeApproval": [
+    "N-01 drop/defer or separately include the two dangling mapping targets",
+    "N-02 correct or explicitly acknowledge FR-CPU-004 ac-03/ac-05 and FR-PRF-003 ac-02/ac-04 contradictions",
+    "N-03 exclude read-synthesized timestamps from R1 preservation evidence",
+    "N-04 value-bearing R1 comparison receipts",
+    "N-05 specify and test the START/FORWARD/REWIND start-helper entry point",
+    "N-06 restore before-deadline cancellation case",
+    "N-11 reword reused media row dependencies"
+  ],
+  "laterMandatoryGates": [
+    "N-07 hidden static state in fixture/provider design",
+    "N-08 lifecycle quirk cases",
+    "N-09 recording position scope decision",
+    "N-10 unknown TAP versions and minimum size",
+    "N-12 FR-TAP-005 audit",
+    "N-15 superseded-test disposition ledger before R2",
+    "F-08 generated em-dash exports",
+    "F-10 raw export receipts",
+    "F-11 per-AC executable traceability",
+    "F-12 Testing export titles",
+    "R2 green discriminating mock gate and its HV",
+    "R3 real managed/native gates, xvic/x64sc parity, native VSF, settings visibility, full cumulative suites, final handoff"
+  ],
+  "verifiedNativeFacts": [
+    "MOTOR_DELAY 32000 and MOTOR_DELAY_FAST 1000 (datasette.c:62-63)",
+    "Start helper schedules startup only when no datasette alarm is pending and is reached from motor-on and from START/FORWARD/REWIND with the motor running (datasette.c:1000-1021, 1065-1089, 1123-1147, 1186-1190)",
+    "Motor-off sets the deadline once and arms an alarm only when none is pending; motor-on clears the deadline without restarting a running motor (datasette.c:1182-1205)",
+    "The callback stops the motor only when clk >= deadline; active reading replaces the same alarm (datasette.c:729-751, 806-851; alarm.h:176-183)",
+    "STOP leaves a pending alarm in place (datasette.c:1052-1058)",
+    "FORWARD/REWIND assign mode first, then arm clk+1000 regardless of motor (datasette.c:925-949, 1069-1090)",
+    "Writes require image, RECORD mode and motor flag plus a 0 to nonzero edge; line value always retained (datasette.c:1303-1321)",
+    "Accepted RECORD resets last_write_clk without the start helper (datasette.c:1091-1099, 1035-1038)",
+    "Gap encoding: below 7 carried, 7..2046 one byte (7 emits 0x00), 2047+ zero byte plus low 24 bits for v1/v2, failures stop the tape (datasette.c:1215-1291)",
+    "C64 motor !(DDR&DATA&0x20), write (~DDR|DATA)&0x08, sense input bit 4, SX-64 forwarding disabled and inputs 3-5 read 0 (c64pla.c:61-96; c64mem.c:218-222)",
+    "VIC-20 motor from raw changed PCR bit 1, write from effective PB3 including DDRB writes, sense VIA1 PA6 (vic20via1.c:188-198, 246-251; vic20via2.c:115-117; viacore.c:717-724)",
+    "Read pulses: C64 CIA1 FLAG, VIC-20 VIA2 CA1 falling (c64datasette.c:36-41; vic20datasette.c:37-42)",
+    "tapeinit CBM bands 36-54, 55-73, 74-100 after tap_init /8; TurboTape bands 10-34 and 35-54 unchanged (c64.c:231-248; vic20.c:267-284; tap.c:52-82, 1673-1680)",
+    "Block decoder v0 zero = 256 units, v1/v2 zero = 24-bit extension >>3, v2 sums halfwaves; live path byte*8, v0 zero = DatasetteZeroGapDelay, then wobble and misalignment (tap.c:389-444; datasette.c:504-535)",
+    "Header: short read or bad magic rejected; tag/video mismatches warn; Plus4 mismatch logs error without rejection; declared length ignored on open; fewer than 3 data bytes rejected (tap.c:121-197, 218-265)",
+    "Datasette audio is a separate sound chip with a 200-entry gap ring, flushed when DatasetteSound is off (default 0) (datasette-sound.c:36-76; datasette.c:270-295, 839-841)"
+  ],
+  "scopeLimitations": [
+    "Source inspection and stored-state comparison only; no native or managed execution, mock run, build or runtime trace (none authorized or needed for a requirement-only review).",
+    "Selected native files (16) only; whole-checkout cleanliness of native/vice not audited.",
+    "Historical pre-2026-10-09 metadata cannot be reconstructed; requirement timestamps are read-synthesized.",
+    "Parent tool calls are not directly observable; PowerShell/no-Python compliance inferred from receipts.",
+    "No triage submission by this reviewer: the timestamp defect is already triaged (25583068); the broadened observation is recorded here for the parent.",
+    "General host environment not audited, per operator instruction."
+  ],
+  "scores": {
+    "accuracy": 93,
+    "completeness": 84,
+    "accuracyRationale": "Hashes, counts, changedFields, AC identity retention, mapping counts, exact parent-row reuse, baseline equality, native identity and every source-derived numeric and branch claim in the amended text verified against immutable VICE. Deductions: 2 of 15 additive links invalid in the live store yet presented as ready additive edges (N-01); recovery receipt overstates its comparisons (N-04); timestamp anomaly characterized as a single-FR case (N-03); reused media row cites unapproved or stale criteria (N-11); 58 case groups include 5 placeholders (N-13).",
+    "completenessRationale": "Strong coverage of the prior five FAIL themes and the TR union. Deductions: contradictory FR-CPU-004 and FR-PRF-003 left unreconciled (N-02); start-helper command path and before-deadline cancellation missing (N-05, N-06); hidden static state, lifecycle quirks, recording position, unknown versions not enumerated (N-07..N-10); FR-TAP-005 unaudited (N-12); superseded-test disposition missing (N-15); R1 metadata and target safeguards (N-01, N-03, N-04); stale handoff/TODO tracking (N-18)."
+  },
+  "counts": {
+    "pass": 35,
+    "fail": 6,
+    "unknown": 0,
+    "notApplicable": 1,
+    "total": 42,
+    "newFindings": 18,
+    "priorFindings": 17
+  },
+  "overallVerdict": "DISAGREE",
+  "verdictBasis": "AGREE requires every applicable assertion PASS, zero FAIL and UNKNOWN, both scores at least 98 and complete receipts. FAIL: A8, C3, C4, C5, C9, D4. Scores 93/84.",
+  "acceptanceDistinction": "This verdict does not approve, apply or accept the amendment, does not accept the earlier five-record application, does not satisfy any acceptance criterion and authorizes no TODO, requirement, phase, plan or goal done-state change. Separate explicit operator approval of a corrected exact delta and a fresh HV remain required.",
+  "responseStreamCredentialScan": {
+    "scannedAtLocal": "2026-10-11T00:43:06-05:00",
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\response.jsonl",
+    "bytes": 3843284,
+    "candidates": 10,
+    "totalHits": 0.0
+  },
+  "receiptPaths": {
+    "verdictMarkdown": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.md",
+    "verdictJson": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.json",
+    "persistenceProof": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.persistence.json",
+    "reviewerEvidence": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\reviewer-evidence.json",
+    "requestJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\request.jsonl",
+    "responseJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\response.jsonl",
+    "stderrLog": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\stderr.log",
+    "inputPins": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\input-pins.json",
+    "priorInputChecks": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\prior-input-checks.json",
+    "resumePrompt": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\resume.prompt.md",
+    "originalPrompt": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\prompt.md"
+  },
+  "verdictCompact": {
+    "overallVerdict": "DISAGREE",
+    "passCount": 35,
+    "failCount": 6,
+    "unknownCount": 0,
+    "notApplicableCount": 1,
+    "accuracy": 93,
+    "completeness": 84,
+    "findings": [
+      "N-01 high [must fix before approval] Two of the 15 additive mapping links target records that do not exist",
+      "N-02 medium-high [must fix or explicitly acknowledge before approval] Other pending requirements contradict the corrected C64 and SX-64 port wiring",
+      "N-03 medium [must fix before application (R1 safeguard)] Requirement timestamps are synthesized per read across getFr, listTr and listTest",
+      "N-04 low [must fix before application (receipt quality)] Retained baseline comparison entries carry no compared values",
+      "N-05 medium [must fix before approval (AC wording and named case)] The second entry point of the ordinary start helper is not specified or tested",
+      "N-06 low-medium [should fix before approval] Before-deadline cancellation lost its named case",
+      "N-07 medium [later mandatory gate; must be explicit before tests] Hidden process-lifetime native state is not required to be pinned",
+      "N-08 low [later mandatory gate] Attach, detach and reset quirks are not enumerated",
+      "N-09 low [later mandatory gate (fixture scope decision)] Recording file position depends on command order",
+      "N-10 low [later mandatory gate] Unknown TAP versions and the minimum-size rejection are not enumerated",
+      "N-11 low [should fix before approval (wording)] Reused media row text depends on unapproved or stale criteria",
+      "N-12 low [later mandatory gate] Newly linked FR-TAP-005 was not audited",
+      "N-13 info [disclosure] Five of the 58 case-group names are placeholders",
+      "N-14 info [disclosure for the approval text] Retained criterion IDs carry rewritten, sometimes inverted, meanings",
+      "N-15 low-medium [later mandatory gate (before R2)] Existing tests cite amended IDs with superseded expectations",
+      "N-16 info [disclosure] Hook-created duplicate turn and leftover attempt sessions",
+      "N-17 info [reviewer self-disclosure] Reviewer conduct notes",
+      "N-18 low [current process gap (D4)] Root handoff and TODO tracking are stale",
+      "F-01 prior: resolved by proposed text (unapplied); executable proof is a future mandatory gate",
+      "F-02 prior: resolved by proposed text with a residual gap (N-05)",
+      "F-03 prior: resolved by proposed text (unapplied); future mandatory gate",
+      "F-04 prior: resolved by proposed text (unapplied); future mandatory gate",
+      "F-05 prior: partially resolved; new defect N-02",
+      "F-06 prior: resolved by proposed union text and mappings; projection reconciliation is a future R1 step",
+      "F-07 prior: resolved in text by the reused parent row; new defects N-01 and N-11",
+      "F-08 prior: still open (tooling); R1 export regeneration will reproduce it unless fixed",
+      "F-09 prior: partially addressed going forward; still-open historical limitation",
+      "F-10 prior: still-open historical limitation; future gate in R1 step 4",
+      "F-11 prior: still open and widened (N-15); future mandatory gate",
+      "F-12 prior: still open (tooling); affects the four retitled TEST records after application",
+      "F-13 prior: still open (D4, N-18)",
+      "F-14 prior: largely resolved by proposed text; residual gaps N-07, N-08, N-09, N-10",
+      "F-15 prior: still-open historical limitation; not repeated in this review",
+      "F-16 prior: resolved",
+      "F-17 prior: still-open process observation (informational); see N-16"
+    ],
+    "receiptPaths": [
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.md",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.json",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.persistence.json",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\reviewer-evidence.json",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\request.jsonl",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\response.jsonl",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\stderr.log",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\input-pins.json",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\prior-input-checks.json",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\resume.prompt.md",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\prompt.md"
+    ],
+    "sessionId": "ClaudeCode-20261011T050449Z-plugin-session",
+    "requestId": "req-20261011T050452Z-prompt-ba39",
+    "persistenceStatus": "pending at file write; see verdict.persistence.json and the final response"
+  },
+  "persistenceStatus": "pending at file write; see verdict.persistence.json and the final response"
+}

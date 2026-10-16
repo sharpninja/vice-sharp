@@ -420,7 +420,8 @@ public sealed record DisplaySettingsDto(
     bool MaintainAspectRatio = true,
     string Scale = "2x",
     string CropMode = "visible-area",
-    string AspectMode = "vice-pixel-aspect");
+    string AspectMode = "vice-pixel-aspect",
+    string PaletteRgb = "");
 
 public sealed record InputSettingsDto(
     string KeyboardMapId = "c64:gtk3_pos",
@@ -481,7 +482,12 @@ public sealed record UpdateSettingsRequest(
     int? FileSystemIecUnit = null,
     string? Vic20ExpansionCartKind = null,
     bool? Vic20ExpansionWriteBack = null,
-    string? Vic20ExpansionConfigPreset = null);
+    string? Vic20ExpansionConfigPreset = null,
+    /// <summary>
+    /// When display changes, including the palette, take effect.
+    /// "frame" means the next frame boundary rather than mid-frame.
+    /// </summary>
+    string ApplyAt = "frame");
 
 public sealed record ValidateSettingsResourcesRequest(
     string SessionId,
@@ -938,7 +944,7 @@ public sealed record ListCapturesResponse(
 
 public sealed record StopCaptureRequest(string SessionId, string CaptureId);
 
-public sealed record CaptureFrameRequest(string SessionId, string FilePath, string Format = "png");
+public sealed record CaptureFrameRequest(string SessionId, string FilePath, string Format = "png", int JpegQuality = 50);
 
 public sealed record StartCaptureResponse(
     RpcStatus Status,

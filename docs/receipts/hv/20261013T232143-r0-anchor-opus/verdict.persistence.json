@@ -1,0 +1,333 @@
+{
+  "schema": "hv-verdict-persistence/v1",
+  "writtenAtLocal": "2026-10-13T23:48:29",
+  "reviewer": {
+    "agent": "ClaudeCode",
+    "model": "claude-opus-5-5",
+    "effort": "max",
+    "cliSessionId": "bab22fd4-f213-4011-9616-074b14def01b",
+    "consoleAgentId": "sa-3a02def0",
+    "launchPid": 25752
+  },
+  "sessionId": "ClaudeCode-20261014T042517Z-plugin-session",
+  "requestId": "req-20261014T042520Z-prompt-6807",
+  "parent": {
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261014T021233Z-remediate-two-hv-failures"
+  },
+  "candidateSha256": "63386E9251185B101F53E9257CDA9270025A68006B83F243314E6E299A55D702",
+  "files": {
+    "verdictMd": {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\verdict.md",
+      "bytes": 32744,
+      "sha256": "B94E8FA19985F13FED9476CC686D2FDE8F39EBA20DF439EAC24E7ACAA780A1D9",
+      "normalizedChars": 32283,
+      "normalizedSha256": "F138DB3306D6874D3E0DA35CE138F716CAFC7F6353293073FFD2AB9E13F2682A"
+    },
+    "verdictJson": {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\verdict.json",
+      "bytes": 18410,
+      "sha256": "36FD48D2B7D0F7441CFC929CBE3CDB06E60B8E151534D4879FA8EB7C6414F4E8",
+      "normalizedChars": 18039,
+      "normalizedSha256": "CE95124A0F34DE0098FC2CB5740BDCF2AFE609D378A3EC8B6619C573761E1C4B"
+    }
+  },
+  "normalization": "Dialog chunks carry file text with CRLF converted to LF and trailing LF trimmed; readback applies the same normalization. No other transformation.",
+  "chunking": {
+    "maxCharsPerItem": 6500,
+    "authoritativeMarkdownLabel": "HV-R0-ROUND3-VERDICT-MD-V2",
+    "jsonLabel": "HV-R0-ROUND3-VERDICT-JSON",
+    "supersededMarkdownLabel": "HV-R0-ROUND3-VERDICT-MD",
+    "supersededReason": "part 4 body ended with a blank line (LF LF) and reads back with one extra LF (32284 vs 32283 chars); a local powershell-yaml round trip is exact; V2 uses boundaries that never end or start on a blank line",
+    "sendsV1AndJson": [
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD",
+        "part": 1,
+        "total": 6,
+        "chars": 6371,
+        "sentUtc": "2026-10-14T04:44:30Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD",
+        "part": 2,
+        "total": 6,
+        "chars": 6408,
+        "sentUtc": "2026-10-14T04:44:33Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD",
+        "part": 3,
+        "total": 6,
+        "chars": 6403,
+        "sentUtc": "2026-10-14T04:44:35Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD",
+        "part": 4,
+        "total": 6,
+        "chars": 6336,
+        "sentUtc": "2026-10-14T04:44:37Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD",
+        "part": 5,
+        "total": 6,
+        "chars": 6332,
+        "sentUtc": "2026-10-14T04:44:40Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD",
+        "part": 6,
+        "total": 6,
+        "chars": 1219,
+        "sentUtc": "2026-10-14T04:44:42Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-JSON",
+        "part": 1,
+        "total": 3,
+        "chars": 6398,
+        "sentUtc": "2026-10-14T04:44:45Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-JSON",
+        "part": 2,
+        "total": 3,
+        "chars": 6387,
+        "sentUtc": "2026-10-14T04:44:47Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-JSON",
+        "part": 3,
+        "total": 3,
+        "chars": 5653,
+        "sentUtc": "2026-10-14T04:44:49Z",
+        "ok": true,
+        "code": "persisted"
+      }
+    ],
+    "sendsV2": [
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD-V2",
+        "part": 1,
+        "total": 6,
+        "chars": 6374,
+        "sentUtc": "2026-10-14T04:46:44Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD-V2",
+        "part": 2,
+        "total": 6,
+        "chars": 6411,
+        "sentUtc": "2026-10-14T04:46:46Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD-V2",
+        "part": 3,
+        "total": 6,
+        "chars": 6406,
+        "sentUtc": "2026-10-14T04:46:48Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD-V2",
+        "part": 4,
+        "total": 6,
+        "chars": 5895,
+        "sentUtc": "2026-10-14T04:46:51Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD-V2",
+        "part": 5,
+        "total": 6,
+        "chars": 6384,
+        "sentUtc": "2026-10-14T04:46:53Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND3-VERDICT-MD-V2",
+        "part": 6,
+        "total": 6,
+        "chars": 1617,
+        "sentUtc": "2026-10-14T04:46:55Z",
+        "ok": true,
+        "code": "persisted"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "setTurnTitle",
+      "atLocal": "2026-10-13T23:42:57",
+      "pluginCode": "rejected",
+      "pluginMessage": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true.",
+      "serverState": "title applied (query 23:43:23 and 23:48:02)",
+      "failsafeRetained": "20261014T044253Z-session_setTurnTitle-1eb8.yaml (not replayed; drain disabled)"
+    },
+    {
+      "step": "updateTurn",
+      "atLocal": "2026-10-13T23:42:57",
+      "pluginCode": "persisted"
+    },
+    {
+      "step": "triage setTurnTitle recurrence",
+      "atLocal": "2026-10-13T23:43:41",
+      "reportId": "triage-report-6f1c801607fe4fff88e480940c809129",
+      "groupId": "triage-group-3ca7b6bf43804600",
+      "status": "collecting"
+    },
+    {
+      "step": "appendDialog V1 markdown 6 + json 3 chunks",
+      "atLocal": "2026-10-13T23:44:30 to 23:44:49",
+      "pluginCode": "persisted (9 of 9)"
+    },
+    {
+      "step": "appendDialog 7 decisions and appendActions 8",
+      "atLocal": "2026-10-13T23:45:18",
+      "pluginCode": "persisted / persisted"
+    },
+    {
+      "step": "pre-completion readback",
+      "atLocal": "2026-10-13T23:45:28",
+      "result": "JSON equal; V1 markdown one char longer (part 4 trailing blank line)"
+    },
+    {
+      "step": "appendDialog V2 markdown 6 chunks plus supersession note",
+      "atLocal": "2026-10-13T23:46:44 to 23:47:00",
+      "pluginCode": "persisted (7 of 7)"
+    },
+    {
+      "step": "pre-completion readback 2",
+      "atLocal": "2026-10-13T23:47:10",
+      "result": "V2 markdown equal, JSON equal"
+    },
+    {
+      "step": "triage appendDialog trailing-blank-line defect",
+      "atLocal": "2026-10-13T23:47:31",
+      "reportId": "triage-report-35946abd857b46c1909cfd5ccff1aa37",
+      "groupId": "triage-group-705d528c59731daf",
+      "status": "collecting"
+    },
+    {
+      "step": "appendActions 9-10",
+      "pluginCode": "persisted"
+    },
+    {
+      "step": "completeTurn",
+      "atLocal": "2026-10-13T23:47:53",
+      "pluginCode": "persisted"
+    },
+    {
+      "step": "final readback (client.SessionLog.QueryAsync agent ClaudeCode)",
+      "atLocal": "2026-10-13T23:48:02",
+      "result": "turn completed; V2 markdown and JSON equal after normalization; response equals submitted"
+    }
+  ],
+  "finalReadback": {
+    "measuredAtLocal": "2026-10-13T23:48:02",
+    "sessionId": "ClaudeCode-20261014T042517Z-plugin-session",
+    "sessionStatus": "in_progress",
+    "sessionModelField": "claude-opus-5-5",
+    "requestId": "req-20261014T042520Z-prompt-6807",
+    "turnStatus": "completed",
+    "turnModelField": "claude-opus-5-5",
+    "title": "Hostile review of R0 round-3 anchor remediation candidate 63386E92 (Opus 5.5 max, all A-D surfaces)",
+    "tagCount": 11,
+    "tagsIncludeModel": true,
+    "dialogCount": 23,
+    "decisionItems": 7,
+    "actionCount": 10,
+    "responseEqualsSubmitted": true,
+    "responseChars": 1965,
+    "queryTextChars": 13371,
+    "mdV2": {
+      "label": "HV-R0-ROUND3-VERDICT-MD-V2",
+      "chunksFound": 6,
+      "distinctParts": 6,
+      "declaredTotal": [
+        6
+      ],
+      "joinedChars": 32283,
+      "expectedChars": 32283,
+      "equalNormalized": true,
+      "joinedSha256": "F138DB3306D6874D3E0DA35CE138F716CAFC7F6353293073FFD2AB9E13F2682A",
+      "expectedSha256": "F138DB3306D6874D3E0DA35CE138F716CAFC7F6353293073FFD2AB9E13F2682A"
+    },
+    "json": {
+      "label": "HV-R0-ROUND3-VERDICT-JSON",
+      "chunksFound": 3,
+      "distinctParts": 3,
+      "declaredTotal": [
+        3
+      ],
+      "joinedChars": 18039,
+      "expectedChars": 18039,
+      "equalNormalized": true,
+      "joinedSha256": "CE95124A0F34DE0098FC2CB5740BDCF2AFE609D378A3EC8B6619C573761E1C4B",
+      "expectedSha256": "CE95124A0F34DE0098FC2CB5740BDCF2AFE609D378A3EC8B6619C573761E1C4B"
+    },
+    "mdV1Superseded": {
+      "label": "HV-R0-ROUND3-VERDICT-MD",
+      "chunksFound": 6,
+      "distinctParts": 6,
+      "declaredTotal": [
+        6
+      ],
+      "joinedChars": 32284,
+      "expectedChars": 32283,
+      "equalNormalized": false,
+      "joinedSha256": "E00E8BC55B8B246E9D926F2F714FF4E222E5013FA7FB6F6F53314C3867B599A9",
+      "expectedSha256": "F138DB3306D6874D3E0DA35CE138F716CAFC7F6353293073FFD2AB9E13F2682A"
+    },
+    "failsafePending": [
+      "20261014T044253Z-session_setTurnTitle-1eb8.yaml"
+    ],
+    "quarantine": 0
+  },
+  "primaryReadbackVerified": true,
+  "persistenceStatus": "PERSISTED: primary MCP turn req-20261014T042520Z-prompt-6807 (session ClaudeCode-20261014T042517Z-plugin-session) completed and read back at 2026-10-13T23:48:02; whole verdict.md (label HV-R0-ROUND3-VERDICT-MD-V2, 6 chunks) and verdict.json (3 chunks) equal the files after LF normalization; superseded first Markdown set disclosed in the turn",
+  "verdictJsonPersistenceFieldNote": "verdict.json was written before persistence and intentionally says pending; this file and the final response carry the final status.",
+  "triageReports": [
+    {
+      "reportId": "triage-report-6f1c801607fe4fff88e480940c809129",
+      "groupId": "triage-group-3ca7b6bf43804600",
+      "status": "collecting",
+      "topic": "setTurnTitle retitled flag missing (recurrence of triage-report-a13e89ad99ab44debb30978ac991583d)"
+    },
+    {
+      "reportId": "triage-report-35946abd857b46c1909cfd5ccff1aa37",
+      "groupId": "triage-group-705d528c59731daf",
+      "status": "collecting",
+      "topic": "appendDialog content ending in a blank line reads back with one extra newline"
+    }
+  ],
+  "disclosures": [
+    "Cached session-state rotated to ClaudeCode-20261014T042520Z-plugin-session at launch; every write targeted the turn session ClaudeCode-20261014T042517Z-plugin-session; final session and turn model fields read claude-opus-5-5.",
+    "The read-only McpServer-workspace triage lookup created only a local session-state.yaml in the isolated cache subfolder; no server session was created.",
+    "No historical turn was edited, no queue was replayed and nothing was canceled or deleted."
+  ]
+}

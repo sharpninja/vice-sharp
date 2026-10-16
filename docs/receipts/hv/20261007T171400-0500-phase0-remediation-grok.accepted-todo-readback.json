@@ -1,0 +1,53 @@
+{
+  "priority": "high",
+  "technicalDetails": [
+    "Testing requirement: TEST-VICE-001. Related real snapshot gates: FR-SNP-005, TEST-SNP-002, TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001.",
+    "Phase 1: full native-safe tests/ViceSharp.OracleContract.Tests project, all six AC-mapped groups, valid mocks and discriminating incorrect mocks; no product/native build dependency.",
+    "Deferred XMLDoc correction: tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs incorrectly cites TR-CYCLE-001 AC4. Correct only after a native-safe harness build exists; retain fixture and single LockstepValidator ownership.",
+    "Named real evidence gate REAL-C64-PHI2-AEC-001: after wrapper feasibility and native-safe harness integration, require actual immutable x64sc half-cycle CPU access observations covering PHI1/PHI2, AEC low/high, idle/read/write, fail closed at missing/unknown access kind or first missing half-cycle. Exercise real managed behavior and native provenance; mock results cannot satisfy TR-CYCLE-001 AC4.",
+    "All seven TR-CYCLE-001 ACs and all existing real-emulator/current-plus-prior suites remain mandatory. Every executable exit has zero failed, skipped or aborted tests, unfiltered applicable suite, and local alternating Grok xhigh / Opus max HV AGREE >=98/98, zero FAIL/UNKNOWN."
+  ],
+  "section": "Plans",
+  "done": false,
+  "remaining": "Phase0 accepted by local Grok4.7 xhigh AGREE99/98,26PASS0FAIL0UNKNOWN. Completed primary GrokCode-20261007T222539Z-phase0-remediation-hv / req-20261007T222539Z-phase0-remediation-hv contains full22855character verdict; parent independent proof docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json plus final .exit.json. Next: entire native-safe AC-mapped mock-contract suite green before real implementation; next reviewer Opus5.5 max. Five implementation tasks remain open. Real emulator/native VSF/whole-goal gates unwaived; no mock project or product implementation yet.",
+  "id": "PLAN-VICEORACLE-001",
+  "technicalRequirements": [
+    "TR-VICE-ORACLE-001",
+    "TR-CYCLE-001"
+  ],
+  "description": [
+    "Execute docs/plans/PLAN-VICE-IMMUTABLE-001.md as a prerequisite within the entire approved Grok handoff completion plan. Remediate original VICE-as-target violations, not a new behavior requirement.",
+    "FR-VICE-001 AC1-4; TR-VICE-ORACLE-001 AC1-5; TEST-VICE-001 AC1-4; TR-CYCLE-001 all seven ACs, including actual PHI2/AEC AC4. No requirement is retired or marked satisfied by mocks."
+  ],
+  "dependsOn": [],
+  "title": "Restore immutable VICE oracle boundary and prove all retained real parity gates",
+  "implementationTasks": [
+    {
+      "done": true,
+      "task": "Reconcile Phase 0 preservation, primary requirements/projections and all workspace queues; obtain accepted HV"
+    },
+    {
+      "done": false,
+      "task": "Prove the entire native-safe AC-mapped mock-contract suite green, including deliberate incorrect controls, then HV"
+    },
+    {
+      "done": false,
+      "task": "Prove external-wrapper feasibility and snapshot compatibility on pinned immutable VICE without source mutation"
+    },
+    {
+      "done": false,
+      "task": "Safely migrate preserved native modifications to external wrappers/managed code and establish native-safe harness builds"
+    },
+    {
+      "done": false,
+      "task": "Correct deferred comparator XMLDoc mapping and pass REAL-C64-PHI2-AEC-001 with actual immutable x64sc evidence"
+    },
+    {
+      "done": false,
+      "task": "Complete real xvic half-cycle parity, native VSF resume and all original whole-plan gates with full suites and HV"
+    }
+  ],
+  "functionalRequirements": [
+    "FR-VICE-001"
+  ]
+}

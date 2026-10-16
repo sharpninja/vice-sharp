@@ -1,0 +1,38 @@
+{
+  "timestampLocal": "2026-10-08T10:08:25.6129002-05:00",
+  "codecHash": "862F7B2FE4399075D944D470E6ABCB67ACA7C1C97C0469D96BC62EA162D4A560",
+  "machines": [
+    {
+      "machine": "xvic",
+      "requestCount": 9,
+      "responseCount": 17,
+      "eventCount": 8,
+      "nativeErrors": [
+        {
+          "id": 8,
+          "type": 0,
+          "error": 143,
+          "bodyLength": 0
+        }
+      ],
+      "parsedExactly": true,
+      "sha256": "F73273448DFA72149C865610D5ED5167CB9ABFFD6208CB22A889D6F8F742B1BE"
+    },
+    {
+      "machine": "x64sc",
+      "requestCount": 10,
+      "responseCount": 18,
+      "eventCount": 8,
+      "nativeErrors": [
+        {
+          "id": 8,
+          "type": 0,
+          "error": 143,
+          "bodyLength": 0
+        }
+      ],
+      "parsedExactly": true,
+      "sha256": "1E3FA96CD7244AB7E9A040FA4A9A8678BCAABD5F67200EFB6B1B86FC54163855"
+    }
+  ]
+}

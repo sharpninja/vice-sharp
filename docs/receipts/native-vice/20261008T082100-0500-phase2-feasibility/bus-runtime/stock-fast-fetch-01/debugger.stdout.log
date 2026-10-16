@@ -1,0 +1,117 @@
+
+Microsoft (R) Windows Debugger Version 10.0.19041.685 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+*** wait with pending attach
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\bus-runtime
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\bus-runtime
+Symbol search path is: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\bus-runtime
+Executable search path is: 
+ModLoad: 00007ff6`3f980000 00007ff6`41a7e000   F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\xvic.exe
+ModLoad: 00007fff`ad980000 00007fff`adbe7000   C:\WINDOWS\SYSTEM32\ntdll.dll
+ModLoad: 00007fff`ac1f0000 00007fff`ac2bb000   C:\WINDOWS\System32\KERNEL32.DLL
+ModLoad: 00007fff`aae30000 00007fff`ab232000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`aca80000 00007fff`acb3c000   C:\WINDOWS\System32\ADVAPI32.dll
+ModLoad: 00007fff`ac8c0000 00007fff`ac969000   C:\WINDOWS\System32\msvcrt.dll
+ModLoad: 00007fff`ac970000 00007fff`aca19000   C:\WINDOWS\System32\sechost.dll
+ModLoad: 00007fff`ab710000 00007fff`ab828000   C:\WINDOWS\System32\RPCRT4.dll
+ModLoad: 00007fff`ad1a0000 00007fff`ad938000   C:\WINDOWS\System32\SHELL32.dll
+ModLoad: 00007fff`ab5f0000 00007fff`ab693000   C:\WINDOWS\System32\msvcp_win.dll
+ModLoad: 00007fff`aac40000 00007fff`aad8c000   C:\WINDOWS\System32\ucrtbase.dll
+ModLoad: 00007fff`acc50000 00007fff`ace1f000   C:\WINDOWS\System32\USER32.dll
+ModLoad: 00007fff`ab5c0000 00007fff`ab5e7000   C:\WINDOWS\System32\win32u.dll
+ModLoad: 00007fff`ad170000 00007fff`ad19b000   C:\WINDOWS\System32\GDI32.dll
+ModLoad: 00007fff`77260000 00007fff`772a7000   C:\msys64\mingw64\bin\libpng16-16.dll
+ModLoad: 00007fff`1b680000 00007fff`1b7b3000   C:\msys64\mingw64\bin\libcurl-4.dll
+ModLoad: 00007fff`772b0000 00007fff`77344000   C:\WINDOWS\SYSTEM32\DSOUND.dll
+ModLoad: 00007fff`ab300000 00007fff`ab429000   C:\WINDOWS\System32\gdi32full.dll
+ModLoad: 00007fff`ab430000 00007fff`ab5ae000   C:\WINDOWS\System32\CRYPT32.dll
+ModLoad: 00007fff`abe60000 00007fff`ac1e5000   C:\WINDOWS\System32\combase.dll
+ModLoad: 00007fff`ac2e0000 00007fff`ac360000   C:\WINDOWS\System32\WS2_32.dll
+ModLoad: 00007fff`abde0000 00007fff`abe54000   C:\WINDOWS\System32\WLDAP32.dll
+ModLoad: 00007fff`75350000 00007fff`75374000   C:\msys64\mingw64\bin\zlib1.dll
+ModLoad: 00007fff`8e400000 00007fff`8e417000   C:\msys64\mingw64\bin\libbrotlidec.dll
+ModLoad: 00007fff`aaa70000 00007fff`aaa9a000   C:\WINDOWS\SYSTEM32\bcrypt.dll
+ModLoad: 00007fff`aa9e0000 00007fff`aaa3e000   C:\WINDOWS\SYSTEM32\powrprof.dll
+ModLoad: 00007fff`74880000 00007fff`74937000   C:\WINDOWS\SYSTEM32\ResampleDmo.DLL
+ModLoad: 00007fff`ab840000 00007fff`ab919000   C:\WINDOWS\System32\OLEAUT32.dll
+ModLoad: 00007fff`89450000 00007fff`89487000   C:\WINDOWS\SYSTEM32\winmmbase.dll
+ModLoad: 00007fff`ad070000 00007fff`ad16b000   C:\WINDOWS\System32\shcore.dll
+ModLoad: 00007fff`0ba90000 00007fff`0bcee000   C:\msys64\mingw64\bin\libstdc++-6.dll
+ModLoad: 00007fff`99280000 00007fff`992b6000   C:\WINDOWS\SYSTEM32\WINMM.dll
+ModLoad: 00007fff`74f80000 00007fff`74fc2000   C:\msys64\mingw64\bin\libidn2-0.dll
+ModLoad: 00007fff`74e30000 00007fff`74e6c000   C:\msys64\mingw64\bin\libnghttp2-14.dll
+ModLoad: 00007fff`a9190000 00007fff`a91c3000   C:\WINDOWS\SYSTEM32\IPHLPAPI.DLL
+ModLoad: 00007fff`74550000 00007fff`74585000   C:\msys64\mingw64\bin\libnghttp3-9.dll
+ModLoad: 00007fff`6bef0000 00007fff`6bf4d000   C:\msys64\mingw64\bin\libngtcp2-16.dll
+ModLoad: 00007fff`8b870000 00007fff`8b883000   C:\msys64\mingw64\bin\libngtcp2_crypto_ossl-0.dll
+ModLoad: 00007fff`74f50000 00007fff`74f71000   C:\msys64\mingw64\bin\libpsl-5.dll
+ModLoad: 00007fff`60ae0000 00007fff`60b32000   C:\msys64\mingw64\bin\libssh2-1.dll
+ModLoad: 00007fff`a7c10000 00007fff`a7c1d000   C:\WINDOWS\SYSTEM32\Secur32.dll
+ModLoad: 00007fff`18b50000 00007fff`18c7a000   C:\msys64\mingw64\bin\libzstd.dll
+ModLoad: 00007ffe`fd180000 00007ffe`fd723000   C:\msys64\mingw64\bin\libcrypto-3-x64.dll
+ModLoad: 00007fff`6bec0000 00007fff`6beeb000   C:\msys64\mingw64\bin\libbrotlicommon.dll
+ModLoad: 00007fff`1a2c0000 00007fff`1a3c1000   C:\msys64\mingw64\bin\libssl-3-x64.dll
+ModLoad: 00007fff`aa700000 00007fff`aa752000   C:\WINDOWS\SYSTEM32\cfgmgr32.dll
+ModLoad: 00007fff`7a1e0000 00007fff`7a1ee000   C:\WINDOWS\SYSTEM32\msdmo.dll
+ModLoad: 00007fff`60ab0000 00007fff`60adb000   C:\msys64\mingw64\bin\libgcc_s_seh-1.dll
+ModLoad: 00007fff`8b5f0000 00007fff`8b606000   C:\msys64\mingw64\bin\libwinpthread-1.dll
+ModLoad: 00007fff`0b970000 00007fff`0ba8e000   C:\msys64\mingw64\bin\libiconv-2.dll
+ModLoad: 00007fff`0b740000 00007fff`0b968000   C:\msys64\mingw64\bin\libunistring-5.dll
+ModLoad: 00007fff`59bb0000 00007fff`59c00000   C:\msys64\mingw64\bin\libintl-8.dll
+ModLoad: 00007fff`a9aa0000 00007fff`a9ae9000   C:\WINDOWS\SYSTEM32\SSPICLI.DLL
+ModLoad: 00007fff`a9fe0000 00007fff`a9fec000   C:\WINDOWS\SYSTEM32\CRYPTBASE.DLL
+ModLoad: 00007fff`aab80000 00007fff`aac2c000   C:\WINDOWS\System32\bcryptPrimitives.dll
+ModLoad: 00007fff`acc10000 00007fff`acc41000   C:\WINDOWS\System32\IMM32.DLL
+ModLoad: 00007fff`aa9c0000 00007fff`aa9d5000   C:\WINDOWS\SYSTEM32\UMPDC.dll
+ModLoad: 00007fff`a8590000 00007fff`a8e3e000   C:\WINDOWS\SYSTEM32\windows.storage.dll
+ModLoad: 00007fff`ab6a0000 00007fff`ab706000   C:\WINDOWS\System32\shlwapi.dll
+(13050.f6f0): Break instruction exception - code 80000003 (first chance)
+ntdll!DbgBreakPoint:
+00007fff`adaa3ab0 cc              int     3
+0:004> .echo STOCK_FAST_FETCH_BEGIN
+STOCK_FAST_FETCH_BEGIN
+0:004> lm m xvic
+start             end                 module name
+00007ff6`3f980000 00007ff6`41a7e000   xvic       (deferred)             
+0:004> ba e1 xvic+0x50ce4 "$<stock-fast-fetch-hit.cdb"
+0:004> bl
+ 0 e 00007ff6`3f9d0ce4 e 1 0001 (0001)  0:**** xvic+0x50ce4 "$<stock-fast-fetch-hit.cdb"
+0:004> g
+0:000> .echo STOCK_FAST_FETCH_BEFORE
+STOCK_FAST_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`00646b26
+0:000> u @rip L1
+xvic+0x50ce4:
+00007ff6`3f9d0ce4 8b0402          mov     eax,dword ptr [rdx+rax]
+0:000> t 0n1 ".echo STOCK_FAST_FETCH_AFTER; r rip; r eax; dq xvic+0x262a10 L1; bc *; q"
+STOCK_FAST_FETCH_AFTER
+rip=00007ff63f9d0ce7
+eax=f002928d
+00007ff6`3fbe2a10  00000000`00646b26
+quit:
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'

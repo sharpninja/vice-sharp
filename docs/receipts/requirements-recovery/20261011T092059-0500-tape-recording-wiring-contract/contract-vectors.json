@@ -1,0 +1,1709 @@
+{
+  "schema": "vicesharp.tape-contract-vectors/v1",
+  "createdAtLocal": "2026-10-11T09:28:55.9848058-05:00",
+  "status": "draft-unapproved-unapplied-not-executed",
+  "sourceCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "baseProposalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+  "baseProposalSha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+  "requirementTextChanged": false,
+  "applicationAuthorized": false,
+  "testedMockCases": 0,
+  "testedProductionCases": 0,
+  "testedNativeCases": 0,
+  "acceptanceEstablished": false,
+  "sources": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+      "relative": "src/datasette/datasette.c",
+      "gitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+      "sha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64pla.c",
+      "relative": "src/c64/c64pla.c",
+      "gitBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+      "sha256": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64mem.c",
+      "relative": "src/c64/c64mem.c",
+      "gitBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+      "sha256": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64datasette.c",
+      "relative": "src/c64/c64datasette.c",
+      "gitBlob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+      "sha256": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via1.c",
+      "relative": "src/vic20/vic20via1.c",
+      "gitBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+      "sha256": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via2.c",
+      "relative": "src/vic20/vic20via2.c",
+      "gitBlob": "432bc199e08fc0f580c7df0f2d637db592a2ed11",
+      "sha256": "21B686FB0414BDE42DA51AA9D5D558917AFC63A3E3D675FBDE79FFC07FA4ADB5",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20datasette.c",
+      "relative": "src/vic20/vic20datasette.c",
+      "gitBlob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+      "sha256": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\ciacore.c",
+      "relative": "src/core/ciacore.c",
+      "gitBlob": "c8a431d927a1831c9d6f10161c87210d64820d75",
+      "sha256": "D7C2AA2931CB8073606AED832AB74B95617EECC3D3A4295673F716DAE18C75AE",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\viacore.c",
+      "relative": "src/core/viacore.c",
+      "gitBlob": "406a84720267a1821182ba9c33ab77e505507842",
+      "sha256": "52836103F80B7AE65685F3077D0F37C6FE8163A112849266939D630FBF599EC0",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\cia.h",
+      "relative": "src/cia.h",
+      "gitBlob": "69a4532e88e9d2f9a08bfcfe6e7619b704faaa44",
+      "sha256": "DF55C1030A85D69E1BFCB549DEF6A9174C6C7DE489A093EA432F94284E9F4B1E",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\via.h",
+      "relative": "src/via.h",
+      "gitBlob": "e52c92fb9df447be4d04036c8cde98c4a01b1ac4",
+      "sha256": "D74D81C7E5DF745D3A374A9C79A32E8D2588A614AE9DCD664EC52E95E8CC96BD",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\tapeport.c",
+      "relative": "src/tapeport/tapeport.c",
+      "gitBlob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+      "sha256": "BC73131BF535AA57DEED1AD2080C92C0C1ECB8AE1F1338B1A2CCC7DD9CE26B15",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tape\\tap.c",
+      "relative": "src/tape/tap.c",
+      "gitBlob": "eed6d8e741622857369f8838f3cab5319eb3e4c1",
+      "sha256": "4061AB1719A95F939E96E7BB41DBB86842F71A1B9F03F8F85D38ED54E22DBB73",
+      "matchesCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tap.h",
+      "relative": "src/tap.h",
+      "gitBlob": "d5dc30267559608cef094088b51e8f23e5dd860e",
+      "sha256": "B0AFFFED6C45E55B1C694FD806E9635F5B1E7E40B754E1C2F643A2CAC78E963F",
+      "matchesCommit": true
+    }
+  ],
+  "bindings": [
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TransportSense_MediaCommandMatrix"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1156"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineSense_C64CpuPortAndVic20Via1",
+        "TapeRead_PulseInterruptRouting"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:51-95",
+        "src/vic20/vic20via1.c:221-260",
+        "src/c64/c64datasette.c",
+        "src/vic20/vic20datasette.c"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-06",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MotorOnThenRecord_FirstEdgeFromZero",
+        "Recording_FileCursor_BufferBoundary",
+        "Recording_FileCursor_CommandOrder",
+        "Recording_GapEncodingAndFailures",
+        "Recording_LongGap_24BitBoundary",
+        "RecordThenMotorOn_FirstEdge"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1005",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321",
+        "src/datasette/datasette.c:1238-1268",
+        "src/datasette/datasette.c:391-409"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-07",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-08",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Datasette_AttachDetachResetState",
+        "Datasette_EnableAndFluxGating",
+        "Lifecycle_AttachNewStopImage_PendingAlarm",
+        "Lifecycle_ControlDispatch_EventPlaybackAndNetwork",
+        "Lifecycle_Detach_ReplaysNoTapeMode",
+        "Lifecycle_Reset_CancelsStopWithoutClearingRunning",
+        "Tapeport_DispatchAndPowerupGating"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1169",
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-922",
+        "src/datasette/datasette.c:879-998",
+        "src/datasette/datasette.c:952-997",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    }
+  ],
+  "machineProfiles": [
+    "C64-PAL",
+    "C64-NTSC",
+    "VIC20-PAL",
+    "VIC20-NTSC"
+  ],
+  "recordingBaseline": {
+    "image": "writable",
+    "mode": "RECORD",
+    "internalMotor": 1,
+    "lastLine": 0,
+    "lastClock": 1000,
+    "position": 100,
+    "size": 100,
+    "cycles": 10,
+    "total": 12,
+    "dirty": 0,
+    "newLine": 8,
+    "eventPlaybackActive": false,
+    "networkConnected": false,
+    "physicalIo": "scripted return counts; no claimed native fixture execution"
+  },
+  "encodingRows": [
+    {
+      "id": "ENC-v0-g0",
+      "version": 0,
+      "gapCycles": 0,
+      "beforeClock": 1000,
+      "currentClock": 1000,
+      "expectedBytes": [],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedWriteCalls": 0
+    },
+    {
+      "id": "ENC-v0-g6",
+      "version": 0,
+      "gapCycles": 6,
+      "beforeClock": 1000,
+      "currentClock": 1006,
+      "expectedBytes": [],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedWriteCalls": 0
+    },
+    {
+      "id": "ENC-v0-g7",
+      "version": 0,
+      "gapCycles": 7,
+      "beforeClock": 1000,
+      "currentClock": 1007,
+      "expectedBytes": [
+        0
+      ],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v0-g8",
+      "version": 0,
+      "gapCycles": 8,
+      "beforeClock": 1000,
+      "currentClock": 1008,
+      "expectedBytes": [
+        1
+      ],
+      "expectedClock": 1008,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 11,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v0-g2046",
+      "version": 0,
+      "gapCycles": 2046,
+      "beforeClock": 1000,
+      "currentClock": 3046,
+      "expectedBytes": [
+        255
+      ],
+      "expectedClock": 3040,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 265,
+      "expectedTotal": 265,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v0-g2047",
+      "version": 0,
+      "gapCycles": 2047,
+      "beforeClock": 1000,
+      "currentClock": 3047,
+      "expectedBytes": [
+        0
+      ],
+      "expectedClock": 3047,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 265,
+      "expectedTotal": 265,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v0-g16777215",
+      "version": 0,
+      "gapCycles": 16777215,
+      "beforeClock": 1000,
+      "currentClock": 16778215,
+      "expectedBytes": [
+        0
+      ],
+      "expectedClock": 16778215,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 2097161,
+      "expectedTotal": 2097161,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v0-g16777216",
+      "version": 0,
+      "gapCycles": 16777216,
+      "beforeClock": 1000,
+      "currentClock": 16778216,
+      "expectedBytes": [
+        0
+      ],
+      "expectedClock": 16778216,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 2097162,
+      "expectedTotal": 2097162,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v0-g16777217",
+      "version": 0,
+      "gapCycles": 16777217,
+      "beforeClock": 1000,
+      "currentClock": 16778217,
+      "expectedBytes": [
+        0
+      ],
+      "expectedClock": 16778217,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 2097162,
+      "expectedTotal": 2097162,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v1-g0",
+      "version": 1,
+      "gapCycles": 0,
+      "beforeClock": 1000,
+      "currentClock": 1000,
+      "expectedBytes": [],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedWriteCalls": 0
+    },
+    {
+      "id": "ENC-v1-g6",
+      "version": 1,
+      "gapCycles": 6,
+      "beforeClock": 1000,
+      "currentClock": 1006,
+      "expectedBytes": [],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedWriteCalls": 0
+    },
+    {
+      "id": "ENC-v1-g7",
+      "version": 1,
+      "gapCycles": 7,
+      "beforeClock": 1000,
+      "currentClock": 1007,
+      "expectedBytes": [
+        0
+      ],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v1-g8",
+      "version": 1,
+      "gapCycles": 8,
+      "beforeClock": 1000,
+      "currentClock": 1008,
+      "expectedBytes": [
+        1
+      ],
+      "expectedClock": 1008,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 11,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v1-g2046",
+      "version": 1,
+      "gapCycles": 2046,
+      "beforeClock": 1000,
+      "currentClock": 3046,
+      "expectedBytes": [
+        255
+      ],
+      "expectedClock": 3040,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 265,
+      "expectedTotal": 265,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v1-g2047",
+      "version": 1,
+      "gapCycles": 2047,
+      "beforeClock": 1000,
+      "currentClock": 3047,
+      "expectedBytes": [
+        0,
+        255,
+        7,
+        0
+      ],
+      "expectedClock": 3047,
+      "expectedLine": 8,
+      "expectedPosition": 104,
+      "expectedSize": 104,
+      "expectedCycles": 265,
+      "expectedTotal": 265,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 2
+    },
+    {
+      "id": "ENC-v1-g16777215",
+      "version": 1,
+      "gapCycles": 16777215,
+      "beforeClock": 1000,
+      "currentClock": 16778215,
+      "expectedBytes": [
+        0,
+        255,
+        255,
+        255
+      ],
+      "expectedClock": 16778215,
+      "expectedLine": 8,
+      "expectedPosition": 104,
+      "expectedSize": 104,
+      "expectedCycles": 2097161,
+      "expectedTotal": 2097161,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 2
+    },
+    {
+      "id": "ENC-v1-g16777216",
+      "version": 1,
+      "gapCycles": 16777216,
+      "beforeClock": 1000,
+      "currentClock": 16778216,
+      "expectedBytes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "expectedClock": 16778216,
+      "expectedLine": 8,
+      "expectedPosition": 104,
+      "expectedSize": 104,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 2
+    },
+    {
+      "id": "ENC-v1-g16777217",
+      "version": 1,
+      "gapCycles": 16777217,
+      "beforeClock": 1000,
+      "currentClock": 16778217,
+      "expectedBytes": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "expectedClock": 16778217,
+      "expectedLine": 8,
+      "expectedPosition": 104,
+      "expectedSize": 104,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 2
+    },
+    {
+      "id": "ENC-v2-g0",
+      "version": 2,
+      "gapCycles": 0,
+      "beforeClock": 1000,
+      "currentClock": 1000,
+      "expectedBytes": [],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedWriteCalls": 0
+    },
+    {
+      "id": "ENC-v2-g6",
+      "version": 2,
+      "gapCycles": 6,
+      "beforeClock": 1000,
+      "currentClock": 1006,
+      "expectedBytes": [],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedWriteCalls": 0
+    },
+    {
+      "id": "ENC-v2-g7",
+      "version": 2,
+      "gapCycles": 7,
+      "beforeClock": 1000,
+      "currentClock": 1007,
+      "expectedBytes": [
+        0
+      ],
+      "expectedClock": 1000,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v2-g8",
+      "version": 2,
+      "gapCycles": 8,
+      "beforeClock": 1000,
+      "currentClock": 1008,
+      "expectedBytes": [
+        1
+      ],
+      "expectedClock": 1008,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 11,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v2-g2046",
+      "version": 2,
+      "gapCycles": 2046,
+      "beforeClock": 1000,
+      "currentClock": 3046,
+      "expectedBytes": [
+        255
+      ],
+      "expectedClock": 3040,
+      "expectedLine": 8,
+      "expectedPosition": 101,
+      "expectedSize": 101,
+      "expectedCycles": 265,
+      "expectedTotal": 265,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 1
+    },
+    {
+      "id": "ENC-v2-g2047",
+      "version": 2,
+      "gapCycles": 2047,
+      "beforeClock": 1000,
+      "currentClock": 3047,
+      "expectedBytes": [
+        0,
+        255,
+        7,
+        0
+      ],
+      "expectedClock": 3047,
+      "expectedLine": 8,
+      "expectedPosition": 104,
+      "expectedSize": 104,
+      "expectedCycles": 265,
+      "expectedTotal": 265,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 2
+    },
+    {
+      "id": "ENC-v2-g16777215",
+      "version": 2,
+      "gapCycles": 16777215,
+      "beforeClock": 1000,
+      "currentClock": 16778215,
+      "expectedBytes": [
+        0,
+        255,
+        255,
+        255
+      ],
+      "expectedClock": 16778215,
+      "expectedLine": 8,
+      "expectedPosition": 104,
+      "expectedSize": 104,
+      "expectedCycles": 2097161,
+      "expectedTotal": 2097161,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 2
+    },
+    {
+      "id": "ENC-v2-g16777216",
+      "version": 2,
+      "gapCycles": 16777216,
+      "beforeClock": 1000,
+      "currentClock": 16778216,
+      "expectedBytes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "expectedClock": 16778216,
+      "expectedLine": 8,
+      "expectedPosition": 104,
+      "expectedSize": 104,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 2
+    },
+    {
+      "id": "ENC-v2-g16777217",
+      "version": 2,
+      "gapCycles": 16777217,
+      "beforeClock": 1000,
+      "currentClock": 16778217,
+      "expectedBytes": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "expectedClock": 16778217,
+      "expectedLine": 8,
+      "expectedPosition": 104,
+      "expectedSize": 104,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 1,
+      "expectedWriteCalls": 2
+    }
+  ],
+  "writeFailureRows": [
+    {
+      "id": "FAIL-v0-short",
+      "version": 0,
+      "gapCycles": 8,
+      "returns": [
+        0
+      ],
+      "expectedBytes": [],
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v0-prefix",
+      "version": 0,
+      "gapCycles": 2047,
+      "returns": [
+        0
+      ],
+      "expectedBytes": [],
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v1-short",
+      "version": 1,
+      "gapCycles": 8,
+      "returns": [
+        0
+      ],
+      "expectedBytes": [],
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v1-prefix",
+      "version": 1,
+      "gapCycles": 2047,
+      "returns": [
+        0
+      ],
+      "expectedBytes": [],
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v2-short",
+      "version": 2,
+      "gapCycles": 8,
+      "returns": [
+        0
+      ],
+      "expectedBytes": [],
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v2-prefix",
+      "version": 2,
+      "gapCycles": 2047,
+      "returns": [
+        0
+      ],
+      "expectedBytes": [],
+      "expectedPosition": 100,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v1-payload0",
+      "version": 1,
+      "gapCycles": 2047,
+      "returns": [
+        1,
+        0
+      ],
+      "expectedBytes": [
+        0
+      ],
+      "expectedPosition": 101,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v1-payload1",
+      "version": 1,
+      "gapCycles": 2047,
+      "returns": [
+        1,
+        1
+      ],
+      "expectedBytes": [
+        0,
+        255
+      ],
+      "expectedPosition": 102,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v1-payload2",
+      "version": 1,
+      "gapCycles": 2047,
+      "returns": [
+        1,
+        2
+      ],
+      "expectedBytes": [
+        0,
+        255,
+        7
+      ],
+      "expectedPosition": 103,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v2-payload0",
+      "version": 2,
+      "gapCycles": 2047,
+      "returns": [
+        1,
+        0
+      ],
+      "expectedBytes": [
+        0
+      ],
+      "expectedPosition": 101,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v2-payload1",
+      "version": 2,
+      "gapCycles": 2047,
+      "returns": [
+        1,
+        1
+      ],
+      "expectedBytes": [
+        0,
+        255
+      ],
+      "expectedPosition": 102,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    },
+    {
+      "id": "FAIL-v2-payload2",
+      "version": 2,
+      "gapCycles": 2047,
+      "returns": [
+        1,
+        2
+      ],
+      "expectedBytes": [
+        0,
+        255,
+        7
+      ],
+      "expectedPosition": 103,
+      "expectedSize": 100,
+      "expectedCycles": 10,
+      "expectedTotal": 12,
+      "expectedDirty": 0,
+      "expectedLastWriteClockAfterLocalStop": 0,
+      "expectedLine": 8
+    }
+  ],
+  "edgeRows": [
+    {
+      "id": "EDGE--1-0",
+      "previousRaw": -1,
+      "newRaw": 0,
+      "qualifiesIfEligible": false,
+      "expectedLastRaw": 0
+    },
+    {
+      "id": "EDGE--1-8",
+      "previousRaw": -1,
+      "newRaw": 8,
+      "qualifiesIfEligible": false,
+      "expectedLastRaw": 8
+    },
+    {
+      "id": "EDGE-0-0",
+      "previousRaw": 0,
+      "newRaw": 0,
+      "qualifiesIfEligible": false,
+      "expectedLastRaw": 0
+    },
+    {
+      "id": "EDGE-0-8",
+      "previousRaw": 0,
+      "newRaw": 8,
+      "qualifiesIfEligible": true,
+      "expectedLastRaw": 8
+    },
+    {
+      "id": "EDGE-8-0",
+      "previousRaw": 8,
+      "newRaw": 0,
+      "qualifiesIfEligible": false,
+      "expectedLastRaw": 0
+    },
+    {
+      "id": "EDGE-8-8",
+      "previousRaw": 8,
+      "newRaw": 8,
+      "qualifiesIfEligible": false,
+      "expectedLastRaw": 8
+    }
+  ],
+  "senseRows": [
+    {
+      "id": "SENSE-C64-s0-d0-o0",
+      "machine": "C64",
+      "sense": 0,
+      "directionBit": 0,
+      "outputBit": 0,
+      "bitIndex": 4,
+      "expectedReadBit": 1
+    },
+    {
+      "id": "SENSE-C64-s0-d0-o1",
+      "machine": "C64",
+      "sense": 0,
+      "directionBit": 0,
+      "outputBit": 1,
+      "bitIndex": 4,
+      "expectedReadBit": 1
+    },
+    {
+      "id": "SENSE-C64-s0-d1-o0",
+      "machine": "C64",
+      "sense": 0,
+      "directionBit": 1,
+      "outputBit": 0,
+      "bitIndex": 4,
+      "expectedReadBit": 0
+    },
+    {
+      "id": "SENSE-C64-s0-d1-o1",
+      "machine": "C64",
+      "sense": 0,
+      "directionBit": 1,
+      "outputBit": 1,
+      "bitIndex": 4,
+      "expectedReadBit": 1
+    },
+    {
+      "id": "SENSE-C64-s1-d0-o0",
+      "machine": "C64",
+      "sense": 1,
+      "directionBit": 0,
+      "outputBit": 0,
+      "bitIndex": 4,
+      "expectedReadBit": 0
+    },
+    {
+      "id": "SENSE-C64-s1-d0-o1",
+      "machine": "C64",
+      "sense": 1,
+      "directionBit": 0,
+      "outputBit": 1,
+      "bitIndex": 4,
+      "expectedReadBit": 0
+    },
+    {
+      "id": "SENSE-C64-s1-d1-o0",
+      "machine": "C64",
+      "sense": 1,
+      "directionBit": 1,
+      "outputBit": 0,
+      "bitIndex": 4,
+      "expectedReadBit": 0
+    },
+    {
+      "id": "SENSE-C64-s1-d1-o1",
+      "machine": "C64",
+      "sense": 1,
+      "directionBit": 1,
+      "outputBit": 1,
+      "bitIndex": 4,
+      "expectedReadBit": 1
+    },
+    {
+      "id": "SENSE-VIC20-s0-d0-o0",
+      "machine": "VIC20",
+      "sense": 0,
+      "directionBit": 0,
+      "outputBit": 0,
+      "bitIndex": 6,
+      "expectedReadBit": 1
+    },
+    {
+      "id": "SENSE-VIC20-s0-d0-o1",
+      "machine": "VIC20",
+      "sense": 0,
+      "directionBit": 0,
+      "outputBit": 1,
+      "bitIndex": 6,
+      "expectedReadBit": 1
+    },
+    {
+      "id": "SENSE-VIC20-s0-d1-o0",
+      "machine": "VIC20",
+      "sense": 0,
+      "directionBit": 1,
+      "outputBit": 0,
+      "bitIndex": 6,
+      "expectedReadBit": 0
+    },
+    {
+      "id": "SENSE-VIC20-s0-d1-o1",
+      "machine": "VIC20",
+      "sense": 0,
+      "directionBit": 1,
+      "outputBit": 1,
+      "bitIndex": 6,
+      "expectedReadBit": 1
+    },
+    {
+      "id": "SENSE-VIC20-s1-d0-o0",
+      "machine": "VIC20",
+      "sense": 1,
+      "directionBit": 0,
+      "outputBit": 0,
+      "bitIndex": 6,
+      "expectedReadBit": 0
+    },
+    {
+      "id": "SENSE-VIC20-s1-d0-o1",
+      "machine": "VIC20",
+      "sense": 1,
+      "directionBit": 0,
+      "outputBit": 1,
+      "bitIndex": 6,
+      "expectedReadBit": 0
+    },
+    {
+      "id": "SENSE-VIC20-s1-d1-o0",
+      "machine": "VIC20",
+      "sense": 1,
+      "directionBit": 1,
+      "outputBit": 0,
+      "bitIndex": 6,
+      "expectedReadBit": 0
+    },
+    {
+      "id": "SENSE-VIC20-s1-d1-o1",
+      "machine": "VIC20",
+      "sense": 1,
+      "directionBit": 1,
+      "outputBit": 1,
+      "bitIndex": 6,
+      "expectedReadBit": 1
+    }
+  ],
+  "c64OutputRows": [
+    {
+      "id": "C64-OUT-d0-o0",
+      "directionBit": 0,
+      "outputBit": 0,
+      "motorBit5": 1,
+      "writeRawBit3": 8,
+      "senseOutBit4": 1
+    },
+    {
+      "id": "C64-OUT-d0-o1",
+      "directionBit": 0,
+      "outputBit": 1,
+      "motorBit5": 1,
+      "writeRawBit3": 8,
+      "senseOutBit4": 1
+    },
+    {
+      "id": "C64-OUT-d1-o0",
+      "directionBit": 1,
+      "outputBit": 0,
+      "motorBit5": 1,
+      "writeRawBit3": 0,
+      "senseOutBit4": 1
+    },
+    {
+      "id": "C64-OUT-d1-o1",
+      "directionBit": 1,
+      "outputBit": 1,
+      "motorBit5": 0,
+      "writeRawBit3": 8,
+      "senseOutBit4": 0
+    }
+  ],
+  "vicPcrRows": [
+    {
+      "id": "VIC-PCR-0-0",
+      "oldPcr": 0,
+      "newPcr": 0,
+      "motorCallCount": 0,
+      "motorValue": null,
+      "userportPa2": null
+    },
+    {
+      "id": "VIC-PCR-0-2",
+      "oldPcr": 0,
+      "newPcr": 2,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-0-12",
+      "oldPcr": 0,
+      "newPcr": 12,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-0-14",
+      "oldPcr": 0,
+      "newPcr": 14,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-0-32",
+      "oldPcr": 0,
+      "newPcr": 32,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-0-255",
+      "oldPcr": 0,
+      "newPcr": 255,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-2-0",
+      "oldPcr": 2,
+      "newPcr": 0,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-2-2",
+      "oldPcr": 2,
+      "newPcr": 2,
+      "motorCallCount": 0,
+      "motorValue": null,
+      "userportPa2": null
+    },
+    {
+      "id": "VIC-PCR-2-12",
+      "oldPcr": 2,
+      "newPcr": 12,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-2-14",
+      "oldPcr": 2,
+      "newPcr": 14,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-2-32",
+      "oldPcr": 2,
+      "newPcr": 32,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-2-255",
+      "oldPcr": 2,
+      "newPcr": 255,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-12-0",
+      "oldPcr": 12,
+      "newPcr": 0,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-12-2",
+      "oldPcr": 12,
+      "newPcr": 2,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-12-12",
+      "oldPcr": 12,
+      "newPcr": 12,
+      "motorCallCount": 0,
+      "motorValue": null,
+      "userportPa2": null
+    },
+    {
+      "id": "VIC-PCR-12-14",
+      "oldPcr": 12,
+      "newPcr": 14,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-12-32",
+      "oldPcr": 12,
+      "newPcr": 32,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-12-255",
+      "oldPcr": 12,
+      "newPcr": 255,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-14-0",
+      "oldPcr": 14,
+      "newPcr": 0,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-14-2",
+      "oldPcr": 14,
+      "newPcr": 2,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-14-12",
+      "oldPcr": 14,
+      "newPcr": 12,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-14-14",
+      "oldPcr": 14,
+      "newPcr": 14,
+      "motorCallCount": 0,
+      "motorValue": null,
+      "userportPa2": null
+    },
+    {
+      "id": "VIC-PCR-14-32",
+      "oldPcr": 14,
+      "newPcr": 32,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-14-255",
+      "oldPcr": 14,
+      "newPcr": 255,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-32-0",
+      "oldPcr": 32,
+      "newPcr": 0,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-32-2",
+      "oldPcr": 32,
+      "newPcr": 2,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-32-12",
+      "oldPcr": 32,
+      "newPcr": 12,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-32-14",
+      "oldPcr": 32,
+      "newPcr": 14,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-32-32",
+      "oldPcr": 32,
+      "newPcr": 32,
+      "motorCallCount": 0,
+      "motorValue": null,
+      "userportPa2": null
+    },
+    {
+      "id": "VIC-PCR-32-255",
+      "oldPcr": 32,
+      "newPcr": 255,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-255-0",
+      "oldPcr": 255,
+      "newPcr": 0,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-255-2",
+      "oldPcr": 255,
+      "newPcr": 2,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-255-12",
+      "oldPcr": 255,
+      "newPcr": 12,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-255-14",
+      "oldPcr": 255,
+      "newPcr": 14,
+      "motorCallCount": 1,
+      "motorValue": 0,
+      "userportPa2": 0
+    },
+    {
+      "id": "VIC-PCR-255-32",
+      "oldPcr": 255,
+      "newPcr": 32,
+      "motorCallCount": 1,
+      "motorValue": 1,
+      "userportPa2": 1
+    },
+    {
+      "id": "VIC-PCR-255-255",
+      "oldPcr": 255,
+      "newPcr": 255,
+      "motorCallCount": 0,
+      "motorValue": null,
+      "userportPa2": null
+    }
+  ],
+  "vicPbRows": [
+    {
+      "id": "VIC-PB-d0-b0-d0-b0",
+      "oldDdr3": 0,
+      "oldPrb3": 0,
+      "newDdr3": 0,
+      "newPrb3": 0,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d0-b0-d0-b1",
+      "oldDdr3": 0,
+      "oldPrb3": 0,
+      "newDdr3": 0,
+      "newPrb3": 1,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d0-b0-d1-b0",
+      "oldDdr3": 0,
+      "oldPrb3": 0,
+      "newDdr3": 1,
+      "newPrb3": 0,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 0,
+      "callCount": 1,
+      "callbackRaw": 0,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d0-b0-d1-b1",
+      "oldDdr3": 0,
+      "oldPrb3": 0,
+      "newDdr3": 1,
+      "newPrb3": 1,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d0-b1-d0-b0",
+      "oldDdr3": 0,
+      "oldPrb3": 1,
+      "newDdr3": 0,
+      "newPrb3": 0,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d0-b1-d0-b1",
+      "oldDdr3": 0,
+      "oldPrb3": 1,
+      "newDdr3": 0,
+      "newPrb3": 1,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d0-b1-d1-b0",
+      "oldDdr3": 0,
+      "oldPrb3": 1,
+      "newDdr3": 1,
+      "newPrb3": 0,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 0,
+      "callCount": 1,
+      "callbackRaw": 0,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d0-b1-d1-b1",
+      "oldDdr3": 0,
+      "oldPrb3": 1,
+      "newDdr3": 1,
+      "newPrb3": 1,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d1-b0-d0-b0",
+      "oldDdr3": 1,
+      "oldPrb3": 0,
+      "newDdr3": 0,
+      "newPrb3": 0,
+      "oldEffectiveRaw": 0,
+      "newEffectiveRaw": 8,
+      "callCount": 1,
+      "callbackRaw": 8,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d1-b0-d0-b1",
+      "oldDdr3": 1,
+      "oldPrb3": 0,
+      "newDdr3": 0,
+      "newPrb3": 1,
+      "oldEffectiveRaw": 0,
+      "newEffectiveRaw": 8,
+      "callCount": 1,
+      "callbackRaw": 8,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d1-b0-d1-b0",
+      "oldDdr3": 1,
+      "oldPrb3": 0,
+      "newDdr3": 1,
+      "newPrb3": 0,
+      "oldEffectiveRaw": 0,
+      "newEffectiveRaw": 0,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d1-b0-d1-b1",
+      "oldDdr3": 1,
+      "oldPrb3": 0,
+      "newDdr3": 1,
+      "newPrb3": 1,
+      "oldEffectiveRaw": 0,
+      "newEffectiveRaw": 8,
+      "callCount": 1,
+      "callbackRaw": 8,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d1-b1-d0-b0",
+      "oldDdr3": 1,
+      "oldPrb3": 1,
+      "newDdr3": 0,
+      "newPrb3": 0,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d1-b1-d0-b1",
+      "oldDdr3": 1,
+      "oldPrb3": 1,
+      "newDdr3": 0,
+      "newPrb3": 1,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d1-b1-d1-b0",
+      "oldDdr3": 1,
+      "oldPrb3": 1,
+      "newDdr3": 1,
+      "newPrb3": 0,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 0,
+      "callCount": 1,
+      "callbackRaw": 0,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    },
+    {
+      "id": "VIC-PB-d1-b1-d1-b1",
+      "oldDdr3": 1,
+      "oldPrb3": 1,
+      "newDdr3": 1,
+      "newPrb3": 1,
+      "oldEffectiveRaw": 8,
+      "newEffectiveRaw": 8,
+      "callCount": 0,
+      "callbackRaw": null,
+      "fixture": "single effective transition; multi-register sequential transitions must be expanded separately"
+    }
+  ],
+  "denominators": {
+    "requirementBindings": 6,
+    "namedGroups": 26,
+    "encodingExamples": 27,
+    "writeFailureExamples": 12,
+    "edgeExamples": 6,
+    "senseBitExamples": 16,
+    "c64OutputExamples": 4,
+    "vicPcrExamples": 36,
+    "vicPbExamples": 16,
+    "materializedExampleRows": 117,
+    "requiredExhaustiveVicPcrPairs": 65536,
+    "combinedExpandedRuntimeCaseCount": null,
+    "explanation": "Rows are source-derived examples, not tests. State/order/resource/side-effect combinations in Markdown remain required. Row count is not a test denominator or a passing gate."
+  },
+  "documents": [
+    "RECORDING-CONTRACT.md",
+    "WIRING-LIFECYCLE-CONTRACT.md"
+  ],
+  "openDependencies": [
+    "approved complete requirement amendment and mapping targets",
+    "native observer/public-fixture reachability for every asserted state",
+    "pinned native CRT update-stream and partial-write observations",
+    "full CIA/VIA interrupt timing and compile-option evidence",
+    "process-static and snapshot observation coverage",
+    "unknown TAP versions and nonneutral tuning/wobble/azimuth",
+    "audio and RTC process history",
+    "five successful turbo-loader fixtures",
+    "superseded-test disposition and application safeguards",
+    "coherent handoff and full-packet Opus max HV"
+  ]
+}

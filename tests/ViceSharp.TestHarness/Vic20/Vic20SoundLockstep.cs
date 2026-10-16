@@ -87,8 +87,7 @@ public sealed class Vic20SoundLockstep
     [Fact]
     public void Silence_MatchesXvic()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -110,8 +109,7 @@ public sealed class Vic20SoundLockstep
     [Fact]
     public void Tone_MatchesXvic()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();

@@ -1,0 +1,22 @@
+{
+  "endedAtLocal": "2026-10-13T22:13:56",
+  "exitCode": 0,
+  "processId": 22508,
+  "captureTasksCompleted": true,
+  "streamsFlushedAndClosed": true,
+  "eventCount": 2648,
+  "resultEventCount": 1,
+  "resultSubtype": "success",
+  "resultIsError": false,
+  "verdict": "DISAGREE",
+  "accuracy": 97,
+  "completeness": 97,
+  "passCount": 39,
+  "failCount": 2,
+  "unknownCount": 4,
+  "notApplicableCount": 1,
+  "responseSha256": "7AF21F53D687E50ABA07FC72E037F5387A7186B07ED7054B52FE931DD8D36C3C",
+  "responseBytes": 3913731,
+  "stderrBytes": 0,
+  "persistence": "Reviewer unable to persist due to launcher plan-mode denial. Parent recovery follows, not reviewer acceptance."
+}

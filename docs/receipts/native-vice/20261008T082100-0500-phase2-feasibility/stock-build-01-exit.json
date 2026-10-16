@@ -1,0 +1,8 @@
+{
+  "timestampLocal": "2026-10-08T08:41:18.6262734-05:00",
+  "pid": 42520,
+  "exitCode": 1,
+  "failure": "configure: error: libcurl (>= 7.66.0) support requested, but libcurl was not found.",
+  "stdout": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-build.stdout.log",
+  "stderr": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-build.stderr.log"
+}

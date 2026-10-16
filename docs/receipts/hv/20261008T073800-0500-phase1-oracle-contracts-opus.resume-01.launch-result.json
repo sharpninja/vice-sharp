@@ -1,0 +1,14 @@
+{
+  "timestampLocal": "2026-10-08T08:05:23.8786355-05:00",
+  "pid": 21280,
+  "hasExited": false,
+  "cliSessionId": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "pinsChecked": 59,
+  "pinMismatches": 0,
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.request.jsonl",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.response.jsonl",
+  "completionPercent": null,
+  "eta": null
+}

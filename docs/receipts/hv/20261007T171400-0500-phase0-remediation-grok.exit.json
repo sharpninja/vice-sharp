@@ -1,0 +1,20 @@
+{
+  "timestampLocal": "2026-10-07T17:48:03.7469429-05:00",
+  "processId": 61032,
+  "exitCode": 0,
+  "exitTime": "2026-10-07T17:47:27.2248558-05:00",
+  "responseBytes": 3988656,
+  "responseSha256": "2132F05EBA4A7AB13AECE5112772EE4632E4CA9EF6481F4C28596E689132CA4B",
+  "stderrBytes": 0,
+  "primaryResponseUnchanged": true,
+  "primaryTurnStatus": "completed",
+  "pinnedInputs": 59,
+  "changedPinnedInputs": [],
+  "activePending": [],
+  "quarantineCount": 7,
+  "completionPercent": 100,
+  "eta": null,
+  "phase0Accepted": true,
+  "wholeGoalComplete": false,
+  "activePendingCount": 0
+}

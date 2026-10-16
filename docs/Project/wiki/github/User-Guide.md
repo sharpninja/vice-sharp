@@ -6,9 +6,9 @@ This guide walks a new user from a fresh clone to a running C64 with a true-driv
 
 ### Prerequisites
 
-- **[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** (10.0.201 or later). Verify with `dotnet --version`.
+- **[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** (10.0.301 or later, matching `global.json`). Verify with `dotnet --version`.
 - **Git**.
-- **Native VICE shim for Windows x64**. Download `vice-sharp-native-win-x64.zip` from [GitHub Releases](https://github.com/sharpninja/vice-sharp/releases), extract it at the repository root, and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Alternatively install **MSYS2 + mingw-w64 gcc** and let the build recreate the shim from source.
+- **Native VICE bundle for Windows x64**. Download `vice-sharp-native-win-x64.zip` from [GitHub Releases](https://github.com/sharpninja/vice-sharp/releases), extract it at the repository root, and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Source-native rebuilding is under immutable-oracle remediation; the current legacy build script still applies a patch and must not be used as VICE parity evidence.
 
 ### Clone and build
 
@@ -18,7 +18,7 @@ cd vice-sharp
 dotnet build ViceSharp.slnx
 ```
 
-The build is `TreatWarningsAsErrors`; a clean checkout on a supported SDK builds with zero warnings. If you see SDK-version errors, re-check `dotnet --version`. If you do not install the release bundle first, Windows builds that touch native VICE will invoke `native/build-vice-shim.ps1` and require MSYS2 at `C:\msys64`.
+The build is `TreatWarningsAsErrors`. If you see SDK-version errors, re-check `dotnet --version`. Install the release native bundle before running native-backed tests. The source-native build path is being moved to a clean external materialization so `native/vice` remains byte-for-byte immutable; until that remediation lands, do not use the legacy patched build as parity evidence.
 
 ### First-run verification
 
@@ -28,9 +28,9 @@ Run the supported test gate (the same filter the Nuke `Test` target uses):
 dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"
 ```
 
-`./build.ps1 Test` runs the same gate. At the v1.0.2 release the baseline is Failed 0 / Passed 2594 / Skipped 21 / Total 2615 (single process). A failure here means your local environment is off (typically a missing native VICE bundle or a wrong .NET SDK) rather than a real regression.
+`./build.ps1 Test` runs the same filtered gate. Judge the run by its actual output. A missing native bundle or wrong SDK can cause environmental failures, but failures can also be real regressions. Current acceptance gates require zero failed and zero skipped tests; this filtered command alone does not establish full VICE parity because it excludes the quarantined parity categories.
 
-Avoid an unfiltered `dotnet test ViceSharp.slnx`: it pulls in opt-in categories (determinism replays, AI reviews, quarantined parity suites), can exceed 5 minutes, and has hung historically.
+For broad validation, use the repository's Nuke targets and retained evidence guidance rather than an unbounded interactive run. Opt-in determinism, AI review, and parity categories have separate gates and may require native prerequisites or process isolation.
 
 ## 2. Get ROMs
 
@@ -105,9 +105,10 @@ The console entry point currently consumes `--help`, `-debugcart` / `+debugcart`
 | Binary name | Topology |
 |-------------|----------|
 | `x64` | C64 host. Adds drives if `-8` / `-9` is given. |
-| `x64sc` | Same as `x64` (cycle-exact path is the only path in ViceSharp). |
+| `x64sc` | Same topology selection as `x64`; ViceSharp does not expose a separate fast-core versus cycle-core selector. This name does not by itself prove x64sc behavioral parity. |
 | `c1541` | Standalone 1541 (disk-only tool mode). |
-| `x128`, `xvic`, `xpet`, `xplus4`, `xcbm2`, `xcbm5x0`, `vsid`, `petcat`, `cartconv` | Reserved. Throws `NotSupportedException` for now. |
+| `xvic` | Launcher-library topology generation exists and emits `kind: Vic20`. It is not an end-to-end console path yet: the console hardcodes `x64sc`, and the generic multi-system kind dispatcher currently recognizes only `C64` and `C1541`. |
+| `x128`, `xpet`, `xplus4`, `xcbm2`, `xcbm5x0`, `vsid`, `petcat`, `cartconv` | Reserved. Throws `NotSupportedException` for now. |
 
 Example: VICE testbench style "run a PRG with the debug cartridge and a bounded cycle budget":
 
@@ -115,7 +116,7 @@ Example: VICE testbench style "run a PRG with the debug cartridge and a bounded 
 dotnet run --project src/ViceSharp.Console -- --roms $env:VICESHARP_ROM_PATH -debugcart -limitcycles 5000000 testcase.prg
 ```
 
-Unknown flags are not fatal: the parser collects them in `ViceArgs.Unknown` and proceeds, matching classic VICE's lenient behaviour. See [VICE-MIGRATION.md](VICE-MIGRATION.md) for which classic flags are currently in this bucket.
+Unknown flags are not fatal: the parser collects them in `ViceArgs.Unknown` and proceeds. That is current ViceSharp behavior; it is not a claim that every classic VICE binary handles unknown options identically. See [VICE-MIGRATION.md](VICE-MIGRATION.md) for which flags are currently in this bucket.
 
 ## 5. Machine YAML topologies
 
@@ -148,7 +149,7 @@ coordinator:
 
 Schema rules in short form:
 
-- `kind:` is dispatched to a real architecture descriptor. Today: `C64` and `C1541`. Other `kind:` values raise a validation error from the loader.
+- `kind:` is dispatched directly for `C64` and `C1541`. For any other value, the coordinator uses that system's nested `yaml:` machine specification when one is supplied; otherwise it raises a validation error.
 - `busAttachments:` wires a machine endpoint to a named bus. Endpoint names are arbitrary identifiers used by `InterSystemBusTracer` for diagnostics.
 - `fidelity:` selects `TrueDevice` (full 6502 CPU + VIA emulation on the drive) or `Buffered` (sector-stream fast path). Default is `Buffered` if omitted.
 - `diskImagePath:` on a `C1541` peripheral attaches a D64 at load time.
@@ -186,11 +187,11 @@ Unsupported extensions (for example `.txt`) are rejected on drag-over.
 
 ## 7. What works today / what doesn't
 
-This matches the [README dashboard](../README.md#completion-dashboard); the matrix below is the practical "what should I expect" view.
+This matrix is the practical current-code view. Historical receipts prove only their named slices; the controlling parity and snapshot gates live in the current plans.
 
 | Area | State | Notes |
 |------|-------|-------|
-| C64 host (MOS 6510 + VIC-II + SID + CIA x2 + PLA + KERNAL boot) | Working | Cycle-exact lockstep parity with native VICE `x64sc`: 322 x64sc variant cases (C64 / C64C / SX-64, PAL + NTSC) at multi-frame depth, plus the 335-case lockstep/checkpoint gate and 100k-cycle parity. |
+| C64 host (MOS 6510 + VIC-II + SID + CIA x2 + PLA + KERNAL boot) | Bounded, parity reopened | Historical 100,000-cycle and multi-frame x64sc receipts cover named models, fields, workloads, and windows. Full classic VICE behavior and edge cases are being re-audited; the bounded receipts are not whole-machine parity proof. |
 | Multi-system substrate (YAML topology + auto-binds) | Working | Canonical sample builds C64 + true-drive 1541 with one CLI invocation; ROM-backed boot still requires local ROM assets. |
 | 1541 drive (true-drive: 6502 + VIA1 + VIA2 + IEC) | Bounded | IEC, head step, motor, D64 sector reads/writes, and stream commit are wired; drive-CPU lockstep and full KERNAL load validation remain Phase 1 work. |
 | CIA1 / CIA2 timers, TOD, ports | Working | Full solution test passes. |
@@ -198,12 +199,12 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | SID audio backend wiring | Working (default on desktop) | The Avalonia desktop app enables a WinMM audio backend by default on Windows (it sets `VICESHARP_AUDIO=1` at startup; set `VICESHARP_AUDIO=0` to force silence). Headless and test hosts stay silent. Library consumers pass an `IAudioBackend` to `Sid6581(IBus, IAudioBackend?)` to receive 256-sample batches. |
 | Standard 8K / 16K cartridge mapping (raw + CRT) | Working | Image normalises to ROML/ROMH and drives the live C64 memory map with GAME/EXROM behaviour; broader mapper families are post-MVP. |
 | Tape (TAP pulse reads) | Bounded | TAP pulse stream, CIA1 FLAG integration, builder wiring, rewind, and seek are present; spin-up/spin-down timing and record state remain Phase 1 work. |
-| Snapshot save/load | Bounded | 64K + public CPU state round-trips; full chip, timing, and resume state remain Phase 1 work. |
+| Snapshot save/load | Canonical format pending | The product host currently emits `vice-sharp.machine-snapshot.v2` for C64 and `vice-sharp.runtime-snapshot.v1` for non-C64. Managed VSF staging exists in the test harness, but normal public and desktop paths do not yet save/load canonical native VICE `.vsf`; full state transfer and deterministic x64sc/xvic resume remain required. |
 | Media capture / recording | Working | Screenshot (PNG/BMP), WAV sound, BMP frame sequence (all or unique frames), and muxed video with sound (MP4 / MKV / AVI via ffmpeg) export through the gRPC capture surface and the Avalonia Snapshot menu. See "Media capture and recording" below. |
 | VIC-II pixel sequencer / sprite collisions | Partial | Visible sprite composition, sprite priority/collision coverage, display-mode pixel routing including invalid ECM priority/collision, managed continuous side-border behavior, VIC-II register readback masks/collision latch writes, and managed matrix idle/fill behavior are covered; native display-mode/register/matrix checkpoints, sprite fetch depth, and FLI/AFLI timing remain under `BACKFILL-VIDEO-001`. |
 | SID combined waveforms + ADSR-bug accuracy | Working | Combined waveform, ADSR, digi, filter, PCM-equivalence, and dual-SID coverage are in the focused suite; further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression. |
 | Cartridge ports / user port as live CPU attachment | Substrate ready | `IInterSystemBus` supports `UserPort` and `CartPort` bus kinds; chip-level bindings are in for CIA2 / VIA1 / VIA2 / GAME / EXROM. Cartridge-as-running-CPU sample topology is future work. |
-| VIC-20 host (MOS 6502 + VIC-I + VIA x2 + 1540 default) | Working core | Managed core + 10 s every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` (PAL and NTSC). READY palette-index and native BGRA SequenceEqual are green for PAL/NTSC/busy captures (scoped Exact, not whole-machine). Settings provide BLK wrap toggles, FE3/Ultimem/Mega-Cart attach, and the [Flash Cart Builder](FlashCart-Builder.md). FE3 erase timing, cartridge persistence, and focused native VIC-I silence/tone audio comparisons are covered. |
+| VIC-20 host (MOS 6502 + VIC-I + VIA x2 + 1540 default) | Bounded, parity reopened | Historical PAL/NTSC 10-second A/X/Y/S/P/PC receipts and scoped frame, flash, persistence, and audio tests exist, but full xvic parity is not accepted. The current Avalonia working tree shows VIC-20 memory and expansion settings only for VIC-20 profiles. Canonical VICE `.vsf`, complete state checkpoints, input end-to-end coverage, and launcher/runtime completion remain open. |
 | C128 / PET / Plus/4 / CBM-II | Not yet | Launcher binaries throw `NotSupportedException` for those machines. |
 | Host UI (Avalonia desktop + Console; gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Supported product shells: Avalonia desktop and Console. Video-surface drop accepts disks/carts (attach + boot) and `*.prg` (load into current RAM; RUN when load address equals live TXTTAB). |
 
@@ -253,13 +254,13 @@ grpcurl -plaintext -d "{}" $attach.endpoint vice_sharp.v1.DiagnosticsService/Get
 
 ## 9. Troubleshooting
 
-**`Failed to load multi-system YAML: ...`** - the loader is strict about schema. Re-check `kind:` (case-sensitive: `C64`, `C1541`), `busAttachments:` references resolve to a `buses:` entry, and `deviceNumber:` is 8..11.
+**`Failed to load multi-system YAML: ...`** - the loader is strict about schema. Re-check `kind:` (`C64` and `C1541` direct dispatch is case-insensitive; other values need a nested `yaml:` machine specification), ensure `busAttachments:` references resolve to a `buses:` entry, and keep `deviceNumber:` in 8..11.
 
 **Missing ROMs / `FileNotFoundException` on kernal/basic/chargen** - `VICESHARP_ROM_PATH` is unset or pointing at the wrong directory. Verify the layout in [ROMs.md](ROMs.md#rom-directory-structure).
 
 **Drive sits idle / `PC` never moves** - true-drive emulation may be off. In YAML, set `fidelity: TrueDevice` (the launcher library's `+truedrive` flag maps to the same setting). The CPU on a buffered drive doesn't run by design.
 
-**`Native VICE failed to create a machine`** - the native shim couldn't allocate a VICE instance. On Windows this is usually disk pressure (the shim writes scratch state) or a missing native bundle. Free space and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist, or rebuild the shim with `pwsh native/build-vice-shim.ps1` (needs MSYS2 + gcc). Maintainers can package a rebuilt bundle with `pwsh tools/Package-NativeViceBinary.ps1`.
+**`Native VICE failed to create a machine`** - the native adapter could not allocate a VICE instance. On Windows this is usually disk pressure or a missing native bundle. Free space and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Do not use the current legacy source-build script as parity evidence while immutable-oracle remediation is open; it still applies a patch under `native/vice`.
 
 **`SetDriveTrueEmulation` returns non-zero** - VICE rejected the resource set. The most common cause is an out-of-range unit number; valid units are 8..11.
 

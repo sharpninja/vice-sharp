@@ -1,0 +1,17 @@
+{
+  "timestampLocal": "2026-10-09T01:59:10-05:00",
+  "started": true,
+  "pid": 114036,
+  "hasExited": false,
+  "cliSessionId": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "host": "PAYTON-LEGION2",
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T014822-0500-opus-remediation-resume\\request.jsonl",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T014822-0500-opus-remediation-resume\\response.jsonl",
+  "stderrPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T014822-0500-opus-remediation-resume\\stderr.log",
+  "freshMcpCacheRoot": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261009T014822-0500-opus-remediation-resume",
+  "artificialTimeout": null,
+  "artificialTurnLimit": null
+}

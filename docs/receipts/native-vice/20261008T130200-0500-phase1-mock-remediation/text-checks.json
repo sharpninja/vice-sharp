@@ -1,0 +1,23 @@
+[
+  {
+    "file": "tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+    "exitCode": 1,
+    "output": [],
+    "noWhitespaceErrors": true,
+    "forbiddenDashCount": 0
+  },
+  {
+    "file": "tests\\ViceSharp.OracleContract.Tests\\README.md",
+    "exitCode": 1,
+    "output": [],
+    "noWhitespaceErrors": true,
+    "forbiddenDashCount": 0
+  },
+  {
+    "file": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\README.md",
+    "exitCode": 1,
+    "output": [],
+    "noWhitespaceErrors": true,
+    "forbiddenDashCount": 0
+  }
+]

@@ -1,0 +1,106 @@
+{
+  "Schema": "hostile-validator-readback/v1",
+  "ReadbackLocal": "2026-10-07T12:46:51.796-05:00",
+  "ReadbackMethod": "Claude plugin Invoke-McpPlugin -Command Invoke -Method client.SessionLog.QueryAsync (agent ClaudeCode, text hv-mock-green-wiki-phase0-readiness), isolated cache; primary server response, not the local cache",
+  "ReadbackRawEvidence": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude-hv\\20261007T120522-0500-mock-green-wiki-opus\\calls\\013-client.SessionLog.QueryAsync.json",
+  "SessionId": "ClaudeCode-20261007T171916Z-hv-mock-green-wiki-opus",
+  "TurnRequestId": "req-20261007T171934Z-001-hv-mock-green-wiki-phase0-readiness",
+  "TurnStatus": "completed",
+  "TurnModelField": "codex",
+  "ResponseLength": 67024,
+  "LocalVerdictMdLength": 67024,
+  "ResponseExactlyEqualsLocalVerdictMd": true,
+  "ResponseSha256": "D342B7E46DA84489DE5E524A23E21EA689CA3A32FD2BB3F80E2F3535C5BFD23D",
+  "LocalVerdictMdSha256": "D342B7E46DA84489DE5E524A23E21EA689CA3A32FD2BB3F80E2F3535C5BFD23D",
+  "StandaloneDelimiterLineCount": 1,
+  "DelimiterLineIndex": 264,
+  "ProseEqualsLocalProse": true,
+  "JsonTextEqualsLocalVerdictJsonFile": true,
+  "JsonParsedDeepEqual": true,
+  "JsonCanonicalSha256Primary": "4949D383291F87C112AE16EA897F6638918299CE889CD2B502090E9330AB582E",
+  "JsonCanonicalSha256Local": "4949D383291F87C112AE16EA897F6638918299CE889CD2B502090E9330AB582E",
+  "PrimaryOverallVerdict": "DISAGREE",
+  "PrimaryScores": "accuracy 93, completeness 82",
+  "PrimaryCounts": "PASS 22, FAIL 6, UNKNOWN 1",
+  "PrimaryClaimCount": 29,
+  "ActionsCount": 6,
+  "ProcessingDialogCount": 5,
+  "TagsCount": 10,
+  "ContextListCount": 8,
+  "VerdictMdPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T120522-0500-mock-green-wiki-opus.verdict.md",
+  "VerdictJsonPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T120522-0500-mock-green-wiki-opus.verdict.json",
+  "VerdictJsonSha256": "AB189D332D607A652C79958C1F4523B58EEA81549CAEEB35E5B2E8679D53E9B5",
+  "PersistenceCalls": {
+    "beginTurn": "persisted true, degraded false, queued false (17:19:36Z)",
+    "appendActions": "persisted true",
+    "appendDialog": "persisted true",
+    "updateTurn": "persisted true (response = full verdict.md)",
+    "completeTurn": "persisted true (response = full verdict.md); local turn status completed",
+    "Evidence": [
+      "F:\\GitHub\\vice-sharp\\.mcpServer\\claude-hv\\20261007T120522-0500-mock-green-wiki-opus\\calls\\910-persist-run1.json",
+      "F:\\GitHub\\vice-sharp\\.mcpServer\\claude-hv\\20261007T120522-0500-mock-green-wiki-opus\\calls\\920-persist-complete.json"
+    ]
+  },
+  "IdentityDiscrepancy": {
+    "Field": "session and turn model",
+    "ReadBack": "codex",
+    "Actual": "claude-opus-5-5 at effort max (sourceType ClaudeCode is correct)",
+    "Cause": "The reviewer ran appendActions, appendDialog, updateTurn and completeTurn through the documented dot-source mode of lib/repl-invoke.ps1 without setting MCP_SESSION_MODEL; repl-invoke.ps1 lines 1290-1292 then fall back to the literal codex. The omission is the reviewer's; the wrong Claude plugin fallback is triaged.",
+    "Impact": "The persisted verdict text and JSON state the correct model and effort; only the metadata field is wrong and the completed turn is immutable.",
+    "Triage": "triage-group-2ceb420887cab44a (collecting, reportCount 1, F:\\GitHub\\McpServer)"
+  },
+  "PostCompletionTriage": {
+    "FirstAttempt": "workflow.triage.report failed at about 17:47:18Z: method_invocation_error, The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+    "FailsafeRecord": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude-hv\\20261007T120522-0500-mock-green-wiki-opus\\failsafe-pending\\20261007T174718Z-triage_report-eed7.yaml SHA256 FA17BF8833C82C52CCAC4CA5F8C6112FAE2545BB927B0B1324F1ED899AEBAC94 (written before submit, retained on failure)",
+    "Replay": "After Invoke-FullBootstrap True at 2026-10-07T12:48:29-05:00, workflow.failsafe.drain on the isolated queue: scanned 1, replayed 1, failed 0, quarantined 0, aborted false; queue empty afterwards",
+    "Readback": "workflow.triage.queryGroups (workspacePath F:\\GitHub\\McpServer): triage-group-2ceb420887cab44a, status collecting, reportCount 1, title Claude plugin repl-invoke dot-source mode records model codex for ClaudeCode sessions"
+  },
+  "FinalIntegrityChecks": {
+    "SharedFailsafeRecords": [
+      {
+        "path": "\\ClaudeCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T162453Z-session_submit-560c.yaml",
+        "sha256": "E8DF8155FC02A30793535A434A33C948C468A039FF056F1ADF37C4F9966D1428",
+        "lastWrite": "11:24:53"
+      },
+      {
+        "path": "\\ClaudeCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T170859Z-session_submit-b7d6.yaml",
+        "sha256": "BEE26210DF59E43A91AE7C9DCB9ED4FC74F4079F0878E0112085BCFF9CE6F3CA",
+        "lastWrite": "12:09:00"
+      },
+      {
+        "path": "\\ClaudeCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T170859Z-session_submit-f19e.yaml",
+        "sha256": "17B96B057853A9DA2A859A7AA809954D0E144421058C68A48BBACE0F573D228A",
+        "lastWrite": "12:09:00"
+      },
+      {
+        "path": "\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\quarantine\\20261007T162044Z-triage_report-2b86.yaml",
+        "sha256": "CAA84359804106F0AC4CE3059359D8448DA4A235C5E07F46AF03B2A907FA3015",
+        "lastWrite": "11:26:51"
+      },
+      {
+        "path": "\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\quarantine\\20261007T162044Z-triage_report-2b86.yaml.reason.txt",
+        "sha256": "DCA4C3E4EFE798DC72593AECCE90796D846D5B9DC6C72F1D9BA39F619F25BC75",
+        "lastWrite": "11:29:55"
+      },
+      {
+        "path": "\\GrokCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T162437Z-session_submit-50e5.yaml",
+        "sha256": "74BCB55290462C0A8907588F30B80130A230D9FF548D5E0BFF74941652FD3B93",
+        "lastWrite": "11:24:37"
+      },
+      {
+        "path": "\\GrokCode\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T162503Z-session_submit-9609.yaml",
+        "sha256": "8003DDBCE8EC58B0B843F478B9B15F30F18DB9DEA60B6EC018319657640738DF",
+        "lastWrite": "11:25:03"
+      }
+    ],
+    "SharedFailsafeUnchanged": "same 7 files and SHA256 values as before the reviewer MCP calls",
+    "SharedClaudeCurrentTurn": "unchanged (mtime 2026-10-07T11:01:17, SHA256 prefix 50B2432A71D69EE1)",
+    "Native": "tracked 12, untracked 2527, files written today 0",
+    "ArtifactPins": "all 8 reviewed artifact SHA256 pins unchanged at final check",
+    "ParentFilesAddedDuringReview": [
+      "20261007T120522-0500-mock-green-wiki-opus.prior-grok-primary-readback.json (12:14:18)",
+      "20261007T120522-0500-mock-green-wiki-opus.effective-integrity-requirements.json"
+    ]
+  },
+  "Note": "This file is written after completeTurn and is not part of the persisted verdict, to avoid circular self-attestation. The comparison used the primary server response from client.SessionLog.QueryAsync, not the local plugin cache."
+}

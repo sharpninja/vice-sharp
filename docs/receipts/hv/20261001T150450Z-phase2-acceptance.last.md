@@ -1,0 +1,38 @@
+2026-10-01T15:30:20Z - **DISAGREE. Phase 2 acceptance is not green.** Accuracy: **96**; completeness: **94**. The receipts substantiate the reported test runs, but an independent replay probe still produces different RAM. Counts below cover assertions 1 through 6: **5 PASS, 1 FAIL, 0 UNKNOWN**.
+
+All 21 specified profiles were read in full before validation. They were reloaded after automatic compaction; add-profile.grok.md was excluded. ValidatorIdentity: Codex; model: gpt-6-astra; reasoning: xhigh. The old ledger and timing-only AGREE reviews were excluded as evidence.
+
+**New failure: replay loses a pre-recording mouse position.** This fails assertion 2, requirements surface C, and the plan's behavior-completion surface D through FR-SNP-003 AC3.
+
+Reproduction using the existing Release assembly from tests/ViceSharp.TestHarness/bin/phase2-f132link:
+
+1. Create independent fresh PAL recording, reference, and playback machines.
+2. On recording and reference, call C64MemoryMap.ApplyMouseDelta(1, 10, 0).
+3. Call RecordKey(0, 0, "A", true, recording), then Play(playback). Press A on the reference.
+4. At cycle 0, reference $D419 is **$4A (74)**; playback is **$FF (255)**.
+5. On reference and playback, put AD 19 D4 8D 00 C1 at $C000, set PC=$C000, and step eight cycles.
+6. Both clocks are **8**, but reference RAM $C100 is **$4A** and playback RAM $C100 is **$FF**.
+
+This is a CPU-executed memory divergence, not a clock-only or reflection-existence check. [FR-SNP-003 AC3](F:/GitHub/vice-sharp/docs/requirements/functional/FR-Snapshot.md:99) requires identical memory during replay.
+
+[ApplyMouseDelta](F:/GitHub/vice-sharp/src/ViceSharp.Core/C64MemoryMap.cs:681) stores mouse mode, accumulated position, and POT bytes. [Replay capture](F:/GitHub/vice-sharp/src/ViceSharp.Core/Snapshots/RuntimeSnapshotStore.cs:72) captures keyboard rows and joystick button masks; [CaptureJoysticks/RestoreJoysticks](F:/GitHub/vice-sharp/src/ViceSharp.Core/C64MemoryMap.cs:805) preserve only the button masks. The mouse/POT state is absent from the replay image. Local VICE preserves mouse positions in [write_mouse_common_snapshot](F:/GitHub/vice-sharp/native/vice/vice/src/joyport/mouse.c:631) and restores them in read_mouse_common_snapshot. The existing held-joystick regression therefore does not cover this failure.
+
+The probed ViceSharp.Core.dll SHA256 is 3E796CFC7945B68C4B0753C2BC2D2E10C91B5FFFA64660943E85CD3B77772C19; ViceSharp.TestHarness.dll is 633C85F7D598A7DD4132743AA1EA9466981B08B187D769B5F392CAA8F5AF379D.
+
+- **Assertion 1: PASS.** I ran pwsh.exe -NoProfile -NonInteractive -File .\tools\check_phase_acceptance_coverage.ps1 -ThroughPhase 2: exit 0, in-scope 94, missing 0. The source selects the markdown Iteration integer and searches tests/, excluding bin/obj. Source-only references cannot satisfy it. PhaseAcceptanceCoverageTests invokes that script and requires exit 0.
+- **Assertion 2: FAIL.** phase-acceptance.txt reports 146 passed, 0 failed, 0 skipped and TEST_EXIT=0; phase-acceptance-2.txt reports the same counts and TEST2_EXIT=0. I read the acceptance sources and independently invoked 113 existing parameterless test methods, including all 45 FrSnp003 methods: 113 passed, 0 failed. This was direct invocation of the existing Release assembly, not a new dotnet test run. The remaining file-writing/host tests were checked against source and the saved runs as authorized. Those facts do not cure the new mouse replay divergence.
+- **Assertion 3: PASS.** Current source and local VICE support the specified SID test-bit oracle, resonance-gain comparison, full-byte 6510 direction register, and CIA output ordering/16 half-cycles/no retransmission. The deterministic 350000-cycle discharge intentionally omits x64sc's random addition; it is not attributed to x64sc. GIF encoding omits the audio stream. Requirement text has no working-tree edit.
+- **Assertion 4: PASS.** idle-lockstep.txt reports 2 passed, 0 failed, 0 skipped, EXIT:0. Its 2026-10-01T15:00:52Z timestamp is later than Mos6502.cs (2026-09-30T21:40:49Z), C64MemoryMap.cs (2026-10-01T14:56:25Z), and ArchitectureBuilder.cs (2026-09-30T22:49:19Z). AdoptElapsedCycles assigns the elapsed counter; interrupt restoration is separate. The serialized image remains 16+65536 bytes, and replay-only chip state does not enlarge CiaSnapshotState. No new idle run was demanded.
+- **Assertion 5: PASS.** The live Codex-plugin TODO query at 2026-10-01T15:28:30Z returned PLAN-C64SET-001 done=false. All 17 named acceptance FRs are pending in the live requirement query. The plan's seven checkboxes remain open. Git status/diff show no requirement/TODO/provenance edits or Phase 3/4 implementation start. The saved done-false JSON agrees. git diff --check exited 0.
+- **Assertion 6: PASS.** The ledger closes only the cited items 2, 5, and 8 and explicitly says the recovered set is not accepted and Goal 2 is not complete. This review does not use that closure or the old ledger AGREE as Phase 2 acceptance.
+
+The prior 57 findings were rechecked against current source and current saved-run evidence. The in-memory behavioral invocations additionally exercised SID replacement/resonance, CIA serial/reset, mouse encoding, monitor ROM/drive/watch, CPU port behavior, and all current replay facts. Findings 18-26, 28-44, and 46-57 are represented by the now-passing CPU/CIA/replay methods, including mid-instruction resume, hidden RAM/I/O, IRQ pipelines, keyboard/joystick state, active VIC borders/sprites, frame start, light pen, and collisions. Findings 4-6, 11, 14-16, 27, and 45 were checked through actual host/encoder/parser implementations and saved behavioral tests: real palette staging and RGB rendering, malformed palette rejection, hotkey reset, encoded media bytes, JPEG per-block color/AC detail, ffmpeg availability, StandardBlock mounting, and GIF-with-audio-tap handling. Findings 3, 13, and 17 also have real replay clock/RAM, captured-frame metadata, and drive-memory assertions. Finding 12 is covered by the live state checks above. None of those earlier findings is being carried forward solely from an older verdict.
+
+Workspace-rule surface B passes for the reviewed product scope. No product, requirement, plan, HANDOFF, provenance, or TODO edits were made by this review. No commit or push occurred. The unrelated completed requirements elsewhere in the store were not treated as new completion claims.
+
+Saved run receipts are in C:\Users\kingd\AppData\Local\Temp\grok-goal-0af1da0c5558\implementer\: phase-coverage.txt, phase-acceptance.txt, phase-acceptance-2.txt, and idle-lockstep.txt. Parent-designated durable streams are [request JSONL](F:/GitHub/vice-sharp/docs/receipts/hv/20261001T150450Z-phase2-acceptance.request.jsonl) and [response JSONL](F:/GitHub/vice-sharp/docs/receipts/hv/20261001T150450Z-phase2-acceptance.response.jsonl).
+
+MCP logging: the Codex plugin's workflow calls reported durable-write verification errors. A separate client.SessionLog.QueryAsync read returned the full verdict verbatim, including the JSON and both receipt paths. The review is stored under the sessionId and requestId below; the initial wrapper errors do not establish a missing reviewer turn.
+
+=== VERDICT JSON ===
+{"OverallVerdict":"DISAGREE","accuracy":96,"completeness":94,"passCount":5,"failCount":1,"unknownCount":0,"failList":[{"assertion":2,"finding":"Replay loses pre-recording mouse/POT state, violating FR-SNP-003 AC3 and the Phase 2 behavior gate.","expected":"At cycle 8, reference and playback RAM $C100 both equal $4A.","actual":"Reference RAM $C100=$4A; playback RAM $C100=$FF; both clocks are 8."}],"sessionId":"Codex-20261001T150848Z-plugin-session","requestId":"req-20261001T150930Z-phase2-hv"}

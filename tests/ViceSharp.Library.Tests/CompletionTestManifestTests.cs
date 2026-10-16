@@ -1,5 +1,6 @@
 namespace ViceSharp.Library.Tests;
 
+using System.Text.Json;
 using ViceSharp.Build.Completion;
 using Xunit;
 
@@ -8,7 +9,7 @@ public sealed class CompletionTestManifestTests
     private const string InvocationId = "completion-20260907-001";
     private const string ProductHash = "sha256-product-final";
     private const string X64Hash = "sha256-vice-x64-final";
-    private const string XvicHash = "sha256-vice-xvic-final";
+    private static readonly string XvicHash = ReadPinnedXvicDllHash();
 
     private const string HeadsProject = "tests/ViceSharp.Heads.Tests/ViceSharp.Heads.Tests.csproj";
     private const string LibraryProject = "tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj";
@@ -629,6 +630,29 @@ public sealed class CompletionTestManifestTests
         AssertIssue("product_binary_provenance", fixture.Manifest, run);
     }
 
+    /// <summary>
+    /// FR-SNP-005 AC7 / TEST-SNP-002 AC6 / Phase 3 Slice 3b.
+    /// Acceptance: completion evidence loads the pinned vice_xvic native-library
+    /// hash from the checked-in oracle manifest and uses it on every evidence surface.
+    /// </summary>
+    [Fact]
+    public void CompleteFixture_UsesPinnedXvicHashFromOracleManifest()
+    {
+        var fixture = CompleteFixture();
+        var expected = ReadPinnedXvicDllHash();
+
+        Assert.Equal(expected, fixture.Run.FinalArtifacts.NativeLibraryHashes["vice_xvic"]);
+        Assert.All(
+            fixture.Run.Discoveries,
+            discovery => Assert.Equal(expected, discovery.NativeLibraryHashes["vice_xvic"]));
+        Assert.All(
+            fixture.Run.TestPartitions,
+            partition => Assert.Equal(expected, partition.NativeLibraryHashes["vice_xvic"]));
+        Assert.Contains(
+            fixture.Run.FinalArtifacts.Files,
+            file => file.Path == "native/vice_xvic.dll" && file.Hash == expected);
+    }
+
     [Fact]
     public void Validate_FailsWhenEvidenceUsesNonFinalNativeLibraryHash()
     {
@@ -1065,6 +1089,16 @@ public sealed class CompletionTestManifestTests
             Status: "completed",
             File($"validation-output/{id}.md"),
             Verdict: "AGREE");
+
+    private static string ReadPinnedXvicDllHash()
+    {
+        var path = RepoPaths.File(
+            Path.Combine("docs", "requirements", "oracles", "vic20-xvic-manifest.json"));
+        using var document = JsonDocument.Parse(System.IO.File.ReadAllText(path));
+        return document.RootElement.GetProperty("viceXvicDllSha256").GetString()
+            ?? throw new InvalidOperationException(
+                $"Pinned xvic oracle manifest does not define viceXvicDllSha256: '{path}'.");
+    }
 
     private static bool Matches(
         CompletionTestSelector selector,

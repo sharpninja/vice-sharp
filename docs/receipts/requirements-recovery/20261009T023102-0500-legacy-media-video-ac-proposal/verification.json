@@ -1,0 +1,94 @@
+{
+  "checkedAtLocal": "2026-10-09T02:37:02.4980792-05:00",
+  "scope": "Proposal structure, traceability references and retained source pins only; not test execution or HV",
+  "recordCount": 12,
+  "existingUpdates": 10,
+  "proposedCreates": 2,
+  "criteriaCount": 48,
+  "allCriteriaUnsatisfied": true,
+  "failureCount": 0,
+  "failures": [],
+  "effectiveRequirementsUnchanged": true,
+  "effectiveCounts": {
+    "functional": 235,
+    "mappings": 233,
+    "testing": 142,
+    "technical": 139
+  },
+  "allRecordCollisionCheck": {
+    "testCount": 142,
+    "newTrMatches": 0,
+    "newTestMatches": 0,
+    "trCount": 139
+  },
+  "pins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-cycle.c",
+      "expectedSha256": "561876187FDE8BFE8636E64593543AA77A5E0855EBBD9FE56D9DA4FA6EB564BA",
+      "actualSha256": "561876187FDE8BFE8636E64593543AA77A5E0855EBBD9FE56D9DA4FA6EB564BA",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-chip-model.c",
+      "expectedSha256": "95EA3EF61E59A1C850FF516C1A827AE849521DCE3199307586E061AF97DB639D",
+      "actualSha256": "95EA3EF61E59A1C850FF516C1A827AE849521DCE3199307586E061AF97DB639D",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-fetch.c",
+      "expectedSha256": "83FE621BFD6C3F9AADFE7C725F02392BA04DB70C36248CDFEA88D79883BB21D0",
+      "actualSha256": "83FE621BFD6C3F9AADFE7C725F02392BA04DB70C36248CDFEA88D79883BB21D0",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage-dxx.c",
+      "expectedSha256": "7D2DAD50EEEE65644DE0EE2A45954EA5E7310474148CBF96B7AB18F787CA838E",
+      "actualSha256": "7D2DAD50EEEE65644DE0EE2A45954EA5E7310474148CBF96B7AB18F787CA838E",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\diskimage.c",
+      "expectedSha256": "DDC53B5EBC6BF181DDA9F1088B26A760ACA4DF9F5CBA138A9CFA730CEA42E251",
+      "actualSha256": "DDC53B5EBC6BF181DDA9F1088B26A760ACA4DF9F5CBA138A9CFA730CEA42E251",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIiCheckpointTests.cs",
+      "expectedSha256": "AC62A6C9335F39B254FA3AC55219253F4288579C456EF423FDD11D3BE7434075",
+      "actualSha256": "AC62A6C9335F39B254FA3AC55219253F4288579C456EF423FDD11D3BE7434075",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIIRcWindowTests.cs",
+      "expectedSha256": "A6E5EBD795DA020C4F972B69742C5AAD3A2656B04BEA5A652826C73843C710E6",
+      "actualSha256": "A6E5EBD795DA020C4F972B69742C5AAD3A2656B04BEA5A652826C73843C710E6",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIISpriteDmaNativeCheckpointTests.cs",
+      "expectedSha256": "4A92CB2629B0352D8A6922524CE04D2A41F1E666F409617FB775B1EF979FD9A8",
+      "actualSha256": "4A92CB2629B0352D8A6922524CE04D2A41F1E666F409617FB775B1EF979FD9A8",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Chips\\VicIi\\Mos8565.cs",
+      "expectedSha256": "FBC2E2217992BB196A6FD856F633F95E8928498609B0411E5AB706A549E0233E",
+      "actualSha256": "FBC2E2217992BB196A6FD856F633F95E8928498609B0411E5AB706A549E0233E",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Chips\\VicIi\\Mos6569.cs",
+      "expectedSha256": "F6E9CD4E3E08D643A0C417B10554A43046C94889E1DF0425A538C60FA3A4738E",
+      "actualSha256": "F6E9CD4E3E08D643A0C417B10554A43046C94889E1DF0425A538C60FA3A4738E",
+      "matches": true
+    }
+  ],
+  "gitDiffCheck": {
+    "command": "git diff --check",
+    "output": [],
+    "exitCode": 0
+  },
+  "testRuns": 0,
+  "hostileReview": "not performed; quota-blocked catch-up backlog",
+  "application": "not applied"
+}

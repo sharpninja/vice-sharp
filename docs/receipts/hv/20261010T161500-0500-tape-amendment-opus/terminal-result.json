@@ -1,0 +1,43 @@
+{
+  "recordedAt": "2026-10-10T16:23:01.1889305-05:00",
+  "sessionId": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+  "pid": 95168,
+  "exitCode": 1,
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "modelConfirmedByInit": "claude-opus-5-5",
+  "responseEventCount": 14,
+  "assistantEventCount": 1,
+  "resultEventCount": 1,
+  "stderrBytes": 0,
+  "verdict": null,
+  "accuracy": null,
+  "completeness": null,
+  "errorSource": "C:\\Users\\kingd\\.claude\\projects\\F--GitHub-vice-sharp\\09cb215d-0e89-4272-aa11-a66514b50ea0.jsonl",
+  "errorTimestamp": "2026-10-10T21:17:29.739Z",
+  "apiError": "usage_limit_reached",
+  "apiStatus": 429,
+  "quotaLimits": {
+    "status": "rejected",
+    "resetsAt": 1791669000,
+    "unifiedRateLimitFallbackAvailable": false,
+    "rateLimitType": "five_hour",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "out_of_credits",
+    "upgradePaths": [
+      "upgrade_plan"
+    ],
+    "isUsingOverage": false
+  },
+  "exactErrorText": "You've hit your session limit · resets 4:50pm (America/Chicago)",
+  "resetAtLocal": "2026-10-10T16:50:00.0000000-05:00",
+  "postRunPinCount": 140,
+  "postRunChangedPins": [],
+  "mcpFailureWrite": {
+    "state": "queued_unconfirmed",
+    "failsafePath": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261010T212233Z-session_dialog-c172.yaml",
+    "error": "mcpserver-repl timed out after 30s"
+  },
+  "requirementsAmendmentApplied": false,
+  "goalComplete": false
+}

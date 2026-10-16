@@ -1,0 +1,28 @@
+{
+  "source": "native mcp__mcpserver__sessionlog_query",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261009T190241Z-prompt-6646",
+  "status": "completed",
+  "actionOrders": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "verdictParts": 6,
+  "verdictMatchesEarlierPrimaryReadback": true,
+  "response": "Applied exactly the operator-approved five-record tape delta through supported atomic batch, primary readback verified: all five pending, 23 AC false, mappings and effective unrelated records unchanged, nothing retired. Canonical projection and supported exports refreshed after 108 verified backups. No product or native edits, no tests run, no done-state or goal advancement. Local Opus 5.5 max HV completed DISAGREE: 34 PASS, 5 FAIL, 1 UNKNOWN, 1 N/A; accuracy 95 and completeness 88, both below 98. FAIL B6 generated em-dashes; C2 active-playback delayed-stop timing; C3 missing fast-wind, recording-window/order, machine-wiring and additional native scenarios; C4 missing discriminating negative controls; C5 TR ID collisions and contradictory closed parent FR. UNKNOWN A1.4: no full-field before-images for non-projected TR/TEST metadata. All 17 findings and complete verdict are retained in docs/receipts/hv/20261009T141130-0500-approved-tape-ac-opus/verdict.md and six parent MCP dialog parts. Parent primary verdict readback exact after LF normalization; reviewer primary completed turn holds the same content plus one terminal LF. Need separately approved semantic correction, including records outside original scope, before advancing. My marker read and the reviewer both exposed the workspace API key. Raw response retained unchanged and exact-path ignored; verified redacted companion has 2676 valid JSONL records and only two key replacements. No rotation or restart performed. Reviewer also missed ongoing percentage/ETA updates. F-08 triaged report-ca7a4811fb4c421a860aae9a31e4f10e; transient closeout timeout triaged report-9354eedd432547c993b5585ba408172d. Missing actions 11-13 retried and primary readback now confirms all 14 actions. Failsafe originals retained, drain disabled. Full receipt index docs/receipts/requirements-recovery/20261009T140421-0500-approved-tape-ac-application/README.md. No commit or push.",
+  "checkedAtLocal": "2026-10-09T15:09:39-05:00",
+  "stopGateOutput": "{} (no block directive; not a literal status: passed)",
+  "failsafeDrainDisabled": true
+}

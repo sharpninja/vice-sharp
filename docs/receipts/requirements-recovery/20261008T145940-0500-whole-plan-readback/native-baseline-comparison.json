@@ -1,0 +1,58 @@
+[
+  {
+    "field": "gitlink",
+    "baseline": "160000 commit cc67418cba58e71d8e70fd353e9de47199ad2075\tnative/vice",
+    "actual": "160000 commit cc67418cba58e71d8e70fd353e9de47199ad2075\tnative/vice",
+    "matches": true,
+    "comparison": "exact equality"
+  },
+  {
+    "field": "head",
+    "baseline": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "actual": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "matches": true,
+    "comparison": "exact equality"
+  },
+  {
+    "field": "trackedDiffSha256",
+    "baseline": "DF7E62DB7D0B7C5D37448B7BE9980AA6813BF4AFF7BEF29062D995DEFA151581",
+    "actual": "DF7E62DB7D0B7C5D37448B7BE9980AA6813BF4AFF7BEF29062D995DEFA151581",
+    "matches": true,
+    "comparison": "exact equality"
+  },
+  {
+    "field": "untrackedListSha256",
+    "baseline": "0716F6E4F82B277B81CD136D234939CFED2096E9B85C41B4CB2D56A07778D608",
+    "actual": "0716F6E4F82B277B81CD136D234939CFED2096E9B85C41B4CB2D56A07778D608",
+    "matches": true,
+    "comparison": "exact equality"
+  },
+  {
+    "field": "inventorySha256",
+    "baseline": "AD076D9119C812AAC59C5CC80D16F27D6B0F9E88B26E7C83998BE21924145CA2",
+    "actual": "AD076D9119C812AAC59C5CC80D16F27D6B0F9E88B26E7C83998BE21924145CA2",
+    "matches": true,
+    "comparison": "exact equality"
+  },
+  {
+    "field": "newestSourceWriteUtc",
+    "baseline": "2026-09-25T17:46:29.9970296Z",
+    "actual": "2026-09-25T17:46:29.9970296Z",
+    "matches": true,
+    "comparison": "UTC ticks, normalized DateTime/string representation"
+  },
+  {
+    "field": "fileCount",
+    "baseline": 6374,
+    "actual": 6374,
+    "matches": true,
+    "comparison": "exact equality"
+  },
+  {
+    "field": "untrackedCount",
+    "baseline": 2527,
+    "actual": 2527,
+    "matches": true,
+    "comparison": "exact equality"
+  }
+]

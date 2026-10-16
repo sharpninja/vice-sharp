@@ -1,0 +1,51 @@
+# Immutable VICE mock contracts
+
+This standalone, test-only project validates contract assertions before production implementation. It does not run VICE or ViceSharp, validate a real snapshot, or prove emulator parity.
+
+The approved scope is Phase 1 of `docs/plans/PLAN-VICE-IMMUTABLE-001.md`. Do not add this project to the solution until that phase has independent HV acceptance and a native-safe real build path exists. The current solution/TestHarness native build remains prohibited for this phase.
+
+## Run the complete project
+
+Run from the repository root through PowerShell.MCP, without a test filter:
+
+```pwsh
+dotnet test .\tests\ViceSharp.OracleContract.Tests\ViceSharp.OracleContract.Tests.csproj -c Release --logger "trx;LogFileName=phase1-oracle-contracts.trx" --results-directory .\TestResults\vice-immutable-phase1 --diag .\TestResults\vice-immutable-phase1\vstest.diag.log --blame-hang --blame-hang-timeout 2m
+git diff --check
+```
+
+Before and after every build or test, including automatic edit verification, retain the native gitlink, HEAD, tracked binary-diff hash, sorted untracked-list hash, complete file-content inventory hash, file count and latest source write time outside `native/vice`. Compare with the retained baseline. Existing native dirt is preservation evidence, not an acceptable clean oracle. Preserve prior TRX and diagnostic files before rerunning the fixed output paths.
+
+## What these tests establish
+
+`OracleContractFixtures` owns the shared theory rows, deterministic input builders and independent expected results. NSubstitute returns scripted decisions. `ContractAssertions.AssertProbe` calls the supplied `IContractProbe<T>` and checks acceptance, reason and exact half-cycle through `DecisionIs`. `ProveDecision` runs that same provider assertion against a correct mock and then independently corrupts acceptance, reason and half-cycle. Negative controls expect assertion exceptions, so a correctly detected defect is a passing test, not an expected-red gate.
+
+`AssertBoundary` calls the supplied `IBoundaryProbe`. Its `BoundaryRequest` has only operation, requested path and inventory status. The resolved path is an observed `BoundaryObservation` output checked against the fixture, never a trusted request field. Each boundary case independently corrupts the observed path and each decision field. Real bindings must establish actual filesystem fixtures and compute resolution, including links, traversal and case handling; these mocks do not exercise the filesystem. `AssertComparator` likewise calls the supplied comparator and uses the shared independent mismatch expectation. `AssertTranscript` is shared for checking the audit dependency's actual received call order and arguments.
+
+The lifecycle group additionally checks mock call history and ordering. Separate controls independently invert the postflight argument or the final receipt value, with otherwise correct ordering and values, for both matching and changed inventories. The receipt group rejects an all-zero test result rather than treating an empty run as successful validation. The comparator group independently corrupts mismatch presence, half-cycle, field and both values. These assertion helpers are not production preflight, path-resolution, provenance, comparator or timing implementations. Future real adapters must exercise the same fixture expectations and assertions. Mocks do not establish that such adapters exist or behave correctly.
+
+## Coverage and limits
+
+- `ImmutableViceOraclePreflightTests`: FR-VICE-001 AC1/AC3, TR-VICE-ORACLE-001 AC1, TEST-VICE-001 AC1. Identity, source, dirty/inventory rejection, preflight-before-runner and rejected-preflight/no-runner contracts.
+- `ImmutableViceWrapperBoundaryTests`: FR-VICE-001 AC2, TR-VICE-ORACLE-001 AC2, TEST-VICE-001 AC2. External destinations versus native writes, patches, generation, traversal, resolved links and post-run changes. Resolver outputs are synthetic; no filesystem mutation occurs.
+- `ImmutableViceReceiptContractTests`: FR-VICE-001 AC1/AC3, TR-VICE-ORACLE-001 AC4, TEST-VICE-001 AC3. Required provenance, command/scope and zero-failure/skip/abort count contracts.
+- `Vic20NativeBusEventTests`: FR-VICE-001 AC4, TR-VICE-ORACLE-001 AC3/AC5, TEST-VICE-001 AC4. Each of CPU bus, timing, snapshots and lifecycle exercises capability, observation continuity and forbidden provenance. All trace data is synthetic.
+- `Vic20HalfCycleComparatorContractTests`: partial FR-SNP-005 AC3 and TEST-SNP-002 AC4 only. Equal registers, bus addresses 0x1000/0x1001, half-cycle 37. This is not TR-CYCLE-001 AC4, restored-checkpoint execution, 100000-cycle coverage or complete-state parity. The real LockstepValidator remains the single production comparator.
+- `CpuPhi2AecContractTests`: TR-CYCLE-001 AC4, plus FR-VICE-001 AC4 / TEST-VICE-001 AC4 for missing observations. Explicit phase, AEC, nullable access kind, legal idle, forbidden accesses, nonempty expected intervals and exact gap positions. No real C64 timing evidence is claimed.
+
+## Current evidence
+
+At 2026-10-08T16:01:10-05:00, the acceptance-control correction passed the full native-safe scope: oracle 89/89, VSF 199/199 and clock 69/69, total 357, with zero failures or unexecuted cases. Two new cases prove acceptance-only faults are rejected in both directions. The generic `ProveDecision` control now flips only `Accepted`, preserving `Error` and `HalfCycle`; previously its compound mutation could hide a missing acceptance assertion. The same full scope passed before that helper correction. These results are local evidence, not HV acceptance or emulator parity.
+
+See [the correction receipt](../../docs/receipts/native-vice/20261008T155754-0500-decision-single-fault-controls/README.md) for chronology, retained preimages, exact commands, unchanged fixture proof and the updated 89-case ledger. The first clock run's two fixed-path C compiler logs were overwritten before archival; its TRX/dotnet log/diagnostics remain. The second run's compiler logs are retained. This provenance limitation remains disclosed for HV.
+
+After the F-10 fixture extraction, the full mock run at 2026-10-08T13:29:50-05:00 reported 87 passed. The full prior suites also passed: 199 VSF-compatibility tests at 13:29:58 and 50 clock-probe tests at 13:30:06, total 336. Each run exited 0 with failed/notExecuted/aborted/error/timeout 0. Native inventories remained unchanged across each build and run. These are local validation results, not independent acceptance.
+
+Current receipts are under `docs/receipts/native-vice/20261008T131300-0500-phase1-fixture-reuse/`. `fixture-extraction-proof.json` records exact preservation of all 87 TRX case names and all 85 ordered theory rows, plus 17 source-token comparisons of moved input builders, expectations, assertions and lifecycle controls. Only whitespace outside literals and the explicitly listed syntactic moves are normalized. Pre-edit sources and hash-verified post-edit copies are retained. Ten boundary rows now also reject a wrong resolved-path output. The new scenario ledger retains the previous AC mappings, with every entry `MockContractOnly` and no real-gate satisfaction.
+
+The earlier F-07/F-08/F-09 remediation at 2026-10-08T13:03:29-05:00 is retained under `docs/receipts/native-vice/20261008T130200-0500-phase1-mock-remediation/`. It added four single-fault postflight controls and the zero-test receipt case to the original 82 cases. Its ledger corrected F-09: only 16 missing/unknown/gap PHI2/AEC cases claim the missing-observation ACs; the other 18 map TR-CYCLE-001 AC4 only. Both that 87-case ledger and the original 82-case ledger remain unchanged as historical evidence.
+
+The interrupted Opus max catch-up contains a DISAGREE draft (96/94, 5 FAIL, 1 UNKNOWN), not a finalized accepted review. F-10 now has shared fixture rows/builders and supplied-provider assertions, locally verified only. Its real-binding obligation remains open: bind the same cases, inputs, expected results, interaction checks and assertions to real adapters; boundary bindings must resolve paths through real filesystem fixtures. No FR, TR, TEST, real-emulator gate or whole-plan goal is satisfied by these mocks. Independent acceptance remains required.
+
+The original 82-pass run at 2026-10-08T07:33:34-05:00 is retained under `docs/receipts/native-vice/20261008T070900-0500-phase1-mocks/`: full-tests-02 log, TRX, diagnostics and result JSON; historical scenario-ac-ledger.json; native-comparison.json and full inventories. The earlier build failed two xUnit analyzer checks, corrected by making assertion helpers internal. The first full run failed eight nullable-long InlineData binding cases, corrected with long literals. Both failures are retained, not counted as accepted gates.
+
+Real native wrapper feasibility, native-safe harness integration, immutable xvic/x64sc observations, primary native VSF interoperability, all legacy acceptance criteria and the complete original handoff plan remain mandatory.

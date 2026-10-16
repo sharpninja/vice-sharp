@@ -1,0 +1,236 @@
+[
+  {
+    "name": "VIA1",
+    "major": 2,
+    "minor": 2,
+    "beforeSize": 50,
+    "afterSize": 50,
+    "count": 1,
+    "bytes": [
+      {
+        "after": 192,
+        "before": 224,
+        "payloadOffset": 22,
+        "moduleOffset": 44
+      }
+    ]
+  },
+  {
+    "name": "VIA2",
+    "major": 2,
+    "minor": 2,
+    "beforeSize": 50,
+    "afterSize": 50,
+    "count": 1,
+    "bytes": [
+      {
+        "after": 192,
+        "before": 224,
+        "payloadOffset": 22,
+        "moduleOffset": 44
+      }
+    ]
+  },
+  {
+    "name": "DRIVE8",
+    "major": 2,
+    "minor": 0,
+    "beforeSize": 167,
+    "afterSize": 167,
+    "count": 13,
+    "bytes": [
+      {
+        "after": 17,
+        "before": 0,
+        "payloadOffset": 31,
+        "moduleOffset": 53
+      },
+      {
+        "after": 3,
+        "before": 0,
+        "payloadOffset": 36,
+        "moduleOffset": 58
+      },
+      {
+        "after": 182,
+        "before": 0,
+        "payloadOffset": 44,
+        "moduleOffset": 66
+      },
+      {
+        "after": 70,
+        "before": 0,
+        "payloadOffset": 45,
+        "moduleOffset": 67
+      },
+      {
+        "after": 6,
+        "before": 0,
+        "payloadOffset": 46,
+        "moduleOffset": 68
+      },
+      {
+        "after": 193,
+        "before": 6,
+        "payloadOffset": 48,
+        "moduleOffset": 70
+      },
+      {
+        "after": 237,
+        "before": 0,
+        "payloadOffset": 49,
+        "moduleOffset": 71
+      },
+      {
+        "after": 7,
+        "before": 0,
+        "payloadOffset": 50,
+        "moduleOffset": 72
+      },
+      {
+        "after": 6,
+        "before": 0,
+        "payloadOffset": 56,
+        "moduleOffset": 78
+      },
+      {
+        "after": 3,
+        "before": 0,
+        "payloadOffset": 71,
+        "moduleOffset": 93
+      },
+      {
+        "after": 3,
+        "before": 0,
+        "payloadOffset": 75,
+        "moduleOffset": 97
+      },
+      {
+        "after": 1,
+        "before": 0,
+        "payloadOffset": 143,
+        "moduleOffset": 165
+      },
+      {
+        "after": 4,
+        "before": 2,
+        "payloadOffset": 144,
+        "moduleOffset": 166
+      }
+    ]
+  },
+  {
+    "name": "DRIVECPU0",
+    "major": 1,
+    "minor": 3,
+    "beforeSize": 2174,
+    "afterSize": 2174,
+    "count": 8,
+    "bytes": [
+      {
+        "after": 198,
+        "before": 193,
+        "payloadOffset": 0,
+        "moduleOffset": 22
+      },
+      {
+        "after": 183,
+        "before": 182,
+        "payloadOffset": 10,
+        "moduleOffset": 32
+      },
+      {
+        "after": 183,
+        "before": 185,
+        "payloadOffset": 12,
+        "moduleOffset": 34
+      },
+      {
+        "after": 229,
+        "before": 101,
+        "payloadOffset": 14,
+        "moduleOffset": 36
+      },
+      {
+        "after": 208,
+        "before": 246,
+        "payloadOffset": 15,
+        "moduleOffset": 37
+      },
+      {
+        "after": 1,
+        "before": 0,
+        "payloadOffset": 16,
+        "moduleOffset": 38
+      },
+      {
+        "after": 196,
+        "before": 193,
+        "payloadOffset": 43,
+        "moduleOffset": 65
+      },
+      {
+        "after": 213,
+        "before": 108,
+        "payloadOffset": 51,
+        "moduleOffset": 73
+      }
+    ]
+  },
+  {
+    "name": "1541VIA1D0",
+    "major": 2,
+    "minor": 2,
+    "beforeSize": 50,
+    "afterSize": 50,
+    "count": 3,
+    "bytes": [
+      {
+        "after": 70,
+        "before": 75,
+        "payloadOffset": 6,
+        "moduleOffset": 28
+      },
+      {
+        "after": 64,
+        "before": 69,
+        "payloadOffset": 12,
+        "moduleOffset": 34
+      },
+      {
+        "after": 192,
+        "before": 224,
+        "payloadOffset": 22,
+        "moduleOffset": 44
+      }
+    ]
+  },
+  {
+    "name": "VIA2D0",
+    "major": 2,
+    "minor": 2,
+    "beforeSize": 50,
+    "afterSize": 50,
+    "count": 3,
+    "bytes": [
+      {
+        "after": 70,
+        "before": 75,
+        "payloadOffset": 6,
+        "moduleOffset": 28
+      },
+      {
+        "after": 64,
+        "before": 69,
+        "payloadOffset": 12,
+        "moduleOffset": 34
+      },
+      {
+        "after": 192,
+        "before": 224,
+        "payloadOffset": 22,
+        "moduleOffset": 44
+      }
+    ]
+  }
+]

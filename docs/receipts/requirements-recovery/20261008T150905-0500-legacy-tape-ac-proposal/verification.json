@@ -1,0 +1,183 @@
+{
+  "timestampLocal": "2026-10-08T15:17:58.6441036-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T200326Z-prompt-15d9",
+  "classification": "Source inspection and unapplied requirements-correction proposal",
+  "proposalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\proposed-field-delta.json",
+  "proposalSha256": "5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A",
+  "proposalRecords": 5,
+  "proposedCriteria": 23,
+  "proposedSatisfiedCriteria": 0,
+  "proposedStatuses": [
+    "pending"
+  ],
+  "recordCriteriaCounts": [
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "count": 6,
+      "uniqueIds": 6
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "count": 4,
+      "uniqueIds": 4
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "count": 4,
+      "uniqueIds": 4
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "count": 4,
+      "uniqueIds": 4
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "count": 5,
+      "uniqueIds": 5
+    }
+  ],
+  "legacyPreRenameRowsCompared": 4,
+  "legacyBodyTitleStatusMatches": 4,
+  "legacyOriginalAcCounts": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeBlobPinsMatched": 6,
+  "nativeSourceDrift": [],
+  "managedInputDrift": [],
+  "nativeBaselineComparison": [
+    {
+      "field": "gitlink",
+      "matches": true
+    },
+    {
+      "field": "head",
+      "matches": true
+    },
+    {
+      "field": "trackedDiffSha256",
+      "matches": true
+    },
+    {
+      "field": "untrackedListSha256",
+      "matches": true
+    },
+    {
+      "field": "inventorySha256",
+      "matches": true
+    },
+    {
+      "field": "newestSourceWriteUtc",
+      "matches": true
+    },
+    {
+      "field": "fileCount",
+      "matches": true
+    },
+    {
+      "field": "untrackedCount",
+      "matches": true
+    }
+  ],
+  "existingRequirementRecordsCompared": 516,
+  "existingRequirementRecordDrift": [],
+  "effectiveCounts": {
+    "after": {
+      "tr": 139,
+      "fr": 235,
+      "test": 142
+    },
+    "before": {
+      "tr": 139,
+      "fr": 235,
+      "test": 142
+    }
+  },
+  "requirementWrites": 0,
+  "productionEdits": 0,
+  "nativeEdits": 0,
+  "testsExecuted": 0,
+  "sourceExcerptCount": 24,
+  "gitDiffCheckExitCode": 0,
+  "operatorApproval": "requested, no answer received",
+  "hostileValidation": "not launched for this proposal; no scores or acceptance",
+  "implementationReady": false,
+  "limitations": [
+    "Static code/test inspection and Boolean algebra are not runtime parity evidence.",
+    "Only the identified retained recovery artifacts were searched; absence of historical AC everywhere is not claimed.",
+    "The other three legacy emulator FRs and placeholder remain unresolved.",
+    "Real native tape observations, managed integration, native VSF continuation and cumulative suites remain mandatory."
+  ],
+  "files": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\effective-linked-records.before.json",
+      "sha256": "89FA93B6AEA6DE2426E2DE6C39EC8BEDDF5FF76DDE693D86A254960CF0840CD1",
+      "bytes": 1971
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\effective-requirements.after.json",
+      "sha256": "191F6E0324DCB0013361B894A5270DFBE8428916EC26A3B70C2DAB3FD8DECA1B",
+      "bytes": 756761
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\historical-inferred-proposals.json",
+      "sha256": "F4CDA21F9F9DFFB22B3C79307C4570BC14B93AB3460C7DA85C3367802AD32743",
+      "bytes": 8839
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\live-fr-readback.json",
+      "sha256": "BCDE382755F506554DB1E30BAE7BC8B1E79993728CDA2C00E33118A71A959D77",
+      "bytes": 2469
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\managed-input-pins.json",
+      "sha256": "934E2B5D6ABA62B78A7A0D023EDAACFAC49C25A785E26D3A2FE50ED104DAC11E",
+      "bytes": 924
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\native-readback.json",
+      "sha256": "C529B71AE183BFE9EAFD1DFE4D6163C30B9C40D40B5D20A901F90E061CEFA24B",
+      "bytes": 1467741
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\native-source-pins.json",
+      "sha256": "984869EFCE5B06C65F9A7969A39BCF9A98E9840EE1776F3B3404EB2050C514F2",
+      "bytes": 2627
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\proposed-field-delta.initial.json",
+      "sha256": "5004608206F617FEED8A45A7DB92C44AE6EBB48AEEF85580F0BD298280371650",
+      "bytes": 15575
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\proposed-field-delta.json",
+      "sha256": "5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A",
+      "bytes": 15841
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\README.md",
+      "sha256": "7EE21E50CB6E39ADEC4D020AA0A2123A59B61DDEA260443277BF5E30C02FA1A5",
+      "bytes": 6655
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\rename-preservation-proof.json",
+      "sha256": "5571B68945F2875081302C6D52880866F225021B583056580C92FF44ACC2E0E3",
+      "bytes": 1854
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\sense-expression-truth-table.json",
+      "sha256": "30D452FB67061AEA6F34C9B12B2E0ADF7E9D641939E826ACB005C5AF48D05F16",
+      "bytes": 587
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\source-excerpts.json",
+      "sha256": "7E4EB008D590ABFF2F56567381CC0D27728183A307F9C38B1375D2D29CEDD0E4",
+      "bytes": 39136
+    }
+  ]
+}

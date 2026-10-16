@@ -1,0 +1,31 @@
+{
+  "timestampLocal": "2026-10-08T08:25:38.7497209-05:00",
+  "source": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source",
+  "head": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "tree": "f1e809189dc5d6bb557acdf0fdf74f26933c9d2c",
+  "status": [],
+  "checkoutCommand": "git -c core.autocrlf=false clone --no-hardlinks --no-checkout [local native/vice] [separate source]; git -c core.autocrlf=false checkout --detach cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "sourcePins": [
+    {
+      "path": "vice/src/mainc64cpu.c",
+      "sha256": "2B96DD04A1EAF30F19C3CC5940EC433AC4C454F1A45681F0A04AD0C98F3A7F3B"
+    },
+    {
+      "path": "vice/src/interrupt.c",
+      "sha256": "1C044ECF6ACA0D382880FD8003E5230EF54C8FDEB1F7746E76BEC759C43EA9FC"
+    },
+    {
+      "path": "vice/src/snapshot.c",
+      "sha256": "7818099A04F9945A29F03C921A2EEA1458F4C15C2E05CBEF535289224F69CEE9"
+    },
+    {
+      "path": "vice/src/snapshot.h",
+      "sha256": "3DF6889655FEA9C7C6FECCBAB5692D0FC180ACE1CC2540CBC3A3ED26F731CE65"
+    },
+    {
+      "path": "vice/src/c64/c64-snapshot.c",
+      "sha256": "22F09184364E2E7BF23E8CD68395814F1B6BFA81F16885A58D3369A672DFF1B1"
+    }
+  ],
+  "nativeComparison": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\native-before-comparison.json"
+}

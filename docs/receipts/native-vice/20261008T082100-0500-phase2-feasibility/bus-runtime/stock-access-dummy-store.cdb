@@ -1,0 +1,7 @@
+.echo STOCK_ACCESS_DUMMY_STORE
+r rip
+r ecx
+r edx
+dq xvic+0x262a10 L1
+r @$t2=@$t2+1
+g

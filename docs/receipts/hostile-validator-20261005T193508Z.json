@@ -1,0 +1,310 @@
+{
+  "TimestampUtc": "2026-10-05T19:35:08.578Z",
+  "TimestampLocal": "2026-10-05T14:35:08.578-05:00",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Model": "Grok 4.7",
+  "Effort": "xhigh",
+  "Classification": "Class 2 operator-directed lab migration. ViceSharp product requirements and Byrd v4 phase gates are N/A.",
+  "AddProfileExecuted": true,
+  "ProfileMarkdownCount": 23,
+  "ProfileFilesRead": 22,
+  "ProfileExcluded": "add-profile.grok.md",
+  "SessionId": "GrokCode-20261005T191843Z-f-devdrive-hv-final3",
+  "RequestId": "req-20261005T191843Z-001-hostile-validate-f-devdrive",
+  "TurnId": 97747,
+  "ParentRequestJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.request.jsonl",
+  "ParentResponseJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.response.jsonl",
+  "ParentResponseHandling": "Existence tested only. Not opened, written, appended, or recreated.",
+  "FailsafeUsed": false,
+  "FailsafePath": null,
+  "PassCount": 26,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "NaCount": 3,
+  "AccuracyPercent": 99,
+  "CompletenessPercent": 99,
+  "OverallVerdict": "AGREE",
+  "completionPercent": 100,
+  "eta": "complete",
+  "ReceiptMarkdown": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hostile-validator-20261005T193508Z.md",
+  "Findings": [
+    {
+      "Id": "A1",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The current script and pinned boot image match the expected identity.",
+      "Evidence": "Script length 50916, 1057 lines, SHA-256 37C4B99FD86D9E89C4477D971B0A21001F0A6064925B40E6B481914DF455AFBA. Exe length 13824, SHA-256 7C96CEDC9837DC2BE57C62B6BCB2E48F56567CE9E240546D4DFA1D249B7F509D. Move-FDevDrive.ps1 line 48 ExpectedBinarySha256 is that exe digest.",
+      "Impact": "This review covers the bytes named in the brief.",
+      "Remediation": null
+    },
+    {
+      "Id": "A2",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The script parses, defines 38 functions, and has no PSScriptAnalyzer warning or error.",
+      "Evidence": "PARSE_ERRORS=0. FUNCTION_COUNT=38. ANALYZER_WARNING_ERROR=0.",
+      "Impact": "The static script gates pass on the current file.",
+      "Remediation": null
+    },
+    {
+      "Id": "A3",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "Destructive and dynamic command counts are zero, and there is exactly one Start-Process.",
+      "Evidence": "Command names Remove-Partition, Clear-Disk, Initialize-Disk, Format-Volume, Remove-Item, Invoke-Expression, iex, and diskpart are 0. Remove-PartitionAccessPath is 5 and is not Remove-Partition. DYNAMIC_COUNT=0. AMP_COUNT=4, each a literal fsutil invocation. Start-Process is one call at line 541: -Verb RunAs -Wait -PassThru -Confirm:$false, with child arguments -NonInteractive and -EncodedCommand.",
+      "Impact": "No reviewed path deletes a partition, clears a disk, formats a volume, or evaluates a string as code. Elevation is the one RunAs boundary.",
+      "Remediation": null
+    },
+    {
+      "Id": "A4",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "Every confirmation-capable mutating cmdlet call passes -Confirm:$false. New-Partition and Register-ScheduledTask were checked in installed metadata.",
+      "Evidence": "Those two commands and the scheduled-task constructors do not expose Confirm. The mutating commands that do expose Confirm all pass -Confirm on each call. The only confirm-capable call without -Confirm is ForEach-Object at line 314, and it only projects drive letters. Script ConfirmPreference is None. Remove-BootImage and Remove-DriveAccessPath use ShouldProcess, and their inner mutating cmdlets pass -Confirm:$false.",
+      "Impact": "Prepare, cutover, and cleanup do not depend on a later confirmation prompt.",
+      "Remediation": null
+    },
+    {
+      "Id": "A5",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "A16/D9 is closed. Plan states payload install and hash before protection, then source readback, then registry and finalizer, then BootExecute.",
+      "Evidence": "prepareSequence lines 522-527: verify; shrink E and create partition 4; install the finalizer script and Native boot image, then hash-verify the Native boot image, and do not create pending state or a startup task; flush, dismount, set the GPT attributes, and read back online, F, IsReadOnly, and NoDefaultDriveLetter; after that readback, persist GUIDs and pending state and register the SYSTEM finalizer; arm BootExecute only after the read-only gate and reboot. Invoke-Prepare command order is Assert-Preflight 773, Initialize-TargetClonePartition 776, Install-MigrationPayload 777, Protect-SourcePartition 778, Initialize-MigrationRegistry 782, Register-FinalizerTask 783, Add-BootImage 788, Restart-Computer 798.",
+      "Impact": "Plan no longer tells the operator the rejected order that put registry and finalizer before source protection.",
+      "Remediation": null
+    },
+    {
+      "Id": "A6",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "A17/D10 is closed. A Prepare exception after registry initialization starts cannot leave Status Pending after the task is removed, and a pre-guard failure does not rewrite prior registry state.",
+      "Evidence": "Assignments are $registryInitializationStarted = $false at line 769 and $true at line 781, the statement immediately before Initialize-MigrationRegistry at line 782. The catch writes Status 3, LastNtStatus 3221225473, and VerifiedBytes 0 at lines 813-815 before Unregister-FinalizerTask at line 823, and only when the guard is true and the registry key exists. Failures before line 781 skip that write. Get-CurrentState lines 362-368 require both source IsReadOnly and BootExecute arming before Pending or Running says a boot copy is ready. The DWORD literal does not fit Int32. RegistryProvider.ConvertValueToKind tries Int32, catches PSInvalidCastException, and converts to UInt32. RegistryWrapper.SetValue then calls ConvertUIntToValueForRegistryIfNeeded, which turns that UInt32 into Int32 bits -1073741823 (0xC0000001) before the registry SetValue. The failure NTSTATUS write is therefore a real DWORD write, not a thrown conversion.",
+      "Impact": "The false ready sentence cannot be selected for a disarmed Pending or Running state. A pre-guard failure does not mark an older registry record Failed or Pending. A pre-guard catch can still remove an already armed BootExecute entry and unregister the task. Status text then says preparation is incomplete rather than ready.",
+      "Remediation": null
+    },
+    {
+      "Id": "A7",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "A19/D11 is closed. display_failure and SkipFailed do not claim read-only success.",
+      "Evidence": "main.rs lines 385-387 and 806-808 both say source read-only protection was not confirmed on this path and tell the operator not to use F until Windows confirms it. The panic handler calls display_failure. LayoutError::SourceNotReadOnly is only the stage name when the attribute check failed. No Rust string says the original F mapping is unchanged and read-only.",
+      "Impact": "Failure, skip-failed, and panic Next text no longer assert protection that the path did not read back.",
+      "Remediation": null
+    },
+    {
+      "Id": "A8",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The 20261005T180849Z A18/D8 power-loss window stays closed.",
+      "Evidence": "Install-MigrationPayload commands are Write-MigrationState, directory creation, two Copy-Item calls, Get-FileHash, and Assert-Exact. It contains zero Initialize-MigrationRegistry calls and zero Register-FinalizerTask calls, and it hash-checks only the installed exe. Protect-SourcePartition flushes and dismounts F, sets IsReadOnly and NoDefaultDriveLetter, and returns only after IsReadOnly, online, F mapping, and NoDefaultDriveLetter read back true at lines 719-743. Registry initialization, finalizer registration, BootExecute readback, and reboot happen after that return. Finalize line 969 makes no protection claim. Pending or Running lines 979-1001 read both prerequisites. A missing one removes an armed BootExecute entry, writes Failed, zero verified bytes, and NTSTATUS 0xC0000001, unregisters the task, distinguishes read-only from writable and unchanged, and does not copy or cut over. Both true keeps the retry and says readback confirmed both facts.",
+      "Impact": "Power loss before protection creates no Pending key and no startup task. Power loss after the read-only readback cannot be cleared by any later reviewed path. A gap after task and registry but before BootExecute is converted by Finalize into a non-repeating Failed preparation.",
+      "Remediation": null
+    },
+    {
+      "Id": "A9",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The raw copy starts at zero, flushes, rereads both devices, and records Verified only after a full match. Terminal states skip disk I/O.",
+      "Evidence": "copy_blocks starts offset at 0 and rejects bad geometry before device access. Native read and write require the transferred length to match the request. execute_migration checks bytes_processed against 210749095936, calls flush_destination, then verify_blocks with separate buffers. VerifiedBytes, LastNtStatus 0, and Status 2 are written only after both checks, then NtFlushKey. A mismatch returns before those writes and does not flush. decide_run maps 0 Start, 1 Restart, 2 SkipVerified, 3 SkipFailed, and any other value to an error. Skip paths return before NativeDevice::open. Restart and Start clear VerifiedBytes and set Running before open. display_dashboard, display_operation_progress, both skip banners, the restart preamble, display_failure, and the panic path each have Completed, Current, and Next.",
+      "Impact": "A short I/O or mismatch cannot mark Verified. Terminal and unknown states do not copy. Running recopies from byte zero.",
+      "Remediation": null
+    },
+    {
+      "Id": "A10",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "Finalize permits cutover only for Verified with exact bytes and NTSTATUS 0, after the named source and target checks.",
+      "Evidence": "Status 0 and 1 return before cutover. Status 3 restores the read-only F mapping and returns. Any other non-2 status throws after BootExecute removal and does not call cutover. Status 2 requires VerifiedBytes equal to SourceBytes and LastNtStatus 0. Cutover refuses a missing target or a writable source, checks the registry GUID, unmaps and offlines the old partition while leaving it read-only, temporarily mounts the target, checks ReFS and the label, resizes to TargetFinalBytes when still clone-sized, requires volume size at least final size minus 67108864, scans with Repair-Volume, checks Dev Drive by fsutil exit code, assigns F, rechecks old read-only, offline, and unmapped, rechecks the new volume, and then unregisters the task.",
+      "Impact": "Pending, Running, Failed, and unknown cannot cut over. The 64 MiB floor rejects an unexpanded source-sized volume. The partition size assertion is exact.",
+      "Remediation": null
+    },
+    {
+      "Id": "A11",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "Pinned geometry does not overlap, the final target is exactly twice the source, and the short last chunk stays sector aligned.",
+      "Evidence": "The arithmetic in the command section holds. PARTITION_INFORMATION_EX layout used by the native reader places PartitionLength at offset 16, GPT PartitionId at 48, and Attributes at 64, matching a 144-byte buffer. GPT read-only is bit 60. Source open does not request GENERIC_WRITE. Chunk size and the 2097152-byte tail are multiples of 4096.",
+      "Impact": "The constants describe a non-overlapping clone stage and an exact doubled final partition. The tail is a legal unbuffered I/O length.",
+      "Remediation": null
+    },
+    {
+      "Id": "A12",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The pinned PE is a Native AMD64 image, imports only ntdll, and its entry symbol is NtProcessStartup at RVA 0x1000. Fresh executable code matches.",
+      "Evidence": "PE fields, section hashes, the 22-byte .rdata metadata diff, and SymFromName are in the command section. Pin hash was unchanged after the isolated build.",
+      "Impact": "Executable code is equivalent. The full-file difference is link metadata, not .text.",
+      "Remediation": null
+    },
+    {
+      "Id": "A13",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The Rust release gates pass without overwriting the pinned image.",
+      "Evidence": "fmt, clippy, test, and build exit codes and the 19/0/0 plus 0 doc-test result are in the command section. The isolated target directory was used for every cargo command that writes output.",
+      "Impact": "Format, lint, test, and rebuild evidence matches the brief.",
+      "Remediation": null
+    },
+    {
+      "Id": "A14",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The 19 tests exercise transfer, layout, progress, and status logic. Native orchestration gaps are source-inspection findings, not unresolved facts.",
+      "Evidence": "Nineteen lib tests passed and none were ignored. They assert progress labels and replay, copy without verify or flush, flush error mapping, verify reads without writes, mismatch with flush_count 0, unaligned geometry before device access, decide_run for 0, 1, 2, 3, and 99, and layout rejection for a writable source, a wrong destination id, a read-only destination, and a wrong destination length. The duplicate-id test reaches DestinationIdentityMismatch because the expected destination id still differs. DuplicatePartitionIdentity is reached when both expected ids are equal. SourceIdentityMismatch and SourceLengthMismatch have no direct test. Short native I/O, registry checkpoint order, and the panic handler were read in main.rs.",
+      "Impact": "The library tests are genuine. They do not execute the boot entry. That does not leave an implementation fact unresolved.",
+      "Remediation": null
+    },
+    {
+      "Id": "A15",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "No path deletes the old partition or clears its read-only flag after protection succeeds.",
+      "Evidence": "Destructive command counts are zero. Cutover sets the old partition read-only, NoDefaultDriveLetter true, and offline, then checks those postconditions. Restore-SourceReadOnlyMapping forces read-only and remaps F. The Prepare catch does not call Set-Partition on the source. Native source open is read-only. failureInvariant line 531 distinguishes pre-protection unchanged F from post-protection read-only preservation.",
+      "Impact": "The old partition remains a preserved partition on every reviewed path.",
+      "Remediation": null
+    },
+    {
+      "Id": "A16",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "Source shows one explicit destructive consent, one RunAs UAC, a noninteractive child, and a SYSTEM AtStartup finalizer.",
+      "Evidence": "Prepare throws unless -ConfirmDestructive is set at line 760. The only Start-Process uses RunAs and passes -NonInteractive plus the same Prepare -ConfirmDestructive command. An already elevated process does not call Start-Process again. Restart-Computer -Force -Confirm:$false is the reboot. Register-FinalizerTask uses AtStartup, SYSTEM, ServiceAccount, Highest, and reads back SYSTEM, the executable, and the installed script argument. This review did not execute Plan, Status, Prepare, or Finalize.",
+      "Impact": "The unattended design is present in source. It was not launched.",
+      "Remediation": null
+    },
+    {
+      "Id": "A17",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "Pending and Running operator text requires source protection and exact BootExecute arming.",
+      "Evidence": "Get-CurrentState lines 362-368 and Invoke-Finalize lines 984-1001 share that gate. Test-BootImageArmed matches fdev-boot-copy with an optional .exe suffix and trailing arguments, and it does not match a different image name. Add-BootImage writes the exact name fdev-boot-copy and requires exactly one exact readback. The armed true branch says readback confirms F is read-only and BootExecute is armed. The false branch says preparation is incomplete or records Failed.",
+      "Impact": "Status and Finalize no longer tell the operator a boot copy is ready from registry status alone.",
+      "Remediation": null
+    },
+    {
+      "Id": "A18",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The three wording observations from receipt 20261005T191258Z are closed.",
+      "Evidence": "Line 524 says hash-verify the Native boot image and does not say the finalizer script is hash-verified. Line 525 says read back that F remains online and mapped as F with IsReadOnly and NoDefaultDriveLetter set. It does not claim a write test. Line 712 says no read-only claim is made until the partition attributes and F mapping pass readback. It does not say every later failure leaves F read-only before flush, dismount, Set-Partition, and readback succeed.",
+      "Impact": "Plan and the protection progress line now describe the checks the code performs.",
+      "Remediation": null
+    },
+    {
+      "Id": "A19",
+      "Status": "PASS",
+      "Surface": "A",
+      "Claim": "The wording closure was recomputed, and the prior control-flow anchors did not move.",
+      "Evidence": "The 191258 receipt recorded script SHA-256 704F71E490FF17EBC560F4596639170970E2D6CF4C02D5BF5CE6804F0A5C8E71, length 50790, 1057 lines. The current file is SHA-256 37C4B99FD86D9E89C4477D971B0A21001F0A6064925B40E6B481914DF455AFBA, length 50916, still 1057 lines, a gain of 126 bytes. Parser, analyzer, function count, destructive counts, confirmation coverage, and the Prepare command lines 773, 776, 777, 778, 782, 783, 788, and 798 match the anchors cited by that receipt. The predecessor file was not retained, so this is not a byte-for-byte diff. The current file was reviewed in full anyway.",
+      "Impact": "The new hash still passes the same safety gates. The three inaccurate sentences are the lines that the prior receipt identified.",
+      "Remediation": null
+    },
+    {
+      "Id": "B1",
+      "Status": "PASS",
+      "Surface": "B",
+      "Claim": "This review re-checked the artifacts and did not adopt the earlier verdicts.",
+      "Evidence": "The four rejected receipts and the 191258 AGREE receipt were read as attack input. Prior overall verdicts were not reused. Hashes, parser, AST, analyzer, confirmation metadata, geometry, PE, PDB symbol, and cargo fmt, clippy, test, and build were run in this session against the current bytes.",
+      "Impact": "Earlier receipts were claims to attack, not authority.",
+      "Remediation": null
+    },
+    {
+      "Id": "B2",
+      "Status": "N/A",
+      "Surface": "B",
+      "Claim": "Byrd Development Process v4 phase order does not apply to this operator-directed lab migration.",
+      "Evidence": "Classification is class 2. The brief says ViceSharp product requirements are N/A. No product FR/TR/TEST completion was claimed for this tooling.",
+      "Impact": "Surface B does not fail the migration for lacking a Byrd phase gate.",
+      "Remediation": null
+    },
+    {
+      "Id": "B3",
+      "Status": "PASS",
+      "Surface": "B",
+      "Claim": "MCP session state was written through the session-log tools, not by editing storage files.",
+      "Evidence": "Session open and beginTurn used mcpserver sessionlog_open and sessionlog_begin_turn for GrokCode. Turn id 97747 is in progress at the time of the source review. Completion and readback are recorded after this file is updated with the query proof. No todo.yaml, session-log file, or requirements store was edited. Raw REST was not used.",
+      "Impact": "The audit route matches the workspace marker and the Grok plugin contract. The readback line below is the persistence proof.",
+      "Remediation": null
+    },
+    {
+      "Id": "B4",
+      "Status": "PASS",
+      "Surface": "B",
+      "Claim": "Lab shell work used PowerShell.MCP only, with no Python.",
+      "Evidence": "Commands ran through pwsh execute_command. Text reads of profile and receipt output used Show-TextFiles. PY_COUNT is 0. JSON for the twin receipt is ConvertTo-Json from objects. No Bash, Node, or Python parser was used.",
+      "Impact": "The PowerShell-only and no-Python rules hold for this review and for the migration tree that was inspected.",
+      "Remediation": null
+    },
+    {
+      "Id": "B5",
+      "Status": "PASS",
+      "Surface": "B",
+      "Claim": "The review did not mutate migration state.",
+      "Evidence": "Move-FDevDrive.ps1 was not invoked in Plan, Status, Prepare, or Finalize. No partition, volume, letter, migration registry value, scheduled task, BootExecute, or reboot operation was performed. The cargo rebuild used an isolated target directory, and the pinned exe hash was the same afterward. The only review writes are this receipt pair and the MCP session-log turn.",
+      "Impact": "The safety boundary in the brief was kept.",
+      "Remediation": null
+    },
+    {
+      "Id": "C1",
+      "Status": "N/A",
+      "Surface": "C",
+      "Claim": "ViceSharp functional and technical requirements do not govern this lab migration.",
+      "Evidence": "Class 2 operator-directed migration. HANDOFF.md product plan PLAN-VSFLOCKSTEP-001 is unrelated and was not claimed complete by this tooling.",
+      "Impact": "Missing ViceSharp FR/TR/TEST coverage is not a failure for this request.",
+      "Remediation": null
+    },
+    {
+      "Id": "D1",
+      "Status": "PASS",
+      "Surface": "D",
+      "Claim": "The migration plan text matches the safe code order, including the corrected wording.",
+      "Evidence": "Same evidence as A5 and A18. failureInvariant line 531 says failures before source protection leave F unchanged, and that after source read-only protection succeeds later failures preserve or restore F as read-only and never delete the old partition. That sentence is not a claim that protection exists before readback.",
+      "Impact": "Plan, progress text, and code describe the same order and the same readback.",
+      "Remediation": null
+    },
+    {
+      "Id": "D2",
+      "Status": "PASS",
+      "Surface": "D",
+      "Claim": "The twelve power-loss and rerun statements hold in source.",
+      "Evidence": "Payload install does not create Pending or the task. Protect runs before registry and task registration, and readback is required before return. Pending, finalizer readback, BootExecute readback, and reboot follow that return. Finalize makes no initial protection claim and independently reads both prerequisites. A missing prerequisite becomes non-repeating Failed with zero bytes and failure NTSTATUS, with no copy or cutover. Both true retains the retry. Power loss before Set-Partition creates no Pending task and does not set source read-only. No later path sets source IsReadOnly false. A gap after task and registry but before BootExecute is converted by Finalize. Rerun reuses a source-sized target, calls Protect again, overwrites Status with 0, replaces the task with -Force, and arms BootExecute. No delete command exists.",
+      "Impact": "The reported power-loss window stays safe. The exception path records Failed before it drops the task when this attempt started registry initialization.",
+      "Remediation": null
+    },
+    {
+      "Id": "D3",
+      "Status": "N/A",
+      "Surface": "D",
+      "Claim": "The ViceSharp product plan is not the definition of done for this migration.",
+      "Evidence": "HANDOFF.md is a VICE snapshot and phase-exit handoff. It does not claim this Dev Drive migration step complete. The operator classified the work as class 2.",
+      "Impact": "Open product plan items do not fail this tooling review.",
+      "Remediation": null
+    },
+    {
+      "Id": "D4",
+      "Status": "PASS",
+      "Surface": "D",
+      "Claim": "The failed claims in the four named receipts are closed in the current source, and their live-environment items were excluded rather than left unknown.",
+      "Evidence": "162750Z and 172424Z progress and invariant failures are closed by the current Completed, Current, and Next fields and by failureInvariant line 531. 180849Z A18/D8 is A8. 184242Z A16/D9, A17/D10, and A19/D11 are A5, A6, and A7. The 191258 wording notes are A18. The old live Dev Drive query was not rerun because this brief forbids environment inspection.",
+      "Impact": "No prior code defect named in those receipts remains open in this source.",
+      "Remediation": null
+    }
+  ],
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": [
+    "B2",
+    "C1",
+    "D3"
+  ],
+  "ReadbackProof": "sessionlog_query readback: turn status completed, response 27168 characters containing OverallVerdict AGREE plus A6 PASS and D4 PASS, processingDialog 2 at first readback (decision 838 characters and the full observation), actions 3 including design_decision, designDecisions 1. A follow-up dialog append reported totalDialogItems 3 with the readback sentence. Failsafe was not used.",
+  "McpReadback": {
+    "TurnStatus": "completed",
+    "ResponseChars": 27168,
+    "HasOverallVerdictAgree": true,
+    "ActionCount": 3,
+    "DesignDecisionCount": 1,
+    "DialogAppendTotal": 3,
+    "FailsafeUsed": false
+  }
+}

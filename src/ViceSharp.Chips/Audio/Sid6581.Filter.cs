@@ -61,6 +61,37 @@ public partial class Sid6581
     /// </summary>
     internal static readonly Lazy<ResidFilterModel> Model8580 = new(BuildResidModel8580);
 
+    /// <summary>
+    /// reSID filter8580new.cc resonance coefficient for the 6581:
+    /// n = (~n8 &amp; 0xf) / 8.0. Setting 15 is 0.
+    /// </summary>
+    internal static double Resid6581ResonanceGain(int n8) => ((~n8) & 0x0F) / 8.0;
+
+    /// <summary>
+    /// reSID filter8580new.cc resGain[] for the 8580. Setting 15 stays above 0.
+    /// </summary>
+    internal static double Resid8580ResonanceGain(int n8) => Resid8580ResGain[n8 & 0x0F];
+
+    internal static readonly double[] Resid8580ResGain =
+    {
+        (1.4 / 1.0),
+        (((1.4 * 15.3) / (1.4 + 15.3)) / 1.0),
+        (((1.4 * 7.3) / (1.4 + 7.3)) / 1.0),
+        (((1.4 * 4.7) / (1.4 + 4.7)) / 1.0),
+        (1.4 / 1.4),
+        (((1.4 * 15.3) / (1.4 + 15.3)) / 1.4),
+        (((1.4 * 7.3) / (1.4 + 7.3)) / 1.4),
+        (((1.4 * 4.7) / (1.4 + 4.7)) / 1.4),
+        (1.4 / 2.0),
+        (((1.4 * 15.3) / (1.4 + 15.3)) / 2.0),
+        (((1.4 * 7.3) / (1.4 + 7.3)) / 2.0),
+        (((1.4 * 4.7) / (1.4 + 4.7)) / 2.0),
+        (1.4 / 2.8),
+        (((1.4 * 15.3) / (1.4 + 15.3)) / 2.8),
+        (((1.4 * 7.3) / (1.4 + 7.3)) / 2.8),
+        (((1.4 * 4.7) / (1.4 + 4.7)) / 2.8),
+    };
+
     // ----------------------------------------------------------------
     // Per-instance filter state (reSID Filter / ExternalFilter fields)
     // filter8580new.h:580-609
@@ -946,25 +977,7 @@ public partial class Sid6581
         // (filter8580new.cc:592-597; resGain at :135-153).
         // Literal C++ R-ratio expressions for bit-exact doubles.
         // -----------------------------------------------------------
-        double[] resGain =
-        {
-            (1.4 / 1.0),                        // :137
-            (((1.4 * 15.3) / (1.4 + 15.3)) / 1.0), // :138
-            (((1.4 * 7.3)  / (1.4 + 7.3))  / 1.0), // :139
-            (((1.4 * 4.7)  / (1.4 + 4.7))  / 1.0), // :140
-            (1.4 / 1.4),                        // :141
-            (((1.4 * 15.3) / (1.4 + 15.3)) / 1.4), // :142
-            (((1.4 * 7.3)  / (1.4 + 7.3))  / 1.4), // :143
-            (((1.4 * 4.7)  / (1.4 + 4.7))  / 1.4), // :144
-            (1.4 / 2.0),                        // :145
-            (((1.4 * 15.3) / (1.4 + 15.3)) / 2.0), // :146
-            (((1.4 * 7.3)  / (1.4 + 7.3))  / 2.0), // :147
-            (((1.4 * 4.7)  / (1.4 + 4.7))  / 2.0), // :148
-            (1.4 / 2.8),                        // :149
-            (((1.4 * 15.3) / (1.4 + 15.3)) / 2.8), // :150
-            (((1.4 * 7.3)  / (1.4 + 7.3))  / 2.8), // :151
-            (((1.4 * 4.7)  / (1.4 + 4.7))  / 2.8), // :152
-        };
+        var resGain = Resid8580ResGain;
         var resonance = new ushort[16][];
         for (int n8 = 0; n8 < 16; n8++)
         {

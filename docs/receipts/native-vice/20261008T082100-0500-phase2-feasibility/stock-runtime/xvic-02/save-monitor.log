@@ -1,0 +1,10 @@
+#1 (Stop on  exec fd22)    0/$000,   6/$06
+.C:fd22  A2 FF       LDX #$FF       - A:00 X:00 Y:00 SP:00 ..-..IZ.          6
+  ADDR A  X  Y  SP 00 01 NV-BDIZC LIN CYC  STOPWATCH
+.;fd22 00 00 00 00 ff 00 00100110 000 006          6
+Stopwatch:          6
+Stepping through the next 1 instruction(s).
+.C:fd22  A2 FF       LDX #$FF       - A:00 X:FF Y:00 SP:00 N.-..I..          6
+  ADDR A  X  Y  SP 00 01 NV-BDIZC LIN CYC  STOPWATCH
+.;fd22 00 ff 00 00 ff 00 10100100 000 006          6
+Stopwatch:          6

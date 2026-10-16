@@ -1,0 +1,6 @@
+{
+  "timestampLocal": "2026-10-08T07:35:30.9873556-05:00",
+  "command": "git diff --check",
+  "exitCode": 0,
+  "output": []
+}

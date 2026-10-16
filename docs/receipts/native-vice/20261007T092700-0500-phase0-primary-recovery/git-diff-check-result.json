@@ -1,0 +1,6 @@
+{
+  "capturedAt": "2026-10-07T09:33:57.4340113-05:00",
+  "command": "git diff --check",
+  "exitCode": 0,
+  "outputLines": 0
+}

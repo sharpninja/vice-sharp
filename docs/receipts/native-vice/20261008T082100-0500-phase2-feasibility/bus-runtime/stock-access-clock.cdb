@@ -1,0 +1,5 @@
+.echo STOCK_ACCESS_CLOCK
+dq xvic+0x262a10 L1
+r rip
+r @$t0=@$t0+1
+.if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }

@@ -1,0 +1,8 @@
+2026-10-08T16:01:07.8295875-05:00
+Executable: C:\msys64\mingw64\bin\gcc.exe
+Arguments: -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | -Wl,--wrap=vic_cycle | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\clock-driver.c | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\native-cycle-double.c | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\clock-observer.c | -o | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-probe-evidence\clock-probe.exe
+ExitCode: 0
+TimedOut: False
+STDOUT:
+
+STDERR:

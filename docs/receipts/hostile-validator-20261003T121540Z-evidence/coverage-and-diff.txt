@@ -1,0 +1,10 @@
+Command: pwsh -NoProfile -NonInteractive -File .\tools\check_phase_acceptance_coverage.ps1 -ThroughPhase 2
+Phase acceptance coverage
+Repository: F:\GitHub\vice-sharp
+Through phase: 2
+In-scope requirements with acceptance criteria: 94
+Missing from tests/: 0
+EXIT=0
+Command: git diff --check
+
+EXIT=0

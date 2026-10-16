@@ -1,0 +1,26 @@
+{
+  "timestampLocal": "2026-10-08T11:13:25.1651663-05:00",
+  "paths": [
+    "tools/immutable-vice/clock-observer.c",
+    "tools/immutable-vice/clock-gate.c",
+    "tools/immutable-vice/clock-gate.h",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockGateContractTests.cs",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockGateImplementationTests.cs",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockHookContractTests.cs",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockHookImplementationTests.cs",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\CompiledCFixture.cs",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\README.md",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ViceSharp.NativeClockProbe.Tests.csproj",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\clock-driver.c",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\gate-driver.c",
+    "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\native-cycle-double.c",
+    "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+    "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\Invoke-GateProbe.ps1"
+  ],
+  "trailingWhitespaceOrConflictMarkers": [],
+  "negativeControlDetected": true,
+  "positiveControlAccepted": true,
+  "gitTrackedDiffCheckExit": 0,
+  "gitNoIndexExplanation": "Each no-index comparison to NUL exited1 with empty diagnostic output; these are differences against an empty file, not whitespace errors. Raw results retained. This additional text check found the listed actual diagnostics."
+}

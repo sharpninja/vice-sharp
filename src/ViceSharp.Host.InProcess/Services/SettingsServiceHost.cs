@@ -373,13 +373,27 @@ public sealed class SettingsServiceHost : ISettingsService
 
             if (request.Display is not null)
             {
-                session.DisplaySettings = request.Display;
-                diagnostics.Add(new SettingApplyDiagnosticDto(
-                    "display",
-                    SettingApplyScope.RestartRequired,
-                    false,
-                    true,
-                    "Display settings were stored on the host session and require runtime display reinitialization to take effect."));
+                var applyAt = string.IsNullOrWhiteSpace(request.ApplyAt) ? "frame" : request.ApplyAt;
+                if (applyAt.Equals("frame", StringComparison.OrdinalIgnoreCase))
+                {
+                    session.StageDisplaySettings(request.Display);
+                    diagnostics.Add(new SettingApplyDiagnosticDto(
+                        "display",
+                        SettingApplyScope.Live,
+                        false,
+                        false,
+                        "Display settings are staged until the next frame boundary."));
+                }
+                else
+                {
+                    session.DisplaySettings = request.Display;
+                    diagnostics.Add(new SettingApplyDiagnosticDto(
+                        "display",
+                        SettingApplyScope.Live,
+                        true,
+                        false,
+                        "Display settings were applied immediately."));
+                }
             }
 
             if (request.Input is not null)

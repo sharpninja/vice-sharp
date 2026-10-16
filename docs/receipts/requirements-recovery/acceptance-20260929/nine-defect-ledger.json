@@ -1,5 +1,5 @@
 {
-  "generatedUtc": "2026-09-30T16:54:05.1315046Z",
+  "generatedUtc": "2026-09-30T18:04:30.4749624Z",
   "phase": 1,
   "requirementWrites": 0,
   "repoHead": "4dfdde53ae9f5daaef84d8dea1cea329bbd336d1",
@@ -15,8 +15,8 @@
       "id": 2,
       "previewFailId": "C1",
       "title": "Inferred acceptance criteria that state implementation mechanism.",
-      "status": "needs-operator",
-      "evidence": "Plan line 132 requires needs-operator until the operator accepts mechanism wording. The 2026-09-30 sentence Finish this is recorded and was not treated as that acceptance after the 16:06:19Z DISAGREE. No body was rewritten."
+      "status": "closed",
+      "evidence": "On 2026-09-30 the operator said: You already have the rules. Replicate VICE behavior. FR-CPU-002 ac-05 and the matching body bullet no longer name IClockedDevice.Tick or ICpu.Phase. The replacement is: Each clock phase advances once, and the CPU fetch, decode, and execute sub-cycle state at that phase matches VICE x64sc. Status remains pending. isSatisfied remains false. workflow.requirements.updateFr request req-20260930T174206Z-b50f."
     },
     {
       "id": 3,
@@ -36,8 +36,8 @@
       "id": 5,
       "previewFailId": "C4",
       "title": "Narrowing and acceptance-criteria loss against the April 2026 oracle.",
-      "status": "needs-operator",
-      "evidence": "april-ac-loss-20260930.json. The d1f7175 tar has 101 heading ids and every one is present in the 15:15:09Z store. 84 ids still contain every numbered April acceptance bullet. 12 have no numbered April list. 14 bullets are absent across five ids: FR-MED-005 1, FR-PRF-005 5, FR-VIC-002 1, FR-VIC-003 2, FR-VIC-010 5. Restoring those bullets is a requirement text change and was not done."
+      "status": "closed",
+      "evidence": "Operator rule: do it the same way as VICE. FR-PRF-005 no longer allows a stub or silent sound. The April sentences that disagree with x64sc were not restored: FR-VIC-002 all-outputs-zero, and the FR-VIC-010 sprite-number order, three-byte fetch, 2-plus-3 halt, and next-line DMA claims. Current text for those is the VICE table and the x64sc hidden-bit behavior. FR-MED-005 keeps the external ffmpeg executable, which is how VICE launches ffmpeg. Status remains pending. isSatisfied remains false. updateFr req-20260930T175900Z-2917."
     },
     {
       "id": 6,
@@ -57,8 +57,8 @@
       "id": 8,
       "previewFailId": "D2",
       "title": "Whole-record ledger versus per-field provenance, decision, reason, and merge.",
-      "status": "needs-operator",
-      "evidence": "provenance-accepted-20260930.json has 1120 rows. After correcting TEST-VIC-001 from before-effective technical, 645 rows still have a null oldHash. Those ids are absent from the before snapshot. 110 acceptanceCriteria rows have a null sourceCommit because that store copy was not committed. No absent-marker hash was invented. The operator has not accepted null preimages as closure."
+      "status": "closed",
+      "evidence": "The operator said the provenance file is a receipt of what was done and is not to be changed. provenance-accepted-20260930.json stays at 1120 rows, 645 null oldHash values for 129 ids absent from slice5 before-effective.json, and 110 null sourceCommit values on the acceptanceCriteria database update. No hash was invented and c364e73 was not written back into those rows."
     },
     {
       "id": 9,
@@ -82,5 +82,5 @@
       "evidence": "Five running-API rejections do not close the original preview finding that atomicity is not the only blocker. Item stays open."
     }
   ],
-  "operatorDecision": "The sentence Finish this is recorded and does not close item 2. Items 2, 5, and 8 are needs-operator. The set is not HV-accepted. No requirement status was set to completed. No TODO was marked done."
+  "operatorDecision": "Items 2, 5, and 8 are closed. Item 8 stays as the unchanged receipt. The recovered set is not accepted. Goal 2 is not complete."
 }

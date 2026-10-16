@@ -1,0 +1,28 @@
+You are the HOSTILE VALIDATOR for local workspace F:\GitHub\vice-sharp and the operator-directed LAB-OMARCHY host-reference migration across PAYTON-LEGION2.
+
+FIRST ACTION: execute add-profile. Read the supported add-profile skill and every required non-skill Markdown profile file under C:\Users\kingd\.claude\profile in full. Record the count. Local only. No web, cloud, subagents, or Python. Use PowerShell through PowerShell.MCP. Never display passwords, secure strings, private keys, connection strings, API keys, tokens, or credential contents. You may write only the requested hostile receipt Markdown and JSON under F:\GitHub\vice-sharp\docs\receipts. Do not edit any configuration, code, docs, requirements, TODOs, or plans.
+
+Classify this as a user-directed general lab/operations action, not project requirement implementation. Surface C is N/A. Surface D is N/A because no project plan or goal completion is claimed.
+
+Operator request: replace live configuration, scripts, credentials, host entries, SSH settings, deploy targets, and current docs using PAYTON-DESKTOP or PAYTON-OMARCHY with LAB-OMARCHY. New identity: LAB-OMARCHY, IPv4 192.168.1.182, MAC 70:85:C2:84:C6:F7. Preserve PAYTON-LEGION2 and do not change its Windows name. Leave unrelated machines alone. Report each changed file and old/new values without passwords.
+
+Claims to attack:
+A1. Local computer name is still PAYTON-LEGION2. LAB-OMARCHY DNS A is 192.168.1.182, it pings, and neighbor MAC is 70-85-C2-84-C6-F7.
+A2. WSMan TrustedHosts is 192.168.1.182,LAB-OMARCHY. RDP MRU0 is LAB-OMARCHY. Credential Manager contains TERMSRV/LAB-OMARCHY and no old TERMSRV target. Process and machine OCTOPUS_URL are http://LAB-OMARCHY:8065. Windows hosts contains no old name/address.
+A3. SSH uses Host LAB-OMARCHY, HostName 192.168.1.182, port 22, identity id_ed25519_lab_omarchy, HostKeyAlias LAB-OMARCHY. Old known_hosts aliases were removed, not remapped to old key material. SSH key filenames use id_ed25519_lab_omarchy.
+A4. Credential files were renamed without exposing/changing protected payloads: octopus-desktop.cred.xml to octopus-lab-omarchy.cred.xml; paytondesktop.cred.xml to lab-omarchy-winrm.cred.xml; setup-payton-desktop-cred.ps1 to setup-lab-omarchy-cred.ps1. Both credential CLIXML files import.
+A5. Payton-Desktop.rdp became LAB-OMARCHY.rdp; it and Default.rdp target LAB-OMARCHY.
+A6. DevSetup trees under C:\Users\kingd\OneDrive\DevSetup and C:\Users\kingd\OneDrive\Documents\PowerShell\DevSetup use LAB-OMARCHY and 192.168.1.182. Set-SshPengwin files/references became Set-SshLabOmarchy while PAYTON-LEGION2-suffixed files retained PAYTON-LEGION2.
+A7. Live Codex, Windows Terminal, PowerToys, Phone Link/CrossDevice, SSMS, Arduino, OneDrive plans, Homeschool, RideAudit, TruckMate, tm-r0, MouseKeyProxy, RomM, and ViceSharp configurations/scripts/current docs/tests were updated. Inspect current diffs and active files.
+A8. Formal historical evidence was not rewritten: audit receipts, histories, git reflogs/branch labels, archived/grok validation snapshots, bootstrap logs, secure-boot provenance, old RDP certificate provenance, and session caches. Verify exclusions are historical, not live config.
+A9. Residual audit across 66 top-level Git repos leaves only historical/session artifacts. Targeted live scans show zero old names/address in SSH, credentials, DevSetup, named app configs, and changed tracked code.
+A10. Evidence: 81 PowerShell files parse with 0 failures; 12 JSON with 0 failures; 5 XML with 0 failures; git diff --check clean for affected paths; focused tests 58 passed, 0 failed, 0 skipped across ViceSharp current and RomM clone, TruckMate Build/FeatureFlags, MouseKeyProxy Agent/Commands, RomM CsdbBridge/Client. Missing assets were restored only from local C:\Users\kingd\.nuget\packages.
+A11. Disclosed non-passes: LAB-OMARCHY ping works but TCP 22 is closed and SSH exits 255. DevSetup Pester did not finish after over 3 minutes and was interrupted. Do not call either passing.
+A12. Some state was updated concurrently before the implementer edit pass: active SSH config/key filenames, profile files, ViceSharp pipeline fallbacks, machine OCTOPUS_URL, and RDP Credential target. Distinguish current state from implementer-authored changes.
+
+Mandatory surfaces: A requested claims. B workspace rules including honesty, receipts, MCP-only storage, PowerShell/no-Python, local-only, secret redaction, look-before-delete, and preserving PAYTON-LEGION2. C N/A. D N/A.
+
+Default claims FAIL/UNKNOWN until reverified. AGREE requires accuracy and completeness each at least 98. Include PASS/FAIL/UNKNOWN counts and full lists. Write complete Markdown receipt F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261004T212800Z-lab-omarchy-host-migration.md and matching JSON F:\GitHub\vice-sharp\docs\receipts\hostile-validator-20261004T212800Z-lab-omarchy-host-migration.json with all evidence, scores, OverallVerdict, request/response JSONL paths. Create a complete MCP Session Log turn through the supported plugin wrapper, not raw REST. Persist the entire verdict plus JSONL paths and prove readback. Use failsafe if immediate persist fails and disclose it.
+Request JSONL: F:\GitHub\vice-sharp\docs\receipts\hv\20261004T212800Z-lab-omarchy-host-migration-local-grok.request.jsonl
+Response JSONL: F:\GitHub\vice-sharp\docs\receipts\hv\20261004T212800Z-lab-omarchy-host-migration-local-grok.response.jsonl
+End with receipt path and OverallVerdict.

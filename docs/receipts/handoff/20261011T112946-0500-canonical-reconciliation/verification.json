@@ -1,0 +1,355 @@
+{
+  "kind": "documentation-and-state-checks-not-mock-or-native-tests",
+  "timestampLocal": "2026-10-11T11:43:22-05:00",
+  "checks": [
+    {
+      "name": "canonical body equals authored replacement",
+      "passed": true
+    },
+    {
+      "name": "prior handoff retained exact",
+      "passed": true
+    },
+    {
+      "name": "original external full goal plan unchanged",
+      "passed": true
+    },
+    {
+      "name": "full goal reference copy exact",
+      "passed": true
+    },
+    {
+      "name": "state snapshot matches native serialization",
+      "passed": true
+    },
+    {
+      "name": "TODO receipt matches native serialization",
+      "passed": true
+    },
+    {
+      "name": "four whole-object primary TODO readbacks exact",
+      "passed": true
+    },
+    {
+      "name": "four TODO done flags remain false",
+      "passed": true
+    },
+    {
+      "name": "sixteen selected source pins unchanged",
+      "passed": true
+    },
+    {
+      "name": "expanded native git status unchanged",
+      "passed": true
+    },
+    {
+      "name": "root status adds only receipt directory",
+      "passed": true
+    },
+    {
+      "name": "all document links except not-yet-written self receipt resolve",
+      "passed": true
+    },
+    {
+      "name": "git diff --check exit zero",
+      "passed": true
+    },
+    {
+      "name": "known credential value scan no hits",
+      "passed": true
+    },
+    {
+      "name": "canonical handoff no em or en dash",
+      "passed": true
+    }
+  ],
+  "checksCount": 15,
+  "failed": 0,
+  "mockTestsExecuted": 0,
+  "realTestsExecuted": 0,
+  "newHvRuns": 0,
+  "goalAccepted": false,
+  "requirementWrites": 0,
+  "doneStateChanges": 0,
+  "files": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "D85B23B8C65AAF7B0481EC0F0D71E4A55B4F61788F8EC09CD9011AB0E74BEC77",
+      "bytes": 25459
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\README.md",
+      "sha256": "8A26AD4C0D041C6FE27AEA3055CBA7319DF8A8E52FD09A2336AA9C12AF978CC1",
+      "bytes": 4514
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\state-before.json",
+      "sha256": "C0C50C71802B66C4CD5E3BCF061A38A04914B5BBE437D07958F4AEC74E405F55",
+      "bytes": 30839
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\todo-updates.json",
+      "sha256": "745FBE3A3B06A8E60494C7EA0EE46E4F873DABE210203EDA487CCD348A2822C9",
+      "bytes": 22556
+    }
+  ],
+  "inputPins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+      "expected": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+      "actual": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\observation-contract.json",
+      "expected": "2D1692BCBD8E8DD922CE40C483A7DC41CF470E80565C1E357021BFB594D449CD",
+      "actual": "2D1692BCBD8E8DD922CE40C483A7DC41CF470E80565C1E357021BFB594D449CD",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\README.md",
+      "expected": "AE57B80B0D5618445ED3A992A44ECC13968694B810C589F4F0224919592C8196",
+      "actual": "AE57B80B0D5618445ED3A992A44ECC13968694B810C589F4F0224919592C8196",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\README.md",
+      "expected": "0E94DD90A07144BF0EA0DEDB060E319759A1F60DBDA11B602FB87B7BEDF22EDF",
+      "actual": "0E94DD90A07144BF0EA0DEDB060E319759A1F60DBDA11B602FB87B7BEDF22EDF",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\README.md",
+      "expected": "C89D5E1765B3FE94AD5F50C1C72E27B39882F0880616794311B4C9549CF7927A",
+      "actual": "C89D5E1765B3FE94AD5F50C1C72E27B39882F0880616794311B4C9549CF7927A",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\README.md",
+      "expected": "41D5CD1B7D169BB1B4E5CB123C87D771422323B071380F5CD18A066D0D3BDFAB",
+      "actual": "41D5CD1B7D169BB1B4E5CB123C87D771422323B071380F5CD18A066D0D3BDFAB",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\README.md",
+      "expected": "60E9421485EFC66D0A6A12FABB640F44C2477B9BF89C64A76CBC90ADE728ADC3",
+      "actual": "60E9421485EFC66D0A6A12FABB640F44C2477B9BF89C64A76CBC90ADE728ADC3",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\README.md",
+      "expected": "AA9068A976E7A381A96E7787698A92AC61BFD2044D87804C2F4A72D035641FF9",
+      "actual": "AA9068A976E7A381A96E7787698A92AC61BFD2044D87804C2F4A72D035641FF9",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\README.md",
+      "expected": "7029447DFBCDDC041F317F6496BD2AAADE0284EA5972A8623F50A6DC47BF0DE4",
+      "actual": "7029447DFBCDDC041F317F6496BD2AAADE0284EA5972A8623F50A6DC47BF0DE4",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\README.md",
+      "expected": "C2B0D861B30070FBDA3CE32B4FBF0D1076651124E61347925C40A6131849B399",
+      "actual": "C2B0D861B30070FBDA3CE32B4FBF0D1076651124E61347925C40A6131849B399",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\README.md",
+      "expected": "377BF9D126351FEAE51F56B96E18A3CBDB843933956508362D3BF45890E202B5",
+      "actual": "377BF9D126351FEAE51F56B96E18A3CBDB843933956508362D3BF45890E202B5",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.md",
+      "expected": "0D3680D6F1C09F076D201A6C795B0BA7520E788803952DDA402C736196985BB2",
+      "actual": "0D3680D6F1C09F076D201A6C795B0BA7520E788803952DDA402C736196985BB2",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.json",
+      "expected": "E87F607E6F533823A59E7FF7EAFDB7A8A88B3FE0548D82163797383B3EB9FC0B",
+      "actual": "E87F607E6F533823A59E7FF7EAFDB7A8A88B3FE0548D82163797383B3EB9FC0B",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\terminal-result.json",
+      "expected": "955A5941D1CA83A6C4FB04E4352360FF2BC22CF2E9AB933BF3E04C422D203323",
+      "actual": "955A5941D1CA83A6C4FB04E4352360FF2BC22CF2E9AB933BF3E04C422D203323",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "expected": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "actual": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+      "expected": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "actual": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "unchanged": true
+    }
+  ],
+  "links": [
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/handoff/20261011T112946-0500-canonical-reconciliation/HANDOFF.before.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\HANDOFF.before.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/handoff/20261011T112946-0500-canonical-reconciliation/goal-plan.reference.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\goal-plan.reference.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/hv/20261010T161500-0500-tape-amendment-opus/resume-20261011T000300-0500/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/hv/20261010T161500-0500-tape-amendment-opus/resume-20261011T000300-0500/verdict.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/hv/20261010T161500-0500-tape-amendment-opus/resume-20261011T000300-0500/verdict.json",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.json",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T080155-0500-capacitor-guard-remediation/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T065515-0500-tape-hv-remediation/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T072531-0500-tape-state-composite/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T083152-0500-media-fixture-specification/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T085402-0500-tape-motor-matrix/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T092059-0500-tape-recording-wiring-contract/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T095710-0500-tape-test-disposition/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T102600-0500-requirements-api-guard/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/requirements-recovery/20261011T110100-0500-tape-observation-contract/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/plans/PLAN-VSFLOCKSTEP-001.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "target": "docs/receipts/handoff/20261011T112946-0500-canonical-reconciliation/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\README.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\README.md",
+      "target": "HANDOFF.before.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\HANDOFF.before.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\README.md",
+      "target": "goal-plan.reference.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\goal-plan.reference.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\README.md",
+      "target": "../../../../HANDOFF.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\README.md",
+      "target": "state-before.json",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\state-before.json",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\README.md",
+      "target": "todo-updates.json",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\todo-updates.json",
+      "exists": true
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\README.md",
+      "target": "verification.json",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\handoff\\20261011T112946-0500-canonical-reconciliation\\verification.json",
+      "exists": false
+    }
+  ],
+  "linkSelfReceiptNote": "verification.json does not exist before its first write. Its one link is excluded only from this pre-write resolution check; perform and log a complete23-link recheck after writing.",
+  "gitDiffCheck": {
+    "command": "git diff --check",
+    "exitCode": 0,
+    "output": []
+  },
+  "nativeStatus": {
+    "command": "git -C native/vice status --porcelain=v1 --untracked-files=all",
+    "limitation": "Status identity is not byte identity of every native file. Sixteen selected document/source artifact hashes checked separately.",
+    "after": 2539,
+    "before": 2539,
+    "differences": []
+  },
+  "todoReadback": {
+    "unrelatedFieldsUnchanged": true,
+    "count": 4,
+    "allDoneFalse": true,
+    "allExpectedExact": true,
+    "details": "todo-updates.json"
+  },
+  "excludedAcceptance": "No independent HV; no whole-packet R0 approval; no product/mock/native gate completion."
+}

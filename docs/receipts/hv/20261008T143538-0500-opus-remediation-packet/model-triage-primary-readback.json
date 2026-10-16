@@ -1,0 +1,10 @@
+{
+  "reportId": "triage-report-13c287e9d2034e07ace0442a9c03697c",
+  "groupId": "triage-group-5fad2245878d8880",
+  "status": "grouped",
+  "title": "Codex wrapper overwrites actual runtime model with placeholder codex",
+  "summary": "Installed Codex plugin1.118.0 unconditionally sets MCP_SESSION_MODEL=codex in Invoke-CodexMcpPlugin.ps1:123 (also PLUGIN_MODEL_DEFAULT and CT2R_MODEL), while runtime turn_context records identify gpt-6-astra at xhigh. Supported workflow.sessionlog.updateTurn has no model field. Primary MCP records model codex, violating accurate agent/model audit identity. Do not repair historical completed turns automatically.",
+  "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+  "workspacePath": "F:\\GitHub\\McpServer",
+  "createdUtc": "2026-10-08T14:35:43.3048203-05:00"
+}

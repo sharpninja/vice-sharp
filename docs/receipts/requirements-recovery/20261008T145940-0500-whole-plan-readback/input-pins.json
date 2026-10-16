@@ -1,0 +1,32 @@
+[
+  {
+    "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+    "sha256": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+    "bytes": 48261
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+    "sha256": "B7A13C695B04D2A2560AEEA3C174189594D8F0F776402662E688C86352E909E8",
+    "bytes": 76615
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\acceptance-20260929\\nine-defect-ledger.json",
+    "sha256": "07A1830198E95977A786D6AEA25167A4EFBBE5E11A8DB7099BE351DE727009C9",
+    "bytes": 5735
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\acceptance-20260929\\dense-session-smoke.json",
+    "sha256": "AF1E6C2BA7CCDA2751F470FFDC826759788FDAF860330791A788BF763159DF04",
+    "bytes": 5241
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\oracles\\vic20-xvic-manifest.json",
+    "sha256": "F3B69E4E2109464D91079A3A9F54B58C122BE5994D332E8AB3DF4DA3EF4B5C51",
+    "bytes": 4241
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\effective-requirements.before.json",
+    "sha256": "191F6E0324DCB0013361B894A5270DFBE8428916EC26A3B70C2DAB3FD8DECA1B",
+    "bytes": 756761
+  }
+]

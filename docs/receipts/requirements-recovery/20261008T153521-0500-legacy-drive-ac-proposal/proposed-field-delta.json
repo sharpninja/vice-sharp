@@ -1,0 +1,316 @@
+{
+  "schema": "ViceSharp.RequirementFieldDelta/v1",
+  "createdAtLocal": "2026-10-08T15:37:16.8377147-05:00",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "sourceAudit": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T152823-0500-legacy-drive-source-audit\\README.md",
+  "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "status": "unapplied-awaiting-operator-approval",
+  "records": [
+    {
+      "kind": "fr",
+      "id": "FR-ARCH-TRUEDRIVE-1541-002",
+      "before": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "closed",
+        "title": "True-Drive 1541 IEC timing and motor ramp",
+        "id": "FR-ARCH-TRUEDRIVE-1541-002",
+        "scopeStartLayerKey": "layer-1",
+        "body": "IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.",
+        "priority": "high",
+        "acceptanceCriteria": []
+      },
+      "after": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "title": "True-drive 1541 IEC, motor and sector behavior matches native VICE",
+        "id": "FR-ARCH-TRUEDRIVE-1541-002",
+        "scopeStartLayerKey": "layer-1",
+        "body": "With true-drive emulation enabled, the managed 1541 and its C64 or VIC-20 host connection shall reproduce the observable IEC, drive-CPU/VIA, motor/rotation and disk-read behavior of the pinned immutable native VICE reference for the same initial state, firmware, media, resources and clock schedule. A fixed helper deadline, a synthetic motor counter, or direct image-buffer access is not proof of true-drive parity. Preserve buffered operation as the separate mode specified by FR-DRVTRUE-001; retain all legacy evidence without treating it as native acceptance.",
+        "priority": "high",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "For independently pinned C64 and VIC-20 fixtures, the ordered host/drive IEC levels, drive VIA ATN signals and synchronization observations match native VICE at each specified clock/phase checkpoint, including both ATN edges, repeated writes and enabled/disabled drive configurations.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Host and drive line contributions remain independent: releasing ATN or one participant does not release CLK or DATA while another native-equivalent participant still holds that line low. Exhaustive single-drive digital combinations and multi-drive contention cases match the pinned native oracle.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Drive motor transitions, rotation progression, speed-zone effects and byte-ready observations match native VICE for the same initialized media and resources. No fixed 300000-cycle no-rotation period or loose host-cycle deadline may replace native-observed behavior.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "A true-drive DOS-mediated read of track 18 sector 0 produces native-matching bytes, status and relevant ordered CPU/VIA/IEC effects for the pinned D64 fixture. Native-observed missing-media and unsuccessful-read cases are retained. The separate buffered image-read assertion remains covered but cannot satisfy this true-drive criterion.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Every preceding criterion has traceable passing mock-contract and subsequently identical production-bound assertions, required real-emulator and cumulative evidence, and independent acceptance. Unrun, skipped, failing or mock-only evidence leaves its criterion unsatisfied; historical closed state or five-test counts do not establish acceptance.",
+            "isSatisfied": false
+          }
+        ]
+      },
+      "changedFields": [
+        "title",
+        "status",
+        "body",
+        "acceptanceCriteria"
+      ],
+      "provenance": "New source-derived proposal, not verbatim recovered legacy AC",
+      "approvalStatus": "unapplied-awaiting-operator-approval"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-DRV-EDGE-001",
+      "before": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "closed",
+        "title": "1541 drive motor 300,000-cycle ramp before rotation",
+        "id": "TR-DRV-EDGE-001",
+        "scopeStartLayerKey": "layer-1",
+        "body": "IecDrive.Tick() enforces 300,000-cycle motor ramp-up (300ms at 1MHz drive clock) before MotorRotationCycles advances. Motor off resets ramp. VICE drive/drive.c.",
+        "priority": "medium",
+        "acceptanceCriteria": []
+      },
+      "after": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "title": "1541 motor and rotation transitions follow pinned native VICE",
+        "id": "TR-DRV-EDGE-001",
+        "scopeStartLayerKey": "layer-1",
+        "body": "Model the native VIA2-controlled 1541 motor/rotation path, not IecDrive helper counters. At the pinned VICE commit, VIA2 port-B writes account for elapsed rotation before updating control bits; a motor-on edge establishes the current drive-clock origin through rotation_begins. Motor-off and repeated same-state writes, speed-zone/resource effects, byte-ready handling and image-attachment/read delays must follow their distinct native paths. Buffered image access and the real drive CPU/VIA/DOS path remain separate.",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "For on/off edges and repeated same-state VIA2 port-B writes, preserve native ordering: account for rotation under old state before the control update, establish the current clock origin only on an actual motor-on edge, and reproduce stop and restart results without an invented 300000-cycle hold.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "For settled attached media, all four speed-zone selections and pinned RPM/wobble resource values produce native-matching rotation and byte-ready traces. Byte-ready enable/disable and pending-edge handling must not be confused with the native motor-on gate; compare both movement and notification effects.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Keep motor timing separate from image visibility and attachment/detachment clocks. Test before, at and after each applicable native deadline from the same initial state, including branch transitions caused by an earlier read; preserve stateful call order and native return effects.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Use drive-CPU/VIA/DOS execution for the true-drive sector-read criterion and retain direct D64 byte access as buffered-mode evidence only. Pin ROM/image hashes, drive type, resources and initial clocks; failures and absent media must follow native observations without substituting synthetic BAM bytes.",
+            "isSatisfied": false
+          }
+        ]
+      },
+      "changedFields": [
+        "title",
+        "status",
+        "body",
+        "acceptanceCriteria"
+      ],
+      "provenance": "New source-derived proposal, not verbatim recovered legacy AC",
+      "approvalStatus": "unapplied-awaiting-operator-approval"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-IEC-EDGE-001",
+      "before": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "closed",
+        "title": "IEC bus ATN-response within 985-cycle spec window",
+        "id": "TR-IEC-EDGE-001",
+        "scopeStartLayerKey": "layer-1",
+        "body": "IecBus.Tick() asserts CLK and DATA low within 985 cycles (Tat=1ms at PAL 985,248Hz) of ATN falling edge. Releases both on ATN rising edge. VICE iecbus/iecbus.c:247-266.",
+        "priority": "high",
+        "acceptanceCriteria": []
+      },
+      "after": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "title": "C64 and VIC-20 IEC timing and line resolution follow native VICE",
+        "id": "TR-IEC-EDGE-001",
+        "scopeStartLayerKey": "layer-1",
+        "body": "Implement machine-specific IEC wiring and drive synchronization from the pinned native source. The configured C64 path executes the drive CPU, applies host contributions and VIA signals, and resolves host/drive bus contributions. The VIC-20 uses its own VIA1 port-A and VIA2 control-output routines and enabled-drive resolution; C64 generic helper functions are not substitutes for xvic behavior. Remove the claim that a standalone IecBus.Tick forcing both lines within 985 calls establishes parity.",
+        "priority": "high",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "For each pinned C64 configured-drive fixture, reproduce native drive-clock synchronization, host port update, ATN-to-drive VIA signal and resolved bus observation order; preserve the distinct no-drive and multi-drive configurations instead of applying one unconditional response.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "For each pinned VIC-20 fixture, reproduce the VIA1 port-A ATN/input path and VIA2 CA2/CB2 clock/data output path, drive CPU synchronization and enabled-drive filtering from vic20iec.c. Compare assertion, release and repeated-write sequences, not the empty generic iec_update_cpu_bus function.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Resolve independent host and drive DATA/CLK contributions and 1541 ATN/ATNA-dependent DATA behavior exactly as native. Cover digital polarity and direction masks at the machine adapter boundary, including release with another participant still asserting, and never force both lines from ATN alone.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Pin machine/region, host and drive clocks, drive enable set/type, ROM/media and initial state for every trace. Require exact ordered checkpoint equality for matching fixture inputs; a transition somewhere inside a 985-call window is not a replacement for native clock/phase parity.",
+            "isSatisfied": false
+          }
+        ]
+      },
+      "changedFields": [
+        "title",
+        "status",
+        "body",
+        "acceptanceCriteria"
+      ],
+      "provenance": "New source-derived proposal, not verbatim recovered legacy AC",
+      "approvalStatus": "unapplied-awaiting-operator-approval"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-DRV-MOTOR-001",
+      "before": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "closed",
+        "title": "IecDriveMotorRampTests: 1541 motor ramp (5 tests)",
+        "id": "TEST-DRV-MOTOR-001",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "acceptanceCriteria": [],
+        "condition": "After SetMotor(true) and 300,000 Tick() calls, MotorRotationCycles>0. Before 300,000, stays at 0. Motor off/on resets ramp. ReadSector(18,0) returns BAM bytes 0x12/0x01. 5 pass."
+      },
+      "after": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "title": "Native-oracle 1541 motor, rotation and sector-read acceptance",
+        "id": "TEST-DRV-MOTOR-001",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "The AC-mapped fixture manifest covers motor off/on, unchanged repeated writes, on/off/on transitions, elapsed-clock boundaries, all four speed zones, byte-ready disabled/enabled and pending-edge cases. Use settled nonempty media for early-motion cases so an attachment delay cannot hide a fabricated 300000-cycle motor hold. Pin native source/build provenance and all initial/resource inputs.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "The manifest separately covers stateful attachment/read deadline minus one, exact deadline and plus one, followed by the next read; successful true-drive DOS access to track 18 sector 0; native-observed absent-media and unsuccessful reads; and buffered D64 byte access. Do not conflate the helper requirement at 300000 ticks with its historical 300001-tick test, or count that historical mismatch as accepted native behavior.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Before production edits, every assertion passes with its independent correct mock and rejects a corresponding single-fault control inside a passing harness. Controls include the inserted 300000-cycle hold, erroneous origin reset on a repeated motor write, wrong speed-zone result, movement incorrectly gated by byte-ready enable, attachment/motor delay conflation, and wrong or missing bytes/status/ordered effects. No required case is skipped or unexecuted.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "After mock and review gates, bind exactly the same case inputs, expected outputs, assertion functions and interaction checks to the approved real native/managed adapters. Real true-drive tests must exercise drive CPU/VIA/DOS behavior; direct IecDrive.ReadSector or a manufactured counter cannot stand in for it. Preserve and separately report buffered-mode regression evidence.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Retain chronological commands, input/source/ROM/media hashes, case-to-FR/TR/AC mapping, correct-mock and wrong-mock rejection results, full applicable suite denominators, production-bound traces and independent review receipts. Mock-only success or a historical five-pass statement cannot satisfy this TEST; all mandatory real-emulator, VSF and cumulative gates remain required.",
+            "isSatisfied": false
+          }
+        ],
+        "condition": "Validate native-derived motor/rotation and sector-read behavior through the actual managed true-drive dependency boundary. First prove the same assertions with discriminating correct and single-fault incorrect mocks in an all-green native-safe suite, then bind them to real managed/native adapters after the required acceptance gates. Preserve existing helper and buffered-image tests as historical or separately classified evidence; replace unsupported native-parity expectations explicitly after approval, never by silent removal, skip or pass-count substitution."
+      },
+      "changedFields": [
+        "title",
+        "status",
+        "condition",
+        "acceptanceCriteria"
+      ],
+      "provenance": "New source-derived proposal, not verbatim recovered legacy AC",
+      "approvalStatus": "unapplied-awaiting-operator-approval"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-IEC-TIMING-001",
+      "before": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "closed",
+        "title": "IecTimingTests: ATN response within spec window (5 tests)",
+        "id": "TEST-IEC-TIMING-001",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "acceptanceCriteria": [],
+        "condition": "After setting IecBus.Atn=false and calling Tick() up to 985 times, Clock==false and Data==false. After ATN release and Tick() up to 985 times, both return true. 5 pass."
+      },
+      "after": {
+        "workspaceId": "F:\\GitHub\\vice-sharp",
+        "status": "pending",
+        "title": "Native-oracle C64 and VIC-20 IEC trace acceptance",
+        "id": "TEST-IEC-TIMING-001",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "For each supported C64/VIC-20 region configuration in the approved native manifest, pin host/drive clocks, initial state, ROM/media, drive type and enable set. Enumerate all 64 combinations of the six single-drive Boolean control contributions (host ATN/DATA/CLK and drive ATNA/DATA/CLK), interpreted through that machine native pin polarity, plus no-drive, disabled-drive, and two-drive contention/release cases. Pin expected traces independently of managed output.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "For each machine adapter, exercise ATN assertion/release, repeated same-value writes, independent DATA/CLK updates and port reads at explicit ordered clock/phase checkpoints. Preserve native drive synchronization and VIA signaling side effects. Include direction-mask cases at the real host/drive VIA or CIA boundary; the C64 function alone is not VIC-20 coverage.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Before production edits, correct mocks satisfy every mapped assertion and each planned single-fault control is rejected within a green native-safe suite. Controls include wrong polarity, omitted drive synchronization, omitted/duplicate VIA signal, unconditional paired line forcing, premature release under contention, wrong enable filtering, wrong event order and deadline-only acceptance of a shifted trace. No required case is skipped or unexecuted.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "After required mock/review gates, bind those exact cases, expected observations and assertion/interaction checks to the approved real C64 and xvic native adapters and actual managed connected-drive path. The standalone IecBus helper is not that path. Match the complete specified trace, not a count of tests or eventual line level inside 985 calls.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Retain AC mapping and chronological mock, negative-control, real-adapter and cumulative suite receipts with exact counts, failures, skips and missing cases. Require all mapped real checks and mandatory emulator/VSF gates before satisfaction, plus independent HV acceptance; all unknown, unrun or mock-only outcomes remain unsatisfied.",
+            "isSatisfied": false
+          }
+        ],
+        "condition": "Validate the actual C64 and VIC-20 machine adapters and connected 1541 CPU/VIA IEC path against pinned native observations. Prove requirement-derived assertions with correct and single-fault wrong mocks first, green, then use the same fixtures/assertions on real implementations. Existing IecTimingTests helper results remain retained evidence but are not substitutes for native IEC trace comparison or shared-bus contention tests."
+      },
+      "changedFields": [
+        "title",
+        "status",
+        "condition",
+        "acceptanceCriteria"
+      ],
+      "provenance": "New source-derived proposal, not verbatim recovered legacy AC",
+      "approvalStatus": "unapplied-awaiting-operator-approval"
+    }
+  ],
+  "unchangedMapping": [
+    {
+      "testIds": [
+        "TEST-DRV-MOTOR-001",
+        "TEST-IEC-TIMING-001"
+      ],
+      "frId": "FR-ARCH-TRUEDRIVE-1541-002",
+      "trIds": [
+        "TR-DRV-EDGE-001",
+        "TR-IEC-EDGE-001"
+      ],
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    }
+  ],
+  "preservedFields": [
+    "id",
+    "workspaceId",
+    "priority",
+    "scopeStartLayerKey",
+    "scopeEndLayerKey",
+    "mapping"
+  ],
+  "historicalEvidencePolicy": "Retain existing source/tests and original requirement records. No retirement, deletion, skipped-test substitution or rewrite of historical results. Any later test correction must explicitly document the superseded expectation and preserve evidence.",
+  "applicationBoundary": "This is an effective-field before/after delta, not an executable wrapper payload. After explicit approval, use the supported mixed-kind atomic update helper with body/condition translated to the documented API description field, re-read exact before values first, verify readback, run traceability, and request independent HV. Approval to apply requirements does not authorize production edits or phase advancement.",
+  "evidenceStatus": "Source comparison only; no new tests, build, production run or HV acceptance",
+  "criteriaCount": 23
+}

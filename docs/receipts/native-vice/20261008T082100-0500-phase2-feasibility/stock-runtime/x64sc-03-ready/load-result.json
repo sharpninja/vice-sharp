@@ -1,0 +1,539 @@
+{
+  "timestampLocal": "2026-10-08T09:13:26.1876980-05:00",
+  "machine": "x64sc",
+  "saveExitCode": 0,
+  "loadExitCode": 0,
+  "originalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\x64sc-03-ready\\after-step.vsf",
+  "resumedPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\x64sc-03-ready\\after-resume-step.vsf",
+  "originalSha256": "4F8468812FF2E3FE60E46299EE07C43977D86502AE618B518899740FEF82BE75",
+  "resumedSha256": "2D7EAE792959CBF1659D37F7661DF57D97EE05D3162BBB76BA8B26F260482F5A",
+  "originalModules": [
+    {
+      "name": "MAINCPU",
+      "major": 1,
+      "minor": 4,
+      "offset": 58,
+      "size": 125,
+      "sha256": "A6B80D66306309EA3A047A11D008D810F915BC0FC1E45BFBE59460DC7BEFABAF"
+    },
+    {
+      "name": "C64MEM",
+      "major": 0,
+      "minor": 1,
+      "offset": 183,
+      "size": 65577,
+      "sha256": "E294C1753D1C983C442754D2450A9AEAA79EC7513918C112E0DF2C0678DBE011"
+    },
+    {
+      "name": "C64CART",
+      "major": 0,
+      "minor": 1,
+      "offset": 65760,
+      "size": 23,
+      "sha256": "708F9C1E9DD02507DD55943DA814B03E3CC4EAD2F6731412861A7B94FA762ECC"
+    },
+    {
+      "name": "CIA1",
+      "major": 2,
+      "minor": 5,
+      "offset": 65783,
+      "size": 99,
+      "sha256": "4AED7B59E093AE6C039D4E59709F04D8F6ED9B640C132DD3CB021C9812BB5C1C"
+    },
+    {
+      "name": "CIA2",
+      "major": 2,
+      "minor": 5,
+      "offset": 65882,
+      "size": 99,
+      "sha256": "8B18014751491B0B31C40D0DDC5295AF32B1141EF54AFDEC595761E3D1A59C19"
+    },
+    {
+      "name": "SID",
+      "major": 1,
+      "minor": 5,
+      "offset": 65981,
+      "size": 58,
+      "sha256": "96C203914FE362D7E0CAFB0B3B6F00A32B5A08754843473F88EF39917E5C98E7"
+    },
+    {
+      "name": "SIDEXTENDED",
+      "major": 1,
+      "minor": 4,
+      "offset": 66039,
+      "size": 155,
+      "sha256": "490EEAF6315F302FEAC0FC887711C8215E1809BF9BFF5A65A5673ED9FC7EA982"
+    },
+    {
+      "name": "DRIVE8",
+      "major": 2,
+      "minor": 0,
+      "offset": 66194,
+      "size": 167,
+      "sha256": "26E9AF6DE6C7F17D77B1BE1072619C3A0D33893D466D70477C6094BB053BBBC9"
+    },
+    {
+      "name": "DRIVE9",
+      "major": 2,
+      "minor": 0,
+      "offset": 66361,
+      "size": 167,
+      "sha256": "6FBEE9B6C7CB10C976C90A4685DA0D0E2A8BA3EAAE190998329D0E4C0981BA4B"
+    },
+    {
+      "name": "DRIVE10",
+      "major": 2,
+      "minor": 0,
+      "offset": 66528,
+      "size": 167,
+      "sha256": "C53C848659ED900AA7B908FC83150826B90192E52FCC0055DC645ACF5D6DBC45"
+    },
+    {
+      "name": "DRIVE11",
+      "major": 2,
+      "minor": 0,
+      "offset": 66695,
+      "size": 167,
+      "sha256": "E0E8BA188D92F0A8670D37733628C8974F2AD9DE267A5CCFE2D9830290AE0272"
+    },
+    {
+      "name": "DRIVECPU0",
+      "major": 1,
+      "minor": 3,
+      "offset": 66862,
+      "size": 2174,
+      "sha256": "756E5C79800FD2A6CF550E7A7893B053958CC50BA822B9D70FC0224F107E7DD0"
+    },
+    {
+      "name": "1541VIA1D0",
+      "major": 2,
+      "minor": 2,
+      "offset": 69036,
+      "size": 50,
+      "sha256": "9953745C49E7C94E090D34F0D03A5848A40BECB9755A5969A3AC037CDA5B6412"
+    },
+    {
+      "name": "VIA2D0",
+      "major": 2,
+      "minor": 2,
+      "offset": 69086,
+      "size": 50,
+      "sha256": "BCEAC0A2D55707A162C353AF6E703537AA4E47CF814F13791E5C2F06CFB8809E"
+    },
+    {
+      "name": "FSDRIVE",
+      "major": 0,
+      "minor": 0,
+      "offset": 69136,
+      "size": 280,
+      "sha256": "A36A08D01905810D1E00ED2BD0A66D08BBBBD87BBAECB5075BE5B8A2640D95E2"
+    },
+    {
+      "name": "VIC-II",
+      "major": 1,
+      "minor": 3,
+      "offset": 69416,
+      "size": 123437,
+      "sha256": "213C1653111AEEB7E82514AD0DD1FBB6A5B207AADA1AB6C73E5EC359B116ABAF"
+    },
+    {
+      "name": "GLUE",
+      "major": 1,
+      "minor": 0,
+      "offset": 192853,
+      "size": 25,
+      "sha256": "D9E5C6842C6EA83AF0D796123BF1A0EE1927C34FCCDA8DF3A9CF12970C5ACE23"
+    },
+    {
+      "name": "C64MEMHACKS",
+      "major": 0,
+      "minor": 0,
+      "offset": 192878,
+      "size": 23,
+      "sha256": "9A4A942823E4393A8383FA6A75827607624574A5F7C3B4B8E4DC16C4226A753A"
+    },
+    {
+      "name": "TAPEPORT",
+      "major": 1,
+      "minor": 0,
+      "offset": 192901,
+      "size": 24,
+      "sha256": "84299E8DA9C14D6CB42F1BA7E9D2479D5DBB4C0BBE9447754DEA59B92B5845E3"
+    },
+    {
+      "name": "DATASETTE",
+      "major": 1,
+      "minor": 5,
+      "offset": 192925,
+      "size": 100,
+      "sha256": "DD535E9B3D9BAE47003C088C985BBCB6F9D8347822BEAA120C39CCEC009AF083"
+    },
+    {
+      "name": "KEYBOARD",
+      "major": 1,
+      "minor": 1,
+      "offset": 193025,
+      "size": 118,
+      "sha256": "C0E0F7FDCF1E2FBAA2C7E54C404D3CCB1D1A7BC7AC1AC0CB340E17ED3A35B50E"
+    },
+    {
+      "name": "JOYPORT0",
+      "major": 0,
+      "minor": 0,
+      "offset": 193143,
+      "size": 23,
+      "sha256": "98FD0926DF42D61E2BDF468C8376C7EA9895AD888DD020FBA10303C51CDBB06A"
+    },
+    {
+      "name": "JOYSTICK0",
+      "major": 1,
+      "minor": 2,
+      "offset": 193166,
+      "size": 24,
+      "sha256": "9BFF82E6F339E84637F9799641010BEB9729E08782545D2C9D712FD046561531"
+    },
+    {
+      "name": "JOYPORT1",
+      "major": 0,
+      "minor": 0,
+      "offset": 193190,
+      "size": 23,
+      "sha256": "AE5FB72297E4DA9D54D61924259E3AEE36BBF828A0CC2D51648D41D80FE7128E"
+    },
+    {
+      "name": "JOYSTICK1",
+      "major": 1,
+      "minor": 2,
+      "offset": 193213,
+      "size": 24,
+      "sha256": "81A7EAE8A0B0BE6BE2B5BE85E991FC1A809BE6EE08306E06D400DA01FA8A1DD7"
+    },
+    {
+      "name": "USERPORT",
+      "major": 1,
+      "minor": 0,
+      "offset": 193237,
+      "size": 24,
+      "sha256": "86984551CBFA914F9A5738AB8CFBF7C550D1481C09FB36F6125A872E2EFF3C54"
+    }
+  ],
+  "resumedModules": [
+    {
+      "name": "MAINCPU",
+      "major": 1,
+      "minor": 4,
+      "offset": 58,
+      "size": 125,
+      "sha256": "A6B80D66306309EA3A047A11D008D810F915BC0FC1E45BFBE59460DC7BEFABAF"
+    },
+    {
+      "name": "C64MEM",
+      "major": 0,
+      "minor": 1,
+      "offset": 183,
+      "size": 65577,
+      "sha256": "E294C1753D1C983C442754D2450A9AEAA79EC7513918C112E0DF2C0678DBE011"
+    },
+    {
+      "name": "C64CART",
+      "major": 0,
+      "minor": 1,
+      "offset": 65760,
+      "size": 23,
+      "sha256": "708F9C1E9DD02507DD55943DA814B03E3CC4EAD2F6731412861A7B94FA762ECC"
+    },
+    {
+      "name": "CIA1",
+      "major": 2,
+      "minor": 5,
+      "offset": 65783,
+      "size": 99,
+      "sha256": "4AED7B59E093AE6C039D4E59709F04D8F6ED9B640C132DD3CB021C9812BB5C1C"
+    },
+    {
+      "name": "CIA2",
+      "major": 2,
+      "minor": 5,
+      "offset": 65882,
+      "size": 99,
+      "sha256": "8B18014751491B0B31C40D0DDC5295AF32B1141EF54AFDEC595761E3D1A59C19"
+    },
+    {
+      "name": "SID",
+      "major": 1,
+      "minor": 5,
+      "offset": 65981,
+      "size": 58,
+      "sha256": "96C203914FE362D7E0CAFB0B3B6F00A32B5A08754843473F88EF39917E5C98E7"
+    },
+    {
+      "name": "SIDEXTENDED",
+      "major": 1,
+      "minor": 4,
+      "offset": 66039,
+      "size": 155,
+      "sha256": "027DA07DAF98B732D6937D2CD9FA2E3D6AC02949B145A46F40C3EDED6D16B0BA"
+    },
+    {
+      "name": "DRIVE8",
+      "major": 2,
+      "minor": 0,
+      "offset": 66194,
+      "size": 167,
+      "sha256": "53F3E5C6C684ED46263F06EA7D7115BE6D678731880AA60C34C257599687DD6F"
+    },
+    {
+      "name": "DRIVE9",
+      "major": 2,
+      "minor": 0,
+      "offset": 66361,
+      "size": 167,
+      "sha256": "6FBEE9B6C7CB10C976C90A4685DA0D0E2A8BA3EAAE190998329D0E4C0981BA4B"
+    },
+    {
+      "name": "DRIVE10",
+      "major": 2,
+      "minor": 0,
+      "offset": 66528,
+      "size": 167,
+      "sha256": "C53C848659ED900AA7B908FC83150826B90192E52FCC0055DC645ACF5D6DBC45"
+    },
+    {
+      "name": "DRIVE11",
+      "major": 2,
+      "minor": 0,
+      "offset": 66695,
+      "size": 167,
+      "sha256": "E0E8BA188D92F0A8670D37733628C8974F2AD9DE267A5CCFE2D9830290AE0272"
+    },
+    {
+      "name": "DRIVECPU0",
+      "major": 1,
+      "minor": 3,
+      "offset": 66862,
+      "size": 2174,
+      "sha256": "91AFF707E766BCC3B5780AC0CE0D04D1ECAB513B1CFA0E0C05CE769F72AC65A1"
+    },
+    {
+      "name": "1541VIA1D0",
+      "major": 2,
+      "minor": 2,
+      "offset": 69036,
+      "size": 50,
+      "sha256": "07D61A3E35B4FFCB8346605E3D41AE30C9A7E151858312C1C9222B3B08AB33B4"
+    },
+    {
+      "name": "VIA2D0",
+      "major": 2,
+      "minor": 2,
+      "offset": 69086,
+      "size": 50,
+      "sha256": "477F83314CFC7662F9493F707A52AA94341156DC80E6F923B0BDD73633851182"
+    },
+    {
+      "name": "FSDRIVE",
+      "major": 0,
+      "minor": 0,
+      "offset": 69136,
+      "size": 280,
+      "sha256": "A36A08D01905810D1E00ED2BD0A66D08BBBBD87BBAECB5075BE5B8A2640D95E2"
+    },
+    {
+      "name": "VIC-II",
+      "major": 1,
+      "minor": 3,
+      "offset": 69416,
+      "size": 123437,
+      "sha256": "213C1653111AEEB7E82514AD0DD1FBB6A5B207AADA1AB6C73E5EC359B116ABAF"
+    },
+    {
+      "name": "GLUE",
+      "major": 1,
+      "minor": 0,
+      "offset": 192853,
+      "size": 25,
+      "sha256": "D9E5C6842C6EA83AF0D796123BF1A0EE1927C34FCCDA8DF3A9CF12970C5ACE23"
+    },
+    {
+      "name": "C64MEMHACKS",
+      "major": 0,
+      "minor": 0,
+      "offset": 192878,
+      "size": 23,
+      "sha256": "9A4A942823E4393A8383FA6A75827607624574A5F7C3B4B8E4DC16C4226A753A"
+    },
+    {
+      "name": "TAPEPORT",
+      "major": 1,
+      "minor": 0,
+      "offset": 192901,
+      "size": 24,
+      "sha256": "84299E8DA9C14D6CB42F1BA7E9D2479D5DBB4C0BBE9447754DEA59B92B5845E3"
+    },
+    {
+      "name": "DATASETTE",
+      "major": 1,
+      "minor": 5,
+      "offset": 192925,
+      "size": 100,
+      "sha256": "DD535E9B3D9BAE47003C088C985BBCB6F9D8347822BEAA120C39CCEC009AF083"
+    },
+    {
+      "name": "KEYBOARD",
+      "major": 1,
+      "minor": 1,
+      "offset": 193025,
+      "size": 118,
+      "sha256": "C0E0F7FDCF1E2FBAA2C7E54C404D3CCB1D1A7BC7AC1AC0CB340E17ED3A35B50E"
+    },
+    {
+      "name": "JOYPORT0",
+      "major": 0,
+      "minor": 0,
+      "offset": 193143,
+      "size": 23,
+      "sha256": "98FD0926DF42D61E2BDF468C8376C7EA9895AD888DD020FBA10303C51CDBB06A"
+    },
+    {
+      "name": "JOYSTICK0",
+      "major": 1,
+      "minor": 2,
+      "offset": 193166,
+      "size": 24,
+      "sha256": "9BFF82E6F339E84637F9799641010BEB9729E08782545D2C9D712FD046561531"
+    },
+    {
+      "name": "JOYPORT1",
+      "major": 0,
+      "minor": 0,
+      "offset": 193190,
+      "size": 23,
+      "sha256": "AE5FB72297E4DA9D54D61924259E3AEE36BBF828A0CC2D51648D41D80FE7128E"
+    },
+    {
+      "name": "JOYSTICK1",
+      "major": 1,
+      "minor": 2,
+      "offset": 193213,
+      "size": 24,
+      "sha256": "81A7EAE8A0B0BE6BE2B5BE85E991FC1A809BE6EE08306E06D400DA01FA8A1DD7"
+    },
+    {
+      "name": "USERPORT",
+      "major": 1,
+      "minor": 0,
+      "offset": 193237,
+      "size": 24,
+      "sha256": "86984551CBFA914F9A5738AB8CFBF7C550D1481C09FB36F6125A872E2EFF3C54"
+    }
+  ],
+  "moduleChanges": [
+    {
+      "index": 6,
+      "original": {
+        "name": "SIDEXTENDED",
+        "major": 1,
+        "minor": 4,
+        "offset": 66039,
+        "size": 155,
+        "sha256": "490EEAF6315F302FEAC0FC887711C8215E1809BF9BFF5A65A5673ED9FC7EA982"
+      },
+      "resumed": {
+        "name": "SIDEXTENDED",
+        "major": 1,
+        "minor": 4,
+        "offset": 66039,
+        "size": 155,
+        "sha256": "027DA07DAF98B732D6937D2CD9FA2E3D6AC02949B145A46F40C3EDED6D16B0BA"
+      }
+    },
+    {
+      "index": 7,
+      "original": {
+        "name": "DRIVE8",
+        "major": 2,
+        "minor": 0,
+        "offset": 66194,
+        "size": 167,
+        "sha256": "26E9AF6DE6C7F17D77B1BE1072619C3A0D33893D466D70477C6094BB053BBBC9"
+      },
+      "resumed": {
+        "name": "DRIVE8",
+        "major": 2,
+        "minor": 0,
+        "offset": 66194,
+        "size": 167,
+        "sha256": "53F3E5C6C684ED46263F06EA7D7115BE6D678731880AA60C34C257599687DD6F"
+      }
+    },
+    {
+      "index": 11,
+      "original": {
+        "name": "DRIVECPU0",
+        "major": 1,
+        "minor": 3,
+        "offset": 66862,
+        "size": 2174,
+        "sha256": "756E5C79800FD2A6CF550E7A7893B053958CC50BA822B9D70FC0224F107E7DD0"
+      },
+      "resumed": {
+        "name": "DRIVECPU0",
+        "major": 1,
+        "minor": 3,
+        "offset": 66862,
+        "size": 2174,
+        "sha256": "91AFF707E766BCC3B5780AC0CE0D04D1ECAB513B1CFA0E0C05CE769F72AC65A1"
+      }
+    },
+    {
+      "index": 12,
+      "original": {
+        "name": "1541VIA1D0",
+        "major": 2,
+        "minor": 2,
+        "offset": 69036,
+        "size": 50,
+        "sha256": "9953745C49E7C94E090D34F0D03A5848A40BECB9755A5969A3AC037CDA5B6412"
+      },
+      "resumed": {
+        "name": "1541VIA1D0",
+        "major": 2,
+        "minor": 2,
+        "offset": 69036,
+        "size": 50,
+        "sha256": "07D61A3E35B4FFCB8346605E3D41AE30C9A7E151858312C1C9222B3B08AB33B4"
+      }
+    },
+    {
+      "index": 13,
+      "original": {
+        "name": "VIA2D0",
+        "major": 2,
+        "minor": 2,
+        "offset": 69086,
+        "size": 50,
+        "sha256": "BCEAC0A2D55707A162C353AF6E703537AA4E47CF814F13791E5C2F06CFB8809E"
+      },
+      "resumed": {
+        "name": "VIA2D0",
+        "major": 2,
+        "minor": 2,
+        "offset": 69086,
+        "size": 50,
+        "sha256": "477F83314CFC7662F9493F707A52AA94341156DC80E6F923B0BDD73633851182"
+      }
+    }
+  ],
+  "registersBefore": [
+    ".;e5cf 00 00 0a f3 2f 37 00110010 000 002    2142506",
+    ".;e5d1 00 00 0a f3 2f 37 00110010 000 005    2142509"
+  ],
+  "registersAfter": [
+    ".;e5cf 00 00 0a f3 2f 37 00110010 000 002    2142506",
+    ".;e5d1 00 00 0a f3 2f 37 00110010 000 005    2142509"
+  ],
+  "registersMatch": true,
+  "snapshotBytesMatch": false,
+  "parityAcceptance": false,
+  "hvPending": true
+}

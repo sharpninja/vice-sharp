@@ -25,7 +25,7 @@ public sealed class CaptureServiceHost : ICaptureService
     private const int SidSampleRate = 44100;
     private const int SidChannels = 1;
 
-    private static readonly IReadOnlyList<string> SupportedAudioFormats = ["wav"];
+    private static readonly IReadOnlyList<string> SupportedAudioFormats = ["wav", "flac", "mp3"];
     private static readonly IReadOnlyList<CaptureVideoFormatDto> SupportedVideoFormats =
     [
         // A directory of numbered 24-bit BMP frames (frame_NNNNNN.bmp). No external
@@ -47,15 +47,20 @@ public sealed class CaptureServiceHost : ICaptureService
         return ValueTask.FromResult(new GetCaptureCapabilitiesResponse(
             RpcStatus.Ok(),
             FrameCapture.ScreenshotFormats,
-            SupportedAudioFormats,
+            AudioFormats(),
             BuildVideoFormats()));
     }
 
+    // flac and mp3 need ffmpeg. A missing VICESHARP_FFMPEG override is
+    // authoritative even when ffmpeg remains on PATH.
+    private static IReadOnlyList<string> AudioFormats()
+        => FfmpegLocator.IsUsable ? SupportedAudioFormats : ["wav"];
+
     // The bmpseq sequence is always available; the muxed ffmpeg containers are
-    // advertised only when an ffmpeg executable can be located.
+    // advertised only when ffmpeg is usable.
     private static IReadOnlyList<CaptureVideoFormatDto> BuildVideoFormats()
     {
-        if (!FfmpegLocator.IsAvailable)
+        if (!FfmpegLocator.IsUsable)
             return SupportedVideoFormats;
 
         var formats = new List<CaptureVideoFormatDto>(SupportedVideoFormats);
@@ -97,6 +102,17 @@ public sealed class CaptureServiceHost : ICaptureService
             return ValueTask.FromResult(new StartCaptureResponse(RpcStatus.InvalidArgument("TargetPath is required."), null));
 
         var format = (request.Format ?? string.Empty).Trim().ToLowerInvariant();
+        if (format.Length == 0)
+        {
+            var kindName = request.Kind switch
+            {
+                CaptureKind.Video => "video",
+                CaptureKind.Audio => "audio",
+                _ => "image"
+            };
+            if (MediaCapture.TryGetExplicitDefault(kindName, out var configured))
+                format = configured.Trim().ToLowerInvariant();
+        }
         var captureId = $"capture-{Guid.NewGuid():N}";
 
         var response = request.Kind switch
@@ -160,7 +176,9 @@ public sealed class CaptureServiceHost : ICaptureService
                 width = videoChip.FrameWidth;
                 height = videoChip.FrameHeight;
                 frameRate = (session.Architecture as IProfiledArchitectureDescriptor)?.MachineProfile.RefreshRateHz ?? 50.0;
-                includeAudio = session.AudioCaptureTap is not null;
+                // GIF has no audio stream. ffmpeg exits -22 if one is mapped.
+                includeAudio = session.AudioCaptureTap is not null
+                    && !string.Equals(format, "gif", StringComparison.OrdinalIgnoreCase);
             }
 
             // Muxed video needs the audio tap; reject if it is already in use (a WAV
@@ -199,7 +217,7 @@ public sealed class CaptureServiceHost : ICaptureService
         }
 
         return new StartCaptureResponse(
-            RpcStatus.InvalidArgument($"Unsupported video format '{request.Format}'. Use bmpseq, mp4, mkv or avi."), null);
+            RpcStatus.InvalidArgument($"Unsupported video format '{request.Format}'. Use bmpseq, mp4, mkv, avi, or gif."), null);
     }
 
     // Registers the (already-started) sink as the session's video capture. On a
@@ -228,9 +246,9 @@ public sealed class CaptureServiceHost : ICaptureService
         EmulatorRuntimeSession session, StartCaptureRequest request, string format, string captureId)
     {
         // FR-MED-003: WAV sound recording, tapped off the live SID -> output path.
-        if (format is not ("" or "wav"))
+        if (!MediaCapture.IsCatalogAudioFormat(format))
             return new StartCaptureResponse(
-                RpcStatus.InvalidArgument($"Unsupported audio format '{request.Format}'. Use wav."), null);
+                RpcStatus.InvalidArgument($"Unsupported audio format '{request.Format}'. Use wav, flac, or mp3."), null);
         if (session.AudioCaptureTap is null)
             return new StartCaptureResponse(
                 RpcStatus.Unavailable("This session has no live audio path to record."), null);
@@ -241,15 +259,30 @@ public sealed class CaptureServiceHost : ICaptureService
             return new StartCaptureResponse(
                 RpcStatus.FailedPrecondition("Audio is already being recorded for this session."), null);
 
-        FileStream? stream = null;
-        WavAudioRecorder? recorder = null;
+        Stream? stream = null;
+        IAudioRecorder? recorder = null;
         try
         {
             var dir = Path.GetDirectoryName(request.TargetPath);
             if (!string.IsNullOrEmpty(dir))
                 Directory.CreateDirectory(dir);
-            stream = new FileStream(request.TargetPath, FileMode.Create, FileAccess.Write);
-            recorder = new WavAudioRecorder(stream, SidSampleRate, SidChannels);
+            if (format.Equals("flac", StringComparison.OrdinalIgnoreCase)
+                || format.Equals("mp3", StringComparison.OrdinalIgnoreCase))
+            {
+                var ffmpeg = FfmpegLocator.Locate();
+                if (ffmpeg is null)
+                    return new StartCaptureResponse(
+                        RpcStatus.InvalidArgument($"Unsupported audio format '{request.Format}'. ffmpeg was not found for flac or mp3."), null);
+                stream = new MemoryStream();
+                string? bitrate = null;
+                request.Options?.TryGetValue("audioBitrate", out bitrate);
+                recorder = new FfmpegAudioRecorder(request.TargetPath, format, SidSampleRate, SidChannels, ffmpeg, bitrate);
+            }
+            else
+            {
+                stream = new FileStream(request.TargetPath, FileMode.Create, FileAccess.Write);
+                recorder = new WavAudioRecorder(stream, SidSampleRate, SidChannels);
+            }
             lock (session.SyncRoot)
             {
                 session.BeginAudioCapture(captureId, recorder, stream);
@@ -430,10 +463,18 @@ public sealed class CaptureServiceHost : ICaptureService
         if (string.IsNullOrWhiteSpace(request.FilePath))
             return new CaptureFrameResponse(RpcStatus.InvalidArgument("FilePath is required."), null);
 
-        var format = (request.Format ?? "png").Trim().ToLowerInvariant();
-        if (format is not ("png" or "bmp"))
+        var format = (request.Format ?? "").Trim().ToLowerInvariant();
+        if (format.Length == 0)
+        {
+            format = MediaCapture.TryGetExplicitDefault("image", out var configured)
+                ? configured.Trim().ToLowerInvariant()
+                : "png";
+        }
+        if (format is "jpg")
+            format = "jpeg";
+        if (format is not ("png" or "bmp" or "jpeg" or "gif"))
             return new CaptureFrameResponse(
-                RpcStatus.InvalidArgument($"Unsupported screenshot format '{request.Format}'. Use png or bmp."),
+                RpcStatus.InvalidArgument($"Unsupported screenshot format '{request.Format}'. Use png, bmp, jpeg, or gif."),
                 null);
 
         byte[] frame;
@@ -455,7 +496,7 @@ public sealed class CaptureServiceHost : ICaptureService
         }
 
         var writtenFormat = await FrameCapture
-            .CaptureBgraAsync(frame, width, height, request.FilePath, format, cancellationToken)
+            .CaptureBgraAsync(frame, width, height, request.FilePath, format, cancellationToken, request.JpegQuality)
             .ConfigureAwait(false);
 
         return new CaptureFrameResponse(

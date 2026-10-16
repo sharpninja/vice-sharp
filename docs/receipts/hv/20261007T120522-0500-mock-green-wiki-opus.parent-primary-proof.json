@@ -1,0 +1,11 @@
+{
+  "verifiedAtLocal": "2026-10-07T13:22:55.7572417-05:00",
+  "sessionId": "ClaudeCode-20261007T171916Z-hv-mock-green-wiki-opus",
+  "requestId": "req-20261007T171934Z-001-hv-mock-green-wiki-phase0-readiness",
+  "responseEqualsWholeVerdictFile": true,
+  "responseCharacters": 67024,
+  "responseSha256": "D342B7E46DA84489DE5E524A23E21EA689CA3A32FD2BB3F80E2F3535C5BFD23D",
+  "verdictFileSha256": "D342B7E46DA84489DE5E524A23E21EA689CA3A32FD2BB3F80E2F3535C5BFD23D",
+  "modelMetadataMismatchDisclosed": true,
+  "parsedVerdictDeepEqual": true
+}

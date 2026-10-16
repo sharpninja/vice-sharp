@@ -1,0 +1,96 @@
+{
+  "requestId": "req-20261008T205618Z-prompt-4940",
+  "timestamp": "2026-10-08T15:56:18-05:00",
+  "queryText": "Continue the full active Grok plan toward 100 percent completion with HV AGREE. Previous turn classified as progress: eight new source-backed legacy media/video findings. Inspect remaining rejected HV findings for authorized corrective work within the current unaccepted gate; do not infer pending approvals or advance gates.",
+  "queryTitle": "Correct acceptance-only mock fault discrimination",
+  "response": "2026-10-08T16:06:24-05:00: Corrected the mock acceptance fault so it changes only Accepted, preserving Error and HalfCycle. Two new acceptance-only controls passed before the helper correction. All three standalone native-safe suites passed before and after: oracle89, VSF199, clock69, total357, zero failed/skipped/unexecuted/aborted/error/timeout, exit0. All prior87 oracle cases and fixture expectations preserved; native baseline and effective requirements unchanged; git diff --check0. Full receipt: docs/receipts/native-vice/20261008T155754-0500-decision-single-fault-controls/README.md, recorded verbatim in MCP and primary-readback verified. Limitation: I failed to archive first clock-stage C compile logs before the second run overwrote them. First-stage TRX/dotnet/diagnostics remain; second-stage compiler logs retained/hash-verified. This omission is explicitly pending HV. No production implementation, real emulator parity, independent acceptance, phase/goal advancement or pending-approval waiver. Full goal remains active.",
+  "interpretation": "Continued full goal by correcting a newly found test-only discrimination defect within the unaccepted mock gate. Added two controls green before the shared control edit, preserved all existing expectations, and reran the full native-safe scope. No acceptance gate or pending approval crossed.",
+  "status": "completed",
+  "actions": [
+    {
+      "order": 1,
+      "description": "The generic ProveDecision acceptance control changes several fields and therefore does not independently demonstrate acceptance-field discrimination. Correct this test-only defect inside the current unaccepted mock gate: preserve preimages, first add two acceptance-only mock rejection tests and get the full native-safe suite green, then change only the existing control to invert Accepted while preserving Error and HalfCycle, verify again, and retain all real gates and HV acceptance as open. No canonical requirements, production code, native source, reviewer launch or pending operator disposition changes.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "tests/ViceSharp.OracleContract.Tests/ContractAssertions.cs"
+    },
+    {
+      "order": 2,
+      "description": "Added two source-derived acceptance-only mock controls, preserving original files in verified preimages. Automatic supported code-verification build succeeded, native baseline unchanged. Generic ProveDecision helper not changed yet.",
+      "type": "test_edit",
+      "status": "completed",
+      "filePath": "tests/ViceSharp.OracleContract.Tests/DecisionAcceptanceControlTests.cs"
+    },
+    {
+      "order": 3,
+      "description": "Pre-helper mock/regression stage green: oracle89/89, VSF199/199, clock69/69 =357/357; all unfiltered Release, exit0, failed/notExecuted/aborted/error/timeout0. Native before/after eight-field inventories unchanged for every build and run. No production implementation or gate advance.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\before-helper-oracle\\result.json"
+    },
+    {
+      "order": 4,
+      "description": "Changed only generic mock acceptance negative control to expected with Accepted inverted, retaining Error and HalfCycle. Supported code-verify build succeeded; native unchanged. git diff --no-index returned expected exit1 because the retained before/current files differ; this is not a test/build failure.",
+      "type": "test_edit",
+      "status": "completed",
+      "filePath": "tests/ViceSharp.OracleContract.Tests/ContractAssertions.cs"
+    },
+    {
+      "order": 5,
+      "description": "After-helper scope passed unfiltered Release: oracle89/89 VSF199/199 clock69/69, total357, exit0 and failed/notExecuted/aborted/error/timeout0. Both automatic builds succeeded. Prior87 names all retained; source fixtures and expected values unchanged; only planned generic control changed. Effective MCP requirements unchanged, git diff --check0. Native baseline preserved for all builds/runs. Missing first-stage C compiler logs disclosed; second-stage logs copied/hash-verified. No HV acceptance or real gate proof.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\validation-summary.json"
+    },
+    {
+      "order": 6,
+      "description": "Updated oracle README with current evidence; retained full correction receipt, exact helper diff, new89-case AC ledger, source preimages/postimages and six test result sets. Documentation distinguishes passing tests from missing first-stage compiler receipts and pending independent acceptance.",
+      "type": "documentation",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\README.md"
+    }
+  ],
+  "model": "codex",
+  "modelProvider": null,
+  "tokenCount": 0,
+  "tags": null,
+  "contextList": null,
+  "failureNote": null,
+  "score": null,
+  "isPremium": null,
+  "rawContext": null,
+  "originalEntry": null,
+  "processingDialog": [
+    {
+      "timestamp": "2026-10-08T15:58:16.0115657-05:00",
+      "role": "model",
+      "content": "The generic ProveDecision acceptance control changes several fields and therefore does not independently demonstrate acceptance-field discrimination. Correct this test-only defect inside the current unaccepted mock gate: preserve preimages, first add two acceptance-only mock rejection tests and get the full native-safe suite green, then change only the existing control to invert Accepted while preserving Error and HalfCycle, verify again, and retain all real gates and HV acceptance as open. No canonical requirements, production code, native source, reviewer launch or pending operator disposition changes.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T16:02:49.2367769-05:00",
+      "role": "model",
+      "content": "Receipt omission: I failed to copy the first before-helper-clock run C compiler logs before running after-helper-clock. The existing CompiledCFixture uses fixed compile.log paths, so the two first-run compiler logs were overwritten. First-run TRX, dotnet log, diagnostics and inventories remain; latest C compiler logs and all available unique run logs/executables have now been copied and hash-verified (192 files, mixed historical/current log set). This does not reconstruct the lost first-run compiler logs. Keep this limitation in pending HV evidence.",
+      "category": "analysis"
+    },
+    {
+      "timestamp": "2026-10-08T16:06:19.3673315-05:00",
+      "role": "model",
+      "content": "Acceptance single-fault correction full receipt part 1\n# Acceptance-control correction evidence\n\n2026-10-08, America/Chicago. Agent: Codex. The two new acceptance-only mock cases and the corrected generic control pass locally. No independent HV acceptance, phase advancement or runtime emulator parity is claimed.\n\n## What changed\n\n- Added DecisionAcceptanceControlTests.AcceptanceOnlyFaultIsRejected for the existing clean/accepted and tracked-delta/rejected-DirtyBefore expectations. Each correct NSubstitute response passes AssertProbe; changing only Accepted must make that same assertion reject the response. Error and HalfCycle stay equal to the independent expectation.\n- Changed ProveDecision's compound acceptance mutation to `expected with { Accepted = !expected.Accepted }`. Previously other changed fields could reject the response even if the acceptance assertion were missing.\n- The supplied-provider assertion, DecisionIs, all existing fixture rows and expected results remain unchanged. The two additional cases supplement, not replace, the prior 87 oracle cases. No production adapter or algorithm was added.\n- Updated the oracle README with the new evidence and limitations. Existing historical paragraphs, sources and receipts remain retained.\n\nThe written scope and sequence preceded edits in SLICE.md. Existing requirement mapping is FR-VICE-001 AC1/AC3, TR-VICE-ORACLE-001 AC1 and TEST-VICE-001 AC1. The updated scenario-ac-ledger.json preserves every previous row's mapping and marks the new rows as assertion-discrimination evidence only. No AC is satisfied by this change.\n\n## Chronology and commands\n\nSource originals were copied and hash-verified before edits. The new tests were written before the generic helper correction. Automatic supported code-verification builds succeeded after each C# edit. Build receipts and logs are retained at this directory's root.\n\nBefore the helper edit, full unfiltered Release runs passed:\n\n- 15:59:32: OracleContract 89/89.\n- 15:59:48: VsfCompatibility 199/199.\n- 15:59:56: NativeClockProbe 69/69.\n\nAfter the helper edit and its successful build, the same full scope passed:\n\n- 16:00:45: OracleContract 89/89.\n- 16:00:53: VsfCompatibility 199/199.\n- 16:01:10: NativeClockProbe 69/69.\n\nEach stage totals 357 passed, exit 0, with failed, notExecuted, aborted, error and timeout all zero. Each run's result.json records its exact command. The command shape is `dotnet test <standalone-project> -c Release --logger trx;LogFileName=<name>.trx --results-directory <unique-directory> --diag <unique-log> --blame-hang --blame-hang-timeout 2m`; no filter was supplied. PowerShell.MCP invoked the established receipt helper. The solution, normal TestHarness and native bridge build were not run.\n\nEach build and test had an eight-field native before/after inventory comparison. The existing native/vice baseline was preserved, including its existing dirt. Preservation does not make that checkout a clean acceptance oracle. These suites include mock contracts and previously existing native-free C fixture tests, not real VICE execution.\n\n## Receipt omission, explicitly unresolved\n\nI failed to archive the before-helper-clock run's two C compiler logs before the after-helper-clock run. CompiledCFixture writes fixed compile.log paths, so the second run overwrote those first-run compiler logs. I did not reconstruct or relabel later logs as earlier evidence.\n\nThe first run's TRX, dotnet stdout/stderr log, VSTest diagnostic log and native inventories are retained. The second run's two C compiler logs are now copied and hash-verified, along with all available unique run logs and executables. c-fixture-evidence-pins.json indexes 192 retained files, including historical runs; it is not a claim that all 192 were produced by this slice. This omission remains part of the pending HV scope.\n\n## Receipts and limits\n\n- preimage-pins.json and *.before: unchanged original source/document bytes.\n- postimage-pins.json and *.after: verified source snapshots; README.after predates the final documentation addition, separately preserved as README.final.md.\n- before-helper-* and after-helper-*: full test outputs, TRX, diagnostics and result JSON.\n- *-native-before.json and *-native-after.json: complete inventories for every build/run.\n- scenario-ac-ledger.json: 89 source-to-AC rows, prior 87 mappings preserved, all real-gate satisfaction false.\n- verification.json: final case/source preservation, requirement readback, native checks and whitespace result.\n- helper-change.diff: exact helper delta against the retained preimage. Its git diff --no-index exit 1 means the files differ, not a build failure.\n- clock-gate-evidence and clock-probe-evidence: copied available native-free C fixture evidence.\n- session-turn.completed-primary-readback.json and primary-proof.json: written after completion through the supported MCP workflow and primary readback.\n\nThe earlier prepared Opus packet was not overwritten or launched. Any future authorized review must include and pin this correction, the legacy",
+      "category": "analysis"
+    },
+    {
+      "timestamp": "2026-10-08T16:06:19.3674278-05:00",
+      "role": "model",
+      "content": "Acceptance single-fault correction full receipt part 2\n audits/proposals and all later evidence. Pending operator decisions and the provider retry boundary remain in force. No commit, push, native edit, canonical requirement change or done-state update occurred in this slice.\n",
+      "category": "analysis"
+    }
+  ],
+  "commits": null,
+  "designDecisions": null,
+  "requirementsDiscovered": null,
+  "filesModified": null,
+  "blockers": null,
+  "planFile": "C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5Cvice-sharp/01a0ef2b-2331-70d1-9c65-0ef12b15d09a/plan.md",
+  "todoId": "None"
+}

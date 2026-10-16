@@ -32,6 +32,7 @@ public sealed class FrameSequenceCapture : IVideoCaptureSink
     private int _acceptedCount;    // frames enqueued (the public FrameCount)
     private int _framesConsidered;
     private bool _disposed;
+    private readonly CapturedFrame _capturedFrame = new();
 
     /// <summary>
     /// Creates a new capture session writing numbered BMP frames to
@@ -65,6 +66,12 @@ public sealed class FrameSequenceCapture : IVideoCaptureSink
 
     /// <summary>Total number of frames submitted (including ones skipped as duplicates).</summary>
     public int FramesConsidered => _framesConsidered;
+
+    /// <summary>FR-CFG-003: palette id stamped onto each accepted frame.</summary>
+    public string PaletteId { get; set; } = "vice";
+
+    /// <summary>Metadata for the most recent accepted frame, including <see cref="PaletteId"/>.</summary>
+    public CapturedFrame LastCapturedFrame => _capturedFrame;
 
     /// <summary>
     /// Persists a single BGRA frame as the next numbered BMP file in
@@ -103,6 +110,9 @@ public sealed class FrameSequenceCapture : IVideoCaptureSink
         _frameWidth = width;
         _frameHeight = height;
         _acceptedCount++;
+        _capturedFrame.Width = width;
+        _capturedFrame.Height = height;
+        _capturedFrame.PaletteId = string.IsNullOrWhiteSpace(PaletteId) ? "vice" : PaletteId;
         _writer.Enqueue(bgra);
     }
 

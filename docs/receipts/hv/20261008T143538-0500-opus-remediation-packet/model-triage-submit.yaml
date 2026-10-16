@@ -1,0 +1,33 @@
+type: result
+payload:
+  requestId: req-20261008T193539Z-4881
+  result:
+    success: true
+    reportId: triage-report-13c287e9d2034e07ace0442a9c03697c
+    groupId: triage-group-5fad2245878d8880
+    status: collecting
+    quietDeadlineUtc:
+      dateTime: 2026-10-08T19:50:43.3048203
+      utcDateTime: 2026-10-08T19:50:43.3048203Z
+      localDateTime: 2026-10-08T14:50:43.3048203-05:00
+      date: 2026-10-08T00:00:00.0000000
+      day: 8
+      dayOfWeek: Thursday
+      dayOfYear: 281
+      hour: 19
+      millisecond: 304
+      microsecond: 820
+      nanosecond: 300
+      minute: 50
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 43
+      ticks: 639270858433048203
+      utcTicks: 639270858433048203
+      timeOfDay: 19:50:43.3048203
+      year: 2026
+    workspacePath: F:\GitHub\McpServer
+  deprecated: true
+
+---

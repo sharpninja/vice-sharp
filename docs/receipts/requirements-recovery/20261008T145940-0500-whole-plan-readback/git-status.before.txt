@@ -1,0 +1,850 @@
+ [31mM[m HANDOFF.md
+ [31mM[m README.md
+ [31mM[m azure-pipelines.ci.yml
+ [31mM[m azure-pipelines.release.yml
+ [31mM[m docs/Architecture.md
+ [31mM[m docs/Iteration-Roadmap.md
+ [31mM[m docs/Project/wiki/azure/.mcp-requirements-manifest.json
+ [31mM[m docs/Project/wiki/github/.mcp-requirements-manifest.json
+ [31mM[m docs/Project/wiki/github/Architecture.md
+ [31mM[m docs/Project/wiki/github/Functional-Requirements.md
+ [31mM[m docs/Project/wiki/github/Home.md
+ [31mM[m docs/Project/wiki/github/Iteration-Roadmap.md
+ [31mM[m docs/Project/wiki/github/Project-Overview.md
+ [31mM[m docs/Project/wiki/github/Public-API.md
+ [31mM[m docs/Project/wiki/github/Requirements-Matrix.md
+ [31mM[m docs/Project/wiki/github/TR-per-FR-Mapping.md
+ [31mM[m docs/Project/wiki/github/Technical-Requirements-Overview.md
+ [31mM[m docs/Project/wiki/github/Technical-Requirements.md
+ [31mM[m docs/Project/wiki/github/Test-Requirements.md
+ [31mM[m docs/Project/wiki/github/Testing-Requirements.md
+ [31mM[m docs/Project/wiki/github/User-Guide.md
+ [31mM[m docs/Project/wiki/github/VICE-Migration.md
+ [31mM[m docs/Project/wiki/github/_Sidebar.md
+ [31mM[m docs/Public-API.md
+ [31mM[m docs/README.md
+ [31mM[m docs/USER-GUIDE.md
+ [31mM[m docs/VICE-MIGRATION.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/TRANSCRIPT.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_000.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_001.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_002.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_003.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_004.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_007.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_008.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_011.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_012.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_013.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_014.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_015.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_016.md
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_checkpoints/24e95806-74b4-4d97-aa5f-24dfce122619.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_checkpoints/e008da89-9904-4259-9a7e-1c7a6c6557cf.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/04172430-e88a-468e-901b-1b91661a704a.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/132eafb1-4cb2-4971-8403-5e1f42217e3c.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/2bb783b1-5b3b-4551-b22f-be4c1a468abc.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/2cc64d92-cfe2-4f4c-9f81-972b2a8439c7.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/374aaab0-41e2-4ace-bb9c-403390b6e256.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/470d7221-659c-48e7-b5ab-c877e6a7e6ef.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/60789dd9-e305-4e57-838e-c9cd255fdcd6.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/8478f6f3-150d-42d4-8625-210637384aa9.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/a77a213b-c3b6-46d9-8429-809c68730c38.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/b3198f63-7932-45cd-bc49-c47e30c6d857.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/ce636d19-938d-4a02-897c-6a9578e51f83.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/e4de9323-7fb2-4cf3-ae75-0af8f93364b8.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/ee4521b0-ee5e-4be7-97a6-32b7d939cc38.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/0c1e21b9-187b-442c-a0e1-e04f66f9ae3f.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/0e1af375-0354-4fe5-a101-e70ffd699a97.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/13add2b9-a4dc-4402-8e27-d7aac2bf3c9b.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/154e16c3-e02d-49cc-86d3-9f694ccd488c.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/19e4d021-63c4-4d86-bacd-02f4c75f6f7d.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/1c26565d-4360-4588-a372-d2d59bee0adf.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/26c10e1a-3a56-4322-a8c4-a84adb9ed1b9.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/2770cf4d-32de-4c7b-9661-df1f0511af6e.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/299d0a60-2384-4338-9e04-d692c5a83498.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/7e5afb62-91b4-4d04-b749-5a1cf4c20fd4.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/820a3f34-f2ba-4c79-b215-b4907412be45.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/8b1f4248-a006-4839-99b2-1625b762bd19.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/a301a8d0-67fd-414b-967b-013dee66cb07.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/ba36b65e-9598-40e4-8172-6ce91679bc9e.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/cb813d75-68a5-4da8-b1a5-c0ee28953f48.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/d50ae609-06e6-4ae4-b5d6-f480a860d5cd.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/d8e298c9-ce22-4052-984a-c2627f38839c.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/dcdd53e7-4b76-4132-9e49-6a8c45c573ee.json
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-050b81e8-5766-4a5e-bf8a-6570041a46fa-294.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-0bd9dc0a-f431-4a3f-8a90-29257dbf1232-9.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-14ac952e-8c20-4d16-bc18-83de78c0fbd4-382.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-5c6ddd9a-39b2-4d00-9285-e947e4e8dab9-18.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-95de47d0-79ef-4316-a754-ee00f17995a5-376.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-a2495750-ce63-415d-a21e-2f04ff8e7129-383.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-bbc19775-3eb8-4521-8d93-01a4e31e8113-379.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-bdc54b97-7cfe-414c-8e19-d601e1822520-279.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-d92c466b-9e76-4f90-bbe8-4d5d15246bc9-372.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-d92c466b-9e76-4f90-bbe8-4d5d15246bc9-374.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-dce014b4-6ad4-4fa4-9ddb-8d0aaba29822-24.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-e3bab58a-51d3-4cf8-834a-30a7e8e6e7e9-283.log
+ [31mM[m docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-f2a4d4fb-8c32-41ce-a664-bab6bcbd5ad1-380.log
+ [31mM[m docs/plan.md
+ [31mM[m docs/receipts/requirements-recovery/acceptance-20260929/nine-defect-ledger.json
+ [31mM[m docs/requirements/functional/FR-Snapshot.md
+ [31mM[m docs/requirements/requirements-wiki-documents.zip
+ [31mM[m docs/requirements/technical/TR-Cycle-Accuracy.md
+ [31mM[m docs/requirements/test/TEST-Requirements.md
+ [31mM[m docs/wiki.yaml
+ [31mM[m src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs
+ [31mM[m src/ViceSharp.Chips/Audio/Sid6581.Filter.cs
+ [31mM[m src/ViceSharp.Chips/Audio/Sid6581.State.cs
+ [31mM[m src/ViceSharp.Chips/Audio/Sid6581.cs
+ [31mM[m src/ViceSharp.Chips/Cia/Mos6526.cs
+ [31mM[m src/ViceSharp.Chips/Cpu/Mos6502.cs
+ [31mM[m src/ViceSharp.Chips/PLA/Mos906114.cs
+ [31mM[m src/ViceSharp.Chips/Tape/TapImage.cs
+ [31mM[m src/ViceSharp.Chips/Tape/TapPulseReader.cs
+ [31mM[m src/ViceSharp.Chips/VicIi/Mos6569.State.cs
+ [31mM[m src/ViceSharp.Chips/VicIi/Mos6569.cs
+ [31mM[m src/ViceSharp.Chips/VicIi/PixelSequencer.cs
+ [31mM[m src/ViceSharp.Chips/VicIi/VideoRenderer.cs
+ [31mM[m src/ViceSharp.Core/ArchitectureBuilder.cs
+ [31mM[m src/ViceSharp.Core/C64MemoryMap.cs
+ [31mM[m src/ViceSharp.Core/Capture/FrameCapture.cs
+ [31mM[m src/ViceSharp.Core/Capture/JpegFrameArtifactWriter.cs
+ [31mM[m src/ViceSharp.Core/Datasette.cs
+ [31mM[m src/ViceSharp.Core/Input/C64JoystickPort.cs
+ [31mM[m src/ViceSharp.Core/Input/C64KeyboardMatrix.cs
+ [31mM[m src/ViceSharp.Core/InterruptLine.cs
+ [31mM[m src/ViceSharp.Core/Media/FfmpegLocator.cs
+ [31mM[m src/ViceSharp.Core/Media/FfmpegVideoEncoding.cs
+ [31mM[m src/ViceSharp.Core/Media/FfmpegVideoRecorder.cs
+ [31mM[m src/ViceSharp.Core/Media/FrameSequenceCapture.cs
+ [31mM[m src/ViceSharp.Core/Media/IVideoCaptureSink.cs
+ [31mM[m src/ViceSharp.Core/Snapshots/RuntimeSnapshot.cs
+ [31mM[m src/ViceSharp.Core/Snapshots/RuntimeSnapshotStore.cs
+ [31mM[m src/ViceSharp.Core/SystemClock.cs
+ [31mM[m src/ViceSharp.Core/Vic20/IVic20ExpansionCartPort.cs
+ [31mM[m src/ViceSharp.Core/Vic20/Vic20ExpansionCartKind.cs
+ [31mM[m src/ViceSharp.Core/Vic20/Vic20ExpansionCartPort.cs
+ [31mM[m src/ViceSharp.Core/ViceSharp.Core.csproj
+ [31mM[m src/ViceSharp.Core/Wiring/DatasetteCia1FlagBinding.cs
+ [31mM[m src/ViceSharp.Host.InProcess/Runtime/EmulatorRuntimeSession.cs
+ [31mM[m src/ViceSharp.Host.InProcess/Services/CaptureServiceHost.cs
+ [31mM[m src/ViceSharp.Host.InProcess/Services/MediaServiceHost.cs
+ [31mM[m src/ViceSharp.Host.InProcess/Services/SettingsServiceHost.cs
+ [31mM[m src/ViceSharp.Monitor/Monitor.cs
+ [31mM[m src/ViceSharp.Protocol/ProtocolContracts.cs
+ [31mM[m tests/ViceSharp.Library.Tests/CompletionTestManifestTests.cs
+ [31mM[m tests/ViceSharp.Library.Tests/Discovery/RomMBridgeConnectionSourceTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/CaptureServiceHostTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Media/FfmpegEncodingTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Slice4CaptureTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs
+ [31mM[m tests/ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs
+[31m??[m .codex-remote-attachments/01a0f7d6-69ab-7df1-af2a-571406599e53/
+[31m??[m docs/Project/wiki/github/Plan-Immutable-Native-VICE.md
+[31m??[m docs/Project/wiki/github/Plan-Native-VICE-VSF-Lockstep.md
+[31m??[m docs/plans/PLAN-VICE-IMMUTABLE-001.md
+[31m??[m docs/plans/PLAN-VSFLOCKSTEP-001.md
+[31m??[m docs/receipts/hostile-validator-20261003T112415Z-evidence/
+[31m??[m docs/receipts/hostile-validator-20261003T112415Z.json
+[31m??[m docs/receipts/hostile-validator-20261003T112415Z.md
+[31m??[m docs/receipts/hostile-validator-20261003T121540Z-evidence/
+[31m??[m docs/receipts/hostile-validator-20261003T121540Z.json
+[31m??[m docs/receipts/hostile-validator-20261003T121540Z.md
+[31m??[m docs/receipts/hostile-validator-20261005T162750Z.json
+[31m??[m docs/receipts/hostile-validator-20261005T162750Z.md
+[31m??[m docs/receipts/hostile-validator-20261005T172424Z.json
+[31m??[m docs/receipts/hostile-validator-20261005T172424Z.md
+[31m??[m docs/receipts/hostile-validator-20261005T180849Z.json
+[31m??[m docs/receipts/hostile-validator-20261005T180849Z.md
+[31m??[m docs/receipts/hostile-validator-20261005T184242Z.json
+[31m??[m docs/receipts/hostile-validator-20261005T184242Z.md
+[31m??[m docs/receipts/hostile-validator-20261005T191258Z.json
+[31m??[m docs/receipts/hostile-validator-20261005T191258Z.md
+[31m??[m docs/receipts/hostile-validator-20261005T193508Z.json
+[31m??[m docs/receipts/hostile-validator-20261005T193508Z.md
+[31m??[m docs/receipts/hv/20260930T215341Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20260930T215341Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20260930T215341Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20260930T215341Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20260930T215341Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20260930T225855Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20260930T225855Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20260930T225855Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20260930T225855Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20260930T231120Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20260930T231120Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20260930T231120Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20260930T231120Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20260930T231120Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T000445Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T000445Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T000445Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T000445Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T000445Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T010135Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T010135Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T010135Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T010135Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T010135Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T021939Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T021939Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T021939Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T021939Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T021939Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T030459Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T030459Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T030459Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T030459Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T030459Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T035508Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T035508Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T035508Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T035508Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T035508Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T043204Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T043204Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T043204Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T043204Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T043204Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T052047Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T052047Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T052047Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T052047Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T052047Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T055430Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T055430Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T055430Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T055430Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T055430Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T063335Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T063335Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T063335Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T063335Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T063335Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T070955Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T070955Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T070955Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T070955Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T070955Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T074352Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T074352Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T074352Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T074352Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T074352Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T082657Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T082657Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T082657Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T082657Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T082657Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T093554Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T093554Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T093554Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T093554Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T093554Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T101055Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T101055Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T101055Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T101055Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T101055Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T110536Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T110536Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T110536Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T110536Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T110536Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T115804Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T115804Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T115804Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T115804Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T115804Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T123716Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T123716Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T123716Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T123716Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T123716Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T131357Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T131357Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T131357Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T131357Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T133455Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T133455Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T133455Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T133455Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T133455Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T142109Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T142109Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T142109Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T142109Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T142109Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T150450Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T150450Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T150450Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T150450Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T150450Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T155317Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T155317Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T155317Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T155317Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T160335Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T160335Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T160335Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T160335Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T160335Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T164652Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T164652Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T164652Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T164652Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T164652Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T172520Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T172520Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T172520Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T172520Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T172520Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T173251Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T173251Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T173251Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T173251Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T174652Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T174652Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T174652Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T174652Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T180752Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T180752Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T180752Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T180752Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T181723Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T181723Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T181723Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T181723Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T191329Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T191329Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T191329Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T191329Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T191329Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T200502Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T200502Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T200502Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T200502Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T200502Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T204527Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T204527Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T204527Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T204527Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T204527Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T212211Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T212211Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T212211Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T212211Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T212211Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T215806Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T215806Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T215806Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T215806Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T220648Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T220648Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T220648Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T220648Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T220648Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T224953Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T224953Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T224953Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T224953Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T224953Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T233651Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T233651Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T233651Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T233651Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261001T234733Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261001T234733Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261001T234733Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261001T234733Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261001T234733Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T003610Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T003610Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T003610Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T003610Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T003610Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T012123Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T012123Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T012123Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T012123Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T012123Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T025130Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T025130Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T025130Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T025130Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T025130Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T033927Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T033927Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T033927Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T033927Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T033927Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T042730Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T042730Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T042730Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T042730Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T042730Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T051408Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T051408Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T051408Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T051408Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T051408Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T060547Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T060547Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T060547Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T060547Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T060547Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T071037Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T071037Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T071037Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T071037Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T071037Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T075209Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T075209Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T075209Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T075209Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T075209Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T084946Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T084946Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T084946Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T084946Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T084946Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T093921Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T093921Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T093921Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T093921Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T093921Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T102818Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T102818Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T102818Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T102818Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T102818Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T112441Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T112441Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T112441Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T112441Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T112441Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T121516Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T121516Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T121516Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T121516Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T121516Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T130629Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T130629Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T130629Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T130629Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T130629Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T134304Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T134304Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T134304Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T134304Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T134304Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T145052Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T145052Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T145052Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T145052Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T145052Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T154316Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T154316Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T154316Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T154316Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T154316Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T162738Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T162738Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T162738Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T162738Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T162738Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T171428Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T171428Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T171428Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T171428Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T171428Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T175323Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T175323Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T175323Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T175323Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T175323Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261002T185547Z-phase2-acceptance.last.md
+[31m??[m docs/receipts/hv/20261002T185547Z-phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/20261002T185547Z-phase2-acceptance.request.jsonl
+[31m??[m docs/receipts/hv/20261002T185547Z-phase2-acceptance.response.jsonl
+[31m??[m docs/receipts/hv/20261002T185547Z-phase2-acceptance.stderr.txt
+[31m??[m docs/receipts/hv/20261003T100623-0500-vsf-gate0-local-evidence.md
+[31m??[m docs/receipts/hv/20261003T112415Z-phase2-fr-snp003-cartridge-value.prompt.txt
+[31m??[m docs/receipts/hv/20261003T112415Z-phase2-fr-snp003-cartridge-value.request.jsonl
+[31m??[m docs/receipts/hv/20261003T112415Z-phase2-fr-snp003-cartridge-value.response.jsonl
+[31m??[m docs/receipts/hv/20261003T121540Z-phase2-fr-snp003-remediation.request.jsonl
+[31m??[m docs/receipts/hv/20261003T121540Z-phase2-fr-snp003-remediation.response.jsonl
+[31m??[m docs/receipts/hv/20261003T122118-0500-handoff-phase4-green-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T122118-0500-handoff-phase4-green-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T122118-0500-handoff-phase4-green-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T122118-0500-handoff-phase4-green-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T122405-0500-handoff-phase4-green-local-grok-continuation.prompt.md
+[31m??[m docs/receipts/hv/20261003T122405-0500-handoff-phase4-green-local-grok-continuation.raw.json
+[31m??[m docs/receipts/hv/20261003T122405-0500-handoff-phase4-green-local-grok-continuation.request.jsonl
+[31m??[m docs/receipts/hv/20261003T122405-0500-handoff-phase4-green-local-grok-continuation.stderr.log
+[31m??[m docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.prompt.md
+[31m??[m docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.raw.json
+[31m??[m docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.request.jsonl
+[31m??[m docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.response.jsonl
+[31m??[m docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.stderr.log
+[31m??[m docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.verdict.md
+[31m??[m docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T131341Z-vsf-plan-corrected.request.jsonl
+[31m??[m docs/receipts/hv/20261003T131341Z-vsf-plan-corrected.response.jsonl
+[31m??[m docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T133142Z-vsf-canonical-plan.request.jsonl
+[31m??[m docs/receipts/hv/20261003T133142Z-vsf-canonical-plan.response.jsonl
+[31m??[m docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T140601-0500-phase3a-green-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T140601-0500-phase3a-green-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T140601-0500-phase3a-green-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T144113Z-vsf-canonical-plan-local-grok.continue.md
+[31m??[m docs/receipts/hv/20261003T144113Z-vsf-canonical-plan-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T144113Z-vsf-canonical-plan-local-grok.response.json
+[31m??[m docs/receipts/hv/20261003T144113Z-vsf-canonical-plan-local-grok.verdict-request.md
+[31m??[m docs/receipts/hv/20261003T144113Z-vsf-canonical-plan-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T151117-0500-phase3b-green-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T151117-0500-phase3b-green-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T151117-0500-phase3b-green-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T151117-0500-phase3b-green-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T152312Z-vsf-gate0-remediated-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T152312Z-vsf-gate0-remediated-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T152312Z-vsf-gate0-remediated-local-grok.verdict-request.md
+[31m??[m docs/receipts/hv/20261003T154410Z-vsf-gate0-uncapped-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.final-only.incomplete.jsonl
+[31m??[m docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261003T165234Z-handoff-phase4-red-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T165234Z-handoff-phase4-red-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T165234Z-handoff-phase4-red-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T165234Z-handoff-phase4-red-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.prompt.md
+[31m??[m docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.raw.json
+[31m??[m docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.request.jsonl
+[31m??[m docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.response.jsonl
+[31m??[m docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.stderr.log
+[31m??[m docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.verdict.md
+[31m??[m docs/receipts/hv/20261003T192556-0500-phase3c-red-correction-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261003T192556-0500-phase3c-red-correction-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261003T192556-0500-phase3c-red-correction-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261003T192556-0500-phase3c-red-correction-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.raw.json
+[31m??[m docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261004T170351Z-refresh-docs-failsafe-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T170351Z-refresh-docs-failsafe-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T170351Z-refresh-docs-failsafe-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T170351Z-refresh-docs-failsafe-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261004T172348Z-refresh-docs-final-failsafe-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T172348Z-refresh-docs-final-failsafe-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T172348Z-refresh-docs-final-failsafe-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T172348Z-refresh-docs-final-failsafe-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261004T174137Z-refresh-docs-remediated-failsafe-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T174137Z-refresh-docs-remediated-failsafe-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T174137Z-refresh-docs-remediated-failsafe-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T174137Z-refresh-docs-remediated-failsafe-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.verdict.json
+[31m??[m docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.verdict.md
+[31m??[m docs/receipts/hv/20261004T212800Z-lab-omarchy-host-migration-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T212800Z-lab-omarchy-host-migration-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T213900Z-f-drive-capacity-location-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T213900Z-f-drive-capacity-location-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T221917Z-f-dev-drive-script-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T221917Z-f-dev-drive-script-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T221917Z-f-dev-drive-script-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T221917Z-f-dev-drive-script-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261004T225013Z-f-dev-drive-script-remediated-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T225013Z-f-dev-drive-script-remediated-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T225013Z-f-dev-drive-script-remediated-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T225013Z-f-dev-drive-script-remediated-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261004T231848Z-f-dev-drive-script-final-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T231848Z-f-dev-drive-script-final-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T231848Z-f-dev-drive-script-final-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T231848Z-f-dev-drive-script-final-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261004T235257Z-f-dev-drive-script-final-remediation-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261004T235257Z-f-dev-drive-script-final-remediation-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261004T235257Z-f-dev-drive-script-final-remediation-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261004T235257Z-f-dev-drive-script-final-remediation-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261005T002219Z-f-dev-drive-script-runtime-remediation-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261005T002219Z-f-dev-drive-script-runtime-remediation-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261005T002219Z-f-dev-drive-script-runtime-remediation-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261005T002219Z-f-dev-drive-script-runtime-remediation-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261005T010415Z-f-dev-drive-script-timestamp-proof-local-grok.prompt.md
+[31m??[m docs/receipts/hv/20261005T010415Z-f-dev-drive-script-timestamp-proof-local-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261005T010415Z-f-dev-drive-script-timestamp-proof-local-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261005T010415Z-f-dev-drive-script-timestamp-proof-local-grok.stderr.log
+[31m??[m docs/receipts/hv/20261005T160033Z-f-dev-drive-final.prompt.txt
+[31m??[m docs/receipts/hv/20261005T160033Z-f-dev-drive-final.request.jsonl
+[31m??[m docs/receipts/hv/20261005T160033Z-f-dev-drive-final.response.jsonl
+[31m??[m docs/receipts/hv/20261005T160033Z-f-dev-drive-final.stderr.log
+[31m??[m docs/receipts/hv/20261005T160826Z-f-dev-drive-grok-4-7-xhigh.prompt.txt
+[31m??[m docs/receipts/hv/20261005T160826Z-f-dev-drive-grok-4-7-xhigh.request.jsonl
+[31m??[m docs/receipts/hv/20261005T160826Z-f-dev-drive-grok-4-7-xhigh.response.jsonl
+[31m??[m docs/receipts/hv/20261005T160826Z-f-dev-drive-grok-4-7-xhigh.stderr.log
+[31m??[m docs/receipts/hv/20261005T170723Z-f-dev-drive-grok-4-7-xhigh-remediation.prompt.txt
+[31m??[m docs/receipts/hv/20261005T170723Z-f-dev-drive-grok-4-7-xhigh-remediation.request.jsonl
+[31m??[m docs/receipts/hv/20261005T170723Z-f-dev-drive-grok-4-7-xhigh-remediation.response.jsonl
+[31m??[m docs/receipts/hv/20261005T170723Z-f-dev-drive-grok-4-7-xhigh-remediation.stderr.log
+[31m??[m docs/receipts/hv/20261005T174728Z-f-dev-drive-grok-4-7-xhigh-code-only.prompt.txt
+[31m??[m docs/receipts/hv/20261005T174728Z-f-dev-drive-grok-4-7-xhigh-code-only.request.jsonl
+[31m??[m docs/receipts/hv/20261005T174728Z-f-dev-drive-grok-4-7-xhigh-code-only.response.jsonl
+[31m??[m docs/receipts/hv/20261005T174728Z-f-dev-drive-grok-4-7-xhigh-code-only.stderr.log
+[31m??[m docs/receipts/hv/20261005T181912Z-f-dev-drive-grok-4-7-xhigh-final.prompt.txt
+[31m??[m docs/receipts/hv/20261005T181912Z-f-dev-drive-grok-4-7-xhigh-final.request.jsonl
+[31m??[m docs/receipts/hv/20261005T181912Z-f-dev-drive-grok-4-7-xhigh-final.response.jsonl
+[31m??[m docs/receipts/hv/20261005T181912Z-f-dev-drive-grok-4-7-xhigh-final.stderr.log
+[31m??[m docs/receipts/hv/20261005T185234Z-f-dev-drive-grok-4-7-xhigh-final2.prompt.txt
+[31m??[m docs/receipts/hv/20261005T185234Z-f-dev-drive-grok-4-7-xhigh-final2.request.jsonl
+[31m??[m docs/receipts/hv/20261005T185234Z-f-dev-drive-grok-4-7-xhigh-final2.response.jsonl
+[31m??[m docs/receipts/hv/20261005T185234Z-f-dev-drive-grok-4-7-xhigh-final2.stderr.log
+[31m??[m docs/receipts/hv/20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.prompt.txt
+[31m??[m docs/receipts/hv/20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.request.jsonl
+[31m??[m docs/receipts/hv/20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.response.jsonl
+[31m??[m docs/receipts/hv/20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.stderr.log
+[31m??[m docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.primary-readback.json
+[31m??[m docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.prompt.md
+[31m??[m docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.raw-result.json
+[31m??[m docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.request.jsonl
+[31m??[m docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.response.jsonl
+[31m??[m docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.stderr.log
+[31m??[m docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.verdict.json
+[31m??[m docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.verdict.md
+[31m??[m docs/receipts/hv/20261007T102500-0500-immutable-vice-phase0-recovery-r2.prompt.md
+[31m??[m docs/receipts/hv/20261007T102500-0500-immutable-vice-phase0-recovery-r2.request.jsonl
+[31m??[m docs/receipts/hv/20261007T102500-0500-immutable-vice-phase0-recovery-r2.response.jsonl
+[31m??[m docs/receipts/hv/20261007T102500-0500-immutable-vice-phase0-recovery-r2.stderr.log
+[31m??[m docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.prompt.md
+[31m??[m docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.readback.json
+[31m??[m docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.request.jsonl
+[31m??[m docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.response.jsonl
+[31m??[m docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.stderr.log
+[31m??[m docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.verdict.json
+[31m??[m docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.verdict.md
+[31m??[m docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.prompt.md
+[31m??[m docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.readback.json
+[31m??[m docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.request.jsonl
+[31m??[m docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.response.jsonl
+[31m??[m docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.stderr.log
+[31m??[m docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.verdict.json
+[31m??[m docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.verdict.md
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.effective-integrity-requirements.json
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.implementation-evidence.json
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.mid-review-human-steering.json
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.parent-primary-proof.json
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.prior-grok-primary-readback.json
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.prompt.md
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.readback.json
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.request.jsonl
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.response.jsonl
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.retry-helper-audit.json
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.stderr.log
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.verdict.json
+[31m??[m docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.verdict.md
+[31m??[m docs/receipts/hv/20261007T125315-0500-failsafe-quarantine/
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok-b7-reconstruction/
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.cycle-status-remediation.json
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.parent-primary-proof.json
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.parent-readonly-preparation.json
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.primary-query-response.json
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.prompt.md
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.readback.json
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.stderr.txt
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.traceability-after-cycle.txt
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.verdict.json
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.verdict.md
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.wiki-after-cycle-proof.json
+[31m??[m docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.wiki-proof.json
+[31m??[m docs/receipts/hv/20261007T133800-0500-retitle-failsafe-replay/
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.evidence/
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.launch-result.json
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.parent-correction-query.json
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.parent-fresh-primary-query.json
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.parent-primary-proof.json
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.primary-query-response.yaml
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.prompt.md
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.readback.json
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.request.jsonl
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.response.jsonl
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.exit.json
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.launch.json
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.prompt.md
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.request.jsonl
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.response.jsonl
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.stderr.txt
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.stderr.txt
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.verdict.json
+[31m??[m docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.verdict.md
+[31m??[m docs/receipts/hv/20261007T163600-0500-phase0-opus-remediation/
+[31m??[m docs/receipts/hv/20261007T171002-0500-approved-7dc1-quarantine/
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.acceptance-projection-proof.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.acceptance-wiki-export.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.acceptance-wiki.zip
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.accepted-goal-todo-readback.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.accepted-todo-readback.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.exit.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.launch-result.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-final-primary-query.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-query.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.progress.jsonl
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.prompt.md
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.readback.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.request.jsonl
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.requirements-extract.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.response.jsonl
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.stderr.txt
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.verdict.json
+[31m??[m docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.verdict.md
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.input-pins.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.interrupted-draft-recovery.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.launch-result.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.old-pin-revalidation.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.parent-completed-turn-readback.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.parent-progress-turn-readback.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.partial-draft-primary-proof.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.partial-draft-primary-readback.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.post-launch-interrupt-addendum.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.post-launch-reset-clones-addendum.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.post-launch-source-addendum.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.post-terminal-integrity.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.post-terminal-native.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.prompt.md
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.request.jsonl
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.response.jsonl
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.reviewer-progress.jsonl
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.reviewer-tests/
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.source-audit-integrity.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.source-audit-native-after.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.source-audit-turn-readback.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.stderr.log
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.terminal-result.json
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.terminal-summary.md
+[31m??[m docs/receipts/hv/20261008-noon-catchup-opus.resume-02.timestamp-correction.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.interrupted-for-operator-override.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.launch-result.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.mcp-config.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.monitor.jsonl
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.prompt.md
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.request.jsonl
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.response.jsonl
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.exit.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.launch-result.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.metadata-correction.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.pin-revalidation.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.post-pins.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.prompt.md
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.request.jsonl
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.response.jsonl
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.stderr.log
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.terminal-result.json
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.reviewer-progress.jsonl
+[31m??[m docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.stderr.log
+[31m??[m docs/receipts/hv/20261008T143538-0500-opus-remediation-packet/
+[31m??[m docs/receipts/hv/phase2-acceptance.prompt.txt
+[31m??[m docs/receipts/hv/plan-c64set-001-done-false.json
+[31m??[m docs/receipts/native-vice/
+[31m??[m docs/receipts/requirements-recovery/20261003T101735-0500-vsf-mcp-readback.json
+[31m??[m docs/requirements/functional/FR-Vice-Reference.md
+[31m??[m docs/requirements/technical/TR-Native-Vice-Snapshot.md
+[31m??[m docs/requirements/technical/TR-Vice-Oracle.md
+[31m??[m docs/requirements/test/TEST-Vice-Oracle.md
+[31m??[m docs/requirements/traceability/VICE-Immutable-Oracle-Matrix-2026-10-03.md
+[31m??[m src/ViceSharp.Abstractions/IFixedRomImage.cs
+[31m??[m src/ViceSharp.Chips/Audio/SidExecutionState.cs
+[31m??[m src/ViceSharp.Chips/Cpu/Mos6502.ExecutionImage.cs
+[31m??[m src/ViceSharp.Chips/Snapshots/
+[31m??[m src/ViceSharp.Core/Capture/GifFrameArtifactWriter.cs
+[31m??[m src/ViceSharp.Core/Input/HotkeyBindings.cs
+[31m??[m src/ViceSharp.Core/Media/CapturedFrame.cs
+[31m??[m src/ViceSharp.Core/Media/FfmpegAudioRecorder.cs
+[31m??[m src/ViceSharp.Core/Media/MediaCapture.cs
+[31m??[m src/ViceSharp.Core/Snapshots/IReplayEngine.cs
+[31m??[m src/ViceSharp.Core/Vic20/StandardBlockCartridge.cs
+[31m??[m src/ViceSharp.ViceCompatibility/
+[31m??[m tests/ViceSharp.NativeClockProbe.Tests/
+[31m??[m tests/ViceSharp.OracleContract.Tests/
+[31m??[m tests/ViceSharp.TestHarness/FrCfg003AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrCfg004AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrCia005AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrCpu004AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrCrt002AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrInp003AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrMed005AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrMem004AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrMem006AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrMon005AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrMon006AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrSid004AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrSid005AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrSid009AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrSnp003AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrUi004AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/FrVic20005AcceptanceTests.cs
+[31m??[m tests/ViceSharp.TestHarness/PhaseAcceptanceCoverageTests.cs
+[31m??[m tests/ViceSharp.TestHarness/Ui/Vic20SettingsVisibilityNotificationTests.cs
+[31m??[m tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs
+[31m??[m tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisiteTests.cs
+[31m??[m tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs
+[31m??[m tests/ViceSharp.VsfCompatibility.Tests/
+[31m??[m tools/check_phase_acceptance_coverage.ps1
+[31m??[m tools/immutable-vice/

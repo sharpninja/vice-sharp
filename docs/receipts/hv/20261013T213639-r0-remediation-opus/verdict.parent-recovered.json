@@ -1,0 +1,96 @@
+{
+  "OverallVerdict": "DISAGREE",
+  "accuracy": 97,
+  "completeness": 97,
+  "assertionCount": 46,
+  "passCount": 39,
+  "failCount": 2,
+  "unknownCount": 4,
+  "notApplicableCount": 1,
+  "failList": [
+    "A8 FAIL: approval-facing mapping description '9 rows, 7 changed, 2 unchanged' is false; actual 6 changed (FR-BACKFILL-MEDIA-001, FR-TAP-001..FR-TAP-005; 13 additions, 0 removals) and 3 unchanged (FR-RUNTIME-TAPE-002, FR-CPU-004, FR-PRF-003); wrong at README.md:15, candidate approvalPrerequisites[1] and scopeDisclosure, HANDOFF.md:73 (RM-01)",
+    "B10 FAIL: HV round launched with --permission-mode plan; PowerShell.MCP, MCP session/requirements/TODO tools and all writes denied, so reviewer receipts, MCP turn, console isolation, marker trust checks and live reads required by plan.md:92-102 and HANDOFF.md:26-28 are impossible (RM-02)"
+  ],
+  "unknownList": [
+    "A1 UNKNOWN: candidate SHA256 not recomputable (shell denied)",
+    "A14 UNKNOWN: 270 input pins not rehashable (shell denied)",
+    "A16 UNKNOWN: parent recovery of full 96/93 Markdown into req-20261014T020333Z-check-hv-outcome not readable (sessionlog_query denied)",
+    "C9 UNKNOWN: live effective/typed requirements, full mappings and TODO state not queryable (MCP tools denied)"
+  ],
+  "notApplicableList": [
+    "C10 N/A: executable AC-mapped tests are a later gate for an unapplied amendment"
+  ],
+  "findings": [
+    "RM-01 medium [must fix before approval] Mapping rows misdescribed as seven changed and two unchanged; actual six changed, three unchanged; propagated to README, candidate approvalPrerequisites and scopeDisclosure, HANDOFF",
+    "RM-02 medium [must fix before any acceptance] Plan permission mode denies all reviewer receipts, MCP persistence, PowerShell.MCP, trust checks and live reads; contradicts plan runner and HANDOFF; brief rules deadlock",
+    "RM-03 low [should fix] 15 coverage fields stored as scalar strings instead of arrays (14 new TEST namedCaseGroups, 1 inherited sourceAnchors) in candidate and consolidated-coverage.json; root cause Prepare-Candidate.ps1:108",
+    "RM-04 low [should fix] New TEST-CPU-001/TEST-PRF-001 AC cover only FR-CPU-004/FR-PRF-003 while those TESTs also trace FR-CPU-001..003,005 and FR-PRF-001,002,004..008; partial scope not stated in record text",
+    "RM-05 low [should fix] R0-06 sibling unswept: TEST-TAP-001/ac-03 timer/IRQ row lacks ciacore.c and viacore.c anchors",
+    "RM-06 low [should fix] Candidate top-level baseline still says freshServerReadback=false from 2026-10-09; current preimage evidence is live-baseline.json 21:30-21:31",
+    "RM-07 info/low [operator disposition] Parent's disclosed credential exposure this turn remains open (no rotation evidenced); joins F-15; no credential found in scanned files",
+    "RM-08 low [should fix] 177 checks are positive-only with no seeded negative controls; trace check proves ID existence only; no count/type recomputation, so RM-01 and RM-03 passed",
+    "RM-09 info [optional] Locked-decision-2 disclosure does not state whether the recovery-apply idempotent route remains supported",
+    "RM-10 info [R2 hint] Native azimuth error uses unsigned rand with negative min stored in 64-bit CLOCK; negative draws become about 2^32 cycles",
+    "RM-11 info [reviewer self-disclosure] No console, hashes, measured times, receipts, MCP or failsafe; marker lines 3, 343, 344 withheld; JSON hand-composed",
+    "RM-12 info [optional] approvalStatus uses three different values across 16 records"
+  ],
+  "priorDispositions": {
+    "newest11": "R0-01 resolved (residual RM-04); R0-02 resolved for consistency (residuals RM-01, RM-06); R0-03 resolved; R0-04 resolved; R0-05 addressed in approval documents; R0-06 partial (RM-05); R0-07 resolved; R0-08 disclosed; R0-09 preserved; R0-10 preserved; R0-11 preserved as R3 blocker",
+    "earlier35": "N-01..N-06, N-11..N-14, N-18, F-01..F-07, F-13, F-14 resolved in text or for R0; N-07..N-10, N-12, N-15 later gates; N-16, N-17, F-08..F-12, F-15, F-17 open or historical; F-16 historical"
+  },
+  "mustFixBeforeApproval": [
+    "RM-01",
+    "RM-02"
+  ],
+  "shouldFixForThreshold": [
+    "RM-03",
+    "RM-04",
+    "RM-05",
+    "RM-06",
+    "RM-08"
+  ],
+  "r0ReadyForExactDeltaApproval": false,
+  "reviewer": {
+    "agent": "ClaudeCode",
+    "model": "claude-opus-5-5",
+    "effort": "max",
+    "cliSessionId": "bab22fd4-f213-4011-9616-074b14def01b",
+    "pid": 22508,
+    "launchedAtLocal": "2026-10-13T21:41:27"
+  },
+  "parent": {
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261014T021233Z-remediate-two-hv-failures"
+  },
+  "sessionId": "none: no MCP session created (sessionlog tools denied in plan mode)",
+  "requestId": "none: no MCP turn created (sessionlog tools denied in plan mode)",
+  "candidateSha256": "98D42B84FBA5AB833BC41F199A9A9CE0C56B5CF8D5B3EF0689895FAAE3D73BC9",
+  "candidateSha256Verification": "as pinned; equal in input-pins.json, verification.json, consolidated-coverage.json and HANDOFF.md; not recomputed (shell denied)",
+  "candidatePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\proposed-field-delta.json",
+  "receiptDirectory": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus",
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus\\request.jsonl",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus\\response.jsonl",
+  "verdictFilesWritten": false,
+  "persistenceStatus": "NOT PERSISTED: plan permission mode denied all writes and MCP calls; no MCP turn, no failsafe, no verdict.md/verdict.json/verdict.persistence.json; this response stream (parent-captured response.jsonl) is the only copy; no primary readback",
+  "deniedOperations": [
+    "mcp__pwsh__start_console: Cannot call mcp__pwsh__start_console while in plan mode.",
+    "mcp__pwsh__execute_command: Cannot call mcp__pwsh__execute_command while in plan mode.",
+    "mcp__mcpserver__requirements_list: Cannot call mcp__mcpserver__requirements_list while in plan mode.",
+    "mcp__mcpserver__todo_get: Cannot call mcp__mcpserver__todo_get while in plan mode.",
+    "mcp__mcpserver__sessionlog_query: Cannot call mcp__mcpserver__sessionlog_query while in plan mode.",
+    "Edit/Write: in launch --disallowed-tools and absent from session"
+  ],
+  "profileReceipt": {
+    "skill": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "profileFilesRead": 1,
+    "profileFile": "C:\\Users\\kingd\\.claude\\profile\\PROFILE-MERGED.md",
+    "profileLines": 361,
+    "hashes": "not computed (shell denied)"
+  },
+  "measuredTimes": {
+    "hookLocal": "2026-10-13T21:41",
+    "launchLocal": "2026-10-13T21:41:27",
+    "later": "not measurable (shell denied)"
+  },
+  "jsonProvenance": "hand-composed in the response stream; native PowerShell serialization impossible because PowerShell.MCP was denied"
+}

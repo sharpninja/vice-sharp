@@ -1,0 +1,331 @@
+using NSubstitute;
+using static ViceSharp.OracleContract.Tests.ContractAssertions;
+
+namespace ViceSharp.OracleContract.Tests;
+
+/// <summary>FR-VICE-001 AC1/AC3; TR-VICE-ORACLE-001 AC1; TEST-VICE-001 AC1.</summary>
+public sealed class ImmutableViceOraclePreflightTests
+{
+    /// <summary>Known inputs have independently declared expected decisions and wrong-result controls.</summary>
+    [Theory]
+    [InlineData("clean", true, null)]
+    [InlineData("wrong-commit", false, "CommitMismatch")]
+    [InlineData("missing-commit", false, "CommitMissing")]
+    [InlineData("tracked-delta", false, "DirtyBefore")]
+    [InlineData("post-inventory", false, "InventoryChanged")]
+    [InlineData("dirty-after", false, "DirtyAfter")]
+    [InlineData("patched", false, "PatchedOracle")]
+    [InlineData("different-source", false, "SourceMismatch")]
+    public void IdentityAndInventory(string scenario, bool accepted, string? error)
+    {
+        var input = scenario switch
+        {
+            "clean" => Fixtures.Clean,
+            "wrong-commit" => Fixtures.Clean with { Commit = new string('b', 40) },
+            "missing-commit" => Fixtures.Clean with { Commit = null },
+            "tracked-delta" => Fixtures.Clean with { CleanBefore = false },
+            "post-inventory" => Fixtures.Clean with { AfterInventory = new string('b', 64) },
+            "dirty-after" => Fixtures.Clean with { CleanAfter = false },
+            "patched" => Fixtures.Clean with { Patched = true },
+            "different-source" => Fixtures.Clean with { Source = "managed-derived-fork" },
+            _ => throw new ArgumentOutOfRangeException(nameof(scenario))
+        };
+        ProveDecision(input, new Decision(accepted, error));
+    }
+
+    /// <summary>Observed adapter call transcript; used instead of implementing an orchestrator.</summary>
+    public interface IRunAudit
+    {
+        /// <summary>Record the preflight decision before any runner call.</summary>
+        void Preflight(bool accepted);
+        /// <summary>Record the parity-runner invocation.</summary>
+        void Run();
+        /// <summary>Record whether post-run inventory still matches.</summary>
+        void Postflight(bool unchanged);
+        /// <summary>Record final receipt acceptance.</summary>
+        void Receipt(bool accepted);
+    }
+
+    /// <summary>Ordering asserted on real mock call history, not a sorted representation.</summary>
+    internal static void AssertTranscript(IRunAudit audit, bool preflight, bool postflight)
+    {
+        var calls = audit.ReceivedCalls().ToArray();
+        var expectedNames = preflight
+            ? new[] { "Preflight", "Run", "Postflight", "Receipt" }
+            : new[] { "Preflight", "Receipt" };
+        Assert.Equal(expectedNames, calls.Select(c => c.GetMethodInfo().Name));
+        Assert.Equal(preflight, Assert.IsType<bool>(calls[0].GetArguments()[0]));
+        if (preflight)
+            Assert.Equal(postflight, Assert.IsType<bool>(calls[2].GetArguments()[0]));
+        Assert.Equal(preflight && postflight, Assert.IsType<bool>(calls[^1].GetArguments()[0]));
+    }
+
+    /// <summary>Rejected preflight cannot run; changed postflight invalidates an otherwise accepted run.</summary>
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(true, true)]
+    [InlineData(true, false)]
+    public void OrderedLifecycle(bool preflight, bool postflight)
+    {
+        var audit = Substitute.For<IRunAudit>();
+        audit.Preflight(preflight);
+        if (preflight) { audit.Run(); audit.Postflight(postflight); }
+        audit.Receipt(preflight && postflight);
+        AssertTranscript(audit, preflight, postflight);
+        // Mutation: an additional runner call is forbidden, including after rejection.
+        audit.Run();
+        Rejects(() => AssertTranscript(audit, preflight, postflight));
+
+        audit.ClearReceivedCalls();
+        if (preflight) audit.Run(); // Mutation: run before acceptance is recorded.
+        audit.Preflight(preflight);
+        if (preflight) audit.Postflight(postflight);
+        audit.Receipt(!(preflight && postflight));
+        Rejects(() => AssertTranscript(audit, preflight, postflight));
+    }
+
+    /// <summary>The ordering assertion rejects early runner even if final receipt is otherwise correct.</summary>
+    [Fact]
+    public void RunnerBeforeRecordedAcceptanceIsRejectedIndependently()
+    {
+        var audit = Substitute.For<IRunAudit>();
+        audit.Run(); audit.Preflight(true); audit.Postflight(true); audit.Receipt(true);
+        Rejects(() => AssertTranscript(audit, true, true));
+    }
+}
+
+/// <summary>FR-VICE-001 AC2; TR-VICE-ORACLE-001 AC2; TEST-VICE-001 AC2.</summary>
+public sealed class ImmutableViceWrapperBoundaryTests
+{
+    /// <summary>Inputs are synthetic resolver results; tests perform no filesystem mutation.</summary>
+    public sealed record Boundary(string Operation, string RequestedPath, string ResolvedPath,
+        bool InventoryUnchanged);
+
+    /// <summary>Reject forbidden destinations even when spelling or a link hides the native root.</summary>
+    [Theory]
+    [InlineData("read", "F:/wrapper/input.vsf", "F:/wrapper/input.vsf", true, true, null)]
+    [InlineData("write", "F:/wrapper/output.vsf", "F:/wrapper/output.vsf", true, true, null)]
+    [InlineData("write", "F:/native/vice/out", "F:/native/vice/out", true, false, "ImmutableWrite")]
+    [InlineData("patch", "F:/native/vice/cpu.c", "F:/native/vice/cpu.c", true, false, "ImmutablePatch")]
+    [InlineData("generate", "F:/native/vice/generated.c", "F:/native/vice/generated.c", true, false, "ImmutableGeneration")]
+    [InlineData("write", "F:/wrapper/../native/vice/out", "F:/native/vice/out", true, false, "ImmutableWrite")]
+    [InlineData("write", "F:/wrapper/link/out", "F:/native/vice/out", true, false, "ImmutableWrite")]
+    [InlineData("write", "f:/NATIVE/Vice/out", "F:/native/vice/out", true, false, "ImmutableWrite")]
+    [InlineData("write", "F:/native/vice-copy/out", "F:/native/vice-copy/out", true, true, null)]
+    [InlineData("write", "F:/wrapper/out", "F:/wrapper/out", false, false, "InventoryChanged")]
+    public void DestinationAndAfterState(string operation, string requested, string resolved,
+        bool unchanged, bool accepted, string? error) =>
+        ProveDecision(new Boundary(operation, requested, resolved, unchanged), new Decision(accepted, error));
+}
+
+/// <summary>FR-VICE-001 AC1/AC3; TR-VICE-ORACLE-001 AC4; TEST-VICE-001 AC3.</summary>
+public sealed class ImmutableViceReceiptContractTests
+{
+    /// <summary>Test-local acceptance receipt fields; no live or native claims.</summary>
+    public sealed record Receipt(OracleState Oracle, string? WrapperHash, string? WrapperVersion,
+        string? Command, string? Scope, int Passed, int Failed, int Skipped, int Aborted);
+
+    /// <summary>Every invalid receipt gets a wrong accepting result rejected by the same assertion.</summary>
+    [Theory]
+    [InlineData("valid", true, null)]
+    [InlineData("missing-commit", false, "CommitMissing")]
+    [InlineData("wrong-commit", false, "CommitMismatch")]
+    [InlineData("dirty-before", false, "DirtyBefore")]
+    [InlineData("dirty-after", false, "DirtyAfter")]
+    [InlineData("changed-inventory", false, "InventoryChanged")]
+    [InlineData("missing-inventory", false, "InventoryMissing")]
+    [InlineData("patched", false, "PatchedOracle")]
+    [InlineData("other-source", false, "SourceMismatch")]
+    [InlineData("missing-hash", false, "WrapperHashMissing")]
+    [InlineData("malformed-hash", false, "WrapperHashInvalid")]
+    [InlineData("missing-version", false, "WrapperVersionMissing")]
+    [InlineData("missing-command", false, "CommandMissing")]
+    [InlineData("missing-scope", false, "ScopeMissing")]
+    [InlineData("negative-passed", false, "NegativeCount")]
+    [InlineData("negative-failed", false, "NegativeCount")]
+    [InlineData("negative-skipped", false, "NegativeCount")]
+    [InlineData("negative-aborted", false, "NegativeCount")]
+    [InlineData("failure", false, "FailedTests")]
+    [InlineData("skip", false, "SkippedTests")]
+    [InlineData("abort", false, "AbortedTests")]
+    public void RequiredProvenanceAndCounts(string scenario, bool accepted, string? error)
+    {
+        var valid = new Receipt(Fixtures.Clean, Fixtures.Hash, "fixture-v1", "fixture-wrapper --system vic20",
+            "synthetic contract example only", 10, 0, 0, 0);
+        var input = scenario switch
+        {
+            "valid" => valid,
+            "missing-commit" => valid with { Oracle = valid.Oracle with { Commit = null } },
+            "wrong-commit" => valid with { Oracle = valid.Oracle with { Commit = new string('b', 40) } },
+            "dirty-before" => valid with { Oracle = valid.Oracle with { CleanBefore = false } },
+            "dirty-after" => valid with { Oracle = valid.Oracle with { CleanAfter = false } },
+            "changed-inventory" => valid with { Oracle = valid.Oracle with { AfterInventory = new string('b', 64) } },
+            "missing-inventory" => valid with { Oracle = valid.Oracle with { BeforeInventory = "" } },
+            "patched" => valid with { Oracle = valid.Oracle with { Patched = true } },
+            "other-source" => valid with { Oracle = valid.Oracle with { Source = "fork" } },
+            "missing-hash" => valid with { WrapperHash = null },
+            "malformed-hash" => valid with { WrapperHash = "not-sha256" },
+            "missing-version" => valid with { WrapperVersion = null },
+            "missing-command" => valid with { Command = null },
+            "missing-scope" => valid with { Scope = null },
+            "negative-passed" => valid with { Passed = -1 },
+            "negative-failed" => valid with { Failed = -1 },
+            "negative-skipped" => valid with { Skipped = -1 },
+            "negative-aborted" => valid with { Aborted = -1 },
+            "failure" => valid with { Failed = 1 },
+            "skip" => valid with { Skipped = 1 },
+            "abort" => valid with { Aborted = 1 },
+            _ => throw new ArgumentOutOfRangeException(nameof(scenario))
+        };
+        ProveDecision(input, new Decision(accepted, error));
+    }
+}
+
+/// <summary>FR-VICE-001 AC4; TR-VICE-ORACLE-001 AC3/AC5; TEST-VICE-001 AC4.</summary>
+public sealed class Vic20NativeBusEventTests
+{
+    /// <summary>Synthetic category capability and per-half-cycle native observation contract.</summary>
+    public sealed record Stream(string Category, bool Capability, string Provenance,
+        long ExpectedFirst, long ExpectedLast, long[] ObservedHalfCycles);
+
+    /// <summary>All four categories independently exercise every provenance and observation defect.</summary>
+    [Theory]
+    [InlineData("cpu-bus")]
+    [InlineData("timing")]
+    [InlineData("snapshots")]
+    [InlineData("lifecycle")]
+    public void EveryCategoryRequiresActualCompleteObservations(string category)
+    {
+        var valid = new Stream(category, true, "immutable-native-observation", 36, 38, [36, 37, 38]);
+        ProveDecision(valid, new Decision(true));
+        ProveDecision(valid with { Capability = false }, new Decision(false, "CapabilityUnavailable", 36));
+        ProveDecision(valid with { ObservedHalfCycles = [] }, new Decision(false, "ObservationMissing", 36));
+        ProveDecision(valid with { ObservedHalfCycles = [37, 38] }, new Decision(false, "ObservationMissing", 36));
+        ProveDecision(valid with { ObservedHalfCycles = [36, 38] }, new Decision(false, "ObservationMissing", 37));
+        ProveDecision(valid with { ObservedHalfCycles = [36, 37] }, new Decision(false, "ObservationMissing", 38));
+        ProveDecision(valid with { ObservedHalfCycles = [36, 36, 38] }, new Decision(false, "ObservationMissing", 37));
+        ProveDecision(valid with { ObservedHalfCycles = [36, 38, 37] }, new Decision(false, "ObservationMissing", 37));
+        foreach (var provenance in new[] { "PeekBus", "PC-derived", "fabricated", "patched-target" })
+            ProveDecision(valid with { Provenance = provenance }, new Decision(false, "ProvenanceRejected", 36));
+    }
+}
+
+/// <summary>Partial FR-SNP-005 AC3 / TEST-SNP-002 AC4. Not TR-CYCLE-001 AC4 or real VSF proof.</summary>
+public sealed class Vic20HalfCycleComparatorContractTests
+{
+    /// <summary>Equal CPU registers do not hide an actual bus-address mismatch.</summary>
+    public sealed record Registers(ushort Pc, byte A, byte X, byte Y, byte Sp, byte Flags);
+    /// <summary>Test-local observation, preserving the original half-cycle37 fixture.</summary>
+    public sealed record BusSample(long HalfCycle, Registers Cpu, ushort Address);
+    /// <summary>Only the result DTO is mocked; no comparison algorithm is implemented here.</summary>
+    public sealed record Mismatch(long HalfCycle, string Field, ushort Expected, ushort Actual);
+    /// <summary>Future adapter seam to the single production LockstepValidator.</summary>
+    public interface IComparator { Mismatch? Compare(BusSample native, BusSample managed); }
+
+    /// <summary>Exact cycle, field and both values are mandatory.</summary>
+    internal static void AssertMismatch(Mismatch? actual)
+    {
+        Assert.NotNull(actual);
+        Assert.Equal(37, actual.HalfCycle);
+        Assert.Equal("BusAddress", actual.Field);
+        Assert.Equal((ushort)0x1000, actual.Expected);
+        Assert.Equal((ushort)0x1001, actual.Actual);
+    }
+
+    /// <summary>Correct result passes; each single-field corruption is independently detected.</summary>
+    [Fact]
+    public void EqualRegistersDifferentAddressAtHalfCycle37()
+    {
+        var registers = new Registers(0x2000, 0x42, 1, 2, 0xff, 0x24);
+        var native = new BusSample(37, registers, 0x1000);
+        var managed = new BusSample(37, registers, 0x1001);
+        Assert.Equal(native.Cpu, managed.Cpu);
+        var comparator = Substitute.For<IComparator>();
+        var correct = new Mismatch(37, "BusAddress", 0x1000, 0x1001);
+        comparator.Compare(native, managed).Returns(correct);
+        AssertMismatch(comparator.Compare(native, managed));
+        foreach (var wrong in new Mismatch?[]
+        {
+            null, correct with { HalfCycle = 38 }, correct with { Field = "Pc" },
+            correct with { Expected = 0x1001 }, correct with { Actual = 0x1000 }
+        })
+        {
+            comparator.Compare(native, managed).Returns(wrong);
+            Rejects(() => AssertMismatch(comparator.Compare(native, managed)));
+        }
+    }
+}
+
+/// <summary>TR-CYCLE-001 AC4; missing observations also FR-VICE-001 AC4 / TEST-VICE-001 AC4.</summary>
+public sealed class CpuPhi2AecContractTests
+{
+    /// <summary>Explicit phase. Undefined numeric values are distinct from valid phases.</summary>
+    public enum Phase { Phi1 = 1, Phi2 = 2 }
+    /// <summary>Explicit idle is valid; null is unavailable evidence, not idle.</summary>
+    public enum Access { None = 0, Read = 1, Write = 2 }
+    /// <summary>Synthetic timing evidence, not an actual x64sc or managed trace.</summary>
+    public sealed record Observation(long HalfCycle, Phase? Phase, bool? Aec, Access? Access);
+    /// <summary>Caller must specify the entire nonempty expected interval.</summary>
+    public sealed record Sequence(long? First, long? Last, Observation[] Observations);
+
+    /// <summary>All legal idle/access combinations and all forbidden accesses are explicit cases.</summary>
+    [Theory]
+    [InlineData(1, false, 0, true, null)]
+    [InlineData(1, true, 0, true, null)]
+    [InlineData(2, false, 0, true, null)]
+    [InlineData(2, true, 0, true, null)]
+    [InlineData(2, true, 1, true, null)]
+    [InlineData(2, true, 2, true, null)]
+    [InlineData(1, false, 1, false, "AccessForbidden")]
+    [InlineData(1, false, 2, false, "AccessForbidden")]
+    [InlineData(1, true, 1, false, "AccessForbidden")]
+    [InlineData(1, true, 2, false, "AccessForbidden")]
+    [InlineData(2, false, 1, false, "AccessForbidden")]
+    [InlineData(2, false, 2, false, "AccessForbidden")]
+    [InlineData(null, true, 1, false, "PhaseMissing")]
+    [InlineData(0, true, 1, false, "PhaseUnknown")]
+    [InlineData(99, true, 1, false, "PhaseUnknown")]
+    [InlineData(2, null, 1, false, "AecMissing")]
+    [InlineData(2, true, null, false, "AccessMissing")]
+    [InlineData(2, true, -1, false, "AccessUnknown")]
+    [InlineData(2, true, 99, false, "AccessUnknown")]
+    [InlineData(1, null, 0, false, "AecMissing")]
+    [InlineData(null, false, 0, false, "PhaseMissing")]
+    [InlineData(1, false, null, false, "AccessMissing")]
+    public void PhaseAecAccessTruthTable(int? phase, bool? aec, int? access, bool accepted, string? error)
+    {
+        var input = new Sequence(37, 37, [new Observation(37, (Phase?)phase, aec, (Access?)access)]);
+        ProveDecision(input, new Decision(accepted, error, accepted ? null : 37));
+    }
+
+    /// <summary>Gap positions are explicitly stated, never derived by a second timing algorithm.</summary>
+    [Theory]
+    [InlineData("complete", true, null, null)]
+    [InlineData("empty", false, "ObservationMissing", 36L)]
+    [InlineData("leading", false, "ObservationMissing", 36L)]
+    [InlineData("interior", false, "ObservationMissing", 37L)]
+    [InlineData("trailing", false, "ObservationMissing", 38L)]
+    [InlineData("duplicate-gap", false, "ObservationMissing", 37L)]
+    [InlineData("out-of-order", false, "ObservationMissing", 37L)]
+    [InlineData("duplicate-complete", false, "SequenceOrder", 37L)]
+    [InlineData("extra", false, "UnexpectedObservation", 39L)]
+    [InlineData("missing-first", false, "IntervalMissing", null)]
+    [InlineData("missing-last", false, "IntervalMissing", null)]
+    [InlineData("reversed", false, "IntervalInvalid", null)]
+    public void IntervalMustBeCompleteAndOrdered(string scenario, bool accepted, string? error, long? firstError)
+    {
+        // These lists are fixed fixture inputs, not a comparator or gap-detection implementation.
+        long[] cycles = scenario switch
+        {
+            "empty" => [], "leading" => [37, 38], "interior" => [36, 38], "trailing" => [36, 37],
+            "duplicate-gap" => [36, 36, 38], "out-of-order" => [36, 38, 37],
+            "duplicate-complete" => [36, 36, 37, 38], "extra" => [36, 37, 38, 39],
+            "complete" or "missing-first" or "missing-last" or "reversed" => [36, 37, 38],
+            _ => throw new ArgumentOutOfRangeException(nameof(scenario))
+        };
+        var input = new Sequence(scenario == "missing-first" ? null : scenario == "reversed" ? 38 : 36,
+            scenario == "missing-last" ? null : scenario == "reversed" ? 36 : 38,
+            cycles.Select(c => new Observation(c, Phase.Phi2, true, Access.None)).ToArray());
+        ProveDecision(input, new Decision(accepted, error, firstError));
+    }
+}

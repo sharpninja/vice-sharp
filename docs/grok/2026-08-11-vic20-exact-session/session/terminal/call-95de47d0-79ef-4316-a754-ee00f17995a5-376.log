@@ -1,6 +1,6 @@
-C:\Users\kingd\.creds\setup-payton-desktop-cred.ps1:9:$credPath = 'C:\Users\kingd\.creds\paytondesktop.cred.xml'
-C:\Users\kingd\.creds\setup-payton-desktop-cred.ps1:17:$verify = Invoke-Command -ComputerName PAYTON-DESKTOP -Credential $cred -ScriptBlock {
-C:\Users\kingd\.creds\setup-payton-desktop-cred.ps1:28:Write-Host "Done. The Claude session can now Import-Clixml '$credPath' and Invoke-Command -ComputerName PAYTON-DESKTOP -Credential `$cred." -ForegroundColor Green
+C:\Users\kingd\.creds\setup-LAB-OMARCHY-cred.ps1:9:$credPath = 'C:\Users\kingd\.creds\paytondesktop.cred.xml'
+C:\Users\kingd\.creds\setup-LAB-OMARCHY-cred.ps1:17:$verify = Invoke-Command -ComputerName LAB-OMARCHY -Credential $cred -ScriptBlock {
+C:\Users\kingd\.creds\setup-LAB-OMARCHY-cred.ps1:28:Write-Host "Done. The Claude session can now Import-Clixml '$credPath' and Invoke-Command -ComputerName LAB-OMARCHY -Credential `$cred." -ForegroundColor Green
 
 FullName
 --------

@@ -1,0 +1,12 @@
+{
+  "startedAtLocal": "2026-10-13T21:41:27",
+  "pid": 22508,
+  "cliSessionId": "bab22fd4-f213-4011-9616-074b14def01b",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus\\request.jsonl",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus\\response.jsonl",
+  "stderrPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus\\stderr.log",
+  "captureStarted": true,
+  "terminal": false
+}

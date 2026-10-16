@@ -1,0 +1,289 @@
+{
+  "schema": "vice-sharp/tape-test-disposition-verification/v1",
+  "verifiedAt": "2026-10-11T10:16:10.1738779-05:00",
+  "agent": "Codex",
+  "host": "PAYTON-LEGION2",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T145109Z-tape-test-disposition",
+  "status": "document-checks-only-not-acceptance",
+  "checks": [
+    {
+      "name": "serialized-document-readback",
+      "passed": true,
+      "evidence": {
+        "chars": 197952,
+        "sha256": "0A0738C2276196E0736B8F4381A6259ACBCE2BB380FA416B217551991F13267E"
+      }
+    },
+    {
+      "name": "63-unique-methods-and-row-ids",
+      "passed": true,
+      "evidence": 63
+    },
+    {
+      "name": "all-original-source-spans-and-declarations-exact",
+      "passed": true,
+      "evidence": []
+    },
+    {
+      "name": "testFilePins-unchanged",
+      "passed": true,
+      "evidence": {
+        "count": 13,
+        "changed": [
+          null
+        ]
+      }
+    },
+    {
+      "name": "productionFilePins-unchanged",
+      "passed": true,
+      "evidence": {
+        "count": 5,
+        "changed": [
+          null
+        ]
+      }
+    },
+    {
+      "name": "nativeSourcePins-unchanged",
+      "passed": true,
+      "evidence": {
+        "count": 6,
+        "changed": [
+          null
+        ]
+      }
+    },
+    {
+      "name": "immutable-native-six-blobs-match-commit",
+      "passed": true,
+      "evidence": []
+    },
+    {
+      "name": "all-requirement-ac-references-resolve-to-stated-authority",
+      "passed": true,
+      "evidence": []
+    },
+    {
+      "name": "all-rows-unapproved-and-unexecuted",
+      "passed": true,
+      "evidence": 63
+    },
+    {
+      "name": "every-row-preserves-assertions-and-names-negative-controls",
+      "passed": true,
+      "evidence": 63
+    },
+    {
+      "name": "search-disposition-exact-readback",
+      "passed": true,
+      "evidence": {
+        "characters": 18690
+      }
+    },
+    {
+      "name": "all-19-broader-search-file-pins-unchanged",
+      "passed": true,
+      "evidence": {
+        "total": 19,
+        "changed": [
+          null
+        ]
+      }
+    },
+    {
+      "name": "search-denominators",
+      "passed": true,
+      "evidence": {
+        "classifications": [
+          {
+            "classification": "adjacent-regression-requires-preservation",
+            "count": 8
+          },
+          {
+            "classification": "lexical-false-positive",
+            "count": 9
+          },
+          {
+            "classification": "retained-legacy-outside-implementation-scope",
+            "count": 2
+          }
+        ],
+        "additional": 19,
+        "union": 32,
+        "direct": 13,
+        "broad": 31
+      }
+    },
+    {
+      "name": "all-28-tape-directory-public-test-methods-represented",
+      "passed": true,
+      "evidence": {
+        "missing": [],
+        "declarations": 28
+      }
+    },
+    {
+      "name": "17-tape-replay-methods-retained",
+      "passed": true,
+      "evidence": {
+        "scope": "Tape replay subset only; not all FR-SNP-003 tests",
+        "count": 17
+      }
+    },
+    {
+      "name": "native-anchor-files-and-line-bounds-resolve",
+      "passed": true,
+      "evidence": {
+        "reason": "Checker supported ranges only; corrected to support single-line anchors.",
+        "recheckBadAnchors": [],
+        "initialCheckRejected": "src/datasette/datasette.h:58"
+      }
+    },
+    {
+      "name": "proposal-and-goal-plan-unchanged",
+      "passed": true,
+      "evidence": {
+        "plan": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+        "proposal": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83"
+      }
+    },
+    {
+      "name": "native-checkout-status-unchanged",
+      "passed": true,
+      "evidence": {
+        "delta": [],
+        "afterCount": 2539,
+        "beforeCount": 2539
+      }
+    },
+    {
+      "name": "root-status-only-new-receipt-directory",
+      "passed": true,
+      "evidence": {
+        "baselineCount": 877,
+        "afterCount": 878,
+        "delta": [
+          {
+            "InputObject": "?? docs/receipts/requirements-recovery/20261011T095710-0500-tape-test-disposition/",
+            "SideIndicator": "=>"
+          }
+        ]
+      }
+    },
+    {
+      "name": "git-diff-check",
+      "passed": true,
+      "evidence": {
+        "command": "git diff --check",
+        "exitCode": 0,
+        "output": []
+      }
+    },
+    {
+      "name": "readme-existing-evidence-links-resolve",
+      "passed": true,
+      "evidence": {
+        "links": [
+          {
+            "target": "disposition-ledger.json",
+            "exists": true
+          },
+          {
+            "target": "search-disposition.json",
+            "exists": true
+          },
+          {
+            "target": "../20261011T080155-0500-capacitor-guard-remediation/proposed-field-delta.json",
+            "exists": true
+          },
+          {
+            "target": "../20261011T085402-0500-tape-motor-matrix/README.md",
+            "exists": true
+          },
+          {
+            "target": "../20261011T092059-0500-tape-recording-wiring-contract/README.md",
+            "exists": true
+          },
+          {
+            "target": "../20261011T083152-0500-media-fixture-specification/README.md",
+            "exists": true
+          },
+          {
+            "target": "verification.json",
+            "exists": false
+          }
+        ],
+        "verificationLink": "Created by this verification receipt; checked after save."
+      }
+    },
+    {
+      "name": "new-untracked-document-trailing-whitespace-check",
+      "passed": true,
+      "evidence": {
+        "note": "git diff --check does not include untracked files.",
+        "issues": []
+      }
+    }
+  ],
+  "checkCount": 22,
+  "passedCount": 22,
+  "failedCount": 0,
+  "artifacts": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\README.md",
+      "sha256": "7029447DFBCDDC041F317F6496BD2AAADE0284EA5972A8623F50A6DC47BF0DE4",
+      "bytes": 7531
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\disposition-ledger.json",
+      "sha256": "0A0738C2276196E0736B8F4381A6259ACBCE2BB380FA416B217551991F13267E",
+      "bytes": 197958
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\search-disposition.json",
+      "sha256": "F1F1C60D6EF45D42307B8CB4AA55B228DC022EFBDB0E9D2395C7780AC0F52857",
+      "bytes": 18690
+    }
+  ],
+  "executionCounts": {
+    "mockTests": 0,
+    "managedTests": 0,
+    "nativeTests": 0,
+    "builds": 0,
+    "productionEdits": 0,
+    "testEdits": 0,
+    "requirementWrites": 0,
+    "nativeEdits": 0,
+    "commits": 0,
+    "pushes": 0
+  },
+  "denominators": {
+    "testMethods": 63,
+    "testFiles": 13,
+    "tapeDirectoryMethods": 28,
+    "tapeReplayMethods": 17,
+    "broaderSearchFiles": 31,
+    "additionalSearchFiles": 19,
+    "unionFiles": 32
+  },
+  "limitations": [
+    "Document consistency and source pin verification do not prove emulator behavior.",
+    "The 19 additional files retain matching lines and classification, not full method audits.",
+    "Negative controls are proposed, not executed.",
+    "The 14-record requirement delta remains unapproved and unapplied.",
+    "HV N-15 is not closed; midnight DISAGREE 93 accuracy and 84 completeness remains unsuperseded.",
+    "Remaining dependency, observer, hidden-state, loader, guard and handoff work remains open.",
+    "No duplicate midnight review was launched."
+  ],
+  "commands": [
+    "git diff --check",
+    "git status --porcelain=v1",
+    "git -C native/vice status --porcelain=v1 --untracked-files=all",
+    "Get-FileHash -Algorithm SHA256 on every pinned file",
+    "git hash-object --no-filters and git rev-parse cc67418cba58e71d8e70fd353e9de47199ad2075:vice/<relativePath> for the six immutable native source files",
+    "Native PowerShell JSON readback, source span/declaration/hash checks, requirement/AC reference resolution and source-anchor bounds checks"
+  ]
+}

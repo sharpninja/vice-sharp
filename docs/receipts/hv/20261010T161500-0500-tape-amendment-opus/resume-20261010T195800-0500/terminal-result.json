@@ -1,0 +1,110 @@
+{
+  "recordedAt": "2026-10-10T20:00:12.7751818-05:00",
+  "launchedAt": "2026-10-10T19:58:49.3681571-05:00",
+  "pid": 49580,
+  "cliSessionId": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+  "exited": true,
+  "exitCode": 1,
+  "streamCapture": {
+    "stdoutBytes": 151202,
+    "copyTasksCompleted": true,
+    "stdoutSha256": "DF0A32157C5126D652514B69A955DE5FE7A092528E8292E17F1FF35804795142",
+    "postFlushParsedEvents": 14,
+    "preFlushParsedEvents": 11,
+    "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "filesFlushedAndClosed": true,
+    "stderrBytes": 0
+  },
+  "modelConfirmed": "claude-opus-5-5",
+  "effortRequested": "max",
+  "reviewPerformed": false,
+  "verdict": null,
+  "accuracy": null,
+  "completeness": null,
+  "terminalResult": {
+    "duration_api_ms": 0,
+    "stop_reason": "stop_sequence",
+    "session_id": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+    "total_cost_usd": 0,
+    "usage": {
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 0,
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "",
+      "iterations": [],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {},
+    "permission_denials": [],
+    "terminal_reason": "api_error",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": true,
+    "num_turns": 1,
+    "subtype": "success",
+    "api_error_status": 429,
+    "api_error": "usage_limit_reached",
+    "result": "You've hit your session limit · resets 9:50pm (America/Chicago)",
+    "type": "result",
+    "duration_ms": 10800,
+    "uuid": "fe51804f-c386-457a-813f-65fc21c73048",
+    "queued_turn_count": 0,
+    "result_index": 0
+  },
+  "quota": {
+    "status": "rejected",
+    "resetsAt": 1791687000,
+    "rateLimitType": "five_hour",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "out_of_credits",
+    "isUsingOverage": false
+  },
+  "resetAtLocal": "2026-10-10T21:50:00.0000000-05:00",
+  "postRunPins": {
+    "changes": [],
+    "total": 146,
+    "unchanged": 146
+  },
+  "noFurtherQuotaRetry": true,
+  "noAutomationScheduled": true,
+  "goalCompleted": false
+}

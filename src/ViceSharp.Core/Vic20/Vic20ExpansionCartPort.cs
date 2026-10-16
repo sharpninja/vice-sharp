@@ -111,6 +111,16 @@ public sealed class Vic20ExpansionCartPort : IVic20ExpansionCartPort, IClockedDe
         _bus.RegisterDevice(cart);
     }
 
+    /// <summary>FR-VIC20-005. Mount a plain BLK image into its documented window.</summary>
+    public void AttachStandardBlock(ReadOnlySpan<byte> image)
+    {
+        Eject();
+        var cart = new StandardBlockCartridge(image);
+        _attached = cart;
+        _kind = Vic20ExpansionCartKind.StandardBlock;
+        _bus.RegisterDevice(cart);
+    }
+
     public void Eject()
     {
         if (_attached is null)

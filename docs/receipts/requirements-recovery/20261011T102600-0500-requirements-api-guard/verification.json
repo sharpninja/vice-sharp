@@ -1,0 +1,1191 @@
+{
+  "schema": "vice-sharp/r0-api-guard-verification/v1",
+  "verifiedAt": "2026-10-11T10:36:49.3355085-05:00",
+  "host": "PAYTON-LEGION2",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T151842Z-r0-approval-readiness",
+  "status": "document-checks-only-not-acceptance",
+  "checks": [
+    {
+      "name": "api-evidence-exact-readback",
+      "passed": true,
+      "evidence": {
+        "sha256": "1904E54B3A2AC3EA3D4896BBB4A293A12A2B6C069282ABD9F40A6BB61E0CBFCF",
+        "chars": 249472
+      }
+    },
+    {
+      "name": "fixture-exact-readback",
+      "passed": true,
+      "evidence": {
+        "sha256": "77C03C8D15D6058F647B288301723EC06100EAE23F9C3B78F12C9F71994D8A86",
+        "chars": 23839
+      }
+    },
+    {
+      "name": "proposal-preimage-value-comparison",
+      "passed": true,
+      "evidence": {
+        "typePolicy": "Presence, ordinal keys and strings, ordered arrays, exact CLR scalar type; these reads use matching types.",
+        "count": 112
+      }
+    },
+    {
+      "name": "all-18-groups-and-69-negative-controls-specified",
+      "passed": true,
+      "evidence": {
+        "executed": 0,
+        "groupIds": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18"
+        ],
+        "negativeControls": 69
+      }
+    },
+    {
+      "name": "seven-live-mapping-preimages-equal-as-sets",
+      "passed": true,
+      "evidence": {
+        "comparisons": [
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "expected": {
+              "trIds": [
+                "TR-DRV-EDGE-001",
+                "TR-TAP-EDGE-001",
+                "TR-TAPE-EDGE-001"
+              ],
+              "testIds": [
+                "TEST-DRV-MOTOR-001",
+                "TEST-TAPE-RAMP-001",
+                "TEST-TAPE-SENSE-001"
+              ],
+              "frId": "FR-BACKFILL-MEDIA-001",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "actual": {
+              "trIds": [
+                "TR-DRV-EDGE-001",
+                "TR-TAP-EDGE-001",
+                "TR-TAPE-EDGE-001"
+              ],
+              "testIds": [
+                "TEST-DRV-MOTOR-001",
+                "TEST-TAPE-RAMP-001",
+                "TEST-TAPE-SENSE-001"
+              ],
+              "frId": "FR-BACKFILL-MEDIA-001",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "equal": true
+          },
+          {
+            "frId": "FR-RUNTIME-TAPE-002",
+            "expected": {
+              "trIds": [
+                "TR-TAP-EDGE-001",
+                "TR-TAPE-EDGE-001"
+              ],
+              "testIds": [
+                "TEST-TAPE-RAMP-001",
+                "TEST-TAPE-SENSE-001"
+              ],
+              "frId": "FR-RUNTIME-TAPE-002",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "actual": {
+              "trIds": [
+                "TR-TAP-EDGE-001",
+                "TR-TAPE-EDGE-001"
+              ],
+              "testIds": [
+                "TEST-TAPE-RAMP-001",
+                "TEST-TAPE-SENSE-001"
+              ],
+              "frId": "FR-RUNTIME-TAPE-002",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "equal": true
+          },
+          {
+            "frId": "FR-TAP-001",
+            "expected": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-001",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "actual": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-001",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "equal": true
+          },
+          {
+            "frId": "FR-TAP-002",
+            "expected": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-002",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "actual": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-002",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "equal": true
+          },
+          {
+            "frId": "FR-TAP-003",
+            "expected": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-003",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "actual": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-003",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "equal": true
+          },
+          {
+            "frId": "FR-TAP-004",
+            "expected": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-004",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "actual": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-004",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "equal": true
+          },
+          {
+            "frId": "FR-TAP-005",
+            "expected": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-005",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "actual": {
+              "trIds": [
+                "TR-CYCLE-001"
+              ],
+              "testIds": [
+                "TEST-TAP-001",
+                "TEST-X64SC-LOCKSTEP-001"
+              ],
+              "frId": "FR-TAP-005",
+              "workspaceId": "F:\\GitHub\\vice-sharp"
+            },
+            "equal": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "every-final-mapping-target-exists-in-correct-effective-kind",
+      "passed": true,
+      "evidence": {
+        "edges": 38,
+        "targets": [
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "kind": "technical",
+            "targetId": "TR-DRV-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "kind": "technical",
+            "targetId": "TR-TAP-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "kind": "technical",
+            "targetId": "TR-TAPE-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "kind": "technical",
+            "targetId": "TR-IEC-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "kind": "testing",
+            "targetId": "TEST-DRV-MOTOR-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "kind": "testing",
+            "targetId": "TEST-TAPE-RAMP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "kind": "testing",
+            "targetId": "TEST-TAPE-SENSE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-BACKFILL-MEDIA-001",
+            "kind": "testing",
+            "targetId": "TEST-IEC-TIMING-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-RUNTIME-TAPE-002",
+            "kind": "technical",
+            "targetId": "TR-TAP-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-RUNTIME-TAPE-002",
+            "kind": "technical",
+            "targetId": "TR-TAPE-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-RUNTIME-TAPE-002",
+            "kind": "testing",
+            "targetId": "TEST-TAPE-RAMP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-RUNTIME-TAPE-002",
+            "kind": "testing",
+            "targetId": "TEST-TAPE-SENSE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-001",
+            "kind": "technical",
+            "targetId": "TR-CYCLE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-001",
+            "kind": "technical",
+            "targetId": "TR-TAPE-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-001",
+            "kind": "technical",
+            "targetId": "TR-TAP-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-001",
+            "kind": "testing",
+            "targetId": "TEST-TAP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-001",
+            "kind": "testing",
+            "targetId": "TEST-X64SC-LOCKSTEP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-001",
+            "kind": "testing",
+            "targetId": "TEST-TAPE-RAMP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-001",
+            "kind": "testing",
+            "targetId": "TEST-TAPE-SENSE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-002",
+            "kind": "technical",
+            "targetId": "TR-CYCLE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-002",
+            "kind": "technical",
+            "targetId": "TR-TAP-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-002",
+            "kind": "testing",
+            "targetId": "TEST-TAP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-002",
+            "kind": "testing",
+            "targetId": "TEST-X64SC-LOCKSTEP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-003",
+            "kind": "technical",
+            "targetId": "TR-CYCLE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-003",
+            "kind": "technical",
+            "targetId": "TR-TAP-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-003",
+            "kind": "testing",
+            "targetId": "TEST-TAP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-003",
+            "kind": "testing",
+            "targetId": "TEST-X64SC-LOCKSTEP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-004",
+            "kind": "technical",
+            "targetId": "TR-CYCLE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-004",
+            "kind": "technical",
+            "targetId": "TR-TAP-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-004",
+            "kind": "technical",
+            "targetId": "TR-TAPE-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-004",
+            "kind": "testing",
+            "targetId": "TEST-TAP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-004",
+            "kind": "testing",
+            "targetId": "TEST-X64SC-LOCKSTEP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-004",
+            "kind": "testing",
+            "targetId": "TEST-TAPE-RAMP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-004",
+            "kind": "testing",
+            "targetId": "TEST-TAPE-SENSE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-005",
+            "kind": "technical",
+            "targetId": "TR-CYCLE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-005",
+            "kind": "technical",
+            "targetId": "TR-TAP-EDGE-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-005",
+            "kind": "testing",
+            "targetId": "TEST-TAP-001",
+            "matches": 1
+          },
+          {
+            "frId": "FR-TAP-005",
+            "kind": "testing",
+            "targetId": "TEST-X64SC-LOCKSTEP-001",
+            "matches": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "git-diff-check",
+      "passed": true,
+      "evidence": {
+        "command": "git diff --check",
+        "exitCode": 0,
+        "output": []
+      }
+    },
+    {
+      "name": "native-checkout-status-unchanged",
+      "passed": true,
+      "evidence": {
+        "delta": [],
+        "afterCount": 2539,
+        "beforeCount": 2539
+      }
+    },
+    {
+      "name": "root-status-only-new-guard-receipt-directory",
+      "passed": true,
+      "evidence": {
+        "baselineCount": 878,
+        "afterCount": 879,
+        "delta": [
+          {
+            "InputObject": "?? docs/receipts/requirements-recovery/20261011T102600-0500-requirements-api-guard/",
+            "SideIndicator": "=>"
+          }
+        ]
+      }
+    },
+    {
+      "name": "proposal-and-plan-hashes-unchanged",
+      "passed": true,
+      "evidence": {
+        "plan": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+        "proposal": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83"
+      }
+    },
+    {
+      "name": "all-nine-source-excerpt-blobs-resolve",
+      "passed": true,
+      "evidence": [
+        {
+          "commit": "bcae36fdce7ce31e792db9e06a17bff51019bdf9",
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "expected": "0d4e7e91008d1a0ad79293d842992ad3f4acad3f",
+          "actual": "0d4e7e91008d1a0ad79293d842992ad3f4acad3f",
+          "equal": true
+        },
+        {
+          "commit": "bcae36fdce7ce31e792db9e06a17bff51019bdf9",
+          "path": "src/QBrainAi.Client/Models/RequirementsModels.cs",
+          "expected": "1a498db40ed9ec281c9c4940dd75a37a439cb225",
+          "actual": "1a498db40ed9ec281c9c4940dd75a37a439cb225",
+          "equal": true
+        },
+        {
+          "commit": "bcae36fdce7ce31e792db9e06a17bff51019bdf9",
+          "path": "src/QBrainAi.Client/RequirementsClient.cs",
+          "expected": "dc9e79fa281316678037470b440feb704f19502c",
+          "actual": "dc9e79fa281316678037470b440feb704f19502c",
+          "equal": true
+        },
+        {
+          "commit": "bcae36fdce7ce31e792db9e06a17bff51019bdf9",
+          "path": "src/QBrainAi.Support.Mcp/Controllers/RequirementsController.cs",
+          "expected": "82cbf935b46d01f7db8653e275d3c47d8585b70c",
+          "actual": "82cbf935b46d01f7db8653e275d3c47d8585b70c",
+          "equal": true
+        },
+        {
+          "commit": "bcae36fdce7ce31e792db9e06a17bff51019bdf9",
+          "path": "src/QBrainAi.Support.Mcp/Controllers/RequirementsController.cs",
+          "expected": "82cbf935b46d01f7db8653e275d3c47d8585b70c",
+          "actual": "82cbf935b46d01f7db8653e275d3c47d8585b70c",
+          "equal": true
+        },
+        {
+          "commit": "bcae36fdce7ce31e792db9e06a17bff51019bdf9",
+          "path": "src/QBrainAi.Support.Mcp/Controllers/RequirementsController.cs",
+          "expected": "82cbf935b46d01f7db8653e275d3c47d8585b70c",
+          "actual": "82cbf935b46d01f7db8653e275d3c47d8585b70c",
+          "equal": true
+        },
+        {
+          "commit": "bcae36fdce7ce31e792db9e06a17bff51019bdf9",
+          "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+          "expected": "4bcff0ad1165355800a5db07a30bdb4388b912ec",
+          "actual": "4bcff0ad1165355800a5db07a30bdb4388b912ec",
+          "equal": true
+        },
+        {
+          "commit": "bcae36fdce7ce31e792db9e06a17bff51019bdf9",
+          "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedRequirementsDocumentService.cs",
+          "expected": "9535a81c6488fcfa75f67d32ca909e1dd30a6c29",
+          "actual": "9535a81c6488fcfa75f67d32ca909e1dd30a6c29",
+          "equal": true
+        },
+        {
+          "commit": "5010795fe67abe3b98d294fce15794b6d2bff8e5",
+          "path": "src/QBrainAi.Repl.Core/GenericClientPassthrough.cs",
+          "expected": "7223f5191d6784a0789c443d621c79cea49a5527",
+          "actual": "7223f5191d6784a0789c443d621c79cea49a5527",
+          "equal": true
+        }
+      ]
+    },
+    {
+      "name": "existing-readme-evidence-links-resolve",
+      "passed": true,
+      "evidence": {
+        "links": [
+          {
+            "target": "../20261011T080155-0500-capacitor-guard-remediation/R0-R1-GUARD-CONTRACT.md",
+            "exists": true
+          },
+          {
+            "target": "../20261011T080155-0500-capacitor-guard-remediation/proposed-field-delta.json",
+            "exists": true
+          },
+          {
+            "target": "api-evidence.json",
+            "exists": true
+          },
+          {
+            "target": "guard-fixtures.json",
+            "exists": true
+          },
+          {
+            "target": "verification.json",
+            "exists": false
+          }
+        ],
+        "verification": "Check after creation"
+      }
+    },
+    {
+      "name": "untracked-documents-no-trailing-whitespace",
+      "passed": true,
+      "evidence": {
+        "issues": []
+      }
+    },
+    {
+      "name": "triage-full-summary-readback",
+      "passed": true,
+      "evidence": {
+        "readback": {
+          "status": "grouped",
+          "groupId": "triage-group-320f2143bb2556d0",
+          "createdUtc": {
+            "dayOfWeek": "Sunday",
+            "ticks": 639273289886284299,
+            "totalOffsetMinutes": 0,
+            "dateTime": "2026-10-11T15:23:08.6284299",
+            "microsecond": 429,
+            "minute": 23,
+            "millisecond": 628,
+            "timeOfDay": "15:23:08.6284299",
+            "hour": 15,
+            "date": "2026-10-11T00:00:00.0000000",
+            "month": 10,
+            "year": 2026,
+            "utcTicks": 639273289886284299,
+            "localDateTime": "2026-10-11T10:23:08.6284299-05:00",
+            "dayOfYear": 284,
+            "offset": "00:00:00",
+            "nanosecond": 900,
+            "second": 8,
+            "utcDateTime": "2026-10-11T15:23:08.6284299Z",
+            "day": 11
+          },
+          "reportId": "triage-report-5deae93eb0764736ae97184817d14eb6",
+          "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+          "summary": "Read-only source inspection during ViceSharp R0 guard design. Active plugin 1.118.0 chooses qbrain-ai-repl.exe 1.4.40 with no executable overrides. Installed QBrainAi.Repl.Core.dll and QBrainAi.Client.dll report 1.4.40+5010795fe67abe3b98d294fce15794b6d2bff8e5; the three relevant client/workflow Git blobs match server bcae36fdce7ce31e792db9e06a17bff51019bdf9. RequirementsWorkflow.CreateMappingAsync lines 518-535 catches every GetMappingAsync exception as no existing mapping, then UpsertMappingAsync sends only requested additions if read failed. Deployed RequirementsDatabaseDocumentService lines 948-954 soft-deletes existing links not in desired request. Inference: timeout/auth/backend errors during existing-row lookup can erase old mappings. No destructive repro or live failure injected; no requirements changed. Expected: only an authoritative not-found response permits creation; any other read uncertainty aborts before upsert, preserves original error, and does not conflate unavailable target reads with missing targets. Add discriminating mocks for timeout/401/503/cancellation versus true 404 and old-link preservation; full suite and supported deployment only. Caller Codex session Codex-20261007T135626Z-plugin-session turn req-20261011T151842Z-r0-approval-readiness; scope PLAN-REQAUDIT-001. Report does not authorize environment repair.",
+          "title": "Requirements mapping workflow treats every read failure as missing and may replace existing links",
+          "workspacePath": "F:\\GitHub\\McpServer"
+        },
+        "cacheInitializationFailure": "First separate cache path did not exist; created it and retried the read only.",
+        "initialWrongWorkspaceError": "workflow.triage.getReport in F:\\GitHub\\vice-sharp returned McpNotFoundException for triage-report-5deae93eb0764736ae97184817d14eb6; intake had explicitly routed it to F:\\GitHub\\McpServer."
+      }
+    },
+    {
+      "name": "14-unsubmitted-payloads-exact-approved-draft-field-projection",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "FR-RUNTIME-TAPE-002",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "TR-TAP-EDGE-001",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            },
+            {
+              "field": "title",
+              "payloadKey": "title",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "TR-TAPE-EDGE-001",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            },
+            {
+              "field": "title",
+              "payloadKey": "title",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "TEST-TAPE-RAMP-001",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "condition",
+              "payloadKey": "description",
+              "equal": true
+            },
+            {
+              "field": "title",
+              "payloadKey": "title",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "TEST-TAPE-SENSE-001",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "condition",
+              "payloadKey": "description",
+              "equal": true
+            },
+            {
+              "field": "title",
+              "payloadKey": "title",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "FR-TAP-001",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "FR-TAP-002",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            },
+            {
+              "field": "title",
+              "payloadKey": "title",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "FR-TAP-003",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "FR-TAP-004",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "TEST-TAP-001",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description",
+            "title"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "condition",
+              "payloadKey": "description",
+              "equal": true
+            },
+            {
+              "field": "title",
+              "payloadKey": "title",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "FR-BACKFILL-MEDIA-001",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description",
+            "status",
+            "title"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description",
+            "status",
+            "title"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            },
+            {
+              "field": "status",
+              "payloadKey": "status",
+              "equal": true
+            },
+            {
+              "field": "title",
+              "payloadKey": "title",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "FR-CPU-004",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "FR-PRF-003",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            }
+          ],
+          "equal": true
+        },
+        {
+          "id": "FR-TAP-005",
+          "actualKeys": [
+            "kind",
+            "id",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "expectedKeys": [
+            "id",
+            "kind",
+            "acceptanceCriteria",
+            "description"
+          ],
+          "fields": [
+            {
+              "field": "acceptanceCriteria",
+              "payloadKey": "acceptanceCriteria",
+              "equal": true
+            },
+            {
+              "field": "body",
+              "payloadKey": "description",
+              "equal": true
+            }
+          ],
+          "equal": true
+        }
+      ]
+    },
+    {
+      "name": "90-unsubmitted-ac-all-unsatisfied",
+      "passed": true,
+      "evidence": {
+        "criteriaCount": 90,
+        "satisfiedCount": 0
+      }
+    }
+  ],
+  "checkCount": 16,
+  "passedCount": 16,
+  "failedCount": 0,
+  "files": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\README.md",
+      "bytes": 9372,
+      "sha256": "C2B0D861B30070FBDA3CE32B4FBF0D1076651124E61347925C40A6131849B399"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\api-evidence.json",
+      "bytes": 249472,
+      "sha256": "1904E54B3A2AC3EA3D4896BBB4A293A12A2B6C069282ABD9F40A6BB61E0CBFCF"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\guard-fixtures.json",
+      "bytes": 23839,
+      "sha256": "77C03C8D15D6058F647B288301723EC06100EAE23F9C3B78F12C9F71994D8A86"
+    }
+  ],
+  "executionCounts": {
+    "mockTests": 0,
+    "realTests": 0,
+    "nativeTests": 0,
+    "builds": 0,
+    "requirementMutations": 0,
+    "mappingMutations": 0,
+    "productionEdits": 0,
+    "nativeEdits": 0,
+    "commits": 0,
+    "pushes": 0
+  },
+  "remaining": [
+    "No full corrected packet HV or exact operator approval.",
+    "No exclusive-writer window or conditional-write mechanism established.",
+    "No G01-G18 implementation or green mock gate.",
+    "No live update/mapping failure injection; source evidence only.",
+    "Tape dependencies, observers, hidden-state/loader work, adjacent test audit and handoff/TODO reconciliation remain open."
+  ],
+  "previousHv": {
+    "superseded": false,
+    "fail": 6,
+    "completeness": 84,
+    "unknown": 0,
+    "accuracy": 93,
+    "verdict": "DISAGREE"
+  }
+}

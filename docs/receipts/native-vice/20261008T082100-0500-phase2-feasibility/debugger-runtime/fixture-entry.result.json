@@ -1,0 +1,11 @@
+{
+  "timestampLocal": "2026-10-08T11:26:01.6926612-05:00",
+  "completed": false,
+  "breakpointHit": false,
+  "debuggerPid": 78080,
+  "fixturePids": [
+    40548
+  ],
+  "termination": "Stopped verified owned fixture/debugger after breakpoint did not trigger; fixture printed complete real7/observe11/end11 sequence and debugger waited at NtTerminateProcess.",
+  "scope": "Independent compiler fixture, no VICE process."
+}

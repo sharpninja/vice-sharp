@@ -1,0 +1,58 @@
+[
+  {
+    "kind": "xvicExecutable",
+    "path": "C:\\Users\\kingd\\AppData\\Local\\Microsoft\\WinGet\\Packages\\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\\GTK3VICE-3.10-win64\\bin\\xvic.exe",
+    "expected": "c570738982419d1d8e850485d9edcaa068e15777c132825d5228653aeca50e19",
+    "exists": true,
+    "actual": "C570738982419D1D8E850485D9EDCAA068E15777C132825D5228653AECA50E19",
+    "matches": true
+  },
+  {
+    "kind": "rom",
+    "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\basic-901486-01.bin",
+    "expected": "8be2d882e0eeb1c6923a43660236ea69d43ca8a3bd0613b1b6c910601584fbed",
+    "exists": true,
+    "actual": "8BE2D882E0EEB1C6923A43660236EA69D43CA8A3BD0613B1B6C910601584FBED",
+    "matches": true
+  },
+  {
+    "kind": "rom",
+    "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\chargen-901460-02.bin",
+    "expected": "66a81f03332f46a289d175933d50bba9cc4636d18bba439d324b2eb1bd1c43ab",
+    "exists": true,
+    "actual": "66A81F03332F46A289D175933D50BBA9CC4636D18BBA439D324B2EB1BD1C43AB",
+    "matches": true
+  },
+  {
+    "kind": "rom",
+    "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\chargen-901460-03.bin",
+    "expected": "bda280726cfe069ca70ef5e2f2d95a29f69d3950c859a12e6979464963fcf502",
+    "exists": true,
+    "actual": "BDA280726CFE069CA70EF5E2F2D95A29F69D3950C859A12E6979464963FCF502",
+    "matches": true
+  },
+  {
+    "kind": "rom",
+    "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-02.bin",
+    "expected": "7e2df5778dfdf787a6e09f0576442d32c8e9160b7e34d22e07547c22bf9030e1",
+    "exists": true,
+    "actual": "7E2DF5778DFDF787A6E09F0576442D32C8E9160B7E34D22E07547C22BF9030E1",
+    "matches": true
+  },
+  {
+    "kind": "rom",
+    "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-06.bin",
+    "expected": "8fc94bd895f488ac0ae1a52abdc32988cd63c777770b89a9d415513098535cc2",
+    "exists": true,
+    "actual": "8FC94BD895F488AC0AE1A52ABDC32988CD63C777770B89A9D415513098535CC2",
+    "matches": true
+  },
+  {
+    "kind": "rom",
+    "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-07.bin",
+    "expected": "ff6d1416b91a71f5240a5bb8adc9fdc1b955374c48322ca47b3e436334f168fb",
+    "exists": true,
+    "actual": "FF6D1416B91A71F5240A5BB8ADC9FDC1B955374C48322CA47B3E436334F168FB",
+    "matches": true
+  }
+]

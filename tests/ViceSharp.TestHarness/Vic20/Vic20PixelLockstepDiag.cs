@@ -13,8 +13,7 @@ public sealed class Vic20PixelLockstepDiag
     [Fact]
     public void Dump_ReadyPal_IndexHistogram()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();

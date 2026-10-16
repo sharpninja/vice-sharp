@@ -17,6 +17,6 @@ AfterBridge    : csdb-bridge Up 6 days
 AfterDb        : romm-db Up 6 days (healthy)
 Http8080       : status=200 len=5826
 Http8090       : error: The remote server returned an error: (404) Not Found.
-PSComputerName : PAYTON-DESKTOP
+PSComputerName : LAB-OMARCHY
 RunspaceId     : 494d9e30-61dc-4a40-9881-db16f2a787b7
 

@@ -1,0 +1,10 @@
+{
+  "verifiedAtLocal": "2026-10-08T14:31:03-05:00",
+  "status": "completed",
+  "requestId": "req-20261008T191836Z-prompt-faf5",
+  "responseExact": true,
+  "decisionExact": true,
+  "actionCount": 4,
+  "dialogCount": 3,
+  "primaryReadbackSha256": "7494C58EB4274E61AFFE1C2B70046B535BDAE0EF50E4C6096CA2398F4E5328C6"
+}

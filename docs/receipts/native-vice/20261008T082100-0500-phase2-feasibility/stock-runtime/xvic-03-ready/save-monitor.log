@@ -1,0 +1,8 @@
+  ADDR A  X  Y  SP 00 01 NV-BDIZC LIN CYC  STOPWATCH
+.;e5ea 00 00 0a f3 4c 48 00100010 000 001     575953
+Stopwatch:     575953
+Stepping through the next 1 instruction(s).
+.C:e5ec  8D 92 02    STA $0292      - A:00 X:00 Y:0A SP:f3 ..-...Z.     575956
+  ADDR A  X  Y  SP 00 01 NV-BDIZC LIN CYC  STOPWATCH
+.;e5ec 00 00 0a f3 4c 48 00100010 000 004     575956
+Stopwatch:     575956

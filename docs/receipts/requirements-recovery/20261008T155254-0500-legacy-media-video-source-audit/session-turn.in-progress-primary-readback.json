@@ -1,0 +1,66 @@
+{
+  "requestId": "req-20261008T204420Z-prompt-bbf1",
+  "timestamp": "2026-10-08T15:44:20-05:00",
+  "queryText": "Continue whole plan goal. Previous turn produced only an unapplied requirements proposal and approval packet; classify it as no implementation/gate progress, not a verified wait. Pending tape/drive and HV remediation approvals are still unanswered; the reviewer is terminal, not live. Take the next independent safe action: inspect the remaining legacy media/video FR acceptance coverage against current source/tests and the whole-plan recovery scope. No requirement writes, product edits, native changes or phase advancement.",
+  "queryTitle": "Audit remaining legacy media and video acceptance coverage",
+  "response": "Actions appended.",
+  "interpretation": "Read current legacy media/video FRs, mappings and implementation/test evidence. Determine concrete gaps without changing canonical requirements, product source, native VICE or any acceptance state. Pending drive/tape proposals remain unapplied.",
+  "status": "in_progress",
+  "actions": [
+    {
+      "order": 1,
+      "description": "The remaining legacy media/video audit is source evidence, not a runtime parity result. Unsupported closed-state assertions and missing structured acceptance coverage must remain visible; no requirement, test, product, native checkout, or gate state is changed by this audit. Pending tape/drive field-delta approvals and the unavailable Opus gate are not waived by goal continuation. After automatic compaction I reloaded all 38 Global MCP records, verified 22 profile source snapshots against the manifest, and read the current workspace marker.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "tests/ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs"
+    },
+    {
+      "order": 2,
+      "description": "Read current effective 17-record media/video scope and two mappings; inspected three full test classes, PAL model constructor, managed RC/VC branches, and three pinned native source files. Retained eight bounded findings, numbered excerpts and arithmetic checks. No implementation, canonical requirement mutation, test execution or acceptance gate advancement.",
+      "type": "source_review",
+      "status": "completed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T155254-0500-legacy-media-video-source-audit\\README.md"
+    }
+  ],
+  "model": "codex",
+  "modelProvider": null,
+  "tokenCount": 0,
+  "tags": [
+    "legacy-media-video-audit",
+    "approval-pending",
+    "no-phase-advance"
+  ],
+  "contextList": null,
+  "failureNote": null,
+  "score": null,
+  "isPremium": null,
+  "rawContext": null,
+  "originalEntry": null,
+  "processingDialog": [
+    {
+      "timestamp": "2026-10-08T15:52:13.8078749-05:00",
+      "role": "model",
+      "content": "The remaining legacy media/video audit is source evidence, not a runtime parity result. Unsupported closed-state assertions and missing structured acceptance coverage must remain visible; no requirement, test, product, native checkout, or gate state is changed by this audit. Pending tape/drive field-delta approvals and the unavailable Opus gate are not waived by goal continuation. After automatic compaction I reloaded all 38 Global MCP records, verified 22 profile source snapshots against the manifest, and read the current workspace marker.",
+      "category": "decision"
+    },
+    {
+      "timestamp": "2026-10-08T15:54:06.9532652-05:00",
+      "role": "model",
+      "content": "Legacy media/video source audit full body part 1\n# Legacy media and video acceptance source audit\n\nObserved 2026-10-08, America/Chicago. Agent: Codex. This is source inspection and requirement readback, not hostile validation, an implementation gate, or a runtime parity result.\n\n## Scope and provenance\n\n- Effective MCP records: FR-BACKFILL-MEDIA-001 and FR-BACKFILL-VIDEO-001, their two mappings, and all 15 directly mapped TR/TEST records. Both FRs are closed with empty structured acceptanceCriteria. Of the 17 records, 16 are closed with empty structured AC; TR-CYCLE-001 is pending with seven AC. Historical prose criteria remain present and are not being retired.\n- Native reference: commit cc67418cba58e71d8e70fd353e9de47199ad2075, read from the separate materialization under artifacts/immutable-vice. All three inspected viciisc source files match their pinned Git blobs. No edit or build occurs in native/vice.\n- The three named test classes were read in full. Mos8565.cs was read in full; Mos6569.cs was inspected at its bad-line and RC/VC update logic, not audited in full. Five managed files and three native source files have SHA-256 pins in this directory.\n- Effective record and mapping snapshots, numbered source excerpts, arithmetic checks, native baseline readback and final verification are retained beside this document. No product test, native bridge, or solution build was run for this audit.\n\n## Findings\n\n1. **Media closure exceeds its mapped evidence.** FR-BACKFILL-MEDIA-001 claims the IEC ATN timing gap is closed, but its mapping contains neither TR-IEC-EDGE-001 nor TEST-IEC-TIMING-001. Its mapped drive/tape tests depend on the legacy claims already contradicted in the retained drive and tape audits. The drive BAM test reads a buffered sector; this does not by itself prove sector writes or true-drive DOS parity. This finding is limited to the stated mapping and reviewed tests, not a claim that no write tests exist elsewhere.\n\n2. **The model classification is false.** FR-BACKFILL-VIDEO-001 and TR-VIC-EDGE-004 call all five selected models non-PAL. The c64c selector constructs Mos8565; both its constructor and pinned vicii-chip-model.c:260-268 identify PAL timing, 63 cycles and 312 lines. The test's own selector comment acknowledges PAL. Keep coverage for all selected models; correct the classification rather than removing the PAL case.\n\n3. **The sprite checkpoint is not a timing comparison.** VicIISpriteDmaNativeCheckpointTests.cs:127-178 searches native SpriteDma bit 3 anywhere from raster line 0x4F through 0x51. It saves nativeDmaCycle at line 159 but never asserts or compares that value. Lines 183-201 separately create a managed chip and assert IsCpuCycleStolen at line 0x51, RasterX 0. Native sprite-active state and managed CPU-cycle ownership are different observables, with no shared clock/phase alignment. A pass can therefore leave cycle displacement or ownership differences undetected. This is a test-oracle gap, not proof that the current managed chip fails at runtime.\n\n4. **The purported bad-line isolation is incorrect.** Comments at sprite-test lines 33-35 and 139 say Y=0x50 lies below the bad-line range or that DEN=1/YSCROLL=0 prevents a bad line there. 0x50 lies within 0x30..0xF7 and its low three bits equal zero. When bad lines are enabled, this matches pinned vicii-cycle.c:51-60. The managed assertion actually checks line 0x51, so this comment error alone does not invalidate that assertion. It does invalidate the documented isolation rationale for the native search. The actual native enable state was not measured here.\n\n5. **The RC tests do not establish the claimed RC/VC native parity.** VicIIRcWindowTests has five Facts plus six InlineData cases, 11 source-declared cases, all managed-only. Assertions cover CurrentRowCounter and IsGraphicsIdle, not VC, VCBASE or VMLI, and do not compare a native provider. The pinned VC/RC branches at vicii-cycle.c:541-563 include those additional state transitions. Existing selected managed RC expectations are not shown wrong by this audit. They are insufficient to prove the broader cycle-accurate state-machine claim or all before/at/after boundaries.\n\n6. **Screen-RAM survival is native-only evidence.** The two ViceFact cases in VicIiCheckpointTests settle a native C64 for 100,000 StepCycle calls, write and reread a region immediately or after 19,656 more steps. They do not compare managed RAM, trace every c-access, or prove no other actor writes memory. The two managed Facts check frame counters only. Thus these cases cannot alone establish managed/native visible-frame parity or read-only c-access behavior. No frame-image comparison occurs in these classes. Runtime ROM/model/CPU-state assumptions were not validated in this audit.\n\n7. **The screen address documentation is wrong, not the computed base.** VicIiCheckpointTests.cs:49-54 computes 0x0400 + 20*40 = 0x0720 and a 200-byte region ending at 0x07E7. Its $07A0 comments describe a different 72-byte range if the same end is used. Preserve the actual 200-",
+      "category": "analysis"
+    },
+    {
+      "timestamp": "2026-10-08T15:54:06.9534975-05:00",
+      "role": "model",
+      "content": "Legacy media/video source audit full body part 2\nbyte coverage when correcting documentation. TR-VIC-EDGE-001 and TR-VIC-EDGE-006 additionally contain a bare '-' where their address range should be; do not invent historical source text to fill that gap.\n\n8. **The c-access source citation points to the wrong code.** In the pinned viciisc/vicii-fetch.c, lines 135-166 cover sprite DMA and address helpers, not matrix fetch. vicii_fetch_matrix is at 192-201, using fetch_phi2 at 76-100 and the color-RAM read at 199. These read paths support the narrow source-level statement; they are not a runtime trace. Historical line references must be checked against the pinned source rather than copied forward.\n\n## Consequences and boundaries\n\nThe requirement prose, mappings and test assertions need a coordinated correction. No canonical field delta is applied here. The separately pending tape and drive proposals remain unchanged and unapproved. This audit neither changes their scope nor supplies approval for them. A video/media correction must preserve IDs and historical text/provenance, explicitly repair coverage links, define native-derived observable/phase boundaries, validate discriminating mocks to green, then reuse the same assertions against real providers. All existing real-emulator gates remain mandatory.\n\nThe noon HV deferral has expired. The previous Opus attempt ended at provider quota, not AGREE. No review was launched here, no acceptance scores are invented, and no plan, TODO, FR/TR/TEST or AC is marked complete by this audit.\n\nRelated retained evidence: ../20261008T152823-0500-legacy-drive-source-audit, ../20261008T153521-0500-legacy-drive-ac-proposal, and ../20261008T150905-0500-legacy-tape-ac-proposal. This receipt is not included in the earlier 1,123-input review packet and must be pinned if a future authorized review uses it.\n",
+      "category": "analysis"
+    }
+  ],
+  "commits": null,
+  "designDecisions": null,
+  "requirementsDiscovered": null,
+  "filesModified": null,
+  "blockers": null,
+  "planFile": "C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5Cvice-sharp/01a0ef2b-2331-70d1-9c65-0ef12b15d09a/plan.md",
+  "todoId": "None"
+}

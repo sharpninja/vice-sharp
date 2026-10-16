@@ -63,13 +63,31 @@ public sealed class VideoRenderer
     public VideoRenderer(Mos6569 vic)
     {
         _vic = vic;
+        ResetPaletteToModel();
+    }
 
-        var colors = VicPalette.ForGroup(vic.PaletteGroup, vic.IsNtscVideo);
+    /// <summary>
+    /// FR-CFG-003. Install the model palette from <see cref="VicPalette"/>.
+    /// </summary>
+    public void ResetPaletteToModel()
+    {
+        var colors = VicPalette.ForGroup(_vic.PaletteGroup, _vic.IsNtscVideo);
         for (int i = 0; i < 16; i++)
         {
             var c = colors[i];
             Palette[i] = 0xFF000000u | c.B | ((uint)c.G << 8) | ((uint)c.R << 16);
         }
+    }
+
+    /// <summary>
+    /// FR-CFG-003. Replace one rendered color. <paramref name="index"/> is 0..15.
+    /// </summary>
+    public void SetPaletteColor(int index, byte red, byte green, byte blue)
+    {
+        if ((uint)index >= Palette.Length)
+            return;
+
+        Palette[index] = 0xFF000000u | blue | ((uint)green << 8) | ((uint)red << 16);
     }
 
     public VideoRenderer(Mos6569 vic, IBus _)

@@ -1,0 +1,31 @@
+{
+  "timestampLocal": "2026-10-08T11:52:00-05:00",
+  "gitDiffCheckExit": 0,
+  "gitDiffCheckOutput": [],
+  "files": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "983DD1F9E9E20CB32180B8AB139B666933B2C3FA44DC4F20F2C1284BC299C733",
+      "bytes": 59244,
+      "trailingWhitespaceMatches": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "sha256": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "bytes": 37043,
+      "trailingWhitespaceMatches": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\bus-runtime\\README.md",
+      "sha256": "7E4DB75D6DC22D0F8DD8DCF213B93C3962227398BEB0239C8E9339C977BB90A3",
+      "bytes": 4843,
+      "trailingWhitespaceMatches": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\\README.md",
+      "sha256": "2E3046E1284793B60397729CE01B4974C7B9ABA8E106AB007A1E26A5A45E073C",
+      "bytes": 6640,
+      "trailingWhitespaceMatches": 0
+    }
+  ]
+}

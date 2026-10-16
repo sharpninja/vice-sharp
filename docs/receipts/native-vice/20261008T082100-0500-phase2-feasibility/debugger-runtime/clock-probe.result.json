@@ -1,0 +1,7 @@
+{
+  "timestampLocal": "2026-10-08T10:05:17.6905084-05:00",
+  "completed": false,
+  "clockStops": 0,
+  "termination": "Stopped only verified owned xvic PID50212 and debugger PID26796 after no watchpoint hits;not a passed proof",
+  "cause": "Unknown; do not infer unsupported mechanism from one failed probe"
+}

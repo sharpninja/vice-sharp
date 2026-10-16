@@ -1,0 +1,8 @@
+2026-10-08T11:03:52.9071942-05:00
+Executable: C:\msys64\mingw64\bin\gcc.exe
+Arguments: -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\gate-driver.c | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\clock-gate.c | -o | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-gate-evidence\clock-gate.exe
+ExitCode: 0
+TimedOut: False
+STDOUT:
+
+STDERR:

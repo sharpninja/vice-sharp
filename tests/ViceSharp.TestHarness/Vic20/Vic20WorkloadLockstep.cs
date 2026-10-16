@@ -24,8 +24,7 @@ public sealed class Vic20WorkloadLockstep
     [Fact]
     public void EveryCycle_Workload_Match_FocusedPal()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         var matched = Vic20DivergeProbe.RunEveryCycle(FocusedBudget, "vic20");
         Assert.Equal(FocusedBudget, matched);
@@ -34,8 +33,7 @@ public sealed class Vic20WorkloadLockstep
     [Fact]
     public void EveryCycle_Workload_Match_FocusedNtsc()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         var matched = Vic20DivergeProbe.RunEveryCycle(FocusedBudget, "vic20ntsc");
         Assert.Equal(FocusedBudget, matched);
@@ -45,8 +43,7 @@ public sealed class Vic20WorkloadLockstep
     [Fact]
     public void EveryCycle_Workload_Match_TwoSecondPal()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
         if (!string.Equals(Environment.GetEnvironmentVariable("VICESHARP_LOCKSTEP_2S"), "1", StringComparison.Ordinal))
             return; // not a skip attribute: gate log runs with env=1 and must pass 0 skip
 
@@ -60,8 +57,7 @@ public sealed class Vic20WorkloadLockstep
     [Fact]
     public void EveryCycle_Workload_Match_TwoSecondNtsc()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
         if (!string.Equals(Environment.GetEnvironmentVariable("VICESHARP_LOCKSTEP_2S"), "1", StringComparison.Ordinal))
             return;
 

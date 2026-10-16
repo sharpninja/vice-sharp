@@ -1,0 +1,44 @@
+{
+  "TimestampUtc": "2026-10-04T20:36:13Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "SourceType": "GrokCode",
+  "Model": "grok-4.7",
+  "WorkClass": "project documentation and requirements-export",
+  "AddProfile": "yes",
+  "ProfileFileCount": 22,
+  "PluginVersion": "1.119.0",
+  "MarkerPluginVersion": "1.119.0",
+  "SessionId": "GrokCode-20261004T201212Z-refresh-docs-export-hv",
+  "RequestId": "req-20261004T201216Z-001-refresh-docs-export-hv",
+  "RequestJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261004T200406Z-refresh-docs-export-final-local-grok.request.jsonl",
+  "ResponseJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261004T200406Z-refresh-docs-export-final-local-grok.response.jsonl",
+  "VerdictMarkdown": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261004T200406Z-refresh-docs-export-final-local-grok.verdict.md",
+  "OverallVerdict": "DISAGREE",
+  "AccuracyScore": 86,
+  "CompletenessScore": 91,
+  "Pass": 30,
+  "Fail": 1,
+  "Unknown": 4,
+  "DoneStateChanged": false,
+  "Fails": [
+    "A7 claimed ZIP generated-at 2026-10-04T19:59:26.0500958Z does not match manifest generatedAtUtc 2026-10-04T19:59:25.9119693+00:00 or ZIP LastWriteTimeUtc 2026-10-04T19:59:26.4266299Z"
+  ],
+  "Unknowns": [
+    "A2 Codex historical drain counts 14/14/0/0/0 not found; current pending 0 quarantine 0",
+    "A3 Grok historical drain counts 14/14/0/0/0 not found; current pending 0 quarantine 0",
+    "B6 triage getReport backend_unavailable for both named reports",
+    "C7 live requirements get backend_unavailable"
+  ],
+  "Claims": [
+    {"id":"A1","result":"PASS"},{"id":"A2","result":"UNKNOWN"},{"id":"A3","result":"UNKNOWN"},{"id":"A4","result":"PASS"},
+    {"id":"A5","result":"PASS"},{"id":"A6","result":"PASS"},{"id":"A7","result":"FAIL"},{"id":"A8","result":"PASS"},
+    {"id":"A9","result":"PASS"},{"id":"A10","result":"PASS"},{"id":"A11","result":"PASS"},{"id":"A12","result":"PASS"},
+    {"id":"A13","result":"PASS"},{"id":"A14","result":"PASS"},{"id":"A15","result":"PASS"},{"id":"A16","result":"PASS"},
+    {"id":"B1","result":"PASS"},{"id":"B2","result":"PASS"},{"id":"B3","result":"PASS"},{"id":"B4","result":"PASS"},
+    {"id":"B5","result":"PASS"},{"id":"B6","result":"UNKNOWN"},
+    {"id":"C1","result":"PASS"},{"id":"C2","result":"PASS"},{"id":"C3","result":"PASS"},{"id":"C4","result":"PASS"},
+    {"id":"C5","result":"PASS"},{"id":"C6","result":"PASS"},{"id":"C7","result":"UNKNOWN"},
+    {"id":"D1","result":"PASS"},{"id":"D2","result":"PASS"},{"id":"D3","result":"PASS"},{"id":"D4","result":"PASS"},
+    {"id":"D5","result":"PASS"},{"id":"D6","result":"PASS"}
+  ]
+}

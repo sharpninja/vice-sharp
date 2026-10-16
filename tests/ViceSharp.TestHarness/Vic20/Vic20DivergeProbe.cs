@@ -26,13 +26,12 @@ public sealed class Vic20DivergeProbe
 
     /// <summary>
     /// Every-cycle CPU match for a focused multi-hundred-k window (past former 5005/5023 fails).
-    /// Skips when oracle absent.
+    /// Fails closed when any pinned oracle prerequisite is absent or stale.
     /// </summary>
     [Fact]
     public void EveryCycle_CpuRegs_Match_FocusedWindow()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         var matched = RunEveryCycle(FocusedBudgetCycles);
         Assert.True(matched == FocusedBudgetCycles,
@@ -46,8 +45,7 @@ public sealed class Vic20DivergeProbe
     [Fact]
     public void EveryCycle_CpuRegs_Match_TwoSecondPal()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
         if (!string.Equals(Environment.GetEnvironmentVariable("VICESHARP_LOCKSTEP_2S"), "1", StringComparison.Ordinal))
             return;
 
@@ -63,8 +61,7 @@ public sealed class Vic20DivergeProbe
     [Fact]
     public void EveryCycle_CpuRegs_Match_TenSecondPal()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
         if (!string.Equals(Environment.GetEnvironmentVariable("VICESHARP_LOCKSTEP_10S"), "1", StringComparison.Ordinal))
             return;
 
@@ -79,8 +76,7 @@ public sealed class Vic20DivergeProbe
     [Fact]
     public void EveryCycle_CpuRegs_Match_TenSecondNtsc()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
         if (!string.Equals(Environment.GetEnvironmentVariable("VICESHARP_LOCKSTEP_10S"), "1", StringComparison.Ordinal))
             return;
 

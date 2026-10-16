@@ -1,0 +1,218 @@
+{
+  "TimestampUtc": "20261005T162750Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Model": "grok-4.7",
+  "Effort": "xhigh",
+  "Host": "PAYTON-LEGION2",
+  "WorkspacePath": "F:\\GitHub\\vice-sharp",
+  "Classification": "Class 2 operator-directed lab migration. Not ViceSharp product requirement work.",
+  "AddProfileExecuted": true,
+  "ProfileDirectoryMarkdownCount": 23,
+  "ProfileNonGrokMarkdownReadCount": 22,
+  "ProfileExcluded": "add-profile.grok.md",
+  "RequestJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261005T160826Z-f-dev-drive-grok-4-7-xhigh.request.jsonl",
+  "ResponseJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261005T160826Z-f-dev-drive-grok-4-7-xhigh.response.jsonl",
+  "SessionId": "GrokCode-20261005T160943Z-plugin-session",
+  "RequestId": "req-20261005T161228Z-001-hostile-validate-f-dev-drive",
+  "PluginWrapper": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.119.0\\lib\\Invoke-McpPlugin.ps1",
+  "PluginRootOverride": "F:\\GitHub\\mcpserver-grok-plugin",
+  "PassCount": 18,
+  "FailCount": 4,
+  "UnknownCount": 2,
+  "NotApplicableCount": 2,
+  "ImplementerClaimPassCount": 16,
+  "ImplementerClaimFailCount": 2,
+  "ImplementerClaimUnknownCount": 1,
+  "AccuracyPercent": 84,
+  "AccuracyBasis": "16 of 19 implementer claims passed. 16/19 = 84.21 percent, reported as 84.",
+  "CompletenessPercent": 97,
+  "CompletenessBasis": "Required gates ran. Set-Partition was not called on a real partition. The rebuilt image was not fully byte-diffed.",
+  "OverallVerdict": "DISAGREE",
+  "CompletionPercent": 100,
+  "Eta": "complete",
+  "FailsafeUsed": false,
+  "Findings": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Move-FDevDrive.ps1 SHA-256 is 79F5BD2D216F3566CD53BDDBF819C70DF683579660FA63B1F306BE2A959935EA.",
+      "Evidence": "Get-FileHash matched. Length 45181. Lines 993. LastWriteTime 2026-10-05T10:50:22.519-05:00."
+    },
+    {
+      "Id": "A2",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Boot exe SHA-256 FE58816EB2325F8D8C75A83CFACA6337C4518C2E50DAC935E720E185B0967BCF and size 13312.",
+      "Evidence": "Pinned file matched. Isolated rebuild hash 7D0EBE873937289E9A3545B51BF15E72CB9A99833E405A702898C741D998C07C, same length, COFF timestamp 1791217406 versus pinned 1791215396. Pinned file was not overwritten."
+    },
+    {
+      "Id": "A3",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "cargo fmt --check exits 0.",
+      "Evidence": "cargo fmt --manifest-path E:\\F-DevDrive-Migration\\FDevBootCopy\\Cargo.toml --check. FMT_EXIT=0. cargo 1.99.0, rustc 1.99.0."
+    },
+    {
+      "Id": "A4",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "cargo clippy --release --all-targets -- -D warnings exits 0.",
+      "Evidence": "CLIPPY_EXIT=0. Isolated CARGO_TARGET_DIR."
+    },
+    {
+      "Id": "A5",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "cargo test --release is 17 passed, 0 failed, 0 ignored, and doc tests 0.",
+      "Evidence": "17 passed; 0 failed; 0 ignored. Doc-tests running 0 tests; 0 passed; 0 failed; 0 ignored. TEST_EXIT=0."
+    },
+    {
+      "Id": "A6",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "cargo build --release exits 0.",
+      "Evidence": "BUILD_EXIT=0. Pinned hash unchanged."
+    },
+    {
+      "Id": "A7",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "PE is AMD64, Native, entry 0x1000, no CLR, imports only ntdll.dll.",
+      "Evidence": "Machine 0x8664. Magic 0x020B. Subsystem 1. Entry 0x00001000. CLR RVA 0 size 0. Delay import 0. Import count 1 ntdll.dll."
+    },
+    {
+      "Id": "A8",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "0 parser errors and 0 PSScriptAnalyzer warning or error findings.",
+      "Evidence": "Parse errors 0. Analyzer 1.25.0 error/warning count 0. Information count 46, rule PSAvoidUsingPositionalParameters."
+    },
+    {
+      "Id": "A9",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "38 functions and none of the five forbidden commands.",
+      "Evidence": "FunctionDefinitionAst count 38. Remove-Partition, Clear-Disk, Initialize-Disk, Format-Volume, and Remove-Item counts are 0. Resize-Partition, New-Partition, Set-Partition, Remove-PartitionAccessPath, Repair-Volume, and Restart-Computer are present."
+    },
+    {
+      "Id": "A10",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Prepare order is preflight, hidden target, payload, read-only F, BootExecute, reboot.",
+      "Evidence": "Invoke-Prepare order matches. The target stage shrinks E before New-Partition when partition 4 is absent."
+    },
+    {
+      "Id": "A11",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Verified finalizer order matches the acceptance sequence.",
+      "Evidence": "Status 0 or 1 returns first. Remove-BootImage precedes cutover. Status 2 checks 210749095936 verified bytes and NTSTATUS 0. Cutover unmaps F, keeps the source read-only, takes it offline, mounts the target, expands with Resize-Partition, scans, checks Dev Drive, assigns F, and verifies the old partition."
+    },
+    {
+      "Id": "A12",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Prepare without -ConfirmDestructive exits 1. Plan and Status exit 0 and do not mutate.",
+      "Evidence": "Prepare exit 1 at line 735. Plan exit 0. Status exit 0. ALL_CHANGED=False."
+    },
+    {
+      "Id": "A13",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Live layout is still D, E, F with the stated sizes and no boot arming.",
+      "Evidence": "E size 1718491576832. F size 210749095936, writable and online. No partition 4. BootExecute is only autocheck autochk *. Registry, installed boot image, and finalizer task are absent. A superseded runner file remains under C:\\ProgramData\\ViceSharp\\Migration."
+    },
+    {
+      "Id": "A14",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Pinned geometry and free-space reserve hold.",
+      "Evidence": "Target offset equals prepared E end. Final target end equals F offset. Double is exact. Live free after shrink is 171639799808, above 137438953472."
+    },
+    {
+      "Id": "A15",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Boot app validates, copies, flushes, rereads, and records Verified only after success.",
+      "Evidence": "decide_run, validate_migration_layout, copy_blocks from offset 0, NtFlushBuffersFile, and verify_blocks implement the claim. Tests passed."
+    },
+    {
+      "Id": "A16",
+      "Surface": "A",
+      "Verdict": "FAIL",
+      "Claim": "Every boot console and user-facing state shows completed, current, and next.",
+      "Evidence": "PowerShell timestamps match yyyy-MM-ddTHH:mm:ss.fffK, observed 2026-10-05T11:19:53.774-05:00. display_failure omits Completed. The dashboard, progress line, skip messages, and PowerShell state include all three fields."
+    },
+    {
+      "Id": "A17",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Claim": "Failure cleanup never deletes the source or makes it writable.",
+      "Evidence": "Prepare catch removes BootExecute only if armed and unregisters the task. Restore paths force the original partition read-only. No delete-partition command exists. E shrink and partition 4 are not rolled back."
+    },
+    {
+      "Id": "A18",
+      "Surface": "A",
+      "Verdict": "UNKNOWN",
+      "Claim": "One UAC then fully unattended completion.",
+      "Evidence": "One RunAs, NonInteractive child, Restart-Computer -Force, and a SYSTEM startup task are in the script. Set-Partition ConfirmImpact is High and -Confirm false is absent. Real-partition confirmation was not executed."
+    },
+    {
+      "Id": "A19",
+      "Surface": "A",
+      "Verdict": "FAIL",
+      "Claim": "No live Prepare, UAC, disk mutation, BootExecute arm, or reboot has occurred yet.",
+      "Evidence": "Current disk and BootExecute are unarmed. Last boot 2026-10-05T06:54:34.500-05:00. Superseded SYSTEM runner started 20261005065535 and failed at 06:58:13. A reboot and a migration execution already occurred."
+    },
+    {
+      "Id": "B1",
+      "Surface": "B",
+      "Verdict": "FAIL",
+      "Claim": "Honesty about that reboot.",
+      "Evidence": "Same evidence as A19."
+    },
+    {
+      "Id": "B2",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Claim": "No Python, no source deletion, and the approval gate holds.",
+      "Evidence": "Python file count 0. Forbidden delete commands absent. Prepare guard did not mutate."
+    },
+    {
+      "Id": "B3",
+      "Surface": "B",
+      "Verdict": "N/A",
+      "Claim": "Byrd v4 is not applied to this lab migration.",
+      "Evidence": "Class 2 operator action."
+    },
+    {
+      "Id": "C1",
+      "Surface": "C",
+      "Verdict": "N/A",
+      "Claim": "ViceSharp FR/TR/TEST do not apply.",
+      "Evidence": "No product requirement was claimed. HANDOFF VSF work is a different plan."
+    },
+    {
+      "Id": "D1",
+      "Surface": "D",
+      "Verdict": "UNKNOWN",
+      "Claim": "One UAC and unattended completion.",
+      "Evidence": "Same open point as A18."
+    },
+    {
+      "Id": "D2",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Claim": "Read-only source, verified copy, preserved source, doubled target, and safe failure.",
+      "Evidence": "Code and tests support these criteria. See A10 through A15 and A17."
+    },
+    {
+      "Id": "D3",
+      "Surface": "D",
+      "Verdict": "FAIL",
+      "Claim": "Progress visibility.",
+      "Evidence": "Same gap as A16."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+diff --git "a/F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\ContractAssertions.cs.before" "b/tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs"
+index 5db0d98..64502aa 100644
+--- "a/F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\ContractAssertions.cs.before"
++++ "b/tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs"
+@@ -108,11 +108,9 @@ public static class ContractAssertions
+         AssertProbe(probe, input, expected);
+         probe.Received(1).Evaluate(input);
+ 
+-        // Every invalid fixture gets a wrong-acceptance control; every valid one
+-        // gets a wrong-rejection control, including legal idle observations.
+-        probe.Evaluate(input).Returns(expected.Accepted
+-            ? new Decision(false, "WrongRejection", 999)
+-            : new Decision(true));
++        // Change only acceptance so a reason or cycle mismatch cannot mask a
++        // missing acceptance assertion. This covers rejection and legal idle.
++        probe.Evaluate(input).Returns(expected with { Accepted = !expected.Accepted });
+         Rejects(() => AssertProbe(probe, input, expected));
+ 
+         // Catch assertions that accidentally ignore the reason or exact cycle.
