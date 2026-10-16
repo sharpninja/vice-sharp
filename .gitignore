@@ -173,3 +173,5 @@ cache/
 
 # Verified local worktree snapshots may contain private configuration and raw logs.
 /.local-preservation/
+
+.version
