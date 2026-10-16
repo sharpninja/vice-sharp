@@ -381,7 +381,8 @@ public sealed class AttachPanelViewModel : ObservableObject
             if (value is null)
                 return;
 
-            SetSettingsProperty(ref _selectedMachineProfile, value);
+            if (SetSettingsProperty(ref _selectedMachineProfile, value))
+                OnPropertyChanged(nameof(IsVic20Selected));
         }
     }
 

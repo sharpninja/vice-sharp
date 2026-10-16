@@ -70,4 +70,43 @@ public sealed class InstallerFileAssociationTests
         Assert.True(DesktopFileAssociations.IsRegisteredExtension("game.PRG"));
         Assert.False(DesktopFileAssociations.IsRegisteredExtension("payload.bin"));
     }
+
+    /// <summary>
+    /// FR-INSTALL-001 / TR-INSTALL-ASSOC-001 / TEST-INSTALL-001: desktop Open passes
+    /// an absolute media path after the executable, including spaces and optional quotes.
+    /// Unix root separators must not be mistaken for Windows slash switches.
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void TryGetOpenPath_DesktopAbsolutePath_IsAccepted(bool quoted)
+    {
+        var media = Path.Combine(Path.GetTempPath(), "ViceSharp media", "game.d64");
+        var executable = Path.Combine(Path.GetTempPath(), "ViceSharp.Avalonia");
+        var requestedPath = quoted ? $"\"{media}\"" : media;
+        var examined = new List<string>();
+
+        var path = DesktopFileAssociations.TryGetOpenPath(
+            [executable, "--ignored.d64", "missing.d64", "notes.txt", requestedPath, "later.d64"],
+            candidate =>
+            {
+                examined.Add(candidate);
+                return candidate == media || candidate == "later.d64";
+            });
+
+        Assert.Equal(Path.GetFullPath(media), path);
+        Assert.Equal(new[] { "missing.d64", media }, examined);
+    }
+
+    /// <summary>
+    /// TEST-INSTALL-001: dash options are never media; slash options retain their
+    /// Windows meaning while a Unix-rooted registered path remains eligible.
+    /// </summary>
+    [Fact]
+    public void TryGetOpenPath_OptionPrefixes_RespectPlatform()
+    {
+        Assert.Null(DesktopFileAssociations.TryGetOpenPath(["--option.d64"], _ => true));
+        var slashPath = DesktopFileAssociations.TryGetOpenPath(["/game.d64"], _ => true);
+        Assert.Equal(OperatingSystem.IsWindows() ? null : Path.GetFullPath("/game.d64"), slashPath);
+    }
 }

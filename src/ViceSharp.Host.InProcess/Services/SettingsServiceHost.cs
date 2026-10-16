@@ -221,7 +221,8 @@ public sealed class SettingsServiceHost : ISettingsService
                         selectedKeyboardMap,
                         memorySpecForRestart);
                 }
-                catch (InvalidOperationException ex)
+                catch (Exception ex) when (ex is InvalidOperationException or ArgumentException
+                    or IOException or UnauthorizedAccessException)
                 {
                     return ValueTask.FromResult(new UpdateSettingsResponse(
                         RpcStatus.FailedPrecondition(ex.Message),
@@ -503,10 +504,44 @@ public sealed class SettingsServiceHost : ISettingsService
             }
         }
 
+        // FR-DRVTRUE-001: a compatible settings restart keeps the actual rig's
+        // drive unit and currently attached media, not the descriptor's original
+        // disk path (which may have since been changed or ejected).
+        var drive = current.Machine is ViceSharp.Core.CoordinatorMachine rig
+            && C64MachineProfiles.TryResolve(profileId, out var c64Profile)
+            && c64Profile.SystemCore.IecBusConnected
+            ? rig.Coordinator.Systems.Select(machine => machine.Architecture)
+                .OfType<IDriveArchitectureDescriptor>().FirstOrDefault()
+            : null;
+        var driveDevice = drive?.DeviceNumber ?? 8;
+        var driveSlot = driveDevice == 9 ? MediaSlot.Drive9 : MediaSlot.Drive8;
+        var diskPath = drive is not null
+            && current.MediaAttachments.TryGetValue(driveSlot, out var attachment)
+            && attachment.IsAttached
+                ? attachment.FilePath
+                : string.Empty;
         var created = _runtimeFactory.Create(new CreateEmulatorSessionRequest(
             profileId,
+            TrueDrive: drive is not null,
+            TrueDriveDevice: driveDevice,
+            TrueDriveDiskImagePath: diskPath,
             Vic20MemorySpec: Vic20MachineProfiles.TryResolve(profileId, out _) ? vic20MemorySpec : string.Empty));
-        return new EmulatorRuntimeSession(current.SessionId, created.Architecture, created.Machine)
+
+        // FR-MED-002 / FR-MED-003: do not orphan the old session's recorders.
+        // Construct first so factory failure leaves the old captures running;
+        // finalize before applying the new wrapper's policy to a shared audio tap.
+        // On failure the old session remains registered and the factory-owned
+        // playback device remains usable (it is shared across session lifetimes).
+        try
+        {
+            current.EndAllCaptures();
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Could not finalize active captures before restart: {ex.Message}", ex);
+        }
+
+        var restarted = new EmulatorRuntimeSession(current.SessionId, created.Architecture, created.Machine, created.IecBusActivity)
         {
             PowerState = current.PowerState,
             // Preserve the prior run state across the restart. The video frame
@@ -531,7 +566,23 @@ public sealed class SettingsServiceHost : ISettingsService
             Vic20ExpansionCartKind = current.Vic20ExpansionCartKind,
             Vic20ExpansionWriteBack = current.Vic20ExpansionWriteBack,
             Vic20ExpansionConfigPreset = current.Vic20ExpansionConfigPreset,
+            // FR-SID-013: keep the factory-wired tap for capture and warp policy.
+            // Assign after limiter fields so an already-suspended session pauses it.
+            AudioCaptureTap = created.AudioCaptureTap,
         };
+        // The factory reuses its tap, which can still be paused by the old
+        // session's warp/fast-forward policy. Normal pacing must resume it too.
+        if (!restarted.IsLiveAudioOutputSuspended)
+            restarted.AudioCaptureTap?.Resume();
+
+        foreach (var (slot, media) in created.MediaAttachments)
+        {
+            restarted.MediaAttachments[slot] = current.MediaAttachments.TryGetValue(slot, out var previous)
+                && previous.IsAttached && string.Equals(previous.FilePath, media.FilePath, StringComparison.Ordinal)
+                    ? media with { DisplayName = previous.DisplayName, IsReadOnly = previous.IsReadOnly }
+                    : media;
+        }
+        return restarted;
     }
 
     // Apply a requested pacing strategy to the global emulation pump (live) and mirror it

@@ -2,7 +2,12 @@ namespace ViceSharp.TestHarness.HostShells;
 
 using System;
 using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using global::Avalonia.Headless.XUnit;
 using ViceSharp.Avalonia;
+using ViceSharp.Avalonia.Host;
+using ViceSharp.Avalonia.ViewModels;
 using Xunit;
 
 /// <summary>
@@ -22,6 +27,53 @@ using Xunit;
 /// </summary>
 public sealed class AvaloniaVideoAspectTests
 {
+    /// <summary>
+    /// FR-XVIDEO-002 / TR-MVVM-001 / TEST-AVASPECT-001: canonical C64 profiles
+    /// select their actual standard's PAR and content rows, even when the id does
+    /// not spell NTSC. VIC-20 keeps its own canvas policy.
+    /// </summary>
+    [AvaloniaTheory]
+    [InlineData("c64", 0.93650794, 272)]
+    [InlineData("c64c", 0.93650794, 272)]
+    [InlineData("c64old", 0.93650794, 272)]
+    [InlineData("sx64pal", 0.93650794, 272)]
+    [InlineData("pet64pal", 0.93650794, 272)]
+    [InlineData("c64gs", 0.93650794, 272)]
+    [InlineData("ntsc", 0.75, 246)]
+    [InlineData("newntsc", 0.75, 246)]
+    [InlineData("oldntsc", 0.75, 246)]
+    [InlineData("sx64ntsc", 0.75, 246)]
+    [InlineData("pet64ntsc", 0.75, 246)]
+    [InlineData("ultimax", 0.75, 246)]
+    [InlineData("c64jap", 0.75, 246)]
+    [InlineData("C64JAP", 0.75, 246)]
+    [InlineData("paln", 0.90769231, 272)]
+    [InlineData("PALN", 0.90769231, 272)]
+    [InlineData("vic20", 1.0, 272)]
+    [InlineData("vic20ntsc", 1.0, 272)]
+    public void UpdateVideoAspect_CanonicalProfile_UsesVideoStandard(
+        string profileId, double expectedAspect, int expectedHeight)
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient())
+        {
+            SelectedMachineProfile = new MachineProfileOption(profileId, profileId, "", false),
+            SelectedAspectMode = "VICE pixel aspect"
+        };
+        var surface = new VideoSurface();
+        // Exercise the real display-update path without the constructor's host startup,
+        // ROM provisioning, persistent settings, or recurring timers.
+        var window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+        const BindingFlags instanceFields = BindingFlags.Instance | BindingFlags.NonPublic;
+        typeof(MainWindow).GetField("_attachViewModel", instanceFields)!.SetValue(window, viewModel);
+        typeof(MainWindow).GetField("_video", instanceFields)!.SetValue(window, surface);
+
+        typeof(MainWindow).GetMethod("UpdateVideoAspect", instanceFields)!.Invoke(window, null);
+
+        Assert.Equal(expectedAspect, surface.PixelAspect, 8);
+        Assert.Equal(expectedHeight, surface.ContentHeight);
+        Assert.Equal(viewModel.SelectedAspectMode, surface.AspectMode);
+    }
+
     [Fact]
     [Trait("Category", "Xbox")]
     public void ComputeDisplayAspect_AppliesModeAndPixelAspect()

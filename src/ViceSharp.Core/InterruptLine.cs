@@ -41,4 +41,17 @@ public sealed class InterruptLine : IInterruptLine
         _risingEdge = false;
         return true;
     }
+
+    // Clock snapshots preserve the physical combined line as well as its
+    // unconsumed edge; replaying chip registers cannot reconstruct either.
+    internal bool PendingRisingEdge => _risingEdge;
+    internal uint[] CaptureSources() => _sources.Select(source => source.Value).Order().ToArray();
+
+    internal void RestoreSources(ReadOnlySpan<uint> sources, bool risingEdge)
+    {
+        _sources.Clear();
+        foreach (var source in sources)
+            _sources.Add(new DeviceId(source));
+        _risingEdge = risingEdge;
+    }
 }

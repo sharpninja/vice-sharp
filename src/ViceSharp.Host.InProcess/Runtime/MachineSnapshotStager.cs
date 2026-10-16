@@ -3,6 +3,7 @@ using ViceSharp.Abstractions;
 using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Cpu;
 using ViceSharp.Chips.VicIi;
+using ViceSharp.Core;
 
 namespace ViceSharp.Host.Runtime;
 
@@ -23,6 +24,9 @@ namespace ViceSharp.Host.Runtime;
 /// </remarks>
 public sealed class MachineSnapshotStager
 {
+    /// <summary>The v3 envelope adds the complete master-clock scheduling state to the v2 chip payload.</summary>
+    public const string FormatV3 = "vice-sharp.machine-snapshot.v3";
+
     /// <summary>The v2 machine snapshot format id carried in <see cref="ViceSharp.Protocol.SnapshotDto"/>.</summary>
     public const string FormatV2 = "vice-sharp.machine-snapshot.v2";
 
@@ -38,6 +42,56 @@ public sealed class MachineSnapshotStager
         + VicRegisterBytes + 12 /* vic phase + counters */
         + 16 + 16 /* cia1 + cia2 */
         + SidRegisterBytes;
+
+    /// <summary>
+    /// Captures chip state and clock scheduling together. The caller holds the
+    /// session lock. Existing chip microstate, SID and drive limitations still
+    /// apply; v3 adds exact clock state, not a claim of full-machine replay.
+    /// </summary>
+    public byte[] CaptureWithClock(IMachine machine)
+    {
+        var clock = RequireClock(machine);
+        var chipPayload = Capture(machine);
+        var coordinated = machine as CoordinatorMachine;
+        var clockPayload = coordinated is not null ? coordinated.Coordinator.CaptureClockSnapshot() : clock.CaptureSnapshot();
+        var payload = new byte[2 + PayloadBytes + clockPayload.Length];
+        payload[0] = 3;
+        chipPayload.CopyTo(payload, 1);
+        payload[1 + PayloadBytes] = coordinated is not null ? (byte)1 : (byte)0;
+        clockPayload.CopyTo(payload, 2 + PayloadBytes);
+        return payload;
+    }
+
+    /// <summary>Validates both sections and the DTO cycle before mutating any machine state.</summary>
+    public void RestoreWithClock(IMachine machine, ReadOnlySpan<byte> payload, ulong cycle)
+    {
+        var clock = RequireClock(machine);
+        if (payload.Length <= 2 + PayloadBytes || payload[0] != 3 || payload[1] != PayloadVersion)
+            throw new ArgumentException("Expected a v3 machine snapshot with chip and clock state.", nameof(payload));
+        _ = ResolveDevices(machine);
+        var coordinated = machine as CoordinatorMachine;
+        var kind = payload[1 + PayloadBytes];
+        if (kind > 1 || (kind == 1) != (coordinated is not null))
+            throw new ArgumentException("Snapshot clock topology does not match the machine.", nameof(payload));
+        var clockPayload = payload[(2 + PayloadBytes)..];
+        var clockCycle = coordinated is not null
+            ? coordinated.Coordinator.ValidateClockSnapshot(clockPayload)
+            : clock.ValidateSnapshot(clockPayload);
+        if (cycle > long.MaxValue || (long)cycle != clockCycle)
+            throw new ArgumentException("Snapshot cycle does not match the captured clock.", nameof(cycle));
+
+        Restore(machine, payload.Slice(1, PayloadBytes));
+        if (coordinated is not null) coordinated.Coordinator.RestoreClockSnapshot(clockPayload);
+        else clock.RestoreSnapshot(clockPayload);
+    }
+
+    private static SystemClock RequireClock(IMachine machine)
+    {
+        ArgumentNullException.ThrowIfNull(machine);
+        if (machine.Clock is not SystemClock clock)
+            throw new ArgumentException("Clock snapshots require a SystemClock machine.", nameof(machine));
+        return clock;
+    }
 
     /// <summary>Captures the machine's snapshot payload (side-effect free).</summary>
     /// <param name="machine">The C64 machine to capture.</param>

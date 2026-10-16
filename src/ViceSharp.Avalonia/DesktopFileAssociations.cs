@@ -37,7 +37,8 @@ public static class DesktopFileAssociations
 
     /// <summary>
     /// First existing registered media path in <paramref name="args"/>, skipping the
-    /// executable and dash/slash flags (Explorer Open: exe then "%1").
+    /// executable and dash flags, plus slash flags on Windows (Explorer Open:
+    /// exe then "%1"). Unix absolute media paths keep their leading slash.
     /// </summary>
     public static string? TryGetOpenPath(IReadOnlyList<string> args, Func<string, bool>? fileExists = null)
     {
@@ -57,7 +58,7 @@ public static class DesktopFileAssociations
             var candidate = args[i].Trim().Trim('"');
             if (candidate.Length == 0)
                 continue;
-            if (candidate[0] is '-' or '/')
+            if (candidate[0] == '-' || (OperatingSystem.IsWindows() && candidate[0] == '/'))
                 continue;
             if (!IsRegisteredExtension(candidate))
                 continue;

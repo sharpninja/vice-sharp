@@ -348,6 +348,38 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
+    /// FR-VIC20-002 AC4 / FR-UI-003 / TR-MVVM-001 / TEST-UISET-001: changing
+    /// the picker immediately refreshes the VIC-20 settings visibility binding,
+    /// before Apply/Restart or any host refresh. Unchanged/null picks are ignored.
+    /// </summary>
+    [Theory]
+    [InlineData("vic20")]
+    [InlineData("vic20ntsc")]
+    public void SelectedMachineProfile_Change_NotifiesVic20Visibility(string profileId)
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var c64 = viewModel.SelectedMachineProfile;
+        var vic20 = viewModel.MachineProfiles.Single(profile => profile.Id == profileId);
+        var changes = TrackPropertyChanges(viewModel);
+
+        viewModel.SelectedMachineProfile = vic20;
+
+        Assert.True(viewModel.IsVic20Selected);
+        Assert.Contains(nameof(viewModel.IsVic20Selected), changes);
+        Assert.True(viewModel.RequiresRestart);
+        changes.Clear();
+
+        viewModel.SelectedMachineProfile = vic20;
+        viewModel.SelectedMachineProfile = null!;
+
+        Assert.DoesNotContain(nameof(viewModel.IsVic20Selected), changes);
+        viewModel.SelectedMachineProfile = c64;
+
+        Assert.False(viewModel.IsVic20Selected);
+        Assert.Contains(nameof(viewModel.IsVic20Selected), changes);
+    }
+
+    /// <summary>
     /// FR-PACESEL-001 / TR-PACESEL-STRAT-001 / TEST-PACESEL-001.
     /// Use case: The pacing strategy applies live (the pump swaps its gate), so changing it
     /// must mark a pending settings change but NOT require a session restart.

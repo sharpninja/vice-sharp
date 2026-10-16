@@ -78,6 +78,19 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
         }
     }
 
+    /// <summary>
+    /// FR-SID-013 / TR-PLAT-001: disabled or disposed playback cannot pace emulation.
+    /// Pausing a usable device does not remove its availability.
+    /// </summary>
+    public bool IsAvailable
+    {
+        get
+        {
+            lock (_lock)
+                return !_disabled && !_disposed;
+        }
+    }
+
     private void Initialize()
     {
         var format = new WaveFormatEx

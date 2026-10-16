@@ -626,9 +626,17 @@ public sealed class EmulatorRuntimeSession
             (recorder, stream) = DetachAudioLocked();
         }
 
-        sink?.Dispose();
-        recorder?.Dispose();
-        stream?.Dispose();
+        // FR-MED-002 / FR-MED-003: one failed finalizer must not strand the
+        // remaining writer or output stream during close or settings restart.
+        try
+        {
+            sink?.Dispose();
+        }
+        finally
+        {
+            try { recorder?.Dispose(); }
+            finally { stream?.Dispose(); }
+        }
     }
 
     /// <summary>

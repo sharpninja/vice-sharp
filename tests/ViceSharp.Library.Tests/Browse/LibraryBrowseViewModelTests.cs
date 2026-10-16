@@ -265,6 +265,37 @@ public sealed class LibraryBrowseViewModelTests
         launcher.Calls.Should().BeEmpty();
     }
 
+    /// <summary>AC-LAUNCH-03: unsupported disks stay browsable but cannot download or launch.</summary>
+    [Theory]
+    [InlineData("g64", false)]
+    [InlineData("d71", false)]
+    [InlineData("d81", false)]
+    [InlineData("G64", true)]
+    [InlineData("D71", true)]
+    [InlineData("D81", true)]
+    [Trait("AC", "AC-LAUNCH-03")]
+    public async Task UnsupportedDisk_AttachDisabled(string extension, bool autostart)
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var handler = new FakeRomMHandler(request => request.RequestUri!.AbsolutePath == "/api/roms"
+            ? FakeRomMHandler.Json(RomMFixtures.RomsPageJson.Replace("boulderdash.d64", $"boulderdash.{extension}"))
+            : RomMFixtures.DefaultRouter(request));
+        await using var client = RomMFixtures.Client(handler);
+        var launcher = new FakeGameLauncher();
+        using var vm = new LibraryBrowseViewModel(
+            new RomMLibraryGateway(client), launcher, new FakeMachineProvider(), CacheDir);
+        await vm.InitializeAsync(ct);
+        vm.SelectedTile = vm.Items.Single(group => group.Primary.Id == 101).Primary;
+
+        vm.SelectedTile.Launchable.Should().BeFalse();
+        vm.CanAttach.Should().BeFalse();
+        LaunchOutcome outcome = await vm.AttachAsync(autostart, ct);
+
+        outcome.Success.Should().BeFalse();
+        launcher.Calls.Should().BeEmpty();
+        handler.CountPathPrefix("/api/roms/101/content/").Should().Be(0);
+    }
+
     /// <summary>AC-LAUNCH-04: attach+start invokes the launcher with the resolved slot and autostart flag.</summary>
     [Fact]
     [Trait("AC", "AC-LAUNCH-04")]
