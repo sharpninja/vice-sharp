@@ -1,0 +1,246 @@
+{
+  "schema": "vice-sharp/adjacent-tape-disposition-verification/v1",
+  "checkedAt": "2026-10-11T12:04:33-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T164636Z-adjacent-test-disposition",
+  "scope": "Document/source integrity only, not test execution or independent HV.",
+  "checks": [
+    {
+      "name": "native-object-serialization-readback",
+      "passed": true,
+      "evidence": "Full parsed-object equality with native PowerShell serialization before write."
+    },
+    {
+      "name": "47-unique-method-identities",
+      "passed": true,
+      "evidence": 47
+    },
+    {
+      "name": "active32-legacy15",
+      "passed": true,
+      "evidence": {
+        "theoryMethodCount": 1,
+        "activeAdjacentFiles": 8,
+        "legacyMethods": 15,
+        "broadAdditionalFiles": 19,
+        "executedCases": 0,
+        "legacyFiles": 2,
+        "activeAdjacentMethods": 32,
+        "explicitInlineDataRows": 7,
+        "methodCount": 47,
+        "lexicalFiles": 9,
+        "note": "Method counts are not tests executed or universal coverage. The seven literal theory rows belong to one selected method. No corpus-wide case denominator is inferred."
+      }
+    },
+    {
+      "name": "all47-exact-source-bodies-and-body-hashes",
+      "passed": true,
+      "evidence": []
+    },
+    {
+      "name": "every-method-retains-assertions",
+      "passed": true,
+      "evidence": "xUnit Assert and FluentAssertions Should both captured."
+    },
+    {
+      "name": "one-theory-seven-literal-rows",
+      "passed": true,
+      "evidence": [
+        "[InlineData(\"boulderdash.d64\", MediaSlot.Drive8, MediaKind.Disk, true)]",
+        "[InlineData(\"game.g64\", MediaSlot.Drive8, MediaKind.Disk, true)]",
+        "[InlineData(\"side.d81\", MediaSlot.Drive8, MediaKind.Disk, true)]",
+        "[InlineData(\"creatures.tap\", MediaSlot.Tape, MediaKind.Tape, true)]",
+        "[InlineData(\"game.t64\", MediaSlot.Drive8, MediaKind.Tape, true)]",
+        "[InlineData(\"wizball.crt\", MediaSlot.Cartridge, MediaKind.Cartridge, true)]",
+        "[InlineData(\"dump.bin\", MediaSlot.Cartridge, MediaKind.Cartridge, true)]"
+      ]
+    },
+    {
+      "name": "all26-input-sha256-pins-current",
+      "passed": true,
+      "evidence": {
+        "changed": [],
+        "count": 26
+      }
+    },
+    {
+      "name": "two-immutable-native-git-blobs",
+      "passed": true,
+      "evidence": [
+        {
+          "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\ciacore.c",
+          "sha256": "D7C2AA2931CB8073606AED832AB74B95617EECC3D3A4295673F716DAE18C75AE",
+          "gitBlob": "c8a431d927a1831c9d6f10161c87210d64820d75",
+          "expectedBlob": "c8a431d927a1831c9d6f10161c87210d64820d75",
+          "matches": true
+        },
+        {
+          "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via1.c",
+          "sha256": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+          "gitBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+          "expectedBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "name": "nineteen-additional-file-classifications",
+      "passed": true,
+      "evidence": "8 active adjacent, 2 retained legacy, 9 lexical."
+    },
+    {
+      "name": "27-proposed-control-recipes",
+      "passed": true,
+      "evidence": "Recipes, not executed cases."
+    },
+    {
+      "name": "all-methods-unapproved-not-run",
+      "passed": true,
+      "evidence": "No acceptance implied."
+    },
+    {
+      "name": "native-status-identical-to-turn-entry",
+      "passed": true,
+      "evidence": {
+        "command": "git -C native/vice status --porcelain=v1 --untracked-files=all",
+        "after": 2539,
+        "before": 2539
+      }
+    },
+    {
+      "name": "git-diff-check",
+      "passed": true,
+      "evidence": {
+        "command": "git diff --check",
+        "exitCode": 0,
+        "output": []
+      }
+    },
+    {
+      "name": "all-existing-markdown-links-resolve",
+      "passed": true,
+      "evidence": [
+        {
+          "target": "adjacent-disposition.json",
+          "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T115707-0500-adjacent-tape-test-disposition\\adjacent-disposition.json",
+          "exists": true,
+          "pendingVerificationFile": false
+        },
+        {
+          "target": "../20261011T095710-0500-tape-test-disposition/README.md",
+          "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\README.md",
+          "exists": true,
+          "pendingVerificationFile": false
+        },
+        {
+          "target": "../20261011T083152-0500-media-fixture-specification/README.md",
+          "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\README.md",
+          "exists": true,
+          "pendingVerificationFile": false
+        },
+        {
+          "target": "../20261011T092059-0500-tape-recording-wiring-contract/README.md",
+          "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\README.md",
+          "exists": true,
+          "pendingVerificationFile": false
+        },
+        {
+          "target": "../20261011T080155-0500-capacitor-guard-remediation/proposed-field-delta.json",
+          "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+          "exists": true,
+          "pendingVerificationFile": false
+        },
+        {
+          "target": "verification.json",
+          "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T115707-0500-adjacent-tape-test-disposition\\verification.json",
+          "exists": false,
+          "pendingVerificationFile": true
+        }
+      ]
+    },
+    {
+      "name": "14-live-related-requirement-records-retained",
+      "passed": true,
+      "evidence": [
+        "FR-BACKFILL-MEDIA-001",
+        "FR-CIA-007",
+        "FR-ROMM-LAUNCH-001",
+        "FR-RUNTIME-TAPE-002",
+        "FR-TAP-002",
+        "FR-UIMENUBAR-001",
+        "FR-XDEV-001",
+        "FR-XDEV-002",
+        "FR-XDEV-003",
+        "TR-XMVVM-001",
+        "TEST-CIA-001",
+        "TEST-TAPE-SENSE-001",
+        "TEST-UIMENUBAR-001",
+        "TEST-XSET-001"
+      ]
+    },
+    {
+      "name": "zero-executions-or-acceptance-mutations",
+      "passed": true,
+      "evidence": {
+        "doneStateWrites": 0,
+        "nativeTests": 0,
+        "managedTests": 0,
+        "requirementsWrites": 0,
+        "hvRuns": 0,
+        "testSourceEdits": 0,
+        "productSourceEdits": 0,
+        "nativeSourceEdits": 0,
+        "mockTests": 0
+      }
+    },
+    {
+      "name": "no-em-or-en-dashes-in-readme",
+      "passed": true,
+      "evidence": "Operator punctuation preference."
+    }
+  ],
+  "checkCount": 17,
+  "failedCount": 0,
+  "artifacts": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T115707-0500-adjacent-tape-test-disposition\\adjacent-disposition.json",
+      "length": 148522,
+      "sha256": "793813B7E44627A83A87D8F8C4ECA629B188397D2A240298AAB484454D35D543"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T115707-0500-adjacent-tape-test-disposition\\README.md",
+      "length": 7438,
+      "sha256": "7FE716AB59E5B6FF56DB711C88ED894C2E79EFEA040A0CB60DA6C84D959FCA7A"
+    }
+  ],
+  "rootStatusDelta": [
+    {
+      "line": "?? docs/receipts/requirements-recovery/20261011T115707-0500-adjacent-tape-test-disposition/",
+      "side": "=>"
+    }
+  ],
+  "nativeStatus": {
+    "exitCode": 0,
+    "afterCount": 2539,
+    "beforeCount": 2539,
+    "identical": true
+  },
+  "gitDiffCheck": {
+    "exitCode": 0,
+    "output": []
+  },
+  "execution": {
+    "doneStateWrites": 0,
+    "nativeTests": 0,
+    "managedTests": 0,
+    "requirementsWrites": 0,
+    "hvRuns": 0,
+    "testSourceEdits": 0,
+    "productSourceEdits": 0,
+    "nativeSourceEdits": 0,
+    "mockTests": 0
+  },
+  "requirements": "Unchanged; no requirement operation issued.",
+  "goal": "Remains active, not complete.",
+  "hv": "No new review. Midnight DISAGREE 93/84 remains controlling."
+}

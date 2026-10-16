@@ -1,0 +1,13 @@
+{
+  "kind": "source arithmetic, not product test",
+  "baseAddress": "0x0720",
+  "endAddress": "0x07E7",
+  "actualByteCount": 200,
+  "claimedBaseToEndByteCount": 72,
+  "spriteY": 80,
+  "yLowThreeBits": 0,
+  "yScroll": 0,
+  "isInsideBadLineRasterRange": true,
+  "matchesYScroll": true,
+  "limitation": "bad-line enable state not measured; managed assertion uses line 0x51"
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "file": "src/ViceSharp.ViceCompatibility/ViceSharp.ViceCompatibility.csproj",
+    "command": "git diff --no-index --check -- NUL src/ViceSharp.ViceCompatibility/ViceSharp.ViceCompatibility.csproj",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "file": "src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs",
+    "command": "git diff --no-index --check -- NUL src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "file": "src/ViceSharp.ViceCompatibility/README.md",
+    "command": "git diff --no-index --check -- NUL src/ViceSharp.ViceCompatibility/README.md",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "file": "tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj",
+    "command": "git diff --no-index --check -- NUL tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "file": "tests/ViceSharp.VsfCompatibility.Tests/LegacyMainCpuContractTests.cs",
+    "command": "git diff --no-index --check -- NUL tests/ViceSharp.VsfCompatibility.Tests/LegacyMainCpuContractTests.cs",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "file": "tests/ViceSharp.VsfCompatibility.Tests/LegacyMainCpuImplementationTests.cs",
+    "command": "git diff --no-index --check -- NUL tests/ViceSharp.VsfCompatibility.Tests/LegacyMainCpuImplementationTests.cs",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "file": "tests/ViceSharp.VsfCompatibility.Tests/README.md",
+    "command": "git diff --no-index --check -- NUL tests/ViceSharp.VsfCompatibility.Tests/README.md",
+    "exitCode": 1,
+    "output": []
+  }
+]

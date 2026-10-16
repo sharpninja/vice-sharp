@@ -1,0 +1,8 @@
+{
+  "timestampLocal": "2026-10-08T09:10:52.7677593-05:00",
+  "pid": 58152,
+  "hasExited": false,
+  "elapsedSeconds": 44.6659882,
+  "lastObserved": "Unit 8 RESET (For undump); no further monitor commands or resumed snapshot",
+  "status": "diagnostic stalled reset-boundary snapshot load, not a pass"
+}

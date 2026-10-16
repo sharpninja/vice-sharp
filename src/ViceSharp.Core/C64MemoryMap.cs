@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Audio;
 using ViceSharp.Chips.Cia;
@@ -10,7 +11,7 @@ namespace ViceSharp.Core;
 /// <summary>
 /// CPU-visible C64 memory map with PLA-controlled ROM and I/O banking.
 /// </summary>
-internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardInput, IKeyboardInputMapSelection, IMachineJoystickInput, ICartridgePort
+internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardInput, IKeyboardInputMapSelection, IMachineJoystickInput, ICartridgePort, IFixedRomImage
 {
     private const int CartridgeBankSize = 0x2000;
     private const int GameSystemCartridgeSize = CartridgeBankSize * 64;
@@ -55,15 +56,31 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private readonly byte[] _charRom = new byte[0x1000];
 
     private readonly Mos6569 _vic;
-    private readonly Sid6581 _sid;
+    private Sid6581 _sid;
     private readonly Mos6526 _cia1;
     private readonly Mos6526? _cia2;
     private readonly Mos906114 _pla;
     private readonly C64KeyboardMatrix _keyboard;
     private readonly object _inputSync = new();
     private readonly Dictionary<byte, int> _keyboardKeyPressCounts = new();
+    private readonly HashSet<string> _keyboardHostKeys = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, byte[]> _keyboardHostKeyCodes = new(StringComparer.Ordinal);
     private readonly C64JoystickPort _joystickPort1;
     private readonly C64JoystickPort _joystickPort2;
+    private Action<int, byte, bool>? _joystickRecorder;
+    private Action<int, int, int>? _mouseRecorder;
+    private Action<int, byte, byte>? _potRecorder;
+    private Action<bool>? _restoreRecorder;
+    private Action<string, bool>? _keyRecorder;
+    private Action<byte, bool>? _matrixRecorder;
+    private Action<bool, byte[]?, int>? _cartridgeRecorder;
+    private Datasette? _datasette;
+    private bool _potOverride;
+    private byte _potX;
+    private byte _potY;
+    private int _mouseX;
+    private int _mouseY;
+    private bool _mouseMode;
     private readonly bool _keyboardEnabled;
     private readonly byte _cia2PortAInputMask;
     private readonly bool _cia2Connected;
@@ -218,10 +235,13 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
         _keyboard.Reset();
         _keyboardKeyPressCounts.Clear();
+        _keyboardHostKeys.Clear();
+        _keyboardHostKeyCodes.Clear();
         _joystickPort1.Reset();
         _joystickPort2.Reset();
         _pla.WriteDataDirection(0x2F);
         _pla.WriteDataPort(0x37);
+        ApplyCassetteMotor();
         // audit M6 RESOLUTION: keep the 3/0 boot seed; see the field comment.
         // Changing it to 0/0 breaks CPU lockstep vs native x64sc.
         _vicBank = 3;
@@ -319,7 +339,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         {
             PageKind.Ram => LatchCpuBusValue(_ram[address]),
             PageKind.Pla0 => address <= 0x0001
-                ? LatchCpuBusValue(_pla.Read(address))
+                ? LatchCpuBusValue(address == 0x0001 ? ReadVisibleProcessorPort() : _pla.Read(address))
                 : LatchCpuBusValue(_ram[address]),
             PageKind.BasicRom => LatchCpuBusValue(_basicRom[address - BasicStart]),
             PageKind.KernalRom => LatchCpuBusValue(_kernalRom[address - KernalStart]),
@@ -407,8 +427,11 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public byte Peek(ushort address)
     {
-        if (address <= 0x0001)
+        if (address == 0x0000)
             return _pla.Peek(address);
+
+        if (address == 0x0001)
+            return ReadVisibleProcessorPort();
 
         if (TryReadCartridge(address, out var cartridgeValue))
             return cartridgeValue;
@@ -460,6 +483,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         {
             _ram[address] = value;
             _pla.Write(address, value);
+            ApplyCassetteMotor();
             RebuildReadPageTable(); // PERF-MEM-001: PLA banking bits may have changed
             return;
         }
@@ -482,6 +506,44 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public void AttachCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode)
     {
+        InstallCartridge(image, mappingMode);
+        _cartridgeRecorder?.Invoke(true, _cartridgeImage, (int)_attachedCartridgeMappingMode!.Value);
+    }
+
+    public void EjectCartridge()
+    {
+        ClearCartridge();
+        _cartridgeRecorder?.Invoke(false, null, 0);
+    }
+
+    /// <summary>
+    /// Puts a captured image back without recording an edge. Public attach
+    /// and eject notify an open recording after the image changes.
+    /// </summary>
+    internal void RestoreCartridgeImage(byte[]? image, CartridgeMappingMode? mappingMode)
+    {
+        if (image is null || mappingMode is null)
+            ClearCartridge();
+        else
+            InstallCartridge(image, mappingMode.Value);
+    }
+
+    internal void CaptureCartridgeImage(out byte[]? image, out CartridgeMappingMode? mappingMode)
+    {
+        image = _cartridgeImage is null ? null : (byte[])_cartridgeImage.Clone();
+        mappingMode = _attachedCartridgeMappingMode;
+    }
+
+    internal void AttachCartridgeRecorder(Action<bool, byte[]?, int>? recorder)
+    {
+        _cartridgeRecorder = recorder;
+    }
+
+    private void InstallCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode)
+    {
+        if (mappingMode == CartridgeMappingMode.Ocean && HasCrtSignature(image.Span))
+            image = DecodeOceanCrt(image.Span);
+
         var resolvedMappingMode = ResolveMappingMode(image.Length, mappingMode);
         ValidateCartridgeImageLength(image.Length, resolvedMappingMode);
 
@@ -500,10 +562,10 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _ss5Hidden = false;
         _rrNetCartridgeBank = 0;
         _rrNetHidden = false;
-        RebuildReadPageTable(); // PERF-MEM-001: cart pages now active
+        RebuildReadPageTable();
     }
 
-    public void EjectCartridge()
+    private void ClearCartridge()
     {
         _cartridgeImage = null;
         _attachedCartridgeMappingMode = null;
@@ -520,7 +582,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _ss5Hidden = false;
         _rrNetCartridgeBank = 0;
         _rrNetHidden = false;
-        RebuildReadPageTable(); // PERF-MEM-001: cart pages now inactive
+        RebuildReadPageTable();
     }
 
     /// <summary>
@@ -562,8 +624,33 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (!_keyboardEnabled)
             return;
 
+        bool changed;
         lock (_inputSync)
+        {
+            // VICE keyboard_event_record stores the matrix after the host
+            // edge. This public matrix write is the same edge when the bit
+            // changes. A release also drops host names that still own the
+            // bit, so a later snapshot cannot press that name again.
+            changed = _keyboard.IsKeyDown(keyCode) != pressed;
+            if (!changed)
+                return;
+
             _keyboard.SetKey(keyCode, pressed);
+            if (pressed)
+            {
+                _keyboardKeyPressCounts.TryGetValue(keyCode, out var count);
+                if (count < 1)
+                    _keyboardKeyPressCounts[keyCode] = 1;
+            }
+            else
+            {
+                _keyboardKeyPressCounts.Remove(keyCode);
+                ReleaseHostKeysOwning(keyCode);
+            }
+        }
+
+        if (changed)
+            _matrixRecorder?.Invoke(keyCode, pressed);
     }
 
     public bool SetKeyState(string key, bool pressed)
@@ -571,14 +658,33 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (!_keyboardEnabled)
             return false;
 
+        bool changed;
         lock (_inputSync)
         {
             if (!_keyboardMap.TryResolve(key, out var keyCodes))
                 return false;
 
+            // VICE keyboard_alarm_handler records EVENT_KEYBOARD_MATRIX
+            // after every host key edge. A second report of the same host
+            // key at the same level is not another edge. A release is still
+            // an edge when another host key keeps the shared matrix bit down
+            // (LeftShift and F2 both own column key 0x0F).
+            var held = _keyboardHostKeys.Contains(key);
+            if (held == pressed)
+                return true;
+
+            if (pressed)
+                RememberHostKey(key, keyCodes);
+            else
+                ForgetHostKey(key);
+
+            changed = true;
             foreach (var keyCode in keyCodes)
                 ApplyMatrixKeyState(keyCode, pressed);
         }
+
+        if (changed)
+            _keyRecorder?.Invoke(key, pressed);
 
         return true;
     }
@@ -591,11 +697,143 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
         // RESTORE is a hardware NMI wired directly to the CPU, not a key-matrix key.
         // Route straight to the dedicated RESTORE/NMI trigger on the matrix, never
-        // through SetKeyState / the keymap.
+        // through SetKeyState / the keymap. VICE records EVENT_KEYBOARD_RESTORE
+        // for that edge (keyboard.c restore_alarm_triggered) and replays it with
+        // machine_set_restore_key.
+        bool changed;
         lock (_inputSync)
+        {
+            changed = _keyboard.IsRestorePressed != pressed;
             _keyboard.SetRestore(pressed);
+        }
+
+        if (changed)
+            _restoreRecorder?.Invoke(pressed);
 
         return true;
+    }
+
+    /// <summary>
+    /// Bind the C2N datasette after construction. The memory map is built
+    /// before the datasette exists. VICE c64pla.c reads the sense line and
+    /// drives the motor from this port.
+    /// </summary>
+    internal void ConnectDatasette(Datasette? datasette)
+    {
+        _datasette = datasette;
+        ApplyCassetteMotor();
+    }
+
+    /// <summary>The C2N bound to this map. Null when the tape port is disconnected.</summary>
+    internal Datasette? Datasette => _datasette;
+
+    /// <summary>
+    /// FR-SID-005. The running SID model switch replaces the chip the CPU
+    /// bus reads and writes. The previous instance stays in the registry
+    /// history only.
+    /// </summary>
+    internal void ReplaceAudioChip(Sid6581 sid)
+    {
+        ArgumentNullException.ThrowIfNull(sid);
+        _sid = sid;
+    }
+
+    /// <inheritdoc />
+    public bool TryPeekRom(ushort address, out byte value)
+    {
+        if (address >= 0xE000)
+        {
+            value = _kernalRom[address - 0xE000];
+            return true;
+        }
+
+        if (address is >= 0xA000 and <= 0xBFFF)
+        {
+            value = _basicRom[address - 0xA000];
+            return true;
+        }
+
+        if (address is >= 0xD000 and <= 0xDFFF)
+        {
+            value = _charRom[address - 0xD000];
+            return true;
+        }
+
+        value = 0;
+        return false;
+    }
+
+    /// <summary>
+    /// FR-INP-003. Port 1 pot bytes are what $D419/$D41A return.
+    /// </summary>
+    public void SetPotState(int port, byte x, byte y)
+    {
+        if (port != 1)
+            return;
+
+        _potOverride = true;
+        _potX = x;
+        _potY = y;
+        _potRecorder?.Invoke(port, x, y);
+    }
+
+    /// <summary>
+    /// FR-INP-003. Host pointer deltas accumulate. The pot byte is the
+    /// 1351 cyclic code VICE uses: (position &amp; 0x7f) + 0x40.
+    /// </summary>
+    public void ApplyMouseDelta(int port, int deltaX, int deltaY)
+    {
+        if (port != 1)
+            return;
+
+        if (!_mouseMode)
+        {
+            _mouseX = 0;
+            _mouseY = 0;
+            _mouseMode = true;
+            _potOverride = true;
+        }
+
+        _mouseX += deltaX;
+        _mouseY += deltaY;
+        _potX = MousePot(_mouseX);
+        _potY = MousePot(_mouseY);
+        _mouseRecorder?.Invoke(port, deltaX, deltaY);
+    }
+
+    private static byte MousePot(int position) => (byte)((position & 0x7F) + 0x40);
+
+    /// <summary>
+    /// FR-INP-003. Left is the joystick fire button. Right is joystick UP.
+    /// Both are active low on the CIA port.
+    /// </summary>
+    public void SetMouseButtons(int port, bool left, bool right)
+    {
+        var joystick = port switch
+        {
+            1 => _joystickPort1,
+            2 => _joystickPort2,
+            _ => null
+        };
+        if (joystick is null)
+            return;
+
+        var state = joystick.State;
+        state = left
+            ? state | C64JoystickPort.JoystickButtons.Fire
+            : state & ~C64JoystickPort.JoystickButtons.Fire;
+        state = right
+            ? state | C64JoystickPort.JoystickButtons.Up
+            : state & ~C64JoystickPort.JoystickButtons.Up;
+        lock (_inputSync)
+            joystick.State = state;
+
+        // Left is fire and right is up. VICE puts those bits on the joyport
+        // value, and the joystick latch records EVENT_JOYSTICK_VALUE.
+        var latched = joystick.State;
+        var direction = (byte)((byte)latched & 0x0F);
+        var fire = (latched & C64JoystickPort.JoystickButtons.Fire) != 0;
+        _joystickRecorder?.Invoke(port, direction, fire);
     }
 
     public bool SetJoystickState(int controlPort, byte directionMask, bool fireButton)
@@ -616,7 +854,132 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
         lock (_inputSync)
             port.State = pressed;
+        _joystickRecorder?.Invoke(controlPort, directionMask, fireButton);
         return true;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. While a recording is open, a joystick change is an input
+    /// event. VICE records EVENT_JOYSTICK_VALUE from the latch handler.
+    /// </summary>
+    internal void AttachJoystickRecorder(Action<int, byte, bool>? recorder)
+    {
+        _joystickRecorder = recorder;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. While a recording is open, a mouse move is an input
+    /// event stamped at the current clock. VICE vice-event.h has no
+    /// EVENT_MOUSE. write_mouse_common_snapshot keeps the position only
+    /// inside a snapshot, so a move after that snapshot is missing on
+    /// playback. The joystick latch records EVENT_JOYSTICK_VALUE the same
+    /// way: the change is an input at the current clock.
+    /// </summary>
+    internal void AttachMouseRecorder(Action<int, int, int>? recorder)
+    {
+        _mouseRecorder = recorder;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. While a recording is open, an absolute pot write is an
+    /// input event stamped at the current clock. The snapshot already holds
+    /// pots that were set before the first key.
+    /// </summary>
+    internal void AttachPotRecorder(Action<int, byte, byte>? recorder)
+    {
+        _potRecorder = recorder;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. While a recording is open, a RESTORE edge is an input
+    /// event stamped at the current clock. VICE event_record writes
+    /// EVENT_KEYBOARD_RESTORE with the pressed value, and
+    /// keyboard_restore_event_playback calls machine_set_restore_key.
+    /// A RESTORE line held before the first recorded key stays in the
+    /// keyboard snapshot instead of the event list.
+    /// </summary>
+    internal void AttachRestoreRecorder(Action<bool>? recorder)
+    {
+        _restoreRecorder = recorder;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. While a recording is open, a host key change is an input
+    /// event. VICE keyboard.c keyboard_event_record stores
+    /// EVENT_KEYBOARD_MATRIX after keyboard_alarm_handler applies the host
+    /// key. Playback of that event must not record itself
+    /// (event_playback_active returns before another record).
+    /// </summary>
+    /// <summary>
+    /// Copies the matrix codes the current map assigns to a host name.
+    /// A replay applies these codes instead of resolving the name again.
+    /// </summary>
+    internal bool TryCopyHostKeyCodes(string key, out byte[] codes)
+    {
+        lock (_inputSync)
+        {
+            if (string.IsNullOrEmpty(key) || !_keyboardMap.TryResolve(key, out var resolved) || resolved.Count == 0)
+            {
+                codes = Array.Empty<byte>();
+                return false;
+            }
+
+            codes = new byte[resolved.Count];
+            for (var i = 0; i < resolved.Count; i++)
+                codes[i] = resolved[i];
+
+            return true;
+        }
+    }
+
+    internal bool IsHostKeyHeld(string key)
+    {
+        lock (_inputSync)
+            return _keyboardHostKeys.Contains(key);
+    }
+
+    /// <summary>
+    /// Applies a recorded host key by the matrix codes captured with it.
+    /// The destination keyboard map is not consulted. VICE playback writes
+    /// the recorded matrix row and column.
+    /// </summary>
+    internal void ApplyRecordedKeyCodes(string hostName, ReadOnlySpan<byte> codes, bool pressed)
+    {
+        if (!_keyboardEnabled)
+            return;
+
+        lock (_inputSync)
+        {
+            if (!string.IsNullOrEmpty(hostName))
+            {
+                // Same guard as SetKeyState. A repeated level must not
+                // increment the matrix owner count a second time.
+                if (_keyboardHostKeys.Contains(hostName) == pressed)
+                    return;
+
+                if (pressed)
+                    RememberHostKey(hostName, codes.ToArray());
+                else
+                    ForgetHostKey(hostName);
+            }
+
+            foreach (var code in codes)
+                ApplyMatrixKeyState(code, pressed);
+        }
+    }
+
+    internal void AttachKeyRecorder(Action<string, bool>? recorder)
+    {
+        _keyRecorder = recorder;
+    }
+
+    /// <summary>
+    /// FR-SNP-003. While a recording is open, a public matrix write is an
+    /// input event. VICE records EVENT_KEYBOARD_MATRIX for that matrix.
+    /// </summary>
+    internal void AttachMatrixRecorder(Action<byte, bool>? recorder)
+    {
+        _matrixRecorder = recorder;
     }
 
     public void SelectKeyboardMap(IKeyboardInputMap keyboardMap)
@@ -627,6 +990,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         {
             _keyboardMap = keyboardMap;
             _keyboardKeyPressCounts.Clear();
+            _keyboardHostKeys.Clear();
+            _keyboardHostKeyCodes.Clear();
             _keyboard.ClearKeys();
         }
     }
@@ -660,6 +1025,283 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public bool KeyboardEnabled => _keyboardEnabled;
 
+    /// <summary>
+    /// FR-SNP-003. Copies the keyboard matrix. Keys held before the first
+    /// recorded event are not in the event list. VICE snapshots keyarr.
+    /// </summary>
+    internal byte[] CaptureKeyboardRows(out bool restorePressed)
+    {
+        lock (_inputSync)
+            return _keyboard.CaptureRows(out restorePressed);
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Copies each matrix owner count. A raw matrix press plus
+    /// a host name is two owners. The row image alone keeps only the bit.
+    /// </summary>
+    internal (byte KeyCode, int Count)[] CaptureKeyboardPressCounts()
+    {
+        lock (_inputSync)
+        {
+            var counts = new (byte KeyCode, int Count)[_keyboardKeyPressCounts.Count];
+            var index = 0;
+            foreach (var pair in _keyboardKeyPressCounts)
+                counts[index++] = (pair.Key, pair.Value);
+
+            return counts;
+        }
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Copies the host key names that are down. The matrix bit
+    /// alone cannot tell one owner from two when LeftShift and F2 share a
+    /// column. VICE keyarr stays down until every host key that set it is
+    /// released. Restoring these names rebuilds that contributor count.
+    /// </summary>
+    internal readonly record struct CartridgeBankState(
+        int GameSystemBank,
+        int MagicDeskBank,
+        bool MagicDeskDisabled,
+        int OceanBank,
+        int Fc3Bank,
+        bool Fc3Hidden,
+        int ActionReplayBank,
+        bool ActionReplayHidden,
+        int EasyFlashBank,
+        int SuperSnapshotBank,
+        bool SuperSnapshotHidden,
+        int RrNetBank,
+        bool RrNetHidden);
+
+    /// <summary>
+    /// FR-SNP-003. Copies the cartridge bank registers. VICE ocean.c saves
+    /// currbank in CARTOCEAN. A later write of peeked I/O must not replace it.
+    /// </summary>
+    internal CartridgeBankState CaptureCartridgeBanks()
+    {
+        lock (_inputSync)
+        {
+            return new CartridgeBankState(
+                _gameSystemCartridgeBank,
+                _magicDeskCartridgeBank,
+                _magicDeskDisabled,
+                _oceanCartridgeBank,
+                _fc3CartridgeBank,
+                _fc3Hidden,
+                _arCartridgeBank,
+                _arHidden,
+                _easyFlashCartridgeBank,
+                _ss5CartridgeBank,
+                _ss5Hidden,
+                _rrNetCartridgeBank,
+                _rrNetHidden);
+        }
+    }
+
+    /// <summary>Writes captured cartridge bank registers back onto this machine.</summary>
+    internal void RestoreCartridgeBanks(CartridgeBankState state)
+    {
+        lock (_inputSync)
+        {
+            _gameSystemCartridgeBank = state.GameSystemBank;
+            _magicDeskCartridgeBank = state.MagicDeskBank;
+            _magicDeskDisabled = state.MagicDeskDisabled;
+            _oceanCartridgeBank = state.OceanBank;
+            _fc3CartridgeBank = state.Fc3Bank;
+            _fc3Hidden = state.Fc3Hidden;
+            _arCartridgeBank = state.ActionReplayBank;
+            _arHidden = state.ActionReplayHidden;
+            _easyFlashCartridgeBank = state.EasyFlashBank;
+            _ss5CartridgeBank = state.SuperSnapshotBank;
+            _ss5Hidden = state.SuperSnapshotHidden;
+            _rrNetCartridgeBank = state.RrNetBank;
+            _rrNetHidden = state.RrNetHidden;
+            RebuildReadPageTable();
+        }
+    }
+
+    internal (string Name, byte[] Codes)[] CaptureKeyboardHostKeyCodes()
+    {
+        lock (_inputSync)
+        {
+            var result = new (string Name, byte[] Codes)[_keyboardHostKeys.Count];
+            var index = 0;
+            foreach (var name in _keyboardHostKeys)
+            {
+                _keyboardHostKeyCodes.TryGetValue(name, out var codes);
+                result[index++] = (name, codes ?? Array.Empty<byte>());
+            }
+
+            return result;
+        }
+    }
+
+    internal string[] CaptureKeyboardHostKeys()
+    {
+        lock (_inputSync)
+        {
+            var keys = new string[_keyboardHostKeys.Count];
+            _keyboardHostKeys.CopyTo(keys);
+            return keys;
+        }
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Copies both control ports. A button held before the
+    /// first recorded key is not in the event list. VICE snapshots
+    /// joystick_value for each port.
+    /// </summary>
+    internal void CaptureJoysticks(out byte port1, out byte port2)
+    {
+        lock (_inputSync)
+        {
+            port1 = (byte)_joystickPort1.State;
+            port2 = (byte)_joystickPort2.State;
+        }
+    }
+
+    /// <summary>Writes captured control-port buttons back onto this machine.</summary>
+    internal void RestoreJoysticks(byte port1, byte port2)
+    {
+        lock (_inputSync)
+        {
+            _joystickPort1.State = (C64JoystickPort.JoystickButtons)port1;
+            _joystickPort2.State = (C64JoystickPort.JoystickButtons)port2;
+        }
+    }
+
+    /// <summary>
+    /// FR-SNP-003. Copies the port-1 mouse position and POT bytes.
+    /// A move before the first recorded key is not in the event list.
+    /// VICE write_mouse_common_snapshot saves the latest mouse position.
+    /// $D419/$D41A read these bytes while the pot override is on.
+    /// </summary>
+    internal byte[] CaptureMouse()
+    {
+        var image = new byte[12];
+        image[0] = _potOverride ? (byte)1 : (byte)0;
+        image[1] = _potX;
+        image[2] = _potY;
+        image[3] = _mouseMode ? (byte)1 : (byte)0;
+        BinaryPrimitives.WriteInt32LittleEndian(image.AsSpan(4), _mouseX);
+        BinaryPrimitives.WriteInt32LittleEndian(image.AsSpan(8), _mouseY);
+        return image;
+    }
+
+    /// <summary>Writes a captured mouse position and POT bytes back onto this machine.</summary>
+    internal void RestoreMouse(ReadOnlySpan<byte> image)
+    {
+        if (image.Length < 12)
+            return;
+
+        _potOverride = image[0] != 0;
+        _potX = image[1];
+        _potY = image[2];
+        _mouseMode = image[3] != 0;
+        _mouseX = BinaryPrimitives.ReadInt32LittleEndian(image.Slice(4, 4));
+        _mouseY = BinaryPrimitives.ReadInt32LittleEndian(image.Slice(8, 4));
+    }
+
+    /// <summary>
+    /// Writes a captured keyboard matrix back onto this machine.
+    /// <paramref name="hostKeys"/> are the host names that were down.
+    /// Null is a legacy image: each down bit is one owner. Names rebuild
+    /// the contributor count so a later release of one shared key leaves
+    /// the other owner down. A matrix bit with no named owner stays at
+    /// count 1.
+    /// </summary>
+    internal void RestoreKeyboardRows(
+        ReadOnlySpan<byte> rows,
+        bool restorePressed,
+        IReadOnlyList<string>? hostKeys = null,
+        IReadOnlyList<(byte KeyCode, int Count)>? pressCounts = null,
+        IReadOnlyList<(string Name, byte[] Codes)>? hostKeyCodes = null)
+    {
+        lock (_inputSync)
+        {
+            _keyboard.RestoreRows(rows, restorePressed);
+            _keyboardKeyPressCounts.Clear();
+            _keyboardHostKeys.Clear();
+            _keyboardHostKeyCodes.Clear();
+
+            if (hostKeys is not null && pressCounts is null)
+            {
+                for (var i = 0; i < hostKeys.Count; i++)
+                {
+                    var key = hostKeys[i];
+                    if (string.IsNullOrEmpty(key) || !_keyboardMap.TryResolve(key, out var keyCodes))
+                        continue;
+
+                    if (!_keyboardHostKeys.Add(key))
+                        continue;
+
+                    foreach (var keyCode in keyCodes)
+                    {
+                        _keyboardKeyPressCounts.TryGetValue(keyCode, out var count);
+                        _keyboardKeyPressCounts[keyCode] = count + 1;
+                        _keyboard.SetKey(keyCode, true);
+                    }
+                }
+            }
+            else if (hostKeyCodes is not null)
+            {
+                // Codes were captured with the recording map. A later raw
+                // release must not look the name up on the playback map.
+                for (var i = 0; i < hostKeyCodes.Count; i++)
+                {
+                    var entry = hostKeyCodes[i];
+                    if (!string.IsNullOrEmpty(entry.Name))
+                        RememberHostKey(entry.Name, entry.Codes);
+                }
+            }
+            else if (hostKeys is not null)
+            {
+                // The captured matrix and owner counts are the physical state.
+                // VICE restores keyarr, not a name looked up in another map.
+                for (var i = 0; i < hostKeys.Count; i++)
+                {
+                    var key = hostKeys[i];
+                    if (!string.IsNullOrEmpty(key))
+                        _keyboardHostKeys.Add(key);
+                }
+            }
+
+            var rowCount = Math.Min(8, rows.Length);
+            for (var row = 0; row < rowCount; row++)
+            {
+                var value = rows[row];
+                for (var col = 0; col < 8; col++)
+                {
+                    if ((value & (1 << col)) == 0)
+                        continue;
+
+                    var keyCode = (byte)((row << 3) | col);
+                    if (_keyboardKeyPressCounts.ContainsKey(keyCode))
+                        continue;
+
+                    _keyboardKeyPressCounts[keyCode] = 1;
+                }
+            }
+
+            if (pressCounts is null)
+                return;
+
+            for (var i = 0; i < pressCounts.Count; i++)
+            {
+                var entry = pressCounts[i];
+                if (entry.Count <= 0)
+                    continue;
+
+                _keyboardKeyPressCounts.TryGetValue(entry.KeyCode, out var count);
+                if (entry.Count <= count)
+                    continue;
+
+                _keyboardKeyPressCounts[entry.KeyCode] = entry.Count;
+                _keyboard.SetKey(entry.KeyCode, true);
+            }
+        }
+    }
+
     public byte ReadVideoMemory(ushort address)
     {
         if (address is >= ColorRamStart and <= ColorRamEnd)
@@ -674,6 +1316,105 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
         return _ram[TranslateVicAddress(vicAddress)];
     }
+
+    /// <summary>
+    /// CPU-visible $0001. VICE c64pla.c forces bit 5 to 0 whenever it is an
+    /// input, and clears bit 4 when the datasette sense line is active and
+    /// that bit is an input. tape_sense active matches SenseLine low.
+    /// </summary>
+    private byte ReadVisibleProcessorPort()
+    {
+        var value = _pla.Read(0x0001);
+        var direction = _pla.DataDirection;
+        if ((direction & 0x20) == 0)
+            value = (byte)(value & 0xDF);
+
+        if (_datasette is not null && !_datasette.SenseLine && (direction & 0x10) == 0)
+            value = (byte)(value & 0xEF);
+
+        return value;
+    }
+
+    /// <summary>
+    /// VICE c64pla.c: the motor is on when ((dir &amp; data) &amp; 0x20) is 0.
+    /// Reset DDR $2F and data $37 leave bit 5 driven high, so the motor stays off.
+    /// </summary>
+    private void ApplyCassetteMotor()
+    {
+        if (_datasette is null)
+            return;
+
+        var masked = (_pla.DataDirection & _pla.DataRegister) & 0x20;
+        _datasette.MotorEnabled = masked == 0;
+    }
+
+    private static byte ClampPot(int value)
+    {
+        if (value < 0)
+            return 0;
+        if (value > 255)
+            return 255;
+        return (byte)value;
+    }
+
+    private static bool HasCrtSignature(ReadOnlySpan<byte> image)
+        => image.Length >= 16 && image[..16].SequenceEqual("C64 CARTRIDGE   "u8);
+
+    /// <summary>
+    /// VICE ocean_crt_attach places each CHIP payload at bank &lt;&lt; 13.
+    /// </summary>
+    private static byte[] DecodeOceanCrt(ReadOnlySpan<byte> image)
+    {
+        if (image.Length < 0x40)
+            throw new ArgumentException("CRT cartridge images must include a complete 64-byte header.", nameof(image));
+
+        var headerLength = BinaryPrimitives.ReadInt32BigEndian(image.Slice(0x10, 4));
+        if (headerLength < 0x40 || headerLength > image.Length)
+            throw new ArgumentException("CRT cartridge header length is invalid.", nameof(image));
+
+        var cartridgeType = BinaryPrimitives.ReadUInt16BigEndian(image.Slice(0x16, 2));
+        if (cartridgeType != 5)
+            throw new ArgumentException("Ocean CRT images must be cartridge type 5.", nameof(image));
+
+        var maxBank = -1;
+        var banks = new Dictionary<int, byte[]>();
+        var offset = headerLength;
+        while (offset < image.Length)
+        {
+            if (image.Length - offset < 0x10)
+                throw new ArgumentException("CRT cartridge CHIP packet is truncated.", nameof(image));
+
+            if (!image.Slice(offset, 4).SequenceEqual("CHIP"u8))
+                throw new ArgumentException("CRT cartridge contains a packet without a CHIP signature.", nameof(image));
+
+            var packetLength = BinaryPrimitives.ReadInt32BigEndian(image.Slice(offset + 4, 4));
+            if (packetLength < 0x10 || offset + packetLength > image.Length)
+                throw new ArgumentException("CRT cartridge CHIP packet length is invalid.", nameof(image));
+
+            var bank = BinaryPrimitives.ReadUInt16BigEndian(image.Slice(offset + 0x0A, 2));
+            var size = BinaryPrimitives.ReadUInt16BigEndian(image.Slice(offset + 0x0E, 2));
+            if (bank > 63 || size != CartridgeBankSize)
+                throw new ArgumentException("Ocean CRT CHIP packets must be 8K banks in the range 0..63.", nameof(image));
+
+            banks[bank] = image.Slice(offset + 0x10, size).ToArray();
+            if (bank > maxBank)
+                maxBank = bank;
+
+            offset += packetLength;
+        }
+
+        if (maxBank < 0)
+            throw new ArgumentException("Ocean CRT images must contain at least one CHIP packet.", nameof(image));
+
+        var raw = new byte[(maxBank + 1) * CartridgeBankSize];
+        foreach (var pair in banks)
+            pair.Value.CopyTo(raw, pair.Key * CartridgeBankSize);
+
+        return raw;
+    }
+
+    private bool IsOcean8KConfig()
+        => _cartridgeImage is not null && _cartridgeImage.Length == CartridgeBankSize * 64;
 
     private bool IsIoVisible => _pla.Charen && (_pla.Loram || _pla.Hiram);
 
@@ -698,6 +1439,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     private byte ReadIo(ushort address, bool peek)
     {
+        if (_potOverride && address is 0xD419 or 0xD41A)
+            return address == 0xD419 ? _potX : _potY;
+
         if (!peek && TryAccessGameSystemBankRegister(address, out var value))
             return value;
 
@@ -1034,7 +1778,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             // a low PB4 asserts the pen.
             if ((address & 0x0F) <= 0x03)
             {
-                _vic.SetLightPen((_cia1.Peek(0xDC01) & 0x10) == 0);
+                _vic.SetLightPenFromPort((_cia1.Peek(0xDC01) & 0x10) == 0);
             }
 
             return;
@@ -1243,6 +1987,73 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         return true;
     }
 
+    private void ReleaseHostKeysOwning(byte keyCode)
+    {
+        foreach (var name in _keyboardHostKeys.ToArray())
+        {
+            if (!TryHostKeyCodes(name, out var keyCodes))
+                continue;
+
+            var owns = false;
+            foreach (var code in keyCodes)
+            {
+                if (code != keyCode)
+                    continue;
+
+                owns = true;
+                break;
+            }
+
+            if (!owns)
+                continue;
+
+            ForgetHostKey(name);
+            foreach (var code in keyCodes)
+            {
+                if (code == keyCode)
+                    continue;
+
+                ApplyMatrixKeyState(code, false);
+            }
+        }
+    }
+
+    private void RememberHostKey(string key, IReadOnlyList<byte> codes)
+    {
+        var copy = new byte[codes.Count];
+        for (var i = 0; i < codes.Count; i++)
+            copy[i] = codes[i];
+
+        _keyboardHostKeys.Add(key);
+        _keyboardHostKeyCodes[key] = copy;
+    }
+
+    private void ForgetHostKey(string key)
+    {
+        _keyboardHostKeys.Remove(key);
+        _keyboardHostKeyCodes.Remove(key);
+    }
+
+    private bool TryHostKeyCodes(string name, out byte[] keyCodes)
+    {
+        if (_keyboardHostKeyCodes.TryGetValue(name, out var remembered) && remembered.Length > 0)
+        {
+            keyCodes = remembered;
+            return true;
+        }
+
+        if (!_keyboardMap.TryResolve(name, out var resolved) || resolved.Count == 0)
+        {
+            keyCodes = Array.Empty<byte>();
+            return false;
+        }
+
+        keyCodes = new byte[resolved.Count];
+        for (var i = 0; i < resolved.Count; i++)
+            keyCodes[i] = resolved[i];
+        return true;
+    }
+
     private void ApplyMatrixKeyState(byte keyCode, bool pressed)
     {
         _keyboardKeyPressCounts.TryGetValue(keyCode, out var count);
@@ -1349,11 +2160,13 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 imageLength > 0 &&
                 imageLength % CartridgeBankSize == 0 &&
                 imageLength / CartridgeBankSize is >= 4 and <= 64,
-            // Ocean accepts the same bank-multiple shapes (4..64 banks of 8K).
+            // Ocean: VICE ocean_crt_attach accepts 8K CHIP banks. A 16KB
+            // image is ROML plus the ROMH mirror (ocean.c type A). Raw
+            // bins of 4..64 banks stay valid. 65 banks are rejected.
             CartridgeMappingMode.Ocean =>
                 imageLength > 0 &&
                 imageLength % CartridgeBankSize == 0 &&
-                imageLength / CartridgeBankSize is >= 4 and <= 64,
+                imageLength / CartridgeBankSize is 2 or (>= 4 and <= 64),
             // FC-III ships as a fixed 64K image (4 banks of 16K).
             CartridgeMappingMode.FinalCartridgeIII =>
                 imageLength == CartridgeBankSize * 8,  // 4 banks * 16K = 64K
@@ -1431,6 +2244,16 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
             offset = CartridgeBankSize + address - CartridgeStandardRomHighStart;
             return true;
+        }
+
+        if (mappingMode == CartridgeMappingMode.Ocean &&
+            address is >= CartridgeStandardRomHighStart and <= CartridgeStandardRomHighEnd)
+        {
+            if (!IsRomHighVisible(mappingMode))
+                return false;
+
+            offset = (_oceanCartridgeBank * CartridgeBankSize) + address - CartridgeStandardRomHighStart;
+            return offset >= 0 && offset < imageLength;
         }
 
         if (mappingMode == CartridgeMappingMode.FinalCartridgeIII &&
@@ -1512,6 +2335,10 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         {
             CartridgeMappingMode.Ultimax => true,
             CartridgeMappingMode.Standard16K => _pla.Hiram,
+            // ocean.c: sizes other than 512KB use 16k game config, and
+            // ocean_romh_read returns the same 8K bank at $A000.
+            // 512KB (type B) is 8k config, so ROMH stays BASIC.
+            CartridgeMappingMode.Ocean => _pla.Hiram && !IsOcean8KConfig(),
             CartridgeMappingMode.FinalCartridgeIII => _pla.Hiram && !_fc3Hidden,
             CartridgeMappingMode.SuperSnapshotV5 => _pla.Hiram && !_ss5Hidden,
             CartridgeMappingMode.RRNet => _pla.Hiram && !_rrNetHidden,

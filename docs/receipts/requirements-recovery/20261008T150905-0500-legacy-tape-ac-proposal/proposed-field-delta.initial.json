@@ -1,0 +1,262 @@
+[
+  {
+    "kind": "fr",
+    "id": "FR-RUNTIME-TAPE-002",
+    "before": {
+      "contentField": "description",
+      "content": "Datasette.Tick() enforces MOTOR_DELAY=32,000-cycle ramp (datasette.c:62) before pulse delivery when Tick is timing mechanism. SenseLine=!PlayPressed||!RecordPressed (CIA1  bit 4). TryWritePulse stores pulses in record mode.",
+      "status": "closed",
+      "acceptanceCriteria": []
+    },
+    "proposed": {
+      "contentField": "description",
+      "content": "Datasette transport, tape-sense, motor timing, and recording must reproduce pinned immutable VICE behavior for the same selected machine, tape media state, control sequence, and emulated clock sequence. Machine-specific tape-sense and pulse wiring belong in machine adapters. Internal pulse-buffer success or compatibility with managed-only tests does not establish VICE parity.",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "text": "Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    "unchangedFields": [
+      "id",
+      "title",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "scopeEndLayerKey",
+      "mapping"
+    ],
+    "authority": "PROPOSED ONLY: exact-delta approval required; no server mutation",
+    "sourceClassification": "New source-derived corrective criteria, not verbatim historical recovery",
+    "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TAP-EDGE-001",
+    "before": {
+      "contentField": "description",
+      "content": "Datasette.SenseLine = false when PlayPressed or RecordPressed (CIA1  bit 4 active-low). TryWritePulse stores pulse when MotorEnabled && RecordPressed. RecordedPulseCount tracks stored pulses.",
+      "status": "closed",
+      "acceptanceCriteria": []
+    },
+    "proposed": {
+      "contentField": "description",
+      "content": "Model accepted VICE transport state and image eligibility before deriving tape sense or recording eligibility. Preserve the distinction between device sense state, each machine input port, and tape read-pulse interrupt wiring. Recording consumes ordered clocked write-line transitions and retains the native gap, image-position, and write-failure behavior through the managed adapter.",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "text": "Use the FR-RUNTIME-TAPE-002 ac-01 media/control matrix to assert accepted mode, sense state, and unchanged state for ignored RECORD commands; do not treat an unconstrained RecordPressed flag as proof that RECORD was accepted.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Use FR-RUNTIME-TAPE-002 ac-02 observations to assert the C64 CPU-port and VIC-20 VIA1 input bits for both data-direction settings; separately assert pulse routing to C64 CIA1 FLAG and VIC-20 VIA2 CA1.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Use the same recording eligibility traces as FR-RUNTIME-TAPE-002 ac-05. Assert emitted writes and absence of writes as well as updated last-write-line state, including input transitions while recording is ineligible.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Use the same recording byte/error traces as FR-RUNTIME-TAPE-002 ac-06. Preserve the pinned native first-write handling and encoded gap behavior, including known native quirks, without patching VICE or replacing expected values with managed output.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    "unchangedFields": [
+      "id",
+      "title",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "scopeEndLayerKey",
+      "mapping"
+    ],
+    "authority": "PROPOSED ONLY: exact-delta approval required; no server mutation",
+    "sourceClassification": "New source-derived corrective criteria, not verbatim historical recovery",
+    "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075"
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TAPE-EDGE-001",
+    "before": {
+      "contentField": "description",
+      "content": "Datasette.Tick() enforces 32,000-cycle motor ramp (MOTOR_DELAY=32000, datasette/datasette.c:62) before TryReadNextPulse delivers pulses. Ramp only activates when Tick() is used as timing. Motor off resets ramp.",
+      "status": "closed",
+      "acceptanceCriteria": []
+    },
+    "proposed": {
+      "contentField": "description",
+      "content": "Represent datasette startup and delayed motor-stop state in emulated-clock units, preserving pinned VICE alarm scheduling and event order. Preserve pending alarms, cancel a pending stop when motor is re-enabled before the stop executes, and distinguish motor control input from the running-motor state. The observable timing contract must not depend on whether a particular managed Tick method has already been called.",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "text": "Assert the native startup schedule at t+32000 from a stopped motor with no pending alarm, and assert that a pending alarm is not overwritten by the start helper.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Assert motor-off at t on a running motor retains running state before the stop executes at t+32000, and that repeated motor-off preserves the first deadline.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Assert motor-on before pending stop execution clears the stop deadline and preserves running state without another startup delay; assert motor-on after an executed stop schedules a new native startup alarm.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Compare ordered pulse and motor-state traces at deadline-1, deadline, and deadline+1 using fixed clock/control/alarm order. Do not use a first-Tick bypass or an unconditional off/on ramp reset as a substitute for native behavior.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    "unchangedFields": [
+      "id",
+      "title",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "scopeEndLayerKey",
+      "mapping"
+    ],
+    "authority": "PROPOSED ONLY: exact-delta approval required; no server mutation",
+    "sourceClassification": "New source-derived corrective criteria, not verbatim historical recovery",
+    "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TAPE-RAMP-001",
+    "before": {
+      "contentField": "condition",
+      "content": "With tape inserted, MotorEnabled=true, PlayPressed=true: TryReadNextPulse returns false during first 12,808 Tick() calls; returns true after 32,000 Tick() calls. Motor off/on resets ramp. 4 pass.",
+      "status": "closed",
+      "acceptanceCriteria": []
+    },
+    "proposed": {
+      "contentField": "condition",
+      "content": "Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and every TR-TAPE-EDGE-001 criterion using shared clock/control/alarm fixtures. First prove correct and deliberately incorrect mock traces discriminate in an entirely passing native-safe suite. Then bind unchanged fixtures and assertions to managed behavior and immutable native VICE observations. Preserve historical results but remove fixed historical pass-count claims from the acceptance condition.",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "text": "Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    "unchangedFields": [
+      "id",
+      "title",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "scopeEndLayerKey",
+      "mapping"
+    ],
+    "authority": "PROPOSED ONLY: exact-delta approval required; no server mutation",
+    "sourceClassification": "New source-derived corrective criteria, not verbatim historical recovery",
+    "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075"
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TAPE-SENSE-001",
+    "before": {
+      "contentField": "condition",
+      "content": "SenseLine==false when PlayPressed or RecordPressed, true otherwise. TryWritePulse returns true only when MotorEnabled && RecordPressed, incrementing RecordedPulseCount. 7 pass.",
+      "status": "closed",
+      "acceptanceCriteria": []
+    },
+    "proposed": {
+      "contentField": "condition",
+      "content": "Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "text": "TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    "unchangedFields": [
+      "id",
+      "title",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "scopeEndLayerKey",
+      "mapping"
+    ],
+    "authority": "PROPOSED ONLY: exact-delta approval required; no server mutation",
+    "sourceClassification": "New source-derived corrective criteria, not verbatim historical recovery",
+    "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075"
+  }
+]

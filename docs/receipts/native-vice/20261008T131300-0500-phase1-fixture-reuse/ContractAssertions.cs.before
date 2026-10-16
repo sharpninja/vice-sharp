@@ -1,0 +1,69 @@
+using NSubstitute;
+using Xunit.Sdk;
+
+namespace ViceSharp.OracleContract.Tests;
+
+/// <summary>Test-only response contract. Null is not an inferred observation.</summary>
+public sealed record Decision(bool Accepted, string? Error = null, long? HalfCycle = null);
+
+/// <summary>Substitution seam for future real adapters; no production implementation exists here.</summary>
+public interface IContractProbe<in T>
+{
+    /// <summary>Returns the adapter's reported acceptance or exact failure.</summary>
+    Decision Evaluate(T input);
+}
+
+/// <summary>Assertions shared by correct mocks, wrong mocks, and future real adapters.</summary>
+public static class ContractAssertions
+{
+    /// <summary>Requires all decision fields, including the exact first failing position.</summary>
+    public static void DecisionIs(Decision expected, Decision actual)
+    {
+        Assert.Equal(expected.Accepted, actual.Accepted);
+        Assert.Equal(expected.Error, actual.Error);
+        Assert.Equal(expected.HalfCycle, actual.HalfCycle);
+    }
+
+    /// <summary>
+    /// Exercises a fixture's independent expected decision. Negative controls are passing
+    /// tests of these same assertions, not intentionally failing production tests.
+    /// </summary>
+    public static void ProveDecision<T>(T input, Decision expected)
+    {
+        var probe = Substitute.For<IContractProbe<T>>();
+        probe.Evaluate(input).Returns(expected);
+        DecisionIs(expected, probe.Evaluate(input));
+        probe.Received(1).Evaluate(input);
+
+        // Every invalid fixture gets a wrong-acceptance control; every valid one
+        // gets a wrong-rejection control, including legal idle observations.
+        probe.Evaluate(input).Returns(expected.Accepted
+            ? new Decision(false, "WrongRejection", 999)
+            : new Decision(true));
+        Rejects(() => DecisionIs(expected, probe.Evaluate(input)));
+
+        // Catch assertions that accidentally ignore the reason or exact cycle.
+        probe.Evaluate(input).Returns(expected with { Error = "WrongReason" });
+        Rejects(() => DecisionIs(expected, probe.Evaluate(input)));
+        probe.Evaluate(input).Returns(expected with { HalfCycle = (expected.HalfCycle ?? 0) + 1 });
+        Rejects(() => DecisionIs(expected, probe.Evaluate(input)));
+    }
+
+    /// <summary>Only assertion failures count as rejection, not arbitrary application errors.</summary>
+    public static void Rejects(Action assertion) => Assert.ThrowsAny<XunitException>(assertion);
+}
+
+/// <summary>Synthetic oracle identity and inventory; never a real native acceptance receipt.</summary>
+public sealed record OracleState(string? Commit, bool CleanBefore, bool CleanAfter,
+    string BeforeInventory, string AfterInventory, string Source, bool Patched);
+
+/// <summary>Fixture constants are expectations, not live environment discovery.</summary>
+public static class Fixtures
+{
+    /// <summary>Pinned upstream reference from the approved immutable plan.</summary>
+    public const string Commit = "cc67418cba58e71d8e70fd353e9de47199ad2075";
+    /// <summary>Synthetic hash-shaped fixture value, not a claimed file hash.</summary>
+    public static readonly string Hash = new('a', 64);
+    /// <summary>Valid synthetic immutable-target state.</summary>
+    public static OracleState Clean => new(Commit, true, true, Hash, Hash, "upstream-vice", false);
+}

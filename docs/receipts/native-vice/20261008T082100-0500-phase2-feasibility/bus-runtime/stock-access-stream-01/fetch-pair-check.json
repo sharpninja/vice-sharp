@@ -1,0 +1,282 @@
+{
+  "timestampLocal": "2026-10-08T11:49:07-05:00",
+  "sourceLogSha256": "660921BD12E83A4A9FC918BC4D343D9E0F0B9D92A986473A3CF0AFA0B6709F4A",
+  "pairCount": 39,
+  "invalidPairs": [],
+  "pairs": [
+    {
+      "index": 2,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 9,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 14,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 19,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 25,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 32,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 37,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 42,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 48,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 55,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 60,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 65,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 71,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 78,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 83,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 88,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 94,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 101,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 106,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 111,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 117,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 124,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 129,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 134,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 140,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 147,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 152,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 157,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 163,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 170,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 175,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 180,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 186,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 193,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 198,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    },
+    {
+      "index": 203,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "928dcc85"
+    },
+    {
+      "index": 209,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "f002928d"
+    },
+    {
+      "index": 216,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "a578f7f0"
+    },
+    {
+      "index": 221,
+      "nextIsAfter": true,
+      "sameClock": true,
+      "instructionDelta": 3,
+      "actualEax": "cc85c6a5"
+    }
+  ],
+  "limitations": "Ad hoc diagnostic extraction. No bus decoder acceptance or per-cycle byte derivation."
+}

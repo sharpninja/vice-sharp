@@ -1,0 +1,126 @@
+{
+  "timestampLocal": "2026-10-08T10:44:03.3947221-05:00",
+  "observations": [
+    {
+      "name": "wrapped-100",
+      "count": 100,
+      "first20": [
+        7,
+        8,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "last": 104,
+      "discontinuities": [
+        {
+          "index": 2,
+          "before": 8,
+          "after": 7
+        }
+      ],
+      "observedLinesSha256": "E34E4773621A2E106E394E3A282A78C00167BEA4C51AF4DC7034720AC57FCA94",
+      "rawStdoutSha256": "A27F157C76125A97B61F2408C86A8C0775C9374C9429BA55C773812B9415539E",
+      "nativeLimitMessage": []
+    },
+    {
+      "name": "wrapped-100000-a",
+      "count": 99998,
+      "first20": [
+        7,
+        8,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "last": 100002,
+      "discontinuities": [
+        {
+          "index": 2,
+          "before": 8,
+          "after": 7
+        }
+      ],
+      "observedLinesSha256": "0A1CBF116EC45B247BE1A01591396411760E649793EC4040A17392F45CEFD406",
+      "rawStdoutSha256": "E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F",
+      "nativeLimitMessage": []
+    },
+    {
+      "name": "wrapped-100000-b",
+      "count": 99998,
+      "first20": [
+        7,
+        8,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "last": 100002,
+      "discontinuities": [
+        {
+          "index": 2,
+          "before": 8,
+          "after": 7
+        }
+      ],
+      "observedLinesSha256": "0A1CBF116EC45B247BE1A01591396411760E649793EC4040A17392F45CEFD406",
+      "rawStdoutSha256": "E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F",
+      "nativeLimitMessage": []
+    }
+  ],
+  "repeatOrderedClockStreamsEqual": true,
+  "stockLinkInputCount": 99,
+  "stockLinkInputChanges": [],
+  "stockSourceFileCount": 3847,
+  "stockSourceChanges": [],
+  "nativeChanges": [],
+  "stockXvicHash": "C01442BC1F15DD8C7006FABE0D35DFA9707664A3120DD1FA014A51EEB481B92C",
+  "nativeCycleControlProven": false,
+  "busParityProven": false,
+  "scope": "All callback clock records retained including discontinuities; native instruction-boundary limit is not cycle-boundary pause/resume"
+}

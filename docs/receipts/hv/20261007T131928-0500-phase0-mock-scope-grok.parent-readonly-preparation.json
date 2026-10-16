@@ -1,0 +1,67 @@
+{
+  "timestampLocal": "2026-10-07T13:36:09.8506843-05:00",
+  "classification": "Read-only preparation; no mock gate or production implementation",
+  "plannedProject": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj",
+  "projectExists": false,
+  "ancestorFiles": [
+    {
+      "path": "F:\\Directory.Build.props",
+      "exists": false
+    },
+    {
+      "path": "F:\\Directory.Build.targets",
+      "exists": false
+    },
+    {
+      "path": "F:\\GitHub\\Directory.Build.props",
+      "exists": false
+    },
+    {
+      "path": "F:\\GitHub\\Directory.Build.targets",
+      "exists": false
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\Directory.Build.targets",
+      "exists": false
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\Directory.Build.targets",
+      "exists": false
+    }
+  ],
+  "inspectedFiles": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\Directory.Build.props",
+      "sha256": "15BEC422A7EBA6C62F1EBD76562AAD8A3598C4DCEB9F84BF30AA65754091FC62"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\Directory.Build.props",
+      "sha256": "542AB9BC622E06D936A16A2F79EE0DF575336CEFAE06771F30B1C73E7C24782D"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\Directory.Packages.props",
+      "sha256": "B1D7C95481E78B419EF4ABB5762C3748D86CAF4838F923BEAD9FD9D7F6136724"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\ViceSharp.TestHarness.csproj",
+      "sha256": "001DF3AEBC24BAE64F8283B032E292A1DAEEBDAD7E16A1D6C191B8F35A6BA586"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Vic20\\Vic20HalfCycleComparatorTests.cs",
+      "sha256": "4E96D5803FAB27D299747210DAEF80DE7BBD9E7157922DB4CE78D5C2B84267A5"
+    }
+  ],
+  "facts": [
+    "Root props target net10.0/C#13 with central packages; tests props disable AOT and trim analyzers.",
+    "No ancestor Directory.Build.targets detected along target project ancestry.",
+    "Existing TestHarness has BeforeTargets=Build native build call and must not be used for this mock phase.",
+    "Existing xUnit v3 projects use OutputType Exe.",
+    "Pinned test packages: Microsoft.NET.Test.Sdk18.7.0 xunit.v3 3.2.2 runner3.1.5 NSubstitute5.3.0.",
+    "Existing comparator fixture tests equal registers with bus1000/1001 at halfcycle37; real fixture unchanged."
+  ],
+  "limitations": [
+    "Proposed project not yet created.",
+    "Imported SDK/NuGet target graph must be inspected once actual project exists before execution.",
+    "No passing test/build claim; current native source remains dirty."
+  ]
+}

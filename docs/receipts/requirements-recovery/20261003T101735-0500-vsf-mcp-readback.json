@@ -1,0 +1,34 @@
+{
+  "recordedAt": "2026-10-03T10:17:35-05:00",
+  "source": "mcpserver-codex-plugin 1.118.0 live readback",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "records": [
+    { "id": "FR-SNP-005", "status": "pending", "scopeStart": "layer-1", "acceptanceCount": 9, "satisfiedCount": 0 },
+    { "id": "FR-VSFLOCKSTEP-001", "status": "pending", "scopeStart": "layer-1", "acceptanceCount": 3, "satisfiedCount": 0 },
+    { "id": "TR-LOCKSTEP-VSF-001", "status": "pending", "scopeStart": "layer-1", "acceptanceCount": 7, "satisfiedCount": 0 },
+    { "id": "TR-VSFLOCKSTEP-RESUME-001", "status": "pending", "scopeStart": "layer-1", "acceptanceCount": 2, "satisfiedCount": 0 },
+    { "id": "TEST-SNP-002", "status": "pending", "scopeStart": "layer-1", "acceptanceCount": 8, "satisfiedCount": 0 },
+    { "id": "TEST-VSFLOCKSTEP-001", "status": "pending", "scopeStart": "layer-1", "acceptanceCount": 1, "satisfiedCount": 0 }
+  ],
+  "mappings": {
+    "FR-SNP-005": [
+      "TR-LOCKSTEP-VSF-001",
+      "TR-VSFLOCKSTEP-RESUME-001",
+      "TEST-SNP-002",
+      "TEST-VSFLOCKSTEP-001"
+    ],
+    "FR-VSFLOCKSTEP-001": [
+      "TR-LOCKSTEP-VSF-001",
+      "TR-VSFLOCKSTEP-RESUME-001",
+      "TEST-SNP-002",
+      "TEST-VSFLOCKSTEP-001"
+    ]
+  },
+  "wikiExportGeneratedAtUtc": "2026-10-03T15:16:14.1534405+00:00",
+  "wikiProjection": "docs/Project/wiki/github",
+  "claims": {
+    "allRecordsPending": true,
+    "allAcceptanceCriteriaUnsatisfied": true,
+    "legacyRecordsRetired": false
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "capturedAtLocal": "2026-10-08T14:16:11-05:00",
+  "classification": "Read-only F-02 evidence assessment; no credential or service mutation",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "host": "PAYTON-LEGION2",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T190255Z-prompt-b8db",
+  "reviewFinding": "F-02",
+  "sourceTranscript": "C:\\Users\\kingd\\.codex\\sessions\\2026\\08\\16\\rollout-2026-08-16T18-26-23-01a00ce5-d30d-7451-ab45-fa3e4fbb825f.jsonl",
+  "sourceSelection": "Tool outputs only dated 2026-10-08; marker-window 12:05 through 12:20 UTC, plus outputs containing MEMORY-LAB-002. Selected 22 outputs, not a full credential audit.",
+  "selectedToolOutputCount": 22,
+  "marker": {
+    "currentFile": "AGENTS-README-FIRST.yaml",
+    "sha256": "3A13AA1CA3A69A247FDE327CFBF4C289757B120541909977616001156C68817F",
+    "currentServerStartedAtUtc": "2026-10-08T14:13:49.1343917Z",
+    "currentMarkerWrittenAtUtc": "2026-10-08T14:14:02.5365398Z",
+    "historicalOutputTimestamp": "2026-10-08T12:15:14.961Z",
+    "historicalOutputCallId": "call_04652996e80c4e4cacd27dc5ebf6b247",
+    "historicalValueRedactionPlaceholderCount": 1,
+    "comparableHistoricalValues": 0,
+    "currentKeyPresentInSelectedOutputs": false,
+    "revocationVerified": false,
+    "limitation": "Retained apiKey value is a redaction placeholder. A later server startup plus documented rotation behavior is inference, not direct verification of revocation."
+  },
+  "tailscale": {
+    "memoryId": "MEMORY-LAB-002",
+    "memoryScope": "Global",
+    "memoryVersion": 5,
+    "credentialPath": "C:\\Users\\kingd\\.creds\\tailscale-grokbot.yaml",
+    "authKeyNonempty": true,
+    "memoryActiveLabelEqualsLocalKeyId": true,
+    "memoryActiveLabelEqualsFullLocalAuthKey": false,
+    "fullLocalAuthKeyPresentInSelectedOutputs": false,
+    "identifierMatches": [
+      {
+        "timestamp": "2026-10-08T14:07:01.125Z",
+        "callId": "call_e5f416fdb1224c7aae4c3d25c5439453",
+        "activeKeyIdPresent": true,
+        "revokedKeyIdPresent": true,
+        "fullLocalAuthKeyPresent": false
+      },
+      {
+        "timestamp": "2026-10-08T14:50:57.549Z",
+        "callId": "call_7f7de37623f843498f00fbe3f5a89bc0",
+        "activeKeyIdPresent": true,
+        "revokedKeyIdPresent": true,
+        "fullLocalAuthKeyPresent": false
+      },
+      {
+        "timestamp": "2026-10-08T15:50:35.331Z",
+        "callId": "call_88dc4d7d854a4fc3bc4c1d75b11c01d0",
+        "activeKeyIdPresent": true,
+        "revokedKeyIdPresent": true,
+        "fullLocalAuthKeyPresent": false
+      }
+    ],
+    "providerRevocationOrValidityQueried": false,
+    "limitation": "A key identifier was exposed in the selected outputs. This bounded check does not establish absence of full-secret exposure elsewhere, nor current provider validity."
+  },
+  "disposition": {
+    "state": "Operator decision requested, pending",
+    "question": "Leave credentials unchanged and record evidence/uncertainty, or plan rotation for explicit approval?",
+    "credentialChanges": false,
+    "serviceRestarts": false,
+    "cloudCalls": false,
+    "nativeSourceChanges": false,
+    "gateAdvanced": false,
+    "hvAccepted": false
+  }
+}

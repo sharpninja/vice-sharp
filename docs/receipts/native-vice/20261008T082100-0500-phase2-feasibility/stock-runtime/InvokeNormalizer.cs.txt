@@ -1,0 +1,10 @@
+using ViceSharp.ViceCompatibility;
+
+// Diagnostic invocation bridge only. PowerShell cannot box ReadOnlySpan<byte>.
+// All parsing and transformation execute the already unit-tested production
+// method, not a second implementation. This bridge performs no file I/O.
+public static class StockRuntimeNormalizerInvocation
+{
+    public static byte[] Invoke(byte[] input) =>
+        X64ScSnapshotCompatibility.Normalize(input);
+}

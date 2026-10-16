@@ -1,0 +1,4 @@
+# Raw prompts and streams can include private environment and marker values.
+request.jsonl
+response.jsonl
+stderr.log

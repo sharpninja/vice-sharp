@@ -277,8 +277,24 @@ public sealed class MediaServiceHost : IMediaService
         if (slot != MediaSlot.Cartridge)
             return false;
 
-        // VIC-20 expansion carts (FE3 / Ultimem / Mega-Cart) when size looks like FE3 flash.
+        // VIC-20 expansion carts. A short image is a plain BLK ROM. Longer
+        // images are FE3, Ultimem, or Mega-Cart.
         var vic20Port = session.Machine.Devices.GetAll<ViceSharp.Core.Vic20.IVic20ExpansionCartPort>().FirstOrDefault();
+        if (vic20Port is not null && payload.Length is 0x2000 or 0x4000 or 0x6000)
+        {
+            try
+            {
+                vic20Port.AttachStandardBlock(payload);
+                session.Vic20ExpansionCartKind = "blk";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+        }
+
         if (vic20Port is not null && payload.Length >= 0x10000)
         {
             try

@@ -1,0 +1,17 @@
+{
+  "timestampLocal": "2026-10-08T15:19:00.1687039-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T200326Z-prompt-15d9",
+  "status": "completed",
+  "responseExact": true,
+  "fullProposalExact": true,
+  "fullProposalChunks": 3,
+  "decisionPairExact": true,
+  "actions": 4,
+  "dialogs": 5,
+  "primaryReceiptSha256": "94F1E2F86C89F9F672F5D72A46620D8EDAA94ABB629E10ED8072A5DEAF28B187",
+  "proposalSha256": "5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A",
+  "verificationSha256": "F665B01EA00A0DFD894E8BAB542A332C35A4E6A2EC8AC5CE3D7F940F84ABFEB9",
+  "operatorApproval": "still pending",
+  "isHvAcceptance": false
+}

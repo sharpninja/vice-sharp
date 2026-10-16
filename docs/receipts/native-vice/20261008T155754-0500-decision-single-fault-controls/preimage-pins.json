@@ -1,0 +1,26 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\ContractAssertions.cs.before",
+    "sha256": "72B973C94AA68CFBE0CDF516CACD4DD96F57C20351D49CA6AA70524F1114AE27",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\OracleContractTests.cs.before",
+    "sha256": "C10940A59A87C1692590D588DDEA89E4ABE4DF25F7EA056A54D96F1161390FC8",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractFixtures.cs",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\OracleContractFixtures.cs.before",
+    "sha256": "CDB53550F2FBA6E8539CB264195E7A5A98406137C80F4CBE702A045082A9163B",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\README.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\README.md.before",
+    "sha256": "9E1FCDD68D81BA0E4FEA4D4D36ECA3362043B78D618043462832879E87F8E2D1",
+    "verified": true
+  }
+]

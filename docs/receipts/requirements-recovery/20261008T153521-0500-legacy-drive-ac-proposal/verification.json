@@ -1,0 +1,134 @@
+{
+  "timestampLocal": "2026-10-08T15:42:53.3073840-05:00",
+  "status": "unapplied-awaiting-operator-approval",
+  "recordCount": 5,
+  "unsatisfiedAcCount": 23,
+  "structure": [
+    {
+      "id": "FR-ARCH-TRUEDRIVE-1541-002",
+      "changedFields": [
+        "acceptanceCriteria",
+        "body",
+        "status",
+        "title"
+      ],
+      "advertisedFieldsMatch": true,
+      "criteria": 5,
+      "allUnsatisfied": true,
+      "uniqueAcIds": true,
+      "pending": true
+    },
+    {
+      "id": "TR-DRV-EDGE-001",
+      "changedFields": [
+        "acceptanceCriteria",
+        "body",
+        "status",
+        "title"
+      ],
+      "advertisedFieldsMatch": true,
+      "criteria": 4,
+      "allUnsatisfied": true,
+      "uniqueAcIds": true,
+      "pending": true
+    },
+    {
+      "id": "TR-IEC-EDGE-001",
+      "changedFields": [
+        "acceptanceCriteria",
+        "body",
+        "status",
+        "title"
+      ],
+      "advertisedFieldsMatch": true,
+      "criteria": 4,
+      "allUnsatisfied": true,
+      "uniqueAcIds": true,
+      "pending": true
+    },
+    {
+      "id": "TEST-DRV-MOTOR-001",
+      "changedFields": [
+        "acceptanceCriteria",
+        "condition",
+        "status",
+        "title"
+      ],
+      "advertisedFieldsMatch": true,
+      "criteria": 5,
+      "allUnsatisfied": true,
+      "uniqueAcIds": true,
+      "pending": true
+    },
+    {
+      "id": "TEST-IEC-TIMING-001",
+      "changedFields": [
+        "acceptanceCriteria",
+        "condition",
+        "status",
+        "title"
+      ],
+      "advertisedFieldsMatch": true,
+      "criteria": 5,
+      "allUnsatisfied": true,
+      "uniqueAcIds": true,
+      "pending": true
+    }
+  ],
+  "missingFrAcCoverage": [],
+  "danglingCoverageReferences": [],
+  "effectiveRequirementSectionChanges": [],
+  "nativeBaseline": [
+    {
+      "field": "gitlink",
+      "unchanged": true
+    },
+    {
+      "field": "head",
+      "unchanged": true
+    },
+    {
+      "field": "trackedDiffSha256",
+      "unchanged": true
+    },
+    {
+      "field": "untrackedListSha256",
+      "unchanged": true
+    },
+    {
+      "field": "inventorySha256",
+      "unchanged": true
+    },
+    {
+      "field": "newestSourceWriteUtc",
+      "unchanged": true
+    },
+    {
+      "field": "fileCount",
+      "unchanged": true
+    },
+    {
+      "field": "untrackedCount",
+      "unchanged": true
+    }
+  ],
+  "pinnedInputChanges": [],
+  "fullProposalBodyExactInPrimaryMcp": true,
+  "decisionActionPairExactInPrimaryMcp": true,
+  "tapeProposalSha256": "5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A",
+  "driveProposalSha256": "87F2462D8AB80B690E1DC2372D8CBAB17725E2A226B9A300E00F3D1B1B645D6E",
+  "gitDiffCheckExit": 0,
+  "gitDiffCheckOutputLines": 0,
+  "testsExecuted": 0,
+  "buildsExecuted": 0,
+  "canonicalRequirementMutations": 0,
+  "nativeSourceMutations": 0,
+  "productionOrTestSourceEdits": 0,
+  "hvVerdict": null,
+  "accuracyScore": null,
+  "completenessScore": null,
+  "phaseAdvanced": false,
+  "comparisonPolicy": "Compare original on-disk proposal after CRLF-to-LF normalization with complete v2 primary readback. Original file unchanged. First series has one extra blank line and identical parsed fields; preserved in initial-failed receipt.",
+  "correctedDialogPrefix": "Exact proposed drive field delta LF-normalized v2 part ",
+  "priorFailureReceipt": "verification.initial-failed.json"
+}

@@ -1,0 +1,132 @@
+{
+  "timestampLocal": "2026-10-09T02:03:36-05:00",
+  "rawFinalRateEvent": {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "rejected",
+      "resetsAt": 1791542400,
+      "rateLimitType": "five_hour",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "out_of_credits",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "five_hour": {
+          "utilization": 1.01,
+          "resetsAt": 1791542400
+        },
+        "seven_day": {
+          "utilization": 0.09,
+          "resetsAt": 1791795600
+        }
+      }
+    },
+    "uuid": "b78879d0-b77a-4d3e-b7e7-e8ebb3116f4e",
+    "session_id": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008"
+  },
+  "rawFinalResult": {
+    "duration_api_ms": 1900804,
+    "stop_reason": "stop_sequence",
+    "session_id": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008",
+    "total_cost_usd": 38.30455820000001,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 879167,
+      "cache_read_input_tokens": 6172195,
+      "output_tokens": 8110,
+      "output_tokens_details": {
+        "thinking_tokens": 2506
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 879167,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1367,
+          "cache_read_input_tokens": 886896,
+          "cache_creation_input_tokens": 2324,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 2324
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 348,
+        "outputTokens": 214274,
+        "thinkingTokens": 106194,
+        "cacheReadInputTokens": 99730591,
+        "cacheCreationInputTokens": 1758946,
+        "webSearchRequests": 0,
+        "costUSD": 38.30455820000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [],
+    "terminal_reason": "api_error",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": true,
+    "num_turns": 9,
+    "subtype": "success",
+    "api_error_status": 429,
+    "api_error": "usage_limit_reached",
+    "result": "You've hit your session limit · resets 5:40am (America/Chicago)",
+    "type": "result",
+    "duration_ms": 173022,
+    "uuid": "f2041e7d-8c42-4f4e-8f83-392c3d7f7eeb",
+    "queued_turn_count": 0,
+    "result_index": 0
+  },
+  "interpretation": "Process exit 1 and synthetic rate_limit response mean quota failure, despite stream result subtype success. There is no reviewer verdict and no gate acceptance.",
+  "reviewerPrimaryQuery": {
+    "workspacePath": "F:\\GitHub\\vice-sharp",
+    "agent": "ClaudeCode",
+    "exactSessionId": "ClaudeCode-20261009T065924Z-plugin-session",
+    "matchedSessionCount": 0,
+    "limit": 10,
+    "from": "2026-10-09T06:50:00Z"
+  },
+  "isolatedQueuedRecordCount": 2
+}

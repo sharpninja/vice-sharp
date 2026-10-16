@@ -1,0 +1,4 @@
+.echo FIXTURE_STEP_TO_ENTRY_BEGIN
+l-t
+r @$t0=0
+$<fixture-step-loop.cdb

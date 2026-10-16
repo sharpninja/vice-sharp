@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  Restored F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\ViceSharp.OracleContract.Tests.csproj (in 462 ms).
+F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\OracleContractTests.cs(226,24): error xUnit1013: Public method 'AssertMismatch' on test class 'Vic20HalfCycleComparatorContractTests' should be marked as a Theory. Reduce the visibility of the method, or add a Theory attribute to the method. (https://xunit.net/xunit.analyzers/rules/xUnit1013) [F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\ViceSharp.OracleContract.Tests.csproj]
+F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\OracleContractTests.cs(50,24): error xUnit1013: Public method 'AssertTranscript' on test class 'ImmutableViceOraclePreflightTests' should be marked as a Theory. Reduce the visibility of the method, or add a Theory attribute to the method. (https://xunit.net/xunit.analyzers/rules/xUnit1013) [F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\ViceSharp.OracleContract.Tests.csproj]
+
+Build FAILED.
+
+F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\OracleContractTests.cs(226,24): error xUnit1013: Public method 'AssertMismatch' on test class 'Vic20HalfCycleComparatorContractTests' should be marked as a Theory. Reduce the visibility of the method, or add a Theory attribute to the method. (https://xunit.net/xunit.analyzers/rules/xUnit1013) [F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\ViceSharp.OracleContract.Tests.csproj]
+F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\OracleContractTests.cs(50,24): error xUnit1013: Public method 'AssertTranscript' on test class 'ImmutableViceOraclePreflightTests' should be marked as a Theory. Reduce the visibility of the method, or add a Theory attribute to the method. (https://xunit.net/xunit.analyzers/rules/xUnit1013) [F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\ViceSharp.OracleContract.Tests.csproj]
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:01.92

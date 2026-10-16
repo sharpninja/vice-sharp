@@ -1,0 +1,3302 @@
+{
+  "schema": "vice-sharp/capacitor-proposal-checks/v1",
+  "checkedAt": "2026-10-11T08:04:34.5595584-05:00",
+  "priorCompositePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\proposed-field-delta.json",
+  "priorCompositeSha256": "2739BDA2EACF1206ACD9074684BA4FD4CDC8F34CD8C0A93739B01D2815AC4C34",
+  "counts": {
+    "records": 14,
+    "beforeAc": 66,
+    "afterAc": 90,
+    "retainedAc": 66,
+    "rewritten": 56,
+    "unchanged": 10,
+    "coverageRows": 82,
+    "uniqueCaseGroups": 104,
+    "projectedFields": 112,
+    "projectedFailures": 0,
+    "stableTypedRecords": 14,
+    "typedFailures": 0
+  },
+  "projectedFieldComparisons": [
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Datasette motor ramp + sense line + record mode",
+      "actual": "Datasette motor ramp + sense line + record mode",
+      "passed": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-RUNTIME-TAPE-002",
+      "actual": "FR-RUNTIME-TAPE-002",
+      "passed": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Datasette transport, tape-sense, motor timing, and recording must reproduce pinned immutable VICE behavior for the same selected machine, tape media state, control sequence, and emulated clock sequence. Machine-specific tape-sense and pulse wiring belong in machine adapters. Internal pulse-buffer success or compatibility with managed-only tests does not establish VICE parity.",
+      "actual": "Datasette transport, tape-sense, motor timing, and recording must reproduce pinned immutable VICE behavior for the same selected machine, tape media state, control sequence, and emulated clock sequence. Machine-specific tape-sense and pulse wiring belong in machine adapters. Internal pulse-buffer success or compatibility with managed-only tests does not establish VICE parity.",
+      "passed": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Datasette sense line and record mode",
+      "actual": "Datasette sense line and record mode",
+      "passed": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "TR-TAP-EDGE-001",
+      "actual": "TR-TAP-EDGE-001",
+      "passed": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Model accepted VICE transport state and image eligibility before deriving tape sense or recording eligibility. Preserve the distinction between device sense state, each machine input port, and tape read-pulse interrupt wiring. Recording consumes ordered clocked write-line transitions and retains the native gap, image-position, and write-failure behavior through the managed adapter.",
+      "actual": "Model accepted VICE transport state and image eligibility before deriving tape sense or recording eligibility. Preserve the distinction between device sense state, each machine input port, and tape read-pulse interrupt wiring. Recording consumes ordered clocked write-line transitions and retains the native gap, image-position, and write-failure behavior through the managed adapter.",
+      "passed": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "Use the FR-RUNTIME-TAPE-002 ac-01 media/control matrix to assert accepted mode, sense state, and unchanged state for ignored RECORD commands; do not treat an unconstrained RecordPressed flag as proof that RECORD was accepted.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Use FR-RUNTIME-TAPE-002 ac-02 observations to assert the C64 CPU-port and VIC-20 VIA1 input bits for both data-direction settings; separately assert pulse routing to C64 CIA1 FLAG and VIC-20 VIA2 CA1.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Use the same recording eligibility traces as FR-RUNTIME-TAPE-002 ac-05. Assert emitted writes and absence of writes as well as updated last-write-line state, including input transitions while recording is ineligible.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Use the same recording byte/error traces as FR-RUNTIME-TAPE-002 ac-06. Preserve the pinned native first-write handling and encoded gap behavior, including known native quirks, without patching VICE or replacing expected values with managed output.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "Use the FR-RUNTIME-TAPE-002 ac-01 media/control matrix to assert accepted mode, sense state, and unchanged state for ignored RECORD commands; do not treat an unconstrained RecordPressed flag as proof that RECORD was accepted.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Use FR-RUNTIME-TAPE-002 ac-02 observations to assert the C64 CPU-port and VIC-20 VIA1 input bits for both data-direction settings; separately assert pulse routing to C64 CIA1 FLAG and VIC-20 VIA2 CA1.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Use the same recording eligibility traces as FR-RUNTIME-TAPE-002 ac-05. Assert emitted writes and absence of writes as well as updated last-write-line state, including input transitions while recording is ineligible.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Use the same recording byte/error traces as FR-RUNTIME-TAPE-002 ac-06. Preserve the pinned native first-write handling and encoded gap behavior, including known native quirks, without patching VICE or replacing expected values with managed output.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Datasette motor 32,000-cycle ramp before pulse delivery",
+      "actual": "Datasette motor 32,000-cycle ramp before pulse delivery",
+      "passed": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "TR-TAPE-EDGE-001",
+      "actual": "TR-TAPE-EDGE-001",
+      "passed": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Represent datasette startup and delayed motor-stop state in emulated-clock units, preserving pinned VICE alarm scheduling and event order. Preserve pending alarms, cancel a pending stop when motor is re-enabled before the stop executes, and distinguish motor control input from the running-motor state. The observable timing contract must not depend on whether a particular managed Tick method has already been called.",
+      "actual": "Represent datasette startup and delayed motor-stop state in emulated-clock units, preserving pinned VICE alarm scheduling and event order. Preserve pending alarms, cancel a pending stop when motor is re-enabled before the stop executes, and distinguish motor control input from the running-motor state. The observable timing contract must not depend on whether a particular managed Tick method has already been called.",
+      "passed": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "Assert the native startup schedule at t+32000 from a stopped motor with no pending alarm, and assert that a pending alarm is not overwritten by the start helper.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Assert motor-off at t on a running motor retains running state before the stop executes at t+32000, and that repeated motor-off preserves the first deadline.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Assert motor-on before pending stop execution clears the stop deadline and preserves running state without another startup delay; assert motor-on after an executed stop schedules a new native startup alarm.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Compare ordered pulse and motor-state traces at deadline-1, deadline, and deadline+1 using fixed clock/control/alarm order. Do not use a first-Tick bypass or an unconditional off/on ramp reset as a substitute for native behavior.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "Assert the native startup schedule at t+32000 from a stopped motor with no pending alarm, and assert that a pending alarm is not overwritten by the start helper.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Assert motor-off at t on a running motor retains running state before the stop executes at t+32000, and that repeated motor-off preserves the first deadline.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Assert motor-on before pending stop execution clears the stop deadline and preserves running state without another startup delay; assert motor-on after an executed stop schedules a new native startup alarm.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Compare ordered pulse and motor-state traces at deadline-1, deadline, and deadline+1 using fixed clock/control/alarm order. Do not use a first-Tick bypass or an unconditional off/on ramp reset as a substitute for native behavior.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Datasette motor startup and delayed-stop parity",
+      "actual": "Datasette motor startup and delayed-stop parity",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "TEST-TAPE-RAMP-001",
+      "actual": "TEST-TAPE-RAMP-001",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "condition",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and every TR-TAPE-EDGE-001 criterion using shared clock/control/alarm fixtures. First prove correct and deliberately incorrect mock traces discriminate in an entirely passing native-safe suite. Then bind unchanged fixtures and assertions to managed behavior and immutable native VICE observations. Preserve historical results but remove fixed historical pass-count claims from the acceptance condition.",
+      "actual": "Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and every TR-TAPE-EDGE-001 criterion using shared clock/control/alarm fixtures. First prove correct and deliberately incorrect mock traces discriminate in an entirely passing native-safe suite. Then bind unchanged fixtures and assertions to managed behavior and immutable native VICE observations. Preserve historical results but remove fixed historical pass-count claims from the acceptance condition.",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Datasette transport, sense wiring and recording parity",
+      "actual": "Datasette transport, sense wiring and recording parity",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "TEST-TAPE-SENSE-001",
+      "actual": "TEST-TAPE-SENSE-001",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "condition",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.",
+      "actual": "Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Datasette Motor Control",
+      "actual": "Datasette Motor Control",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-TAP-001",
+      "actual": "FR-TAP-001",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "The Commodore Datasette tape drive motor is controlled by bit 3 of the 6510 I/O port ($0001). The motor is active-low (writing 0 turns the motor on). The motor has a spin-up delay before tape movement begins and a mechanical inertia effect.\n\n## Acceptance Criteria\n- Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.\n- The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.\n- The tape position advances only when the motor is running and spin-up is complete.\n- The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.\n- Motor state changes are reflected in the `ITapeUnit.MotorState` property.\n- Audio output from the tape (when connected to SID EXT IN) is modeled.",
+      "actual": "The Commodore Datasette tape drive motor is controlled by bit 3 of the 6510 I/O port ($0001). The motor is active-low (writing 0 turns the motor on). The motor has a spin-up delay before tape movement begins and a mechanical inertia effect.\n\n## Acceptance Criteria\n- Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.\n- The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.\n- The tape position advances only when the motor is running and spin-up is complete.\n- The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.\n- Motor state changes are reflected in the `ITapeUnit.MotorState` property.\n- Audio output from the tape (when connected to SID EXT IN) is modeled.",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "The tape position advances only when the motor is running and spin-up is complete.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Motor state changes are reflected in the `ITapeUnit.MotorState` property.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "Audio output from the tape (when connected to SID EXT IN) is modeled.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "The tape position advances only when the motor is running and spin-up is complete.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Motor state changes are reflected in the `ITapeUnit.MotorState` property.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "Audio output from the tape (when connected to SID EXT IN) is modeled.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "TAP File Format Support (v0 and v1)",
+      "actual": "TAP File Format Support (v0 and v1)",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-TAP-002",
+      "actual": "FR-TAP-002",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengths as single bytes (with 0 indicating an overflow requiring 3 additional bytes). TAP v1 extends the overflow encoding. The emulator shall read and write both TAP format versions.\n\n## Acceptance Criteria\n- TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.\n- A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.\n- TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.\n- The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.\n- Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.\n- Writing to TAP format captures the pulse timing from emulated writes.\n- The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+      "actual": "The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengths as single bytes (with 0 indicating an overflow requiring 3 additional bytes). TAP v1 extends the overflow encoding. The emulator shall read and write both TAP format versions.\n\n## Acceptance Criteria\n- TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.\n- A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.\n- TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.\n- The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.\n- Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.\n- Writing to TAP format captures the pulse timing from emulated writes.\n- The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "Writing to TAP format captures the pulse timing from emulated writes.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-07",
+          "text": "The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "Writing to TAP format captures the pulse timing from emulated writes.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-07",
+          "text": "The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Cycle-Accurate Tape Read Timing",
+      "actual": "Cycle-Accurate Tape Read Timing",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-TAP-003",
+      "actual": "FR-TAP-003",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Tape reading relies on the CIA1 Timer A or the FLAG pin to measure the time between pulses from the datasette. The Kernal tape routine uses Timer A in one-shot mode to measure pulse widths and classify them as short, medium, or long pulses for data decoding.\n\n## Acceptance Criteria\n- Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).\n- The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.\n- Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).\n- The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.\n- Tape reading at normal speed produces identical results to real hardware.\n- The timing accuracy supports both PAL and NTSC system clock rates.",
+      "actual": "Tape reading relies on the CIA1 Timer A or the FLAG pin to measure the time between pulses from the datasette. The Kernal tape routine uses Timer A in one-shot mode to measure pulse widths and classify them as short, medium, or long pulses for data decoding.\n\n## Acceptance Criteria\n- Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).\n- The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.\n- Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).\n- The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.\n- Tape reading at normal speed produces identical results to real hardware.\n- The timing accuracy supports both PAL and NTSC system clock rates.",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Tape reading at normal speed produces identical results to real hardware.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "The timing accuracy supports both PAL and NTSC system clock rates.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Tape reading at normal speed produces identical results to real hardware.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "The timing accuracy supports both PAL and NTSC system clock rates.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Tape Write Support",
+      "actual": "Tape Write Support",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-TAP-004",
+      "actual": "FR-TAP-004",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "low",
+      "actual": "low",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "The emulator shall support writing data to tape images via the datasette write line. The write signal from the VIA/CIA generates pulses that are recorded to the TAP file with correct timing.\n\n## Acceptance Criteria\n- The tape write line output generates pulses whose timing is captured.\n- Written pulses are stored in TAP format with correct timing values.\n- The standard Commodore SAVE routine produces valid tape data.\n- Writes can be appended to existing TAP files or written to new files.\n- The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+      "actual": "The emulator shall support writing data to tape images via the datasette write line. The write signal from the VIA/CIA generates pulses that are recorded to the TAP file with correct timing.\n\n## Acceptance Criteria\n- The tape write line output generates pulses whose timing is captured.\n- Written pulses are stored in TAP format with correct timing values.\n- The standard Commodore SAVE routine produces valid tape data.\n- Writes can be appended to existing TAP files or written to new files.\n- The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "The tape write line output generates pulses whose timing is captured.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Written pulses are stored in TAP format with correct timing values.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "The standard Commodore SAVE routine produces valid tape data.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Writes can be appended to existing TAP files or written to new files.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "The tape write line output generates pulses whose timing is captured.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Written pulses are stored in TAP format with correct timing values.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "The standard Commodore SAVE routine produces valid tape data.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Writes can be appended to existing TAP files or written to new files.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Tape and Datasette Tests",
+      "actual": "Tape and Datasette Tests",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "TEST-TAP-001",
+      "actual": "TEST-TAP-001",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "condition",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Datasette motor, TAP parsing, pulse timing, write behavior, and turbo loader compatibility are verified with unit and timing tests.",
+      "actual": "Datasette motor, TAP parsing, pulse timing, write behavior, and turbo loader compatibility are verified with unit and timing tests.",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [],
+      "actual": [],
+      "passed": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Media devices (D64, tape) I/O functional parity",
+      "actual": "Media devices (D64, tape) I/O functional parity",
+      "passed": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-BACKFILL-MEDIA-001",
+      "actual": "FR-BACKFILL-MEDIA-001",
+      "passed": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [],
+      "actual": [],
+      "passed": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "closed",
+      "actual": "closed",
+      "passed": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+      "actual": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+      "passed": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "6510 I/O Port at Addresses $0000/$0001",
+      "actual": "6510 I/O Port at Addresses $0000/$0001",
+      "passed": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-CPU-004",
+      "actual": "FR-CPU-004",
+      "passed": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "high",
+      "actual": "high",
+      "passed": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction register) and $0001 (data port) shall be emulated. This port controls the PLA memory banking configuration (LORAM, HIRAM, CHAREN bits), the cassette motor, and the cassette sense line. The data port shall exhibit the correct behavior with pull-up/pull-down resistors and the capacitive discharge timing that affects reads of output pins.\n\n## Acceptance Criteria\n- Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.\n- Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.\n- Bit 3 controls the cassette motor (active low).\n- Bit 4 reads the cassette switch sense (active low).\n- Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.\n- When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.\n- The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+      "actual": "The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction register) and $0001 (data port) shall be emulated. This port controls the PLA memory banking configuration (LORAM, HIRAM, CHAREN bits), the cassette motor, and the cassette sense line. The data port shall exhibit the correct behavior with pull-up/pull-down resistors and the capacitive discharge timing that affects reads of output pins.\n\n## Acceptance Criteria\n- Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.\n- Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.\n- Bit 3 controls the cassette motor (active low).\n- Bit 4 reads the cassette switch sense (active low).\n- Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.\n- When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.\n- The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+      "passed": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Bit 3 controls the cassette motor (active low).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Bit 4 reads the cassette switch sense (active low).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-07",
+          "text": "The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Bit 3 controls the cassette motor (active low).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "Bit 4 reads the cassette switch sense (active low).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-07",
+          "text": "The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Commodore SX-64 Machine Profile",
+      "actual": "Commodore SX-64 Machine Profile",
+      "passed": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-PRF-003",
+      "actual": "FR-PRF-003",
+      "passed": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "medium",
+      "actual": "medium",
+      "passed": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "The SX-64 is a portable C64 with a built-in 1541 disk drive and a 5\" color monitor. It lacks a cassette port and has a different KERNAL ROM (no tape routines, different screen colors on startup).\n\n## Acceptance Criteria\n- KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).\n- No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").\n- Built-in 1541 drive: device 8 is always present.\n- The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.\n- All other hardware is identical to the C64 NMOS profile.\n- Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+      "actual": "The SX-64 is a portable C64 with a built-in 1541 disk drive and a 5\" color monitor. It lacks a cassette port and has a different KERNAL ROM (no tape routines, different screen colors on startup).\n\n## Acceptance Criteria\n- KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).\n- No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").\n- Built-in 1541 drive: device 8 is always present.\n- The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.\n- All other hardware is identical to the C64 NMOS profile.\n- Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+      "passed": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Built-in 1541 drive: device 8 is always present.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "All other hardware is identical to the C64 NMOS profile.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Built-in 1541 drive: device 8 is always present.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "All other hardware is identical to the C64 NMOS profile.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "title",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Turbo Tape Loader Compatibility",
+      "actual": "Turbo Tape Loader Compatibility",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "id",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "FR-TAP-005",
+      "actual": "FR-TAP-005",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "priority",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "low",
+      "actual": "low",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "body",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "Many commercial C64 programs used turbo tape loaders that employ faster pulse encoding than the standard Commodore format. The emulator shall support turbo loaders by providing accurate tape read timing down to individual clock cycles.\n\n## Acceptance Criteria\n- Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.\n- Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.\n- Custom pulse encoding schemes are supported through accurate pulse-level emulation.\n- The CIA FLAG input timing is accurate to 1 system clock cycle.\n- Half-wave and full-wave detection methods both work correctly.\n- Multi-speed loaders (that change pulse rates mid-load) are supported.",
+      "actual": "Many commercial C64 programs used turbo tape loaders that employ faster pulse encoding than the standard Commodore format. The emulator shall support turbo loaders by providing accurate tape read timing down to individual clock cycles.\n\n## Acceptance Criteria\n- Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.\n- Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.\n- Custom pulse encoding schemes are supported through accurate pulse-level emulation.\n- The CIA FLAG input timing is accurate to 1 system clock cycle.\n- Half-wave and full-wave detection methods both work correctly.\n- Multi-speed loaders (that change pulse rates mid-load) are supported.",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "acceptanceCriteria",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": [
+        {
+          "id": "ac-01",
+          "text": "Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Custom pulse encoding schemes are supported through accurate pulse-level emulation.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The CIA FLAG input timing is accurate to 1 system clock cycle.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Half-wave and full-wave detection methods both work correctly.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "Multi-speed loaders (that change pulse rates mid-load) are supported.",
+          "isSatisfied": false
+        }
+      ],
+      "actual": [
+        {
+          "id": "ac-01",
+          "text": "Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Custom pulse encoding schemes are supported through accurate pulse-level emulation.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The CIA FLAG input timing is accurate to 1 system clock cycle.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Half-wave and full-wave detection methods both work correctly.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "Multi-speed loaders (that change pulse rates mid-load) are supported.",
+          "isSatisfied": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "workspaceId",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "F:\\GitHub\\vice-sharp",
+      "actual": "F:\\GitHub\\vice-sharp",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "status",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "pending",
+      "actual": "pending",
+      "passed": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "scopeStartLayerKey",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": "layer-1",
+      "actual": "layer-1",
+      "passed": true
+    }
+  ],
+  "stableTypedComparisons": [
+    {
+      "check": "StableTypedPreimage",
+      "id": "TR-TAP-EDGE-001",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "TR-TAP-EDGE-001",
+        "priority": "medium",
+        "subarea": "EDGE",
+        "area": "TAP",
+        "description": "Model accepted VICE transport state and image eligibility before deriving tape sense or recording eligibility. Preserve the distinction between device sense state, each machine input port, and tape read-pulse interrupt wiring. Recording consumes ordered clocked write-line transitions and retains the native gap, image-position, and write-failure behavior through the managed adapter.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Use the FR-RUNTIME-TAPE-002 ac-01 media/control matrix to assert accepted mode, sense state, and unchanged state for ignored RECORD commands; do not treat an unconstrained RecordPressed flag as proof that RECORD was accepted.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Use FR-RUNTIME-TAPE-002 ac-02 observations to assert the C64 CPU-port and VIC-20 VIA1 input bits for both data-direction settings; separately assert pulse routing to C64 CIA1 FLAG and VIC-20 VIA2 CA1.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Use the same recording eligibility traces as FR-RUNTIME-TAPE-002 ac-05. Assert emitted writes and absence of writes as well as updated last-write-line state, including input transitions while recording is ineligible.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Use the same recording byte/error traces as FR-RUNTIME-TAPE-002 ac-06. Preserve the pinned native first-write handling and encoded gap behavior, including known native quirks, without patching VICE or replacing expected values with managed output.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette sense line and record mode",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "TR-TAP-EDGE-001",
+        "priority": "medium",
+        "subarea": "EDGE",
+        "area": "TAP",
+        "description": "Model accepted VICE transport state and image eligibility before deriving tape sense or recording eligibility. Preserve the distinction between device sense state, each machine input port, and tape read-pulse interrupt wiring. Recording consumes ordered clocked write-line transitions and retains the native gap, image-position, and write-failure behavior through the managed adapter.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Use the FR-RUNTIME-TAPE-002 ac-01 media/control matrix to assert accepted mode, sense state, and unchanged state for ignored RECORD commands; do not treat an unconstrained RecordPressed flag as proof that RECORD was accepted.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Use FR-RUNTIME-TAPE-002 ac-02 observations to assert the C64 CPU-port and VIC-20 VIA1 input bits for both data-direction settings; separately assert pulse routing to C64 CIA1 FLAG and VIC-20 VIA2 CA1.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Use the same recording eligibility traces as FR-RUNTIME-TAPE-002 ac-05. Assert emitted writes and absence of writes as well as updated last-write-line state, including input transitions while recording is ineligible.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Use the same recording byte/error traces as FR-RUNTIME-TAPE-002 ac-06. Preserve the pinned native first-write handling and encoded gap behavior, including known native quirks, without patching VICE or replacing expected values with managed output.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette sense line and record mode",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "TR-TAPE-EDGE-001",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "TR-TAPE-EDGE-001",
+        "priority": "medium",
+        "subarea": "EDGE",
+        "area": "TAPE",
+        "description": "Represent datasette startup and delayed motor-stop state in emulated-clock units, preserving pinned VICE alarm scheduling and event order. Preserve pending alarms, cancel a pending stop when motor is re-enabled before the stop executes, and distinguish motor control input from the running-motor state. The observable timing contract must not depend on whether a particular managed Tick method has already been called.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Assert the native startup schedule at t+32000 from a stopped motor with no pending alarm, and assert that a pending alarm is not overwritten by the start helper.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Assert motor-off at t on a running motor retains running state before the stop executes at t+32000, and that repeated motor-off preserves the first deadline.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Assert motor-on before pending stop execution clears the stop deadline and preserves running state without another startup delay; assert motor-on after an executed stop schedules a new native startup alarm.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Compare ordered pulse and motor-state traces at deadline-1, deadline, and deadline+1 using fixed clock/control/alarm order. Do not use a first-Tick bypass or an unconditional off/on ramp reset as a substitute for native behavior.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette motor 32,000-cycle ramp before pulse delivery",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "TR-TAPE-EDGE-001",
+        "priority": "medium",
+        "subarea": "EDGE",
+        "area": "TAPE",
+        "description": "Represent datasette startup and delayed motor-stop state in emulated-clock units, preserving pinned VICE alarm scheduling and event order. Preserve pending alarms, cancel a pending stop when motor is re-enabled before the stop executes, and distinguish motor control input from the running-motor state. The observable timing contract must not depend on whether a particular managed Tick method has already been called.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Assert the native startup schedule at t+32000 from a stopped motor with no pending alarm, and assert that a pending alarm is not overwritten by the start helper.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Assert motor-off at t on a running motor retains running state before the stop executes at t+32000, and that repeated motor-off preserves the first deadline.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Assert motor-on before pending stop execution clears the stop deadline and preserves running state without another startup delay; assert motor-on after an executed stop schedules a new native startup alarm.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Compare ordered pulse and motor-state traces at deadline-1, deadline, and deadline+1 using fixed clock/control/alarm order. Do not use a first-Tick bypass or an unconditional off/on ramp reset as a substitute for native behavior.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette motor 32,000-cycle ramp before pulse delivery",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "TEST-TAPE-RAMP-001",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "TEST-TAPE-RAMP-001",
+        "priority": "medium",
+        "area": "TAPE",
+        "description": "Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and every TR-TAPE-EDGE-001 criterion using shared clock/control/alarm fixtures. First prove correct and deliberately incorrect mock traces discriminate in an entirely passing native-safe suite. Then bind unchanged fixtures and assertions to managed behavior and immutable native VICE observations. Preserve historical results but remove fixed historical pass-count claims from the acceptance condition.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette motor startup and delayed-stop parity",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "TEST-TAPE-RAMP-001",
+        "priority": "medium",
+        "area": "TAPE",
+        "description": "Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and every TR-TAPE-EDGE-001 criterion using shared clock/control/alarm fixtures. First prove correct and deliberately incorrect mock traces discriminate in an entirely passing native-safe suite. Then bind unchanged fixtures and assertions to managed behavior and immutable native VICE observations. Preserve historical results but remove fixed historical pass-count claims from the acceptance condition.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette motor startup and delayed-stop parity",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "TEST-TAPE-SENSE-001",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "TEST-TAPE-SENSE-001",
+        "priority": "medium",
+        "area": "TAPE",
+        "description": "Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette transport, sense wiring and recording parity",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "TEST-TAPE-SENSE-001",
+        "priority": "medium",
+        "area": "TAPE",
+        "description": "Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette transport, sense wiring and recording parity",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "TEST-TAP-001",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "TEST-TAP-001",
+        "priority": "medium",
+        "area": "TAP",
+        "description": "Datasette motor, TAP parsing, pulse timing, write behavior, and turbo loader compatibility are verified with unit and timing tests.",
+        "acceptanceCriteria": [],
+        "title": "Tape and Datasette Tests",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "TEST-TAP-001",
+        "priority": "medium",
+        "area": "TAP",
+        "description": "Datasette motor, TAP parsing, pulse timing, write behavior, and turbo loader compatibility are verified with unit and timing tests.",
+        "acceptanceCriteria": [],
+        "title": "Tape and Datasette Tests",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-RUNTIME-TAPE-002",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "FR-RUNTIME-TAPE-002",
+        "priority": "medium",
+        "area": "RUNTIME",
+        "description": "Datasette transport, tape-sense, motor timing, and recording must reproduce pinned immutable VICE behavior for the same selected machine, tape media state, control sequence, and emulated clock sequence. Machine-specific tape-sense and pulse wiring belong in machine adapters. Internal pulse-buffer success or compatibility with managed-only tests does not establish VICE parity.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette motor ramp + sense line + record mode",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "FR-RUNTIME-TAPE-002",
+        "priority": "medium",
+        "area": "RUNTIME",
+        "description": "Datasette transport, tape-sense, motor timing, and recording must reproduce pinned immutable VICE behavior for the same selected machine, tape media state, control sequence, and emulated clock sequence. Machine-specific tape-sense and pulse wiring belong in machine adapters. Internal pulse-buffer success or compatibility with managed-only tests does not establish VICE parity.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette motor ramp + sense line + record mode",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-TAP-001",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "FR-TAP-001",
+        "priority": "medium",
+        "area": "TAP",
+        "description": "The Commodore Datasette tape drive motor is controlled by bit 3 of the 6510 I/O port ($0001). The motor is active-low (writing 0 turns the motor on). The motor has a spin-up delay before tape movement begins and a mechanical inertia effect.\n\n## Acceptance Criteria\n- Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.\n- The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.\n- The tape position advances only when the motor is running and spin-up is complete.\n- The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.\n- Motor state changes are reflected in the `ITapeUnit.MotorState` property.\n- Audio output from the tape (when connected to SID EXT IN) is modeled.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "The tape position advances only when the motor is running and spin-up is complete.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Motor state changes are reflected in the `ITapeUnit.MotorState` property.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Audio output from the tape (when connected to SID EXT IN) is modeled.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette Motor Control",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "FR-TAP-001",
+        "priority": "medium",
+        "area": "TAP",
+        "description": "The Commodore Datasette tape drive motor is controlled by bit 3 of the 6510 I/O port ($0001). The motor is active-low (writing 0 turns the motor on). The motor has a spin-up delay before tape movement begins and a mechanical inertia effect.\n\n## Acceptance Criteria\n- Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.\n- The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.\n- The tape position advances only when the motor is running and spin-up is complete.\n- The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.\n- Motor state changes are reflected in the `ITapeUnit.MotorState` property.\n- Audio output from the tape (when connected to SID EXT IN) is modeled.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "The tape position advances only when the motor is running and spin-up is complete.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Motor state changes are reflected in the `ITapeUnit.MotorState` property.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Audio output from the tape (when connected to SID EXT IN) is modeled.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Datasette Motor Control",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-TAP-002",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "FR-TAP-002",
+        "priority": "medium",
+        "area": "TAP",
+        "description": "The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengths as single bytes (with 0 indicating an overflow requiring 3 additional bytes). TAP v1 extends the overflow encoding. The emulator shall read and write both TAP format versions.\n\n## Acceptance Criteria\n- TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.\n- A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.\n- TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.\n- The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.\n- Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.\n- Writing to TAP format captures the pulse timing from emulated writes.\n- The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Writing to TAP format captures the pulse timing from emulated writes.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-07",
+            "text": "The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "TAP File Format Support (v0 and v1)",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "FR-TAP-002",
+        "priority": "medium",
+        "area": "TAP",
+        "description": "The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengths as single bytes (with 0 indicating an overflow requiring 3 additional bytes). TAP v1 extends the overflow encoding. The emulator shall read and write both TAP format versions.\n\n## Acceptance Criteria\n- TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.\n- A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.\n- TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.\n- The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.\n- Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.\n- Writing to TAP format captures the pulse timing from emulated writes.\n- The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Writing to TAP format captures the pulse timing from emulated writes.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-07",
+            "text": "The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "TAP File Format Support (v0 and v1)",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-TAP-003",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "FR-TAP-003",
+        "priority": "medium",
+        "area": "TAP",
+        "description": "Tape reading relies on the CIA1 Timer A or the FLAG pin to measure the time between pulses from the datasette. The Kernal tape routine uses Timer A in one-shot mode to measure pulse widths and classify them as short, medium, or long pulses for data decoding.\n\n## Acceptance Criteria\n- Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).\n- The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.\n- Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).\n- The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.\n- Tape reading at normal speed produces identical results to real hardware.\n- The timing accuracy supports both PAL and NTSC system clock rates.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Tape reading at normal speed produces identical results to real hardware.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "The timing accuracy supports both PAL and NTSC system clock rates.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Cycle-Accurate Tape Read Timing",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "FR-TAP-003",
+        "priority": "medium",
+        "area": "TAP",
+        "description": "Tape reading relies on the CIA1 Timer A or the FLAG pin to measure the time between pulses from the datasette. The Kernal tape routine uses Timer A in one-shot mode to measure pulse widths and classify them as short, medium, or long pulses for data decoding.\n\n## Acceptance Criteria\n- Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).\n- The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.\n- Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).\n- The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.\n- Tape reading at normal speed produces identical results to real hardware.\n- The timing accuracy supports both PAL and NTSC system clock rates.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Tape reading at normal speed produces identical results to real hardware.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "The timing accuracy supports both PAL and NTSC system clock rates.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Cycle-Accurate Tape Read Timing",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-TAP-004",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "FR-TAP-004",
+        "priority": "low",
+        "area": "TAP",
+        "description": "The emulator shall support writing data to tape images via the datasette write line. The write signal from the VIA/CIA generates pulses that are recorded to the TAP file with correct timing.\n\n## Acceptance Criteria\n- The tape write line output generates pulses whose timing is captured.\n- Written pulses are stored in TAP format with correct timing values.\n- The standard Commodore SAVE routine produces valid tape data.\n- Writes can be appended to existing TAP files or written to new files.\n- The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "The tape write line output generates pulses whose timing is captured.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Written pulses are stored in TAP format with correct timing values.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "The standard Commodore SAVE routine produces valid tape data.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Writes can be appended to existing TAP files or written to new files.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Tape Write Support",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "FR-TAP-004",
+        "priority": "low",
+        "area": "TAP",
+        "description": "The emulator shall support writing data to tape images via the datasette write line. The write signal from the VIA/CIA generates pulses that are recorded to the TAP file with correct timing.\n\n## Acceptance Criteria\n- The tape write line output generates pulses whose timing is captured.\n- Written pulses are stored in TAP format with correct timing values.\n- The standard Commodore SAVE routine produces valid tape data.\n- Writes can be appended to existing TAP files or written to new files.\n- The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "The tape write line output generates pulses whose timing is captured.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Written pulses are stored in TAP format with correct timing values.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "The standard Commodore SAVE routine produces valid tape data.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Writes can be appended to existing TAP files or written to new files.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Tape Write Support",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-BACKFILL-MEDIA-001",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "closed",
+        "id": "FR-BACKFILL-MEDIA-001",
+        "priority": "medium",
+        "area": "BACKFILL",
+        "description": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+        "acceptanceCriteria": [],
+        "title": "Media devices (D64, tape) I/O functional parity",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "closed",
+        "id": "FR-BACKFILL-MEDIA-001",
+        "priority": "medium",
+        "area": "BACKFILL",
+        "description": "D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.",
+        "acceptanceCriteria": [],
+        "title": "Media devices (D64, tape) I/O functional parity",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-CPU-004",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "FR-CPU-004",
+        "priority": "high",
+        "area": "CPU",
+        "description": "The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction register) and $0001 (data port) shall be emulated. This port controls the PLA memory banking configuration (LORAM, HIRAM, CHAREN bits), the cassette motor, and the cassette sense line. The data port shall exhibit the correct behavior with pull-up/pull-down resistors and the capacitive discharge timing that affects reads of output pins.\n\n## Acceptance Criteria\n- Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.\n- Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.\n- Bit 3 controls the cassette motor (active low).\n- Bit 4 reads the cassette switch sense (active low).\n- Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.\n- When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.\n- The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Bit 3 controls the cassette motor (active low).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Bit 4 reads the cassette switch sense (active low).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-07",
+            "text": "The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "6510 I/O Port at Addresses $0000/$0001",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "FR-CPU-004",
+        "priority": "high",
+        "area": "CPU",
+        "description": "The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction register) and $0001 (data port) shall be emulated. This port controls the PLA memory banking configuration (LORAM, HIRAM, CHAREN bits), the cassette motor, and the cassette sense line. The data port shall exhibit the correct behavior with pull-up/pull-down resistors and the capacitive discharge timing that affects reads of output pins.\n\n## Acceptance Criteria\n- Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.\n- Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.\n- Bit 3 controls the cassette motor (active low).\n- Bit 4 reads the cassette switch sense (active low).\n- Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.\n- When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.\n- The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Bit 3 controls the cassette motor (active low).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "Bit 4 reads the cassette switch sense (active low).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-07",
+            "text": "The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "6510 I/O Port at Addresses $0000/$0001",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-PRF-003",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "FR-PRF-003",
+        "priority": "medium",
+        "area": "PRF",
+        "description": "The SX-64 is a portable C64 with a built-in 1541 disk drive and a 5\" color monitor. It lacks a cassette port and has a different KERNAL ROM (no tape routines, different screen colors on startup).\n\n## Acceptance Criteria\n- KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).\n- No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").\n- Built-in 1541 drive: device 8 is always present.\n- The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.\n- All other hardware is identical to the C64 NMOS profile.\n- Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Built-in 1541 drive: device 8 is always present.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "All other hardware is identical to the C64 NMOS profile.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Commodore SX-64 Machine Profile",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "FR-PRF-003",
+        "priority": "medium",
+        "area": "PRF",
+        "description": "The SX-64 is a portable C64 with a built-in 1541 disk drive and a 5\" color monitor. It lacks a cassette port and has a different KERNAL ROM (no tape routines, different screen colors on startup).\n\n## Acceptance Criteria\n- KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).\n- No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").\n- Built-in 1541 drive: device 8 is always present.\n- The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.\n- All other hardware is identical to the C64 NMOS profile.\n- Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Built-in 1541 drive: device 8 is always present.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "All other hardware is identical to the C64 NMOS profile.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Commodore SX-64 Machine Profile",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    },
+    {
+      "check": "StableTypedPreimage",
+      "id": "FR-TAP-005",
+      "expectedPresent": true,
+      "actualPresent": true,
+      "expected": {
+        "status": "pending",
+        "id": "FR-TAP-005",
+        "priority": "low",
+        "area": "TAP",
+        "description": "Many commercial C64 programs used turbo tape loaders that employ faster pulse encoding than the standard Commodore format. The emulator shall support turbo loaders by providing accurate tape read timing down to individual clock cycles.\n\n## Acceptance Criteria\n- Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.\n- Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.\n- Custom pulse encoding schemes are supported through accurate pulse-level emulation.\n- The CIA FLAG input timing is accurate to 1 system clock cycle.\n- Half-wave and full-wave detection methods both work correctly.\n- Multi-speed loaders (that change pulse rates mid-load) are supported.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Custom pulse encoding schemes are supported through accurate pulse-level emulation.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The CIA FLAG input timing is accurate to 1 system clock cycle.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Half-wave and full-wave detection methods both work correctly.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Multi-speed loaders (that change pulse rates mid-load) are supported.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Turbo Tape Loader Compatibility",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "actual": {
+        "status": "pending",
+        "id": "FR-TAP-005",
+        "priority": "low",
+        "area": "TAP",
+        "description": "Many commercial C64 programs used turbo tape loaders that employ faster pulse encoding than the standard Commodore format. The emulator shall support turbo loaders by providing accurate tape read timing down to individual clock cycles.\n\n## Acceptance Criteria\n- Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.\n- Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.\n- Custom pulse encoding schemes are supported through accurate pulse-level emulation.\n- The CIA FLAG input timing is accurate to 1 system clock cycle.\n- Half-wave and full-wave detection methods both work correctly.\n- Multi-speed loaders (that change pulse rates mid-load) are supported.",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Custom pulse encoding schemes are supported through accurate pulse-level emulation.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The CIA FLAG input timing is accurate to 1 system clock cycle.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Half-wave and full-wave detection methods both work correctly.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Multi-speed loaders (that change pulse rates mid-load) are supported.",
+            "isSatisfied": false
+          }
+        ],
+        "title": "Turbo Tape Loader Compatibility",
+        "scopeStartLayerKey": "layer-1"
+      },
+      "passed": true
+    }
+  ],
+  "criteriaLedger": [
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-01",
+      "beforeText": "Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.",
+      "afterText": "From known STOP, cover STOP, START, FORWARD, REWIND and RECORD with absent, read-only and writable images. Match accepted mode and sense. Absent-image and read-only-image RECORD do not change mode or sense; accepted writable RECORD asserts sense when the datasette is enabled.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-02",
+      "beforeText": "For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.",
+      "afterText": "Match C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6, including DDR/output masking. Separately match C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse routing; sense is not an interrupt pulse.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-03",
+      "beforeText": "With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.",
+      "afterText": "A stopped motor with no pending alarm schedules the ordinary startup callback at current clock plus 32000; retain an existing alarm as VICE does. FORWARD/REWIND commands schedule their 1000-cycle alarm independently of motor-running state, including motor-on before and after that alarm dispatch. Compare ordered scheduled and actual events, not a pulse-duration getter. Also cover START while the motor is already running, with absent, read-only and writable media, with no pending alarm and with an existing pending alarm. The command reaches the start helper after resetting the gap: install t+32000 only when no alarm is pending, otherwise preserve the existing alarm; match attached-image seek, current-clock write-clock seeding and write-bit zeroing, including clock zero. Contrast START with running-motor FORWARD/REWIND, whose earlier t+1000 alarm survives the helper, and preserve any stop deadline that the command does not clear.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-04",
+      "beforeText": "For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.",
+      "afterText": "Motor-off on a running motor sets a stop deadline of current clock plus 32000 without immediate stopping or replacing an already pending alarm. Actual stopping occurs when a datasette callback observes the deadline reached. Cover callbacks before, at and beyond the deadline, active read rescheduling, STOP with a retained later alarm, repeated off preserving the deadline, and motor-on cancellation even after the deadline but before stop execution. A stopped motor starts again through the native pending-alarm rule. Explicitly include motor-on before the stop deadline and at the deadline before callback dispatch, preserving the already-running motor, pending alarm and write state while clearing the stop deadline; neither case starts a new ramp.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-05",
+      "beforeText": "Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.",
+      "afterText": "Recording eligibility follows attached image, accepted RECORD mode, the native running-motor flag and qualifying zero-to-nonzero write-line transition. The running flag is set immediately on motor-on and retained until the delayed-stop callback. Cover writes during startup and pending stop, no writes after executed stop, rejected RECORD, repeated/opposite edges, and retained write-line updates even while ineligible.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-06",
+      "beforeText": "For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.",
+      "afterText": "Match emitted TAP bytes, last-write clock/line, remainder, image position/size/dirty state, counters and failure/STOP effects for RECORD-before-motor and motor-before-RECORD, same/future-clock first edges, short gaps 0/6/7/8/2046/2047, long gaps at and above 24-bit boundaries, TAP v0/v1/v2 output paths, and first/partial/failed writes. Preserve the native first-gap and truncation behavior. Include the pinned stream-cursor versus logical-position command-order and buffer-boundary contract in FR-TAP-004 ac-04; retained buffered-read state is part of the initial condition.",
+      "rewritten": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "acId": "ac-01",
+      "beforeText": "Use the FR-RUNTIME-TAPE-002 ac-01 media/control matrix to assert accepted mode, sense state, and unchanged state for ignored RECORD commands; do not treat an unconstrained RecordPressed flag as proof that RECORD was accepted.",
+      "afterText": "Apply FR-RUNTIME-TAPE-002 ac-01 media/control matrix to accepted transport state and sense. Ignored RECORD is not a RecordPressed success. Include enabled-state gating and unchanged observations.",
+      "rewritten": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "acId": "ac-02",
+      "beforeText": "Use FR-RUNTIME-TAPE-002 ac-02 observations to assert the C64 CPU-port and VIC-20 VIA1 input bits for both data-direction settings; separately assert pulse routing to C64 CIA1 FLAG and VIC-20 VIA2 CA1.",
+      "afterText": "Apply FR-RUNTIME-TAPE-002 ac-02 and ac-07 to separate machine sense inputs, read-pulse interrupt inputs and motor/write outputs, including direction registers, raw VIC-20 PCR behavior and SX-64.",
+      "rewritten": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "acId": "ac-03",
+      "beforeText": "Use the same recording eligibility traces as FR-RUNTIME-TAPE-002 ac-05. Assert emitted writes and absence of writes as well as updated last-write-line state, including input transitions while recording is ineligible.",
+      "afterText": "Apply FR-RUNTIME-TAPE-002 ac-05 to ordered recording eligibility and write edges; assert output absence as well as writes and retained line state. Native running state is distinct from control input and completed startup delay.",
+      "rewritten": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "acId": "ac-04",
+      "beforeText": "Use the same recording byte/error traces as FR-RUNTIME-TAPE-002 ac-06. Preserve the pinned native first-write handling and encoded gap behavior, including known native quirks, without patching VICE or replacing expected values with managed output.",
+      "afterText": "Apply FR-RUNTIME-TAPE-002 ac-06 to exact recording bytes and side effects, including both RECORD/motor orderings, first-edge clock handling, 24-bit truncation and failed/partial writes.",
+      "rewritten": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "acId": "ac-01",
+      "beforeText": "Assert the native startup schedule at t+32000 from a stopped motor with no pending alarm, and assert that a pending alarm is not overwritten by the start helper.",
+      "afterText": "Assert stopped-motor ordinary startup at t+32000 with no pending alarm and preservation of an existing pending alarm. Observe callback dispatch separately from scheduled time; no first-Tick bypass. Exercise the separate command-entry path: START on an already-running motor invokes the start helper with and without media, schedules t+32000 only without a pending alarm, and preserves a pending alarm while still performing the native seek and write-state initialization. Distinguish command START from motor-line re-enable, and preserve the t+1000 alarm already installed by FORWARD/REWIND before their helper call.",
+      "rewritten": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "acId": "ac-02",
+      "beforeText": "Assert motor-off at t on a running motor retains running state before the stop executes at t+32000, and that repeated motor-off preserves the first deadline.",
+      "afterText": "Assert motor-off sets t+32000 stop deadline, retains a pending alarm and running state until a callback executes at or after that deadline, and repeated motor-off does not extend it. Include no-pending exact-deadline stop, retained late read/STOP alarms and a before-deadline callback rescheduling beyond the deadline.",
+      "rewritten": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "acId": "ac-03",
+      "beforeText": "Assert motor-on before pending stop execution clears the stop deadline and preserves running state without another startup delay; assert motor-on after an executed stop schedules a new native startup alarm.",
+      "afterText": "Assert motor-on cancels a stop not yet executed, including after the nominal deadline but before a late callback, without imposing a new startup delay on an already-running motor. After an executed stop, obey the ordinary start helper and its pending-alarm preservation. Include cancellation before the deadline and same-clock cancellation before callback dispatch as separate cases from cancellation after the deadline; for an already-running motor, preserve the existing alarm and write state and clear only the stop deadline in this path.",
+      "rewritten": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "acId": "ac-04",
+      "beforeText": "Compare ordered pulse and motor-state traces at deadline-1, deadline, and deadline+1 using fixed clock/control/alarm order. Do not use a first-Tick bypass or an unconditional off/on ramp reset as a substitute for native behavior.",
+      "afterText": "Compare complete ordered control, alarm, running-state and pulse traces at deadline-1/deadline/deadline+1 and at actual callback boundaries. Pin same-clock ordering, callback offset, tape resources and effective gap; reject missing, extra, duplicate, reordered or synthesized events.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "acId": "ac-01",
+      "beforeText": "Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.",
+      "afterText": "Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert ordered schedules, callback times and events; incorrect early/late/missing/duplicated/reordered events are rejected within a passing mock harness. Start_CommandWhileMotorRunning_NoPendingAlarm and Start_CommandWhileMotorRunning_PendingAlarm cover absent/read-only/writable media, clock zero/nonzero, seek/no-seek, retained write state and a pending stop deadline; reject omission of the command helper path, wrong alarm replacement or absence, wrong seek, wrong write-clock/bit seeding, and clearing a stop deadline that START leaves intact.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "acId": "ac-02",
+      "beforeText": "Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.",
+      "afterText": "Run all named delayed-stop and cancellation cases in the amendment ledger, retaining deadline and callback boundaries separately. Reject immediate stop, guaranteed-deadline stop despite an existing late alarm, repeated-off deadline extension and unconditional off/on restart. MotorOn_CancelsPendingStop covers deadline-1 and the exact deadline with motor-on ordered before callback dispatch; assert stop-clock clearing, unchanged running/alarm/write state and no startup ramp, and reject wrong mocks that restart only in these earlier cancellation cases.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "acId": "ac-03",
+      "beforeText": "The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.",
+      "afterText": "Real-provider validation reuses every mock input/assertion and obtains actual native and managed ordered observations. Source inspection, an analytical trace or a duration getter cannot substitute for actual pulse/state evidence. Missing capability fails closed.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "acId": "ac-04",
+      "beforeText": "All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.",
+      "afterText": "Run every case without skips in full applicable cumulative native-safe and real-emulator suites after native-safe integration. Retain exact commands, counts, TRX/logs, identities, failure history and accepted hostile review before satisfaction.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-01",
+      "beforeText": "TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.",
+      "afterText": "TransportSense_MediaCommandMatrix covers five commands from STOP, absent/read-only/writable images, enabled-state sense gating and later STOP. Reject wrong polarity, ignored-command state changes and missing transitions.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-02",
+      "beforeText": "MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.",
+      "afterText": "MachineSense_C64CpuPortAndVic20Via1 covers both machines and DDR/output masking; TapeRead_PulseInterruptRouting separately covers CIA1 FLAG and VIA2 CA1. Reject wrong port/bit/direction/interrupt target and extra or missing pulse events.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-03",
+      "beforeText": "Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.",
+      "afterText": "Run all recording eligibility/window/edge cases in the ledger, including startup, pending stop, after nominal deadline before callback and after executed stop. Assert writes/no-writes and retained line state. Reject no-image recording and invented startup inhibits.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-04",
+      "beforeText": "Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.",
+      "afterText": "Run both RECORD/motor orderings and gap/error cases including 0/6/7/8/2046/2047, remainder carry, same/future-clock edges, v0/v1/v2, 0xffffff/0x1000000/0x1000001 and zero/one/two/three-byte long-payload writes. Assert bytes, image position/size/dirty state, counters, retained state and STOP side effects against independent native expectations.",
+      "rewritten": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-05",
+      "beforeText": "Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.",
+      "afterText": "Reuse all fixtures/assertions with actual immutable native and managed providers, then run full cumulative suites. Missing, failed, skipped, aborted or mock-only cases cannot satisfy AC; require independent AGREE, both scores at least 98 and zero FAIL/UNKNOWN.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-01",
+      "beforeText": "Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.",
+      "afterText": "C64 CPU-port bit 5 controls active-low motor output as !((DDR & DATA) & 0x20); input direction drives motor-on. Bit 3 is tape write, not motor. VIC-20 and SX-64 behavior follows FR-RUNTIME-TAPE-002 ac-07.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-02",
+      "beforeText": "The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.",
+      "afterText": "Use the native emulated-clock schedule: ordinary start adds 32000 only if no alarm is pending; FORWARD/REWIND uses its 1000-cycle command alarm. Do not substitute an approximate real-hardware half-second timer.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-03",
+      "beforeText": "The tape position advances only when the motor is running and spin-up is complete.",
+      "afterText": "Tape motion, read-pulse delivery and stopping match the ordered native transport/alarm trace, including late stop execution and pending-alarm cases. Do not conflate immediate native running-state assertion with first movement or apply a universal spin-up-complete gate to every operation.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-04",
+      "beforeText": "The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.",
+      "afterText": "PLAY/sense is not a prerequisite for asserting the native motor-running flag. Cover motor-on in STOP and RECORD, and distinguish transport mode/sense from motor control and running state.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-05",
+      "beforeText": "Motor state changes are reflected in the `ITapeUnit.MotorState` property.",
+      "afterText": "Motor state changes are reflected in the `ITapeUnit.MotorState` property.",
+      "rewritten": false
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-06",
+      "beforeText": "Audio output from the tape (when connected to SID EXT IN) is modeled.",
+      "afterText": "Tape audio remains required. With identical sound-enabled/volume/sample-format/rate and tape halfwave/gap inputs, match pinned VICE datasette sound buffer and output samples, including disabled flush, buffer wrap, empty output and gap boundaries. Native datasette sound-chip output, not an assumed SID EXT IN route, is the acceptance target.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-01",
+      "beforeText": "TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.",
+      "afterText": "For nonzero TAP bytes, preserve native pulse units and layer-specific conversion: file/block decoding uses pulse units while live datasette gaps use byte times eight before resource adjustments. Do not globally label every v0 byte a half-period.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-02",
+      "beforeText": "A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.",
+      "afterText": "A v0 zero consumes only that byte. The file/block decoder returns 256 pulse units; the live datasette uses DatasetteZeroGapDelay and its adjustments. Adjacent bytes remain separate pulses, not a 24-bit extension.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-03",
+      "beforeText": "TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.",
+      "afterText": "For v1/v2 zero, cover three-byte little-endian extensions, truncated extension and all-zero length at each native layer. File/block v2 combines two halfwaves; live behavior depends on selected machine tape behavior and retains its native direction/resource effects.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-04",
+      "beforeText": "The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.",
+      "afterText": "Header handling matches native short-read/magic rejection, stored version/system/video values, mismatch warning versus error behavior, declared data handling and clock fallback. Do not reject a mismatch that the corresponding native path only warns about. Test actual payload sizes 0, 1, 2 and 3 independently of declared header length; native tap_open rejects fewer than three actual bytes, and derives size from the physical file rather than the declared length. With at least three valid payload bytes, vary declared length below/equal/above actual length without incorrectly attributing a minimum-size rejection to a length mismatch. Cover every stored version byte 0 through 255 with otherwise valid headers; header acceptance is distinct from decoder outcome.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-05",
+      "beforeText": "Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.",
+      "afterText": "Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.",
+      "rewritten": false
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-06",
+      "beforeText": "Writing to TAP format captures the pulse timing from emulated writes.",
+      "afterText": "Writing to TAP preserves native recording eligibility, clocks, byte encoding, first-gap and failure effects from FR-RUNTIME-TAPE-002 ac-05/ac-06, including v0/v1/v2 output behavior and 24-bit truncation.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-07",
+      "beforeText": "The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.",
+      "afterText": "Header machine tags distinguish C64, VIC-20 and C16/Plus4 and use the native machine/video clock table. Tests pin selected machine separately from the media header and preserve native mismatch/fallback behavior.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-01",
+      "beforeText": "Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).",
+      "afterText": "C64 read pulses reach CIA1 FLAG and VIC-20 read pulses reach VIA2 CA1 with the pinned native edge/state semantics. Tape sense remains a distinct input.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-02",
+      "beforeText": "The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.",
+      "afterText": "With identical pinned firmware and tape workload, timer/interrupt observations used to measure pulses match native VICE, including boundary and pending-interrupt state. A decoder return value is not timer/interrupt evidence.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-03",
+      "beforeText": "Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).",
+      "afterText": "Configured C64/VIC-20 file-decoder CBM pulse-unit ranges are inclusive 36-54 short, 55-73 middle and 74-100 long. Test endpoint and adjacent values after tap_init conversion. Keep live pulse clocks separate; do not pair inconsistent fixed cycle counts with TAP byte values.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-04",
+      "beforeText": "The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.",
+      "afterText": "Pinned standard Commodore header, data-block and checksum workloads produce the same decoded bytes/status and machine-visible load outcome as native VICE. Include malformed, truncated and checksum-error fixtures.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-05",
+      "beforeText": "Tape reading at normal speed produces identical results to real hardware.",
+      "afterText": "At normal speed, the same named tape workload produces the same ordered native and managed machine-visible pulse/state/output observations. Hardware assumptions or source inspection alone cannot replace the immutable native target.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-06",
+      "beforeText": "The timing accuracy supports both PAL and NTSC system clock rates.",
+      "afterText": "Run PAL and NTSC selected-machine/resource profiles with separately pinned tape headers and clock domains. Preserve native differences and any lack of cross-standard rescaling; do not improve the native target.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-01",
+      "beforeText": "The tape write line output generates pulses whose timing is captured.",
+      "afterText": "Capture qualifying native write-line transitions from C64 CPU-port bit 3 and VIC-20 VIA2 PB3, including DDR-only changes, repeated/opposite edges and SX-64 disconnection.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-02",
+      "beforeText": "Written pulses are stored in TAP format with correct timing values.",
+      "afterText": "Store the same bytes, gap/remainder, last-write state, file position/size/dirty state and counters as pinned VICE across short/long/24-bit boundaries and partial/failed output.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-03",
+      "beforeText": "The standard Commodore SAVE routine produces valid tape data.",
+      "afterText": "A standard Commodore SAVE workload with pinned firmware, writable tape, resources and initial state produces the same bytes/status and machine-visible effects as immutable VICE, and its corresponding native/managed load results match. Include failure and write-protected cases.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-04",
+      "beforeText": "Writes can be appended to existing TAP files or written to new files.",
+      "afterText": "New-image, existing-image current-position and explicit end-position recordings preserve the same prefix/suffix and file-position/size effects as native VICE. Existing-file writes must not silently become unconditional append or truncate. Retain RECORD accepted while the motor already runs as an in-scope sequence, including after buffered reads; that command does not itself seek. Distinguish the actual C stream cursor from logical image position and compare the bytes and both positions that pinned native execution produces. Include RECORD-before-motor, motor-before-RECORD, read-then-RECORD, intervening START/seek, beginning/interior/end positions and buffer-refill boundaries. Pin the exact native binary, platform/C runtime, file mode, initial bytes and I/O prelude, and retain repeated native observations. Do not invent a platform-independent result, insert a compensating native seek, silently exclude an ordering or treat an unstable/unobservable result as a passing gate.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-05",
+      "beforeText": "The record interlock (RECORD + PLAY buttons) must be engaged for writes.",
+      "afterText": "Writable-image RECORD acceptance is the native interlock; absent/read-only-image RECORD is ignored. Do not require an additional independent PlayPressed boolean once native RECORD mode is accepted. Motor-running and qualifying-edge conditions still apply.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-01",
+      "beforeText": "Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.",
+      "afterText": "Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.",
+      "rewritten": false
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-02",
+      "beforeText": "Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.",
+      "afterText": "Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.",
+      "rewritten": false
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-03",
+      "beforeText": "Bit 3 controls the cassette motor (active low).",
+      "afterText": "On C64, the cassette motor output is active low from DDR-masked bit 5, !(DDR & DATA & 0x20), and the cassette write output is bit 3, (~DDR | DATA) & 0x08. Match pinned VICE's changed-effective-output detection for data and DDR writes, including input/output transitions and repeated writes. Do not exchange the motor and write bits.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-04",
+      "beforeText": "Bit 4 reads the cassette switch sense (active low).",
+      "afterText": "Bit 4 reads the cassette switch sense (active low).",
+      "rewritten": false
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-05",
+      "beforeText": "Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.",
+      "afterText": "On the C64 board, reading $0001 with DDR bit 5 clear returns bit 5 clear; with DDR bit 5 set, its output readback follows pinned VICE's port data/DDR calculation. Bit 5 is the motor-control bit, not an unused pin. Exercise both data levels, both DDR directions, and direction changes; do not substitute SX-64 floating-pin behavior for C64 behavior.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-06",
+      "beforeText": "When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.",
+      "afterText": "Unused CPU-port pins reproduce the pinned VICE C64/SX-64 charge and decay behavior: bits 6 and 7 on both boards use a deadline of the current CPU clock plus 350000 cycles plus an inclusive random value from 0 through 70000; SX-64 bits 3, 4 and 5 use 1500000 plus an inclusive 0 through 300000. Writing a pin while configured as output, including a repeated identical data write, or changing it from output to input captures its data bit and sets its deadline. Other DDR transitions do not reset that deadline. Reads of $0001 clear active retained charge only when the deadline is strictly less than the current CPU clock, and substitute retained charge only for pins configured as input; reads of $0000 do not perform this discharge. Preserve native board selection, random-state consumption order, unsigned 64-bit clock arithmetic and reset behavior. Do not replace the executed behavior with a fixed 350-microsecond delay, an unused 8500 constant, or host-time expiration.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-07",
+      "beforeText": "The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+      "afterText": "The `IMemoryMappedDevice` interface exposes the port to the address decoder.",
+      "rewritten": false
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-01",
+      "beforeText": "KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).",
+      "afterText": "KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).",
+      "rewritten": false
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-02",
+      "beforeText": "No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").",
+      "afterText": "The SX-64 board has no connected cassette port. Match pinned VICE's board-specific PLA inputs and suppress forwarding of motor, write and sense-out changes to tapeport devices. CPU-visible reads of bits 3-5 must still follow the native data, DDR and retained floating-capacitor state; neither permanently-high nor permanently-low input values are a valid universal substitute.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-03",
+      "beforeText": "Built-in 1541 drive: device 8 is always present.",
+      "afterText": "Built-in 1541 drive: device 8 is always present.",
+      "rewritten": false
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-04",
+      "beforeText": "The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.",
+      "afterText": "For SX-64 CPU reads of $0001, each input-configured bit 3, 4 and 5 is replaced by its retained native data_set_bit value after native falloff processing. Reset clears those retained values. Output writes and output-to-input transitions seed the corresponding retained data bit, falloff flag and deadline as pinned VICE does. A flagged retained value clears on a read only when its stored deadline is strictly less than maincpu_clk: a charged input therefore remains charged at the exact deadline and clears on the first later read. Output-configured bits retain normal port readback. Match each bit independently, native RNG-dependent deadline selection, repeated writes, direction transitions, reset and read side effects; do not impose an always-high or always-zero sense bit.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-05",
+      "beforeText": "All other hardware is identical to the C64 NMOS profile.",
+      "afterText": "All other hardware is identical to the C64 NMOS profile.",
+      "rewritten": false
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-06",
+      "beforeText": "Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+      "afterText": "Selectable via `IMachineProfile.LoadProfile(\"sx64\")`.",
+      "rewritten": false
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-01",
+      "beforeText": "Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.",
+      "afterText": "Turbo loaders using shorter pulses than the standard Commodore format, including the existing approximately-160-cycle workload obligation, function correctly with the same pinned C64 firmware, tape fixture, resources and initial state as native VICE. Do not impose 160 cycles as a parser minimum or normalize pulse widths to hardware estimates; cover representable values below, at and above 160 with separately asserted block-decoder units and native live scheduling/interrupt traces.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-02",
+      "beforeText": "Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.",
+      "afterText": "Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully. For each named C64 format, retain identified fixture and firmware hashes, resources, initial state, load entry/operation sequence, expected loaded bytes and machine-visible completion/failure observations. Native and managed results must both satisfy successful loading and match; two equal failures do not satisfy this criterion. A missing fixture, oracle capability or completion observation leaves the corresponding format unsatisfied, not waived.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-03",
+      "beforeText": "Custom pulse encoding schemes are supported through accurate pulse-level emulation.",
+      "afterText": "Custom pulse encoding schemes are supported through accurate pulse-level emulation. Pin custom-stream bytes and their format-specific expected loading/output behavior independently of the managed implementation; compare ordered native and managed tape/interrupt/timer observations without converting the input into a recognized standard loader or normalizing its pulse widths. Include malformed/truncated and boundary fixtures with explicit expected outcomes.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-04",
+      "beforeText": "The CIA FLAG input timing is accurate to 1 system clock cycle.",
+      "afterText": "For C64 tape workloads, reproduce the exact native ordered CIA1 FLAG invocation, interrupt/timer state and clock observations at the approved observation boundary, with pinned main-CPU clock, alarm scheduled/dispatch clocks and callback offset. Do not interpret the former one-system-clock wording as permission for a one-cycle divergence. Include same-clock ordering and pending interrupt state, with missing, extra, duplicated and shifted events rejected. VIC-20 VIA2 CA1 parity remains separately mandatory under FR-RUNTIME-TAPE-002 and FR-TAP-003; CIA FLAG terminology does not substitute for it.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-05",
+      "beforeText": "Half-wave and full-wave detection methods both work correctly.",
+      "afterText": "Half-wave and full-wave loader detection workloads both work correctly against pinned native VICE. Keep file/block TAP-v2 pairing (including each truncated half) distinct from live playback, which follows selected-machine tape behavior rather than applying a universal two-to-one conversion. Preserve fixture-specific ordered pulses, direction/phase, timer and load outcomes under separately pinned media version/system/video tags and machine resources.",
+      "rewritten": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-06",
+      "beforeText": "Multi-speed loaders (that change pulse rates mid-load) are supported.",
+      "afterText": "Multi-speed loaders that change pulse rates mid-load are supported. Use a single pinned workload with an explicit sequence of rate transitions and assert the whole load result plus ordered native-equivalent pulse, timer and interrupt observations across every transition; disconnected constant-speed subtests do not prove the mid-load behavior. Run each required PAL/NTSC profile with pinned headers and preserve native scaling or lack of scaling.",
+      "rewritten": true
+    }
+  ],
+  "sourcePins": [
+    {
+      "relativePath": "src/c64/c64.h",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64.h",
+      "gitBlob": "3733dcec1dc2392aa72ab0eedde49e40b2f990a0",
+      "sha256": "23B26B78EFAC77C43FDF2FE20C399464DC0A9A7C0D103804D7FF65CEA6BF816F",
+      "matchesPinnedCommit": true
+    },
+    {
+      "relativePath": "src/c64/c64mem.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64mem.c",
+      "gitBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+      "sha256": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+      "matchesPinnedCommit": true
+    },
+    {
+      "relativePath": "src/c64/c64memsc.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64memsc.c",
+      "gitBlob": "d08f9904d6874753c7d829bc00fc0482d7a54748",
+      "sha256": "85A08EA194E27735DA0C7A8282772B97E6EFB6E109F3B683C780EE0F2A37F2DB",
+      "matchesPinnedCommit": true
+    },
+    {
+      "relativePath": "src/c64/c64pla.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64pla.c",
+      "gitBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+      "sha256": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+      "matchesPinnedCommit": true
+    },
+    {
+      "relativePath": "src/lib.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\lib.c",
+      "gitBlob": "f6c07b80fbebda155a95b52e9d41406760fecce7",
+      "sha256": "29A769179C00A80A502FDD3DD452E1716A286DFF7FDB3B72D0FFEAE2B5673C9E",
+      "matchesPinnedCommit": true
+    },
+    {
+      "relativePath": "src/types.h",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\types.h",
+      "gitBlob": "54c3c4f56d12793d45f464bd06f5566106692499",
+      "sha256": "00A1C62B8A3CA58F04BA310DE22EE1289EEA4F9A69ED8ED6E818B68FCBF84758",
+      "matchesPinnedCommit": true
+    }
+  ],
+  "productOrEmulatorTestsRun": 0,
+  "mockGateExecuted": false,
+  "R0R1TransactionVerified": false,
+  "applicationPerformed": false,
+  "hostileAcceptance": false,
+  "limitation": "Read-only source and data comparisons, not runtime or mutation proof. Guard protocol and capacitor case matrices remain proposed, not executable acceptance."
+}

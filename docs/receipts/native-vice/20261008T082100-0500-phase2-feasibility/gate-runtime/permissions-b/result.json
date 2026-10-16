@@ -1,0 +1,338 @@
+{
+  "startedLocal": "2026-10-08T11:07:58.2092397-05:00",
+  "executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\xvic-gate-probe.exe",
+  "executableSha256": "A15ED9740135D4E95A2594D8155E2FC807B45453FFCF525E731DEDF02733FF60",
+  "arguments": [
+    "-default",
+    "-console",
+    "-sound",
+    "-sounddev",
+    "dummy",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data"
+  ],
+  "workingDirectory": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src",
+  "permissions": 16,
+  "finalCommand": "quit",
+  "expectedExit": 67,
+  "pid": 115024,
+  "exitCode": 67,
+  "endedLocal": "2026-10-08T11:08:02.7364562-05:00",
+  "completed": true,
+  "failure": null,
+  "forcedTermination": false,
+  "clocks": [
+    7,
+    8,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "events": [
+    {
+      "timestampLocal": "2026-10-08T11:07:58.2720549-05:00",
+      "kind": "observed",
+      "index": 0,
+      "clock": 7
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:58.5292486-05:00",
+      "kind": "permission-withheld",
+      "index": 0,
+      "milliseconds": 256.8023
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:58.5293918-05:00",
+      "kind": "permit",
+      "index": 0
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:58.5295691-05:00",
+      "kind": "observed",
+      "index": 1,
+      "clock": 8
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:58.7881543-05:00",
+      "kind": "permission-withheld",
+      "index": 1,
+      "milliseconds": 258.2782
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:58.7883206-05:00",
+      "kind": "permit",
+      "index": 1
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:58.7890042-05:00",
+      "kind": "observed",
+      "index": 2,
+      "clock": 7
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.0509086-05:00",
+      "kind": "permission-withheld",
+      "index": 2,
+      "milliseconds": 261.4771
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.0510679-05:00",
+      "kind": "permit",
+      "index": 2
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.0512640-05:00",
+      "kind": "observed",
+      "index": 3,
+      "clock": 8
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.3125298-05:00",
+      "kind": "permission-withheld",
+      "index": 3,
+      "milliseconds": 261.0115
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.3126938-05:00",
+      "kind": "permit",
+      "index": 3
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.3129282-05:00",
+      "kind": "observed",
+      "index": 4,
+      "clock": 9
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.5732348-05:00",
+      "kind": "permission-withheld",
+      "index": 4,
+      "milliseconds": 259.6059
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.5734059-05:00",
+      "kind": "permit",
+      "index": 4
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.5736345-05:00",
+      "kind": "observed",
+      "index": 5,
+      "clock": 10
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.8358807-05:00",
+      "kind": "permission-withheld",
+      "index": 5,
+      "milliseconds": 262.0053
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.8360607-05:00",
+      "kind": "permit",
+      "index": 5
+    },
+    {
+      "timestampLocal": "2026-10-08T11:07:59.8363033-05:00",
+      "kind": "observed",
+      "index": 6,
+      "clock": 11
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.0986975-05:00",
+      "kind": "permission-withheld",
+      "index": 6,
+      "milliseconds": 262.0519
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.1166146-05:00",
+      "kind": "permit",
+      "index": 6
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.1169505-05:00",
+      "kind": "observed",
+      "index": 7,
+      "clock": 12
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.3760636-05:00",
+      "kind": "permission-withheld",
+      "index": 7,
+      "milliseconds": 258.7723
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.3761860-05:00",
+      "kind": "permit",
+      "index": 7
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.3763711-05:00",
+      "kind": "observed",
+      "index": 8,
+      "clock": 13
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.6402976-05:00",
+      "kind": "permission-withheld",
+      "index": 8,
+      "milliseconds": 263.6222
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.6404626-05:00",
+      "kind": "permit",
+      "index": 8
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.6406940-05:00",
+      "kind": "observed",
+      "index": 9,
+      "clock": 14
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.9037682-05:00",
+      "kind": "permission-withheld",
+      "index": 9,
+      "milliseconds": 262.7536
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.9039850-05:00",
+      "kind": "permit",
+      "index": 9
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:00.9042830-05:00",
+      "kind": "observed",
+      "index": 10,
+      "clock": 15
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.1656882-05:00",
+      "kind": "permission-withheld",
+      "index": 10,
+      "milliseconds": 261.1696
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.1658439-05:00",
+      "kind": "permit",
+      "index": 10
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.1660826-05:00",
+      "kind": "observed",
+      "index": 11,
+      "clock": 16
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.4305416-05:00",
+      "kind": "permission-withheld",
+      "index": 11,
+      "milliseconds": 264.2499
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.4306973-05:00",
+      "kind": "permit",
+      "index": 11
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.4309205-05:00",
+      "kind": "observed",
+      "index": 12,
+      "clock": 17
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.6916802-05:00",
+      "kind": "permission-withheld",
+      "index": 12,
+      "milliseconds": 260.5327
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.6918457-05:00",
+      "kind": "permit",
+      "index": 12
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.6920410-05:00",
+      "kind": "observed",
+      "index": 13,
+      "clock": 18
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.9566879-05:00",
+      "kind": "permission-withheld",
+      "index": 13,
+      "milliseconds": 264.2007
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.9568473-05:00",
+      "kind": "permit",
+      "index": 13
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:01.9570270-05:00",
+      "kind": "observed",
+      "index": 14,
+      "clock": 19
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:02.2168125-05:00",
+      "kind": "permission-withheld",
+      "index": 14,
+      "milliseconds": 259.4382
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:02.2169568-05:00",
+      "kind": "permit",
+      "index": 14
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:02.2171181-05:00",
+      "kind": "observed",
+      "index": 15,
+      "clock": 20
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:02.4673394-05:00",
+      "kind": "permission-withheld",
+      "index": 15,
+      "milliseconds": 249.8011
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:02.4675142-05:00",
+      "kind": "permit",
+      "index": 15
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:02.4677810-05:00",
+      "kind": "observed",
+      "index": 16,
+      "clock": 21
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:02.7274479-05:00",
+      "kind": "permission-withheld",
+      "index": 16,
+      "milliseconds": 259.3675
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:02.7276551-05:00",
+      "kind": "terminal-command",
+      "command": "quit"
+    }
+  ],
+  "scope": "Post-vic_cycle callback permission only; not complete device freeze, bus trace or parity acceptance."
+}

@@ -1,0 +1,9 @@
+{
+  "timestampLocal": "2026-10-08T11:30:18.0489711-05:00",
+  "debuggerPid": 90236,
+  "fixturePids": [
+    11224
+  ],
+  "completed": false,
+  "reason": "Recursive one-step command reached first instruction only; no recursive completion marker. Owned debugger stopped, failed diagnostic retained."
+}

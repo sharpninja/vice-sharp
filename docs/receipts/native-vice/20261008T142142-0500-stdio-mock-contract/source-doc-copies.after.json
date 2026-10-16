@@ -1,0 +1,22 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\StdioAdapterContractTests.cs",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\StdioAdapterContractTests.cs.after-copy",
+    "sha256": "EDC43F831C70183873AA38550291948A39DA3CB6081F565F13F4948132F82A8E"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\STDIO-ADAPTER-SLICE.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\STDIO-ADAPTER-SLICE.md.after-copy",
+    "sha256": "AD5699E68514B3319A5A483AAE8187C50DD12F5EC95ECF705B43975FEFB47166"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\GATE-SLICE.md.after-copy",
+    "sha256": "0A8787761A7569332D2DA899DF393BA6CEDF8664964A4AF909BE507AEFBC94FB"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\HANDOFF.md.after-copy",
+    "sha256": "CF5B25D28071A32F01DF65FCBC8DC8524DB4436EAF4A0D20A4522F8CC649426B"
+  }
+]

@@ -1,0 +1,3964 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-cycle.c",
+    "start": 42,
+    "end": 82,
+    "lines": [
+      {
+        "line": 42,
+        "text": "#include \"vicii-cycle.h\""
+      },
+      {
+        "line": 43,
+        "text": "#include \"vicii-draw-cycle.h\""
+      },
+      {
+        "line": 44,
+        "text": "#include \"vicii-fetch.h\""
+      },
+      {
+        "line": 45,
+        "text": "#include \"vicii-irq.h\""
+      },
+      {
+        "line": 46,
+        "text": "#include \"vicii-lightpen.h\""
+      },
+      {
+        "line": 47,
+        "text": "#include \"vicii-resources.h\""
+      },
+      {
+        "line": 48,
+        "text": "#include \"vicii.h\""
+      },
+      {
+        "line": 49,
+        "text": "#include \"viciitypes.h\""
+      },
+      {
+        "line": 50,
+        "text": ""
+      },
+      {
+        "line": 51,
+        "text": "static inline void check_badline(void)"
+      },
+      {
+        "line": 52,
+        "text": "{"
+      },
+      {
+        "line": 53,
+        "text": "    /* Check badline condition (line range and \"allow bad lines\" handled outside */"
+      },
+      {
+        "line": 54,
+        "text": "    if ((vicii.raster_line & 7) == vicii.ysmooth) {"
+      },
+      {
+        "line": 55,
+        "text": "        vicii.bad_line = 1;"
+      },
+      {
+        "line": 56,
+        "text": "        vicii.idle_state = 0;"
+      },
+      {
+        "line": 57,
+        "text": "    } else {"
+      },
+      {
+        "line": 58,
+        "text": "        vicii.bad_line = 0;"
+      },
+      {
+        "line": 59,
+        "text": "    }"
+      },
+      {
+        "line": 60,
+        "text": "}"
+      },
+      {
+        "line": 61,
+        "text": ""
+      },
+      {
+        "line": 62,
+        "text": "static inline void check_sprite_display(void)"
+      },
+      {
+        "line": 63,
+        "text": "{"
+      },
+      {
+        "line": 64,
+        "text": "    int i, b;"
+      },
+      {
+        "line": 65,
+        "text": "    int enable = vicii.regs[0x15];"
+      },
+      {
+        "line": 66,
+        "text": ""
+      },
+      {
+        "line": 67,
+        "text": "    for (i = 0, b = 1; i < VICII_NUM_SPRITES; i++, b <<= 1) {"
+      },
+      {
+        "line": 68,
+        "text": "        unsigned int y = vicii.regs[i * 2 + 1];"
+      },
+      {
+        "line": 69,
+        "text": "        vicii.sprite[i].mc = vicii.sprite[i].mcbase;"
+      },
+      {
+        "line": 70,
+        "text": ""
+      },
+      {
+        "line": 71,
+        "text": "        if (vicii.sprite_dma & b) {"
+      },
+      {
+        "line": 72,
+        "text": "            if ((enable & b) && (y == (vicii.raster_line & 0xff))) {"
+      },
+      {
+        "line": 73,
+        "text": "                vicii.sprite_display_bits |= b;"
+      },
+      {
+        "line": 74,
+        "text": "            }"
+      },
+      {
+        "line": 75,
+        "text": "        } else {"
+      },
+      {
+        "line": 76,
+        "text": "            vicii.sprite_display_bits &= ~b;"
+      },
+      {
+        "line": 77,
+        "text": "        }"
+      },
+      {
+        "line": 78,
+        "text": "    }"
+      },
+      {
+        "line": 79,
+        "text": "}"
+      },
+      {
+        "line": 80,
+        "text": ""
+      },
+      {
+        "line": 81,
+        "text": "static inline void sprite_mcbase_update(void)"
+      },
+      {
+        "line": 82,
+        "text": "{"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-cycle.c",
+    "start": 527,
+    "end": 568,
+    "lines": [
+      {
+        "line": 527,
+        "text": ""
+      },
+      {
+        "line": 528,
+        "text": "    /* Check badline condition, trigger fetches */"
+      },
+      {
+        "line": 529,
+        "text": "    if (vicii.allow_bad_lines) {"
+      },
+      {
+        "line": 530,
+        "text": "        check_badline();"
+      },
+      {
+        "line": 531,
+        "text": "    }"
+      },
+      {
+        "line": 532,
+        "text": ""
+      },
+      {
+        "line": 533,
+        "text": "    /* VSP-bug condition */"
+      },
+      {
+        "line": 534,
+        "text": "    if (vicii.bad_line && vsp_may_crash &&"
+      },
+      {
+        "line": 535,
+        "text": "        (vicii.raster_cycle >= VICII_PAL_CYCLE(16)) &&"
+      },
+      {
+        "line": 536,
+        "text": "        (vicii.raster_cycle < VICII_PAL_CYCLE(55))) {"
+      },
+      {
+        "line": 537,
+        "text": "            vicii_handle_vsp_bug();"
+      },
+      {
+        "line": 538,
+        "text": "    }"
+      },
+      {
+        "line": 539,
+        "text": "    vsp_ysmoothold = vicii.ysmooth;"
+      },
+      {
+        "line": 540,
+        "text": ""
+      },
+      {
+        "line": 541,
+        "text": "    /* Update VC (Cycle 14 on PAL) */"
+      },
+      {
+        "line": 542,
+        "text": "    /*  if (vicii.raster_cycle == VICII_PAL_CYCLE(14)) { */"
+      },
+      {
+        "line": 543,
+        "text": "    if (cycle_is_update_vc(vicii.cycle_flags)) {"
+      },
+      {
+        "line": 544,
+        "text": "        vicii.vc = vicii.vcbase;"
+      },
+      {
+        "line": 545,
+        "text": "        vicii.vmli = 0;"
+      },
+      {
+        "line": 546,
+        "text": "        if (vicii.bad_line) {"
+      },
+      {
+        "line": 547,
+        "text": "            vicii.rc = 0;"
+      },
+      {
+        "line": 548,
+        "text": "        }"
+      },
+      {
+        "line": 549,
+        "text": "    }"
+      },
+      {
+        "line": 550,
+        "text": ""
+      },
+      {
+        "line": 551,
+        "text": "    /* Update RC (Cycle 58 on PAL) */"
+      },
+      {
+        "line": 552,
+        "text": "    /* if (vicii.raster_cycle == VICII_PAL_CYCLE(58)) { */"
+      },
+      {
+        "line": 553,
+        "text": "    if (cycle_is_update_rc(vicii.cycle_flags)) {"
+      },
+      {
+        "line": 554,
+        "text": "        /* `rc' makes the chip go to idle state when it reaches the"
+      },
+      {
+        "line": 555,
+        "text": "           maximum value.  */"
+      },
+      {
+        "line": 556,
+        "text": "        if (vicii.rc == 7) {"
+      },
+      {
+        "line": 557,
+        "text": "            vicii.idle_state = 1;"
+      },
+      {
+        "line": 558,
+        "text": "            vicii.vcbase = vicii.vc;"
+      },
+      {
+        "line": 559,
+        "text": "        }"
+      },
+      {
+        "line": 560,
+        "text": "        if (!vicii.idle_state || vicii.bad_line) {"
+      },
+      {
+        "line": 561,
+        "text": "            vicii.rc = (vicii.rc + 1) & 0x7;"
+      },
+      {
+        "line": 562,
+        "text": "            vicii.idle_state = 0;"
+      },
+      {
+        "line": 563,
+        "text": "        }"
+      },
+      {
+        "line": 564,
+        "text": "    }"
+      },
+      {
+        "line": 565,
+        "text": ""
+      },
+      {
+        "line": 566,
+        "text": "    /******"
+      },
+      {
+        "line": 567,
+        "text": "     *"
+      },
+      {
+        "line": 568,
+        "text": "     * BA logic"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-chip-model.c",
+    "start": 236,
+    "end": 271,
+    "lines": [
+      {
+        "line": 236,
+        "text": "    { Phi1(63), 0x18c, None,    SprDma1(2), BaSpr3(2, 3, 4), None                 },"
+      },
+      {
+        "line": 237,
+        "text": "    { Phi2(63), 0x190, None,    SprDma2(2), BaSpr3(2, 3, 4), None                 }"
+      },
+      {
+        "line": 238,
+        "text": "};"
+      },
+      {
+        "line": 239,
+        "text": ""
+      },
+      {
+        "line": 240,
+        "text": "static const struct ViciiChipModel chip_model_mos6569r1 = {"
+      },
+      {
+        "line": 241,
+        "text": "    \"MOS6569R1\",     /* name */"
+      },
+      {
+        "line": 242,
+        "text": "    63,              /* cycles per line */"
+      },
+      {
+        "line": 243,
+        "text": "    cycle_tab_pal,   /* cycle table */"
+      },
+      {
+        "line": 244,
+        "text": "    312,             /* number of raster lines */"
+      },
+      {
+        "line": 245,
+        "text": "    1,               /* color latency */"
+      },
+      {
+        "line": 246,
+        "text": "    1,               /* old light pen irq mode */"
+      },
+      {
+        "line": 247,
+        "text": "    0                /* new luminances */"
+      },
+      {
+        "line": 248,
+        "text": "};"
+      },
+      {
+        "line": 249,
+        "text": ""
+      },
+      {
+        "line": 250,
+        "text": "static const struct ViciiChipModel chip_model_mos6569r3 = {"
+      },
+      {
+        "line": 251,
+        "text": "    \"MOS6569R3\",     /* name */"
+      },
+      {
+        "line": 252,
+        "text": "    63,              /* cycles per line */"
+      },
+      {
+        "line": 253,
+        "text": "    cycle_tab_pal,   /* cycle table */"
+      },
+      {
+        "line": 254,
+        "text": "    312,             /* number of raster lines */"
+      },
+      {
+        "line": 255,
+        "text": "    1,               /* color latency */"
+      },
+      {
+        "line": 256,
+        "text": "    0,               /* old light pen irq mode */"
+      },
+      {
+        "line": 257,
+        "text": "    1                /* new luminances */"
+      },
+      {
+        "line": 258,
+        "text": "};"
+      },
+      {
+        "line": 259,
+        "text": ""
+      },
+      {
+        "line": 260,
+        "text": "static const struct ViciiChipModel chip_model_mos8565 = {"
+      },
+      {
+        "line": 261,
+        "text": "    \"MOS8565\",       /* name */"
+      },
+      {
+        "line": 262,
+        "text": "    63,              /* cycles per line */"
+      },
+      {
+        "line": 263,
+        "text": "    cycle_tab_pal,   /* cycle table */"
+      },
+      {
+        "line": 264,
+        "text": "    312,             /* number of raster lines */"
+      },
+      {
+        "line": 265,
+        "text": "    0,               /* color latency */"
+      },
+      {
+        "line": 266,
+        "text": "    0,               /* old light pen irq mode */"
+      },
+      {
+        "line": 267,
+        "text": "    1                /* new luminances */"
+      },
+      {
+        "line": 268,
+        "text": "};"
+      },
+      {
+        "line": 269,
+        "text": ""
+      },
+      {
+        "line": 270,
+        "text": ""
+      },
+      {
+        "line": 271,
+        "text": "/* NTSC (and PAL-N) */"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-fetch.c",
+    "start": 76,
+    "end": 100,
+    "lines": [
+      {
+        "line": 76,
+        "text": "inline static uint8_t fetch_phi2(int addr)"
+      },
+      {
+        "line": 77,
+        "text": "{"
+      },
+      {
+        "line": 78,
+        "text": "    uint8_t *p;"
+      },
+      {
+        "line": 79,
+        "text": ""
+      },
+      {
+        "line": 80,
+        "text": "    addr = ((addr + vicii.vbank_phi2) & vicii.vaddr_mask_phi2) | vicii.vaddr_offset_phi2;"
+      },
+      {
+        "line": 81,
+        "text": ""
+      },
+      {
+        "line": 82,
+        "text": "    if (export.ultimax_phi2) {"
+      },
+      {
+        "line": 83,
+        "text": "        uint8_t value;"
+      },
+      {
+        "line": 84,
+        "text": "        if (ultimax_romh_phi2_read((uint16_t)(0x1000 + (addr & 0xfff)), &value)) {"
+      },
+      {
+        "line": 85,
+        "text": "            if ((addr & 0x3fff) >= 0x3000) {"
+      },
+      {
+        "line": 86,
+        "text": "                return value;"
+      },
+      {
+        "line": 87,
+        "text": "            } else {"
+      },
+      {
+        "line": 88,
+        "text": "                p = vicii.ram_base_phi2 + addr;"
+      },
+      {
+        "line": 89,
+        "text": "                return *p;"
+      },
+      {
+        "line": 90,
+        "text": "            }"
+      },
+      {
+        "line": 91,
+        "text": "        }"
+      },
+      {
+        "line": 92,
+        "text": "    }"
+      },
+      {
+        "line": 93,
+        "text": ""
+      },
+      {
+        "line": 94,
+        "text": "    if ((addr & vicii.vaddr_chargen_mask_phi2) == vicii.vaddr_chargen_value_phi2) {"
+      },
+      {
+        "line": 95,
+        "text": "        p = mem_chargen_rom_ptr + (addr & 0xfff);"
+      },
+      {
+        "line": 96,
+        "text": "    } else {"
+      },
+      {
+        "line": 97,
+        "text": "        p = vicii.ram_base_phi2 + addr;"
+      },
+      {
+        "line": 98,
+        "text": "    }"
+      },
+      {
+        "line": 99,
+        "text": ""
+      },
+      {
+        "line": 100,
+        "text": "    return *p;"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-fetch.c",
+    "start": 124,
+    "end": 201,
+    "lines": [
+      {
+        "line": 124,
+        "text": "            log_debug(LOG_DEFAULT, \"SDMA0 in cycle %u   %\"PRIu64, vicii.raster_cycle, maincpu_clk);"
+      },
+      {
+        "line": 125,
+        "text": "        }"
+      },
+      {
+        "line": 126,
+        "text": "#endif"
+      },
+      {
+        "line": 127,
+        "text": "    }"
+      },
+      {
+        "line": 128,
+        "text": ""
+      },
+      {
+        "line": 129,
+        "text": "    vicii.sprite[i].data &= 0x00ffff;"
+      },
+      {
+        "line": 130,
+        "text": "    vicii.sprite[i].data |= sprdata << 16;"
+      },
+      {
+        "line": 131,
+        "text": "}"
+      },
+      {
+        "line": 132,
+        "text": ""
+      },
+      {
+        "line": 133,
+        "text": "inline static void sprite_dma_cycle_2(int i)"
+      },
+      {
+        "line": 134,
+        "text": "{"
+      },
+      {
+        "line": 135,
+        "text": "    uint8_t sprdata = vicii.last_bus_phi2;"
+      },
+      {
+        "line": 136,
+        "text": ""
+      },
+      {
+        "line": 137,
+        "text": "    if (check_sprite_dma(i)) {"
+      },
+      {
+        "line": 138,
+        "text": "        if (!vicii.prefetch_cycles) {"
+      },
+      {
+        "line": 139,
+        "text": "            sprdata = fetch_phi2((vicii.sprite[i].pointer << 6) + vicii.sprite[i].mc);"
+      },
+      {
+        "line": 140,
+        "text": "        }"
+      },
+      {
+        "line": 141,
+        "text": ""
+      },
+      {
+        "line": 142,
+        "text": "        vicii.sprite[i].mc++;"
+      },
+      {
+        "line": 143,
+        "text": "        vicii.sprite[i].mc &= 0x3f;"
+      },
+      {
+        "line": 144,
+        "text": ""
+      },
+      {
+        "line": 145,
+        "text": "#ifdef DEBUG"
+      },
+      {
+        "line": 146,
+        "text": "        if (debug.maincpu_traceflg && (vicii.sprite_dma & (1 << i))) {"
+      },
+      {
+        "line": 147,
+        "text": "            log_debug(LOG_DEFAULT, \"SDMA2 in cycle %u   %\"PRIu64, vicii.raster_cycle, maincpu_clk);"
+      },
+      {
+        "line": 148,
+        "text": "        }"
+      },
+      {
+        "line": 149,
+        "text": "#endif"
+      },
+      {
+        "line": 150,
+        "text": "    }"
+      },
+      {
+        "line": 151,
+        "text": ""
+      },
+      {
+        "line": 152,
+        "text": "    vicii.sprite[i].data &= 0xffff00;"
+      },
+      {
+        "line": 153,
+        "text": "    vicii.sprite[i].data |= sprdata;"
+      },
+      {
+        "line": 154,
+        "text": "}"
+      },
+      {
+        "line": 155,
+        "text": ""
+      },
+      {
+        "line": 156,
+        "text": "/*-----------------------------------------------------------------------*/"
+      },
+      {
+        "line": 157,
+        "text": ""
+      },
+      {
+        "line": 158,
+        "text": "inline static int v_fetch_addr(int offset)"
+      },
+      {
+        "line": 159,
+        "text": "{"
+      },
+      {
+        "line": 160,
+        "text": "    return ((vicii.regs[0x18] & 0xf0) << 6) + offset;"
+      },
+      {
+        "line": 161,
+        "text": "}"
+      },
+      {
+        "line": 162,
+        "text": ""
+      },
+      {
+        "line": 163,
+        "text": "inline static uint16_t g_fetch_addr(uint8_t mode)"
+      },
+      {
+        "line": 164,
+        "text": "{"
+      },
+      {
+        "line": 165,
+        "text": "    uint16_t a;"
+      },
+      {
+        "line": 166,
+        "text": ""
+      },
+      {
+        "line": 167,
+        "text": "    /* BMM */"
+      },
+      {
+        "line": 168,
+        "text": "    if (mode & 0x20) {"
+      },
+      {
+        "line": 169,
+        "text": "        a = (vicii.vc << 3) | vicii.rc;"
+      },
+      {
+        "line": 170,
+        "text": "        a |= (vicii.regs[0x18] & 0x8) << 10;"
+      },
+      {
+        "line": 171,
+        "text": "    } else {"
+      },
+      {
+        "line": 172,
+        "text": "        a = (vicii.vbuf[vicii.vmli] << 3) | vicii.rc;"
+      },
+      {
+        "line": 173,
+        "text": "        a |= (vicii.regs[0x18] & 0xe) << 10;"
+      },
+      {
+        "line": 174,
+        "text": "    }"
+      },
+      {
+        "line": 175,
+        "text": ""
+      },
+      {
+        "line": 176,
+        "text": "    /* ECM */"
+      },
+      {
+        "line": 177,
+        "text": "    if (mode & 0x40) {"
+      },
+      {
+        "line": 178,
+        "text": "        a &= 0x39ff;"
+      },
+      {
+        "line": 179,
+        "text": "    }"
+      },
+      {
+        "line": 180,
+        "text": ""
+      },
+      {
+        "line": 181,
+        "text": "    return a;"
+      },
+      {
+        "line": 182,
+        "text": "}"
+      },
+      {
+        "line": 183,
+        "text": ""
+      },
+      {
+        "line": 184,
+        "text": "inline static int is_char_rom(uint16_t addr)"
+      },
+      {
+        "line": 185,
+        "text": "{"
+      },
+      {
+        "line": 186,
+        "text": "    addr = ((addr + vicii.vbank_phi1) & vicii.vaddr_mask_phi1) | vicii.vaddr_offset_phi1;"
+      },
+      {
+        "line": 187,
+        "text": "    return (addr & vicii.vaddr_chargen_mask_phi1) == vicii.vaddr_chargen_value_phi1;"
+      },
+      {
+        "line": 188,
+        "text": "}"
+      },
+      {
+        "line": 189,
+        "text": ""
+      },
+      {
+        "line": 190,
+        "text": "/*-----------------------------------------------------------------------*/"
+      },
+      {
+        "line": 191,
+        "text": ""
+      },
+      {
+        "line": 192,
+        "text": "void vicii_fetch_matrix(void)"
+      },
+      {
+        "line": 193,
+        "text": "{"
+      },
+      {
+        "line": 194,
+        "text": "    if (vicii.prefetch_cycles) {"
+      },
+      {
+        "line": 195,
+        "text": "        vicii.vbuf[vicii.vmli] = 0xff;"
+      },
+      {
+        "line": 196,
+        "text": "        vicii.cbuf[vicii.vmli] = vicii.ram_base_phi2[reg_pc] & 0xf;"
+      },
+      {
+        "line": 197,
+        "text": "    } else {"
+      },
+      {
+        "line": 198,
+        "text": "        vicii.vbuf[vicii.vmli] = fetch_phi2(v_fetch_addr(vicii.vc));"
+      },
+      {
+        "line": 199,
+        "text": "        vicii.cbuf[vicii.vmli] = mem_color_ram_vicii[vicii.vc];"
+      },
+      {
+        "line": 200,
+        "text": "    }"
+      },
+      {
+        "line": 201,
+        "text": "}"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIiCheckpointTests.cs",
+    "start": 1,
+    "end": 217,
+    "lines": [
+      {
+        "line": 1,
+        "text": "namespace ViceSharp.TestHarness;"
+      },
+      {
+        "line": 2,
+        "text": ""
+      },
+      {
+        "line": 3,
+        "text": "using ViceSharp.Abstractions;"
+      },
+      {
+        "line": 4,
+        "text": "using ViceSharp.Chips.VicIi;"
+      },
+      {
+        "line": 5,
+        "text": "using ViceSharp.Core;"
+      },
+      {
+        "line": 6,
+        "text": "using Xunit;"
+      },
+      {
+        "line": 7,
+        "text": ""
+      },
+      {
+        "line": 8,
+        "text": "/// <summary>"
+      },
+      {
+        "line": 9,
+        "text": "/// BACKFILL-VIDEO-001 (primary) / TR-VIC-EDGE-001 / TR-VIC-EDGE-002 / TR-VIC-EDGE-005 / TR-VIC-EDGE-006 /"
+      },
+      {
+        "line": 10,
+        "text": "/// FR-VIC-001 / TEST-VIC-001."
+      },
+      {
+        "line": 11,
+        "text": "///"
+      },
+      {
+        "line": 12,
+        "text": "/// Native visible-frame checkpoints (sub-slice 1C). Two checkpoint categories:"
+      },
+      {
+        "line": 13,
+        "text": "///"
+      },
+      {
+        "line": 14,
+        "text": "///   1. Managed-only: the managed PAL VIC-II raster engine advances exactly one full frame"
+      },
+      {
+        "line": 15,
+        "text": "///      (PalTotalLines * PalCyclesPerLine = 19,656 ticks) and returns to the same raster"
+      },
+      {
+        "line": 16,
+        "text": "///      position, proving the line-wrap and cycle counter are correct."
+      },
+      {
+        "line": 17,
+        "text": "///"
+      },
+      {
+        "line": 18,
+        "text": "///   2. Native (gated): write a known byte pattern to screen-RAM rows 20-24 on a live x64sc"
+      },
+      {
+        "line": 19,
+        "text": "///      native machine, step one full PAL frame (19,656 cycles), and verify the pattern"
+      },
+      {
+        "line": 20,
+        "text": "///      is preserved. VIC-II matrix DMA (c-access) is read-only; it must never write back"
+      },
+      {
+        "line": 21,
+        "text": "///      to screen RAM. This validates TR-VIC-EDGE-005 (DMA read-only semantics)."
+      },
+      {
+        "line": 22,
+        "text": "///"
+      },
+      {
+        "line": 23,
+        "text": "/// VICE sources:"
+      },
+      {
+        "line": 24,
+        "text": "///   vicii-fetch.c:135-166 (matrix character-fetch c-access reads screen RAM, read-only),"
+      },
+      {
+        "line": 25,
+        "text": "///   vicii-cycle.c:541-548 (VC update, matrix DMA window 12..54 per bad line),"
+      },
+      {
+        "line": 26,
+        "text": "///   vicii-mem.c:48-63 (unused_bits table, register space),"
+      },
+      {
+        "line": 27,
+        "text": "///   vicii-draw-cycle.c:133-141 (display mode color table)."
+      },
+      {
+        "line": 28,
+        "text": "///"
+      },
+      {
+        "line": 29,
+        "text": "/// Safe region for screen RAM: rows 20-24 (bytes $07A0-$07E7 = last 200 bytes of screen RAM)."
+      },
+      {
+        "line": 30,
+        "text": "/// KERNAL places the READY cursor at row 5-6 and does not write to rows 20-24 within one frame."
+      },
+      {
+        "line": 31,
+        "text": "///"
+      },
+      {
+        "line": 32,
+        "text": "/// Byrd Development Process: managed-only leg written first (always green, no native required)."
+      },
+      {
+        "line": 33,
+        "text": "/// Native legs are gated by [ViceFact] and skip when native VICE is absent."
+      },
+      {
+        "line": 34,
+        "text": "/// </summary>"
+      },
+      {
+        "line": 35,
+        "text": "[Collection(\"NativeVice\")]"
+      },
+      {
+        "line": 36,
+        "text": "public sealed class VicIiCheckpointTests"
+      },
+      {
+        "line": 37,
+        "text": "{"
+      },
+      {
+        "line": 38,
+        "text": "    // PAL frame constants."
+      },
+      {
+        "line": 39,
+        "text": "    // One PAL frame = 312 lines x 63 cycles = 19,656 total cycles."
+      },
+      {
+        "line": 40,
+        "text": "    private const int PalCyclesPerLine = 63;"
+      },
+      {
+        "line": 41,
+        "text": "    private const int PalTotalLines = 312;"
+      },
+      {
+        "line": 42,
+        "text": "    private const int PalCyclesPerFrame = PalCyclesPerLine * PalTotalLines; // 19 656"
+      },
+      {
+        "line": 43,
+        "text": ""
+      },
+      {
+        "line": 44,
+        "text": "    // Screen RAM layout: $0400..$07E7 = 40 columns x 25 rows = 1000 bytes."
+      },
+      {
+        "line": 45,
+        "text": "    private const ushort ScreenRamBase = 0x0400;"
+      },
+      {
+        "line": 46,
+        "text": "    private const int ScreenRamCols = 40;"
+      },
+      {
+        "line": 47,
+        "text": ""
+      },
+      {
+        "line": 48,
+        "text": "    // Safe test region: rows 20-24 (offset 800..999) = $07A0..$07E7."
+      },
+      {
+        "line": 49,
+        "text": "    // KERNAL READY cursor is at row 5-6 after init; rows 20-24 are left as spaces and"
+      },
+      {
+        "line": 50,
+        "text": "    // are not touched by the cursor-blink interrupt within one 19,656-cycle frame."
+      },
+      {
+        "line": 51,
+        "text": "    private const int SafeRowStart = 20;"
+      },
+      {
+        "line": 52,
+        "text": "    private const int SafeRowCount = 5;"
+      },
+      {
+        "line": 53,
+        "text": "    private const ushort SafeRegionBase = (ushort)(ScreenRamBase + SafeRowStart * ScreenRamCols); // $07A0"
+      },
+      {
+        "line": 54,
+        "text": "    private const int SafeRegionSize = SafeRowCount * ScreenRamCols; // 200"
+      },
+      {
+        "line": 55,
+        "text": ""
+      },
+      {
+        "line": 56,
+        "text": "    // Cycles to step past KERNAL init before writing test registers."
+      },
+      {
+        "line": 57,
+        "text": "    // 100,000 cycles ~= 5 PAL frames; BASIC READY appears within ~3 frames."
+      },
+      {
+        "line": 58,
+        "text": "    private const int KernalSettleCycles = 100_000;"
+      },
+      {
+        "line": 59,
+        "text": ""
+      },
+      {
+        "line": 60,
+        "text": "    // -------------------------------------------------------------------------"
+      },
+      {
+        "line": 61,
+        "text": "    // Managed-only checkpoint (always runs; no native VICE required)"
+      },
+      {
+        "line": 62,
+        "text": "    // -------------------------------------------------------------------------"
+      },
+      {
+        "line": 63,
+        "text": ""
+      },
+      {
+        "line": 64,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 65,
+        "text": "    /// FR-VIC-001 / TR-CYCLE-001 / BACKFILL-VIDEO-001."
+      },
+      {
+        "line": 66,
+        "text": "    /// Use case: The managed PAL VIC-II raster engine must be frame-periodic."
+      },
+      {
+        "line": 67,
+        "text": "    /// After advancing exactly one full PAL frame (19,656 ticks) from any starting"
+      },
+      {
+        "line": 68,
+        "text": "    /// raster position, the chip returns to the identical (rasterLine, rasterX) pair."
+      },
+      {
+        "line": 69,
+        "text": "    /// Acceptance: rasterLine and rasterX after two-frame advance equal those after"
+      },
+      {
+        "line": 70,
+        "text": "    /// one-frame advance - the frame is a fixed period of 312 x 63 = 19,656 cycles."
+      },
+      {
+        "line": 71,
+        "text": "    /// VICE vicii-cycle.c:576-598 (line-wrap and raster-line increment timing)."
+      },
+      {
+        "line": 72,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 73,
+        "text": "    [Fact]"
+      },
+      {
+        "line": 74,
+        "text": "    public void ManagedVic_OneFullPalFrame_RasterPositionIsFramePeriodic()"
+      },
+      {
+        "line": 75,
+        "text": "    {"
+      },
+      {
+        "line": 76,
+        "text": "        var irq = new InterruptLine(InterruptType.Irq);"
+      },
+      {
+        "line": 77,
+        "text": "        var vic = new Mos6569(new BasicBus(), irq);"
+      },
+      {
+        "line": 78,
+        "text": ""
+      },
+      {
+        "line": 79,
+        "text": "        // Advance through one complete frame from reset to establish a baseline."
+      },
+      {
+        "line": 80,
+        "text": "        for (var i = 0; i < PalCyclesPerFrame; i++)"
+      },
+      {
+        "line": 81,
+        "text": "            vic.Tick();"
+      },
+      {
+        "line": 82,
+        "text": ""
+      },
+      {
+        "line": 83,
+        "text": "        ushort baselineLine = vic.CurrentRasterLine;"
+      },
+      {
+        "line": 84,
+        "text": "        byte baselineRasterX = vic.RasterX;"
+      },
+      {
+        "line": 85,
+        "text": ""
+      },
+      {
+        "line": 86,
+        "text": "        // Advance exactly one more frame."
+      },
+      {
+        "line": 87,
+        "text": "        for (var i = 0; i < PalCyclesPerFrame; i++)"
+      },
+      {
+        "line": 88,
+        "text": "            vic.Tick();"
+      },
+      {
+        "line": 89,
+        "text": ""
+      },
+      {
+        "line": 90,
+        "text": "        Assert.Equal(baselineLine, vic.CurrentRasterLine);"
+      },
+      {
+        "line": 91,
+        "text": "        Assert.Equal(baselineRasterX, vic.RasterX);"
+      },
+      {
+        "line": 92,
+        "text": "    }"
+      },
+      {
+        "line": 93,
+        "text": ""
+      },
+      {
+        "line": 94,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 95,
+        "text": "    /// FR-VIC-001 / TR-CYCLE-001 / BACKFILL-VIDEO-001."
+      },
+      {
+        "line": 96,
+        "text": "    /// Use case: The managed PAL VIC-II cycle counter must advance monotonically"
+      },
+      {
+        "line": 97,
+        "text": "    /// by exactly PalCyclesPerFrame per frame."
+      },
+      {
+        "line": 98,
+        "text": "    /// Acceptance: After one frame, CycleCounter increases by exactly 19,656."
+      },
+      {
+        "line": 99,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 100,
+        "text": "    [Fact]"
+      },
+      {
+        "line": 101,
+        "text": "    public void ManagedVic_OneFullPalFrame_CycleCounterAdvancesByExactlyOnePalFrame()"
+      },
+      {
+        "line": 102,
+        "text": "    {"
+      },
+      {
+        "line": 103,
+        "text": "        var irq = new InterruptLine(InterruptType.Irq);"
+      },
+      {
+        "line": 104,
+        "text": "        var vic = new Mos6569(new BasicBus(), irq);"
+      },
+      {
+        "line": 105,
+        "text": ""
+      },
+      {
+        "line": 106,
+        "text": "        var before = vic.CycleCounter;"
+      },
+      {
+        "line": 107,
+        "text": "        for (var i = 0; i < PalCyclesPerFrame; i++)"
+      },
+      {
+        "line": 108,
+        "text": "            vic.Tick();"
+      },
+      {
+        "line": 109,
+        "text": ""
+      },
+      {
+        "line": 110,
+        "text": "        Assert.Equal((ulong)(before + PalCyclesPerFrame), vic.CycleCounter);"
+      },
+      {
+        "line": 111,
+        "text": "    }"
+      },
+      {
+        "line": 112,
+        "text": ""
+      },
+      {
+        "line": 113,
+        "text": "    // -------------------------------------------------------------------------"
+      },
+      {
+        "line": 114,
+        "text": "    // Native VICE checkpoints (gated - skip when native VICE absent)"
+      },
+      {
+        "line": 115,
+        "text": "    // -------------------------------------------------------------------------"
+      },
+      {
+        "line": 116,
+        "text": ""
+      },
+      {
+        "line": 117,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 118,
+        "text": "    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001."
+      },
+      {
+        "line": 119,
+        "text": "    /// Use case: The ViceNativeBridge ReadMemory/WriteMemory path for screen-RAM"
+      },
+      {
+        "line": 120,
+        "text": "    /// addresses ($0400-$07E7) must correctly round-trip byte values immediately"
+      },
+      {
+        "line": 121,
+        "text": "    /// after a write (no VIC or CPU side-effects in zero elapsed cycles)."
+      },
+      {
+        "line": 122,
+        "text": "    /// Acceptance: Writing a distinctive pattern to the safe region ($07A0-$07E7)"
+      },
+      {
+        "line": 123,
+        "text": "    /// and immediately reading it back yields the same 200 byte values."
+      },
+      {
+        "line": 124,
+        "text": "    /// VICE vicii-fetch.c:135-166 (c-access reads, no write side-effect)."
+      },
+      {
+        "line": 125,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 126,
+        "text": "    [ViceFact]"
+      },
+      {
+        "line": 127,
+        "text": "    public void Native_ScreenRam_ImmediateReadBackMatchesWrite()"
+      },
+      {
+        "line": 128,
+        "text": "    {"
+      },
+      {
+        "line": 129,
+        "text": "        var native = ViceNativeBridge.CreateMachine(\"c64\");"
+      },
+      {
+        "line": 130,
+        "text": "        try"
+      },
+      {
+        "line": 131,
+        "text": "        {"
+      },
+      {
+        "line": 132,
+        "text": "            ViceNativeBridge.ResetMachine(native);"
+      },
+      {
+        "line": 133,
+        "text": ""
+      },
+      {
+        "line": 134,
+        "text": "            // Step past KERNAL init."
+      },
+      {
+        "line": 135,
+        "text": "            for (var i = 0; i < KernalSettleCycles; i++)"
+      },
+      {
+        "line": 136,
+        "text": "                ViceNativeBridge.StepCycle(native);"
+      },
+      {
+        "line": 137,
+        "text": ""
+      },
+      {
+        "line": 138,
+        "text": "            // Write a distinctive non-space pattern to the safe screen-RAM region."
+      },
+      {
+        "line": 139,
+        "text": "            var pattern = new byte[SafeRegionSize];"
+      },
+      {
+        "line": 140,
+        "text": "            for (var i = 0; i < SafeRegionSize; i++)"
+      },
+      {
+        "line": 141,
+        "text": "                pattern[i] = (byte)((i + 0xAA) & 0xFF);"
+      },
+      {
+        "line": 142,
+        "text": ""
+      },
+      {
+        "line": 143,
+        "text": "            for (var i = 0; i < SafeRegionSize; i++)"
+      },
+      {
+        "line": 144,
+        "text": "                ViceNativeBridge.WriteMemory(native, (ushort)(SafeRegionBase + i), pattern[i]);"
+      },
+      {
+        "line": 145,
+        "text": ""
+      },
+      {
+        "line": 146,
+        "text": "            // Read back immediately (zero elapsed cycles - only testing R/W path)."
+      },
+      {
+        "line": 147,
+        "text": "            for (var i = 0; i < SafeRegionSize; i++)"
+      },
+      {
+        "line": 148,
+        "text": "            {"
+      },
+      {
+        "line": 149,
+        "text": "                var actual = ViceNativeBridge.ReadMemory(native, (ushort)(SafeRegionBase + i));"
+      },
+      {
+        "line": 150,
+        "text": "                Assert.True(actual == pattern[i],"
+      },
+      {
+        "line": 151,
+        "text": "                    $\"Screen RAM at ${SafeRegionBase + i:X4}: immediate read must return written value \" +"
+      },
+      {
+        "line": 152,
+        "text": "                    $\"0x{pattern[i]:X2} (ViceNativeBridge R/W path for address range $07A0-$07E7), \" +"
+      },
+      {
+        "line": 153,
+        "text": "                    $\"got 0x{actual:X2}.\");"
+      },
+      {
+        "line": 154,
+        "text": "            }"
+      },
+      {
+        "line": 155,
+        "text": "        }"
+      },
+      {
+        "line": 156,
+        "text": "        finally"
+      },
+      {
+        "line": 157,
+        "text": "        {"
+      },
+      {
+        "line": 158,
+        "text": "            ViceNativeBridge.DestroyMachine(native);"
+      },
+      {
+        "line": 159,
+        "text": "        }"
+      },
+      {
+        "line": 160,
+        "text": "    }"
+      },
+      {
+        "line": 161,
+        "text": ""
+      },
+      {
+        "line": 162,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 163,
+        "text": "    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001."
+      },
+      {
+        "line": 164,
+        "text": "    /// Use case: VIC-II matrix DMA (c-access, vicii-fetch.c:135-166) is read-only."
+      },
+      {
+        "line": 165,
+        "text": "    /// The chip fetches character codes from screen RAM during each bad line but must"
+      },
+      {
+        "line": 166,
+        "text": "    /// not write back to it. After exactly one PAL frame (19,656 cycles = 312 x 63),"
+      },
+      {
+        "line": 167,
+        "text": "    /// screen-RAM bytes that the CPU did not touch must be unchanged."
+      },
+      {
+        "line": 168,
+        "text": "    /// Acceptance: A 200-byte test pattern written to rows 20-24 ($07A0-$07E7) before"
+      },
+      {
+        "line": 169,
+        "text": "    /// the frame survives the frame unchanged. KERNAL cursor is at row 5-6 during"
+      },
+      {
+        "line": 170,
+        "text": "    /// BASIC READY and does not reach rows 20-24 within a single 19,656-cycle frame."
+      },
+      {
+        "line": 171,
+        "text": "    /// VICE vicii-fetch.c:135-166, vicii-cycle.c:541-548."
+      },
+      {
+        "line": 172,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 173,
+        "text": "    [ViceFact]"
+      },
+      {
+        "line": 174,
+        "text": "    public void Native_ScreenRamPattern_SurvivesOneFullPalFrame_VicDmaIsReadOnly()"
+      },
+      {
+        "line": 175,
+        "text": "    {"
+      },
+      {
+        "line": 176,
+        "text": "        var native = ViceNativeBridge.CreateMachine(\"c64\");"
+      },
+      {
+        "line": 177,
+        "text": "        try"
+      },
+      {
+        "line": 178,
+        "text": "        {"
+      },
+      {
+        "line": 179,
+        "text": "            ViceNativeBridge.ResetMachine(native);"
+      },
+      {
+        "line": 180,
+        "text": ""
+      },
+      {
+        "line": 181,
+        "text": "            // Step past KERNAL init."
+      },
+      {
+        "line": 182,
+        "text": "            for (var i = 0; i < KernalSettleCycles; i++)"
+      },
+      {
+        "line": 183,
+        "text": "                ViceNativeBridge.StepCycle(native);"
+      },
+      {
+        "line": 184,
+        "text": ""
+      },
+      {
+        "line": 185,
+        "text": "            // Write a distinctive test pattern to the safe screen-RAM region."
+      },
+      {
+        "line": 186,
+        "text": "            // The pattern uses i*3+0x55 mod 256 to differentiate all 200 positions."
+      },
+      {
+        "line": 187,
+        "text": "            var pattern = new byte[SafeRegionSize];"
+      },
+      {
+        "line": 188,
+        "text": "            for (var i = 0; i < SafeRegionSize; i++)"
+      },
+      {
+        "line": 189,
+        "text": "                pattern[i] = (byte)((i * 3 + 0x55) & 0xFF);"
+      },
+      {
+        "line": 190,
+        "text": ""
+      },
+      {
+        "line": 191,
+        "text": "            for (var i = 0; i < SafeRegionSize; i++)"
+      },
+      {
+        "line": 192,
+        "text": "                ViceNativeBridge.WriteMemory(native, (ushort)(SafeRegionBase + i), pattern[i]);"
+      },
+      {
+        "line": 193,
+        "text": ""
+      },
+      {
+        "line": 194,
+        "text": "            // Step exactly one full PAL frame (19,656 cycles)."
+      },
+      {
+        "line": 195,
+        "text": "            // This exercises all 25 bad-line DMA windows (lines $30-$F7 with YSCROLL=0 default),"
+      },
+      {
+        "line": 196,
+        "text": "            // each reading 40 character codes from screen RAM via c-access."
+      },
+      {
+        "line": 197,
+        "text": "            for (var i = 0; i < PalCyclesPerFrame; i++)"
+      },
+      {
+        "line": 198,
+        "text": "                ViceNativeBridge.StepCycle(native);"
+      },
+      {
+        "line": 199,
+        "text": ""
+      },
+      {
+        "line": 200,
+        "text": "            // Read back and verify the pattern is unchanged."
+      },
+      {
+        "line": 201,
+        "text": "            // Any mismatch proves a write to screen RAM by VIC DMA (which must not happen)"
+      },
+      {
+        "line": 202,
+        "text": "            // or unexpected CPU activity in rows 20-24 during BASIC idle state."
+      },
+      {
+        "line": 203,
+        "text": "            for (var i = 0; i < SafeRegionSize; i++)"
+      },
+      {
+        "line": 204,
+        "text": "            {"
+      },
+      {
+        "line": 205,
+        "text": "                var actual = ViceNativeBridge.ReadMemory(native, (ushort)(SafeRegionBase + i));"
+      },
+      {
+        "line": 206,
+        "text": "                Assert.True(actual == pattern[i],"
+      },
+      {
+        "line": 207,
+        "text": "                    $\"Screen RAM at ${SafeRegionBase + i:X4} must survive one PAL frame unchanged. \" +"
+      },
+      {
+        "line": 208,
+        "text": "                    $\"VIC-II matrix DMA is read-only (vicii-fetch.c:135-166); CPU cursor is at row 5-6 and \" +"
+      },
+      {
+        "line": 209,
+        "text": "                    $\"does not reach rows 20-24 in 19,656 cycles. Expected 0x{pattern[i]:X2}, got 0x{actual:X2}.\");"
+      },
+      {
+        "line": 210,
+        "text": "            }"
+      },
+      {
+        "line": 211,
+        "text": "        }"
+      },
+      {
+        "line": 212,
+        "text": "        finally"
+      },
+      {
+        "line": 213,
+        "text": "        {"
+      },
+      {
+        "line": 214,
+        "text": "            ViceNativeBridge.DestroyMachine(native);"
+      },
+      {
+        "line": 215,
+        "text": "        }"
+      },
+      {
+        "line": 216,
+        "text": "    }"
+      },
+      {
+        "line": 217,
+        "text": "}"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIIRcWindowTests.cs",
+    "start": 1,
+    "end": 211,
+    "lines": [
+      {
+        "line": 1,
+        "text": "namespace ViceSharp.TestHarness;"
+      },
+      {
+        "line": 2,
+        "text": ""
+      },
+      {
+        "line": 3,
+        "text": "using ViceSharp.Abstractions;"
+      },
+      {
+        "line": 4,
+        "text": "using ViceSharp.Chips.VicIi;"
+      },
+      {
+        "line": 5,
+        "text": "using ViceSharp.Core;"
+      },
+      {
+        "line": 6,
+        "text": "using Xunit;"
+      },
+      {
+        "line": 7,
+        "text": ""
+      },
+      {
+        "line": 8,
+        "text": "/// <summary>"
+      },
+      {
+        "line": 9,
+        "text": "/// FR: FR-VIC-001 / FR-VIC-006 / FR-VIC-008, TR: TR-VIC-EDGE-003 / TR-CYCLE-001."
+      },
+      {
+        "line": 10,
+        "text": "/// Use case: The VIC-II row counter (RC) and video counter (VC) state machine"
+      },
+      {
+        "line": 11,
+        "text": "/// must match the cycle-accurate behavior documented in VICE"
+      },
+      {
+        "line": 12,
+        "text": "/// viciisc/vicii-cycle.c lines 541-563."
+      },
+      {
+        "line": 13,
+        "text": "/// - VC update at cycle 14 (managed: RasterX == 13): vc = vcbase; vmli = 0;"
+      },
+      {
+        "line": 14,
+        "text": "///   if bad_line: rc = 0, idle_state = false."
+      },
+      {
+        "line": 15,
+        "text": "/// - RC update at cycle 58 (managed: RasterX == 57): if rc == 7 then"
+      },
+      {
+        "line": 16,
+        "text": "///   idle_state = 1 and vcbase = vc; if !idle_state || bad_line then"
+      },
+      {
+        "line": 17,
+        "text": "///   rc = (rc + 1) and 7 and idle_state = 0."
+      },
+      {
+        "line": 18,
+        "text": "/// After eight consecutive display rows the chip enters idle state (rc"
+      },
+      {
+        "line": 19,
+        "text": "/// rolls to 7 and stays there). A bad line at the start of the next row"
+      },
+      {
+        "line": 20,
+        "text": "/// resets rc to 0 and clears idle state."
+      },
+      {
+        "line": 21,
+        "text": "/// VICE source: viciisc/vicii-cycle.c:541-563 (cycle 14 VC update),"
+      },
+      {
+        "line": 22,
+        "text": "/// viciisc/vicii-cycle.c:551-563 (cycle 58 RC update)."
+      },
+      {
+        "line": 23,
+        "text": "/// </summary>"
+      },
+      {
+        "line": 24,
+        "text": "public sealed class VicIIRcWindowTests"
+      },
+      {
+        "line": 25,
+        "text": "{"
+      },
+      {
+        "line": 26,
+        "text": "    private const ushort ScreenControl1 = 0xD011;"
+      },
+      {
+        "line": 27,
+        "text": "    private const byte DenRselYscroll0 = 0x18; // DEN=1, RSEL=1, YSCROLL=0"
+      },
+      {
+        "line": 28,
+        "text": ""
+      },
+      {
+        "line": 29,
+        "text": "    private static Mos6569 BuildVic()"
+      },
+      {
+        "line": 30,
+        "text": "    {"
+      },
+      {
+        "line": 31,
+        "text": "        var irq = new InterruptLine(InterruptType.Irq);"
+      },
+      {
+        "line": 32,
+        "text": "        return new Mos6569(new BasicBus(), irq);"
+      },
+      {
+        "line": 33,
+        "text": "    }"
+      },
+      {
+        "line": 34,
+        "text": ""
+      },
+      {
+        "line": 35,
+        "text": "    private static void AdvanceTo(Mos6569 vic, ushort rasterLine, byte rasterCycle)"
+      },
+      {
+        "line": 36,
+        "text": "    {"
+      },
+      {
+        "line": 37,
+        "text": "        var maxCycles = vic.TotalLines * vic.CyclesPerLine * 2;"
+      },
+      {
+        "line": 38,
+        "text": "        for (var i = 0; i < maxCycles; i++)"
+      },
+      {
+        "line": 39,
+        "text": "        {"
+      },
+      {
+        "line": 40,
+        "text": "            if (vic.CurrentRasterLine == rasterLine && vic.RasterX == rasterCycle)"
+      },
+      {
+        "line": 41,
+        "text": "                return;"
+      },
+      {
+        "line": 42,
+        "text": "            vic.Tick();"
+      },
+      {
+        "line": 43,
+        "text": "        }"
+      },
+      {
+        "line": 44,
+        "text": "        throw new InvalidOperationException("
+      },
+      {
+        "line": 45,
+        "text": "            $\"VIC did not reach line ${rasterLine:X3}, cycle {rasterCycle}.\");"
+      },
+      {
+        "line": 46,
+        "text": "    }"
+      },
+      {
+        "line": 47,
+        "text": ""
+      },
+      {
+        "line": 48,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 49,
+        "text": "    /// FR-VIC-001 / TR-VIC-EDGE-003."
+      },
+      {
+        "line": 50,
+        "text": "    /// Use case: The VIC-II row counter resets to 0 on the first bad line"
+      },
+      {
+        "line": 51,
+        "text": "    /// in the DMA range when a forced bad line condition is met."
+      },
+      {
+        "line": 52,
+        "text": "    /// Acceptance: At cycle 14 (RasterX 13) of raster line $30 with"
+      },
+      {
+        "line": 53,
+        "text": "    /// YSCROLL=0 and DEN=1, CurrentRowCounter is 0 (the VC update resets"
+      },
+      {
+        "line": 54,
+        "text": "    /// it because bad_line is active)."
+      },
+      {
+        "line": 55,
+        "text": "    /// VICE viciisc/vicii-cycle.c:546-548 (if bad_line then rc = 0)."
+      },
+      {
+        "line": 56,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 57,
+        "text": "    [Fact]"
+      },
+      {
+        "line": 58,
+        "text": "    public void CurrentRowCounter_IsZeroAfterFirstBadLine_VcUpdate()"
+      },
+      {
+        "line": 59,
+        "text": "    {"
+      },
+      {
+        "line": 60,
+        "text": "        var vic = BuildVic();"
+      },
+      {
+        "line": 61,
+        "text": "        vic.Write(ScreenControl1, DenRselYscroll0);"
+      },
+      {
+        "line": 62,
+        "text": ""
+      },
+      {
+        "line": 63,
+        "text": "        // Advance to cycle 13 of line $30 (first DMA line, bad line with YSCROLL=0)."
+      },
+      {
+        "line": 64,
+        "text": "        // The VC update fires at RasterX=13 and resets rc to 0 because bad_line=true."
+      },
+      {
+        "line": 65,
+        "text": "        AdvanceTo(vic, 0x30, 13);"
+      },
+      {
+        "line": 66,
+        "text": ""
+      },
+      {
+        "line": 67,
+        "text": "        Assert.Equal(0, vic.CurrentRowCounter);"
+      },
+      {
+        "line": 68,
+        "text": "    }"
+      },
+      {
+        "line": 69,
+        "text": ""
+      },
+      {
+        "line": 70,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 71,
+        "text": "    /// FR-VIC-001 / TR-VIC-EDGE-003."
+      },
+      {
+        "line": 72,
+        "text": "    /// Use case: The RC update increments the row counter at cycle 58 (RasterX 57)"
+      },
+      {
+        "line": 73,
+        "text": "    /// of each non-bad display line. The RC update fires DURING the tick that"
+      },
+      {
+        "line": 74,
+        "text": "    /// brings RasterX to 57, so AdvanceTo(line, 57) returns with the updated value."
+      },
+      {
+        "line": 75,
+        "text": "    /// After line $30 (bad, rc resets to 0 at VC then increments to 1 at RC),"
+      },
+      {
+        "line": 76,
+        "text": "    /// six consecutive non-bad lines (0x31-0x36) produce rc 2..7 at their RC points."
+      },
+      {
+        "line": 77,
+        "text": "    /// Acceptance: At cycle 57 of $36, CurrentRowCounter == 7 (rc went 6->7 in"
+      },
+      {
+        "line": 78,
+        "text": "    /// that tick; idle_state is still false because rc was 6 when checked)."
+      },
+      {
+        "line": 79,
+        "text": "    /// VICE viciisc/vicii-cycle.c:560-562 (rc increment when !idle || bad)."
+      },
+      {
+        "line": 80,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 81,
+        "text": "    [Fact]"
+      },
+      {
+        "line": 82,
+        "text": "    public void CurrentRowCounter_IsSevenAtCycle57OfSixthNonBadLine()"
+      },
+      {
+        "line": 83,
+        "text": "    {"
+      },
+      {
+        "line": 84,
+        "text": "        var vic = BuildVic();"
+      },
+      {
+        "line": 85,
+        "text": "        vic.Write(ScreenControl1, DenRselYscroll0);"
+      },
+      {
+        "line": 86,
+        "text": ""
+      },
+      {
+        "line": 87,
+        "text": "        // Line $30: bad. VC update: rc=0. RC update: rc was 0 (!7), !idle=true -> rc=1."
+      },
+      {
+        "line": 88,
+        "text": "        // Lines $31-$35: not bad. RC updates: rc 2, 3, 4, 5, 6."
+      },
+      {
+        "line": 89,
+        "text": "        // Line $36: not bad. RC update: rc was 6 (!7), !idle=true -> rc=7."
+      },
+      {
+        "line": 90,
+        "text": "        AdvanceTo(vic, 0x36, 57);"
+      },
+      {
+        "line": 91,
+        "text": ""
+      },
+      {
+        "line": 92,
+        "text": "        Assert.Equal(7, vic.CurrentRowCounter);"
+      },
+      {
+        "line": 93,
+        "text": "    }"
+      },
+      {
+        "line": 94,
+        "text": ""
+      },
+      {
+        "line": 95,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 96,
+        "text": "    /// FR-VIC-001 / TR-VIC-EDGE-003."
+      },
+      {
+        "line": 97,
+        "text": "    /// Use case: When rc is already 7 going into the RC update, the VIC-II"
+      },
+      {
+        "line": 98,
+        "text": "    /// enters idle state. idle_state must be true at cycle 57 of the SECOND"
+      },
+      {
+        "line": 99,
+        "text": "    /// line that sees rc==7 (line $37), because $36's RC update raised rc"
+      },
+      {
+        "line": 100,
+        "text": "    /// from 6 to 7 without setting idle."
+      },
+      {
+        "line": 101,
+        "text": "    /// Acceptance: After advancing to cycle 57 of line $37 with YSCROLL=0,"
+      },
+      {
+        "line": 102,
+        "text": "    /// IsGraphicsIdle returns true and CurrentRowCounter stays 7 (not incremented"
+      },
+      {
+        "line": 103,
+        "text": "    /// when idle and not bad_line)."
+      },
+      {
+        "line": 104,
+        "text": "    /// VICE viciisc/vicii-cycle.c:556-558 (if rc == 7: idle_state = 1)."
+      },
+      {
+        "line": 105,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 106,
+        "text": "    [Fact]"
+      },
+      {
+        "line": 107,
+        "text": "    public void IsGraphicsIdle_TrueAtCycle57WhenExistingRcIsAlreadySeven()"
+      },
+      {
+        "line": 108,
+        "text": "    {"
+      },
+      {
+        "line": 109,
+        "text": "        var vic = BuildVic();"
+      },
+      {
+        "line": 110,
+        "text": "        vic.Write(ScreenControl1, DenRselYscroll0);"
+      },
+      {
+        "line": 111,
+        "text": ""
+      },
+      {
+        "line": 112,
+        "text": "        // At cycle 57 of $36: rc goes 6->7 but idle NOT set (rc was 6 at the check)."
+      },
+      {
+        "line": 113,
+        "text": "        // At cycle 57 of $37: rc==7 at check -> idle_state=1. !idle||bad=false -> rc stays 7."
+      },
+      {
+        "line": 114,
+        "text": "        AdvanceTo(vic, 0x37, 57);"
+      },
+      {
+        "line": 115,
+        "text": ""
+      },
+      {
+        "line": 116,
+        "text": "        Assert.True(vic.IsGraphicsIdle);"
+      },
+      {
+        "line": 117,
+        "text": "        Assert.Equal(7, vic.CurrentRowCounter);"
+      },
+      {
+        "line": 118,
+        "text": "    }"
+      },
+      {
+        "line": 119,
+        "text": ""
+      },
+      {
+        "line": 120,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 121,
+        "text": "    /// FR-VIC-001 / TR-VIC-EDGE-003."
+      },
+      {
+        "line": 122,
+        "text": "    /// Use case: When the chip is in idle state (rc==7, idle_state=1), the"
+      },
+      {
+        "line": 123,
+        "text": "    /// next bad line must reset rc to 0 and clear idle_state via the VC"
+      },
+      {
+        "line": 124,
+        "text": "    /// update at cycle 14 of the bad line."
+      },
+      {
+        "line": 125,
+        "text": "    /// Acceptance: After the idle transition at cycle 57 of $37, advancing"
+      },
+      {
+        "line": 126,
+        "text": "    /// to cycle 13 of $38 (the next bad line with YSCROLL=0) sets"
+      },
+      {
+        "line": 127,
+        "text": "    /// CurrentRowCounter to 0 and IsGraphicsIdle to false."
+      },
+      {
+        "line": 128,
+        "text": "    /// VICE viciisc/vicii-cycle.c:546-548 (rc = 0 on bad line at VC update)."
+      },
+      {
+        "line": 129,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 130,
+        "text": "    [Fact]"
+      },
+      {
+        "line": 131,
+        "text": "    public void CurrentRowCounter_ResetsToZeroOnNextBadLine()"
+      },
+      {
+        "line": 132,
+        "text": "    {"
+      },
+      {
+        "line": 133,
+        "text": "        var vic = BuildVic();"
+      },
+      {
+        "line": 134,
+        "text": "        vic.Write(ScreenControl1, DenRselYscroll0);"
+      },
+      {
+        "line": 135,
+        "text": ""
+      },
+      {
+        "line": 136,
+        "text": "        // Advance past the idle transition at $37 cycle 57."
+      },
+      {
+        "line": 137,
+        "text": "        AdvanceTo(vic, 0x37, 57);"
+      },
+      {
+        "line": 138,
+        "text": "        Assert.True(vic.IsGraphicsIdle);"
+      },
+      {
+        "line": 139,
+        "text": ""
+      },
+      {
+        "line": 140,
+        "text": "        // Line $38 is a bad line (0x38 & 7 = 0 = YSCROLL). VC update at cycle 13"
+      },
+      {
+        "line": 141,
+        "text": "        // resets rc=0 and clears idle_state."
+      },
+      {
+        "line": 142,
+        "text": "        AdvanceTo(vic, 0x38, 13);"
+      },
+      {
+        "line": 143,
+        "text": ""
+      },
+      {
+        "line": 144,
+        "text": "        Assert.Equal(0, vic.CurrentRowCounter);"
+      },
+      {
+        "line": 145,
+        "text": "        Assert.False(vic.IsGraphicsIdle);"
+      },
+      {
+        "line": 146,
+        "text": "    }"
+      },
+      {
+        "line": 147,
+        "text": ""
+      },
+      {
+        "line": 148,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 149,
+        "text": "    /// FR-VIC-001 / TR-VIC-EDGE-003."
+      },
+      {
+        "line": 150,
+        "text": "    /// Use case: The row counter must increment continuously over multiple"
+      },
+      {
+        "line": 151,
+        "text": "    /// 8-row groups, proving the RC window repeats correctly across rows."
+      },
+      {
+        "line": 152,
+        "text": "    /// Note: AdvanceTo returns AFTER the RC update fires at RasterX=57, so"
+      },
+      {
+        "line": 153,
+        "text": "    /// the value observed is the POST-update value (one higher than pre-update)."
+      },
+      {
+        "line": 154,
+        "text": "    /// Acceptance: Starting from line $30 (bad, rc=0 VC / rc=1 RC), the row"
+      },
+      {
+        "line": 155,
+        "text": "    /// counter at cycle 57 of $31 is 2 (1->2), at $32 is 3, ..., at $36 is 7 (6->7)."
+      },
+      {
+        "line": 156,
+        "text": "    /// VICE viciisc/vicii-cycle.c:560-562."
+      },
+      {
+        "line": 157,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 158,
+        "text": "    [Theory]"
+      },
+      {
+        "line": 159,
+        "text": "    [InlineData(0x31, 2)] // rc was 1 pre-update, becomes 2"
+      },
+      {
+        "line": 160,
+        "text": "    [InlineData(0x32, 3)]"
+      },
+      {
+        "line": 161,
+        "text": "    [InlineData(0x33, 4)]"
+      },
+      {
+        "line": 162,
+        "text": "    [InlineData(0x34, 5)]"
+      },
+      {
+        "line": 163,
+        "text": "    [InlineData(0x35, 6)]"
+      },
+      {
+        "line": 164,
+        "text": "    [InlineData(0x36, 7)] // rc was 6 pre-update, becomes 7 (idle NOT set: rc was 6 at check)"
+      },
+      {
+        "line": 165,
+        "text": "    public void CurrentRowCounter_MatchesExpectedValueAtRcUpdateCycles(ushort line, int expectedRc)"
+      },
+      {
+        "line": 166,
+        "text": "    {"
+      },
+      {
+        "line": 167,
+        "text": "        var vic = BuildVic();"
+      },
+      {
+        "line": 168,
+        "text": "        vic.Write(ScreenControl1, DenRselYscroll0);"
+      },
+      {
+        "line": 169,
+        "text": ""
+      },
+      {
+        "line": 170,
+        "text": "        AdvanceTo(vic, line, 57);"
+      },
+      {
+        "line": 171,
+        "text": ""
+      },
+      {
+        "line": 172,
+        "text": "        Assert.Equal(expectedRc, vic.CurrentRowCounter);"
+      },
+      {
+        "line": 173,
+        "text": "    }"
+      },
+      {
+        "line": 174,
+        "text": ""
+      },
+      {
+        "line": 175,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 176,
+        "text": "    /// FR-VIC-001 / FR-VIC-008 / TR-VIC-EDGE-003."
+      },
+      {
+        "line": 177,
+        "text": "    /// Use case: On an FLI line (forced bad line), changing YSCROLL mid-way"
+      },
+      {
+        "line": 178,
+        "text": "    /// to match the current raster line's low 3 bits causes a new bad line"
+      },
+      {
+        "line": 179,
+        "text": "    /// condition. The VC update at cycle 14 of that line resets rc to 0 and"
+      },
+      {
+        "line": 180,
+        "text": "    /// clears idle_state, interrupting the idle window."
+      },
+      {
+        "line": 181,
+        "text": "    /// Acceptance: After reaching idle state at $37 cycle 57 (rc==7,"
+      },
+      {
+        "line": 182,
+        "text": "    /// idle_state=1), writing YSCROLL=1 (to match $39 & 7 = 1) before line"
+      },
+      {
+        "line": 183,
+        "text": "    /// $39 makes $39 a forced bad line. Its VC update at cycle 13 resets"
+      },
+      {
+        "line": 184,
+        "text": "    /// rc=0 and clears idle_state. Lines $38 (YSCROLL=1: 0x38&7=0!=1) are"
+      },
+      {
+        "line": 185,
+        "text": "    /// not bad, so the idle window survives line $38 and is only interrupted"
+      },
+      {
+        "line": 186,
+        "text": "    /// at $39."
+      },
+      {
+        "line": 187,
+        "text": "    /// VICE viciisc/vicii-cycle.c:51-60 (check_badline),"
+      },
+      {
+        "line": 188,
+        "text": "    /// viciisc/vicii-cycle.c:546-548 (rc = 0 on bad_line VC update)."
+      },
+      {
+        "line": 189,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 190,
+        "text": "    [Fact]"
+      },
+      {
+        "line": 191,
+        "text": "    public void ForcedBadLine_ResetsRcAndClearsIdleState()"
+      },
+      {
+        "line": 192,
+        "text": "    {"
+      },
+      {
+        "line": 193,
+        "text": "        var vic = BuildVic();"
+      },
+      {
+        "line": 194,
+        "text": "        vic.Write(ScreenControl1, DenRselYscroll0); // YSCROLL=0"
+      },
+      {
+        "line": 195,
+        "text": ""
+      },
+      {
+        "line": 196,
+        "text": "        // Reach idle state at cycle 57 of $37."
+      },
+      {
+        "line": 197,
+        "text": "        AdvanceTo(vic, 0x37, 57);"
+      },
+      {
+        "line": 198,
+        "text": "        Assert.True(vic.IsGraphicsIdle);"
+      },
+      {
+        "line": 199,
+        "text": ""
+      },
+      {
+        "line": 200,
+        "text": "        // Change YSCROLL to 1 so line $39 ($39 & 7 = 1) becomes a forced bad line."
+      },
+      {
+        "line": 201,
+        "text": "        // Line $38 ($38 & 7 = 0 != 1) is NOT a bad line with YSCROLL=1,"
+      },
+      {
+        "line": 202,
+        "text": "        // so idle survives through $38."
+      },
+      {
+        "line": 203,
+        "text": "        vic.Write(ScreenControl1, 0x19); // DEN=1, RSEL=1, YSCROLL=1"
+      },
+      {
+        "line": 204,
+        "text": ""
+      },
+      {
+        "line": 205,
+        "text": "        // VC update at cycle 13 of $39: bad_line=1 -> rc=0, idle_state=false."
+      },
+      {
+        "line": 206,
+        "text": "        AdvanceTo(vic, 0x39, 13);"
+      },
+      {
+        "line": 207,
+        "text": ""
+      },
+      {
+        "line": 208,
+        "text": "        Assert.Equal(0, vic.CurrentRowCounter);"
+      },
+      {
+        "line": 209,
+        "text": "        Assert.False(vic.IsGraphicsIdle);"
+      },
+      {
+        "line": 210,
+        "text": "    }"
+      },
+      {
+        "line": 211,
+        "text": "}"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\VicIISpriteDmaNativeCheckpointTests.cs",
+    "start": 1,
+    "end": 205,
+    "lines": [
+      {
+        "line": 1,
+        "text": "namespace ViceSharp.TestHarness;"
+      },
+      {
+        "line": 2,
+        "text": ""
+      },
+      {
+        "line": 3,
+        "text": "using ViceSharp.Abstractions;"
+      },
+      {
+        "line": 4,
+        "text": "using ViceSharp.Chips.VicIi;"
+      },
+      {
+        "line": 5,
+        "text": "using ViceSharp.Core;"
+      },
+      {
+        "line": 6,
+        "text": "using Xunit;"
+      },
+      {
+        "line": 7,
+        "text": ""
+      },
+      {
+        "line": 8,
+        "text": "/// <summary>"
+      },
+      {
+        "line": 9,
+        "text": "/// BACKFILL-VIDEO-001 (primary) / TR-VIC-EDGE-004 / FR-VIC-006 / FR-VIC-010 / TEST-VIC-001."
+      },
+      {
+        "line": 10,
+        "text": "///"
+      },
+      {
+        "line": 11,
+        "text": "/// Native checkpoints for non-PAL per-model sprite DMA windows (sub-slice 1B)."
+      },
+      {
+        "line": 12,
+        "text": "/// Tables are already wired in Mos6569 (Slice 1A). These tests validate that:"
+      },
+      {
+        "line": 13,
+        "text": "///   (a) VICE native SpriteDma bit 3 fires near the expected raster line when sprite 3"
+      },
+      {
+        "line": 14,
+        "text": "///       is enabled with Y = 0x50, for each supported non-PAL model selector."
+      },
+      {
+        "line": 15,
+        "text": "///   (b) The managed VIC for the matching model reports IsCpuCycleStolen at rasterX 0"
+      },
+      {
+        "line": 16,
+        "text": "///       of line 0x50 (the sprite-3 pointer-access slot, shared across all models)."
+      },
+      {
+        "line": 17,
+        "text": "///"
+      },
+      {
+        "line": 18,
+        "text": "/// No implementation change is expected; this is checkpoint/validation coverage only."
+      },
+      {
+        "line": 19,
+        "text": "///"
+      },
+      {
+        "line": 20,
+        "text": "/// VICE sources:"
+      },
+      {
+        "line": 21,
+        "text": "///   vicii-cycle.c:118 (check_sprite_dma Y-latch entry point),"
+      },
+      {
+        "line": 22,
+        "text": "///   vicii-cycle.c:499-503 (model cycle count flags + late-line),"
+      },
+      {
+        "line": 23,
+        "text": "///   vicii-chip-model.c:272-403 (cycle_tab_ntsc SprDma*/BaSpr* for 65 cpl Mos6567R8/Mos8562),"
+      },
+      {
+        "line": 24,
+        "text": "///   vicii-chip-model.c:437-566 (cycle_tab_ntsc_old for 64 cpl Mos6567R56A),"
+      },
+      {
+        "line": 25,
+        "text": "///   vicii-fetch.c:275-309 (sprite pointer + data fetch driven by per-model DMA windows)."
+      },
+      {
+        "line": 26,
+        "text": "///"
+      },
+      {
+        "line": 27,
+        "text": "/// Byrd Development Process: tests written first (checkpoint); no prod edit required."
+      },
+      {
+        "line": 28,
+        "text": "/// Gated by [Collection(\"NativeVice\")] and [ViceTheory] - skip when native VICE absent."
+      },
+      {
+        "line": 29,
+        "text": "/// </summary>"
+      },
+      {
+        "line": 30,
+        "text": "[Collection(\"NativeVice\")]"
+      },
+      {
+        "line": 31,
+        "text": "public sealed class VicIISpriteDmaNativeCheckpointTests"
+      },
+      {
+        "line": 32,
+        "text": "{"
+      },
+      {
+        "line": 33,
+        "text": "    // Sprite 3 Y coordinate: line 0x50 (80 decimal), in the visible display area,"
+      },
+      {
+        "line": 34,
+        "text": "    // well below the DMA bad-line range (0x30-0xF7 with YSCROLL=0). Using line 0x50"
+      },
+      {
+        "line": 35,
+        "text": "    // means it is NOT a bad line, so only sprite DMA contributes to IsCpuCycleStolen."
+      },
+      {
+        "line": 36,
+        "text": "    private const byte SpriteY = 0x50;"
+      },
+      {
+        "line": 37,
+        "text": "    private const byte SpriteEnable3 = 0x08;   // bit 3 of $D015"
+      },
+      {
+        "line": 38,
+        "text": "    private const ushort D011 = 0xD011;"
+      },
+      {
+        "line": 39,
+        "text": "    private const ushort D015 = 0xD015;"
+      },
+      {
+        "line": 40,
+        "text": "    private const ushort SpriteY3Reg = 0xD007;  // sprite 3 Y register"
+      },
+      {
+        "line": 41,
+        "text": ""
+      },
+      {
+        "line": 42,
+        "text": "    // Number of cycles to step past KERNAL init before writing sprite registers."
+      },
+      {
+        "line": 43,
+        "text": "    // 30,000 covers ~1.5 PAL frames (19,656 cycles/frame). NTSC/OldNTSC are similar."
+      },
+      {
+        "line": 44,
+        "text": "    private const int KernalInitCycles = 30_000;"
+      },
+      {
+        "line": 45,
+        "text": ""
+      },
+      {
+        "line": 46,
+        "text": "    // Additional cycles to search for SpriteDma after writing registers (~2 PAL frames)."
+      },
+      {
+        "line": 47,
+        "text": "    private const int SearchCycles = 40_000;"
+      },
+      {
+        "line": 48,
+        "text": ""
+      },
+      {
+        "line": 49,
+        "text": "    public static TheoryData<string> NonPalAndExtendedModelSelectors"
+      },
+      {
+        "line": 50,
+        "text": "    {"
+      },
+      {
+        "line": 51,
+        "text": "        get"
+      },
+      {
+        "line": 52,
+        "text": "        {"
+      },
+      {
+        "line": 53,
+        "text": "            var data = new TheoryData<string>();"
+      },
+      {
+        "line": 54,
+        "text": "            // NTSC 65 cpl - Mos6567R8 (standard new NTSC C64)"
+      },
+      {
+        "line": 55,
+        "text": "            data.Add(\"ntsc\");"
+      },
+      {
+        "line": 56,
+        "text": "            // NTSC 65 cpl - Mos8562 (new NTSC C64C)"
+      },
+      {
+        "line": 57,
+        "text": "            data.Add(\"newntsc\");"
+      },
+      {
+        "line": 58,
+        "text": "            // Old NTSC 64 cpl - Mos6567R56A"
+      },
+      {
+        "line": 59,
+        "text": "            data.Add(\"oldntsc\");"
+      },
+      {
+        "line": 60,
+        "text": "            // PAL-N 65 cpl - Mos6572 (Drean/PAL-N)"
+      },
+      {
+        "line": 61,
+        "text": "            data.Add(\"paln\");"
+      },
+      {
+        "line": 62,
+        "text": "            // PAL 63 cpl - Mos8565 (new PAL C64C)"
+      },
+      {
+        "line": 63,
+        "text": "            data.Add(\"c64c\");"
+      },
+      {
+        "line": 64,
+        "text": "            return data;"
+      },
+      {
+        "line": 65,
+        "text": "        }"
+      },
+      {
+        "line": 66,
+        "text": "    }"
+      },
+      {
+        "line": 67,
+        "text": ""
+      },
+      {
+        "line": 68,
+        "text": "    private static Mos6569 CreateManagedVic(string modelSelector)"
+      },
+      {
+        "line": 69,
+        "text": "    {"
+      },
+      {
+        "line": 70,
+        "text": "        var irq = new InterruptLine(InterruptType.Irq);"
+      },
+      {
+        "line": 71,
+        "text": "        var bus = new BasicBus();"
+      },
+      {
+        "line": 72,
+        "text": "        return modelSelector switch"
+      },
+      {
+        "line": 73,
+        "text": "        {"
+      },
+      {
+        "line": 74,
+        "text": "            \"ntsc\" => new Mos6567(bus, irq),"
+      },
+      {
+        "line": 75,
+        "text": "            \"newntsc\" => new Mos8562(bus, irq),"
+      },
+      {
+        "line": 76,
+        "text": "            \"oldntsc\" => new Mos6567R56A(bus, irq),"
+      },
+      {
+        "line": 77,
+        "text": "            \"paln\" => new Mos6572(bus, irq),"
+      },
+      {
+        "line": 78,
+        "text": "            \"c64c\" => new Mos8565(bus, irq),"
+      },
+      {
+        "line": 79,
+        "text": "            _ => new Mos6569(bus, irq),"
+      },
+      {
+        "line": 80,
+        "text": "        };"
+      },
+      {
+        "line": 81,
+        "text": "    }"
+      },
+      {
+        "line": 82,
+        "text": ""
+      },
+      {
+        "line": 83,
+        "text": "    private static void AdvanceTo(Mos6569 vic, ushort rasterLine, byte rasterCycle)"
+      },
+      {
+        "line": 84,
+        "text": "    {"
+      },
+      {
+        "line": 85,
+        "text": "        var max = vic.TotalLines * vic.CyclesPerLine * 4;"
+      },
+      {
+        "line": 86,
+        "text": "        for (var i = 0; i < max; i++)"
+      },
+      {
+        "line": 87,
+        "text": "        {"
+      },
+      {
+        "line": 88,
+        "text": "            if (vic.CurrentRasterLine == rasterLine && vic.RasterX == rasterCycle)"
+      },
+      {
+        "line": 89,
+        "text": "                return;"
+      },
+      {
+        "line": 90,
+        "text": "            vic.Tick();"
+      },
+      {
+        "line": 91,
+        "text": "        }"
+      },
+      {
+        "line": 92,
+        "text": ""
+      },
+      {
+        "line": 93,
+        "text": "        throw new InvalidOperationException("
+      },
+      {
+        "line": 94,
+        "text": "            $\"Managed VIC did not reach line ${rasterLine:X3} cycle {rasterCycle}.\");"
+      },
+      {
+        "line": 95,
+        "text": "    }"
+      },
+      {
+        "line": 96,
+        "text": ""
+      },
+      {
+        "line": 97,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 98,
+        "text": "    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-004 / FR-VIC-006 / FR-VIC-010 / TEST-VIC-001."
+      },
+      {
+        "line": 99,
+        "text": "    ///"
+      },
+      {
+        "line": 100,
+        "text": "    /// Use case: For each supported VIC-II model, enabling sprite 3 at Y=0x50 must cause"
+      },
+      {
+        "line": 101,
+        "text": "    /// the VIC-II chip to assert DMA activity in the line range [0x4F, 0x51]. This"
+      },
+      {
+        "line": 102,
+        "text": "    /// native checkpoint validates that the VICE x64sc engine fires sprite-3 DMA at"
+      },
+      {
+        "line": 103,
+        "text": "    /// the expected raster position for each model-specific cycle table. The managed"
+      },
+      {
+        "line": 104,
+        "text": "    /// VIC for the matching model must also report IsCpuCycleStolen at rasterX 0 of"
+      },
+      {
+        "line": 105,
+        "text": "    /// line 0x50 (the sprite-3 pointer-access slot, model-independent)."
+      },
+      {
+        "line": 106,
+        "text": "    ///"
+      },
+      {
+        "line": 107,
+        "text": "    /// Native assertion: VICE SpriteDma bit 3 goes high in lines [0x4F, 0x51]."
+      },
+      {
+        "line": 108,
+        "text": "    /// Managed assertion: managed IsCpuCycleStolen is true at (line 0x50, rasterX 0)."
+      },
+      {
+        "line": 109,
+        "text": "    ///"
+      },
+      {
+        "line": 110,
+        "text": "    /// VICE sources:"
+      },
+      {
+        "line": 111,
+        "text": "    ///   vicii-cycle.c:118 (check_sprite_dma Y-latch, fires at model ChkSprDma cycle),"
+      },
+      {
+        "line": 112,
+        "text": "    ///   vicii-chip-model.c:272-403/437-566 (SprDma* + BaSpr* slots per model cpl),"
+      },
+      {
+        "line": 113,
+        "text": "    ///   vicii-fetch.c:275-309 (sprite 3 p/s fetch at cycle 1/2 = rasterX 0/1)."
+      },
+      {
+        "line": 114,
+        "text": "    ///"
+      },
+      {
+        "line": 115,
+        "text": "    /// Acceptance: Both native and managed assertions pass for all five model selectors."
+      },
+      {
+        "line": 116,
+        "text": "    /// Byrd: checkpoint test; no production code change needed."
+      },
+      {
+        "line": 117,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 118,
+        "text": "    [ViceTheory]"
+      },
+      {
+        "line": 119,
+        "text": "    [MemberData(nameof(NonPalAndExtendedModelSelectors))]"
+      },
+      {
+        "line": 120,
+        "text": "    public void Sprite3DmaWindow_NativeAndManagedBothActive_ModelSpecificCycleTable(string modelSelector)"
+      },
+      {
+        "line": 121,
+        "text": "    {"
+      },
+      {
+        "line": 122,
+        "text": "        // ============================================================"
+      },
+      {
+        "line": 123,
+        "text": "        // Native VICE side"
+      },
+      {
+        "line": 124,
+        "text": "        // ============================================================"
+      },
+      {
+        "line": 125,
+        "text": "        var native = ViceNativeBridge.CreateMachine(modelSelector);"
+      },
+      {
+        "line": 126,
+        "text": "        bool nativeFoundDma = false;"
+      },
+      {
+        "line": 127,
+        "text": "        ushort nativeDmaLine = 0;"
+      },
+      {
+        "line": 128,
+        "text": "        byte nativeDmaCycle = 0;"
+      },
+      {
+        "line": 129,
+        "text": ""
+      },
+      {
+        "line": 130,
+        "text": "        try"
+      },
+      {
+        "line": 131,
+        "text": "        {"
+      },
+      {
+        "line": 132,
+        "text": "            ViceNativeBridge.ResetMachine(native);"
+      },
+      {
+        "line": 133,
+        "text": ""
+      },
+      {
+        "line": 134,
+        "text": "            // Step past KERNAL init so sprite registers survive the write."
+      },
+      {
+        "line": 135,
+        "text": "            for (var i = 0; i < KernalInitCycles; i++)"
+      },
+      {
+        "line": 136,
+        "text": "                ViceNativeBridge.StepCycle(native);"
+      },
+      {
+        "line": 137,
+        "text": ""
+      },
+      {
+        "line": 138,
+        "text": "            // Write sprite 3 registers: Y=0x50, enable bit 3."
+      },
+      {
+        "line": 139,
+        "text": "            // DEN=1, YSCROLL=0 ensures line 0x50 is not a bad line."
+      },
+      {
+        "line": 140,
+        "text": "            ViceNativeBridge.WriteMemory(native, D011, 0x10);"
+      },
+      {
+        "line": 141,
+        "text": "            ViceNativeBridge.WriteMemory(native, SpriteY3Reg, SpriteY);"
+      },
+      {
+        "line": 142,
+        "text": "            ViceNativeBridge.WriteMemory(native, D015, SpriteEnable3);"
+      },
+      {
+        "line": 143,
+        "text": ""
+      },
+      {
+        "line": 144,
+        "text": "            // Step forward and poll GetVicState looking for SpriteDma bit 3 near line 0x50."
+      },
+      {
+        "line": 145,
+        "text": "            // The DMA latch fires at check_sprite_dma (near end of line 0x4F); the p/s access"
+      },
+      {
+        "line": 146,
+        "text": "            // is at VICE cycle 1/2 of line 0x50 (RasterX 0/1 in managed). We search for any"
+      },
+      {
+        "line": 147,
+        "text": "            // cycle in lines [0x4F, 0x51] where bit 3 is active."
+      },
+      {
+        "line": 148,
+        "text": "            for (var i = 0; i < SearchCycles && !nativeFoundDma; i++)"
+      },
+      {
+        "line": 149,
+        "text": "            {"
+      },
+      {
+        "line": 150,
+        "text": "                ViceNativeBridge.StepCycle(native);"
+      },
+      {
+        "line": 151,
+        "text": "                var st = new ViceNativeBridge.ViceVicState();"
+      },
+      {
+        "line": 152,
+        "text": "                ViceNativeBridge.GetVicState(native, ref st);"
+      },
+      {
+        "line": 153,
+        "text": ""
+      },
+      {
+        "line": 154,
+        "text": "                if ((st.SpriteDma & SpriteEnable3) != 0 &&"
+      },
+      {
+        "line": 155,
+        "text": "                    st.RasterLine >= (ushort)(SpriteY - 1) &&"
+      },
+      {
+        "line": 156,
+        "text": "                    st.RasterLine <= (ushort)(SpriteY + 1))"
+      },
+      {
+        "line": 157,
+        "text": "                {"
+      },
+      {
+        "line": 158,
+        "text": "                    nativeDmaLine = st.RasterLine;"
+      },
+      {
+        "line": 159,
+        "text": "                    nativeDmaCycle = (byte)st.RasterCycle;"
+      },
+      {
+        "line": 160,
+        "text": "                    nativeFoundDma = true;"
+      },
+      {
+        "line": 161,
+        "text": "                }"
+      },
+      {
+        "line": 162,
+        "text": "            }"
+      },
+      {
+        "line": 163,
+        "text": "        }"
+      },
+      {
+        "line": 164,
+        "text": "        finally"
+      },
+      {
+        "line": 165,
+        "text": "        {"
+      },
+      {
+        "line": 166,
+        "text": "            ViceNativeBridge.DestroyMachine(native);"
+      },
+      {
+        "line": 167,
+        "text": "        }"
+      },
+      {
+        "line": 168,
+        "text": ""
+      },
+      {
+        "line": 169,
+        "text": "        // Native assertion: VICE fired sprite 3 DMA at the expected line range."
+      },
+      {
+        "line": 170,
+        "text": "        Assert.True(nativeFoundDma,"
+      },
+      {
+        "line": 171,
+        "text": "            $\"Model {modelSelector}: native VICE did not set SpriteDma bit 3 near line ${SpriteY:X2} \" +"
+      },
+      {
+        "line": 172,
+        "text": "            $\"after writing sprite 3 Y=${SpriteY:X2} and enabling via $D015={SpriteEnable3:X2}. \" +"
+      },
+      {
+        "line": 173,
+        "text": "            \"Expected SpriteDma & 0x08 in lines [0x4F, 0x51] per model cycle table \" +"
+      },
+      {
+        "line": 174,
+        "text": "            \"(vicii-chip-model.c:272-403/437-566, vicii-cycle.c:118).\");"
+      },
+      {
+        "line": 175,
+        "text": ""
+      },
+      {
+        "line": 176,
+        "text": "        Assert.True("
+      },
+      {
+        "line": 177,
+        "text": "            nativeDmaLine >= (ushort)(SpriteY - 1) && nativeDmaLine <= (ushort)(SpriteY + 1),"
+      },
+      {
+        "line": 178,
+        "text": "            $\"Model {modelSelector}: SpriteDma bit 3 appeared at line ${nativeDmaLine:X3} \" +"
+      },
+      {
+        "line": 179,
+        "text": "            $\"but expected within +-1 of sprite Y=${SpriteY:X2}.\");"
+      },
+      {
+        "line": 180,
+        "text": ""
+      },
+      {
+        "line": 181,
+        "text": "        // ============================================================"
+      },
+      {
+        "line": 182,
+        "text": "        // Managed VIC side (independent of native - no lockstep needed)"
+      },
+      {
+        "line": 183,
+        "text": "        // ============================================================"
+      },
+      {
+        "line": 184,
+        "text": "        // Sprite 3 uses the \"early next-line\" DMA slot: cycle_tab_* places sprite 3 at"
+      },
+      {
+        "line": 185,
+        "text": "        // FirstCurrentCycle=0 for all models (PAL 63cpl, NTSC 65cpl, OldNTSC 64cpl,"
+      },
+      {
+        "line": 186,
+        "text": "        // PAL-N 65cpl). The p/s access is at rasterX 0/1 of line (spriteY + 1), not"
+      },
+      {
+        "line": 187,
+        "text": "        // on spriteY itself. The DMA check fires at ~rasterX 54-55 of spriteY; BA lead"
+      },
+      {
+        "line": 188,
+        "text": "        // starts at rasterX 60-62 of spriteY; p/s at rasterX 0/1 of (spriteY+1)."
+      },
+      {
+        "line": 189,
+        "text": "        // This matches SpriteDmaStall_Sprite3UsesEarlyLineTableSlot (Y=$10, checks $11)."
+      },
+      {
+        "line": 190,
+        "text": "        var managed = CreateManagedVic(modelSelector);"
+      },
+      {
+        "line": 191,
+        "text": "        managed.Write(D011, 0x10);       // DEN=1, YSCROLL=0"
+      },
+      {
+        "line": 192,
+        "text": "        managed.Write(SpriteY3Reg, SpriteY);  // sprite 3 Y = 0x50"
+      },
+      {
+        "line": 193,
+        "text": "        managed.Write(D015, SpriteEnable3);   // enable sprite 3"
+      },
+      {
+        "line": 194,
+        "text": ""
+      },
+      {
+        "line": 195,
+        "text": "        // Advance to line (SpriteY+1), rasterX 0 - the sprite-3 pointer-access slot."
+      },
+      {
+        "line": 196,
+        "text": "        // For SpriteY=0x50: check fires at end of line 0x50, p/s access at line 0x51 rasterX 0."
+      },
+      {
+        "line": 197,
+        "text": "        AdvanceTo(managed, (ushort)(SpriteY + 1), 0);"
+      },
+      {
+        "line": 198,
+        "text": ""
+      },
+      {
+        "line": 199,
+        "text": "        Assert.True(managed.IsCpuCycleStolen,"
+      },
+      {
+        "line": 200,
+        "text": "            $\"Model {modelSelector}: managed VIC-II must report IsCpuCycleStolen at \" +"
+      },
+      {
+        "line": 201,
+        "text": "            $\"line ${SpriteY + 1:X2} rasterX 0 (sprite-3 pointer-access slot on line Y+1; \" +"
+      },
+      {
+        "line": 202,
+        "text": "            \"check fires at end of line $50, BA lead at $50 cycles 60-62, p/s at $51 rasterX 0/1; \" +"
+      },
+      {
+        "line": 203,
+        "text": "            \"VICE vicii-fetch.c:275-309 + chip-model.c:272-403/437-566).\");"
+      },
+      {
+        "line": 204,
+        "text": "    }"
+      },
+      {
+        "line": 205,
+        "text": "}"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Chips\\VicIi\\Mos8565.cs",
+    "start": 1,
+    "end": 34,
+    "lines": [
+      {
+        "line": 1,
+        "text": "using ViceSharp.Abstractions;"
+      },
+      {
+        "line": 2,
+        "text": ""
+      },
+      {
+        "line": 3,
+        "text": "namespace ViceSharp.Chips.VicIi;"
+      },
+      {
+        "line": 4,
+        "text": ""
+      },
+      {
+        "line": 5,
+        "text": "/// <summary>"
+      },
+      {
+        "line": 6,
+        "text": "/// HMOS MOS 8565 PAL VIC-II variant."
+      },
+      {
+        "line": 7,
+        "text": "/// </summary>"
+      },
+      {
+        "line": 8,
+        "text": "public sealed class Mos8565 : Mos6569"
+      },
+      {
+        "line": 9,
+        "text": "{"
+      },
+      {
+        "line": 10,
+        "text": "    public Mos8565(IBus bus, IInterruptLine irqLine) : base(bus, irqLine)"
+      },
+      {
+        "line": 11,
+        "text": "    {"
+      },
+      {
+        "line": 12,
+        "text": "        ConfigureTiming("
+      },
+      {
+        "line": 13,
+        "text": "            TvSystem.PAL,"
+      },
+      {
+        "line": 14,
+        "text": "            PalCyclesPerLine,"
+      },
+      {
+        "line": 15,
+        "text": "            PalVisibleLines,"
+      },
+      {
+        "line": 16,
+        "text": "            PalTotalLines,"
+      },
+      {
+        "line": 17,
+        "text": "            985_248d / (PalCyclesPerLine * PalTotalLines));"
+      },
+      {
+        "line": 18,
+        "text": "    }"
+      },
+      {
+        "line": 19,
+        "text": ""
+      },
+      {
+        "line": 20,
+        "text": "    public override string Name => \"MOS 8565 VIC-II (new PAL)\";"
+      },
+      {
+        "line": 21,
+        "text": "    public override DeviceId Id => new DeviceId(0x0009);"
+      },
+      {
+        "line": 22,
+        "text": ""
+      },
+      {
+        "line": 23,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 24,
+        "text": "    /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-07: the HMOS 8565 has no colour"
+      },
+      {
+        "line": 25,
+        "text": "    /// latency (VICE viciisc/vicii-chip-model.c:260-268, color_latency = 0),"
+      },
+      {
+        "line": 26,
+        "text": "    /// so the light-pen x offset is 1 instead of 2 (vicii-lightpen.c:42)."
+      },
+      {
+        "line": 27,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 28,
+        "text": "    protected override bool ColorLatency => false;"
+      },
+      {
+        "line": 29,
+        "text": ""
+      },
+      {
+        "line": 30,
+        "text": "    /// <summary>"
+      },
+      {
+        "line": 31,
+        "text": "    /// audit M15/L7: 8565 uses the 8565r2 palette (vicii-color.c:641-643)."
+      },
+      {
+        "line": 32,
+        "text": "    /// </summary>"
+      },
+      {
+        "line": 33,
+        "text": "    public override VicPalette.Group PaletteGroup => VicPalette.Group.Mos8565R2;"
+      },
+      {
+        "line": 34,
+        "text": "}"
+      }
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Chips\\VicIi\\Mos6569.cs",
+    "start": 1300,
+    "end": 1383,
+    "lines": [
+      {
+        "line": 1300,
+        "text": "            }"
+      },
+      {
+        "line": 1301,
+        "text": "        }"
+      },
+      {
+        "line": 1302,
+        "text": "        else"
+      },
+      {
+        "line": 1303,
+        "text": "        {"
+      },
+      {
+        "line": 1304,
+        "text": "            _rasterIrqTriggered = false;"
+      },
+      {
+        "line": 1305,
+        "text": "        }"
+      },
+      {
+        "line": 1306,
+        "text": ""
+      },
+      {
+        "line": 1307,
+        "text": "        // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-15: per-cycle DEN re-check on the"
+      },
+      {
+        "line": 1308,
+        "text": "        // first DMA line. VICE viciisc/vicii-cycle.c:523-526: on every cycle of"
+      },
+      {
+        "line": 1309,
+        "text": "        // line $30 while bad lines are not yet allowed, allow_bad_lines takes the"
+      },
+      {
+        "line": 1310,
+        "text": "        // current DEN bit, so a mid-line DEN write arms the latch immediately."
+      },
+      {
+        "line": 1311,
+        "text": "        if (CurrentRasterLine == FirstDmaLine && !_allowBadLines)"
+      },
+      {
+        "line": 1312,
+        "text": "        {"
+      },
+      {
+        "line": 1313,
+        "text": "            _allowBadLines = IsDisplayEnabled;"
+      },
+      {
+        "line": 1314,
+        "text": "        }"
+      },
+      {
+        "line": 1315,
+        "text": ""
+      },
+      {
+        "line": 1316,
+        "text": "        // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-04/AC-16: per-cycle badline latch."
+      },
+      {
+        "line": 1317,
+        "text": "        // VICE viciisc/vicii-cycle.c:528-531 runs check_badline every cycle while"
+      },
+      {
+        "line": 1318,
+        "text": "        // allowed; check_badline (:51-60) latches bad_line from the raw ysmooth"
+      },
+      {
+        "line": 1319,
+        "text": "        // match (no raster-range clamp) and forces idle_state = 0 on every"
+      },
+      {
+        "line": 1320,
+        "text": "        // matching cycle, not just at the VC update."
+      },
+      {
+        "line": 1321,
+        "text": "        if (_allowBadLines)"
+      },
+      {
+        "line": 1322,
+        "text": "        {"
+      },
+      {
+        "line": 1323,
+        "text": "            if ((CurrentRasterLine & 0x07) == YScroll)"
+      },
+      {
+        "line": 1324,
+        "text": "            {"
+      },
+      {
+        "line": 1325,
+        "text": "                _badLine = true;"
+      },
+      {
+        "line": 1326,
+        "text": "                _idleState = false;"
+      },
+      {
+        "line": 1327,
+        "text": ""
+      },
+      {
+        "line": 1328,
+        "text": "                // BACKFILL-VIDEO-001 / FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001:"
+      },
+      {
+        "line": 1329,
+        "text": "                // count this scanline as a bad line exactly once, on the first"
+      },
+      {
+        "line": 1330,
+        "text": "                // cycle at which the latch fires for the line."
+      },
+      {
+        "line": 1331,
+        "text": "                if (_lastBadLineCounted != CurrentRasterLine)"
+      },
+      {
+        "line": 1332,
+        "text": "                {"
+      },
+      {
+        "line": 1333,
+        "text": "                    _badLineCountThisFrame++;"
+      },
+      {
+        "line": 1334,
+        "text": "                    _lastBadLineCounted = CurrentRasterLine;"
+      },
+      {
+        "line": 1335,
+        "text": "                }"
+      },
+      {
+        "line": 1336,
+        "text": "            }"
+      },
+      {
+        "line": 1337,
+        "text": "            else"
+      },
+      {
+        "line": 1338,
+        "text": "            {"
+      },
+      {
+        "line": 1339,
+        "text": "                _badLine = false;"
+      },
+      {
+        "line": 1340,
+        "text": "            }"
+      },
+      {
+        "line": 1341,
+        "text": "        }"
+      },
+      {
+        "line": 1342,
+        "text": ""
+      },
+      {
+        "line": 1343,
+        "text": "        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:"
+      },
+      {
+        "line": 1344,
+        "text": "        // VC update at VICE cycle 14 / managed RasterX 13 (VICII_PAL_CYCLE(14) = 13)."
+      },
+      {
+        "line": 1345,
+        "text": "        // Resets vc to vcbase and vmli to 0. On a bad line (per-cycle latch), also"
+      },
+      {
+        "line": 1346,
+        "text": "        // resets rc to 0. VICE viciisc/vicii-cycle.c:541-549; the idle exit is"
+      },
+      {
+        "line": 1347,
+        "text": "        // handled per cycle by check_badline above (PLAN-VICEPARITY-001"
+      },
+      {
+        "line": 1348,
+        "text": "        // FR-VIC-CYCLE AC-04), exactly as in VICE."
+      },
+      {
+        "line": 1349,
+        "text": "        if (RasterX == 13)"
+      },
+      {
+        "line": 1350,
+        "text": "        {"
+      },
+      {
+        "line": 1351,
+        "text": "            _videoCounter = _vcBase;"
+      },
+      {
+        "line": 1352,
+        "text": "            _videoMatrixLineIndex = 0;"
+      },
+      {
+        "line": 1353,
+        "text": "            if (_badLine)"
+      },
+      {
+        "line": 1354,
+        "text": "            {"
+      },
+      {
+        "line": 1355,
+        "text": "                _rowCounter = 0;"
+      },
+      {
+        "line": 1356,
+        "text": "                CaptureRenderMatrixRowForCurrentLine();"
+      },
+      {
+        "line": 1357,
+        "text": "            }"
+      },
+      {
+        "line": 1358,
+        "text": "        }"
+      },
+      {
+        "line": 1359,
+        "text": ""
+      },
+      {
+        "line": 1360,
+        "text": "        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:"
+      },
+      {
+        "line": 1361,
+        "text": "        // RC update at VICE cycle 58 / managed RasterX 57 (VICII_PAL_CYCLE(58) = 57)."
+      },
+      {
+        "line": 1362,
+        "text": "        // If rc == 7: enter idle state and capture vcbase = vc. Then if !idle_state"
+      },
+      {
+        "line": 1363,
+        "text": "        // or bad_line: increment rc, clear idle_state. The two branches use the"
+      },
+      {
+        "line": 1364,
+        "text": "        // updated idle_state from the first branch, so a bad line both sets idle (rc==7"
+      },
+      {
+        "line": 1365,
+        "text": "        // case) then immediately clears it (second branch bad_line=1)."
+      },
+      {
+        "line": 1366,
+        "text": "        // VICE viciisc/vicii-cycle.c:551-563 (bad_line is the per-cycle latch)."
+      },
+      {
+        "line": 1367,
+        "text": "        if (RasterX == 57)"
+      },
+      {
+        "line": 1368,
+        "text": "        {"
+      },
+      {
+        "line": 1369,
+        "text": "            if (_rowCounter == 7)"
+      },
+      {
+        "line": 1370,
+        "text": "            {"
+      },
+      {
+        "line": 1371,
+        "text": "                _idleState = true;"
+      },
+      {
+        "line": 1372,
+        "text": "                _vcBase = _videoCounter;"
+      },
+      {
+        "line": 1373,
+        "text": "            }"
+      },
+      {
+        "line": 1374,
+        "text": "            if (!_idleState || _badLine)"
+      },
+      {
+        "line": 1375,
+        "text": "            {"
+      },
+      {
+        "line": 1376,
+        "text": "                _rowCounter = (byte)((_rowCounter + 1) & 0x7);"
+      },
+      {
+        "line": 1377,
+        "text": "                _idleState = false;"
+      },
+      {
+        "line": 1378,
+        "text": "            }"
+      },
+      {
+        "line": 1379,
+        "text": "        }"
+      },
+      {
+        "line": 1380,
+        "text": ""
+      },
+      {
+        "line": 1381,
+        "text": "        UpdateSpriteDmaLatchForCurrentCycle();"
+      },
+      {
+        "line": 1382,
+        "text": "        UpdateSpriteSequencerForCurrentCycle();"
+      },
+      {
+        "line": 1383,
+        "text": ""
+      }
+    ]
+  }
+]

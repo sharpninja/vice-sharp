@@ -1,0 +1,6 @@
+{
+  "timestampLocal": "2026-10-08T09:11:21.4429100-05:00",
+  "exitCode": 0,
+  "completedNormally": true,
+  "note": "Reset-boundary diagnostic. xvic load stalled and parent terminated it; x64sc exit0 but resumed bytes differ. Neither is a parity pass."
+}

@@ -1,0 +1,168 @@
+{
+  "schema": "vice-mcp-recovery-receipt/v1",
+  "historicalObservation": {
+    "observedAtLocal": "2026-10-10T15:58:27-05:00",
+    "service": {
+      "name": "McpServer",
+      "status": "Running",
+      "pid": 72172,
+      "binaryPath": "C:\\ProgramData\\QBrainAi\\QBrainAi.Support.Mcp.exe"
+    },
+    "controlMarker": {
+      "path": "C:\\ProgramData\\QBrainAi\\AGENTS-README-FIRST.yaml",
+      "sha256": "814423C6AC39B7DC85F749070D7BA8634F4734BE24C7264ECC56766DB33D5C3F",
+      "signatureVerified": true,
+      "healthNonceVerified": true,
+      "declaredVersion": "1.4.40+407a80272b6c90861ea5994ca6c648d9204e14cc",
+      "declaredPluginVersion": "1.26.0",
+      "actualPluginVersion": "1.118.0"
+    },
+    "workspaceQuery": {
+      "method": "client.Workspace.ListAsync",
+      "requestId": "req-20261010T205607Z-6419",
+      "controlWorkspace": "C:\\ProgramData\\QBrainAi",
+      "totalCount": 5,
+      "items": [
+        {
+          "workspacePath": "C:\\ProgramData\\QBrainAi",
+          "name": "QBrainAi",
+          "isPrimary": true,
+          "isEnabled": true
+        },
+        {
+          "workspacePath": "F:\\GitHub\\McpServer\\src\\QBrainAi.Support.Mcp",
+          "name": "QBrainAi.Support.Mcp",
+          "isPrimary": true,
+          "isEnabled": true
+        },
+        {
+          "workspacePath": "F:\\GitHub\\TruckMate",
+          "name": "TruckMate",
+          "isPrimary": false,
+          "isEnabled": true
+        },
+        {
+          "workspacePath": "",
+          "name": "global",
+          "isPrimary": false,
+          "isEnabled": true
+        },
+        {
+          "workspacePath": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\throwaway-host-root",
+          "name": "throwaway-host-root",
+          "isPrimary": true,
+          "isEnabled": true
+        }
+      ],
+      "viceSharpMatches": 0
+    },
+    "globalMemoryQuery": {
+      "method": "workflow.memory.list",
+      "params": {
+        "scope": "Global"
+      },
+      "requestId": "req-20261010T205642Z-7941",
+      "result": {
+        "totalCount": 0,
+        "items": []
+      },
+      "profileManifestPresent": false,
+      "profileReloadComplete": false
+    },
+    "configuration": {
+      "source": "C:\\ProgramData\\QBrainAi\\appsettings.yaml",
+      "databaseProvider": "sqlite",
+      "dataDirectory": ".",
+      "dataSource": "mcp.db",
+      "federationRole": "Standalone",
+      "limitation": "Configuration file values only; runtime environment overrides not inspected."
+    },
+    "targetMarkerPresent": false,
+    "actionsNotTaken": [
+      "No service restart or stop",
+      "No workspace create/init",
+      "No database/config changes",
+      "No data import or failsafe replay",
+      "No requirement or acceptance mutation"
+    ],
+    "conclusion": "Trusted running service does not expose the existing ViceSharp workspace or Global profile. Cause and historical data disposition remain unproven.",
+    "triage": {
+      "submissionResult": {
+        "success": true,
+        "status": "collecting",
+        "groupId": "triage-group-41ce304c3228ad2e",
+        "quietDeadlineUtc": {
+          "dayOfWeek": "Saturday",
+          "ticks": 639272636411903040,
+          "totalOffsetMinutes": 0,
+          "dateTime": "2026-10-10T21:14:01.1903040",
+          "microsecond": 304,
+          "minute": 14,
+          "millisecond": 190,
+          "timeOfDay": "21:14:01.1903040",
+          "hour": 21,
+          "date": "2026-10-10T00:00:00.0000000",
+          "month": 10,
+          "year": 2026,
+          "utcTicks": 639272636411903040,
+          "localDateTime": "2026-10-10T16:14:01.1903040-05:00",
+          "dayOfYear": 283,
+          "offset": "00:00:00",
+          "nanosecond": 0,
+          "second": 1,
+          "utcDateTime": "2026-10-10T21:14:01.1903040Z",
+          "day": 10
+        },
+        "reportId": "triage-report-a393a20764a2448abfb84024b54343f3",
+        "workspacePath": "C:\\ProgramData\\QBrainAi"
+      },
+      "independentReadbackConfirmed": false,
+      "readbackError": "MCP_UNTRUSTED: marker refresh failed before REPL request: No marker file (AGENTS-README-FIRST.yaml) found walking up from C:\\ProgramData\\QBrainAi",
+      "noFurtherMcpCalls": true
+    },
+    "lastObservation": {
+      "observedAtLocal": "2026-10-10T15:59:35-05:00",
+      "serviceStatus": "Running",
+      "controlMarkerExists": false,
+      "viceMarkerExists": true
+    }
+  },
+  "currentObservation": {
+    "observedAtLocal": "2026-10-10T16:06:19-05:00",
+    "serviceStatus": "Running",
+    "servicePid": 73428,
+    "markerPath": "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml",
+    "markerSha256": "96ACFE5069A1FC5D8E39A6248CA9CD1FD9328308E576B79FBEB4FFC85516B508",
+    "markerPid": 73428,
+    "markerWrittenAtUtc": "2026-10-10T21:00:39.0413705+00:00",
+    "signatureVerified": true,
+    "healthNonceVerified": true,
+    "plugin": "mcpserver-codex-plugin",
+    "pluginVersion": "1.118.0",
+    "globalTotal": 38,
+    "verifiedProfileParts": 22,
+    "otherGlobalMemories": 15,
+    "profileFullReadComplete": true,
+    "originalSessionId": "Codex-20261007T135626Z-plugin-session",
+    "priorServerTurnCount": 60,
+    "currentRequestId": "req-20261010T205827Z-running-server-missing-vice-workspace",
+    "isolatedCache": "F:\\GitHub\\vice-sharp\\.mcpServer\\codex\\recovery-20261010-current-turn",
+    "failsafeDrainDisabled": "1",
+    "replayedRecords": 0,
+    "primaryBeginTurnReturnedPersisted": true,
+    "productGatePassed": false
+  },
+  "primaryReadback": {
+    "observedAtLocal": "2026-10-10T16:06:37-05:00",
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "turnCount": 61,
+    "requestId": "req-20261010T205827Z-running-server-missing-vice-workspace",
+    "turnStatus": "in_progress",
+    "responseExact": true,
+    "actions": 3,
+    "dialog": 3,
+    "decisions": 3,
+    "oldTurnStatus": "in_progress"
+  },
+  "currentConclusion": "Trusted ViceSharp access and full Global profile restored. Original primary session recovered and current turn proven by independent readback. Historical empty inventory does not describe current server. No old queue replay."
+}

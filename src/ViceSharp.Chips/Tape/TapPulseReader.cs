@@ -49,6 +49,19 @@ public sealed class TapPulseReader
         _offset = 0;
     }
 
+    /// <summary>Byte cursor in the pulse data. VICE stores the tape image position.</summary>
+    public int Offset => _offset;
+
+    /// <summary>Puts the cursor back. Does not re-read the pulses in front of it.</summary>
+    public void RestoreOffset(int offset)
+    {
+        if (offset < 0)
+            offset = 0;
+        if (offset > _pulseData.Length)
+            offset = _pulseData.Length;
+        _offset = offset;
+    }
+
     /// <summary>
     /// Try to position the cursor at the given pulse index by iterating
     /// pulses from the start. Returns false if the index is negative or

@@ -346,7 +346,7 @@ public sealed class CaptureServiceHostTests
     /// <summary>
     /// FR-MED-001 / TR-MEDIA-001 (x64sc screenshot parity).
     /// Use case: a client requests a screenshot in a format the host does not support
-    ///   (x64sc offers BMP/PNG; we reject everything else, e.g. "gif").
+    ///   (a format neither this host nor x64sc writes, e.g. "tiff").
     /// Acceptance: CaptureFrame returns InvalidArgument, produces no artifact, and writes
     ///   no file - the format is validated before any frame-buffer or filesystem work.
     /// </summary>
@@ -357,10 +357,10 @@ public sealed class CaptureServiceHostTests
         var session = CreateMinimalSession();
         registry.Add(session);
         var captureService = new CaptureServiceHost(registry);
-        var targetPath = Path.Combine(Path.GetTempPath(), $"vice-sharp-{Guid.NewGuid():N}.gif");
+        var targetPath = Path.Combine(Path.GetTempPath(), $"vice-sharp-{Guid.NewGuid():N}.tiff");
 
         var response = await captureService.CaptureFrameAsync(
-            new CaptureFrameRequest(session.SessionId, targetPath, "gif"),
+            new CaptureFrameRequest(session.SessionId, targetPath, "tiff"),
             TestContext.Current.CancellationToken);
 
         Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);

@@ -1,0 +1,28 @@
+{
+  "timestampLocal": "2026-10-08T10:42:39.8806011-05:00",
+  "name": "wrapped-100000-b",
+  "executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\xvic-clock-probe.exe",
+  "sha256": "EBACCD480620F4508A6EF2756F320B0F39931F72BE393267E3009A505FF85446",
+  "arguments": [
+    "-default",
+    "-console",
+    "-sound",
+    "-sounddev",
+    "dummy",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "\"F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data\"",
+    "-limitcycles",
+    "100000"
+  ],
+  "workingDirectory": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100000-b",
+  "pid": 67648,
+  "completedWithinDiagnosticTimeout": true,
+  "exitCode": 1,
+  "observedCallbackCount": 99998,
+  "first": "VICE_CLOCK,7",
+  "last": "VICE_CLOCK,100002",
+  "scope": "Actual native vic_cycle callback clock observations only; not complete bus,cycle-control or parity proof"
+}

@@ -1,0 +1,1 @@
+sid.c:1180:sid_state_write(): sound_get_psid() returned NULL

@@ -1,0 +1,8 @@
+undump "fresh.vsf"
+registers
+stopwatch
+step 1
+registers
+stopwatch
+dump "after-resume-step.vsf"
+quit

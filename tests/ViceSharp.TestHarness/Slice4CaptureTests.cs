@@ -96,8 +96,24 @@ public sealed class Slice4CaptureTests
             Assert.Equal((byte)'B', bmpBytes[0]);
             Assert.Equal((byte)'M', bmpBytes[1]);
 
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>
-                await FrameCapture.CaptureBgraAsync(frame, 8, 8, png, "gif", TestContext.Current.CancellationToken));
+            var gif = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.gif");
+            try
+            {
+                var gifFmt = await FrameCapture.CaptureBgraAsync(frame, 8, 8, gif, "gif", TestContext.Current.CancellationToken);
+                Assert.Equal("gif", gifFmt);
+                var gifBytes = await File.ReadAllBytesAsync(gif, TestContext.Current.CancellationToken);
+                Assert.Equal((byte)'G', gifBytes[0]);
+                Assert.Equal((byte)'I', gifBytes[1]);
+                Assert.Equal((byte)'F', gifBytes[2]);
+                Assert.Equal((byte)'8', gifBytes[3]);
+                Assert.Equal((byte)'9', gifBytes[4]);
+                Assert.Equal((byte)'a', gifBytes[5]);
+                Assert.Equal(0x3B, gifBytes[^1]);
+            }
+            finally
+            {
+                if (File.Exists(gif)) File.Delete(gif);
+            }
         }
         finally
         {

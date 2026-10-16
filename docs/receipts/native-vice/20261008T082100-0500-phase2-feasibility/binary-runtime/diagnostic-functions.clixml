@@ -1,0 +1,14 @@
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Management.Automation.PSCustomObject</T>
+      <T>System.Object</T>
+    </TN>
+    <MS>
+      <S N="timestampLocal">2026-10-08T10:07:49.7412150-05:00</S>
+      <S N="ReadViceBinaryPacket">param([hashtable]$Run)_x000D__x000A__x000A_ $header=[byte[]]::new(12)_x000A_ $Run.stream.ReadExactly($header,0,12)_x000A_ $length=[BitConverter]::ToUInt32($header,2)_x000A_ if ($length -gt [ViceSharp.ViceCompatibility.BinaryMonitorProtocol]::MaximumBodyLength) {throw 'Oversize native packet, fail closed'}_x000A_ $body=[byte[]]::new([int]$length)_x000A_ $Run.stream.ReadExactly($body,0,$body.Length)_x000A_ $frame=[byte[]]($header+$body)_x000A_ [pscustomobject]@{timestampLocal=Get-Date -Format o;direction='response';hex=[Convert]::ToHexString($frame)} | ConvertTo-Json -Compress | Out-File -LiteralPath (Join-Path $Run.directory 'exchange.jsonl') -Append -Encoding utf8_x000A_ $memory=[IO.MemoryStream]::new($frame,$false)_x000A_ try { return [ViceSharp.ViceCompatibility.BinaryMonitorProtocol]::ReadResponse($memory) } finally {$memory.Dispose()}_x000A_</S>
+      <S N="SendViceBinaryCommand">param([hashtable]$Run, [byte]$Command, [byte[]]$Body)_x000D__x000A__x000A_ $Run.requestId=[uint32]($Run.requestId+1)_x000A_ $packet=[ViceSharp.ViceCompatibility.BinaryMonitorProtocol]::EncodeCommand($Run.requestId,$Command,$Body)_x000A_ [pscustomobject]@{timestampLocal=Get-Date -Format o;direction='request';hex=[Convert]::ToHexString($packet)} | ConvertTo-Json -Compress | Out-File -LiteralPath (Join-Path $Run.directory 'exchange.jsonl') -Append -Encoding utf8_x000A_ $Run.stream.Write($packet,0,$packet.Length)_x000A_ for($i=0;$i -lt 128;$i++) {_x000A_  $response=Read-ViceBinaryPacket $Run_x000A_  if($response.RequestId -eq $Run.requestId) {return $response}_x000A_  if($response.RequestId -ne [uint32]::MaxValue) {throw 'Response for unexpected request, fail closed'}_x000A_ }_x000A_ throw 'No matching acknowledgement in128 packets, fail closed'_x000A_</S>
+      <S N="scope">Exact executed diagnostic helper bodies exported from the persistent console; no emulator implementation and no credentials</S>
+    </MS>
+  </Obj>
+</Objs>

@@ -1,0 +1,60 @@
+{
+  "timestampLocal": "2026-10-07T12:07:42.0462176-05:00",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "agent": "Codex",
+  "generationCommand": "Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method workflow.requirements.generateDocument -ParamsObject @{format=wiki;docType=all}",
+  "generation": {
+    "contentType": "application/zip",
+    "fileName": "requirements-wiki-documents.zip",
+    "format": "wiki",
+    "docType": "all",
+    "generatedAt": "2026-10-07T17:04:09.8409520+00:00"
+  },
+  "diffCheckExit": 0,
+  "fileChecks": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "24BC7C35F8A9BF565CECBFFDD7422CAFB300B4A6C387E812C90054FB026F197A",
+      "trailingWhitespace": 0,
+      "conflictMarkers": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "sha256": "F74774C985D1AEF456955BFCFC0223C0AB5A0D1D8F6D602041DCFD54A8474A9B",
+      "trailingWhitespace": 0,
+      "conflictMarkers": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+      "sha256": "9A3DED1B62405678A01687DA1D3C4FBF3C9697A959A27A1A2D4F049B91B2ABE2",
+      "trailingWhitespace": 0,
+      "conflictMarkers": 0
+    },
+    {
+      "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+      "sha256": "8BC3A6818E5B0276870A22ACC559874BFE66FD6322A8C4B5F6E80B3571F373EC",
+      "trailingWhitespace": 0,
+      "conflictMarkers": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Immutable-Native-VICE.md",
+      "sha256": "F74774C985D1AEF456955BFCFC0223C0AB5A0D1D8F6D602041DCFD54A8474A9B",
+      "trailingWhitespace": 0,
+      "conflictMarkers": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Native-VICE-VSF-Lockstep.md",
+      "sha256": "9A3DED1B62405678A01687DA1D3C4FBF3C9697A959A27A1A2D4F049B91B2ABE2",
+      "trailingWhitespace": 0,
+      "conflictMarkers": 0
+    }
+  ],
+  "triageReportId": "triage-report-2cc694977df94070a70488d4538d735f",
+  "triageGroupId": "triage-group-f4975763232ade3a",
+  "triageReadbackWorkspace": "F:\\GitHub\\McpServer",
+  "nativeChanged": false,
+  "productionChanged": false,
+  "published": false,
+  "committed": false,
+  "pushed": false
+}

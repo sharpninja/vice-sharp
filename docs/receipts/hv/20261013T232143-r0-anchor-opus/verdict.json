@@ -1,0 +1,372 @@
+{
+  "OverallVerdict": "AGREE",
+  "accuracy": 99,
+  "completeness": 98,
+  "assertionCount": 50,
+  "passCount": 49,
+  "failCount": 0,
+  "unknownCount": 0,
+  "notApplicableCount": 1,
+  "failList": [],
+  "unknownList": [],
+  "notApplicableList": [
+    "C10 N/A: Executable AC-mapped tests are a later gate for an unapplied amendment"
+  ],
+  "findings": [
+    "RP-01 info [reviewer self-correction] Round-2 RN-08 was partly inaccurate: plan.md:3 already recorded the operator's 2026-10-08 temporary Opus override superseding the alternation, and the round-2 HANDOFF.md:26 already said Grok is unavailable and named claude-opus-5-5 max; the parent's strengthened HANDOFF.md:26 is harmless",
+    "RP-02 info [optional] Anchor src/core/viacore.c:441-462 includes lines 459-462 (start of the CA2 case) beyond the CA1 case at 441-458; harmless over-inclusion of the reviewer's own recommended range",
+    "RP-03 info [optional, RN-02 residual] Candidate-Checks.ps1 does not lint the partial-scope sentence of the 14 TEST AC; explicitly not claimed; satisfaction and coverage row count are guarded by Verify-Candidate",
+    "RP-04 info [tracking hygiene, RN-03] PLAN-REQAUDIT-001 latest note (2026-10-11T12:32) still states latest accepted status DISAGREE 93/84 and PLAN-GROKCOMPLETION-001 keeps 9 of 10 red/green task labels; dated history, HANDOFF current, no done-state change; suggest a dated checkpoint note after this accepted HV if the operator permits",
+    "RP-05 info [optional, RN-06/RM-09] README.md:30 still does not name workflow.requirements.planRecovery, applyRecovery or getRecovery as the route needing separate verification; nothing assumed",
+    "RP-06 info [environment disclosure, RN-05/R0-09 class] Hook-created session ClaudeCode-20261014T042517Z-plugin-session / turn req-20261014T042520Z-prompt-6807 used as reviewer turn (plugin-format request ID); cached session-state rotated locally to ClaudeCode-20261014T042520Z-plugin-session at 23:25:22, writes target the turn session; structured model field 'claude' at 23:28:18 (final value in verdict.persistence.json); read-only McpServer-workspace triage lookup created only a local session-state.yaml in the isolated cache subfolder and no server session (23:35:39); round-2 setTurnTitle failsafe untouched; nothing replayed or canceled; round-3 recurrence: setTurnTitle at 23:42:57 reported rejected (retitled flag absent) and wrote failsafe 20261014T044253Z-session_setTurnTitle-1eb8.yaml while the server title was applied (23:43:23); filed triage-report-6f1c801607fe4fff88e480940c809129 (group triage-group-3ca7b6bf43804600, collecting) at 23:43:41; failsafe not replayed",
+    "RP-07 info RN-05 triage report triage-report-a13e89ad99ab44debb30978ac991583d is in status grouped (intake, not resolution) at 23:35:05"
+  ],
+  "blockingFindings": [],
+  "optional": [
+    "RP-02",
+    "RP-03",
+    "RP-04",
+    "RP-05"
+  ],
+  "disclosureOnly": [
+    "RP-01",
+    "RP-06",
+    "RP-07"
+  ],
+  "priorDispositions": [
+    "RN-01 resolved (A16)",
+    "RN-02 resolved for stated scope (A11, A19); residual RP-03",
+    "RN-03 disclosed, unchanged (RP-04)",
+    "RN-04 resolved",
+    "RN-05 resolved (A19; RP-06, RP-07)",
+    "RN-06 open optional (RP-05)",
+    "RN-07 resolved",
+    "RN-08 resolved; original finding partly inaccurate (RP-01)",
+    "RM-01, RM-02, RM-03, RM-04, RM-06, RM-08 resolved and holding; RM-05 now fully resolved via RN-01; RM-07 open for operator disposition; RM-09 optional; RM-10 carried as R2 trap; RM-11 preserved history; RM-12 retained",
+    "R0-01 to R0-05 and R0-07 resolved; R0-06 now resolved (12-row set); R0-08 disclosed; R0-09 and R0-10 preserved; R0-11 preserved as R3 blocker",
+    "N-01 to N-06, N-11, N-13, N-14, N-18, F-01 to F-07, F-13, F-14, F-16 resolved in text or for R0; N-07 to N-10, N-12, N-15 specified for later gates; N-16, N-17, F-08 to F-12, F-15, F-17 open or historical"
+  ],
+  "r0ReadyForExactDeltaApproval": true,
+  "r0ReadinessCondition": "Ready to present for explicit operator approval once this verdict's primary MCP readback succeeds (verdict.persistence.json); the parent must then pause. Approval must name the exact candidate hash, 16 records, 9 mapping rows (6 changed, 3 unchanged, 13 additions, 0 removals), the locked-decision-2 departure and the writer-window prerequisites.",
+  "classification": "Class 1 project requirement work, requirements phase R0: unapplied 16-record/9-row amendment and ordered implementation plan; surfaces A-D apply; executable tests are a later gate",
+  "assertions": [
+    {
+      "id": "A1",
+      "status": "PASS",
+      "summary": "Candidate SHA256 63386E9251185B101F53E9257CDA9270025A68006B83F243314E6E299A55D702 (194242 bytes) equals input pins, verification.json, ledger proposalSha256 and HANDOFF.md:9 and :71; recomputed 23:30:25, 23:31:25, 23:38:17"
+    },
+    {
+      "id": "A2",
+      "status": "PASS",
+      "summary": "16 existing records (9 FR, 2 TR, 5 TEST), unique IDs, operation update; all 16 exist live (typed reads 23:32:09-23:32:48)"
+    },
+    {
+      "id": "A3",
+      "status": "PASS",
+      "summary": "All 16 records canonically equal to the round-2 candidate (23:30:10); Verify-Candidate's 14 original-payload checks against draft 320887C5 pass (23:31:25)"
+    },
+    {
+      "id": "A4",
+      "status": "PASS",
+      "summary": "66 retained AC: 56 rewritten, 10 unchanged (independent recount 23:36:51)"
+    },
+    {
+      "id": "A5",
+      "status": "PASS",
+      "summary": "38 added AC, 104 after, 0 satisfied; FR-BACKFILL-MEDIA-001 closed to pending is the only status change"
+    },
+    {
+      "id": "A6",
+      "status": "PASS",
+      "summary": "96 amendment rows plus 8 unchanged mandatory rows = 104, same order as round 2; consolidated-coverage.json equals candidate coverage"
+    },
+    {
+      "id": "A7",
+      "status": "PASS",
+      "summary": "117 distinct named groups (85 specified plus 32 AC-text-only), labeled specifications, not tests"
+    },
+    {
+      "id": "A8",
+      "status": "PASS",
+      "summary": "9 mapping rows: 6 changed (13 additions, 0 removals; 31 to 44 references), 3 unchanged (FR-RUNTIME-TAPE-002, FR-CPU-004, FR-PRF-003); mappingChangeSummary and approval-facing statements agree"
+    },
+    {
+      "id": "A9",
+      "status": "PASS",
+      "summary": "5 FR-AC to TEST-AC bindings hold by identity: testCriterionTraceability, For FR-x/ac-y text in all 14 TEST AC, and live mapping rows linking TEST-CPU-001 and TEST-PRF-001"
+    },
+    {
+      "id": "A10",
+      "status": "PASS",
+      "summary": "Verify-Candidate.ps1 re-executed 23:31:25: 178 checks, 0 failed; names, order and evidence identical to verification.json; no file changed"
+    },
+    {
+      "id": "A11",
+      "status": "PASS",
+      "summary": "10 independent controls rejected and correct fixture accepted; reviewer probes on the real candidate detect 24 of 24 single-anchor removals across the 12 rows, a truncated CIA range, a wrong unchanged count and scalar anchors (23:31:45)"
+    },
+    {
+      "id": "A12",
+      "status": "PASS",
+      "summary": "112 projected preimages equal; live 128/128 typed and 128/128 effective; 137 typed fields 0 differences versus live-baseline.json"
+    },
+    {
+      "id": "A13",
+      "status": "PASS",
+      "summary": "TEST-CPU-001 (0 to 10 AC) and TEST-PRF-001 (0 to 4 AC): only acceptanceCriteria changes, all other fields equal, all 14 AC carry the partial-scope sentence"
+    },
+    {
+      "id": "A14",
+      "status": "PASS",
+      "summary": "32 R2 groups: 21 named plus 11 Turbo_*, all resolving to coverage groups"
+    },
+    {
+      "id": "A15",
+      "status": "PASS",
+      "summary": "324/324 input pins equal (23:28:29, 23:39:51); prior 294 revalidated, 293 equal, 1 intentional HANDOFF change; 30 new pins including RN-07's six native files"
+    },
+    {
+      "id": "A16",
+      "status": "PASS",
+      "summary": "RN-01 fixed: FR-TAP-005 ac-01/03/05/06 gained ciacore.c:592-600,1594-1625 and viacore.c:441-462 with all five prior anchors retained; 12-row set complete; content sweeps find no unanchored interrupt/timer row; claims bounded at README.md:44, FINDINGS.md:5, HANDOFF.md:9; anchor ranges verified in immutable source"
+    },
+    {
+      "id": "A17",
+      "status": "PASS",
+      "summary": "Round-2 receipts: verdict files unchanged; terminal-result exit 0, streams closed; response.jsonl SHA256 18D882CE..., 2191 valid JSON lines, one success result; round-2 turn completed with 15 dialog and 7 actions"
+    },
+    {
+      "id": "A18",
+      "status": "PASS",
+      "summary": "Read-only re-run of Prepare-Candidate.ps1 (23:37:46-23:38:17) reproduces the candidate on every key except createdAtLocal and baseline timing, and the ledger except preparedAtLocal and the proposalSha256 placeholder"
+    },
+    {
+      "id": "A19",
+      "status": "PASS",
+      "summary": "RN-02 to RN-08 dispositions verified: 12-identity anchor lint plus two controls; dated TODO notes unchanged and not done; R2-BACKLOG.md:5 corrected; triage-report-a13e89ad99ab44debb30978ac991583d exists (grouped) in the routed McpServer store; RN-06 optional; six native files pinned; HANDOFF.md:26"
+    },
+    {
+      "id": "B1",
+      "status": "PASS",
+      "summary": "BDPv4 mocks-first order with in-harness negative controls required throughout; no red gate"
+    },
+    {
+      "id": "B2",
+      "status": "PASS",
+      "summary": "Approval and pause boundary explicit; applicationAuthorized false; R0 approval is not R1 authority"
+    },
+    {
+      "id": "B3",
+      "status": "PASS",
+      "summary": "Preparation read-only; live state equals every before value; generator re-run confirms"
+    },
+    {
+      "id": "B4",
+      "status": "PASS",
+      "summary": "PowerShell with native-object JSON; no Python; PSScriptAnalyzer 1.25.0 Warning/Error: 0 findings and 0 parse errors in Prepare-Candidate, Candidate-Checks, Verify-Candidate and Launch-Review (23:31:12)"
+    },
+    {
+      "id": "B5",
+      "status": "PASS",
+      "summary": "Evidence labeled honestly; anchor claim bounded to the explicit 12-row set; historical gaps preserved"
+    },
+    {
+      "id": "B6",
+      "status": "PASS",
+      "summary": "No native change; 31 pinned immutable files unchanged; anchor ranges re-read from the immutable materialization"
+    },
+    {
+      "id": "B7",
+      "status": "PASS",
+      "summary": "0 occurrences of either workspace key in 23 scanned files (23:36:35); parent exposure RM-07 open for operator disposition"
+    },
+    {
+      "id": "B8",
+      "status": "PASS",
+      "summary": "0 em dashes and 0 en dashes in the same 23 files"
+    },
+    {
+      "id": "B9",
+      "status": "PASS",
+      "summary": "Real reviewer identity and local execution: claude-opus-5-5, effort max, own console sa-3a02def0"
+    },
+    {
+      "id": "B10",
+      "status": "PASS",
+      "summary": "Run executed as specified: default permission mode, console isolation, trust checks, live reads, receipts and own MCP turn; completion and primary readback in verdict.persistence.json, without which this verdict is not an accepted gate"
+    },
+    {
+      "id": "B11",
+      "status": "PASS",
+      "summary": "Supported plugin routes only with -CacheRoot; /health nonce is the marker's trust step; read-only triage lookup in the routed McpServer workspace with its key redacted; no raw REST data calls, no storage access, drain disabled, no replay"
+    },
+    {
+      "id": "C1",
+      "status": "PASS",
+      "summary": "Five formerly unmapped CPU/SX-64 criteria constrained by named TEST AC with corrupt-mock rejections, linked by identity"
+    },
+    {
+      "id": "C2",
+      "status": "PASS",
+      "summary": "TEST AC remain source-accurate; unchanged since the round-1 audit with source files pinned and unchanged"
+    },
+    {
+      "id": "C3",
+      "status": "PASS",
+      "summary": "Broad TEST conditions and metadata preserved; partial FR scope stated in each new TEST AC"
+    },
+    {
+      "id": "C4",
+      "status": "PASS",
+      "summary": "14 original records unchanged from the source-audited payloads"
+    },
+    {
+      "id": "C5",
+      "status": "PASS",
+      "summary": "Native VSF canonical and mandatory; existing managed VSF support acknowledged"
+    },
+    {
+      "id": "C6",
+      "status": "PASS",
+      "summary": "D64 dependencies separate and not linked: no D64 identifier in 233 live rows; TR-MEDIA-D64-001 and TEST-D64IO-001 absent; extended-track and drive decisions remain separate"
+    },
+    {
+      "id": "C7",
+      "status": "PASS",
+      "summary": "UWP/Xbox implementation excluded; historical requirements and tests retained (HANDOFF.md:22; plan lines 79 and 320)"
+    },
+    {
+      "id": "C8",
+      "status": "PASS",
+      "summary": "No AC removed, nothing retired, all 104 unsatisfied"
+    },
+    {
+      "id": "C9",
+      "status": "PASS",
+      "summary": "Live effective and typed requirements, full mappings and TODOs consistent with the candidate (23:32-23:34)"
+    },
+    {
+      "id": "C10",
+      "status": "N/A",
+      "summary": "Executable AC-mapped tests are a later gate for an unapplied amendment"
+    },
+    {
+      "id": "D1",
+      "status": "PASS",
+      "summary": "Locked decisions 2 (disclosed departure), 3, 6 and 10 to 15 respected; decision 16 alternation superseded by plan.md:3 (operator 2026-10-08 Opus override) and recorded at HANDOFF.md:26; whole objective retained"
+    },
+    {
+      "id": "D2",
+      "status": "PASS",
+      "summary": "One approval contract across candidate approvalPrerequisites, README stage contract and HANDOFF"
+    },
+    {
+      "id": "D3",
+      "status": "PASS",
+      "summary": "All 117 groups, including 32 AC-text-only groups, are mandatory R2 designs"
+    },
+    {
+      "id": "D4",
+      "status": "PASS",
+      "summary": "Locked-decision-2 departure disclosed; operator acceptance required before R1; no server-deduplication claim; old key not reused"
+    },
+    {
+      "id": "D5",
+      "status": "PASS",
+      "summary": "Writer-window contract complete: attestor, 16-record/9-row scope, writer inventory and acknowledgements, measured interval, candidate/session binding, per-mutation check, expiry/revocation stop, G09/G14/G15 extensions"
+    },
+    {
+      "id": "D6",
+      "status": "PASS",
+      "summary": "No compare-and-swap, cross-API atomicity, blind retry or automatic compensation"
+    },
+    {
+      "id": "D7",
+      "status": "PASS",
+      "summary": "Observer, loader, native, VSF and cumulative real gates retained"
+    },
+    {
+      "id": "D8",
+      "status": "PASS",
+      "summary": "After an accepted HV the parent pauses for separate operator approval"
+    },
+    {
+      "id": "D9",
+      "status": "PASS",
+      "summary": "Historical Phase 3/4 start authority retained and not extended"
+    },
+    {
+      "id": "D10",
+      "status": "PASS",
+      "summary": "HANDOFF current for this candidate"
+    }
+  ],
+  "reviewer": {
+    "agent": "ClaudeCode",
+    "model": "claude-opus-5-5",
+    "effort": "max",
+    "cliSessionId": "bab22fd4-f213-4011-9616-074b14def01b",
+    "launchPid": 25752,
+    "launchStartedAtLocal": "2026-10-13T23:25:08",
+    "consoleAgentId": "sa-3a02def0"
+  },
+  "parent": {
+    "agent": "Codex",
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261014T021233Z-remediate-two-hv-failures"
+  },
+  "sessionId": "ClaudeCode-20261014T042517Z-plugin-session",
+  "requestId": "req-20261014T042520Z-prompt-6807",
+  "candidateSha256": "63386E9251185B101F53E9257CDA9270025A68006B83F243314E6E299A55D702",
+  "candidateBytes": 194242,
+  "candidatePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T231703-r0-anchor-remediation\\proposed-field-delta.json",
+  "receiptDirectory": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus",
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\request.jsonl",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\response.jsonl",
+  "verdictMarkdown": {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T232143-r0-anchor-opus\\verdict.md",
+    "bytes": 32744,
+    "sha256": "B94E8FA19985F13FED9476CC686D2FDE8F39EBA20DF439EAC24E7ACAA780A1D9"
+  },
+  "profileReceipt": {
+    "loadedAtLocal": "2026-10-13T23:26:37",
+    "skill": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "skillSha256": "9B8AB476410BB2E778A97BA545C94D4A4591A1E40B7E6352777C40C95229A86E",
+    "profileFilesRead": 1,
+    "profileFile": "C:\\Users\\kingd\\.claude\\profile\\PROFILE-MERGED.md",
+    "profileSha256": "A6AD7EAC0CB9CFFE9B9687E02A936484A3ED34FC49CF0CDD2C5FD6C869112AF3",
+    "profileBytes": 62592
+  },
+  "trustReceipt": {
+    "bootstrapAtLocal": "2026-10-13T23:27:49",
+    "signatureAtLocal": "2026-10-13T23:28:04",
+    "markerSha256": "8ADA0C1316EB8499C352FEA7BF62490BE9F6F9B12264D5168D9DF1DA75AC071D",
+    "signature": true,
+    "fullBootstrap": true,
+    "nonce": "hv-r0r3-4b5da1265e27476f",
+    "health": "Healthy",
+    "server": "1.4.40+bcae36fdce7ce31e792db9e06a17bff51019bdf9"
+  },
+  "negativeControlProbe": {
+    "measuredAtLocal": "2026-10-13T23:31:45",
+    "builtInPassed": 10,
+    "builtInFailed": 0,
+    "correctFixtureAccepted": true,
+    "perRowAnchorRemovalsDetected": 24,
+    "perRowAnchorRemovalsTotal": 24,
+    "linterBlindSpots": [
+      "partial-scope sentence (not claimed)",
+      "isSatisfied (caught by Verify-Candidate line 41)",
+      "dropped coverage row (caught by Verify-Candidate line 80)"
+    ]
+  },
+  "measuredThroughLocal": "2026-10-13T23:44:16",
+  "persistenceStatus": "pending at file write; final primary-readback status is recorded in verdict.persistence.json and the final response",
+  "triageReceipt": {
+    "reportId": "triage-report-6f1c801607fe4fff88e480940c809129",
+    "groupId": "triage-group-3ca7b6bf43804600",
+    "status": "collecting",
+    "submittedAtLocal": "2026-10-13T23:43:41",
+    "priorRelatedReport": "triage-report-a13e89ad99ab44debb30978ac991583d (grouped)"
+  }
+}

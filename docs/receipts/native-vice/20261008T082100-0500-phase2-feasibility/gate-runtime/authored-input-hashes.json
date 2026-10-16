@@ -1,0 +1,82 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-observer.c",
+    "bytes": 746,
+    "sha256": "CD59B89B488B8DD9207F4A7FA28549C9D61D4142FA24E58CFD231578F9AFEEC8"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.c",
+    "bytes": 599,
+    "sha256": "673A7E7899FD022BFF5C45AB55D05568E6FB4DECAFBFF88EEF80D0157551BA4C"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.h",
+    "bytes": 751,
+    "sha256": "E8EB1E690F4F0616E54B80EAFE347C516F12236F2A8B7AEF1A9A61388FFFE390"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockGateContractTests.cs",
+    "bytes": 5307,
+    "sha256": "7C9D45F4E85D2BE9DD64CD6F5EF92C373054D8207698F3A6D749355EEB7D2ADA"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockGateImplementationTests.cs",
+    "bytes": 2236,
+    "sha256": "C0C37C419464EDD5A7691B099C67476E411AC11F1813A5A053A592D688AEA83A"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockHookContractTests.cs",
+    "bytes": 4937,
+    "sha256": "EF9BD85FE60DFEF966EFB3B622A5D7785FCEA2F233A834A98180ADFBD6531946"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockHookImplementationTests.cs",
+    "bytes": 2145,
+    "sha256": "DF6260318FFA9A1B44EF8E3E77DC817BC3F3CD54B896C8001380A93887F25FB2"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\CompiledCFixture.cs",
+    "bytes": 3303,
+    "sha256": "BAC0B7FE7E0A78D2222A023263ABCD68874734B5D0228C6D7E8EFED3D0C49F8F"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+    "bytes": 3392,
+    "sha256": "F07C0E3C7A779166A8E90D01442408F0A1404DB505037A658043C685E1FBCFDB"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\README.md",
+    "bytes": 4517,
+    "sha256": "7D50B9F2D1B56994FE44634C12A7A9E9389B8D858411C72866A763FBF07ABDCA"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ViceSharp.NativeClockProbe.Tests.csproj",
+    "bytes": 900,
+    "sha256": "F5D6CEAC8AE216026C0915038CBF6F40608C45E63DE0C39BE1C61FB30C07E5E0"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\clock-driver.c",
+    "bytes": 1010,
+    "sha256": "4F5E6CC338D781DEF1A813E1796E76349143752385E2AC1006625573BC35422A"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\gate-driver.c",
+    "bytes": 1803,
+    "sha256": "B4C3AEA8A941B6C9F490302E76C038A816DD12A05D9D82A13053D0471ACC16EC"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\native-cycle-double.c",
+    "bytes": 312,
+    "sha256": "641BB736C531BD2D38D360E64F5576B24B807B90D0AC0F0308DED1A8BD7FD2B4"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+    "bytes": 1094,
+    "sha256": "F3BFC89E125B762219EA1E7FCF7A6F12920ED634A7F61858A256178CDB3F6380"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\Invoke-GateProbe.ps1",
+    "bytes": 6276,
+    "sha256": "8AA5FF732D4E1C72A54F9A48EFB3EB0AF345A1E77279BC502686E7D3AD7FA674"
+  }
+]

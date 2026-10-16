@@ -38,3 +38,6 @@
   - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
   - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)
   - [Desktop UI Reference (Windows, Avalonia)](Desktop-Windows-UI)
+- Current Plans
+  - [Immutable Native VICE Remediation Plan](Plan-Immutable-Native-VICE)
+  - [Native VICE VSF Lockstep Plan](Plan-Native-VICE-VSF-Lockstep)

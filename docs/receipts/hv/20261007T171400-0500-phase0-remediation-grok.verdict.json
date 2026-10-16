@@ -1,0 +1,205 @@
+{
+  "TimestampLocal": "2026-10-07T17:38:38.556-05:00",
+  "TimestampUtc": "2026-10-07T22:38:38.556Z",
+  "ValidatorIdentity": "GrokCode",
+  "Model": "grok-4.7",
+  "ReasoningEffort": "xhigh",
+  "McpSessionId": "GrokCode-20261007T222539Z-phase0-remediation-hv",
+  "McpRequestId": "req-20261007T222539Z-phase0-remediation-hv",
+  "AddProfile": "yes",
+  "AddProfileFilesRead": 22,
+  "WorkClass": "class 1 Phase 0 planning remediation plus class 2 approved 7dc1 quarantine",
+  "OverallVerdict": "AGREE",
+  "Accuracy": 99,
+  "AccuracyJustification": "Live pins, primary TODOs, requirement gets, queue files, plan text, and 6374 native content hashes matched the remediated claims. One point is withheld because the stored git diff aggregate hash was not reproduced even though every inventoried file hash matched.",
+  "Completeness": 98,
+  "CompletenessJustification": "All 26 prior claims were re-scored, including the four former failures. The traceability script was not re-run, the A4 paragraph transform was not repeated, and the 40 wiki-copy paths were checked from the proof file rather than rehashed from disk.",
+  "Phase0Accepted": true,
+  "MockValidatedTestPhasePermitted": true,
+  "ProductionImplementationPermitted": false,
+  "WholeGoalComplete": false,
+  "NativeParity": false,
+  "NativeRestoration": false,
+  "VsfCompletion": false,
+  "PassCount": 26,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "CompletionPercent": 100,
+  "Eta": null,
+  "EtaReason": "Review checks are finished.",
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": [
+    {
+      "Surface": "A",
+      "Id": "A1",
+      "Text": "All 59 pinned inputs matched before and after the review.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A2",
+      "Text": "Group 5 does not map the bus-address comparator to TR-CYCLE-001 AC4.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A3",
+      "Text": "TR-CYCLE-001 is pending and all seven ACs are unsatisfied.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A4",
+      "Text": "B7 reconstruction files remain at the unchanged pins.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A5",
+      "Text": "Prior Grok turn req-20261007T182902Z-001-hv-phase0-mock-scope-grok is completed and holds the verdict.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A6",
+      "Text": "Five historical quarantine records plus 2b86 remain. 2b93 was not recreated.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A7",
+      "Text": "Later fallback receipt pins are unchanged.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A8",
+      "Text": "No mock project, production code, or native edit was introduced.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B1",
+      "Text": "Marker signature and health nonce bootstrap passed. API key was not emitted.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B2",
+      "Text": "Plugin 1.119.0 versus marker 1.118.0 disclosed. Review model read back grok-4.7.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B3",
+      "Text": "Scoped diff check exit 0 and parent-authored files have no em or en dashes.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B4",
+      "Text": "PLAN-VICEORACLE-001 is high priority, six tasks open, and names the deferred gate.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B5",
+      "Text": "Review stayed inside the operator boundaries.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "C",
+      "Id": "C1",
+      "Text": "Groups 1-4 map 13 live unsatisfied integrity ACs.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "C",
+      "Id": "C2",
+      "Text": "TEST-VICE-001 condition text is nonempty and has four ACs.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "C",
+      "Id": "C3",
+      "Text": "TR-VSFLOCKSTEP-RESUME-001 keeps the external adapter and never applies the legacy patch.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "C",
+      "Id": "C4",
+      "Text": "Current mappings match the plan.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "C",
+      "Id": "C5",
+      "Text": "Group 5 is partial and does not satisfy the real snapshot ACs.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "C",
+      "Id": "C6",
+      "Text": "Group 6 expressly rejects missing access kind, gaps, and wrong missing-position answers. Idle stays valid.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "D",
+      "Id": "D1",
+      "Text": "Active pending 0. Quarantine 7. 7dc1 preserved, not replayed. Target turn unchanged and completed.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "D",
+      "Id": "D2",
+      "Text": "Phase 1 stays outside the native-mutating build.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "D",
+      "Id": "D3",
+      "Text": "Phase 1 scope is the full unfiltered mock-contract project.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "D",
+      "Id": "D4",
+      "Text": "Real gates remain mandatory. VSF exit still requires zero failed, skipped, and aborted.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "D",
+      "Id": "D5",
+      "Text": "Native inventory 6374 file hashes match. 12 tracked and 2527 untracked. Dirty preservation only.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "D",
+      "Id": "D6",
+      "Text": "Whole-goal scope remains open. Phase 0 acceptance does not close it.",
+      "Status": "PASS"
+    },
+    {
+      "Surface": "D",
+      "Id": "D7",
+      "Text": "Neither plan treats a filter or a named blocker as 100 percent completion.",
+      "Status": "PASS"
+    }
+  ],
+  "PinCheck": {
+    "Matched": 59,
+    "AtLocal": "2026-10-07T17:38:38.556-05:00",
+    "Missing": 0,
+    "Pinned": 59
+  },
+  "Queue": {
+    "ActivePending": 0,
+    "Quarantine": 7,
+    "IsolatedPending": 0
+  },
+  "RequestJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.request.jsonl",
+  "ResponseJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.response.jsonl",
+  "Stderr": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.stderr.txt",
+  "VerdictMarkdown": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.verdict.md"
+}

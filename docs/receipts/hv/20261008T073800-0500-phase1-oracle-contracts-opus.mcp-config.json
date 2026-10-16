@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "pwsh": {
+      "type": "stdio",
+      "command": "C:\\Users\\kingd\\OneDrive\\Documents\\PowerShell\\Modules\\PowerShell.MCP\\1.14.0\\bin\\win-x64\\PowerShell.MCP.Proxy.exe",
+      "args": [],
+      "env": {}
+    },
+    "mcpserver": {
+      "type": "http",
+      "url": "http://localhost:7147/mcp-transport"
+    }
+  }
+}

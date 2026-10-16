@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-10-08T10:52:40.3202254-05:00",
+  "correctionTo": "observation-integrity-result.json",
+  "correction": "The original nativeLimitMessage array searched stderr only. The message is in stdout for all four runs. Original artifacts retained.",
+  "runs": [
+    {
+      "name": "stock-100",
+      "exitCode": 1,
+      "limitMessage": [
+        {
+          "Path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\stock-100\\stdout.log",
+          "LineNumber": 30,
+          "Line": "Error -  cycle limit reached."
+        }
+      ],
+      "stdoutSha256": "E644EF50195BE5F15482E7038EE5619CA95DB0E1946E17A0E7D526B14B9747F3",
+      "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "name": "wrapped-100",
+      "exitCode": 1,
+      "limitMessage": [
+        {
+          "Path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100\\stdout.log",
+          "LineNumber": 130,
+          "Line": "Error -  cycle limit reached."
+        }
+      ],
+      "stdoutSha256": "A27F157C76125A97B61F2408C86A8C0775C9374C9429BA55C773812B9415539E",
+      "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "name": "wrapped-100000-a",
+      "exitCode": 1,
+      "limitMessage": [
+        {
+          "Path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100000-a\\stdout.log",
+          "LineNumber": 100029,
+          "Line": "Error -  cycle limit reached."
+        }
+      ],
+      "stdoutSha256": "E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F",
+      "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "name": "wrapped-100000-b",
+      "exitCode": 1,
+      "limitMessage": [
+        {
+          "Path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100000-b\\stdout.log",
+          "LineNumber": 100029,
+          "Line": "Error -  cycle limit reached."
+        }
+      ],
+      "stdoutSha256": "E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F",
+      "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    }
+  ],
+  "cycleBoundaryPauseResumeProven": false
+}

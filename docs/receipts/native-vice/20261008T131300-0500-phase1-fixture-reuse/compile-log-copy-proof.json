@@ -1,0 +1,16 @@
+[
+  {
+    "original": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\clock-gate-compile.log",
+    "sha256": "F3CC20D12196B7135348BA83ED8DFE5DF52A55E3DD95E27F7FCB296399153FFD",
+    "length": 511,
+    "verified": true
+  },
+  {
+    "original": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\clock-probe-compile.log",
+    "sha256": "2CC512AF3AAB8F05638EEA952BEFF11841162F24DD0422122FCE2D5721BBF000",
+    "length": 654,
+    "verified": true
+  }
+]

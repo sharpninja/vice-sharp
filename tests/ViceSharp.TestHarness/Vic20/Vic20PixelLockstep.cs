@@ -20,8 +20,7 @@ public sealed class Vic20PixelLockstep
     [Fact]
     public void Index_ReadyPal_SequenceEqual()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
         AssertIndexEqual("vic20", PalNormalWidth, PalNormalHeight, BootCycles, busy: false);
     }
 
@@ -29,8 +28,7 @@ public sealed class Vic20PixelLockstep
     [Fact]
     public void Index_ReadyNtsc_SequenceEqual()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
         // NTSC normal canvas from vic-timing (display_width*PIXEL_WIDTH x lines).
         using var native = ViceNative.CreateInstance("vic20ntsc");
         native.Reset();
@@ -54,8 +52,7 @@ public sealed class Vic20PixelLockstep
     [Fact]
     public void Index_BusyPal_SequenceEqual()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
         AssertIndexEqual("vic20", PalNormalWidth, PalNormalHeight, BootCycles, busy: true);
     }
 
@@ -70,8 +67,7 @@ public sealed class Vic20PixelLockstep
     [Fact]
     public void Bgra_ReadyPal_SequenceEqual()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -146,8 +142,7 @@ public sealed class Vic20PixelLockstep
     [Fact]
     public void Bgra_BusyPal_SequenceEqual()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -202,8 +197,7 @@ public sealed class Vic20PixelLockstep
     [Fact]
     public void Bgra_ReadyNtsc_SequenceEqual()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20ntsc");
         native.Reset();

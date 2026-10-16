@@ -147,6 +147,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             drive9?.ConnectIecBus(iecBus);
         }
         var datasette = profile?.SystemCore.TapePortConnected == false ? null : new Datasette();
+        memory.ConnectDatasette(datasette);
         var datasetteCia1FlagBinding = datasette is null
             ? null
             : new DatasetteCia1FlagBinding(datasette, cia1);
@@ -204,6 +205,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             deviceRegistry.Add(new IecBusDevice(iecBus));
         deviceRegistry.Add(pla, DeviceRole.Pla);
         deviceRegistry.Add(sid, DeviceRole.AudioChip);
+        WireSidModelSwitch(sid, bus, memory, deviceRegistry, clock, _audioBackend, descriptor.MasterClockHz);
         if (drive8 is not null)
             deviceRegistry.Add(drive8);
         if (drive9 is not null)
@@ -598,6 +600,38 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         // PLAN-VICEPARITY-001 P0-7: single canonical construction path shared
         // with every other machine (see SidFactory).
         => SidFactory.Create(bus, profile, audioBackend, masterClockHz);
+
+    private static void WireSidModelSwitch(
+        Sid6581 sid,
+        IBus bus,
+        C64MemoryMap memory,
+        DeviceRegistry devices,
+        SystemClock clock,
+        IAudioBackend? audioBackend,
+        double masterClockHz)
+    {
+        sid.ModelSwitch = model =>
+        {
+            var current = devices.GetByRole(DeviceRole.AudioChip) as Sid6581 ?? sid;
+            var want8580 = model.Contains("8580", StringComparison.OrdinalIgnoreCase);
+            if (want8580 && current is Sid8580)
+                return;
+            if (!want8580 && current is not Sid8580)
+                return;
+
+            Sid6581 next = want8580
+                ? new Sid8580(bus, audioBackend) { BaseAddress = SidFactory.C64BaseAddress }
+                : new Sid6581(bus, audioBackend) { BaseAddress = SidFactory.C64BaseAddress };
+            if (audioBackend is not null)
+                next.ConfigureAudioClock(masterClockHz);
+
+            next.ModelSwitch = current.ModelSwitch;
+            devices.Replace(DeviceRole.AudioChip, next);
+            memory.ReplaceAudioChip(next);
+            clock.Unregister(current);
+            clock.Register(next);
+        };
+    }
 }
 
 /// <summary>
@@ -690,6 +724,25 @@ internal sealed class DeviceRegistry : IDeviceRegistry
     public IReadOnlyList<IDevice> All => _devices.AsReadOnly();
     public IDevice? GetByRole(DeviceRole role) => _byRole.TryGetValue(role, out var device) ? device : null;
     public int Count => _devices.Count;
+
+    public void Replace(DeviceRole role, IDevice device)
+    {
+        if (!_byRole.TryGetValue(role, out var previous))
+        {
+            Add(device, role);
+            return;
+        }
+
+        var index = _devices.IndexOf(previous);
+        if (index >= 0)
+            _devices[index] = device;
+        else
+            _devices.Add(device);
+
+        _byId.Remove(previous.Id);
+        _byId[device.Id] = device;
+        _byRole[role] = device;
+    }
 
     public void Add(IDevice device, params DeviceRole[] roles)
     {

@@ -1,0 +1,14 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\clock-gate-compile.log",
+    "sha256": "67A2280BE0A40C3A838F15A9676A6595DBDCA2873F918B2474AB4281693F042A",
+    "copyVerified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T142142-0500-stdio-mock-contract\\clock-probe-compile.log",
+    "sha256": "D3018BCCABF2C67CDD5E00CD0F298DDB3310FCC8FD12F3A6C54FAEDD6336F4B5",
+    "copyVerified": true
+  }
+]

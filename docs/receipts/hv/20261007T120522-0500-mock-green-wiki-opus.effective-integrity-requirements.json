@@ -1,0 +1,233 @@
+{
+  "timestampLocal": "2026-10-07T12:34:03.086-05:00",
+  "source": "workflow.requirements.effective",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "currentLayer": {
+    "order": 1,
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "key": "layer-1",
+    "createdAtUtc": {
+      "utcDateTime": "2026-06-30T03:25:50.2331983Z",
+      "microsecond": 198,
+      "timeOfDay": "03:25:50.2331983",
+      "month": 6,
+      "offset": "00:00:00",
+      "date": "2026-06-30T00:00:00.0000000",
+      "totalOffsetMinutes": 0,
+      "dayOfYear": 181,
+      "dateTime": "2026-06-30T03:25:50.2331983",
+      "year": 2026,
+      "minute": 25,
+      "hour": 3,
+      "dayOfWeek": "Tuesday",
+      "millisecond": 233,
+      "second": 50,
+      "nanosecond": 300,
+      "ticks": 639183867502331983,
+      "utcTicks": 639183867502331983,
+      "day": 30,
+      "localDateTime": "2026-06-29T22:25:50.2331983-05:00"
+    },
+    "updatedAtUtc": {
+      "utcDateTime": "2026-06-30T03:25:50.2331983Z",
+      "microsecond": 198,
+      "timeOfDay": "03:25:50.2331983",
+      "month": 6,
+      "offset": "00:00:00",
+      "date": "2026-06-30T00:00:00.0000000",
+      "totalOffsetMinutes": 0,
+      "dayOfYear": 181,
+      "dateTime": "2026-06-30T03:25:50.2331983",
+      "year": 2026,
+      "minute": 25,
+      "hour": 3,
+      "dayOfWeek": "Tuesday",
+      "millisecond": 233,
+      "second": 50,
+      "nanosecond": 300,
+      "ticks": 639183867502331983,
+      "utcTicks": 639183867502331983,
+      "day": 30,
+      "localDateTime": "2026-06-29T22:25:50.2331983-05:00"
+    },
+    "name": "Layer 1"
+  },
+  "functional": [
+    {
+      "priority": "critical",
+      "scopeStartLayerKey": "layer-1",
+      "id": "FR-VICE-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "notes": "Operator directive 2026-10-03: VICE native is the immutable target. Wrappers are allowed; modifying VICE is forbidden.",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "isSatisfied": false,
+          "text": "Every parity or lockstep acceptance run identifies the pinned native/vice commit and proves no tracked native/vice file differs from that commit before or after the run."
+        },
+        {
+          "id": "ac-02",
+          "isSatisfied": false,
+          "text": "Emulator-behavior corrections are made in managed ViceSharp; native integration code may wrap or observe VICE only from outside native/vice and may not alter target source or behavior."
+        },
+        {
+          "id": "ac-03",
+          "isSatisfied": false,
+          "text": "Oracle binaries used as acceptance evidence are built from the pinned unmodified VICE target; evidence from a patched or behavior-modified VICE build is rejected."
+        },
+        {
+          "id": "ac-04",
+          "isSatisfied": false,
+          "text": "When an external wrapper cannot obtain a required observation from immutable VICE, the parity gate fails closed and reports the missing observation instead of inferring data or changing VICE."
+        }
+      ],
+      "title": "Immutable native VICE behavioral target",
+      "body": "ViceSharp shall conform managed emulator behavior to a pinned, unmodified native VICE revision. Native VICE source and oracle behavior shall never be changed to make ViceSharp pass; observation and control integrations must be implemented as wrappers outside native/vice.",
+      "status": "pending"
+    }
+  ],
+  "technical": [
+    {
+      "priority": "critical",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TR-VICE-ORACLE-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "notes": "No patch application or direct source edit under native/vice is permitted.",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "isSatisfied": false,
+          "text": "The native oracle preflight fails before validation when any tracked file under native/vice differs from the pinned gitlink commit."
+        },
+        {
+          "id": "ac-02",
+          "isSatisfied": false,
+          "text": "Wrapper builds and tests do not edit, generate source into, or apply patches to tracked native/vice paths."
+        },
+        {
+          "id": "ac-03",
+          "isSatisfied": false,
+          "text": "Required CPU bus events, timing, snapshots, and lifecycle observations come from real immutable VICE execution through external wrapper mechanisms; PeekBus, PC-derived values, and fabricated events are forbidden."
+        },
+        {
+          "id": "ac-04",
+          "isSatisfied": false,
+          "text": "Each oracle receipt records the native/vice commit, wrapper version or hash, clean-target proof, command, and zero-failure/zero-skip result for the claimed scope."
+        },
+        {
+          "id": "ac-05",
+          "isSatisfied": false,
+          "text": "A missing wrapper capability is an explicit blocker and cannot be remediated by modifying native/vice."
+        }
+      ],
+      "title": "Read-only native VICE oracle boundary",
+      "body": "The native/vice gitlink is a read-only behavioral oracle. All stepping, tracing, snapshot, bus-event, and lifecycle integration must be implemented by external wrappers, launchers, link-time interposition, or public VICE interfaces that leave the pinned target source and semantics unchanged.",
+      "status": "pending"
+    },
+    {
+      "priority": "high",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TR-VSFLOCKSTEP-RESUME-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "acceptanceCriteria": [
+        {
+          "id": "tr-vsflockstep-resume-001-ac-1",
+          "isSatisfied": false,
+          "text": "An external compatibility adapter outside `native/vice` loads a validated `MAINCPU` v1.2 module by inserting the absent v1.3 `ane_log_level` and `lxa_log_level` fields and absent v1.4 `maincpu_jammed` field with the pinned immutable VICE defaults before `maincpu_ba_low_flags`, updates the inclusive module length, preserves every following byte and module, handles v1.3 by inserting only `maincpu_jammed`, and passes current v1.4 through byte-for-byte. Malformed or unsupported layouts fail closed. External v1.2 and v1.3 fixtures plus a current v1.4 native round-trip prove resume behavior with zero failed, zero skipped, and zero aborted prerequisites."
+        },
+        {
+          "id": "tr-vsflockstep-resume-001-ac-2",
+          "isSatisfied": false,
+          "text": "`native/build-vice-shim.ps1` materializes the pinned VICE commit into a separate clean build source and output root outside `native/vice`, builds the unmodified upstream target there, and links only external wrapper translation units stored outside the submodule. Pre-build and post-build commit, tracked-status, untracked-status, and source-tree hash receipts must match exactly; any patch application, generated file, or source mutation under `native/vice` fails the build. `native/patches/vice-shim-runtime.patch` is diagnostic legacy evidence only and is never applied."
+        }
+      ],
+      "title": "Backward-compatible snapshot module read and VIC-II model alignment",
+      "body": "An external compatibility adapter outside `native/vice` shall normalize legacy x64sc `MAINCPU` v1.2 and v1.3 modules for the pinned, unmodified VICE reader while current v1.4 modules remain byte-identical. The wrapper shall align the VIC-II model before `machine_read_snapshot` and normalize wrapper-reported `snapshot_last_error` after a successful read. No part of this compatibility path may edit, patch, generate into, or behaviorally change `native/vice`.",
+      "status": "pending"
+    }
+  ],
+  "testing": [
+    {
+      "priority": "critical",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TEST-VICE-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "notes": "Covers FR-VICE-001 and TR-VICE-ORACLE-001.",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "isSatisfied": false,
+          "text": "A clean-target preflight passes for the pinned native/vice commit and a simulated dirty-target fixture is rejected before parity execution."
+        },
+        {
+          "id": "ac-02",
+          "isSatisfied": false,
+          "text": "The wrapper integration test proves no tracked native/vice file changes across build and execution."
+        },
+        {
+          "id": "ac-03",
+          "isSatisfied": false,
+          "text": "Oracle receipts prove native commit identity, clean tracked source, wrapper provenance, exact commands, and failed 0 skipped 0 for the claimed gate."
+        },
+        {
+          "id": "ac-04",
+          "isSatisfied": false,
+          "text": "When a required real bus or timing observation is unavailable, the test fails at that first missing observation and does not substitute PeekBus, PC inference, fabricated data, or a modified native build."
+        }
+      ],
+      "title": "Immutable native VICE oracle integrity gates",
+      "condition": "Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable.",
+      "status": "pending"
+    }
+  ],
+  "mappings": [
+    {
+      "frId": "FR-NATIVERESIDUE-001",
+      "trIds": [
+        "TR-BASELINE-CORRECTNESS-001",
+        "TR-DEPS-202607-001",
+        "TR-VSFLOCKSTEP-RESUME-001"
+      ],
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "testIds": [
+        "TEST-BASELINE-CORRECTNESS-001",
+        "TEST-DEPS-202607-001",
+        "TEST-NATIVERESIDUE-001"
+      ]
+    },
+    {
+      "frId": "FR-SNP-005",
+      "trIds": [
+        "TR-LOCKSTEP-VSF-001",
+        "TR-VSFLOCKSTEP-RESUME-001"
+      ],
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "testIds": [
+        "TEST-SNP-002",
+        "TEST-VSFLOCKSTEP-001"
+      ]
+    },
+    {
+      "frId": "FR-VICE-001",
+      "trIds": [
+        "TR-VICE-ORACLE-001"
+      ],
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "testIds": [
+        "TEST-VICE-001"
+      ]
+    },
+    {
+      "frId": "FR-VSFLOCKSTEP-001",
+      "trIds": [
+        "TR-LOCKSTEP-VSF-001",
+        "TR-VSFLOCKSTEP-RESUME-001"
+      ],
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "testIds": [
+        "TEST-SNP-002",
+        "TEST-VSFLOCKSTEP-001"
+      ]
+    }
+  ]
+}

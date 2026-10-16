@@ -1,0 +1,1062 @@
+{
+  "receiptType": "hostile-validation-reviewer-evidence",
+  "createdAtLocal": "2026-10-11T00:37:12-05:00",
+  "createdAtUtc": "2026-10-11T05:37:12Z",
+  "reviewer": {
+    "agent": "ClaudeCode",
+    "model": "claude-opus-5-5",
+    "modelName": "Claude Opus 5.5",
+    "effort": "max",
+    "host": "PAYTON-LEGION2",
+    "cliSessionId": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+    "console": "PowerShell.MCP sub-agent console sa-5bb1338b, window/PID 87788"
+  },
+  "profileLoad": {
+    "skillPath": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "transport": "plugin workflow.memory.list/get (scope Global)",
+    "listTotalCount": 38,
+    "manifest": "MEMORY-PROFILE-000",
+    "verifiedProfileParts": 22,
+    "otherGlobalMemories": 15,
+    "totalUniqueRecords": 38,
+    "parts": [
+      {
+        "id": "MEMORY-PROFILE-002",
+        "source": "add-profile.md",
+        "bytes": 247,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-018",
+        "source": "PROFILE.md",
+        "bytes": 18525,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-021",
+        "source": "user-payton-byrd.md",
+        "bytes": 1552,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-001",
+        "source": "accuracy-first-verify-sources.md",
+        "bytes": 1207,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-003",
+        "source": "adversarial-review-global.md",
+        "bytes": 7722,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-004",
+        "source": "approve-before-execute.md",
+        "bytes": 2269,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-005",
+        "source": "bring-the-receipts.md",
+        "bytes": 2056,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-006",
+        "source": "hostile-on-goal-state.md",
+        "bytes": 1734,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-007",
+        "source": "hostile-ops-vs-requirements.md",
+        "bytes": 2050,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-008",
+        "source": "hostile-phase-gates.md",
+        "bytes": 1317,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-009",
+        "source": "hv-jsonl-and-session-log.md",
+        "bytes": 4208,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-010",
+        "source": "kill-assumption-iteration.md",
+        "bytes": 1240,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-011",
+        "source": "lab-authorization.md",
+        "bytes": 2174,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-012",
+        "source": "log-decisions-as-conclusions.md",
+        "bytes": 2060,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-013",
+        "source": "never-skip-explicit-actions.md",
+        "bytes": 2957,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-014",
+        "source": "no-attitude-honesty-tell.md",
+        "bytes": 1357,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-015",
+        "source": "no-python-lab.md",
+        "bytes": 1127,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-016",
+        "source": "no-shortcuts-precision-over-convenience.md",
+        "bytes": 2030,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-017",
+        "source": "philosophical-dialogue-mode.md",
+        "bytes": 1230,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-019",
+        "source": "requirement-change-plan-first.md",
+        "bytes": 2215,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-020",
+        "source": "session-turn-title-summary.md",
+        "bytes": 1196,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROFILE-022",
+        "source": "wireframe-app-visual-fidelity.md",
+        "bytes": 945,
+        "snapshotHashMatch": true,
+        "manifestHashMatch": true,
+        "listEqualsGet": true
+      }
+    ],
+    "otherIdsListEqualsGet": [
+      {
+        "id": "MEMORY-DEVPROCESS-001",
+        "version": 4,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-DEVPROCESS-002",
+        "version": 1,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-DEVPROCESS-003",
+        "version": 1,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-FACT-006",
+        "version": 1,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-GUIDANCE-001",
+        "version": 2,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-LAB-001",
+        "version": 4,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-LAB-002",
+        "version": 6,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-LAB-003",
+        "version": 11,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PREFERENCE-001",
+        "version": 1,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PREFERENCE-002",
+        "version": 1,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PREFERENCE-003",
+        "version": 2,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PREFERENCE-004",
+        "version": 1,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PREFERENCE-005",
+        "version": 3,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PREFERENCE-007",
+        "version": 1,
+        "listEqualsGet": true
+      },
+      {
+        "id": "MEMORY-PROCEDURE-002",
+        "version": 2,
+        "listEqualsGet": true
+      }
+    ]
+  },
+  "getFrReads": [
+    {
+      "read": "FR-RUNTIME-TAPE-002",
+      "id": "FR-RUNTIME-TAPE-002",
+      "createdAt": "2026-10-11T05:15:41.9496887+00:00",
+      "updatedAt": "2026-10-11T05:15:41.9497813+00:00",
+      "status": "pending",
+      "area": "RUNTIME",
+      "acCount": 6
+    },
+    {
+      "read": "FR-TAP-001",
+      "id": "FR-TAP-001",
+      "createdAt": "2026-10-11T05:15:43.7177861+00:00",
+      "updatedAt": "2026-10-11T05:15:43.7178779+00:00",
+      "status": "pending",
+      "area": "TAP",
+      "acCount": 6
+    },
+    {
+      "read": "FR-TAP-002",
+      "id": "FR-TAP-002",
+      "createdAt": "2026-10-11T05:15:45.3864719+00:00",
+      "updatedAt": "2026-10-11T05:15:45.3865575+00:00",
+      "status": "pending",
+      "area": "TAP",
+      "acCount": 7
+    },
+    {
+      "read": "FR-TAP-003",
+      "id": "FR-TAP-003",
+      "createdAt": "2026-10-11T05:15:47.1151304+00:00",
+      "updatedAt": "2026-10-11T05:15:47.1152182+00:00",
+      "status": "pending",
+      "area": "TAP",
+      "acCount": 6
+    },
+    {
+      "read": "FR-TAP-004",
+      "id": "FR-TAP-004",
+      "createdAt": "2026-10-11T05:15:48.7595309+00:00",
+      "updatedAt": "2026-10-11T05:15:48.7596266+00:00",
+      "status": "pending",
+      "area": "TAP",
+      "acCount": 5
+    },
+    {
+      "read": "FR-BACKFILL-MEDIA-001",
+      "id": "FR-BACKFILL-MEDIA-001",
+      "createdAt": "2026-10-11T05:15:50.4570289+00:00",
+      "updatedAt": "2026-10-11T05:15:50.4571252+00:00",
+      "status": "closed",
+      "area": "BACKFILL",
+      "acCount": 0
+    },
+    {
+      "read": "FR-TAP-005",
+      "id": "FR-TAP-005",
+      "createdAt": "2026-10-11T05:15:52.2135989+00:00",
+      "updatedAt": "2026-10-11T05:15:52.2136949+00:00",
+      "status": "pending",
+      "area": "TAP",
+      "acCount": 6
+    },
+    {
+      "read": "FR-RUNTIME-TAPE-002#2",
+      "id": "FR-RUNTIME-TAPE-002",
+      "createdAt": "2026-10-11T05:15:53.8592299+00:00",
+      "updatedAt": "2026-10-11T05:15:53.8593164+00:00",
+      "status": "pending",
+      "area": "RUNTIME",
+      "acCount": 6
+    }
+  ],
+  "listTimestampObservations": [
+    {
+      "method": "workflow.requirements.listTr",
+      "totalCount": 139,
+      "items": 139,
+      "distinctCreatedAt": 139,
+      "minCreatedAt": "2026-10-11T05:16:09.7520549+00:00",
+      "maxCreatedAt": "2026-10-11T05:16:09.8250331+00:00"
+    },
+    {
+      "method": "workflow.requirements.listTest",
+      "totalCount": 142,
+      "items": 142,
+      "distinctCreatedAt": 142,
+      "minCreatedAt": "2026-10-11T05:16:12.1222065+00:00",
+      "maxCreatedAt": "2026-10-11T05:16:12.1854747+00:00"
+    }
+  ],
+  "stableNonProjectedFields": [
+    {
+      "id": "TR-TAP-EDGE-001",
+      "area": "TAP",
+      "subarea": "EDGE",
+      "notes": null,
+      "status": "pending",
+      "priority": "medium"
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "area": "TAPE",
+      "subarea": "EDGE",
+      "notes": null,
+      "status": "pending",
+      "priority": "medium"
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "area": "TAPE",
+      "testType": "unit",
+      "notes": null,
+      "status": "pending",
+      "priority": "medium"
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "area": "TAPE",
+      "testType": "unit",
+      "notes": null,
+      "status": "pending",
+      "priority": "medium"
+    },
+    {
+      "id": "TEST-TAP-001",
+      "area": "TAP",
+      "testType": "unit",
+      "notes": null,
+      "status": "pending",
+      "priority": "medium"
+    }
+  ],
+  "trust": {
+    "markerPath": "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml",
+    "markerSha256": "96ACFE5069A1FC5D8E39A6248CA9CD1FD9328308E576B79FBEB4FFC85516B508",
+    "markerWrittenAtUtc": "2026-10-10T21:00:39.0413705+00:00",
+    "markerPid": 73428,
+    "pluginTestMarkerSignature": true,
+    "pluginInvokeFullBootstrap": true,
+    "fullBootstrapAtLocal": "2026-10-11T00:08:07.814-05:00",
+    "independentNonceSent": "hv-tape-midnight-20261011T000807933-87788",
+    "independentNonceEchoed": true,
+    "serverVersion": "1.4.40+67e0b325f3991c57af4f017ee3f7ed91280f6147",
+    "markerDeclaredClaudePluginVersion": "1.118.0",
+    "installedClaudePluginVersion": "1.119.0",
+    "pluginRoot": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0",
+    "credentialValuesRedacted": "all marker credential values (apiKey 3 occurrences incl. inline X-Api-Key and query form, signature value) plus secret-like environment values were replaced before any rendering; values never printed"
+  },
+  "environment": {
+    "requestJsonl": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\request.jsonl",
+    "requestSha256": "56A7566508A09E104230C309092A3D6DCB0675C6437C8B912B4236ABAF17ABA2",
+    "appliedVariables": 17,
+    "mismatches": 0,
+    "removedInheritedNames": [
+      "GROK_API_KEY",
+      "GROK_BASE_URL",
+      "GROK_MEMORY",
+      "MCP_AGENT_API_KEY",
+      "MCP_AGENT_MODEL_NAME",
+      "MCP_AGENT_MODEL_URL"
+    ],
+    "failsafeDrainDisabled": "1",
+    "cacheDir": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261010T161500-0500-tape-amendment-opus",
+    "failsafeDir": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261010T161500-0500-tape-amendment-opus\\failsafe\\pending",
+    "appliedBeforeFirstPluginCall": true
+  },
+  "pinsCurrent": {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\input-pins.json",
+    "checkedAtLocal": "2026-10-11T00:16:41-05:00",
+    "total": 146,
+    "matched": 146,
+    "missing": 0,
+    "drift": 0
+  },
+  "pinsPriorReview": {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\input-pins.json",
+    "total": 94,
+    "unchanged": 93,
+    "changed": 1,
+    "missing": 0,
+    "changedPaths": [
+      "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml"
+    ],
+    "markerOldSha256": "3A13AA1CA3A69A247FDE327CFBF4C289757B120541909977616001156C68817F"
+  },
+  "nativeSelected": {
+    "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "method": "reviewer-computed git blob SHA1 of materialized file; git --git-dir=F:\\GitHub\\vice-sharp\\.git\\modules\\native\\vice ls-tree <commit> -- vice/<path> (object store only, no working-tree access); SHA256 vs pin",
+    "files": [
+      {
+        "path": "src/datasette/datasette.c",
+        "reviewerBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+        "commitTreeBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+        "pinnedBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/alarm.h",
+        "reviewerBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+        "commitTreeBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+        "pinnedBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/tapeport/tapeport.c",
+        "reviewerBlob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+        "commitTreeBlob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+        "pinnedBlob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/c64/c64pla.c",
+        "reviewerBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+        "commitTreeBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+        "pinnedBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/c64/c64mem.c",
+        "reviewerBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+        "commitTreeBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+        "pinnedBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/c64/c64datasette.c",
+        "reviewerBlob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+        "commitTreeBlob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+        "pinnedBlob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/vic20/vic20via1.c",
+        "reviewerBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+        "commitTreeBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+        "pinnedBlob": "92ffff352ead28d3527df520325ef1390b2513af",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/vic20/vic20via2.c",
+        "reviewerBlob": "432bc199e08fc0f580c7df0f2d637db592a2ed11",
+        "commitTreeBlob": "432bc199e08fc0f580c7df0f2d637db592a2ed11",
+        "pinnedBlob": "432bc199e08fc0f580c7df0f2d637db592a2ed11",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/vic20/vic20datasette.c",
+        "reviewerBlob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+        "commitTreeBlob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+        "pinnedBlob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/tape/tap.c",
+        "reviewerBlob": "eed6d8e741622857369f8838f3cab5319eb3e4c1",
+        "commitTreeBlob": "eed6d8e741622857369f8838f3cab5319eb3e4c1",
+        "pinnedBlob": "eed6d8e741622857369f8838f3cab5319eb3e4c1",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/tapeport/sense-dongle.c",
+        "reviewerBlob": "7a4f685e368f31697949037c6821a858cee26f48",
+        "commitTreeBlob": "7a4f685e368f31697949037c6821a858cee26f48",
+        "pinnedBlob": "7a4f685e368f31697949037c6821a858cee26f48",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/tapeport/cp-clockf83.c",
+        "reviewerBlob": "fe316ee9aeab843b0d91dcd992d3836394e8850e",
+        "commitTreeBlob": "fe316ee9aeab843b0d91dcd992d3836394e8850e",
+        "pinnedBlob": "fe316ee9aeab843b0d91dcd992d3836394e8850e",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/core/viacore.c",
+        "reviewerBlob": "406a84720267a1821182ba9c33ab77e505507842",
+        "commitTreeBlob": "406a84720267a1821182ba9c33ab77e505507842",
+        "pinnedBlob": "406a84720267a1821182ba9c33ab77e505507842",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/datasette/datasette-sound.c",
+        "reviewerBlob": "aff23fc5985c616cfaa2e7481d36362d424df28b",
+        "commitTreeBlob": "aff23fc5985c616cfaa2e7481d36362d424df28b",
+        "pinnedBlob": "aff23fc5985c616cfaa2e7481d36362d424df28b",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/c64/c64.c",
+        "reviewerBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+        "commitTreeBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+        "pinnedBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+        "sha256Match": true,
+        "allMatch": true
+      },
+      {
+        "path": "src/vic20/vic20.c",
+        "reviewerBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+        "commitTreeBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+        "pinnedBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+        "sha256Match": true,
+        "allMatch": true
+      }
+    ]
+  },
+  "proposal": {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\proposed-field-delta.json",
+    "sha256": "1D8A442588ADD7883693694352954DF2077D166FB47ED4E2924AFE738A481507",
+    "draft1Sha256": "7020A59D11EEF640919579EC404E3DC237B70C9E7C33272D5195F7B3B3F4845C",
+    "reusedParentSha256": "4CF5B9A3A8FA47A5904F53FC3DC39140FDB7E5A8A852F8B65AA723A285D0C1AD",
+    "records": [
+      {
+        "id": "FR-RUNTIME-TAPE-002",
+        "kind": "fr",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "beforeAc": 6,
+        "afterAc": 8,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "TR-TAP-EDGE-001",
+        "kind": "tr",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "beforeAc": 4,
+        "afterAc": 6,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "TR-TAPE-EDGE-001",
+        "kind": "tr",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "beforeAc": 4,
+        "afterAc": 7,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "TEST-TAPE-RAMP-001",
+        "kind": "test",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "beforeAc": 4,
+        "afterAc": 5,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "TEST-TAPE-SENSE-001",
+        "kind": "test",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "beforeAc": 5,
+        "afterAc": 8,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "FR-TAP-001",
+        "kind": "fr",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "beforeAc": 6,
+        "afterAc": 6,
+        "retainedIdsWithUnchangedText": [
+          "ac-05"
+        ],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "FR-TAP-002",
+        "kind": "fr",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "beforeAc": 7,
+        "afterAc": 8,
+        "retainedIdsWithUnchangedText": [
+          "ac-05"
+        ],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "FR-TAP-003",
+        "kind": "fr",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "beforeAc": 6,
+        "afterAc": 6,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "FR-TAP-004",
+        "kind": "fr",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "beforeAc": 5,
+        "afterAc": 5,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "TEST-TAP-001",
+        "kind": "test",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "beforeAc": 0,
+        "afterAc": 7,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "pending",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      },
+      {
+        "id": "FR-BACKFILL-MEDIA-001",
+        "kind": "fr",
+        "declaredChangedFields": [
+          "acceptanceCriteria",
+          "body",
+          "status",
+          "title"
+        ],
+        "actualChangedFields": [
+          "acceptanceCriteria",
+          "body",
+          "status",
+          "title"
+        ],
+        "beforeAc": 0,
+        "afterAc": 5,
+        "retainedIdsWithUnchangedText": [],
+        "beforeStatus": "closed",
+        "afterStatus": "pending",
+        "afterSatisfiedCount": 0
+      }
+    ],
+    "beforeAcTotal": 47,
+    "afterAcTotal": 71,
+    "retainedIdsWithRewrittenText": 45,
+    "coverageRows": 71,
+    "uniqueGroupNames": 58,
+    "placeholderGroupNames": 5,
+    "groupReferences": 286,
+    "mappingRows": 7,
+    "mappingAdditions": [
+      {
+        "frId": "FR-BACKFILL-MEDIA-001",
+        "addedTr": [
+          "TR-IEC-EDGE-001",
+          "TR-MEDIA-D64-001"
+        ],
+        "addedTest": [
+          "TEST-IEC-TIMING-001",
+          "TEST-D64IO-001"
+        ],
+        "removedTr": [],
+        "removedTest": []
+      },
+      {
+        "frId": "FR-RUNTIME-TAPE-002",
+        "addedTr": [],
+        "addedTest": [],
+        "removedTr": [],
+        "removedTest": []
+      },
+      {
+        "frId": "FR-TAP-001",
+        "addedTr": [
+          "TR-TAPE-EDGE-001",
+          "TR-TAP-EDGE-001"
+        ],
+        "addedTest": [
+          "TEST-TAPE-RAMP-001",
+          "TEST-TAPE-SENSE-001"
+        ],
+        "removedTr": [],
+        "removedTest": []
+      },
+      {
+        "frId": "FR-TAP-002",
+        "addedTr": [
+          "TR-TAP-EDGE-001"
+        ],
+        "addedTest": [],
+        "removedTr": [],
+        "removedTest": []
+      },
+      {
+        "frId": "FR-TAP-003",
+        "addedTr": [
+          "TR-TAP-EDGE-001"
+        ],
+        "addedTest": [],
+        "removedTr": [],
+        "removedTest": []
+      },
+      {
+        "frId": "FR-TAP-004",
+        "addedTr": [
+          "TR-TAP-EDGE-001",
+          "TR-TAPE-EDGE-001"
+        ],
+        "addedTest": [
+          "TEST-TAPE-RAMP-001",
+          "TEST-TAPE-SENSE-001"
+        ],
+        "removedTr": [],
+        "removedTest": []
+      },
+      {
+        "frId": "FR-TAP-005",
+        "addedTr": [
+          "TR-TAP-EDGE-001"
+        ],
+        "addedTest": [],
+        "removedTr": [],
+        "removedTest": []
+      }
+    ],
+    "additiveLinkTotal": 15,
+    "removals": 0,
+    "additiveLinksToMissingLiveIds": [
+      "FR-BACKFILL-MEDIA-001->TR-MEDIA-D64-001",
+      "FR-BACKFILL-MEDIA-001->TEST-D64IO-001"
+    ],
+    "missingIdsCreatedOnlyByExcludedParentRows": [
+      "TR-MEDIA-D64-001 (op=create)",
+      "TEST-D64IO-001 (op=create)"
+    ],
+    "parentRecordRowByteEqual": true,
+    "parentMappingRowValuesEqual": true,
+    "parentMappingRowPropertyOrderDiffers": true
+  },
+  "verifierRerun": {
+    "ranAtLocal": "2026-10-11T00:27:00-05:00",
+    "script": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\Verify-Proposal.ps1",
+    "checkCount": 250,
+    "failed": 0,
+    "uniqueNamedCaseGroups": 58,
+    "additions": 15,
+    "identicalToRetainedFinal": true,
+    "proposalDirectoryUnchangedByRun": true,
+    "checksTargetExistence": false
+  },
+  "baseline": {
+    "retainedPreimagePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\tape-preimages.json",
+    "retainedPreimageSha256": "470F6E228C95EE45D17082AF2158EBCE2ADB0853AD1CA96FAC5B93CC8D399550",
+    "proposalBeforeVsRetainedEffective": {
+      "recordFields": 88,
+      "equal": 88,
+      "currentNull": 0,
+      "mappingFields": 28,
+      "mappingEqual": 28
+    },
+    "proposalBeforeVsLiveAtLocal": "2026-10-11T00:14:48-05:00",
+    "proposalBeforeVsLive": {
+      "recordFields": 88,
+      "diffs": 0
+    },
+    "liveCounts": {
+      "fr": 235,
+      "tr": 139,
+      "test": 142,
+      "mappings": 233,
+      "layer": "layer-1"
+    },
+    "retainedVsLiveWholeStore": {
+      "records": 516,
+      "changed": 0,
+      "onlyRetained": 0,
+      "onlyLive": 0,
+      "mappings": 233,
+      "mappingsChanged": 0
+    },
+    "retainedReceiptRecordChecks": {
+      "entries": 88,
+      "beforeNull": 88,
+      "currentNull": 88,
+      "note": "all stored comparison values are null; equality was independently re-derived by this reviewer from the retained effective response and live reads"
+    }
+  },
+  "triageReadback": [
+    {
+      "reportId": "triage-report-25583068f60e48b19d678d556ea2b304",
+      "workspacePath": "F:\\GitHub\\McpServer",
+      "status": "grouped",
+      "groupId": "triage-group-2badaaf3d7396c93",
+      "tool": "mcp__mcpserver__triage_status",
+      "scopeOfReport": "single FR-RUNTIME-TAPE-002 consecutive getFr reads"
+    },
+    {
+      "reportId": "triage-report-b0d27fb541e84ff6ae8278667c3e0a34",
+      "workspacePath": "F:\\GitHub\\McpServer",
+      "status": "grouped",
+      "groupId": "triage-group-d2cdfacc58deec79",
+      "tool": "mcp__mcpserver__triage_status"
+    }
+  ],
+  "todos": {
+    "method": "workflow.todo.query done=false",
+    "openCount": 39,
+    "referencingTapeRecordsOrAmendment": 0,
+    "planReqaudit001NoteDate": "2026-09-28",
+    "planViceoracle001TasksDone": "1 of 6"
+  },
+  "corpusContradictions": [
+    {
+      "id": "FR-CPU-004",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-03",
+          "text": "Bit 3 controls the cassette motor (active low)."
+        },
+        {
+          "id": "ac-05",
+          "text": "Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior."
+        }
+      ],
+      "conflictsWith": "proposed FR-TAP-001 ac-01; FR-RUNTIME-TAPE-002 ac-07; c64pla.c:61-63,77-89",
+      "existingTestNote": "tests/ViceSharp.TestHarness/FrCpu004AcceptanceTests.cs:67-90 asserts bit 5 under the name PortBit3_ControlsTheCassetteMotorActiveLow and documents that the FR text is wrong"
+    },
+    {
+      "id": "FR-PRF-003",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-02",
+          "text": "No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\")."
+        },
+        {
+          "id": "ac-04",
+          "text": "The 6510 I/O port bit 4 (cassette sense) is permanently pulled high."
+        }
+      ],
+      "conflictsWith": "proposed FR-RUNTIME-TAPE-002 ac-07 SX-64; c64mem.c:219-220 config (1,1,1,1,0x07) plus c64pla.c:65-67 makes input bit 4 read 0"
+    }
+  ],
+  "existingTestsCitingAmendedIds": [
+    {
+      "file": "tests/ViceSharp.TestHarness/StorageRuntimeTests.cs",
+      "lines": "181-199",
+      "cites": "FR-TAP-002, FR-TAP-003",
+      "superseded": "v0 zero byte followed by 24-bit overflow decoded as a long pulse"
+    },
+    {
+      "file": "tests/ViceSharp.TestHarness/StorageRuntimeTests.cs",
+      "lines": "202-206",
+      "cites": "FR-TAP-002",
+      "superseded": "reject header pulse-data length larger than actual data (native ignores declared length; tap.c:250-256)"
+    },
+    {
+      "file": "tests/ViceSharp.TestHarness/Tape/DatasetteSenseLineTests.cs",
+      "cites": "TR-TAP-EDGE-001",
+      "superseded": "prior managed sense/record semantics (prior F-11)"
+    },
+    {
+      "file": "tests/ViceSharp.TestHarness/Tape/DatasetteMotorRampTests.cs",
+      "cites": "TR-TAPE-EDGE-001",
+      "superseded": "prior managed ramp semantics (prior F-11)"
+    }
+  ],
+  "session": {
+    "sessionId": "ClaudeCode-20261011T050449Z-plugin-session",
+    "requestId": "req-20261011T050452Z-prompt-ba39",
+    "createdBy": "plugin hooks at launch, primary persisted 2026-10-11T05:04:52Z",
+    "duplicateHookTurnUntouched": "req-20261011T050452Z-prompt-75df",
+    "earlierAttemptSessionsUntouched": [
+      "ClaudeCode-20261010T211713Z-plugin-session",
+      "ClaudeCode-20261011T005900Z-plugin-session"
+    ],
+    "structuredModelField": "claude (host default set by Invoke-McpPlugin)",
+    "earlyUpdateTurn": "persisted 2026-10-11T00:31:49-05:00"
+  }
+}

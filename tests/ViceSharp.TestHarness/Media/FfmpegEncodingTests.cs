@@ -29,7 +29,9 @@ public sealed class FfmpegEncodingTests
         Assert.Equal("mpeg4", avi.VideoCodec);
         Assert.Equal("libmp3lame", avi.AudioCodec);
 
-        Assert.False(FfmpegVideoFormats.TryGet("gif", out _));
+        Assert.True(FfmpegVideoFormats.TryGet("gif", out var gif));
+        Assert.Equal("gif", gif.Container);
+        Assert.Equal("gif", gif.VideoCodec);
         Assert.False(FfmpegVideoFormats.TryGet("", out _));
         Assert.False(FfmpegVideoFormats.TryGet(null, out _));
     }

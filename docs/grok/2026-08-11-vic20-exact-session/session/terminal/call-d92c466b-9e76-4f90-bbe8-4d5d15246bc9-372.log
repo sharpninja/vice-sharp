@@ -5,7 +5,7 @@ Name                                                  Length
 octopus-legion2.cred.xml                                 928
 octopus-payton.cred.xml                                 1552
 paytondesktop.cred.xml                                   883
-setup-payton-desktop-cred.ps1                           1535
+setup-LAB-OMARCHY-cred.ps1                           1535
 truckmate-preproduction-generated-secrets.cred.xml      6907
 truckmate-preproduction-pki.cred.xml                  100946
 truckmate-preproduction-provisioning.partial.cred.xml 111517

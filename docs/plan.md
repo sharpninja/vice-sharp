@@ -1,25 +1,22 @@
 # ViceSharp Phase 1 Completion Plan
 
-**STATUS: PHASE 1 COMPLETE (2026-05-31, HEAD `6086e11`).** See `HANDOFF.md` at the repo root for current continuity (the original docs/handoff.md closeout record lives in git history). Slices 1-9 all landed; full suite 1641 / 2 skip / 0 fail; perf 47x target. This file is preserved for historical reference. Post-Phase 1 work follows the deferrals list in handoff.md.
+**HISTORICAL STATUS ONLY:** This file records the Phase 1 closeout claim made on 2026-05-31 at HEAD `6086e11` (1641 passed, 2 skipped, 0 failed). That claim and its skipped tests are not current acceptance evidence and do not establish whole-machine parity. For current continuity use root [HANDOFF.md](../HANDOFF.md); for current gates use [PLAN-VICE-IMMUTABLE-001](plans/PLAN-VICE-IMMUTABLE-001.md) and [PLAN-VSFLOCKSTEP-001](plans/PLAN-VSFLOCKSTEP-001.md).
 
 Updated: 2026-05-27 (audit refresh at HEAD 064d3a0; see handoff.md for full reconciliation)
 Workspace: `F:\GitHub\vice-sharp`
 Baseline: `main` at `064d3a0` (post-audit; prior 2026-05-21 snapshot at 46edda9 / 8c1b2fc)
 
-This file replaces the stale May 12 30-stage execution snapshot in its
-entirety. Keep this document as the live Phase 1 closeout plan. Do not append
-the old stage list back into this file.
+This file is retained as a historical Phase 1 closeout record. It is not the live plan and must not override current requirements, the canonical handoff, or the two current remediation plans.
 
 ## Sources Of Truth
 
-Use these inputs, in this order, when this document and local state disagree:
+For current work, this historical file yields to these sources:
 
-1. Live MCP TODO state queried through `mcpserver-codex-plugin`.
-2. `README.md` Completion Dashboard and current validation notes.
-3. Current git state and recent MCP session log evidence.
-4. `handoff.md` for session continuity.
-5. Older files such as archived session logs or previous plan snapshots only as
-   historical context.
+1. Primary MCP requirements, TODO, and session state after supported plugin readback.
+2. `docs/plans/PLAN-VICE-IMMUTABLE-001.md` and `docs/plans/PLAN-VSFLOCKSTEP-001.md`.
+3. Root `HANDOFF.md` for continuity.
+4. Current code, tests, retained validation evidence, and git state.
+5. This file and other archived plans only as historical context.
 
 Slice 0 reconciliation is now the baseline for this plan. It used live MCP TODO
 state, subagent code/test review, and focused validation to separate stale open
@@ -27,15 +24,9 @@ TODOs from real Phase 1 blockers before new feature work continues.
 
 ## Phase 1 Definition
 
-Phase 1 means Iteration 1 C64 bringup is complete enough to operate the C64 and
-required x64sc profiles through real boot, input, media, capture, snapshot, and
-host-control flows with native-comparable validation. It also includes a first
-performance-tuning pass that reaches at least 25% of classic VICE performance
-on the selected benchmark profile. It does not mean every future VICE machine,
-every cartridge mapper, every platform host, or complete performance parity is
-done.
+In this historical record, Phase 1 meant a C64 bringup sufficient to operate selected x64sc profiles through boot, input, media, capture, snapshot, and host-control flows with the validation then available. It also targeted at least 25% of classic VICE performance on one selected benchmark profile. Those historical bounds did not mean every VICE behavior, machine, cartridge mapper, platform host, or current parity gate was complete.
 
-Phase 1 is complete only when all of these are true:
+The historical 2026 closeout criteria were:
 
 1. Every Phase 1 implementation slice is driven by current canonical
    `FR-*`, `TR-*`, and `TEST-*` requirements, with VICE source evidence cited

@@ -1,0 +1,7 @@
+{
+  "startedLocal": "2026-10-08T07:31:48.1457957-05:00",
+  "endedLocal": "2026-10-08T07:31:55.4534198-05:00",
+  "exitCode": 1,
+  "command": "dotnet test .\\tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj -c Release --logger \"trx;LogFileName=phase1-oracle-contracts.trx\" --results-directory .\\TestResults\\vice-immutable-phase1 --diag .\\TestResults\\vice-immutable-phase1\\vstest.diag.log --blame-hang --blame-hang-timeout 2m",
+  "nativeInventoryUnchanged": true
+}

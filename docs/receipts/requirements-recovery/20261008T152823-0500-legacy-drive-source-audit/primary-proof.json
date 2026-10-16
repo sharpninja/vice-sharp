@@ -1,0 +1,13 @@
+{
+  "timestampLocal": "2026-10-08T15:33:15.3127574-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "turnId": "req-20261008T201951Z-prompt-ab18",
+  "status": "completed",
+  "responseExact": true,
+  "fullAuditBodyExact": true,
+  "exactDecisionPair": true,
+  "actions": 3,
+  "dialogs": 4,
+  "stopGateOutput": "{}; not an explicit passed receipt",
+  "completedReadbackSha256": "3FB2A71A931BE554E5997FE52995A13CC3DA7D15A7284C8C8A8711F419AC4809"
+}

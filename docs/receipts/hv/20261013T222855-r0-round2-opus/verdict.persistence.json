@@ -1,0 +1,241 @@
+{
+  "schema": "hv-verdict-persistence/v1",
+  "writtenAtLocal": "2026-10-13T23:14:36",
+  "reviewer": {
+    "agent": "ClaudeCode",
+    "model": "claude-opus-5-5",
+    "effort": "max",
+    "cliSessionId": "bab22fd4-f213-4011-9616-074b14def01b",
+    "consoleAgentId": "sa-76fe112f"
+  },
+  "sessionId": "ClaudeCode-20261014T033325Z-plugin-session",
+  "requestId": "req-20261014T033328Z-prompt-5bc0",
+  "parent": {
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "requestId": "req-20261014T021233Z-remediate-two-hv-failures"
+  },
+  "candidateSha256": "A13429ED21F4764E88EAC9CE5323691AEC98D1C4C227E64BD4AD8E2B64604EF9",
+  "files": {
+    "verdictMd": {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T222855-r0-round2-opus\\verdict.md",
+      "bytes": 40223,
+      "sha256": "4FD3A29D7930FDBD50518567C4F8F92B92A70C306729536DE9D319BC7E33EFEE",
+      "normalizedChars": 39704,
+      "normalizedSha256": "C036294340F71A8769AE036254356ED6726CC9472561D72A00E23CCC79777D8F"
+    },
+    "verdictJson": {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T222855-r0-round2-opus\\verdict.json",
+      "bytes": 17912,
+      "sha256": "711E6093B1A61175D12B59D7BE929FA75076A3433F1FDD69ABE6A62D7A577DA7",
+      "normalizedChars": 17500,
+      "normalizedSha256": "5CD854E3DC3C790D46603D817D6BFF29B58D988B65482158128234E368729E91"
+    }
+  },
+  "normalization": "Dialog chunks carry the file text with CRLF converted to LF and trailing LF trimmed (files are CRLF on disk); readback comparison applies the same normalization to both sides. No other transformation.",
+  "chunking": {
+    "maxCharsPerItem": 6500,
+    "maxObservedItemChars": 6432,
+    "headerFormat": "<label> part <n>/<N> fileSha256=<sha256 of file bytes> normalizedChars=<count>, then LF, then body",
+    "labels": [
+      "HV-R0-ROUND2-VERDICT-MD",
+      "HV-R0-ROUND2-VERDICT-JSON"
+    ],
+    "mdChunks": 7,
+    "jsonChunks": 3,
+    "sends": [
+      {
+        "label": "HV-R0-ROUND2-VERDICT-MD",
+        "part": 1,
+        "total": 7,
+        "chars": 6343,
+        "sentUtc": "2026-10-14T04:11:02Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-MD",
+        "part": 2,
+        "total": 7,
+        "chars": 6418,
+        "sentUtc": "2026-10-14T04:11:05Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-MD",
+        "part": 3,
+        "total": 7,
+        "chars": 6206,
+        "sentUtc": "2026-10-14T04:11:07Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-MD",
+        "part": 4,
+        "total": 7,
+        "chars": 6337,
+        "sentUtc": "2026-10-14T04:11:09Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-MD",
+        "part": 5,
+        "total": 7,
+        "chars": 6369,
+        "sentUtc": "2026-10-14T04:11:11Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-MD",
+        "part": 6,
+        "total": 7,
+        "chars": 6419,
+        "sentUtc": "2026-10-14T04:11:13Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-MD",
+        "part": 7,
+        "total": 7,
+        "chars": 2529,
+        "sentUtc": "2026-10-14T04:11:16Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-JSON",
+        "part": 1,
+        "total": 3,
+        "chars": 6432,
+        "sentUtc": "2026-10-14T04:11:18Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-JSON",
+        "part": 2,
+        "total": 3,
+        "chars": 6402,
+        "sentUtc": "2026-10-14T04:11:20Z",
+        "ok": true,
+        "code": "persisted"
+      },
+      {
+        "label": "HV-R0-ROUND2-VERDICT-JSON",
+        "part": 3,
+        "total": 3,
+        "chars": 5065,
+        "sentUtc": "2026-10-14T04:11:22Z",
+        "ok": true,
+        "code": "persisted"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "setTurnTitle",
+      "atLocal": "2026-10-13T23:09:35",
+      "pluginCode": "rejected",
+      "pluginMessage": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true.",
+      "serverState": "title applied (query readback 23:10:01 and 23:13:02)",
+      "failsafeRetained": "20261014T040935Z-session_setTurnTitle-8836.yaml (not replayed; drain disabled)"
+    },
+    {
+      "step": "updateTurn",
+      "atLocal": "2026-10-13T23:10:37",
+      "pluginCode": "persisted"
+    },
+    {
+      "step": "appendDialog x10 verdict chunks",
+      "atLocal": "2026-10-13T23:11:02 to 23:11:22 (sent UTC 04:11:02Z to 04:11:22Z)",
+      "pluginCode": "persisted (10 of 10)"
+    },
+    {
+      "step": "appendDialog 5 decision items",
+      "atLocal": "2026-10-13T23:11:52",
+      "pluginCode": "persisted"
+    },
+    {
+      "step": "appendActions 7 actions",
+      "atLocal": "2026-10-13T23:11:52",
+      "pluginCode": "persisted"
+    },
+    {
+      "step": "pre-completion readback",
+      "atLocal": "2026-10-13T23:12:07",
+      "result": "both joins equal after normalization; 15 dialog items, 7 actions"
+    },
+    {
+      "step": "completeTurn",
+      "atLocal": "2026-10-13T23:12:52",
+      "pluginCode": "persisted"
+    },
+    {
+      "step": "final readback (client.SessionLog.QueryAsync agent ClaudeCode)",
+      "atLocal": "2026-10-13T23:13:02",
+      "result": "turn completed; both joins equal after normalization; response equals submitted"
+    }
+  ],
+  "finalReadback": {
+    "measuredAtLocal": "2026-10-13T23:13:02",
+    "sessionId": "ClaudeCode-20261014T033325Z-plugin-session",
+    "sessionStatus": "in_progress",
+    "sessionModelField": "claude-opus-5-5",
+    "requestId": "req-20261014T033328Z-prompt-5bc0",
+    "turnStatus": "completed",
+    "title": "Hostile review of R0 remediation round-2 candidate A13429ED (Opus 5.5 max, all A-D surfaces)",
+    "tagCount": 13,
+    "tagsIncludeModel": true,
+    "dialogCount": 15,
+    "decisionItems": 5,
+    "actionCount": 7,
+    "responseEqualsSubmitted": true,
+    "responseChars": 2290,
+    "queryTextChars": 12969,
+    "verify": {
+      "HV-R0-ROUND2-VERDICT-MD": {
+        "chunksFound": 7,
+        "distinctParts": 7,
+        "declaredTotal": [
+          7
+        ],
+        "joinedChars": 39704,
+        "expectedChars": 39704,
+        "equalNormalized": true,
+        "joinedSha256": "C036294340F71A8769AE036254356ED6726CC9472561D72A00E23CCC79777D8F",
+        "expectedSha256": "C036294340F71A8769AE036254356ED6726CC9472561D72A00E23CCC79777D8F"
+      },
+      "HV-R0-ROUND2-VERDICT-JSON": {
+        "chunksFound": 3,
+        "distinctParts": 3,
+        "declaredTotal": [
+          3
+        ],
+        "joinedChars": 17500,
+        "expectedChars": 17500,
+        "equalNormalized": true,
+        "joinedSha256": "5CD854E3DC3C790D46603D817D6BFF29B58D988B65482158128234E368729E91",
+        "expectedSha256": "5CD854E3DC3C790D46603D817D6BFF29B58D988B65482158128234E368729E91"
+      }
+    },
+    "failsafePending": [
+      "20261014T040935Z-session_setTurnTitle-8836.yaml"
+    ],
+    "quarantine": 0
+  },
+  "primaryReadbackVerified": true,
+  "persistenceStatus": "PERSISTED: primary MCP turn req-20261014T033328Z-prompt-5bc0 completed and read back at 2026-10-13T23:13:02; whole verdict.md (7 chunks) and verdict.json (3 chunks) equal the files after LF normalization; 5 decision items and 7 actions present",
+  "verdictJsonPersistenceFieldNote": "verdict.json was written before persistence and intentionally says pending; this file and the final response carry the final status.",
+  "corrections": [
+    "RN-05 and verdict.json reviewer.structuredSessionModelField said the session model field reads claude. That was observed at 23:10:01 before my persist calls; the final readback at 23:13:02 shows the session model field as claude-opus-5-5."
+  ],
+  "disclosuresForParentTriage": [
+    "setTurnTitle typed-result mismatch: server applied the title but the plugin reported rejected because retitled=true was absent; failsafe retained in the isolated pending directory.",
+    "The compaction SessionStart hook rotated the cached session id in session-state.yaml to ClaudeCode-20261014T035025Z-plugin-session at 22:50:28; every write still targeted the cached turn session ClaudeCode-20261014T033325Z-plugin-session (Get-ReplCompleteTurnPersistSessionId); session 035025Z did not appear in the server query at 23:10:01.",
+    "No triage was submitted by the reviewer because the brief limits reviewer writes to receipts and its own session/failsafe state."
+  ]
+}

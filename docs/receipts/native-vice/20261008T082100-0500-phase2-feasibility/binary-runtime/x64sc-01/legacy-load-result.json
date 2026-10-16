@@ -1,0 +1,12 @@
+{
+  "timestampLocal": "2026-10-08T09:40:19.5250863-05:00",
+  "requestId": 9,
+  "type": 66,
+  "error": 0,
+  "pc": 22377,
+  "expectedPc": 22377,
+  "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\x64sc-04-legacy\\fresh.vsf",
+  "destination": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-runtime\\x64sc-01\\legacy.vsf",
+  "sha256": "CB4EB08D47A9C1F4BA7F6CD30A1ED5CAFEF0B8C50AAE57E9153E4B1831E8805E",
+  "sourceRetained": true
+}

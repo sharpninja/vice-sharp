@@ -1,0 +1,36 @@
+{
+  "type": "result",
+  "payload": {
+    "requestId": "req-20261009T190734Z-9194",
+    "result": {
+      "success": true,
+      "status": "collecting",
+      "groupId": "triage-group-5d520f4f9909f4fc",
+      "quietDeadlineUtc": {
+        "dayOfWeek": "Friday",
+        "ticks": 639271705594942113,
+        "totalOffsetMinutes": 0,
+        "dateTime": "2026-10-09T19:22:39.4942113",
+        "microsecond": 211,
+        "minute": 22,
+        "millisecond": 494,
+        "timeOfDay": "19:22:39.4942113",
+        "hour": 19,
+        "date": "2026-10-09T00:00:00.0000000",
+        "month": 10,
+        "year": 2026,
+        "utcTicks": 639271705594942113,
+        "localDateTime": "2026-10-09T14:22:39.4942113-05:00",
+        "dayOfYear": 282,
+        "offset": "00:00:00",
+        "nanosecond": 300,
+        "second": 39,
+        "utcDateTime": "2026-10-09T19:22:39.4942113Z",
+        "day": 9
+      },
+      "reportId": "triage-report-52b871ce6e7a4f2c8b157cde7c6f7da9",
+      "workspacePath": "F:\\GitHub\\McpServer"
+    },
+    "deprecated": true
+  }
+}

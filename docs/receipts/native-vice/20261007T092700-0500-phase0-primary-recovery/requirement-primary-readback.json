@@ -1,0 +1,24 @@
+{
+  "priority": "high",
+  "createdAt": "2026-10-07T14:25:27.1177741+00:00",
+  "subarea": "RESUME",
+  "id": "TR-VSFLOCKSTEP-RESUME-001",
+  "description": "An external compatibility adapter outside `native/vice` shall normalize legacy x64sc `MAINCPU` v1.2 and v1.3 modules for the pinned, unmodified VICE reader while current v1.4 modules remain byte-identical. The wrapper shall align the VIC-II model before `machine_read_snapshot` and normalize wrapper-reported `snapshot_last_error` after a successful read. No part of this compatibility path may edit, patch, generate into, or behaviorally change `native/vice`.",
+  "updatedAt": "2026-10-07T14:25:27.1179451+00:00",
+  "title": "Backward-compatible snapshot module read and VIC-II model alignment",
+  "area": "VSFLOCKSTEP",
+  "acceptanceCriteria": [
+    {
+      "text": "An external compatibility adapter outside `native/vice` loads a validated `MAINCPU` v1.2 module by inserting the absent v1.3 `ane_log_level` and `lxa_log_level` fields and absent v1.4 `maincpu_jammed` field with the pinned immutable VICE defaults before `maincpu_ba_low_flags`, updates the inclusive module length, preserves every following byte and module, handles v1.3 by inserting only `maincpu_jammed`, and passes current v1.4 through byte-for-byte. Malformed or unsupported layouts fail closed. External v1.2 and v1.3 fixtures plus a current v1.4 native round-trip prove resume behavior with zero failed, zero skipped, and zero aborted prerequisites.",
+      "id": "tr-vsflockstep-resume-001-ac-1",
+      "isSatisfied": false
+    },
+    {
+      "text": "`native/build-vice-shim.ps1` materializes the pinned VICE commit into a separate clean build source and output root outside `native/vice`, builds the unmodified upstream target there, and links only external wrapper translation units stored outside the submodule. Pre-build and post-build commit, tracked-status, untracked-status, and source-tree hash receipts must match exactly; any patch application, generated file, or source mutation under `native/vice` fails the build. `native/patches/vice-shim-runtime.patch` is diagnostic legacy evidence only and is never applied.",
+      "id": "tr-vsflockstep-resume-001-ac-2",
+      "isSatisfied": false
+    }
+  ],
+  "status": "pending",
+  "scopeStartLayerKey": "layer-1"
+}

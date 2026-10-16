@@ -1,0 +1,42 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-cycle.c",
+    "relative": "vice/src/viciisc/vicii-cycle.c",
+    "expectedBlob": "f20270d3c8ae88ead060e2012a94824068fdb812",
+    "actualBlob": "f20270d3c8ae88ead060e2012a94824068fdb812",
+    "exactMatch": true,
+    "sha256": "561876187FDE8BFE8636E64593543AA77A5E0855EBBD9FE56D9DA4FA6EB564BA"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-chip-model.c",
+    "relative": "vice/src/viciisc/vicii-chip-model.c",
+    "expectedBlob": "ed2080d53fe770ffa356fa1b3c7f7e971436acab",
+    "actualBlob": "ed2080d53fe770ffa356fa1b3c7f7e971436acab",
+    "exactMatch": true,
+    "sha256": "95EA3EF61E59A1C850FF516C1A827AE849521DCE3199307586E061AF97DB639D"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\viciisc\\vicii-fetch.c",
+    "relative": "vice/src/viciisc/vicii-fetch.c",
+    "expectedBlob": "dbc1324df8124eb04d3b472d1c8cd697f1748532",
+    "actualBlob": "dbc1324df8124eb04d3b472d1c8cd697f1748532",
+    "exactMatch": true,
+    "sha256": "83FE621BFD6C3F9AADFE7C725F02392BA04DB70C36248CDFEA88D79883BB21D0"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage-dxx.c",
+    "relative": "vice/src/diskimage/fsimage-dxx.c",
+    "expectedBlob": "001e2d021441d23311b741337560606fd005084a",
+    "actualBlob": "001e2d021441d23311b741337560606fd005084a",
+    "exactMatch": true,
+    "sha256": "7D2DAD50EEEE65644DE0EE2A45954EA5E7310474148CBF96B7AB18F787CA838E"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\diskimage.c",
+    "relative": "vice/src/diskimage/diskimage.c",
+    "expectedBlob": "911f2e364c615c91fd1f164c987faf624cfa072d",
+    "actualBlob": "911f2e364c615c91fd1f164c987faf624cfa072d",
+    "exactMatch": true,
+    "sha256": "DDC53B5EBC6BF181DDA9F1088B26A760ACA4DF9F5CBA138A9CFA730CEA42E251"
+  }
+]

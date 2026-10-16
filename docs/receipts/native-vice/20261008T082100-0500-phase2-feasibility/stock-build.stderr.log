@@ -1,0 +1,2 @@
+C:\msys64\mingw64\bin\ar.exe: `u' modifier ignored since `D' is the default (see `U')
+configure: error: libcurl (>= 7.66.0) support requested, but libcurl was not found.

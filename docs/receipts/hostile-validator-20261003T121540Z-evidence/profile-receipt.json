@@ -1,0 +1,33 @@
+{
+  "Tool": "PowerShell.MCP execute_command / Show-TextFiles",
+  "Skill": "C:\\Users\\kingd\\.codex\\skills\\add-profile\\SKILL.md",
+  "Count": 22,
+  "Files": [
+    "C:\\Users\\kingd\\.claude\\profile\\accuracy-first-verify-sources.md",
+    "C:\\Users\\kingd\\.claude\\profile\\add-profile.md",
+    "C:\\Users\\kingd\\.claude\\profile\\adversarial-review-global.md",
+    "C:\\Users\\kingd\\.claude\\profile\\approve-before-execute.md",
+    "C:\\Users\\kingd\\.claude\\profile\\bring-the-receipts.md",
+    "C:\\Users\\kingd\\.claude\\profile\\hostile-on-goal-state.md",
+    "C:\\Users\\kingd\\.claude\\profile\\hostile-ops-vs-requirements.md",
+    "C:\\Users\\kingd\\.claude\\profile\\hostile-phase-gates.md",
+    "C:\\Users\\kingd\\.claude\\profile\\hv-jsonl-and-session-log.md",
+    "C:\\Users\\kingd\\.claude\\profile\\kill-assumption-iteration.md",
+    "C:\\Users\\kingd\\.claude\\profile\\lab-authorization.md",
+    "C:\\Users\\kingd\\.claude\\profile\\log-decisions-as-conclusions.md",
+    "C:\\Users\\kingd\\.claude\\profile\\never-skip-explicit-actions.md",
+    "C:\\Users\\kingd\\.claude\\profile\\no-attitude-honesty-tell.md",
+    "C:\\Users\\kingd\\.claude\\profile\\no-python-lab.md",
+    "C:\\Users\\kingd\\.claude\\profile\\no-shortcuts-precision-over-convenience.md",
+    "C:\\Users\\kingd\\.claude\\profile\\philosophical-dialogue-mode.md",
+    "C:\\Users\\kingd\\.claude\\profile\\PROFILE.md",
+    "C:\\Users\\kingd\\.claude\\profile\\requirement-change-plan-first.md",
+    "C:\\Users\\kingd\\.claude\\profile\\session-turn-title-summary.md",
+    "C:\\Users\\kingd\\.claude\\profile\\user-payton-byrd.md",
+    "C:\\Users\\kingd\\.claude\\profile\\wireframe-app-visual-fidelity.md"
+  ],
+  "InitialLocal": "2026-10-03T07:19:02.8630651-05:00",
+  "InitialUtc": "2026-10-03T12:19:02.8683795+00:00",
+  "ReloadLocal": "2026-10-03T07:39:05.9959071-05:00",
+  "ReloadUtc": "2026-10-03T12:39:05.9959423Z"
+}

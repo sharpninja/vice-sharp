@@ -1,0 +1,2545 @@
+{
+  "schema": "vicesharp-tape-motor-contract/v1",
+  "status": "source-derived draft vectors, unexecuted and unapproved",
+  "preparedAtLocal": "2026-10-11T08:54:02.6646925-05:00",
+  "host": "PAYTON-LEGION2",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "baseProposalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+  "baseProposalSha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+  "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "sourcePins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+      "relative": "vice/src/datasette/datasette.c",
+      "gitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+      "sha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+      "matchesPinnedCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\alarm.h",
+      "relative": "vice/src/alarm.h",
+      "gitBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+      "sha256": "BFD69D427573607D5934678739DE781C7F846636AA08A65C8B6A8D53451BDD3C",
+      "matchesPinnedCommit": true
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ac-03",
+      "text": "A stopped motor with no pending alarm schedules the ordinary startup callback at current clock plus 32000; retain an existing alarm as VICE does. FORWARD/REWIND commands schedule their 1000-cycle alarm independently of motor-running state, including motor-on before and after that alarm dispatch. Compare ordered scheduled and actual events, not a pulse-duration getter. Also cover START while the motor is already running, with absent, read-only and writable media, with no pending alarm and with an existing pending alarm. The command reaches the start helper after resetting the gap: install t+32000 only when no alarm is pending, otherwise preserve the existing alarm; match attached-image seek, current-clock write-clock seeding and write-bit zeroing, including clock zero. Contrast START with running-motor FORWARD/REWIND, whose earlier t+1000 alarm survives the helper, and preserve any stop deadline that the command does not clear.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Motor-off on a running motor sets a stop deadline of current clock plus 32000 without immediate stopping or replacing an already pending alarm. Actual stopping occurs when a datasette callback observes the deadline reached. Cover callbacks before, at and beyond the deadline, active read rescheduling, STOP with a retained later alarm, repeated off preserving the deadline, and motor-on cancellation even after the deadline but before stop execution. A stopped motor starts again through the native pending-alarm rule. Explicitly include motor-on before the stop deadline and at the deadline before callback dispatch, preserving the already-running motor, pending alarm and write state while clearing the stop deadline; neither case starts a new ramp.",
+      "isSatisfied": false
+    }
+  ],
+  "requiredGroups": [
+    "FastWind_ExistingReadAlarm_Replaced",
+    "FastWind_MotorOnBeforePendingCallback",
+    "FastWind_MotorStopped_CallbackBeforeMotorOn",
+    "Start_CommandWhileMotorRunning_NoPendingAlarm",
+    "Start_CommandWhileMotorRunning_PendingAlarm",
+    "Startup_NoPendingAlarm_DeadlineBoundaries",
+    "Startup_PendingAlarm_NotOverwritten",
+    "MotorOff_NoPendingAlarm_StopsAtDeadline",
+    "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+    "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+    "MotorOff_RepeatedDoesNotExtend",
+    "MotorOff_StopModeWithExistingLateAlarm",
+    "MotorOn_AfterExecutedStop_Restarts",
+    "MotorOn_CancelsPendingStop",
+    "MotorOn_CancelsStopAfterDeadlineBeforeCallback"
+  ],
+  "vectorCount": 64,
+  "expandedProjectionCases": 366,
+  "scope": "motor/alarm state projection at routine boundary; does not establish whole tape behavior or real reachability",
+  "tupleContract": {
+    "motor": "native datasette_motor integer flag",
+    "stopClock": "native motor_stop_clk, zero sentinel",
+    "alarmAt": "null means no pending datasette alarm; zero means pending at clock zero",
+    "writeClock": "native last_write_clk, zero sentinel",
+    "writeBit": "native last_write_bit",
+    "mode": "current image mode if attached, otherwise notape_mode"
+  },
+  "commonPreconditions": [
+    "port and datasette alarm initialized",
+    "datasette enabled",
+    "event playback false and network disconnected",
+    "no implicit callback dispatch during observe or command actions",
+    "expand across each named machine and media variant independently",
+    "seeds must be reached and observed through approved real-provider public prelude or validated native snapshot before claiming real coverage"
+  ],
+  "seekFixture": {
+    "logicalSeek": 17,
+    "imageOffset": 20,
+    "physicalSeekBefore": 999,
+    "expectedSeek": 37,
+    "mediaLengthAtLeast": 1000,
+    "appliesTo": "SeekIfAttached vectors; not the separate active-read gap fixture",
+    "materialized": false
+  },
+  "activeReadFixture": {
+    "behaviour": "regular C64/VIC20",
+    "tapVersion": 1,
+    "payloadBytes": [
+      0,
+      0,
+      16,
+      0
+    ],
+    "decodedGap": 4096,
+    "speedTuning": 0,
+    "wobbleFrequency": 0,
+    "wobbleAmplitude": 0,
+    "azimuthError": 0,
+    "lastDirection": 1,
+    "longGapPending": 0,
+    "longGapElapsed": 0,
+    "fullwave": 0,
+    "expectedLogicalCursorDelta": 4,
+    "expectedCycleCounterDelta": 512,
+    "expectedLongGapElapsed": 4096,
+    "containerAndFollowingDataPinned": false,
+    "realReadTraceAvailable": false
+  },
+  "eventArgumentRules": {
+    "AlarmSet": "expectedAfter.alarmAt",
+    "AlarmSetStopDeadline": "expectedAfter.stopClock, including duplicate calls",
+    "AlarmSetNextRead": "expectedAfter.alarmAt",
+    "AlarmUnset": "consume the pending datasette alarm before deadline comparison",
+    "SeekIfAttached": "none: no seek; read-only or writable: fd seek to logicalSeek+imageOffset",
+    "MotorUiOn": 1,
+    "MotorUiOff": 0,
+    "MotorFlagOn": 1,
+    "MotorFlagOff": 0,
+    "FluxBeforeGap": 0,
+    "ReadGap4096": 4096,
+    "SoundGap4096": 4096
+  },
+  "vectors": [
+    {
+      "id": "startup-none-0",
+      "group": "Startup_NoPendingAlarm_DeadlineBoundaries",
+      "acId": "ac-03",
+      "action": "motor-on",
+      "clock": 0,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 32000,
+        "writeClock": 0,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "startup-none-100000",
+      "group": "Startup_NoPendingAlarm_DeadlineBoundaries",
+      "acId": "ac-03",
+      "action": "motor-on",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "startup-pending-0",
+      "group": "Startup_PendingAlarm_NotOverwritten",
+      "acId": "ac-03",
+      "action": "motor-on",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 0,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 0,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "startup-pending-100500",
+      "group": "Startup_PendingAlarm_NotOverwritten",
+      "acId": "ac-03",
+      "action": "motor-on",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 100500,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 100500,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-0-0-none",
+      "group": "Start_CommandWhileMotorRunning_NoPendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 0,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 32000,
+        "writeClock": 0,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-0-0-500",
+      "group": "Start_CommandWhileMotorRunning_PendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 0,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 500,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 500,
+        "writeClock": 0,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-0-0-50000",
+      "group": "Start_CommandWhileMotorRunning_PendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 0,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 50000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 50000,
+        "writeClock": 0,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-0-32000-none",
+      "group": "Start_CommandWhileMotorRunning_NoPendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 0,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 32000,
+        "alarmAt": null,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 32000,
+        "alarmAt": 32000,
+        "writeClock": 0,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-0-32000-500",
+      "group": "Start_CommandWhileMotorRunning_PendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 0,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 32000,
+        "alarmAt": 500,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 32000,
+        "alarmAt": 500,
+        "writeClock": 0,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-0-32000-50000",
+      "group": "Start_CommandWhileMotorRunning_PendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 0,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 32000,
+        "alarmAt": 50000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 32000,
+        "alarmAt": 50000,
+        "writeClock": 0,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-100000-0-none",
+      "group": "Start_CommandWhileMotorRunning_NoPendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-100000-0-100500",
+      "group": "Start_CommandWhileMotorRunning_PendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 100500,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 100500,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-100000-0-150000",
+      "group": "Start_CommandWhileMotorRunning_PendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-100000-132000-none",
+      "group": "Start_CommandWhileMotorRunning_NoPendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-100000-132000-100500",
+      "group": "Start_CommandWhileMotorRunning_PendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 100500,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 100500,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "start-100000-132000-150000",
+      "group": "Start_CommandWhileMotorRunning_PendingAlarm",
+      "acId": "ac-03",
+      "action": "command-START",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-FORWARD-0-none",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-FORWARD",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-FORWARD-0-150000",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-FORWARD",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-FORWARD-1-none",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-FORWARD",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet",
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-FORWARD-1-150000",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-FORWARD",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet",
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-preserves-stop-FORWARD",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-FORWARD",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 101000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet",
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-on-before-FORWARD",
+      "group": "FastWind_MotorOnBeforePendingCallback",
+      "acId": "ac-03",
+      "action": "motor-on",
+      "clock": 100100,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "FORWARD"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 100100,
+        "writeBit": 0,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-callback-running-notape-FORWARD",
+      "group": "FastWind_MotorOnBeforePendingCallback",
+      "acId": "ac-03",
+      "action": "callback",
+      "clock": 101000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 100100,
+        "writeBit": 0,
+        "mode": "FORWARD"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 100100,
+        "writeBit": 0,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-callback-stopped-FORWARD",
+      "group": "FastWind_MotorStopped_CallbackBeforeMotorOn",
+      "acId": "ac-03",
+      "action": "callback",
+      "clock": 101000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "FORWARD"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-on-after-FORWARD",
+      "group": "FastWind_MotorStopped_CallbackBeforeMotorOn",
+      "acId": "ac-03",
+      "action": "motor-on",
+      "clock": 101001,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "FORWARD"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 133001,
+        "writeClock": 101001,
+        "writeBit": 0,
+        "mode": "FORWARD"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-REWIND-0-none",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-REWIND",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-REWIND-0-150000",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-REWIND",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-REWIND-1-none",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-REWIND",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet",
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-REWIND-1-150000",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-REWIND",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet",
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-preserves-stop-REWIND",
+      "group": "FastWind_ExistingReadAlarm_Replaced",
+      "acId": "ac-03",
+      "action": "command-REWIND",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 101000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet",
+        "SeekIfAttached"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-on-before-REWIND",
+      "group": "FastWind_MotorOnBeforePendingCallback",
+      "acId": "ac-03",
+      "action": "motor-on",
+      "clock": 100100,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "REWIND"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 100100,
+        "writeBit": 0,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-callback-running-notape-REWIND",
+      "group": "FastWind_MotorOnBeforePendingCallback",
+      "acId": "ac-03",
+      "action": "callback",
+      "clock": 101000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 100100,
+        "writeBit": 0,
+        "mode": "REWIND"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 100100,
+        "writeBit": 0,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-callback-stopped-REWIND",
+      "group": "FastWind_MotorStopped_CallbackBeforeMotorOn",
+      "acId": "ac-03",
+      "action": "callback",
+      "clock": 101000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": 101000,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "REWIND"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "fast-on-after-REWIND",
+      "group": "FastWind_MotorStopped_CallbackBeforeMotorOn",
+      "acId": "ac-03",
+      "action": "motor-on",
+      "clock": 101001,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 0,
+        "writeBit": 1,
+        "mode": "REWIND"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 133001,
+        "writeClock": 101001,
+        "writeBit": 0,
+        "mode": "REWIND"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "startup-observe-131999",
+      "group": "Startup_NoPendingAlarm_DeadlineBoundaries",
+      "acId": "ac-03",
+      "action": "observe-without-dispatch",
+      "clock": 131999,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "startup-observe-132000",
+      "group": "Startup_NoPendingAlarm_DeadlineBoundaries",
+      "acId": "ac-03",
+      "action": "observe-without-dispatch",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "startup-callback-stop-mode",
+      "group": "Startup_NoPendingAlarm_DeadlineBoundaries",
+      "acId": "ac-03",
+      "action": "callback",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 100000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-none",
+      "group": "MotorOff_NoPendingAlarm_StopsAtDeadline",
+      "acId": "ac-04",
+      "action": "motor-off",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmSet"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-observe-131999",
+      "group": "MotorOff_NoPendingAlarm_StopsAtDeadline",
+      "acId": "ac-04",
+      "action": "observe-without-dispatch",
+      "clock": 131999,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-observe-132000",
+      "group": "MotorOff_NoPendingAlarm_StopsAtDeadline",
+      "acId": "ac-04",
+      "action": "observe-without-dispatch",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-callback-0",
+      "group": "MotorOff_NoPendingAlarm_StopsAtDeadline",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "MotorUiOff",
+        "MotorFlagOff"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-callback-10",
+      "group": "MotorOff_NoPendingAlarm_StopsAtDeadline",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 132010,
+      "callbackOffset": 10,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "MotorUiOff",
+        "MotorFlagOff"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-late-START",
+      "group": "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+      "acId": "ac-04",
+      "action": "motor-off",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-late-callback-START",
+      "group": "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 150000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "MotorUiOff",
+        "MotorFlagOff"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-late-STOP",
+      "group": "MotorOff_StopModeWithExistingLateAlarm",
+      "acId": "ac-04",
+      "action": "motor-off",
+      "clock": 100000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-late-callback-STOP",
+      "group": "MotorOff_StopModeWithExistingLateAlarm",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 150000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "MotorUiOff",
+        "MotorFlagOff"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-repeat-100100",
+      "group": "MotorOff_RepeatedDoesNotExtend",
+      "acId": "ac-04",
+      "action": "motor-off",
+      "clock": 100100,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-repeat-132000",
+      "group": "MotorOff_RepeatedDoesNotExtend",
+      "acId": "ac-04",
+      "action": "motor-off",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "off-repeat-132001",
+      "group": "MotorOff_RepeatedDoesNotExtend",
+      "acId": "ac-04",
+      "action": "motor-off",
+      "clock": 132001,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "cancel-131999-132000",
+      "group": "MotorOn_CancelsPendingStop",
+      "acId": "ac-04",
+      "action": "motor-on",
+      "clock": 131999,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "cancel-131999-150000",
+      "group": "MotorOn_CancelsPendingStop",
+      "acId": "ac-04",
+      "action": "motor-on",
+      "clock": 131999,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "cancel-132000-132000",
+      "group": "MotorOn_CancelsPendingStop",
+      "acId": "ac-04",
+      "action": "motor-on",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "cancel-132000-150000",
+      "group": "MotorOn_CancelsPendingStop",
+      "acId": "ac-04",
+      "action": "motor-on",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "cancel-132001-132000",
+      "group": "MotorOn_CancelsStopAfterDeadlineBeforeCallback",
+      "acId": "ac-04",
+      "action": "motor-on",
+      "clock": 132001,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "cancel-132001-150000",
+      "group": "MotorOn_CancelsStopAfterDeadlineBeforeCallback",
+      "acId": "ac-04",
+      "action": "motor-on",
+      "clock": 132001,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 150000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "callback-after-cancel",
+      "group": "MotorOn_CancelsStopAfterDeadlineBeforeCallback",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 132001,
+      "callbackOffset": 1,
+      "before": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "callback-before-restart",
+      "group": "MotorOn_AfterExecutedStop_Restarts",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "MotorUiOff",
+        "MotorFlagOff"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "restart-after-callback",
+      "group": "MotorOn_AfterExecutedStop_Restarts",
+      "acId": "ac-04",
+      "action": "motor-on",
+      "clock": 132000,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 0,
+        "alarmAt": 164000,
+        "writeClock": 132000,
+        "writeBit": 0,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "SeekIfAttached",
+        "AlarmSet",
+        "MotorUiOn",
+        "MotorFlagOn"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "early-read-0",
+      "group": "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+      "acId": "ac-04",
+      "action": "callback-gap4096",
+      "clock": 131900,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 131900,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 135996,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "AlarmSetStopDeadline",
+        "FluxBeforeGap",
+        "ReadGap4096",
+        "SoundGap4096",
+        "AlarmSetNextRead"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "early-read-8",
+      "group": "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+      "acId": "ac-04",
+      "action": "callback-gap4096",
+      "clock": 131900,
+      "callbackOffset": 8,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 131892,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 135988,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "AlarmSetStopDeadline",
+        "FluxBeforeGap",
+        "ReadGap4096",
+        "SoundGap4096",
+        "AlarmSetNextRead"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "stop-at-replaced-read-alarm",
+      "group": "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 135996,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 135996,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "MotorUiOff",
+        "MotorFlagOff"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "early-stop-attached",
+      "group": "MotorOff_StopModeWithExistingLateAlarm",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 131900,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 131900,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "AlarmSetStopDeadline"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "early-stop-notape",
+      "group": "MotorOff_StopModeWithExistingLateAlarm",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 131900,
+      "callbackOffset": 0,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 131900,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "expectedAfter": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 132000,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "STOP"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "AlarmSetStopDeadline",
+        "AlarmSetStopDeadline"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none"
+      ],
+      "testExecuted": false
+    },
+    {
+      "id": "late-early-read-dispatched-at-stop",
+      "group": "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+      "acId": "ac-04",
+      "action": "callback",
+      "clock": 132000,
+      "callbackOffset": 100,
+      "before": {
+        "motor": 1,
+        "stopClock": 132000,
+        "alarmAt": 131900,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "expectedAfter": {
+        "motor": 0,
+        "stopClock": 0,
+        "alarmAt": null,
+        "writeClock": 99000,
+        "writeBit": 1,
+        "mode": "START"
+      },
+      "orderedMotorAlarmCalls": [
+        "AlarmUnset",
+        "MotorUiOff",
+        "MotorFlagOff"
+      ],
+      "machines": [
+        "C64",
+        "VIC20"
+      ],
+      "media": [
+        "none",
+        "read-only",
+        "writable"
+      ],
+      "testExecuted": false
+    }
+  ],
+  "negativeControls": [
+    "Mutate each changed tuple field separately.",
+    "Mutate each required unchanged tuple sentinel separately.",
+    "Omit, duplicate, reorder or alter the clock/argument of each ordered event.",
+    "Replace null alarm with zero or zero with null.",
+    "Stop immediately on motor-off.",
+    "Renew the deadline on repeated motor-off.",
+    "Maintain a second stop alarm after an early read replaces it.",
+    "Overwrite a pending startup alarm.",
+    "Retain the old alarm after FORWARD/REWIND.",
+    "Reset write state on already-running motor-on.",
+    "Fail to reset/reseed write state on START.",
+    "Force nonzero writeClock when action clock is zero.",
+    "Use callback scheduled clock instead of actual clock to check stop deadline.",
+    "Collapse on-before-callback and callback-before-on at the same clock.",
+    "Skip read-only or no-media expansions where explicitly required."
+  ],
+  "openObligations": [
+    "The other26 groups covering the other6 tape criteria remain required.",
+    "Attached-media fast-wind callback speed/cursor/next-alarm traces remain required beyond these pre-callback vectors.",
+    "Full TAP container, buffer/file cursor and native public-operation preludes are not materialized here.",
+    "No accepted external observer or real-provider binding is supplied by this document.",
+    "No tests, mocks, negative controls, real emulation or new HV ran.",
+    "Whole corrected packet requires HV and exact expanded-delta approval before implementation."
+  ],
+  "testCounts": {
+    "real": 0,
+    "mock": 0,
+    "negativeControls": 0
+  },
+  "requirementWrites": 0,
+  "applicationAuthorized": false,
+  "acceptanceClaimed": false
+}

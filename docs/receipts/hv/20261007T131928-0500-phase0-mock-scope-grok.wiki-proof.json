@@ -1,0 +1,16 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+    "projection": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Immutable-Native-VICE.md",
+    "sourceSha256": "B01E231E477468D67D99FF0A33EA9A758EFA0B79DC78681F20F9F503F83847E0",
+    "projectionSha256": "B01E231E477468D67D99FF0A33EA9A758EFA0B79DC78681F20F9F503F83847E0",
+    "equal": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+    "projection": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Native-VICE-VSF-Lockstep.md",
+    "sourceSha256": "C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183",
+    "projectionSha256": "C15DA385A6F327191581F7B112F4838AA7644CA51A50F1D81EEDDD57E576D183",
+    "equal": true
+  }
+]

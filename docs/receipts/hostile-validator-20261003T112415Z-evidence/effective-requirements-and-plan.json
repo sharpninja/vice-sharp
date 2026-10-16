@@ -1,0 +1,118 @@
+{
+  "functional": [
+    {
+      "scopeStartLayerKey": "layer-1",
+      "id": "FR-SNP-003",
+      "priority": "medium",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "title": "Deterministic Input Replay",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "text": "Recording mode captures all external input events with their precise frame and cycle timestamps.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-02",
+          "text": "Playback mode loads a base snapshot and replays the recorded input events.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-03",
+          "text": "Playback produces bit-exact results: the same memory contents, same VIC-II output, same audio output as the original recording at every point.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-04",
+          "text": "The replay format stores: base snapshot reference, input event stream (event type, frame number, cycle within frame, value).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-05",
+          "text": "Replay can be paused, single-stepped, and fast-forwarded.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-06",
+          "text": "The `IReplayEngine` interface provides record/playback/seek operations.",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-07",
+          "text": "Replay files are compact (only input events are stored, not full state per frame).",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-08",
+          "text": "Seeking to an arbitrary frame is supported via periodic auto-snapshots during recording.",
+          "isSatisfied": false
+        }
+      ],
+      "body": "The emulator shall support recording input events (keyboard, joystick, timing) from a starting snapshot and replaying them to reproduce the exact same execution. This enables tool-assisted speedruns (TAS), automated testing, and bug reproduction.\n\n## Acceptance Criteria\n- Recording mode captures all external input events with their precise frame and cycle timestamps.\n- Playback mode loads a base snapshot and replays the recorded input events.\n- Playback produces bit-exact results: the same memory contents, same VIC-II output, same audio output as the original recording at every point.\n- The replay format stores: base snapshot reference, input event stream (event type, frame number, cycle within frame, value).\n- Replay can be paused, single-stepped, and fast-forwarded.\n- The `IReplayEngine` interface provides record/playback/seek operations.\n- Replay files are compact (only input events are stored, not full state per frame).\n- Seeking to an arbitrary frame is supported via periodic auto-snapshots during recording.",
+      "status": "pending"
+    }
+  ],
+  "technical": [
+    {
+      "scopeStartLayerKey": "layer-1",
+      "id": "TR-STATE-001",
+      "priority": "high",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "title": "Mutation Queue with ACID State Transactions and Configurable State Window",
+      "acceptanceCriteria": [],
+      "body": "All mutations to emulated machine state shall be performed through a mutation queue that provides ACID-like transaction semantics. State changes within a single emulation step (one clock cycle or one instruction) are grouped into a transaction that is either fully applied or fully rolled back. A configurable state window maintains a ring buffer of recent states to support rewind, debugging, and snapshot operations.",
+      "status": "pending"
+    }
+  ],
+  "testing": [
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "condition": "Save/load, deterministic replay, and state diff behavior are verified through round-trip and byte/trace comparison tests.",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TEST-SNP-001",
+      "priority": "medium",
+      "title": "Snapshot and Replay Tests",
+      "acceptanceCriteria": [],
+      "status": "pending"
+    }
+  ],
+  "mapping": [
+    {
+      "testIds": [
+        "TEST-SNP-001"
+      ],
+      "trIds": [
+        "TR-STATE-001"
+      ],
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-SNP-003"
+    }
+  ],
+  "plan": {
+    "technicalRequirements": [
+      "TR-SETTINGS-TXN-001",
+      "TR-UIAXAML-PICKER-001",
+      "TR-WARP-STATUS-001"
+    ],
+    "technicalDetails": [
+      "Approved continuation PLAN-GROKCOMPLETION-001; AC matrix docs/requirements/traceability/Grok-Completion-AC-Matrix-2026-09-06.md; tests TEST-SETTINGS-TXN-001, TEST-UISET-001/002/003, TEST-COMPLETION-001."
+    ],
+    "done": false,
+    "section": "Backlog",
+    "description": [
+      "Avalonia Settings Computer+Model dropdowns like Xbox; hide VIC-20-only controls on C64 and vice-versa; RemoteControl validation of C64 variants (c64, c64c, ntsc at minimum) including PAL/NTSC CLOCK, Warp, shared inventory."
+    ],
+    "functionalRequirements": [
+      "FR-MACHINEPICKER-001",
+      "FR-SETTINGS-TXN-001",
+      "FR-UISETVIS-001",
+      "FR-WARP-001"
+    ],
+    "remaining": "Approved completion plan slices 4/5/8 pending; requirements reconciled, no implementation completion claimed.",
+    "title": "C64 Settings RC, Computer/Model dropdowns, family visibility",
+    "priority": "High",
+    "id": "PLAN-C64SET-001",
+    "dependsOn": [],
+    "implementationTasks": []
+  }
+}

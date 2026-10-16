@@ -1,0 +1,21 @@
+{
+  "startedLocal": "2026-10-08T11:07:23.6770914-05:00",
+  "executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\xvic-gate-probe.exe",
+  "executableSha256": "A15ED9740135D4E95A2594D8155E2FC807B45453FFCF525E731DEDF02733FF60",
+  "arguments": [
+    "-default",
+    "-console",
+    "-sound",
+    "-sounddev",
+    "dummy",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data"
+  ],
+  "workingDirectory": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src",
+  "permissions": 16,
+  "finalCommand": "quit",
+  "expectedExit": 67
+}

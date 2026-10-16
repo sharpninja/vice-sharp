@@ -14,8 +14,7 @@ public sealed class Vic20NativeAudioExportTests
     [Fact]
     public void RenderVic20Samples_AfterReset_ReturnsSamples()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();

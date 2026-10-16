@@ -1,0 +1,96 @@
+{
+  "duration_api_ms": 48133,
+  "stop_reason": "stop_sequence",
+  "session_id": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008",
+  "total_cost_usd": 0.6094724,
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 31791,
+    "cache_read_input_tokens": 1226422,
+    "output_tokens": 5491,
+    "output_tokens_details": {
+      "thinking_tokens": 3668
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 31791,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 509,
+        "cache_read_input_tokens": 258827,
+        "cache_creation_input_tokens": 9441,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9441
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 5491,
+      "cacheReadInputTokens": 1226422,
+      "cacheCreationInputTokens": 31791,
+      "webSearchRequests": 0,
+      "costUSD": 0.6094724,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3668,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "api_error",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": true,
+  "num_turns": 27,
+  "subtype": "success",
+  "api_error_status": 429,
+  "api_error": "usage_limit_reached",
+  "result": "You've hit your session limit · resets 11:50am (America/Chicago)",
+  "type": "result",
+  "duration_ms": 60663,
+  "uuid": "3c8273c3-1d7c-4e62-ba48-1c91fa70df67",
+  "queued_turn_count": 0,
+  "result_index": 0
+}

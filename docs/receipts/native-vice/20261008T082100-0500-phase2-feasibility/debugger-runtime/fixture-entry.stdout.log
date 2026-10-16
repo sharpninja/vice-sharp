@@ -1,0 +1,37 @@
+
+Microsoft (R) Windows Debugger Version 10.0.19041.685 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+CommandLine: "F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-probe-evidence\clock-probe.exe" 7 11
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+Symbol search path is: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+Executable search path is: 
+ModLoad: 00007ff6`1b790000 00007ff6`1b7d4000   image00007ff6`1b790000
+ModLoad: 00007fff`ad980000 00007fff`adbe7000   ntdll.dll
+ModLoad: 00007fff`ac1f0000 00007fff`ac2bb000   C:\WINDOWS\System32\KERNEL32.DLL
+ModLoad: 00007fff`aae30000 00007fff`ab232000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`ac8c0000 00007fff`ac969000   C:\WINDOWS\System32\msvcrt.dll
+(9e64.1aa64): Break instruction exception - code 80000003 (first chance)
+ntdll!RtlGetReturnAddressHijackTarget+0x749:
+00007fff`adaa2239 cc              int     3
+0:000> .echo FIXTURE_HARDWARE_ENTRY_BEGIN
+FIXTURE_HARDWARE_ENTRY_BEGIN
+0:000> ? @$exentry
+Evaluate expression: 140694999602176 = 00007ff6`1b791400
+0:000> ba e1 @$exentry ".echo FIXTURE_HARDWARE_ENTRY_HIT; r rip; bl; bc *; q"
+0:000> bl
+ 0 e 00007ff6`1b791400 e 1 0001 (0001)  0:**** clock_probe+0x1400 ".echo FIXTURE_HARDWARE_ENTRY_HIT; r rip; bl; bc *; q"
+0:000> g
+real,7
+observe,11
+end,11
+ntdll!NtTerminateProcess+0x14:
+00007fff`adae1344 c3              ret
+0:000> 

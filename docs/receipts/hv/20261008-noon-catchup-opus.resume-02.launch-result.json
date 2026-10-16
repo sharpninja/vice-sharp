@@ -1,0 +1,21 @@
+{
+  "timestampLocal": "2026-10-08T12:00:36.0630518-05:00",
+  "pid": 117120,
+  "hasExited": false,
+  "cliSessionId": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "inputPinsChecked": 826,
+  "inputMismatches": 0,
+  "originalPinsChecked": 59,
+  "originalChangedPins": 3,
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.request.jsonl",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.response.jsonl",
+  "requestSha256": "5FBE7BCAED27CB1BA15CEF2A16E472C254F907015B74DE09C167294878810176",
+  "promptSha256": "5FA2024B70C823C59802B47B681B7D6A7BC4D98D6DFB0E4576FDE3D833C1BA48",
+  "environmentIsolationApplied": true,
+  "artificialTurnLimit": null,
+  "artificialTimeout": null,
+  "completionPercent": null,
+  "eta": null
+}

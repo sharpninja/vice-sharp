@@ -1,0 +1,50 @@
+{
+  "startedLocal": "2026-10-08T11:08:03.3938847-05:00",
+  "executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\xvic-gate-probe.exe",
+  "executableSha256": "A15ED9740135D4E95A2594D8155E2FC807B45453FFCF525E731DEDF02733FF60",
+  "arguments": [
+    "-default",
+    "-console",
+    "-sound",
+    "-sounddev",
+    "dummy",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data"
+  ],
+  "workingDirectory": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src",
+  "permissions": 0,
+  "finalCommand": "uppercase",
+  "expectedExit": 68,
+  "pid": 44412,
+  "exitCode": 68,
+  "endedLocal": "2026-10-08T11:08:03.7174086-05:00",
+  "completed": true,
+  "failure": null,
+  "forcedTermination": false,
+  "clocks": [
+    7
+  ],
+  "events": [
+    {
+      "timestampLocal": "2026-10-08T11:08:03.4521104-05:00",
+      "kind": "observed",
+      "index": 0,
+      "clock": 7
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:03.7103740-05:00",
+      "kind": "permission-withheld",
+      "index": 0,
+      "milliseconds": 258.0182
+    },
+    {
+      "timestampLocal": "2026-10-08T11:08:03.7105281-05:00",
+      "kind": "terminal-command",
+      "command": "uppercase"
+    }
+  ],
+  "scope": "Post-vic_cycle callback permission only; not complete device freeze, bus trace or parity acceptance."
+}

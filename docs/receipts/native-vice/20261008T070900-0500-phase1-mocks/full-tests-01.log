@@ -1,0 +1,90 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.OracleContract.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\bin\Release\net10.0\ViceSharp.OracleContract.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\bin\Release\net10.0\ViceSharp.OracleContract.Tests.dll (.NETCoreApp,Version=v10.0)
+Logging Vstest Diagnostics in file: F:\GitHub\vice-sharp\TestResults\vice-immutable-phase1\vstest.diag.log
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.63]     ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "empty", accepted: False, error: "ObservationMissing", firstError: 36) [FAIL]
+[xUnit.net 00:00:01.64]     ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "leading", accepted: False, error: "ObservationMissing", firstError: 36) [FAIL]
+[xUnit.net 00:00:01.64]     ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "extra", accepted: False, error: "UnexpectedObservation", firstError: 39) [FAIL]
+[xUnit.net 00:00:01.65]     ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "trailing", accepted: False, error: "ObservationMissing", firstError: 38) [FAIL]
+  Failed ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "empty", accepted: False, error: "ObservationMissing", firstError: 36) [< 1 ms]
+  Error Message:
+   System.ArgumentException : Object of type 'System.Int32' cannot be converted to type 'System.Nullable`1[System.Int64]'.
+  Stack Trace:
+     at System.RuntimeType.CheckValue(Object& value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+--- End of stack trace from previous location ---
+  Failed ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "leading", accepted: False, error: "ObservationMissing", firstError: 36) [< 1 ms]
+  Error Message:
+   System.ArgumentException : Object of type 'System.Int32' cannot be converted to type 'System.Nullable`1[System.Int64]'.
+  Stack Trace:
+     at System.RuntimeType.CheckValue(Object& value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+--- End of stack trace from previous location ---
+  Failed ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "extra", accepted: False, error: "UnexpectedObservation", firstError: 39) [< 1 ms]
+  Error Message:
+   System.ArgumentException : Object of type 'System.Int32' cannot be converted to type 'System.Nullable`1[System.Int64]'.
+  Stack Trace:
+     at System.RuntimeType.CheckValue(Object& value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+--- End of stack trace from previous location ---
+  Failed ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "trailing", accepted: False, error: "ObservationMissing", firstError: 38) [< 1 ms]
+  Error Message:
+   System.ArgumentException : Object of type 'System.Int32' cannot be converted to type 'System.Nullable`1[System.Int64]'.
+  Stack Trace:
+     at System.RuntimeType.CheckValue(Object& value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:01.66]     ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "duplicate-gap", accepted: False, error: "ObservationMissing", firstError: 37) [FAIL]
+[xUnit.net 00:00:01.67]     ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "duplicate-complete", accepted: False, error: "SequenceOrder", firstError: 37) [FAIL]
+[xUnit.net 00:00:01.68]     ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "interior", accepted: False, error: "ObservationMissing", firstError: 37) [FAIL]
+[xUnit.net 00:00:01.68]     ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "out-of-order", accepted: False, error: "ObservationMissing", firstError: 37) [FAIL]
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+  Failed ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "duplicate-gap", accepted: False, error: "ObservationMissing", firstError: 37) [< 1 ms]
+  Error Message:
+   System.ArgumentException : Object of type 'System.Int32' cannot be converted to type 'System.Nullable`1[System.Int64]'.
+  Stack Trace:
+     at System.RuntimeType.CheckValue(Object& value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+--- End of stack trace from previous location ---
+  Failed ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "duplicate-complete", accepted: False, error: "SequenceOrder", firstError: 37) [< 1 ms]
+  Error Message:
+   System.ArgumentException : Object of type 'System.Int32' cannot be converted to type 'System.Nullable`1[System.Int64]'.
+  Stack Trace:
+     at System.RuntimeType.CheckValue(Object& value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+--- End of stack trace from previous location ---
+  Failed ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "interior", accepted: False, error: "ObservationMissing", firstError: 37) [< 1 ms]
+  Error Message:
+   System.ArgumentException : Object of type 'System.Int32' cannot be converted to type 'System.Nullable`1[System.Int64]'.
+  Stack Trace:
+     at System.RuntimeType.CheckValue(Object& value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+--- End of stack trace from previous location ---
+  Failed ViceSharp.OracleContract.Tests.CpuPhi2AecContractTests.IntervalMustBeCompleteAndOrdered(scenario: "out-of-order", accepted: False, error: "ObservationMissing", firstError: 37) [< 1 ms]
+  Error Message:
+   System.ArgumentException : Object of type 'System.Int32' cannot be converted to type 'System.Nullable`1[System.Int64]'.
+  Stack Trace:
+     at System.RuntimeType.CheckValue(Object& value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+--- End of stack trace from previous location ---
+Results File: F:\GitHub\vice-sharp\TestResults\vice-immutable-phase1\phase1-oracle-contracts.trx
+
+Failed!  - Failed:     8, Passed:    74, Skipped:     0, Total:    82, Duration: 210 ms - ViceSharp.OracleContract.Tests.dll (net10.0)

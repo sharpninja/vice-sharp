@@ -1,0 +1,26 @@
+{
+  "timestampLocal": "2026-10-08T09:10:08.1083483-05:00",
+  "pid": 58152,
+  "executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\xvic.exe",
+  "sha256": "C01442BC1F15DD8C7006FABE0D35DFA9707664A3120DD1FA014A51EEB481B92C",
+  "arguments": [
+    "-default",
+    "-console",
+    "+sound",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data",
+    "-monlog",
+    "-monlogname",
+    "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\xvic-02\\load-monitor.log",
+    "-logfile",
+    "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\xvic-02\\load-vice.log",
+    "-initbreak",
+    "reset",
+    "-moncommands",
+    "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\load-step.mon"
+  ],
+  "workingDirectory": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\xvic-02"
+}

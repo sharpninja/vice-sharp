@@ -1,0 +1,22 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+    "launchSnapshotSha256": "24BC7C35F8A9BF565CECBFFDD7422CAFB300B4A6C387E812C90054FB026F197A",
+    "currentSha256": "E5777C5847ED42A9E856B7F155AB85C6178432696879F655BDDD6711D30869D6",
+    "reconstructedPriorSha256": "24BC7C35F8A9BF565CECBFFDD7422CAFB300B4A6C387E812C90054FB026F197A",
+    "reconstructionMatches": true,
+    "exactInsertedParagraph": "Operator fallback directive, 2026-10-07: \"If you genuinely cannot save to MCP, you must use the fallback.\" Attempt the supported primary save first. On a genuine persistence failure, preserve the complete record, including the entire HV verdict where applicable, through the supported failsafe queue and continue under this authorization. Report the exact failure, queued path, and verification evidence; distinguish local retention from primary persistence and replay/read back when available. Do not bypass the plugin, edit storage directly, discard records, summarize away verdict content, or treat a queued requirement mutation as a confirmed primary update. This supersedes the older stop-only behavior for inability to save to MCP.",
+    "reason": "Direct human fallback authorization received during Opus review; original review receipts retained unchanged.",
+    "mcpTurn": "req-20261007T171225Z-prompt-3b07"
+  },
+  {
+    "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+    "launchSnapshotSha256": "8BC3A6818E5B0276870A22ACC559874BFE66FD6322A8C4B5F6E80B3571F373EC",
+    "currentSha256": "AC8B715D6BA30DDAABEC1F6A53E88667334570347617DFBAEC8A8764C81BFCBF",
+    "reconstructedPriorSha256": "8BC3A6818E5B0276870A22ACC559874BFE66FD6322A8C4B5F6E80B3571F373EC",
+    "reconstructionMatches": true,
+    "exactInsertedParagraph": "Operator fallback directive: \"If you genuinely cannot save to MCP, you must use the fallback.\" Attempt supported primary persistence first. If it genuinely fails, retain the complete record through the supported failsafe flow, including full HV verdict content, and continue under this authorization. Report the actual failure, exact queue path and verification evidence, with primary persistence explicitly unconfirmed until replay and readback. This changes the response to a persistence outage, not product acceptance criteria or the HV score threshold. Never substitute raw REST, direct storage edits, a summary-only verdict, or an unverified claim of primary storage.",
+    "reason": "Direct human fallback authorization received during Opus review; original review receipts retained unchanged.",
+    "mcpTurn": "req-20261007T171225Z-prompt-3b07"
+  }
+]

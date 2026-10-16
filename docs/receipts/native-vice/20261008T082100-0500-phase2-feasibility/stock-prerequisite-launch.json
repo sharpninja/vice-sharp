@@ -1,0 +1,7 @@
+{
+  "timestampLocal": "2026-10-08T08:41:54.7531428-05:00",
+  "pid": 68512,
+  "package": "mingw-w64-x86_64-curl",
+  "source": "Pinned VICE Windows-MinGW-GTK3-Howto.txt prerequisites",
+  "script": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\install-stock-prerequisite.sh"
+}

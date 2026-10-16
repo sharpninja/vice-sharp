@@ -1,0 +1,44 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\README.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\01-README.md.before",
+    "sha256": "B057DDED56B737134D8172CB11AE6812836BF8EF7ACBC7E1B49DB6DC3C631EFD",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\02-gate-observer.c.before",
+    "sha256": "F3BFC89E125B762219EA1E7FCF7A6F12920ED634A7F61858A256178CDB3F6380",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\README.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\03-README.md.before",
+    "sha256": "E78BCE1078203D4846C0D184598FB79FDDC2595C77D485AE2437712C4EF8F0D7",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-runtime\\README.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\04-README.md.before",
+    "sha256": "6C823247BFA1A650B9C6DB98F6361A4FCA738AE5556018AA13A961EA8FC51BBB",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.VsfCompatibility.Tests\\BINARY-MONITOR-SLICE.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\05-BINARY-MONITOR-SLICE.md.before",
+    "sha256": "1A07A9E0C999115BB760719DD813A1C9362172989DAC5B4FFC833DD223234E3C",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\06-GATE-SLICE.md.before",
+    "sha256": "F07C0E3C7A779166A8E90D01442408F0A1404DB505037A658043C685E1FBCFDB",
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\07-HANDOFF.md.before",
+    "sha256": "9D426177B811D91AFFE965EFC62604E5216103BAE5C9DF5D75241ECE5E677AAC",
+    "verified": true
+  }
+]

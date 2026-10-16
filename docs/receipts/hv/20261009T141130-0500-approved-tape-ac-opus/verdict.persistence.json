@@ -1,0 +1,71 @@
+{
+  "receiptType": "hostile-validation-persistence-proof",
+  "timestampLocal": "2026-10-09T14:59:16-05:00",
+  "reviewer": "ClaudeCode claude-opus-5-5 (Claude Opus 5.5) effort max",
+  "sessionId": "ClaudeCode-20261009T191359Z-plugin-session",
+  "requestId": "req-20261009T191402Z-prompt-e6c7",
+  "method": "mcpserver plugin 1.119.0: workflow.sessionlog.updateTurn, appendDialog (x2), appendActions, completeTurn; readback via client.SessionLog.QueryAsync and native sessionlog_query",
+  "persistenceStatus": "primary-persisted",
+  "queued": false,
+  "verdictMarkdownSha256": "9FFD9FA24618FAC60E8FC650FFE6CDD20D63EBE5D8A7F554370DC4540FAF0B3A",
+  "verdictMarkdownSha256NormalizedLf": "B602CD3705CD238F8EA3A5D98B7BB3F005A433585ADCB1340519C3282BE8EBFB",
+  "verdictJsonSha256": "E470778B4C80CE53CFFED14DCF4BD8EB1FA0B9CA1E7644236E86F245D482FA78",
+  "readback": {
+    "turnStatus": "completed",
+    "responseEqualsSent": true,
+    "responseLength": 3437,
+    "dialogItems": 12,
+    "verdictParts": 6,
+    "decisionItems": 7,
+    "verdictReassemblyEqualsFile": true,
+    "verdictReassemblySha256Normalized": "B602CD3705CD238F8EA3A5D98B7BB3F005A433585ADCB1340519C3282BE8EBFB",
+    "actions": 8,
+    "sessionLastUpdated": "2026-10-09T19:58:38.0000000+00:00"
+  },
+  "pluginStatusAfter": {
+    "status": "available",
+    "pendingCount": 0,
+    "failsafeCount": 0,
+    "failsafeQuarantineCount": 0,
+    "failsafeDir": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261009T141130-0500-approved-tape-ac-opus\\failsafe\\pending"
+  },
+  "completeTurnResponseSha256": "4444E8511427E93B20259288DD7DE4CC81ECC9C95D46AEF7DD827C5251A9839B",
+  "finalVerdict": {
+    "overallVerdict": "DISAGREE",
+    "passCount": 34,
+    "failCount": 5,
+    "unknownCount": 1,
+    "accuracy": 95,
+    "completeness": 88,
+    "findings": [
+      "F-01 medium-high C2/C4: Delayed-stop execution time is misdescribed for active playback",
+      "F-02 medium C3/C4: FORWARD/REWIND fast-wind scheduling (MOTOR_DELAY_FAST=1000) not covered",
+      "F-03 medium C3/C4: Running-motor semantics for recording are undefined",
+      "F-04 medium-low C3/C4: RECORD pressed while the motor already runs is not enumerated",
+      "F-05 medium C3: Machine motor-line and write-line wiring uncovered; related requirement contradicts pinned source",
+      "F-06 medium C5: TR ID semantic collision with committed backfill document",
+      "F-07 low-medium C5: Closed parent FR still claims the reopened tape behavior complete",
+      "F-08 low B6: Generated export contains em-dashes",
+      "F-09 low A1.4/B2: No before-image for non-projected fields of changed TR/TEST records",
+      "F-10 low A4/B2: Export failure receipts incomplete; triage attribution imprecise",
+      "F-11 low A5: Traceability gaps touching the corrected records",
+      "F-12 low A3: Corrected TEST titles not rendered by the supported Testing export",
+      "F-13 low D3: Deferred work not referenced by any open TODO",
+      "F-14 low C3: Lower-severity native scenarios not enumerated",
+      "F-15 high Reviewer conduct: Reviewer exposed the workspace API key in its tool output",
+      "F-16 info Process: Unpinned post-launch evidence files",
+      "F-17 info Process: Reviewer environment and bootstrap notes"
+    ],
+    "receiptPaths": [
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.md",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.json",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.persistence.json",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\request.jsonl",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\response.jsonl"
+    ],
+    "sessionId": "ClaudeCode-20261009T191359Z-plugin-session",
+    "requestId": "req-20261009T191402Z-prompt-e6c7",
+    "persistenceStatus": "primary-persisted: full verdict.md stored as 6 dialog parts on this turn and read back byte-equal before completion (normalized SHA256 B602CD3705CD238F8EA3A5D98B7BB3F005A433585ADCB1340519C3282BE8EBFB); 8 actions and 6 decision dialog items persisted; completion readback recorded in verdict.persistence.json"
+  },
+  "signature": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+}

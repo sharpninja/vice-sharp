@@ -1,0 +1,906 @@
+{
+  "checkedAt": "2026-10-11T07:39:38.9478610-05:00",
+  "files": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\EXISTING-TEST-DISPOSITIONS.md",
+      "bytes": 8230,
+      "sha256": "80088B05B52C7B6F43C96A187FF5A5768954482B373E6D0A0D2AE5609A5251FC"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\N07-N12-SOURCE-AUDIT.md",
+      "bytes": 10933,
+      "sha256": "2CED9B96E12FFF7D11502BF586D4EFB135010AC8E3E2BBE487F79CE427139972"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\preparation-checks.json",
+      "bytes": 205354,
+      "sha256": "9B30C1DA412178151D24674A4C6BBE0BF9FD45493021A0A4C469853A73A01A3A"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\proposed-field-delta.json",
+      "bytes": 152579,
+      "sha256": "2739BDA2EACF1206ACD9074684BA4FD4CDC8F34CD8C0A93739B01D2815AC4C34"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\README.md",
+      "bytes": 6970,
+      "sha256": "51E7B8B58C023D135F94742603C912E4B22B383EB662F28408BF7B2421AD801C"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\typed-record-preimages.json",
+      "bytes": 123619,
+      "sha256": "63C3801EA3CE46EF6DBB64569C8BA81482FD965DA97C88F5504065BDE5544974"
+    }
+  ],
+  "stablePreservation": [
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "title",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "title",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "title",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "title",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "title",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "title",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "title",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "subarea",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "subarea",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "testType",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "testType",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "status",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "id",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "priority",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "area",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "testType",
+      "presentAfter": true,
+      "matches": true
+    },
+    {
+      "id": "TEST-TAP-001",
+      "field": "scopeStartLayerKey",
+      "presentAfter": true,
+      "matches": true
+    }
+  ],
+  "existingAcRetention": [
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-06",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TR-TAP-EDGE-001",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TR-TAPE-EDGE-001",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-RAMP-001",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "TEST-TAPE-SENSE-001",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-001",
+      "acId": "ac-06",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-06",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-002",
+      "acId": "ac-07",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-003",
+      "acId": "ac-06",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-004",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-06",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-CPU-004",
+      "acId": "ac-07",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-PRF-003",
+      "acId": "ac-06",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-01",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-02",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-03",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-04",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-05",
+      "retainedExactlyOnce": true
+    },
+    {
+      "id": "FR-TAP-005",
+      "acId": "ac-06",
+      "retainedExactlyOnce": true
+    }
+  ],
+  "sourcePostChecks": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.h",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette-sound.c",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tape\\tap.c",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\viacore.c",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\cp-clockf83.c",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20datasette.c",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64datasette.c",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\rtc\\pcf8583.c",
+      "matches": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\rtc\\rtc.c",
+      "matches": true
+    }
+  ],
+  "newFileWhitespaceViolations": [],
+  "gitDiffCheckExit": 0,
+  "gitStatusDelta": [
+    {
+      "InputObject": "?? docs/receipts/requirements-recovery/20261011T072531-0500-tape-state-composite/",
+      "SideIndicator": "=>"
+    }
+  ],
+  "notRuntimeEvidence": true
+}

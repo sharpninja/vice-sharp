@@ -1,0 +1,14 @@
+{
+  "timestampLocal": "2026-10-08T08:03:13.3893698-05:00",
+  "pid": 44552,
+  "operatorAuthorization": "Yes, use failsafe for triage too",
+  "reason": "Non-interactive run cannot receive a new prompt. Interrupt reporting retry loop and resume SAME saved CLI session with explicit operator override. Not an artificial turn/time limit or model replacement.",
+  "wasLive": true,
+  "exited": true,
+  "cliSessionId": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008",
+  "responseBytes": 1240345,
+  "responseSha256": "E895C7D5308F3C88ADD75B044835317890535F3B4E3451710B0E58BE685148A0",
+  "verdictAccepted": false,
+  "completionPercent": null,
+  "eta": null
+}

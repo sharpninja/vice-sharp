@@ -1,0 +1,15 @@
+{
+  "verifiedAtLocal": "2026-10-09T02:40:28.7835157-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261009T072013Z-full-goal-blocked-audit",
+  "primaryTool": "mcp__mcpserver__sessionlog_query",
+  "queryText": "Revalidate full-goal blockers",
+  "exactTurnFound": true,
+  "bodyCharacters": 80245,
+  "chunkCount": 18,
+  "bodySha256": "84F558288FA149ED0E13A1377B13607330AD99D841D2DF2A517CC20C97971B4E",
+  "byteNormalizedTextExactMatch": true,
+  "canonicalRequirementsUnchanged": true,
+  "proposalApplied": false,
+  "hvVerdict": null
+}

@@ -1,0 +1,19 @@
+{
+  "timestampLocal": "2026-10-08T08:58:05.1091192-05:00",
+  "pid": 36708,
+  "exitCode": 0,
+  "source": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source",
+  "head": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "originalTrackedCount": 3847,
+  "changedOriginalFiles": [],
+  "trackedStatus": [],
+  "generatedFileCount": 2815,
+  "generatedManifest": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-generated-after-build.json",
+  "nativeMismatches": [],
+  "sourceIntegrityPassed": true,
+  "stdout": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-build-02.stdout.log",
+  "stderr": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-build-02.stderr.log",
+  "warningsRetained": true,
+  "runtimeValidated": false,
+  "hvPending": true
+}

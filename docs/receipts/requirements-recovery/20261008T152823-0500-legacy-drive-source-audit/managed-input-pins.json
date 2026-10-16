@@ -1,0 +1,38 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\IecBus.cs",
+    "sha256": "37083EB066F5C1C26130861BE424F2823816209AB7338DA2E1F323504D8B79BD"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\IecDrive.cs",
+    "sha256": "E293F584EB111AA59D864E6561EE29551D50A03A58B8E01349332899C2A09550"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\ArchitectureBuilder.cs",
+    "sha256": "0DF3563FEDE7FE1896F5B785C0C5E58B5FBFB7CA13E2FBDB95A3404751647E0A"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\C1541IecInterfaceDevice.cs",
+    "sha256": "C56400AEE903A669DFD5C6AA57CE2F6B99135889F8B97E76FD6613507F587BF1"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\C1541DriveMechanismDevice.cs",
+    "sha256": "FE6A7843BCAA3D046752FA7D6D9713CD4F0031AE3F735BB014A610251813B45A"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Host.InProcess\\Runtime\\C64TrueDriveRigBuilder.cs",
+    "sha256": "DAEEEA6B53D32997AEC08F8ABFFDF8BF8184D353015B74AC7B66631A7AA7F483"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Architectures\\Multisystem\\MultiSystemBlueprint.cs",
+    "sha256": "CCC926A88580754C46D4C0BF2236A2284585C459E74991C9117B3B843125C8A2"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\C1541\\IecTimingTests.cs",
+    "sha256": "494B2F3A7D986874C980664F205E2ACA8F54FC40372AFA66C0E023E5212327BC"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\C1541\\IecDriveMotorRampTests.cs",
+    "sha256": "97226EF6E0F2522B155D471DFE3D7824AF623C7BDD1F5FA8B7B9E3EEFBECF260"
+  }
+]

@@ -13,7 +13,7 @@ using Xunit;
 /// Acceptance: when <c>vice_xvic.dll</c> is present, after equal cycle counts
 /// managed and native agree on A/X/Y/S/P/PC, VIA1/VIA2 control-register peeks
 /// ($9110/$9120 windows), and VIC-I peeks ($9000-$900F static + raster fields).
-/// Skips when oracle absent.
+/// Fails closed when any pinned oracle prerequisite is absent or stale.
 /// </summary>
 [Collection("NativeVice")]
 public sealed class Vic20NativeLockstepTests
@@ -41,8 +41,7 @@ public sealed class Vic20NativeLockstepTests
     [MemberData(nameof(CycleCounts))]
     public void NativeXvic_Managed_CpuRegs_Lockstep(string modelSelector, int cycles)
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance(modelSelector);
         native.Reset();
@@ -69,8 +68,7 @@ public sealed class Vic20NativeLockstepTests
     [Fact]
     public void NativeXvic_Managed_PMatches_ThroughCmpAbsX()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -100,8 +98,7 @@ public sealed class Vic20NativeLockstepTests
     [InlineData(1024)]
     public void NativeXvic_Managed_DualVia_ControlRegs_Lockstep(int cycles)
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -134,8 +131,7 @@ public sealed class Vic20NativeLockstepTests
     [InlineData(5000)]
     public void NativeXvic_Managed_VicI_Regs_Lockstep(int cycles)
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -181,8 +177,7 @@ public sealed class Vic20NativeLockstepTests
     [Fact]
     public void NativeXvic_VicRasterAdvances_AndMatchesManaged()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -214,8 +209,7 @@ public sealed class Vic20NativeLockstepTests
     [Fact]
     public void LockstepValidator_AcceptsVic20Model_WhenOraclePresent()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var validator = new LockstepValidator("vic20");
         Assert.NotNull(validator);

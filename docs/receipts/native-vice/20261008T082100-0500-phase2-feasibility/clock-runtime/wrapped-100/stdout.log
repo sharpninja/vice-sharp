@@ -1,0 +1,132 @@
+Detecting DLL based HardSID boards.
+Cannot open hardsid.dll.
+ 
+*** VICE Version 3.10 ***
+ 
+This is the condensed log, for the full log use --verbose or --debug.
+ 
+Main:  random seed was: 0x1
+Main:  command line was: F:\GitHub\vice-sharp\artifacts\immutable-vice\clock-hook\xvic-clock-probe.exe -default -console -sound -sounddev dummy -warp -seed 1 -directory F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data -limitcycles 100
+Main:  VICE system file directory: 'F:\GitHub\vice-sharp\artifacts\immutable-vice\clock-hook'.
+Main:  VICE system file search path: 'F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\kernal.901486-07.bin'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\basic-901486-01.bin'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\chargen-901460-03.bin'.
+DriveROM: Error -  2000 ROM image not found. Hardware-level 2000 emulation is not available.
+DriveROM: Error -  4000 ROM image not found. Hardware-level 4000 emulation is not available.
+DriveROM: Error -  CMDHD ROM image not found. Hardware-level CMDHD emulation is not available.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\DRIVES\dos1540-325302+3-01.bin'.
+Sound:  Available sound devices: dx wmm dummy dump fs wav voc iff aiff soundmovie
+Joystick: Warning -  Failed to open `F:\GitHub\vice-sharp\artifacts\immutable-vice\clock-hook\headless-joymap-VIC20.vjm'.
+Joystick: Warning -  using minimal default mapping.
+
+Main CPU:  starting at ($FFFC).
+Main CPU:  RESET.
+Unit 8:  RESET.
+VICE_CLOCK,7
+VICE_CLOCK,8
+Main CPU:  RESET.
+VICE_CLOCK,7
+VICE_CLOCK,8
+VICE_CLOCK,9
+VICE_CLOCK,10
+VICE_CLOCK,11
+VICE_CLOCK,12
+VICE_CLOCK,13
+VICE_CLOCK,14
+VICE_CLOCK,15
+VICE_CLOCK,16
+VICE_CLOCK,17
+VICE_CLOCK,18
+VICE_CLOCK,19
+VICE_CLOCK,20
+VICE_CLOCK,21
+VICE_CLOCK,22
+VICE_CLOCK,23
+VICE_CLOCK,24
+VICE_CLOCK,25
+VICE_CLOCK,26
+VICE_CLOCK,27
+VICE_CLOCK,28
+VICE_CLOCK,29
+VICE_CLOCK,30
+VICE_CLOCK,31
+VICE_CLOCK,32
+VICE_CLOCK,33
+VICE_CLOCK,34
+VICE_CLOCK,35
+VICE_CLOCK,36
+VICE_CLOCK,37
+VICE_CLOCK,38
+VICE_CLOCK,39
+VICE_CLOCK,40
+VICE_CLOCK,41
+VICE_CLOCK,42
+VICE_CLOCK,43
+VICE_CLOCK,44
+VICE_CLOCK,45
+VICE_CLOCK,46
+VICE_CLOCK,47
+VICE_CLOCK,48
+VICE_CLOCK,49
+VICE_CLOCK,50
+VICE_CLOCK,51
+VICE_CLOCK,52
+VICE_CLOCK,53
+VICE_CLOCK,54
+VICE_CLOCK,55
+VICE_CLOCK,56
+VICE_CLOCK,57
+VICE_CLOCK,58
+VICE_CLOCK,59
+VICE_CLOCK,60
+VICE_CLOCK,61
+VICE_CLOCK,62
+VICE_CLOCK,63
+VICE_CLOCK,64
+VICE_CLOCK,65
+VICE_CLOCK,66
+VICE_CLOCK,67
+VICE_CLOCK,68
+VICE_CLOCK,69
+VICE_CLOCK,70
+Sound:  Opened device `dummy', speed 48000Hz, fragment size 2.67ms, buffer size 32.00ms
+Sound:  reSID: MOS6581, filter on, sampling rate 48000Hz - resampling, pass to 21600Hz
+VSync:  Sync reset
+VICE_CLOCK,71
+VICE_CLOCK,72
+VICE_CLOCK,73
+VICE_CLOCK,74
+VICE_CLOCK,75
+VICE_CLOCK,76
+VICE_CLOCK,77
+VICE_CLOCK,78
+VICE_CLOCK,79
+VICE_CLOCK,80
+VICE_CLOCK,81
+VICE_CLOCK,82
+VICE_CLOCK,83
+VICE_CLOCK,84
+VICE_CLOCK,85
+VICE_CLOCK,86
+VICE_CLOCK,87
+VICE_CLOCK,88
+VICE_CLOCK,89
+VICE_CLOCK,90
+VICE_CLOCK,91
+VICE_CLOCK,92
+VICE_CLOCK,93
+VICE_CLOCK,94
+VICE_CLOCK,95
+VICE_CLOCK,96
+VICE_CLOCK,97
+VICE_CLOCK,98
+VICE_CLOCK,99
+VICE_CLOCK,100
+VICE_CLOCK,101
+VICE_CLOCK,102
+VICE_CLOCK,103
+VICE_CLOCK,104
+Error -  cycle limit reached.
+
+Exiting...

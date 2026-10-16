@@ -1,0 +1,16 @@
+{
+  "launchedAt": "2026-10-10T19:58:49.3681571-05:00",
+  "pid": 49580,
+  "cliSessionId": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+  "hasExited": false,
+  "executable": "C:\\Users\\kingd\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe\\claude.exe",
+  "executableSha256": "EB95BB65955F8B1702E800815F9A2C0388A5DE0F196C354C7EE1DD5CB9A2BA23",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "resume": true,
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261010T195800-0500\\request.jsonl",
+  "requestSha256": "6E86AD0F0C91B25AC66A8BE251071A79DE079A1AB5A38A7012B65690773858B6",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261010T195800-0500\\response.jsonl",
+  "stderrPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261010T195800-0500\\stderr.log",
+  "noArtificialLimits": true
+}

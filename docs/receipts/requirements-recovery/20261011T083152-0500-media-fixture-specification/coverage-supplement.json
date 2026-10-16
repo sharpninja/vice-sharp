@@ -1,0 +1,355 @@
+{
+  "schema": "media-coverage-supplement/v1",
+  "status": "unapplied R0 draft; not implementation-ready or accepted",
+  "createdAtLocal": "2026-10-11T08:31:52.2284384-05:00",
+  "baseProposalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+  "baseProposalSha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+  "recordTextChanged": false,
+  "applicationAuthorized": false,
+  "priorCoverage": [
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "ExistingMediaProposal_ac-01"
+      ],
+      "sourceAnchors": [
+        "unchanged parent row and proposed-ac-coverage.json in 20261009T023102-0500-legacy-media-video-ac-proposal"
+      ],
+      "evidenceStatus": "reused unapproved proposal; drive/D64/IEC dependencies remain open"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "ExistingMediaProposal_ac-02",
+        "Media_TrueDriveApprovalDependency"
+      ],
+      "sourceAnchors": [
+        "separate-drive-proposal approval boundary",
+        "unchanged parent row and proposed-ac-coverage.json in 20261009T023102-0500-legacy-media-video-ac-proposal"
+      ],
+      "evidenceStatus": "reused unapproved proposal; drive/D64/IEC dependencies remain open"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "ExistingMediaProposal_ac-03",
+        "Media_TapeApprovedContractBinding"
+      ],
+      "sourceAnchors": [
+        "FR-RUNTIME-TAPE-002 exact proposed after criteria",
+        "unchanged parent row and proposed-ac-coverage.json in 20261009T023102-0500-legacy-media-video-ac-proposal"
+      ],
+      "evidenceStatus": "reused unapproved proposal; drive/D64/IEC dependencies remain open"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "ExistingMediaProposal_ac-04"
+      ],
+      "sourceAnchors": [
+        "unchanged parent row and proposed-ac-coverage.json in 20261009T023102-0500-legacy-media-video-ac-proposal"
+      ],
+      "evidenceStatus": "reused unapproved proposal; drive/D64/IEC dependencies remain open"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "ExistingMediaProposal_ac-05"
+      ],
+      "sourceAnchors": [
+        "unchanged parent row and proposed-ac-coverage.json in 20261009T023102-0500-legacy-media-video-ac-proposal"
+      ],
+      "evidenceStatus": "reused unapproved proposal; drive/D64/IEC dependencies remain open"
+    }
+  ],
+  "replacementCoverage": [
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-01",
+      "namedCaseGroups": [
+        "D64_AllStandardSectors",
+        "D64_RecognitionAndZoneBoundaries",
+        "D64_InvalidGeometry",
+        "D64_ErrorMapAllByteValues",
+        "D64_WriteReadReopen",
+        "D64_ReadOnlyPrecedence",
+        "D64_UnrecognizedLengths",
+        "D64_GeometryVersusExtent",
+        "D64_IoFailuresAndPartialEffects"
+      ],
+      "specification": "D64-CONTRACT.md",
+      "evidenceStatus": "source-derived specification; no test or native execution"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-02",
+      "namedCaseGroups": [
+        "Media_Vic20IecDigitalMatrix",
+        "Media_C64IecDigitalMatrix",
+        "Media_IecOrderedAtnEdges",
+        "Media_MotorZoneAndStopEdges",
+        "Media_DosBamAndModeSeparation"
+      ],
+      "specification": "MEDIA-COVERAGE.md",
+      "evidenceStatus": "digital/source expectations specified; runtime traces, observer and separate drive approval outstanding"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-03",
+      "namedCaseGroups": [
+        "Media_TapeFullContractBinding"
+      ],
+      "specification": "MEDIA-COVERAGE.md",
+      "evidenceStatus": "exact binding to eight proposed tape criteria and all inherited case groups; concrete tape matrices incomplete"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-04",
+      "namedCaseGroups": [
+        "Media_EvidenceIdentity",
+        "Media_ClockAndOrder",
+        "Media_FirstMismatch"
+      ],
+      "specification": "MEDIA-COVERAGE.md",
+      "evidenceStatus": "proposed assertion and negative-control contract; no implementation"
+    },
+    {
+      "requirementId": "FR-BACKFILL-MEDIA-001",
+      "acId": "ac-05",
+      "namedCaseGroups": [
+        "Media_GateEvidenceBinding",
+        "Media_ApprovalAndAcceptanceBoundary"
+      ],
+      "specification": "MEDIA-COVERAGE.md",
+      "evidenceStatus": "proposed evidence-gate checks; no acceptance"
+    }
+  ],
+  "tapeCriteria": [
+    {
+      "id": "ac-01",
+      "text": "From known STOP, cover STOP, START, FORWARD, REWIND and RECORD with absent, read-only and writable images. Match accepted mode and sense. Absent-image and read-only-image RECORD do not change mode or sense; accepted writable RECORD asserts sense when the datasette is enabled.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Match C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6, including DDR/output masking. Separately match C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse routing; sense is not an interrupt pulse.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "A stopped motor with no pending alarm schedules the ordinary startup callback at current clock plus 32000; retain an existing alarm as VICE does. FORWARD/REWIND commands schedule their 1000-cycle alarm independently of motor-running state, including motor-on before and after that alarm dispatch. Compare ordered scheduled and actual events, not a pulse-duration getter. Also cover START while the motor is already running, with absent, read-only and writable media, with no pending alarm and with an existing pending alarm. The command reaches the start helper after resetting the gap: install t+32000 only when no alarm is pending, otherwise preserve the existing alarm; match attached-image seek, current-clock write-clock seeding and write-bit zeroing, including clock zero. Contrast START with running-motor FORWARD/REWIND, whose earlier t+1000 alarm survives the helper, and preserve any stop deadline that the command does not clear.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Motor-off on a running motor sets a stop deadline of current clock plus 32000 without immediate stopping or replacing an already pending alarm. Actual stopping occurs when a datasette callback observes the deadline reached. Cover callbacks before, at and beyond the deadline, active read rescheduling, STOP with a retained later alarm, repeated off preserving the deadline, and motor-on cancellation even after the deadline but before stop execution. A stopped motor starts again through the native pending-alarm rule. Explicitly include motor-on before the stop deadline and at the deadline before callback dispatch, preserving the already-running motor, pending alarm and write state while clearing the stop deadline; neither case starts a new ramp.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Recording eligibility follows attached image, accepted RECORD mode, the native running-motor flag and qualifying zero-to-nonzero write-line transition. The running flag is set immediately on motor-on and retained until the delayed-stop callback. Cover writes during startup and pending stop, no writes after executed stop, rejected RECORD, repeated/opposite edges, and retained write-line updates even while ineligible.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-06",
+      "text": "Match emitted TAP bytes, last-write clock/line, remainder, image position/size/dirty state, counters and failure/STOP effects for RECORD-before-motor and motor-before-RECORD, same/future-clock first edges, short gaps 0/6/7/8/2046/2047, long gaps at and above 24-bit boundaries, TAP v0/v1/v2 output paths, and first/partial/failed writes. Preserve the native first-gap and truncation behavior. Include the pinned stream-cursor versus logical-position command-order and buffer-boundary contract in FR-TAP-004 ac-04; retained buffered-read state is part of the initial condition.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-07",
+      "text": "Match machine motor/write outputs: C64 DDR-masked bit-5 active-low motor and bit-3 write; VIC-20 changed PCR raw bit-1 motor and effective VIA2 PB3 write including DDRB-induced edges. Cover SX-64 disconnection, repeated writes and input/output direction changes without substituting intended hardware behavior for pinned code.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-08",
+      "text": "Match enabled/disabled datasette sense/flux forwarding, tapeport device dispatch, attach/detach, resource-controlled CPU reset and retained state. Assert internal state separately from UI motor display. Preserve pending alarms, gap state and sense exactly as pinned VICE, including no universal tapeport-active suppression of every signal. Enumerate attachment with a new STOP-mode image while an old read alarm is pending; internal reset selects the new image mode, so do not automatically remove that alarm. Enumerate reset/attachment during delayed stop: motor_stop_clk clears while the native motor-running flag is retained, independently of UI motor-off display. Enumerate detach and no-image reset with previously retained START/FORWARD/REWIND notape_mode, including helper calls, scheduled alarms and transient sense before attachment clears it. Compare ordered transitions, not only final values. Pin DatasetteResetWithCPU, autostart reset handling and event-playback/network routing; exercise their alternate paths rather than assume every public control request reaches the internal command handler.",
+      "isSatisfied": false
+    }
+  ],
+  "tapeCoverage": [
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-01",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "TransportSense_MediaCommandMatrix"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1156"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-02",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineSense_C64CpuPortAndVic20Via1",
+        "TapeRead_PulseInterruptRouting"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:51-95",
+        "src/vic20/vic20via1.c:221-260",
+        "src/c64/c64datasette.c",
+        "src/vic20/vic20datasette.c"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-03",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "FastWind_ExistingReadAlarm_Replaced",
+        "FastWind_MotorOnBeforePendingCallback",
+        "FastWind_MotorStopped_CallbackBeforeMotorOn",
+        "Start_CommandWhileMotorRunning_NoPendingAlarm",
+        "Start_CommandWhileMotorRunning_PendingAlarm",
+        "Startup_NoPendingAlarm_DeadlineBoundaries",
+        "Startup_PendingAlarm_NotOverwritten"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1000-1021",
+        "src/datasette/datasette.c:1059-1089",
+        "src/datasette/datasette.c:1069-1090",
+        "src/datasette/datasette.c:1117-1147",
+        "src/datasette/datasette.c:1127-1148",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851",
+        "src/datasette/datasette.c:925-949"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-04",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MotorOff_NoPendingAlarm_StopsAtDeadline",
+        "MotorOff_PendingReadBeyondDeadline_DoesNotInsertSecondAlarm",
+        "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+        "MotorOff_RepeatedDoesNotExtend",
+        "MotorOff_StopModeWithExistingLateAlarm",
+        "MotorOn_AfterExecutedStop_Restarts",
+        "MotorOn_CancelsPendingStop",
+        "MotorOn_CancelsStopAfterDeadlineBeforeCallback"
+      ],
+      "sourceAnchors": [
+        "src/alarm.h:147-183",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1172-1205",
+        "src/datasette/datasette.c:695-851"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-05",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Recording_EligibilityAndWriteEdges",
+        "Recording_DuringStartupWindow",
+        "Recording_DuringDelayedStop",
+        "Recording_AfterStopDeadlineBeforeCallback",
+        "Recording_AfterExecutedStop"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-06",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MotorOnThenRecord_FirstEdgeFromZero",
+        "Recording_FileCursor_BufferBoundary",
+        "Recording_FileCursor_CommandOrder",
+        "Recording_GapEncodingAndFailures",
+        "Recording_LongGap_24BitBoundary",
+        "RecordThenMotorOn_FirstEdge"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1000-1005",
+        "src/datasette/datasette.c:1000-1020",
+        "src/datasette/datasette.c:1035-1038",
+        "src/datasette/datasette.c:1091-1099",
+        "src/datasette/datasette.c:1172-1321",
+        "src/datasette/datasette.c:1238-1268",
+        "src/datasette/datasette.c:391-409"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-07",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "MachineMotor_C64Bit5AndDdr",
+        "MachineWrite_C64Bit3AndDdrEdges",
+        "MachineMotor_Vic20PcrRawByte",
+        "MachineWrite_Vic20Pb3AndDdrEdges",
+        "MachineTape_Sx64Disconnected"
+      ],
+      "sourceAnchors": [
+        "src/c64/c64pla.c:77-95",
+        "src/c64/c64mem.c:218-222",
+        "src/vic20/vic20via1.c:185-203",
+        "src/vic20/vic20via2.c:110-118",
+        "src/core/viacore.c:717-724"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    },
+    {
+      "requirementId": "FR-RUNTIME-TAPE-002",
+      "acId": "ac-08",
+      "kind": "fr",
+      "namedCaseGroups": [
+        "Datasette_AttachDetachResetState",
+        "Datasette_EnableAndFluxGating",
+        "Lifecycle_AttachNewStopImage_PendingAlarm",
+        "Lifecycle_ControlDispatch_EventPlaybackAndNetwork",
+        "Lifecycle_Detach_ReplaysNoTapeMode",
+        "Lifecycle_Reset_CancelsStopWithoutClearingRunning",
+        "Tapeport_DispatchAndPowerupGating"
+      ],
+      "sourceAnchors": [
+        "src/datasette/datasette.c:1041-1169",
+        "src/datasette/datasette.c:169-174",
+        "src/datasette/datasette.c:775-778",
+        "src/datasette/datasette.c:879-922",
+        "src/datasette/datasette.c:879-998",
+        "src/datasette/datasette.c:952-997",
+        "src/tapeport/tapeport.c:245-312"
+      ],
+      "evidenceStatus": "proposed; no mocks, real providers, or acceptance executed"
+    }
+  ],
+  "openDependencies": [
+    "Drive proposal HV and exact operator approval",
+    "TR-MEDIA-D64-001 and TEST-D64IO-001 do not yet exist",
+    "Native 36..42 track behavior inventory versus product scope reconciliation",
+    "Approved native observer and provider interfaces",
+    "Runtime fault injection without modifying VICE",
+    "Formatted true-drive media and native traces",
+    "Remaining tape fixture matrices and retained turbo-loader workloads",
+    "R0/R1 supported schema verification",
+    "Root handoff reconciliation and complete corrected-packet HV"
+  ]
+}

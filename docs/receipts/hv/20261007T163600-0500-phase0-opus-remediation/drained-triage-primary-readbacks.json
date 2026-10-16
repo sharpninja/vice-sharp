@@ -1,0 +1,44 @@
+[
+  {
+    "groupId": "triage-group-2fb308935768364b",
+    "status": "collecting",
+    "reportCount": 1,
+    "workspacePath": "F:\\GitHub\\McpServer",
+    "title": "Codex setTurnTitle rejected because typed result did not confirm retitled=true",
+    "summary": "During ViceSharp mock-scope approval logging, updateTurn with title did not change queryTitle on primary readback. Supported workflow.sessionlog.setTurnTitle with queryTitle changed the local current-turn.yaml but returned code rejected persisted false queued false and a real failsafePath. Primary title outcome remains unconfirmed. Investigate result-schema compatibility and distinguish retained fallback from primary persistence. Expected: supported retitle confirms primary readback and reports actual retained queue consistently. No plugin repair requested here.",
+    "quietDeadlineUtc": "2026-10-07T16:55:36.7886597-05:00",
+    "reports": [
+      {
+        "reportId": "triage-report-487365092efe42b09597d606478314ca",
+        "groupId": "triage-group-2fb308935768364b",
+        "status": "grouped",
+        "title": "Codex setTurnTitle rejected because typed result did not confirm retitled=true",
+        "summary": "During ViceSharp mock-scope approval logging, updateTurn with title did not change queryTitle on primary readback. Supported workflow.sessionlog.setTurnTitle with queryTitle changed the local current-turn.yaml but returned code rejected persisted false queued false and a real failsafePath. Primary title outcome remains unconfirmed. Investigate result-schema compatibility and distinguish retained fallback from primary persistence. Expected: supported retitle confirms primary readback and reports actual retained queue consistently. No plugin repair requested here.",
+        "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+        "workspacePath": "F:\\GitHub\\McpServer",
+        "createdUtc": "2026-10-07T16:40:36.7886597-05:00"
+      }
+    ]
+  },
+  {
+    "groupId": "triage-group-bbcc5c07d1bb753b",
+    "status": "collecting",
+    "reportCount": 1,
+    "workspacePath": "F:\\GitHub\\McpServer",
+    "title": "Installed Grok plugin 1.119.0 disagrees with marker and source 1.118.0",
+    "summary": "Installed plugin .version and plugin.json files read 1.119.0. Marker Grok plugin_version and source checkout .version read 1.118.0. Signature and health bootstrap returned true. No plugin update was performed. Native triage_report and workflow.triage.report both failed; this record is the isolated failsafe retention.",
+    "quietDeadlineUtc": "2026-10-07T16:56:47.0734571-05:00",
+    "reports": [
+      {
+        "reportId": "triage-report-355c01441a744a7c85bb321076c9368b",
+        "groupId": "triage-group-bbcc5c07d1bb753b",
+        "status": "grouped",
+        "title": "Installed Grok plugin 1.119.0 disagrees with marker and source 1.118.0",
+        "summary": "Installed plugin .version and plugin.json files read 1.119.0. Marker Grok plugin_version and source checkout .version read 1.118.0. Signature and health bootstrap returned true. No plugin update was performed. Native triage_report and workflow.triage.report both failed; this record is the isolated failsafe retention.",
+        "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+        "workspacePath": "F:\\GitHub\\McpServer",
+        "createdUtc": "2026-10-07T16:41:47.0734571-05:00"
+      }
+    ]
+  }
+]

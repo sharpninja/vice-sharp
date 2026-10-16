@@ -1,0 +1,170 @@
+[
+  {
+    "file": "after-code-verify-01.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "after-code-verify-02.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "after-code-verify-03.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "after-code-verify-04.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "after-full-tests-01.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "after-full-tests-02.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "before-code-verify-01.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "before-code-verify-02.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "before-code-verify-03.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "before-code-verify-04.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "before-full-tests-01.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  },
+  {
+    "file": "before-full-tests-02.json",
+    "checks": {
+      "gitlink": true,
+      "head": true,
+      "trackedDiffSha256": true,
+      "untrackedListSha256": true,
+      "inventorySha256": true,
+      "newestSourceWriteUtc": true,
+      "fileCount": true,
+      "untrackedCount": true
+    },
+    "allMatch": true
+  }
+]

@@ -1,0 +1,120 @@
+{
+  "CoreLocation": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\bin\\Release\\net10.0\\ViceSharp.Core.dll",
+  "Cases": [
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 0,
+      "RecordedMapping": 1,
+      "Bytes": 8192,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 1,
+      "RecordedMapping": 1,
+      "Bytes": 8192,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 2,
+      "RecordedMapping": 2,
+      "Bytes": 16384,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 3,
+      "RecordedMapping": 3,
+      "Bytes": 8192,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 4,
+      "RecordedMapping": 4,
+      "Bytes": 524288,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 5,
+      "RecordedMapping": 5,
+      "Bytes": 32768,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 6,
+      "RecordedMapping": 6,
+      "Bytes": 524288,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 7,
+      "RecordedMapping": 7,
+      "Bytes": 65536,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 8,
+      "RecordedMapping": 8,
+      "Bytes": 32768,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 9,
+      "RecordedMapping": 9,
+      "Bytes": 1048576,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 10,
+      "RecordedMapping": 10,
+      "Bytes": 65536,
+      "Pass": true
+    },
+    {
+      "Case": "MappingFullValueDefensiveCopy",
+      "RequestedMapping": 11,
+      "RecordedMapping": 11,
+      "Bytes": 65536,
+      "Pass": true
+    },
+    {
+      "Case": "EqualLengthDifferentTailAndMappingThenEject",
+      "Pass": true,
+      "EjectLine": "input cartridge attached=0 frame=0 cycle=50"
+    },
+    {
+      "Case": "InvalidInputRejectedWithoutEvent",
+      "Length": 0,
+      "Mapping": 1,
+      "Pass": true
+    },
+    {
+      "Case": "InvalidInputRejectedWithoutEvent",
+      "Length": 8191,
+      "Mapping": 1,
+      "Pass": true
+    },
+    {
+      "Case": "InvalidInputRejectedWithoutEvent",
+      "Length": 0,
+      "Mapping": 0,
+      "Pass": true
+    },
+    {
+      "Case": "InvalidInputRejectedWithoutEvent",
+      "Length": 8192,
+      "Mapping": 999,
+      "Pass": true
+    }
+  ],
+  "Count": 17,
+  "Failed": 0
+}

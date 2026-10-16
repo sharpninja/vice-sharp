@@ -583,6 +583,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     internal bool IsMos8580FilterSeam => IsMos8580Filter;
 
     /// <summary>
+    /// FR-SID-005. Resonance gain the running chip stored for the last
+    /// $D417 write. 6581 setting 15 is 0. 8580 setting 15 stays above 0.
+    /// </summary>
+    public double LiveResonanceGain { get; private set; }
+
+    /// <summary>
     /// reSID sampling method (sid.h). Default SAMPLE_RESAMPLE, matching x64sc
     /// (sid-resources.c:439-441), so the 8580 one-cycle write pipeline stays
     /// inert in normal operation. The 8580 arms the pipeline only under
@@ -1053,6 +1059,17 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     private int _liveDeltaTRemaining;   // cycles left before the next convolution
     private double _liveMasterClockHz;
     private double _liveRelativeSpeedPercent = 100.0;
+
+    /// <summary>
+    /// FR-SID-005. The machine installs this so <see cref="SetSidModel"/>
+    /// can replace the audio device. The chip cannot see the device registry.
+    /// </summary>
+    public Action<string>? ModelSwitch { get; set; }
+
+    /// <summary>
+    /// FR-SID-005. Ask the machine to switch this chip to the named model.
+    /// </summary>
+    public void SetSidModel(string model) => ModelSwitch?.Invoke(model);
 
     public Sid6581(IBus bus) : this(bus, audioBackend: null) { }
 
@@ -1730,6 +1747,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             case 0x17:
                 _filterResonance = (byte)((value >> 4) & 0x0F);
                 _filterControl = (byte)((_filterControl & 0xF0) | (value & 0x0F));
+                LiveResonanceGain = IsMos8580FilterSeam
+                    ? Resid8580ResonanceGain(_filterResonance)
+                    : Resid6581ResonanceGain(_filterResonance);
                 SetSumMix_6581();
                 break;
             case 0x18:

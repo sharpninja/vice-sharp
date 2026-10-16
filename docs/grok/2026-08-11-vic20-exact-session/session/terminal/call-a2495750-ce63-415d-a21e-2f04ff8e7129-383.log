@@ -37,8 +37,8 @@ ConfigFiles    : docker.exe : template parsing error: template: :1: function "co
 Ports          : csdb-bridge 0.0.0.0:8090->8090/tcp, [::]:8090->8090/tcp Up 6 days
                  romm 0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp Up 6 days
                  romm-db 3306/tcp Up 6 days (healthy)
-PSComputerName : PAYTON-DESKTOP
+PSComputerName : LAB-OMARCHY
 RunspaceId     : bd8e0af5-d9e8-4f91-9184-811042074f88
 
-=== from LEGION2 to PAYTON-DESKTOP:8080 ===
+=== from LEGION2 to LAB-OMARCHY:8080 ===
 OK status=200 len=5826

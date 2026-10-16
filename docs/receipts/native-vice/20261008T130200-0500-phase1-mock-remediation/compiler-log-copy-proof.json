@@ -1,0 +1,18 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\clock-gate-evidence-compile.log",
+    "lastWriteLocal": "2026-10-08T13:03:44.5458595-05:00",
+    "sourceSha256": "C80C1AA8E0B4892918399E69D3F911F327677793A248B6BDFA515D9CB60BD78B",
+    "copySha256": "C80C1AA8E0B4892918399E69D3F911F327677793A248B6BDFA515D9CB60BD78B",
+    "content": "2026-10-08T13:03:44.5439390-05:00\nExecutable: C:\\msys64\\mingw64\\bin\\gcc.exe\nArguments: -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\Fixtures\\gate-driver.c | F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\Fixtures\\clock-gate.c | -o | F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\clock-gate.exe\nExitCode: 0\nTimedOut: False\nSTDOUT:\n\nSTDERR:\n"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\clock-probe-evidence-compile.log",
+    "lastWriteLocal": "2026-10-08T13:03:44.6104248-05:00",
+    "sourceSha256": "E317F4BCAC7B74D9C7D16FEFD80DAE4B2E4BC462B763DB277EC37892679FBB25",
+    "copySha256": "E317F4BCAC7B74D9C7D16FEFD80DAE4B2E4BC462B763DB277EC37892679FBB25",
+    "content": "2026-10-08T13:03:44.6108308-05:00\nExecutable: C:\\msys64\\mingw64\\bin\\gcc.exe\nArguments: -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | -Wl,--wrap=vic_cycle | F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\Fixtures\\clock-driver.c | F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\Fixtures\\native-cycle-double.c | F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\Fixtures\\clock-observer.c | -o | F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\clock-probe.exe\nExitCode: 0\nTimedOut: False\nSTDOUT:\n\nSTDERR:\n"
+  }
+]

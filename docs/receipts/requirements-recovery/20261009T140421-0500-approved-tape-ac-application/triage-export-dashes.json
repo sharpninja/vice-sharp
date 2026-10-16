@@ -1,0 +1,67 @@
+{
+  "dashCount": 139,
+  "failsafe": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261009T195722Z-requirements_export_dashes-b1a6.yaml",
+  "request": {
+    "title": "Requirements Markdown exporter emits forbidden em-dash separators",
+    "summary": "Severity low. Supported generateDocument output uses U+2014 in Technical-Requirements title separators, violating this workspace no-em-dash rule. Opus F-08 found 139 occurrences in the newly exported document, including the two corrected tape TR sections. Existing wiki backup has the same count. Expected: supported export should honor the required ASCII separator convention without hand-editing generated output. This is an incidental exporter formatting defect, not an emulator defect.",
+    "component": "mcpserver-requirements-export",
+    "errorSignature": "requirements_export_U2014_separator",
+    "dedupeKey": "requirements-export-ascii-title-separator",
+    "evidence": "Verified U+2014 count=139; source review docs/receipts/hv/20261009T141130-0500-approved-tape-ac-opus/verdict.json finding F-08. Approval delta and native source unchanged.",
+    "reporterAgent": "Codex",
+    "workspacePath": "F:\\GitHub\\vice-sharp",
+    "sessionId": "Codex-20261007T135626Z-plugin-session",
+    "turnId": "req-20261009T190241Z-prompt-6646",
+    "affectedPaths": [
+      "docs/Project/Technical-Requirements.md",
+      "docs/Project/wiki/github/Technical-Requirements.md"
+    ],
+    "affectedSymbols": [
+      "workflow.requirements.generateDocument"
+    ],
+    "reproductionHints": [
+      "Generate all requirements via the supported workflow; count U+2014 in Technical-Requirements.md. Acceptance: zero em/en dashes in generated separators; preserve requirement content and AC; add generator regression tests."
+    ],
+    "tags": [
+      "requirements",
+      "export",
+      "hv-F08"
+    ]
+  },
+  "response": {
+    "type": "result",
+    "payload": {
+      "requestId": "req-20261009T195723Z-e2bf",
+      "result": {
+        "success": true,
+        "status": "collecting",
+        "groupId": "triage-group-2d9ba7e831b0700a",
+        "quietDeadlineUtc": {
+          "dayOfWeek": "Friday",
+          "ticks": 639271735484830828,
+          "totalOffsetMinutes": 0,
+          "dateTime": "2026-10-09T20:12:28.4830828",
+          "microsecond": 82,
+          "minute": 12,
+          "millisecond": 483,
+          "timeOfDay": "20:12:28.4830828",
+          "hour": 20,
+          "date": "2026-10-09T00:00:00.0000000",
+          "month": 10,
+          "year": 2026,
+          "utcTicks": 639271735484830828,
+          "localDateTime": "2026-10-09T15:12:28.4830828-05:00",
+          "dayOfYear": 282,
+          "offset": "00:00:00",
+          "nanosecond": 800,
+          "second": 28,
+          "utcDateTime": "2026-10-09T20:12:28.4830828Z",
+          "day": 9
+        },
+        "reportId": "triage-report-ca7a4811fb4c421a860aae9a31e4f10e",
+        "workspacePath": "F:\\GitHub\\McpServer"
+      },
+      "deprecated": true
+    }
+  }
+}

@@ -87,8 +87,54 @@ public sealed class C64KeyboardMatrix : IInputSource, IKeyboardMatrix, IInterrup
     }
 
     /// <summary>
+    /// Copies the 8 row bytes. Bit column is set when that key is down.
+    /// VICE snapshots keyarr the same way.
+    /// </summary>
+    internal byte[] CaptureRows(out bool restorePressed)
+    {
+        var rows = new byte[8];
+        for (var row = 0; row < 8; row++)
+        {
+            byte value = 0;
+            for (var col = 0; col < 8; col++)
+            {
+                if (_matrix[row, col])
+                    value |= (byte)(1 << col);
+            }
+
+            rows[row] = value;
+        }
+
+        restorePressed = _restoreKeyPressed;
+        return rows;
+    }
+
+    /// <summary>Writes a captured matrix back, including the RESTORE line.</summary>
+    internal void RestoreRows(ReadOnlySpan<byte> rows, bool restorePressed)
+    {
+        Array.Clear(_matrix);
+        var count = Math.Min(8, rows.Length);
+        for (var row = 0; row < count; row++)
+        {
+            var value = rows[row];
+            for (var col = 0; col < 8; col++)
+                _matrix[row, col] = (value & (1 << col)) != 0;
+        }
+
+        _stopKeyPressed = _matrix[7, 7];
+        SetRestore(restorePressed);
+    }
+
+    /// <summary>
     /// Set key press state for C64 keycode with VICE-style handling
     /// </summary>
+    internal bool IsKeyDown(byte keyCode)
+    {
+        var row = keyCode >> 3;
+        var col = keyCode & 0x07;
+        return row < 8 && col < 8 && _matrix[row, col];
+    }
+
     public void SetKey(byte keyCode, bool pressed)
     {
         int row = keyCode >> 3;

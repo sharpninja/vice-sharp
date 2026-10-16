@@ -1,0 +1,81 @@
+# Phase 2 public snapshot acknowledgement slice
+
+Decision recorded 2026-10-08T09:24:37-05:00, before implementation. This is the
+smallest external public-interface proof within approved `PLAN-VICE-IMMUTABLE-001`
+Phase 2. No product requirement or scope changes. Layer-1 effective requirements
+were read from MCP: FR-VICE-001 AC4, TR-VICE-ORACLE-001 AC3/AC5, TEST-VICE-001 AC4,
+and TR-VSFLOCKSTEP-RESUME-001 remain pending.
+
+The text monitor discards snapshot load errors. Use the pinned binary API 2
+to retain native result codes, correlate request IDs, reject errors or missing
+acknowledgements, and preserve unsolicited packets separately. No bus or
+half-cycle observation may be inferred from this protocol proof.
+
+## Locked implementation seam
+
+Add `BinaryMonitorProtocol` in the native-safe `ViceSharp.ViceCompatibility`
+library after its mock gate passes. `EncodeCommand(uint requestId, byte command,
+byte[] body)` returns an owned API-2 command frame; reject reserved event ID
+0xffffffff, null body and body greater than 1 MiB. `ReadResponse(Stream)` returns
+one `BinaryMonitorResponse(Type, Error, RequestId, Body)` without reading the next
+frame; use exact reads, reject truncated header/body, non-STX, non-2 API and
+body length greater than 1 MiB before body allocation. Preserve native error
+codes and unsolicited event IDs as data, not successful acknowledgements.
+`RequireSuccess(response, requestId, command, bodyLength)` requires matching ID,
+type, zero native error and exact nonnegative bounded body length, otherwise
+throws InvalidDataException. The diagnostic network runner has finite socket
+read timeouts, retains raw exchanges, and never retries or treats timeout as
+success. This transport timeout is not an HV reviewer limit.
+
+Pinned source: VICE cc67418cba58e71d8e70fd353e9de47199ad2075,
+`vice/doc/vice.texi` Binary Command/Response Structure and Dump/Undump sections;
+`vice/src/monitor/monitor_binary.c` command enum, response writer,
+`monitor_binary_error`, `monitor_binary_process_undump` and command dispatch.
+The server emits type zero on error and unsolicited ID 0xffffffff. It also
+synchronizes drive CPUs before each binary command. Retain that behavior as
+part of the observed oracle, not a reason to weaken state comparisons.
+
+## Gate sequence
+
+1. Add `BinaryMonitorContractTests` before production code. Correct mocks must
+   satisfy literal independently pinned packets and exact stream consumption.
+   Wrong bytes/lengths, mutated input, wrong fields, premature/extra reads,
+   false error acceptance, false rejection and wrong exception types must be
+   caught inside a passing test harness. Include every header truncation point,
+   fragmented/coalesced reads, unsigned length overflow and native error packets.
+2. Full unfiltered native-safe mock/current suite and prior oracle suite must
+   pass with zero failed/skipped/aborted before implementation. Retain TRX,
+   diagnostics, exact commands and source-integrity receipts.
+3. Implement only the seam above. Bind the same mock-proven assertions and inputs
+   through a test adapter to production, without removing or weakening cases.
+   Run the entire current and prior native-safe suites again.
+4. Real stock xvic/x64sc diagnostics must demonstrate successful dump/undump
+   acknowledgements and rejection of a nonexistent snapshot. Capture complete
+   request/response packets and source/binary integrity. An emulator exit code
+   alone never substitutes for an acknowledgement. Keep native reset/resume
+   differences unresolved until actual evidence explains them.
+5. Noon Opus catch-up must review this slice and all preceding deferred work.
+   No requirement, plan phase or whole-goal completion is claimed until all
+   applicable real gates and independent HV agree at >=98/98, zero FAIL/UNKNOWN.
+
+## Execution receipt: 2026-10-08T09:56:27-05:00
+
+Chronology addendum recorded 2026-10-08T13:47:42-05:00 for draft F-06:
+`binary-mock-01` first passed 125/125 at 09:28:37 (48 protocol mock cases plus
+77 prior cases). Before production, 13 cases were added to strengthen selected
+native-error and boundary/null guard coverage: errors 01/02/80/81/82/83/ff,
+reserved expected ID, null acknowledgement body, null reader stream, inclusive
+reader length, and zero/max encoder boundary rows. Retained TRX comparison shows
+all original 125 names preserved and precisely these 13 additions. The first
+expanded run, `binary-mock-02`, had 137 pass / 1 failure from fixture-name parsing;
+the corrected `binary-mock-03` then passed 138/138 at 09:31:04. This addendum
+does not recreate an earlier decision or turn the failed run into a green gate.
+
+The final preimplementation mock gate is `binary-mock-03` (138/138, including
+61 new protocol mock cases and 77 prior cases), with `binary-prior-mock-02`
+(82/82). The production-bound gate is `binary-implementation-02` (199/199),
+with `binary-prior-implementation-01` (82/82), all failed/skipped/aborted 0.
+The earlier test-name parser mistake and locked-assembly build failure remain
+retained under `binary-mock-02` and `binary-implementation-01` respectively.
+Read the Phase 2 receipt directory's `binary-runtime/README.md` for complete
+stock ACK evidence, source findings and unresolved scope. HV remains pending.

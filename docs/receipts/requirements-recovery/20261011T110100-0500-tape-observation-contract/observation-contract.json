@@ -1,0 +1,991 @@
+{
+  "schema": "vice-sharp/tape-observation-contract/v1",
+  "createdAt": "2026-10-11T11:01:00.0907430-05:00",
+  "classification": "R0 source and retained-object evidence; unapproved planning supplement, not executed mock or native acceptance",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T155254Z-tape-observer-audit",
+  "upstreamCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "originalPlan": {
+    "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+    "sha256": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+    "wholeGoalComplete": false
+  },
+  "nativeSourcePins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+      "upstreamPath": "vice/src/datasette/datasette.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+      "actualGitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+      "sha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+      "bytes": 51518
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.h",
+      "upstreamPath": "vice/src/datasette/datasette.h",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "39fba3c7d85d2a551843fddef2c60473b6ac8d5d",
+      "actualGitBlob": "39fba3c7d85d2a551843fddef2c60473b6ac8d5d",
+      "sha256": "A7D6F6763E72A2D9C4A7128E7974806C5921D408AC3CFF41141F88804F88C71A",
+      "bytes": 3793
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette-sound.c",
+      "upstreamPath": "vice/src/datasette/datasette-sound.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "aff23fc5985c616cfaa2e7481d36362d424df28b",
+      "actualGitBlob": "aff23fc5985c616cfaa2e7481d36362d424df28b",
+      "sha256": "B28ACECF95D404C0C67291BD0C7BE57FD9EA9994505BD8B7384C3DCC647A3BB6",
+      "bytes": 9753
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tape\\tape-snapshot.c",
+      "upstreamPath": "vice/src/tape/tape-snapshot.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "543a541580360b3366d0a7769209a3dabab0431d",
+      "actualGitBlob": "543a541580360b3366d0a7769209a3dabab0431d",
+      "sha256": "B443907238976D3529DA913F85E81B5C30156BF388894AD02C190E3785FFD128",
+      "bytes": 9249
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\tapeport.c",
+      "upstreamPath": "vice/src/tapeport/tapeport.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+      "actualGitBlob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+      "sha256": "BC73131BF535AA57DEED1AD2080C92C0C1ECB8AE1F1338B1A2CCC7DD9CE26B15",
+      "bytes": 20059
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\cp-clockf83.c",
+      "upstreamPath": "vice/src/tapeport/cp-clockf83.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "fe316ee9aeab843b0d91dcd992d3836394e8850e",
+      "actualGitBlob": "fe316ee9aeab843b0d91dcd992d3836394e8850e",
+      "sha256": "ED74CAD4F778CEDB433B5BC095D7615B9D1E44AC974DC82D190F49F834B93369",
+      "bytes": 7137
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\rtc\\pcf8583.c",
+      "upstreamPath": "vice/src/core/rtc/pcf8583.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "4d5453acfb06c264f3af69fed6922ee3193e28fa",
+      "actualGitBlob": "4d5453acfb06c264f3af69fed6922ee3193e28fa",
+      "sha256": "4B4A7147EF1B0828E1E2E68A950EBDBFC27ECABA7CF8D9FD9C4CD796A2E0202D",
+      "bytes": 23741
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\rtc\\rtc.c",
+      "upstreamPath": "vice/src/core/rtc/rtc.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "c85e5de1a7355e001aec532179cc7ec46775ec45",
+      "actualGitBlob": "c85e5de1a7355e001aec532179cc7ec46775ec45",
+      "sha256": "AA1A1D60DB2D82D8CBA046AC3EB42984FCDDEA86FD57C28F3A4FE04465036A96",
+      "bytes": 26108
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\alarm.h",
+      "upstreamPath": "vice/src/alarm.h",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+      "actualGitBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+      "sha256": "BFD69D427573607D5934678739DE781C7F846636AA08A65C8B6A8D53451BDD3C",
+      "bytes": 5408
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64.c",
+      "upstreamPath": "vice/src/c64/c64.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+      "actualGitBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+      "sha256": "967A52413C31B43F0B51C793D608C171E34AA31728230B03391327BCCA1A9352",
+      "bytes": 51143
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64-snapshot.c",
+      "upstreamPath": "vice/src/c64/c64-snapshot.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "9a40c3b207edee4d0c6d47bfe5fc11cee424e320",
+      "actualGitBlob": "9a40c3b207edee4d0c6d47bfe5fc11cee424e320",
+      "sha256": "22F09184364E2E7BF23E8CD68395814F1B6BFA81F16885A58D3369A672DFF1B1",
+      "bytes": 4619
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20.c",
+      "upstreamPath": "vice/src/vic20/vic20.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+      "actualGitBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+      "sha256": "AE776199B6ABD85E5FBFA58F12F575B4893519E19A60035A7E5B7B9EBDF2187F",
+      "bytes": 36747
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20-snapshot.c",
+      "upstreamPath": "vice/src/vic20/vic20-snapshot.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "6de763df6c2b671305f7b1ad1d32fa2a2f769407",
+      "actualGitBlob": "6de763df6c2b671305f7b1ad1d32fa2a2f769407",
+      "sha256": "69D765823C678E6286419D0C023DE4B8C46B54714C66922FDF5A11B404544DCE",
+      "bytes": 4931
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\sound.c",
+      "upstreamPath": "vice/src/sound.c",
+      "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+      "expectedGitBlob": "2c4a99a5ab19b6d7cfe1c3302576612ffaf7d97a",
+      "actualGitBlob": "2c4a99a5ab19b6d7cfe1c3302576612ffaf7d97a",
+      "sha256": "CDB42660B9D0C1E4B44E99734FC36628F10A3DDFA2A732618790AC8BC75CF426",
+      "bytes": 57662
+    }
+  ],
+  "localInputPins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-observer.c",
+      "sha256": "CD59B89B488B8DD9207F4A7FA28549C9D61D4142FA24E58CFD231578F9AFEEC8",
+      "bytes": 746
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.h",
+      "sha256": "E8EB1E690F4F0616E54B80EAFE347C516F12236F2A8B7AEF1A9A61388FFFE390",
+      "bytes": 751
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.c",
+      "sha256": "673A7E7899FD022BFF5C45AB55D05568E6FB4DECAFBFF88EEF80D0157551BA4C",
+      "bytes": 599
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\README.md",
+      "sha256": "7D50B9F2D1B56994FE44634C12A7A9E9389B8D858411C72866A763FBF07ABDCA",
+      "bytes": 4517
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+      "sha256": "0A8787761A7569332D2DA899DF393BA6CEDF8664964A4AF909BE507AEFBC94FB",
+      "bytes": 5613
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\STDIO-ADAPTER-SLICE.md",
+      "sha256": "AD5699E68514B3319A5A483AAE8187C50DD12F5EC95ECF705B43975FEFB47166",
+      "bytes": 3776
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+      "sha256": "9E9DFB8A920C6766F372675E442B336C1B46A0B0A44581085ACBE05936437BD5",
+      "bytes": 1175
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Abstractions\\IViceNative.cs",
+      "sha256": "21F45B664479C552D5E66B3C587FB15825312D16FAE7D0A506986C7C395F3FA8",
+      "bytes": 12055
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\ViceNative.cs",
+      "sha256": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+      "bytes": 37725
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\ViceNative.Xvic.cs",
+      "sha256": "1245E78407C9C25BBD8C87E33BD65DC236DE2D1699F6DE2BC53E54F3E82CF0A9",
+      "bytes": 21396
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice-shim.c",
+      "sha256": "30369B9EA3BB8E805DF171C948A15467A8C174218899181C4ECC89B663CC08A6",
+      "bytes": 82153
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice-shim-vic20.c",
+      "sha256": "9225463FE0C657EDE249ECAE9167468C9223E779ABB9C0A662BD30C212230197",
+      "bytes": 43059
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\N07-N12-SOURCE-AUDIT.md",
+      "sha256": "2CED9B96E12FFF7D11502BF586D4EFB135010AC8E3E2BBE487F79CE427139972",
+      "bytes": 10933
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+      "sha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+      "bytes": 159258
+    }
+  ],
+  "binaryInspectionPins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.o",
+      "sha256": "84128444DFD020C25C963151D86508A41405C8032F97846A121A0D53DCAE0308",
+      "bytes": 97817
+    },
+    {
+      "path": "C:\\msys64\\mingw64\\bin\\nm.exe",
+      "sha256": "9054A37B5A8C0C2A1F64F18A92980A9F1D1E4B98950D0CB265C7B8C2B48F434A",
+      "bytes": 1295187
+    },
+    {
+      "path": "C:\\msys64\\mingw64\\bin\\objdump.exe",
+      "sha256": "95316F5D85AC63712323E49C2EE00CCF41B3F0B60E6BD55872CA0F0E412EDDDB",
+      "bytes": 2638075
+    }
+  ],
+  "currentRequirements": {
+    "method": "workflow.requirements.effective",
+    "layerKey": "layer-1",
+    "functionalCount": 235,
+    "technicalCount": 139,
+    "testingCount": 142,
+    "mappingCount": 233,
+    "selectedRecords": [
+      {
+        "id": "FR-RUNTIME-TAPE-002",
+        "title": "Datasette motor ramp + sense line + record mode",
+        "status": "pending",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.",
+            "isSatisfied": false
+          }
+        ]
+      },
+      {
+        "id": "FR-SNP-003",
+        "title": "Deterministic Input Replay",
+        "status": "pending",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Recording mode captures all external input events with their precise frame and cycle timestamps.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Playback mode loads a base snapshot and replays the recorded input events.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Playback produces bit-exact results: the same memory contents, same VIC-II output, same audio output as the original recording at every point.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The replay format stores: base snapshot reference, input event stream (event type, frame number, cycle within frame, value).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Replay can be paused, single-stepped, and fast-forwarded.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "The `IReplayEngine` interface provides record/playback/seek operations.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-07",
+            "text": "Replay files are compact (only input events are stored, not full state per frame).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-08",
+            "text": "Seeking to an arbitrary frame is supported via periodic auto-snapshots during recording.",
+            "isSatisfied": false
+          }
+        ]
+      },
+      {
+        "id": "FR-TAP-003",
+        "title": "Cycle-Accurate Tape Read Timing",
+        "status": "pending",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Tape reading at normal speed produces identical results to real hardware.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "The timing accuracy supports both PAL and NTSC system clock rates.",
+            "isSatisfied": false
+          }
+        ]
+      },
+      {
+        "id": "FR-TAP-005",
+        "title": "Turbo Tape Loader Compatibility",
+        "status": "pending",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-01",
+            "text": "Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-02",
+            "text": "Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-03",
+            "text": "Custom pulse encoding schemes are supported through accurate pulse-level emulation.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-04",
+            "text": "The CIA FLAG input timing is accurate to 1 system clock cycle.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-05",
+            "text": "Half-wave and full-wave detection methods both work correctly.",
+            "isSatisfied": false
+          },
+          {
+            "id": "ac-06",
+            "text": "Multi-speed loaders (that change pulse rates mid-load) are supported.",
+            "isSatisfied": false
+          }
+        ]
+      }
+    ],
+    "note": "Projection read is requirements context, not metadata preservation proof or approval of pending field delta."
+  },
+  "objectInspection": {
+    "nmCommand": "C:\\msys64\\mingw64\\bin\\nm.exe --undefined-only <pinned datasette.o>",
+    "nmExit": 0,
+    "undefinedSymbols": [
+      "                 U alarm_log_too_many_alarms",
+      "                 U alarm_new",
+      "                 U alarm_unset",
+      "                 U autostart_ignore_reset",
+      "                 U cmdline_register_options",
+      "                 U datasette_sound_add_to_circular_buffer",
+      "                 U datasette_sound_set_halfwaves",
+      "                 U event_playback_active",
+      "                 U event_record",
+      "                 U fread",
+      "                 U fseek",
+      "                 U fwrite",
+      "                 U lib_free",
+      "                 U lib_malloc",
+      "                 U lib_unsigned_rand",
+      "                 U log_error",
+      "                 U log_open",
+      "                 U machine_class",
+      "                 U machine_get_cycles_per_second",
+      "                 U machine_tape_behaviour",
+      "                 U maincpu_alarm_context",
+      "                 U maincpu_clk",
+      "                 U network_connected",
+      "                 U network_event_record",
+      "                 U resources_get_int",
+      "                 U resources_register_int",
+      "                 U sinf",
+      "                 U snapshot_module_close",
+      "                 U snapshot_module_create",
+      "                 U snapshot_module_open",
+      "                 U snapshot_module_read_byte_into_int",
+      "                 U snapshot_module_read_dword_into_int",
+      "                 U snapshot_module_read_qword",
+      "                 U snapshot_module_write_byte",
+      "                 U snapshot_module_write_dword",
+      "                 U snapshot_module_write_qword",
+      "                 U sqrt",
+      "                 U tap_seek_start",
+      "                 U tape_snapshot_read_module",
+      "                 U tape_snapshot_write_module",
+      "                 U tapeport_device_register",
+      "                 U tapeport_set_tape_sense",
+      "                 U tapeport_trigger_flux_change",
+      "                 U tapeport_valid_port",
+      "                 U ui_display_reset",
+      "                 U ui_display_tape_control_status",
+      "                 U ui_display_tape_counter",
+      "                 U ui_display_tape_motor_status",
+      "                 U ui_set_tape_status"
+    ],
+    "objdumpCommand": "C:\\msys64\\mingw64\\bin\\objdump.exe -r <pinned datasette.o>",
+    "objdumpExit": 0,
+    "totalRelocationOutputLines": 2079,
+    "retainedRelocationFilter": "alarm_|ui_|tapeport|sound_|lib_unsigned_rand|fread|fwrite|fseek|ftell",
+    "filteredRelocations": [
+      "00000000000005ca IMAGE_REL_AMD64_REL32  alarm_unset",
+      "00000000000005e6 IMAGE_REL_AMD64_REL32  alarm_log_too_many_alarms",
+      "0000000000000789 IMAGE_REL_AMD64_REL32  alarm_unset",
+      "00000000000007b6 IMAGE_REL_AMD64_REL32  alarm_log_too_many_alarms",
+      "000000000000091a IMAGE_REL_AMD64_REL32  fseek",
+      "0000000000000940 IMAGE_REL_AMD64_REL32  fread",
+      "0000000000000996 IMAGE_REL_AMD64_REL32  fseek",
+      "00000000000009bb IMAGE_REL_AMD64_REL32  fread",
+      "0000000000000a4b IMAGE_REL_AMD64_REL32  fseek",
+      "0000000000000a77 IMAGE_REL_AMD64_REL32  fread",
+      "0000000000000acb IMAGE_REL_AMD64_REL32  fseek",
+      "0000000000000c16 IMAGE_REL_AMD64_REL32  alarm_log_too_many_alarms",
+      "0000000000000e69 IMAGE_REL_AMD64_REL32  alarm_unset",
+      "0000000000000e82 IMAGE_REL_AMD64_REL32  ui_set_tape_status",
+      "0000000000000e94 IMAGE_REL_AMD64_REL32  ui_display_tape_motor_status",
+      "0000000000000ea8 IMAGE_REL_AMD64_REL32  ui_display_tape_control_status",
+      "0000000000000ed2 IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "0000000000000fbd IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "0000000000001039 IMAGE_REL_AMD64_REL32  alarm_log_too_many_alarms",
+      "000000000000110b IMAGE_REL_AMD64_REL32  ui_display_tape_motor_status",
+      "000000000000120f IMAGE_REL_AMD64_REL32  alarm_log_too_many_alarms",
+      "00000000000014a5 IMAGE_REL_AMD64_REL32  lib_unsigned_rand",
+      "00000000000019f8 IMAGE_REL_AMD64_REL32  lib_unsigned_rand",
+      "0000000000001a97 IMAGE_REL_AMD64_REL32  fseek",
+      "0000000000001ad2 IMAGE_REL_AMD64_REL32  fread",
+      "0000000000001b23 IMAGE_REL_AMD64_REL32  fseek",
+      "0000000000001b4c IMAGE_REL_AMD64_REL32  fread",
+      "0000000000001bf3 IMAGE_REL_AMD64_REL32  fseek",
+      "0000000000001c2a IMAGE_REL_AMD64_REL32  fread",
+      "0000000000001d4c IMAGE_REL_AMD64_REL32  lib_unsigned_rand",
+      "0000000000001ee2 IMAGE_REL_AMD64_REL32  fseek",
+      "0000000000001f08 IMAGE_REL_AMD64_REL32  fread",
+      "0000000000001f73 IMAGE_REL_AMD64_REL32  fseek",
+      "0000000000001fa3 IMAGE_REL_AMD64_REL32  fread",
+      "0000000000001ff5 IMAGE_REL_AMD64_REL32  fseek",
+      "000000000000201b IMAGE_REL_AMD64_REL32  fread",
+      "0000000000002141 IMAGE_REL_AMD64_REL32  tapeport_device_register",
+      "00000000000023d6 IMAGE_REL_AMD64_REL32  ui_display_tape_control_status",
+      "0000000000002427 IMAGE_REL_AMD64_REL32  tapeport_valid_port",
+      "00000000000024a2 IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "00000000000024dc IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "0000000000002565 IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "000000000000259d IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "000000000000262b IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "0000000000002676 IMAGE_REL_AMD64_REL32  tapeport_valid_port",
+      "00000000000026ac IMAGE_REL_AMD64_REL32  alarm_unset",
+      "00000000000026e0 IMAGE_REL_AMD64_REL32  alarm_unset",
+      "0000000000002855 IMAGE_REL_AMD64_REL32  fwrite",
+      "00000000000028f3 IMAGE_REL_AMD64_REL32  fwrite",
+      "00000000000029a4 IMAGE_REL_AMD64_REL32  fwrite",
+      "0000000000002ac3 IMAGE_REL_AMD64_REL32  ui_display_tape_motor_status",
+      "0000000000002b75 IMAGE_REL_AMD64_REL32  alarm_unset",
+      "0000000000002bb5 IMAGE_REL_AMD64_REL32  ui_display_tape_motor_status",
+      "0000000000003322 IMAGE_REL_AMD64_REL32  tapeport_trigger_flux_change",
+      "0000000000003351 IMAGE_REL_AMD64_REL32  alarm_log_too_many_alarms",
+      "000000000000336c IMAGE_REL_AMD64_REL32  datasette_sound_add_to_circular_buffer",
+      "00000000000033d1 IMAGE_REL_AMD64_REL32  alarm_log_too_many_alarms",
+      "00000000000034b8 IMAGE_REL_AMD64_REL32  .refptr.maincpu_alarm_context",
+      "00000000000034d7 IMAGE_REL_AMD64_REL32  alarm_new",
+      "000000000000354b IMAGE_REL_AMD64_REL32  tapeport_valid_port",
+      "00000000000035a2 IMAGE_REL_AMD64_REL32  ui_set_tape_status",
+      "00000000000035ed IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "00000000000035fd IMAGE_REL_AMD64_REL32  alarm_unset",
+      "000000000000368b IMAGE_REL_AMD64_REL32  tapeport_valid_port",
+      "0000000000003703 IMAGE_REL_AMD64_REL32  datasette_sound_set_halfwaves",
+      "0000000000003755 IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "000000000000376e IMAGE_REL_AMD64_REL32  tapeport_valid_port",
+      "00000000000037ce IMAGE_REL_AMD64_REL32  ui_set_tape_status",
+      "0000000000003804 IMAGE_REL_AMD64_REL32  alarm_unset",
+      "0000000000003845 IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "000000000000385c IMAGE_REL_AMD64_REL32  alarm_unset",
+      "00000000000038c4 IMAGE_REL_AMD64_REL32  tapeport_valid_port",
+      "0000000000003904 IMAGE_REL_AMD64_REL32  alarm_unset",
+      "000000000000043a IMAGE_REL_AMD64_REL32  ui_display_tape_counter",
+      "000000000000211e IMAGE_REL_AMD64_REL32  tapeport_set_tape_sense",
+      "000000000000227d IMAGE_REL_AMD64_REL32  ui_display_tape_counter",
+      "00000000000022a1 IMAGE_REL_AMD64_REL32  ui_display_tape_counter",
+      "0000000000002ad5 IMAGE_REL_AMD64_REL32  ui_display_reset",
+      "000000000000374c IMAGE_REL_AMD64_REL32  ui_set_tape_status",
+      "RELOCATION RECORDS FOR [.rdata$.refptr.maincpu_alarm_context]:",
+      "0000000000000000 IMAGE_REL_AMD64_ADDR64  maincpu_alarm_context"
+    ],
+    "alarmSetUndefined": 0,
+    "alarmSetRelocations": 0,
+    "limitations": "Read-only inspection of one retained Windows object. This does not prove its build provenance, final-link interception, runtime observation, or equivalent symbols on other platforms."
+  },
+  "serializedFieldCoverage": {
+    "datasetteModule": "DATASETTE 1.5",
+    "datasetteSource": "vice/src/datasette/datasette.c:1381-1399",
+    "datasetteFields": [
+      "datasette_motor",
+      "notape_mode",
+      "last_write_clk",
+      "motor_stop_clk",
+      "datasette_alarm_pending",
+      "alarm_clk",
+      "datasette_long_gap_pending",
+      "datasette_long_gap_elapsed",
+      "datasette_last_direction",
+      "datasette_counter_offset",
+      "reset_datasette_with_maincpu",
+      "datasette_zero_gap_delay",
+      "datasette_speed_tuning",
+      "datasette_tape_wobble_frequency",
+      "datasette_tape_wobble_amplitude",
+      "datasette_tape_azimuth_error",
+      "fullwave",
+      "fullwave_gap"
+    ],
+    "tapeModule": "TAPE 1.0",
+    "tapeSource": "vice/src/tape/tape-snapshot.c:228-251",
+    "tapeFields": [
+      "tape_image.read_only",
+      "tape_image.type",
+      "tap.size",
+      "tap.version",
+      "tap.system",
+      "tap.current_file_seek_position",
+      "tap.offset",
+      "tap.cycle_counter",
+      "tap.cycle_counter_total",
+      "tap.counter",
+      "tap.mode",
+      "tap.read_only",
+      "tap.has_changed"
+    ],
+    "notSerializedByTheseWriters": [
+      "last_write_bit",
+      "tap_buffer bytes",
+      "next_tap",
+      "last_tap",
+      "FILE stream direction and error/eof state",
+      "physical FILE position",
+      "wobble_sin_count",
+      "wobble restf",
+      "azimuth resterror",
+      "datasette audio ring/indices/startclock/square sign/split state"
+    ],
+    "rtcModules": [
+      "TP_CP_CLOCK_F83 0.1",
+      "RTC_PCF8583 0.0"
+    ],
+    "rtcTrain": "pcf8583 register_train[180] is process-static, read by READ_REGS_TRAIN and neither saved nor rebuilt by the inspected snapshot read function. Snapshot fields include clock_regs_for_read, but their presence alone does not establish train restoration."
+  },
+  "fixtureDiscovery": {
+    "fileCommand": "rg --files --hidden --no-ignore -g !.git/** -g !native/vice/** -g !artifacts/immutable-vice/** -g !**/bin/** -g !**/obj/** -g !TestResults/** -g !validation-output/** -g *.tap -g *.t64 -g *.prg -g *.p00 -g *.d64",
+    "fileExit": 0,
+    "fileCandidates": [
+      "artifacts\\rastercmp\\pol.prg",
+      "tests\\ViceSharp.TestHarness\\Fixtures\\D64\\pieces_of_light.d64",
+      "tests\\ViceSharp.TestHarness\\Fixtures\\D64\\frostpoint.d64",
+      "tests\\ViceSharp.TestHarness\\Fixtures\\D64\\Elise.d64",
+      "artifacts\\ls-out3\\Fixtures\\D64\\pieces_of_light.d64",
+      "artifacts\\ls-out3\\Fixtures\\D64\\frostpoint.d64",
+      "artifacts\\ls-out3\\Fixtures\\D64\\Elise.d64",
+      "artifacts\\ls-out\\Fixtures\\D64\\pieces_of_light.d64",
+      "artifacts\\ls-out\\Fixtures\\D64\\frostpoint.d64",
+      "artifacts\\ls-out\\Fixtures\\D64\\Elise.d64",
+      "artifacts\\ls-out2\\Fixtures\\D64\\pieces_of_light.d64",
+      "artifacts\\ls-out2\\Fixtures\\D64\\frostpoint.d64",
+      "artifacts\\ls-out2\\Fixtures\\D64\\Elise.d64",
+      ".mcpServer\\tmp\\NeuralNetworks-commit-sync-build\\CL.ML.prg",
+      ".mcpServer\\tmp\\NeuralNetworks-commit-sync-build\\BP.ML.prg"
+    ],
+    "tapOrT64Count": 0,
+    "nameCommand": "rg -n -i novaload|biturbo|turbotape|cyberload|pavloda tests src --glob *.cs (pattern passed as one quoted argument)",
+    "nameExit": 1,
+    "nameMatches": [],
+    "requiredLoaders": [
+      "Novaload",
+      "Biturbo",
+      "Turbotape",
+      "Cyberload",
+      "Pavloda"
+    ],
+    "limits": "File-name and C# name search only. Archives, excluded native/build/output trees, generated temporary fixture bytes and external corpora were not inspected. No universal absence claim."
+  },
+  "capabilities": [
+    {
+      "id": "OBS-01",
+      "need": "Per-cycle native tape event trace",
+      "currentEvidence": "Current external clock wrapper calls real vic_cycle then emits maincpu_clk only; diagnostic adapter emits VICE_GATE and VICE_GATE_STOP.",
+      "sourceAnchors": [
+        "tools/immutable-vice/clock-observer.c:14-18",
+        "gate-runtime/gate-observer.c:12-38"
+      ],
+      "proposedRoute": "Extend separate external observation tooling only after its approved mock gate. Never synthesize tape events from elapsed clocks.",
+      "requiredProof": "Same-cycle total event order, both machines, complete capture, all-device pause behavior and real bindings are unproved.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-02",
+      "need": "Alarm scheduling, cancellation and pending deadline",
+      "currentEvidence": "alarm_set and dispatch are inline static; inspected datasette.o has zero alarm_set undefined symbols/relocations. alarm_new and alarm_unset are external.",
+      "sourceAnchors": [
+        "vice/src/alarm.h:38-99,131-185",
+        "vice/src/datasette/datasette.c:855-865",
+        "objectInspection"
+      ],
+      "proposedRoute": "Candidate read-only alarm_new return-pointer capture, keyed by maincpu context, name and original port data; sample native pending queue at approved boundaries. Forward original callback/data unchanged. Never replace callback or mutate native structures.",
+      "requiredProof": "Bounds/lifetime/ABI and call coverage must be proven. Queue samples are not a complete transient schedule trace. Missing same-boundary transitions remains an explicit blocker, not inferred history.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-03",
+      "need": "Motor/mode/deadline/counters at native checkpoints",
+      "currentEvidence": "DATASETTE/TAPE writers contain 18/13 named fields. Existing IViceNative has VSF load/save but no explicit tape observer.",
+      "sourceAnchors": [
+        "vice/src/datasette/datasette.c:1363-1408",
+        "vice/src/tape/tape-snapshot.c:197-261",
+        "src/ViceSharp.Abstractions/IViceNative.cs:73-89"
+      ],
+      "proposedRoute": "Use actual native VSF as canonical snapshot and independently parse native module bytes, preserving module order/port context. Do not infer absent module as zero.",
+      "requiredProof": "Schema/version/truncation/clock-width tests, multiport occurrence identity and real save/load are mandatory. Snapshot call effects need separate proof before observation use.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-04",
+      "need": "Observer does not alter the tape recording precondition",
+      "currentEvidence": "TAPIMAGE writer calls ftell, fseek, fread and fseek restore. C64 shim passes save_disks=0, VIC20 passes 1; both native writers pass save_disks to tapeport.",
+      "sourceAnchors": [
+        "vice/src/tape/tape-snapshot.c:69-129",
+        "native/vice-shim.c:792-812",
+        "native/vice-shim-vic20.c:566-585",
+        "vice/src/c64/c64-snapshot.c:62-91",
+        "vice/src/vic20/vic20-snapshot.c:64-90"
+      ],
+      "proposedRoute": "Separate pristine recording runs from snapshot checkpoints; reproduce full prelude independently. Prefer pass-through call tracing at already-existing I/O calls where validated, without extra fseek/fflush/read.",
+      "requiredProof": "Compare observed and unobserved same-prelude traces; preserve CRT stream direction/errors, physical and logical cursor distinctions. Same final file offset alone is insufficient.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-05",
+      "need": "Snapshot synchronization effects",
+      "currentEvidence": "Native snapshot calls sound_snapshot_prepare; C64 also executes drive CPUs to maincpu_clk. sound_snapshot_prepare calls sound_run_sound.",
+      "sourceAnchors": [
+        "vice/src/c64/c64-snapshot.c:71-74",
+        "vice/src/vic20/vic20-snapshot.c:76",
+        "vice/src/sound.c:1830-1838"
+      ],
+      "proposedRoute": "Model snapshot invocation as an explicit native operation in replay fixtures, not a neutral getter. Preserve required VSF round-trip/cross-load gates.",
+      "requiredProof": "Pre/post sound and drive observations plus control runs; no claim that excluding embedded images removes all snapshot effects.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-06",
+      "need": "Write edge, wobble, azimuth and lifecycle process history",
+      "currentEvidence": "last_write_bit initialized -1 and stored across edges; wobble phase/restf and azimuth resterror are static and absent from the named module writers.",
+      "sourceAnchors": [
+        "vice/src/datasette/datasette.c:71-137,436-502,1299-1322,1381-1399"
+      ],
+      "proposedRoute": "Separate fresh process, reset, reattach, resource toggle and VSF-reload histories; pin full setup including attachment scan. Non-neutral fixtures remain mandatory.",
+      "requiredProof": "Actual native history-dependent response and RNG inputs/order. No invented state injection or replacing defaults with neutral settings for the whole suite.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-07",
+      "need": "Datasette sound ring and output phase",
+      "currentEvidence": "Sound ring length 200, indices, startclock, square sign and split state are static. Flush disables chip and sets end=start only.",
+      "sourceAnchors": [
+        "vice/src/datasette/datasette-sound.c:36-123,125-225"
+      ],
+      "proposedRoute": "Observe native gap-enqueue boundary plus actual PCM at native mixer boundary with pinned sample budget/backend/format. Treat gap trace and PCM trace as separate obligations.",
+      "requiredProof": "A gap observer does not establish audio. Ring wrap, partial consumption, split pulse, disable/re-enable and snapshot synchronization require real PCM traces.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-08",
+      "need": "Tape RTC host inputs and shifted serial train",
+      "currentEvidence": "RTC loads persistent context; halted seconds still read host centiseconds. Shared register_train is neither saved nor rebuilt by snapshot reader; CPClockF83 uses read_bit_shift=2.",
+      "sourceAnchors": [
+        "vice/src/tapeport/cp-clockf83.c:86-107,161-191,203-248",
+        "vice/src/core/rtc/pcf8583.c:136-161,181-250,478-485,533-675",
+        "vice/src/core/rtc/rtc.c:58-61,192-195"
+      ],
+      "proposedRoute": "Pin persistence/timezone, capture all existing time/centisecond inputs and serial line transitions. Compare fresh-process restore and same-process restore before and after a new I2C start.",
+      "requiredProof": "Wrapper control/capture of external inputs and phase-correct train behavior remain unproved. Do not change host clock or native state; deterministic fixture bindings alone are not native runtime proof.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-09",
+      "need": "Recorded tape bytes and partial I/O",
+      "currentEvidence": "Retained object has external fread/fwrite/fseek relocations; current clock observer records none of them.",
+      "sourceAnchors": [
+        "objectInspection",
+        "vice/src/tape/tape-snapshot.c:69-129"
+      ],
+      "proposedRoute": "Candidate pass-through wrappers preserve arguments, call count/order, results and native error state. Identify tape stream without fabricating logical positions. Capture actual post-run bytes independently.",
+      "requiredProof": "Final-link interception, errno/error/eof preservation, short-write/failure behavior and platform behavior must be validated. Never count metadata pulse buffers as file evidence.",
+      "accepted": false
+    },
+    {
+      "id": "OBS-10",
+      "need": "Named turbo-loader successful workloads",
+      "currentEvidence": "Bounded search found 15 candidate media paths, zero TAP/T64; loader names absent from src/tests C#.",
+      "sourceAnchors": [
+        "fixtureDiscovery",
+        "live FR-TAP-005 ac-01 through ac-06"
+      ],
+      "proposedRoute": "Retain all five named success obligations. Build corpus manifest with bytes/hash/license or provenance, machine/timing, launch prelude, native success signal and expected payload/entry state.",
+      "requiredProof": "Five real independent success fixtures, custom encoding, rate changes, half/full waves and sub/at/above-160 cases missing. Failure equality cannot pass successful-load AC.",
+      "accepted": false
+    }
+  ],
+  "fixtureGroups": [
+    {
+      "id": "Observer_ClockIsNotTapeTrace",
+      "covers": [
+        "OBS-01"
+      ],
+      "positiveContract": "A clock-only response reports tape capability unavailable. A proposed tape response must identify source, machine, port, clock, ordinal, event, value and observation boundary; missing data fails admission.",
+      "negativeControls": [
+        "Clock-only response claims tape trace complete",
+        "Missing event accepted because clock advanced",
+        "Two same-clock events reversed or collapsed",
+        "Invented zero fills an unavailable state"
+      ],
+      "realBindingProof": "Actual native tape callbacks captured under approved observer and identical fixture assertions.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_AlarmPointerIdentity",
+      "covers": [
+        "OBS-02"
+      ],
+      "positiveContract": "Forward alarm_new exactly once with original context, name, callback and data; retain returned pointer only for read-only inspection. Separate the two Datasette alarms by port data, never by equal name alone; reject invalid pending index before dereference.",
+      "negativeControls": [
+        "Both ports share one identity",
+        "Callback or data replaced",
+        "Extra alarm_new call",
+        "Pending index outside native queue accepted",
+        "Freed alarm pointer retained"
+      ],
+      "realBindingProof": "Real external link call capture and ABI/lifetime validation; not yet implemented.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_AlarmCoverageHonesty",
+      "covers": [
+        "OBS-02"
+      ],
+      "positiveContract": "Distinguish sampled queue states from full scheduling-event coverage. If set/change/unset occurs between observation boundaries, incomplete event coverage cannot satisfy full trace assertions.",
+      "negativeControls": [
+        "No alarm_set import interpreted as no scheduling",
+        "alarm_unset events accepted as complete history",
+        "Final pending deadline used to infer all prior schedules"
+      ],
+      "realBindingProof": "Approved observer must capture transient same-boundary changes or leave the case explicitly blocked.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_VsfPresenceAndIdentity",
+      "covers": [
+        "OBS-03"
+      ],
+      "positiveContract": "Validate module name/version/payload length and ordered occurrences against independent VSF fixtures; preserve all 18 DATASETTE and 13 TAPE fields and port context. No-image module absence differs from numeric zero state.",
+      "negativeControls": [
+        "Missing DATASETTE becomes zero motor",
+        "TAPE current_file_seek_position reported as physical FILE position",
+        "Two port module instances collapsed",
+        "Truncated field accepted",
+        "last_write_bit fabricated from last_write_clk"
+      ],
+      "realBindingProof": "Native-authored VSF bytes plus cross-load and round-trip receipts, not only parser tests.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_RecordingCaptureNeutrality",
+      "covers": [
+        "OBS-04",
+        "OBS-09"
+      ],
+      "positiveContract": "Use existing Recording_FileCursor_CommandOrder prelude. Capture the original ordered I/O operations without adding a stream operation between native read and write; run snapshot checkpoints in independent same-prelude executions.",
+      "negativeControls": [
+        "Inserted fseek restore considered neutral",
+        "Inserted fflush hidden",
+        "Returned count changed",
+        "errno/error/eof state overwritten by logger",
+        "Logical position substituted for physical output offset"
+      ],
+      "realBindingProof": "Real CRT traces and post-run bytes, with no-observer control; platform differences retained.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_SnapshotIsOperation",
+      "covers": [
+        "OBS-04",
+        "OBS-05"
+      ],
+      "positiveContract": "Fixtures distinguish C64 shim save_disks=0 and VIC20 save_disks=1, and include native sound preparation plus C64 drive synchronization. Snapshot occurrence is an explicit workload event.",
+      "negativeControls": [
+        "Both machine snapshot modes treated equal",
+        "No embedded image assumed to mean no state effects",
+        "Capture calls omitted from replay history"
+      ],
+      "realBindingProof": "Before/after native sound/drive/media state and matching control run; native VSF remains mandatory.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_ProcessHistoryNotSnapshotState",
+      "covers": [
+        "OBS-06"
+      ],
+      "positiveContract": "Use separate fresh-process and same-process reset/reattach/VSF load preludes. Preserve write-bit history and non-neutral wobble/azimuth state; only neutral timing subfixtures disable those resources.",
+      "negativeControls": [
+        "Reset clears last_write_bit without native evidence",
+        "VSF equality asserted to prove hidden static equality",
+        "Every case forces neutral resources",
+        "RNG calls reordered"
+      ],
+      "realBindingProof": "Native traces for actual histories; no direct private-state writes or inferred responses.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_AudioRingAndPhase",
+      "covers": [
+        "OBS-07"
+      ],
+      "positiveContract": "Correct scripted traces distinguish enqueue from PCM and preserve ring wrap, split consumption, retained sign/split state after flush, selected float/int backend and exact sample budget.",
+      "negativeControls": [
+        "Gap enqueue accepted as audio proof",
+        "Flush resets square sign",
+        "Ring wrap drops wrong gap",
+        "Snapshot sound-run omitted",
+        "Sample budget or backend changed"
+      ],
+      "realBindingProof": "Native PCM observations on both sides of snapshot/disable/ring boundaries; gap-only capture cannot pass.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_RtcHostInputsAndTrain",
+      "covers": [
+        "OBS-08"
+      ],
+      "positiveContract": "Pin fresh/existing persistent context and timezone; log seconds and centisecond inputs independently even with clock_halt. Restore in fresh and same process during READ_REGS_TRAIN, then after new I2C start; compare native serial bit sequence at each phase.",
+      "negativeControls": [
+        "clock_halt assumed to freeze centiseconds",
+        "Old persistent context ignored",
+        "register_train reconstructed on load without native evidence",
+        "Same-process prelude omitted",
+        "Host clock changed to force equality"
+      ],
+      "realBindingProof": "Actual native host-input and serial traces. Candidate mocks exercise assertions but do not establish native controllability.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    },
+    {
+      "id": "Observer_LoaderSuccessNotFailureEquality",
+      "covers": [
+        "OBS-10"
+      ],
+      "positiveContract": "Require one identified successful native workload for each Novaload, Biturbo, Turbotape, Cyberload and Pavloda case; verify resulting payload/entry state and precise event trace alongside rate/encoding cases.",
+      "negativeControls": [
+        "Both emulators fail and case passes",
+        "Loader label has no pinned bytes",
+        "Native success inferred from timeout absence",
+        "Disk fixture renamed to satisfy tape corpus",
+        "Missing loader silently skipped"
+      ],
+      "realBindingProof": "Five real retained success receipts plus custom/rate/half-wave timing cases; discovery is not execution.",
+      "executionStatus": "specified_not_executed",
+      "requirements": [
+        "FR-VICE-001",
+        "TR-VICE-ORACLE-001",
+        "TEST-VICE-001",
+        "FR-RUNTIME-TAPE-002"
+      ]
+    }
+  ],
+  "acceptance": {
+    "mockGateExecuted": false,
+    "realObserverImplemented": false,
+    "nativeRuntimeExecuted": false,
+    "hvAgree": false,
+    "requirementsApplied": false,
+    "gateAdvanced": false,
+    "wholeGoalComplete": false
+  },
+  "fixtureGroupCount": 10,
+  "negativeControlCount": 44.0
+}

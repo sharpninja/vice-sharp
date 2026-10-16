@@ -1,0 +1,6 @@
+.echo STOCK_ACCESS_FETCH_AFTER
+r rip
+r eax
+dq xvic+0x262a10 L1
+r @$t1=@$t1+1
+g

@@ -1,0 +1,43 @@
+{
+  "requestId": "req-20261009T070737Z-unintended-drain-audit",
+  "timestamp": "2026-10-09T02:07:38-05:00",
+  "queryText": "Continuation of the authorized local ViceSharp HV task. Parent error: direct stop-gate invocation replayed 11 pre-existing Codex failsafe records after claiming they would stay untouched. Record actual effect and bounded read-only evidence, do not reverse or alter historical turns, do not restart HV. Not a new operator approval.",
+  "queryTitle": "Disclose unintended Codex failsafe replay during HV closeout",
+  "response": "Actions appended.",
+  "interpretation": null,
+  "status": "in_progress",
+  "actions": [
+    {
+      "order": 1,
+      "description": "Parent stop-hook invocation unintentionally replayed 11 pre-existing Codex failsafe records. Aggregate hook receipt, source cause, pending count 11 to 0 and unresolved individual historical effects retained in full dialog and local audit. No repair/rollback performed. The two protected Claude sessions and four Claude queue files were rechecked unchanged; all 6374 previously inventoried native files still match. Automatic draining is now disabled for this parent console using the documented process-local flag.",
+      "type": "validation",
+      "status": "failed",
+      "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T014822-0500-opus-remediation-resume\\unintended-parent-queue-replay.json"
+    }
+  ],
+  "model": "codex",
+  "modelProvider": null,
+  "tokenCount": 0,
+  "tags": null,
+  "contextList": null,
+  "failureNote": null,
+  "score": null,
+  "isPremium": null,
+  "rawContext": null,
+  "originalEntry": null,
+  "processingDialog": [
+    {
+      "timestamp": "2026-10-09T02:08:46.247586-05:00",
+      "role": "model",
+      "content": "{\n  \"timestampLocal\": \"2026-10-09T02:08:46-05:00\",\n  \"parentSession\": \"Codex-20261007T135626Z-plugin-session\",\n  \"auditTurn\": \"req-20261009T070737Z-unintended-drain-audit\",\n  \"operatorError\": \"I invoked lib/stop-gate.ps1 without MCP_FAILSAFE_DRAIN_DISABLED=1 in the parent console, despite claiming the 11 pending Codex records would remain untouched.\",\n  \"exactObservedOutput\": \"Failsafe queue drain: replayed=11 failed=0 quarantined=0 skipped=0 dir='F:\\\\GitHub\\\\vice-sharp\\\\.mcpServer\\\\failsafe\\\\Codex\\\\workspaces\\\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\\\pending'.\",\n  \"beforePendingCount\": 11,\n  \"afterPendingCount\": 0,\n  \"quarantineCountBefore\": 2,\n  \"quarantineCountAfter\": 2,\n  \"causeSource\": \"C:\\\\Users\\\\kingd\\\\.codex\\\\plugins\\\\cache\\\\mcpserver-codex-plugin\\\\mcpserver\\\\1.118.0\\\\lib\\\\repl-invoke.ps1:1189\",\n  \"cause\": \"Invoke-ReplFailsafeDrainOnFirstSuccess opts out at line 1208 only when MCP_FAILSAFE_DRAIN_DISABLED equals 1; otherwise it invokes the queue drain after a successful backend call.\",\n  \"currentParentDisableFlag\": \"1\",\n  \"historicalClaudeSessions\": [\n    {\n      \"sessionId\": \"ClaudeCode-20261008T170040Z-plugin-session\",\n      \"exactEqual\": true\n    },\n    {\n      \"sessionId\": \"ClaudeCode-20261008T124507Z-phase1-oracle-contracts-hv\",\n      \"exactEqual\": true\n    }\n  ],\n  \"protectedClaudeQueueCount\": 4,\n  \"protectedClaudeQueueDifferences\": [],\n  \"nativeComparedCount\": 6374,\n  \"nativeDifferences\": [],\n  \"individualReplayedRecordEffectsEstablished\": false,\n  \"limitation\": \"The aggregate hook output identifies no individual replay paths. No retained pre-drain manifest of the 11 parent queue payloads was available in this bounded check. Record-by-record historical MCP effects are not established. No historical data has been reversed or altered to conceal the replay.\",\n  \"reviewOutcome\": \"Opus quota failure, no verdict, no acceptance; no further retry.\"\n}",
+      "category": "observation"
+    }
+  ],
+  "commits": null,
+  "designDecisions": null,
+  "requirementsDiscovered": null,
+  "filesModified": null,
+  "blockers": null,
+  "planFile": "None",
+  "todoId": "None"
+}

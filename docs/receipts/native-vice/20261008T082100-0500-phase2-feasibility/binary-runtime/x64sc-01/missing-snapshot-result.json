@@ -1,0 +1,12 @@
+{
+  "timestampLocal": "2026-10-08T09:40:19.4971520-05:00",
+  "machine": "x64sc",
+  "requestId": 8,
+  "file": "missing-4b8e0ead98e6438b8af3073d24767d06.vsf",
+  "exists": false,
+  "type": 0,
+  "error": 143,
+  "bodyHex": "",
+  "guardRejected": true,
+  "exceptionType": "System.IO.InvalidDataException"
+}

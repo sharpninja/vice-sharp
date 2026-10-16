@@ -1,0 +1,38 @@
+{
+  "startedLocal": "2026-10-08T11:31:48.8670548-05:00",
+  "executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\clock-hook\\xvic-gate-probe.exe",
+  "executableSha256": "A15ED9740135D4E95A2594D8155E2FC807B45453FFCF525E731DEDF02733FF60",
+  "arguments": [
+    "-default",
+    "-console",
+    "-sound",
+    "-sounddev",
+    "dummy",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data"
+  ],
+  "purpose": "Test hardware watchpoint after native startup using already-validated external callback pause. No software breakpoint or native source edit.",
+  "targetPid": 99760,
+  "firstCallback": "VICE_GATE,7",
+  "debuggerArguments": [
+    "-y",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\bus-runtime\"",
+    "-cf",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\bus-runtime\\after-init-watch.cdb\"",
+    "-p",
+    "99760"
+  ],
+  "debuggerPid": 79292,
+  "permissionSentLocal": "2026-10-08T11:31:49.6309638-05:00",
+  "debuggerCompletedWithin5s": true,
+  "hardwareHitCount": 1,
+  "debuggerExitCode": 0,
+  "targetExitCode": -1073740972,
+  "completed": true,
+  "failure": null,
+  "forcedTermination": false,
+  "endedLocal": "2026-10-08T11:31:49.6517171-05:00"
+}

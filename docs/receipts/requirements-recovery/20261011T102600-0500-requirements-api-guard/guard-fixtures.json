@@ -1,0 +1,715 @@
+{
+  "schema": "vice-sharp/r0-guard-fixture-spec/v1",
+  "preparedAt": "2026-10-11T10:32:45.1367320-05:00",
+  "status": "specification-only-unapproved-unexecuted",
+  "baseEvidence": {
+    "batch": "/unsubmittedBatch",
+    "path": "api-evidence.json",
+    "sha256": "1904E54B3A2AC3EA3D4896BBB4A293A12A2B6C069282ABD9F40A6BB61E0CBFCF",
+    "mappingRequests": "/unsubmittedMappingRequests",
+    "typedReads": "/typedReads"
+  },
+  "proposal": {
+    "sha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json"
+  },
+  "fixtureSemantics": [
+    "Each group starts from complete base typed before/desired-after records and exact unsubmitted payloads; overlays never modify those files.",
+    "Path selectors with [id=...] and operations are declarative fixture instructions, not executable JSON Patch or production code.",
+    "Synthetic comparison-only values must be confined to fake responses; never sent to production requirements.",
+    "Each control deliberately supplies wrong observations or decisions; the assertion must reject it inside a passing harness.",
+    "Expected negative rejection is not an acceptable red unit-test suite.",
+    "Scenarios requiring already-approved state use a test-only approval fixture; these artifacts do not grant actual approval.",
+    "Server errors include 400/404/409, timeout, cancellation, 401, 503 and unreadable/queued responses where the group names uncertainty.",
+    "Model all fourteen records and seven mappings; do not reduce fixture denominators to one convenient record."
+  ],
+  "groups": [
+    {
+      "id": "G01",
+      "name": "ExactPacketAndApproval",
+      "positiveScenario": "Explicit approval binds the exact proposal, API evidence and fixture hashes; writer exclusion is documented; prepare only.",
+      "requiredAssertions": [
+        "Journal ready-not-written; zero mutations.",
+        "Any semantic edit invalidates the approval binding."
+      ],
+      "negativeControls": [
+        {
+          "expect": "blocked-before-write",
+          "path": "/approval/present",
+          "value": false,
+          "op": "replace"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/approval/proposalSha256",
+          "value": "0000000000000000000000000000000000000000000000000000000000000000",
+          "op": "replace"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/approval/recordCount",
+          "value": 5,
+          "op": "replace"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/records/0/after/acceptanceCriteria/0/text",
+          "value": " unapproved",
+          "op": "append"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G02",
+      "name": "UniqueOrdinalTypedIdentity",
+      "positiveScenario": "Exactly one typed record for each of the 14 kind/ID pairs.",
+      "requiredAssertions": [
+        "Match kind and case-sensitive ID.",
+        "Do not select the first duplicate or another collection."
+      ],
+      "negativeControls": [
+        {
+          "expect": "blocked-before-write",
+          "path": "/typedReads",
+          "value": "FR-CPU-004",
+          "op": "remove-by-id"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/typedReads",
+          "value": "FR-CPU-004",
+          "op": "duplicate-by-id"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/typedReads[id=FR-CPU-004]/kind",
+          "value": "tr",
+          "op": "replace"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/typedReads[id=FR-CPU-004]/id",
+          "value": "fr-cpu-004",
+          "op": "replace"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G03",
+      "name": "PresenceAndType",
+      "positiveScenario": "Compare explicitly present JSON values without scalar coercion or missing-property substitution.",
+      "requiredAssertions": [
+        "Empty array differs from null and absence.",
+        "Boolean false differs from string false and number 0.",
+        "Number 1 differs from string 1."
+      ],
+      "negativeControls": [
+        {
+          "expect": "comparison-false",
+          "expected": {
+            "value": null,
+            "present": true
+          },
+          "actual": {
+            "present": false
+          }
+        },
+        {
+          "expect": "comparison-false",
+          "expected": {
+            "value": [],
+            "present": true
+          },
+          "actual": {
+            "value": null,
+            "present": true
+          }
+        },
+        {
+          "expect": "comparison-false",
+          "expected": {
+            "value": false,
+            "present": true
+          },
+          "actual": {
+            "value": "false",
+            "present": true
+          }
+        },
+        {
+          "expect": "comparison-false",
+          "expected": {
+            "value": false,
+            "present": true
+          },
+          "actual": {
+            "value": 0,
+            "present": true
+          }
+        },
+        {
+          "expect": "comparison-false",
+          "expected": {
+            "value": 1,
+            "present": true
+          },
+          "actual": {
+            "value": "1",
+            "present": true
+          }
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G04",
+      "name": "StableMetadata",
+      "positiveScenario": "Full typed before/after responses preserve all unmodified exposed fields; separately retain workflow-derived fields.",
+      "requiredAssertions": [
+        "Preserve notes, scope and linkedUseCases including presence and ordered content.",
+        "Do not claim fields absent from typed models are stored metadata.",
+        "Unknown newly exposed fields require classification before mutation."
+      ],
+      "negativeControls": [
+        {
+          "path": "/typedReads[id=FR-CPU-004]/result/linkedUseCases",
+          "expect": "blocked-before-write",
+          "op": "remove"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/typedReads[id=FR-CPU-004]/result/scopeStartLayerKey",
+          "value": "future",
+          "op": "replace"
+        },
+        {
+          "expect": "comparison-false",
+          "path": "/syntheticBefore/notes",
+          "value": "must retain",
+          "op": "remove-from-after"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/typedReads[id=FR-CPU-004]/result/unclassifiedRevision",
+          "value": 42,
+          "op": "add"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G05",
+      "name": "VolatileReadTimestamps",
+      "positiveScenario": "Workflow observation times change between reads, while stable typed fields remain identical; preserve raw observations and omit timestamps from patch.",
+      "requiredAssertions": [
+        "Only named synthesized createdAt/updatedAt are excluded.",
+        "Actual stored historical metadata remains unproven through these models."
+      ],
+      "negativeControls": [
+        {
+          "expect": "blocked-before-write",
+          "path": "/batch/records/0/createdAt",
+          "value": "2026-10-11T00:00:00Z",
+          "op": "add"
+        },
+        {
+          "expect": "comparison-false",
+          "path": "/typedReads[id=FR-CPU-004]/result/notes",
+          "value": "concurrent",
+          "op": "change-and-ignore-as-metadata"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G06",
+      "name": "ExactChangedFields",
+      "positiveScenario": "Emit only kind/id plus approved changedFields, mapping body/condition to description exactly as pinned.",
+      "requiredAssertions": [
+        "Compare exact full payload to unsubmittedBatch.params.",
+        "Other API-supported aliases are not intrinsically invalid, but cannot silently change this approved packet.",
+        "No area/subarea/testType/linkedUseCases or timestamps in batch patch."
+      ],
+      "negativeControls": [
+        {
+          "expect": "blocked-before-write",
+          "path": "/batch/records/0/body",
+          "value": "conflicting alias",
+          "op": "add"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/batch/records/0/notes",
+          "value": "",
+          "op": "add"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/batch/records/0/status",
+          "value": "completed",
+          "op": "add"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/batch/records/0/acceptanceCriteria",
+          "value": null,
+          "op": "replace"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G07",
+      "name": "AcIdentityAndMeaning",
+      "positiveScenario": "All 66 original AC IDs retained, 90 desired criteria, with exact approved text/order/flags/evidence.",
+      "requiredAssertions": [
+        "66 retained IDs: 56 rewritten texts and 10 unchanged; 24 added.",
+        "Every desired satisfaction flag false.",
+        "Counts alone never prove identity or meaning."
+      ],
+      "negativeControls": [
+        {
+          "expect": "comparison-false",
+          "path": "/records/0/after/acceptanceCriteria/0/id",
+          "value": "ac-unapproved",
+          "op": "replace"
+        },
+        {
+          "path": "/records/0/after/acceptanceCriteria",
+          "expect": "comparison-false",
+          "op": "duplicate-first-replace-second"
+        },
+        {
+          "path": "/records/0/after/acceptanceCriteria/0/text",
+          "expect": "comparison-false",
+          "op": "replace-from-before"
+        },
+        {
+          "expect": "comparison-false",
+          "path": "/records/0/after/acceptanceCriteria/0/isSatisfied",
+          "value": true,
+          "op": "replace"
+        },
+        {
+          "expect": "comparison-false",
+          "path": "/syntheticBefore/acceptanceCriteria/0/evidence",
+          "value": "retained receipt",
+          "op": "remove-from-after"
+        },
+        {
+          "path": "/records/0/after/acceptanceCriteria",
+          "expect": "comparison-false",
+          "op": "reverse"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G08",
+      "name": "MappingExistenceAndPreservation",
+      "positiveScenario": "All old and final target IDs exist in their exact kinds; desired full-row union sent; order-only readback changes accepted.",
+      "requiredAssertions": [
+        "Map edge comparison is ordinal set equality after duplicate detection.",
+        "Retain every old edge and workspaceId.",
+        "No write when already equal.",
+        "Read error never means empty mapping."
+      ],
+      "negativeControls": [
+        {
+          "expect": "blocked-before-write",
+          "path": "/mappingsAfter/0/testIds",
+          "value": "TEST-NOT-EXIST-999",
+          "op": "append"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/mappingsAfter/0/trIds",
+          "value": "TEST-TAP-001",
+          "op": "append"
+        },
+        {
+          "path": "/mappingsAfter/0/trIds",
+          "expect": "comparison-false",
+          "op": "remove-first"
+        },
+        {
+          "path": "/mappingsAfter/0/trIds",
+          "expect": "blocked-before-write",
+          "op": "duplicate-first"
+        },
+        {
+          "path": "/mappingsAfter/0/trIds/0",
+          "expect": "blocked-before-write",
+          "op": "lowercase"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/mappingBaselineRead",
+          "value": "timeout",
+          "op": "throw"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G09",
+      "name": "DriftBeforeFirstWrite",
+      "positiveScenario": "Immediately fresh baseline and documented exclusive-writer condition hold before batch and each mapping write.",
+      "requiredAssertions": [
+        "No external edit overwritten.",
+        "No unverified local lock called server-wide exclusion.",
+        "No compare-and-swap guarantee inferred from read then write."
+      ],
+      "negativeControls": [
+        {
+          "expect": "blocked-before-write",
+          "path": "/fresh/records[id=FR-CPU-004]/body",
+          "value": " concurrent",
+          "op": "append"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/writerWindow/verified",
+          "value": false,
+          "op": "replace"
+        },
+        {
+          "expect": "blocked-before-write",
+          "path": "/fresh/mappings[0]/trIds",
+          "value": "TR-CYCLE-001",
+          "op": "append"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G10",
+      "name": "BatchSuccessNeedsReadback",
+      "positiveScenario": "Batch reports success; all 14 full typed records equal desired state including stable fields; only then allow mapping phase.",
+      "requiredAssertions": [
+        "Exactly one batch call.",
+        "Read every record before any mapping call.",
+        "Queued is not primary persisted."
+      ],
+      "negativeControls": [
+        {
+          "readbacks": [],
+          "expect": "submitted-outcome-unknown",
+          "path": "/batchResponse/total",
+          "value": 14,
+          "op": "replace"
+        },
+        {
+          "expect": "submitted-outcome-unknown",
+          "path": "/batchResponse/disposition",
+          "value": "queued",
+          "op": "replace"
+        },
+        {
+          "expect": "submitted-outcome-unknown",
+          "path": "/recordReadbacks",
+          "value": "FR-TAP-005",
+          "op": "remove-by-id"
+        },
+        {
+          "path": "/calls",
+          "expect": "assertion-rejects-call-order",
+          "op": "insert-mapping-before-last-record-read"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G11",
+      "name": "BatchRejectedNoMutation",
+      "positiveScenario": "Validation/missing/conflict rejection followed by exact full before-state; journal records-confirmed-before; no mappings.",
+      "requiredAssertions": [
+        "Source atomicity is a contract input, not a live fault-injection result.",
+        "400, 404 and 409 retain response details.",
+        "Do not report applied from any rejected response."
+      ],
+      "negativeControls": [
+        {
+          "path": "/recordReadbacks/0/body",
+          "expect": "mixed-or-drift-stop",
+          "op": "replace-from-after"
+        },
+        {
+          "expect": "assertion-rejects-forbidden-call",
+          "path": "/calls",
+          "value": "mapping-upsert",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-state",
+          "path": "/journal/state",
+          "value": "records-confirmed-after",
+          "op": "replace"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G12",
+      "name": "LostAcknowledgementApplied",
+      "positiveScenario": "One batch call times out; full readback equals exact after-state; record confirmed applied and suppress replay.",
+      "requiredAssertions": [
+        "Write call count exactly one.",
+        "Confirm all 14 records and stable fields.",
+        "Do not confuse missing HTTP acknowledgement with failed mutation."
+      ],
+      "negativeControls": [
+        {
+          "expect": "assertion-rejects-repeat",
+          "path": "/calls",
+          "value": "batch-repeat",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-state",
+          "path": "/journal/state",
+          "value": "records-confirmed-before",
+          "op": "replace"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G13",
+      "name": "LostAcknowledgementUnapplied",
+      "positiveScenario": "One batch call times out; full readback equals exact before-state; stop with records-confirmed-before.",
+      "requiredAssertions": [
+        "No automatic retry.",
+        "A later authorized retry needs fresh complete preflight, exact still-valid approval and writer window.",
+        "Local journal ID is not a server idempotency key."
+      ],
+      "negativeControls": [
+        {
+          "expect": "assertion-rejects-repeat",
+          "path": "/calls",
+          "value": "batch-repeat-without-preflight",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-state",
+          "path": "/journal/state",
+          "value": "records-confirmed-after",
+          "op": "replace"
+        },
+        {
+          "expect": "assertion-rejects-unsupported-claim",
+          "path": "/retry/serverIdempotencyProven",
+          "value": true,
+          "op": "replace"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G14",
+      "name": "UnknownOrMixedOutcome",
+      "positiveScenario": "Unavailable or mixed/third-state readback stops all mutations and preserves full uncertainty.",
+      "requiredAssertions": [
+        "No automatic compensation.",
+        "Potential server-internal rollback does not establish observed before-state.",
+        "Do not interpret an unavailable read as authoritative absence."
+      ],
+      "negativeControls": [
+        {
+          "corruptDecision": "before-state",
+          "expect": "assertion-rejects-state",
+          "path": "/readback",
+          "value": "backend unavailable",
+          "op": "throw"
+        },
+        {
+          "expect": "assertion-rejects-call-order",
+          "path": "/recordReadbacks/0",
+          "corruptDecision": "continue-mappings",
+          "op": "replace-from-after-only"
+        },
+        {
+          "corruptDecision": "restore-before",
+          "expect": "assertion-rejects-compensation",
+          "path": "/recordReadbacks/0/body",
+          "value": "third-party change",
+          "op": "replace"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G15",
+      "name": "PartialMappingSequence",
+      "positiveScenario": "Two rows confirmed desired, third call fails and reconciles before, remaining four untouched; journal mapping-partial-stop.",
+      "requiredAssertions": [
+        "Retain exact seven-row states and each invocation.",
+        "Do not claim one transaction across batch and mappings.",
+        "Do not reapply the two confirmed rows."
+      ],
+      "negativeControls": [
+        {
+          "expect": "assertion-rejects-repeat",
+          "path": "/calls",
+          "value": "repeat-confirmed-row-1",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-call-order",
+          "path": "/calls",
+          "value": "write-row-4-after-uncertainty",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-state",
+          "path": "/journal/state",
+          "value": "all-atomic-success",
+          "op": "replace"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G16",
+      "name": "FinalWholeScopeReadback",
+      "positiveScenario": "All 14 typed records, 90 AC and seven full mapping rows equal approved desired state; exposed stable fields preserved.",
+      "requiredAssertions": [
+        "Independent final read, not echoed response.",
+        "Exact ordered criteria plus ordinal mapping sets.",
+        "Data verified still awaits exports, traceability and HV."
+      ],
+      "negativeControls": [
+        {
+          "expect": "assertion-rejects-denominator",
+          "path": "/finalRead/records",
+          "value": "FR-CPU-004",
+          "op": "keep-only"
+        },
+        {
+          "path": "/finalRead/records/0/linkedUseCases",
+          "expect": "comparison-false",
+          "op": "remove"
+        },
+        {
+          "path": "/finalRead/mappings/6/testIds",
+          "expect": "comparison-false",
+          "op": "remove-first"
+        },
+        {
+          "expect": "comparison-false",
+          "path": "/finalRead/records/0/acceptanceCriteria/0/text",
+          "value": " ",
+          "op": "append"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G17",
+      "name": "PersistenceAndExportEvidence",
+      "positiveScenario": "Exact full verdict/request/response and operation journal persist with verified readback; export and traceability receipts retain actual outputs.",
+      "requiredAssertions": [
+        "Primary, queued and unknown are distinct.",
+        "Traceability exit 0 is not complete AC coverage.",
+        "Any failed required export or persistence gate blocks completion."
+      ],
+      "negativeControls": [
+        {
+          "corruptDecision": "persisted",
+          "expect": "assertion-rejects-disposition",
+          "path": "/persistence/actual",
+          "value": "queued",
+          "op": "replace"
+        },
+        {
+          "path": "/verdict/findings",
+          "expect": "assertion-rejects-incomplete-verdict",
+          "op": "remove-last"
+        },
+        {
+          "corruptDecision": "complete",
+          "expect": "assertion-rejects-gate",
+          "path": "/export/exitCode",
+          "value": 1,
+          "op": "replace"
+        },
+        {
+          "corruptDecision": "all-AC-covered",
+          "expect": "assertion-rejects-overclaim",
+          "path": "/traceability/exitCode",
+          "value": 0,
+          "op": "replace"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    },
+    {
+      "id": "G18",
+      "name": "NoUnapprovedRecoveryOrDone",
+      "positiveScenario": "Every failure preserves history and leaves requirements/TODO/goal unaccepted; only approved batch and mapping mutations allowed.",
+      "requiredAssertions": [
+        "Detect forbidden calls even if final values are restored.",
+        "No native changes, deletion/recreation or historic queue replay.",
+        "No satisfaction or done transition before required independent acceptance."
+      ],
+      "negativeControls": [
+        {
+          "expect": "assertion-rejects-forbidden-call",
+          "path": "/calls",
+          "value": "delete-and-recreate-requirement",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-forbidden-call",
+          "path": "/calls",
+          "value": "write-native-vice",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-forbidden-call",
+          "path": "/calls",
+          "value": "drain-historical-failsafe",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-forbidden-call",
+          "path": "/calls",
+          "value": "compensating-update-without-new-approval",
+          "op": "append"
+        },
+        {
+          "expect": "assertion-rejects-forbidden-call",
+          "path": "/calls",
+          "value": "set-done-or-satisfied",
+          "op": "append"
+        }
+      ],
+      "mockResult": "not-run",
+      "realResult": "not-run"
+    }
+  ],
+  "groupCount": 18,
+  "negativeControlCount": 69,
+  "testExecutionCount": 0,
+  "realMutationCount": 0,
+  "acceptance": "not-claimed"
+}

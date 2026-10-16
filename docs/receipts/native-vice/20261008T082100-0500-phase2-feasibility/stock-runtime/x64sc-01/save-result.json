@@ -1,0 +1,7 @@
+{
+  "timestampLocal": "2026-10-08T09:09:08.4544666-05:00",
+  "exitCode": -1,
+  "result": "Machine initialization failed: ROM lookup",
+  "runtimePassed": false,
+  "directory": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\x64sc-01"
+}

@@ -1,16 +1,16 @@
 # Switching from Classic VICE to ViceSharp
 
-A side-by-side reference for users who already drive classic VICE (`x64sc`, `c1541`, etc.) and want to try ViceSharp as a drop-in alternative. For the broader install / first-run story, start at [USER-GUIDE.md](USER-GUIDE.md).
+A side-by-side reference for users who already drive classic VICE (`x64sc`, `xvic`, `c1541`, etc.) and want to evaluate ViceSharp against the same behavior. Native VICE is the immutable reference; ViceSharp is not yet a complete drop-in replacement. For install and first run, start at [USER-GUIDE.md](USER-GUIDE.md).
 
 ## 1. Binary mapping
 
 | Classic VICE | ViceSharp launcher | Status |
 |--------------|--------------------|--------|
-| `x64` | `x64` (binary-name dispatch) | Supported via the launcher library; maps to the cycle-exact C64 host (ViceSharp does not maintain a separate "fast" variant). No `x64.exe` ships yet. |
-| `x64sc` | `x64sc` (console shell) | Supported via the console shell: `ViceSharp.Console` parses its arguments as binary name `x64sc`. Identical topology to `x64`; both go through the same cycle-exact path. No `x64sc.exe` ships yet. |
+| `x64` | `x64` (binary-name dispatch) | Supported by the launcher library and maps to the same managed C64 topology as `x64sc`; ViceSharp does not maintain a separate fast variant. No `x64.exe` ships yet. Full x64sc parity remains pending. |
+| `x64sc` | `x64sc` (console shell) | `ViceSharp.Console` parses its arguments as binary name `x64sc`. It shares the managed C64 path with `x64`; no `x64sc.exe` ships yet, and historical bounded lockstep is not whole-machine parity proof. |
 | `c1541` | `c1541` (binary-name dispatch) | Supported as a standalone 1541 disk-tool topology (single drive, optional D64 mount) in the launcher library. No `c1541.exe` ships yet. |
 | `x128` | `x128.exe` | Not yet. Throws `NotSupportedException`. C128 is iteration 3. |
-| `xvic` | `xvic.exe` | Not yet. VIC-20 is iteration 2. |
+| `xvic` | `xvic` (library topology generation) | Partial. `ViceTopologyBuilder` recognizes `xvic` and emits a `Vic20` topology, but no `xvic.exe` ships, `ViceSharp.Console` hardcodes `x64sc`, and the generic multi-system kind dispatcher does not yet recognize `Vic20`. |
 | `xpet` | `xpet.exe` | Not yet. PET is iteration 4. |
 | `xplus4` | `xplus4.exe` | Not yet. Plus/4 / C16 is iteration 5. |
 | `xcbm2` / `xcbm5x0` | same names | Not yet. CBM-II is post-MVP. |
@@ -18,11 +18,11 @@ A side-by-side reference for users who already drive classic VICE (`x64sc`, `c15
 | `petcat` | `petcat.exe` | Not yet. BASIC tokeniser is post-MVP. |
 | `cartconv` | `cartconv.exe` | Not yet. Cart converter is post-MVP. |
 
-`ViceSharp.Launcher` is a class library: no VICE-named executables are built today. Binary-name dispatch is implemented in [ViceTopologyBuilder.cs](../src/ViceSharp.Launcher/ViceTopologyBuilder.cs) and consumed by `ViceSharp.Console` (which hardcodes the binary name `x64sc`); unsupported binary names deliberately throw with a message listing the supported set so you find out fast rather than silently doing the wrong thing. Until named binaries ship, invoke the flags below through `dotnet run --project src/ViceSharp.Console --`.
+`ViceSharp.Launcher` is a class library: no VICE-named executables are built today. Binary-name dispatch is implemented in [ViceTopologyBuilder.cs](../src/ViceSharp.Launcher/ViceTopologyBuilder.cs). `ViceSharp.Console` hardcodes the binary name `x64sc`, so its process path does not expose `xvic` selection. Unsupported names throw; `xvic` is recognized by the topology builder but remains incomplete at the generic multi-system dispatcher.
 
 ## 2. Flag mapping
 
-The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/ViceArgsParser.cs). The table below is exhaustive for the parser; unlisted classic VICE flags are collected into `ViceArgs.Unknown` and silently ignored (matching VICE's own lenient handling).
+The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/ViceArgsParser.cs). The table below is exhaustive for the parser; unlisted classic VICE flags are collected into `ViceArgs.Unknown` and currently have no effect. That describes ViceSharp behavior and does not assert that every classic VICE binary handles unknown options the same way.
 
 ### Supported
 
@@ -86,18 +86,26 @@ The launcher invokes the console host. It does not start an Avalonia screen, bui
 
 In ViceSharp, the canonical sample sets `fidelity: TrueDevice` explicitly. If you omit `fidelity:`, you get `Buffered` (sector-stream fast path), which is much faster but never runs the drive's 6502. Classic VICE's "TrueDrive 8" resource maps to `+truedrive` on the launcher, which in turn sets `fidelity: TrueDevice` on every drive peripheral the launcher emits.
 
+### Snapshot format is native VICE VSF
+
+VICE `.vsf` is the canonical required snapshot format for supported x64sc C64 and xvic VIC-20 paths. The current product host does not yet meet that contract: it emits `vice-sharp.machine-snapshot.v2` for C64 and `vice-sharp.runtime-snapshot.v1` for non-C64. Managed VSF staging exists in the test harness, but normal public and desktop save/load do not yet use the production native bridge.
+
+Migration compatibility is therefore pending. A proprietary ViceSharp snapshot is not interchangeable with a VICE snapshot and does not satisfy the requirement. Track the production bridge and deterministic resume gates in [PLAN-VSFLOCKSTEP-001](plans/PLAN-VSFLOCKSTEP-001.md).
+
 ## 4. Performance and accuracy
 
-ViceSharp targets cycle-exact parity with native VICE on the C64 host path. The current gate:
+ViceSharp targets behavioral parity with immutable native VICE. Current evidence is bounded:
 
-- **100,000-cycle lockstep** against native VICE on the BASIC `READY.` boot path (`LockstepValidationTests`). Trace-by-trace identical CPU state.
-- **Drive CPU lockstep accessors** (`vice_drivecpu_get_*`) expose VICE's per-unit drive 6502 register file from .NET. The `LockstepDriveValidationTests` gate verifies `Drive%uTrueEmulation` toggles cleanly and the drive CPU advances under TDE.
-- **BenchmarkDotNet harness** is checked in under [tests/ViceSharp.Benchmarks/](../tests/ViceSharp.Benchmarks/) for the CPU / VIC / SID / CIA hot paths; native VICE comparison numbers are deferred (`PERF-BENCHMARK-001`).
+- Historical C64 receipts include a 100,000-cycle BASIC READY CPU path and multi-frame no-cartridge model/checkpoint slices.
+- Historical VIC-20 receipts include 10-second PAL and NTSC A/X/Y/S/P/PC comparisons plus named frame, flash, persistence, and audio slices.
+- BenchmarkDotNet probes exist for CPU, VIC, SID, and CIA hot paths; native comparison sweeps remain open under `PERF-BENCHMARK-001`.
 
 What this means in practice:
-- For boot sequences, KERNAL traps, and any code that lives inside the lockstep gate, ViceSharp's CPU output is identical to VICE cycle-for-cycle.
-- For VIC-II pixel-level behaviour, visible sprite composition, sprite priority/collision coverage, display-mode pixel routing including invalid ECM priority/collision, managed continuous side-border behavior, VIC-II register readback masks/collision latch writes, and managed matrix idle/fill fetch behavior are implemented, but native display-mode/register/matrix checkpoints, sprite fetch depth, and FLI/AFLI timing remain under `BACKFILL-VIDEO-001`. Demo code that depends on deep raster effects can still diverge from VICE.
-- For SID, hard sync, ring modulation, combined waveforms, ADSR behaviour, digi output, and dual-SID coverage are wired and exercised in the focused suite. Further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression.
+
+- A passing lockstep window proves only the models, workload, state fields, and cycle budget named by that test. It does not prove whole-machine or all-software compatibility.
+- VIC-II raster effects, SID analog behavior, drive/tape/cartridge edge cases, input, timing, and host integration still require acceptance coverage against classic VICE.
+- Full parity remains pending until active FR/TR/TEST acceptance criteria pass against an unmodified oracle with zero failed and zero skipped tests.
+- The immutable-oracle and canonical snapshot gates are defined in [PLAN-VICE-IMMUTABLE-001](plans/PLAN-VICE-IMMUTABLE-001.md) and [PLAN-VSFLOCKSTEP-001](plans/PLAN-VSFLOCKSTEP-001.md).
 
 ## 5. Bug compatibility
 
@@ -105,8 +113,8 @@ Classic VICE faithfully reproduces several Commodore-era hardware bugs that real
 
 | Bug | Status |
 |-----|--------|
-| 6510 illegal opcodes | Reproduced. Lockstep gate covers them. |
-| 6510 jump-vector page-cross bug (`JMP ($xxFF)`) | Reproduced. |
+| 6510 illegal opcodes | Covered by focused implementation and bounded lockstep tests; final parity acceptance remains pending. |
+| 6510 jump-vector page-cross bug (`JMP ($xxFF)`) | Covered by focused tests; final parity acceptance remains pending. |
 | VIC-II "bad line" cycle stealing | Reproduced at the CIA / CPU contention level; managed matrix idle/fill behavior is covered, while native matrix checkpoints and FLI/AFLI effects remain under `BACKFILL-VIDEO-001`. |
 | VIC-II sprite-DMA timing | Bounded. Sprite fetch is wired and side-border visibility is managed, but non-PAL per-model fetch tables and native multiplexing checkpoints remain. |
 | SID ADSR bug | Reproduced in the focused Phase 1 SID suite; further analog deepening is post-MVP. |

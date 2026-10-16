@@ -15,6 +15,13 @@ public interface IVideoCaptureSink : IDisposable
     int FrameCount { get; }
 
     /// <summary>
+    /// FR-CFG-003: palette id copied onto <see cref="CapturedFrame"/> when a
+    /// frame is accepted. The host sets this from the active display palette
+    /// before <see cref="CaptureFrame"/>.
+    /// </summary>
+    string PaletteId { get; set; }
+
+    /// <summary>
     /// Frames dropped under back-pressure (0 for sinks that never drop). A non-zero count means
     /// the recording omits frames, which - since each survivor is tagged at the nominal frame
     /// rate - compresses the clip's timeline and makes it play faster than real time.

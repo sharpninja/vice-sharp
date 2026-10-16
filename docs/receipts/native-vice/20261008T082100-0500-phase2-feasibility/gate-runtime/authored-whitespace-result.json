@@ -1,0 +1,82 @@
+[
+  {
+    "path": "tools/immutable-vice/clock-observer.c",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "tools/immutable-vice/clock-gate.c",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "tools/immutable-vice/clock-gate.h",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockGateContractTests.cs",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockGateImplementationTests.cs",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockHookContractTests.cs",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ClockHookImplementationTests.cs",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\CompiledCFixture.cs",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\README.md",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\ViceSharp.NativeClockProbe.Tests.csproj",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\clock-driver.c",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\gate-driver.c",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\Fixtures\\native-cycle-double.c",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+    "exitCode": 1,
+    "output": []
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\Invoke-GateProbe.ps1",
+    "exitCode": 1,
+    "output": []
+  }
+]

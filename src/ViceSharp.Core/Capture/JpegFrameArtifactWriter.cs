@@ -1,12 +1,10 @@
 namespace ViceSharp.Core.Capture;
 
 /// <summary>
-/// Minimal pure-C# JPEG/JFIF encoder for BGRA frame buffers.
-/// Produces a valid baseline JFIF JPEG file using a simplified
-/// luminance-only grayscale encode path (sufficient for test assertion
-/// of the SOI/EOI markers required by FR-MED-001 / TR-MEDIA-001 /
-/// RUNTIME-CAPTURE-002). The output bytes[0]=0xFF bytes[1]=0xD8 satisfy
-/// the acceptance criteria of all current tests.
+/// Minimal pure-C# baseline JFIF encoder for BGRA frame buffers.
+/// Each 8x8 block is converted to Y, Cb, and Cr, transformed, quantized,
+/// and Huffman coded. A block that is not flat emits nonzero AC coefficients.
+/// Color is three components that share the luminance tables.
 /// </summary>
 public static class JpegFrameArtifactWriter
 {
@@ -64,12 +62,27 @@ public static class JpegFrameArtifactWriter
         0xF9, 0xFA
     ];
 
+    private static readonly int[] ZigZag =
+    [
+        0, 1, 8, 16, 9, 2, 3, 10,
+        17, 24, 32, 25, 18, 11, 4, 5,
+        12, 19, 26, 33, 40, 48, 41, 34,
+        27, 20, 13, 6, 7, 14, 21, 28,
+        35, 42, 49, 56, 57, 50, 43, 36,
+        29, 22, 15, 23, 30, 37, 44, 51,
+        58, 59, 52, 45, 38, 31, 39, 46,
+        53, 60, 61, 54, 47, 55, 62, 63
+    ];
+
+    private static readonly Dictionary<int, (uint Code, int Length)> AcCodes = BuildAcCodes();
+
     public static async Task WriteBgraAsync(
         ReadOnlyMemory<byte> bgraFrame,
         int width,
         int height,
         string filePath,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        int quality = 50)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
@@ -82,15 +95,16 @@ public static class JpegFrameArtifactWriter
         await using var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
         await using var ms = new MemoryStream();
 
-        WriteJfifJpeg(ms, bgraFrame.Span, width, height);
+        WriteJfifJpeg(ms, bgraFrame.Span, width, height, quality);
 
         ms.Position = 0;
         await ms.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
         await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    private static void WriteJfifJpeg(Stream output, ReadOnlySpan<byte> bgra, int width, int height)
+    private static void WriteJfifJpeg(Stream output, ReadOnlySpan<byte> bgra, int width, int height, int quality)
     {
+        var quant = ScaleQuantTable(quality);
         using var writer = new BinaryWriter(output, System.Text.Encoding.ASCII, leaveOpen: true);
 
         // SOI
@@ -101,7 +115,7 @@ public static class JpegFrameArtifactWriter
         WriteApp0(writer);
 
         // DQT: luminance quantization table
-        WriteDqt(writer);
+        WriteDqt(writer, quant);
 
         // SOF0: Start of Frame (grayscale, 1 component)
         WriteSof(writer, width, height);
@@ -114,7 +128,7 @@ public static class JpegFrameArtifactWriter
         WriteSos(writer);
 
         // Scan data: simple grayscale, one 8x8 block with EOB, padded
-        WriteScanData(writer, bgra, width, height);
+        WriteScanData(writer, bgra, width, height, quant);
 
         // EOI
         writer.Write(MarkerPrefix);
@@ -136,29 +150,51 @@ public static class JpegFrameArtifactWriter
         writer.Write((byte)0x00); // Ythumbnail = 0
     }
 
-    private static void WriteDqt(BinaryWriter writer)
+    private static byte[] ScaleQuantTable(int quality)
+    {
+        // IJG quality scale. 50 keeps the Annex K luminance table.
+        quality = Math.Clamp(quality, 1, 100);
+        var scale = quality < 50 ? 5000 / quality : 200 - (quality * 2);
+        var table = new byte[64];
+        for (var i = 0; i < 64; i++)
+        {
+            var value = ((LumaQuantTable[i] * scale) + 50) / 100;
+            if (value < 1)
+                value = 1;
+            else if (value > 255)
+                value = 255;
+            table[i] = (byte)value;
+        }
+
+        return table;
+    }
+
+    private static void WriteDqt(BinaryWriter writer, byte[] quant)
     {
         writer.Write(MarkerPrefix);
         writer.Write(DqtMarker);
         var length = (ushort)(2 + 1 + 64); // length field + table ID byte + 64 table values
         WriteUInt16BigEndian(writer, length);
         writer.Write((byte)0x00); // table ID 0, precision 0 (8-bit)
-        writer.Write(LumaQuantTable);
+        writer.Write(quant);
     }
 
     private static void WriteSof(BinaryWriter writer, int width, int height)
     {
-        // SOF0: baseline DCT, 8-bit precision, 1 component (grayscale)
+        // SOF0: baseline DCT, 8-bit, Y/Cb/Cr at 1x1. Chroma uses quant table 0.
         writer.Write(MarkerPrefix);
         writer.Write(SofMarker);
-        WriteUInt16BigEndian(writer, 11); // length: 2 + 1 + 2 + 2 + 1 + (1*3)
-        writer.Write((byte)8);           // precision
+        WriteUInt16BigEndian(writer, 17);
+        writer.Write((byte)8);
         WriteUInt16BigEndian(writer, (ushort)height);
         WriteUInt16BigEndian(writer, (ushort)width);
-        writer.Write((byte)1);           // 1 component
-        writer.Write((byte)1);           // component ID: Y
-        writer.Write((byte)0x11);        // sampling factors: 1x1
-        writer.Write((byte)0);           // quantization table ID: 0
+        writer.Write((byte)3);
+        for (byte id = 1; id <= 3; id++)
+        {
+            writer.Write(id);
+            writer.Write((byte)0x11);
+            writer.Write((byte)0);
+        }
     }
 
     private static void WriteDht(BinaryWriter writer, byte tableId, byte[] lengths, byte[] values)
@@ -174,68 +210,211 @@ public static class JpegFrameArtifactWriter
 
     private static void WriteSos(BinaryWriter writer)
     {
-        // SOS header: 1 component (Y), uses DC table 0 and AC table 0
+        // SOS: Y, Cb, Cr interleaved. Each component uses DC table 0 and AC table 0.
         writer.Write(MarkerPrefix);
         writer.Write(SosMarker);
-        WriteUInt16BigEndian(writer, 8); // length: 2 + 1 + (1*2) + 3 = 8
-        writer.Write((byte)1);  // number of components in scan
-        writer.Write((byte)1);  // component selector: Y
-        writer.Write((byte)0x00); // DC/AC table selector: DC=0, AC=0
-        writer.Write((byte)0);  // Ss: start of spectral selection
-        writer.Write((byte)63); // Se: end of spectral selection
-        writer.Write((byte)0);  // Ah/Al: approximation bit position
+        WriteUInt16BigEndian(writer, 12);
+        writer.Write((byte)3);
+        for (byte id = 1; id <= 3; id++)
+        {
+            writer.Write(id);
+            writer.Write((byte)0x00);
+        }
+
+        writer.Write((byte)0);
+        writer.Write((byte)63);
+        writer.Write((byte)0);
     }
 
-    private static void WriteScanData(BinaryWriter writer, ReadOnlySpan<byte> bgra, int width, int height)
+    private static void WriteScanData(BinaryWriter writer, ReadOnlySpan<byte> bgra, int width, int height, byte[] quant)
     {
-        // Emit a minimal entropy-coded segment. We use the simplest possible
-        // approach: compute the average luminance across all pixels and emit
-        // a single DC coefficient representing that value, followed by EOB
-        // for the AC coefficients, for every 8x8 MCU in the image.
-        // The Huffman codes used match the standard luminance tables above.
-
-        // Calculate average luminance (Y = 0.299R + 0.587G + 0.114B)
-        long totalY = 0;
-        int pixelCount = width * height;
-        for (int i = 0; i < pixelCount; i++)
-        {
-            int b = bgra[i * 4 + 0];
-            int g = bgra[i * 4 + 1];
-            int r = bgra[i * 4 + 2];
-            totalY += (299 * r + 587 * g + 114 * b) / 1000;
-        }
-        int avgY = pixelCount > 0 ? (int)(totalY / pixelCount) : 128;
-
-        // DC coefficient: level-shift by 128
-        int dcValue = avgY - 128;
-
-        // Count 8x8 MCUs
         int mcusX = (width + 7) / 8;
         int mcusY = (height + 7) / 8;
-
-        // Emit bit-packed Huffman data
         var bits = new BitWriter(writer);
-
-        int prevDc = 0;
+        var samples = new double[64];
+        var quantized = new int[64];
+        int prevY = 0;
+        int prevCb = 0;
+        int prevCr = 0;
         for (int my = 0; my < mcusY; my++)
         {
             for (int mx = 0; mx < mcusX; mx++)
             {
-                int diff = dcValue - prevDc;
-                prevDc = dcValue;
-
-                // Encode DC coefficient using luminance DC table
-                EncodeDcCoefficient(bits, diff);
-
-                // Encode AC: all zero -> single EOB (0x00 category)
-                // EOB is coded as the 0/0 entry: code for (0,0) from standard table
-                // In the standard DC luma table, category 0 -> code 00 (2 bits)
-                // EOB for AC: AC table entry for symbol 0x00 -> 4 bits: 1010
-                bits.WriteBits(0b1010, 4); // EOB from standard AC luminance table
+                EncodeComponent(bits, samples, quantized, quant, bgra, width, height, mx, my, 0, ref prevY);
+                EncodeComponent(bits, samples, quantized, quant, bgra, width, height, mx, my, 1, ref prevCb);
+                EncodeComponent(bits, samples, quantized, quant, bgra, width, height, mx, my, 2, ref prevCr);
             }
         }
 
         bits.Flush();
+    }
+
+    private static void EncodeComponent(
+        BitWriter bits,
+        double[] samples,
+        int[] quantized,
+        byte[] quant,
+        ReadOnlySpan<byte> bgra,
+        int width,
+        int height,
+        int mcuX,
+        int mcuY,
+        int component,
+        ref int prevDc)
+    {
+        for (int y = 0; y < 8; y++)
+        {
+            var py = mcuY * 8 + y;
+            if (py >= height)
+                py = height - 1;
+            for (int x = 0; x < 8; x++)
+            {
+                var px = mcuX * 8 + x;
+                if (px >= width)
+                    px = width - 1;
+                SampleYCbCr(bgra, width, py, px, out var yVal, out var cb, out var cr);
+                var level = component switch
+                {
+                    1 => cb,
+                    2 => cr,
+                    _ => yVal
+                };
+                samples[y * 8 + x] = level - 128;
+            }
+        }
+
+        ForwardDct(samples);
+        for (int i = 0; i < 64; i++)
+        {
+            var natural = ZigZag[i];
+            quantized[i] = (int)Math.Round(samples[natural] / quant[i], MidpointRounding.AwayFromZero);
+        }
+
+        var dc = quantized[0];
+        EncodeDcCoefficient(bits, dc - prevDc);
+        prevDc = dc;
+        EncodeAcCoefficients(bits, quantized);
+    }
+
+    private static void SampleYCbCr(ReadOnlySpan<byte> bgra, int width, int y, int x, out int yVal, out int cb, out int cr)
+    {
+        var i = (y * width + x) * 4;
+        int b = bgra[i];
+        int g = bgra[i + 1];
+        int r = bgra[i + 2];
+        yVal = (299 * r + 587 * g + 114 * b) / 1000;
+        cb = 128 + ((-169 * r - 331 * g + 500 * b) / 1000);
+        cr = 128 + ((500 * r - 419 * g - 81 * b) / 1000);
+        if (cb < 0) cb = 0;
+        if (cb > 255) cb = 255;
+        if (cr < 0) cr = 0;
+        if (cr > 255) cr = 255;
+    }
+
+    private static void ForwardDct(double[] block)
+    {
+        var temp = new double[64];
+        for (int v = 0; v < 8; v++)
+        {
+            var cv = v == 0 ? 1.0 / Math.Sqrt(2.0) : 1.0;
+            for (int u = 0; u < 8; u++)
+            {
+                var cu = u == 0 ? 1.0 / Math.Sqrt(2.0) : 1.0;
+                double sum = 0;
+                for (int y = 0; y < 8; y++)
+                {
+                    for (int x = 0; x < 8; x++)
+                    {
+                        sum += block[y * 8 + x]
+                            * Math.Cos(((2 * x) + 1) * u * Math.PI / 16.0)
+                            * Math.Cos(((2 * y) + 1) * v * Math.PI / 16.0);
+                    }
+                }
+
+                temp[v * 8 + u] = 0.25 * cu * cv * sum;
+            }
+        }
+
+        Array.Copy(temp, block, 64);
+    }
+
+    private static void EncodeAcCoefficients(BitWriter bits, int[] quantized)
+    {
+        var run = 0;
+        for (var i = 1; i < 64; i++)
+        {
+            var coef = quantized[i];
+            if (coef == 0)
+            {
+                run++;
+                continue;
+            }
+
+            while (run > 15)
+            {
+                WriteAcSymbol(bits, 0xF0);
+                run -= 16;
+            }
+
+            var category = Category(coef);
+            WriteAcSymbol(bits, (run << 4) | category);
+            WriteAmplitude(bits, coef, category);
+            run = 0;
+        }
+
+        if (run > 0)
+            WriteAcSymbol(bits, 0x00);
+    }
+
+    private static void WriteAcSymbol(BitWriter bits, int symbol)
+    {
+        if (!AcCodes.TryGetValue(symbol, out var code))
+            throw new InvalidOperationException("JPEG AC symbol is not in the luminance Huffman table.");
+
+        bits.WriteBits(code.Code, code.Length);
+    }
+
+    private static void WriteAmplitude(BitWriter bits, int value, int category)
+    {
+        if (category <= 0)
+            return;
+
+        var amplitude = value < 0 ? value - 1 + (1 << category) : value;
+        bits.WriteBits((uint)amplitude, category);
+    }
+
+    private static int Category(int value)
+    {
+        var abs = Math.Abs(value);
+        var category = 0;
+        while (abs > 0)
+        {
+            category++;
+            abs >>= 1;
+        }
+
+        return category;
+    }
+
+    private static Dictionary<int, (uint Code, int Length)> BuildAcCodes()
+    {
+        var map = new Dictionary<int, (uint Code, int Length)>();
+        uint code = 0;
+        var k = 0;
+        for (var length = 1; length <= 16; length++)
+        {
+            var count = AcLumaLengths[length - 1];
+            for (var i = 0; i < count; i++)
+            {
+                map[AcLumaValues[k]] = (code, length);
+                code++;
+                k++;
+            }
+
+            code <<= 1;
+        }
+
+        return map;
     }
 
     private static void EncodeDcCoefficient(BitWriter bits, int diff)

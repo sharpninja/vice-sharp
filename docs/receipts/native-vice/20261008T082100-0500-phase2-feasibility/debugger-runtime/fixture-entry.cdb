@@ -1,0 +1,5 @@
+.echo FIXTURE_HARDWARE_ENTRY_BEGIN
+? @$exentry
+ba e1 @$exentry ".echo FIXTURE_HARDWARE_ENTRY_HIT; r rip; bl; bc *; q"
+bl
+g

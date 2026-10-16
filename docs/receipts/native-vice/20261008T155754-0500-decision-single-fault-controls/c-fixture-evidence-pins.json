@@ -1,0 +1,1538 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\clock-gate.exe",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\clock-gate.exe",
+    "sha256": "A53C294D690C0A6D3F0D796BD31B8FC461DFB7CE1C79A9C943C3C0C063C4D626",
+    "lastWriteTime": "2026-10-08T16:01:07.7681891-05:00",
+    "bytes": 272563,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\compile.log",
+    "sha256": "71BC2B60B3EECE22254A43CC62BD6F5E3071702152B9D038D5F30906C0293B25",
+    "lastWriteTime": "2026-10-08T16:01:07.7791937-05:00",
+    "bytes": 511,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-00f7e283cc114531a34ea638b0cb7678.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-00f7e283cc114531a34ea638b0cb7678.log",
+    "sha256": "02A7D5B7A3AB7BE3DE2ED9A14591C1708D967DB35EE5FA2E6F0F8221AB532B10",
+    "lastWriteTime": "2026-10-08T13:03:44.6409533-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-010e8e6880e54281a093a85f1c332400.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-010e8e6880e54281a093a85f1c332400.log",
+    "sha256": "FD63BB04A567324E74A7224D0E5C3F9FB69A18125B70B013C0C04072079AB2AA",
+    "lastWriteTime": "2026-10-08T13:03:44.8070515-05:00",
+    "bytes": 268,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-046912ee03d54f44b5ac396c3b654b5d.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-046912ee03d54f44b5ac396c3b654b5d.log",
+    "sha256": "98800D47298E4BDD5A3679CF31CC20A83E6354D35E400F8EC5647EAECA4711E3",
+    "lastWriteTime": "2026-10-08T14:25:16.0799480-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-04a7063283204547b295a0f8e5009427.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-04a7063283204547b295a0f8e5009427.log",
+    "sha256": "9D007FF666E93D56DB236B01015A4A9DB6E4635B2BA977A15721FBE3629219F6",
+    "lastWriteTime": "2026-10-08T11:03:52.9919652-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-04f5294a24bf4736a2dd1fd46a74d759.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-04f5294a24bf4736a2dd1fd46a74d759.log",
+    "sha256": "3D4B03438227892E0BF7A7C2F1B002CEAB9478017974173B77C0258E587247A9",
+    "lastWriteTime": "2026-10-08T15:59:53.8329854-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-06522a42b2e14286b1ad1f192d6d7016.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-06522a42b2e14286b1ad1f192d6d7016.log",
+    "sha256": "754DF9A01614AAA56B0019D5CF91F2060C1CCE241CE6416F51ABA3B9A125EB2B",
+    "lastWriteTime": "2026-10-08T14:25:16.1504758-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-082260f1fc63446184210fd235981e04.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-082260f1fc63446184210fd235981e04.log",
+    "sha256": "4EA89A83163ECF0DC4DEE4FF89F2BC3CF7946F5CB02407E522BBBB7FF0FF6E4A",
+    "lastWriteTime": "2026-10-08T11:03:53.3223330-05:00",
+    "bytes": 293,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-09a57e542f014cb8a7cd0a245f018f9b.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-09a57e542f014cb8a7cd0a245f018f9b.log",
+    "sha256": "1E56282EF80596B362F0132A57811D45168B83048396CB69F6F55D114E9321ED",
+    "lastWriteTime": "2026-10-08T16:01:07.9607202-05:00",
+    "bytes": 258,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-09b6724d8bf44e08b3d1d96581fb98ac.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-09b6724d8bf44e08b3d1d96581fb98ac.log",
+    "sha256": "A803DCABDCD49C9BCD1604468A4C1BC50E4B153247FBC7AE3FC91A78F716893C",
+    "lastWriteTime": "2026-10-08T13:30:03.7453079-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-0cbf5b336d1947ac9de257d295537a38.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-0cbf5b336d1947ac9de257d295537a38.log",
+    "sha256": "97E265E9A946495C95EB3CAB0878355CC0F3A6F8A7F75CBEB45843F9C002C16E",
+    "lastWriteTime": "2026-10-08T11:03:53.1592881-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-0cc2badc481445b0adcdbc80693157eb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-0cc2badc481445b0adcdbc80693157eb.log",
+    "sha256": "1BFA653394BEDC46D161AA37BC2F97EA270E69A7CAA77BB64734F327CCC8E5AC",
+    "lastWriteTime": "2026-10-08T14:25:15.9994331-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-0d2e0c7be153411e9f107a596e342cca.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-0d2e0c7be153411e9f107a596e342cca.log",
+    "sha256": "148AE15EFB0F5D097EDEAFA085C48EF6B3AE8EADBB59B1E487FBD08476448C19",
+    "lastWriteTime": "2026-10-08T15:59:53.6733992-05:00",
+    "bytes": 258,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-0e409cf0c1164d1a8ed2cb431565bbfa.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-0e409cf0c1164d1a8ed2cb431565bbfa.log",
+    "sha256": "57FCBB44E5344D5907CAAD1511771E3859973E7A26135D663B4C9E0AF7ADC44C",
+    "lastWriteTime": "2026-10-08T11:03:53.2032906-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-137f72451b7746e2a9c4064f6dc80dbb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-137f72451b7746e2a9c4064f6dc80dbb.log",
+    "sha256": "45EB7ABD99BAC08CE5CE489C2D5341EFB77A57EA57303A1782C4E0585F9419D6",
+    "lastWriteTime": "2026-10-08T16:01:08.1992744-05:00",
+    "bytes": 293,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-1485e1ed3d7b43e39f928027ec74d419.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-1485e1ed3d7b43e39f928027ec74d419.log",
+    "sha256": "43CFFECF8D21AD3BBF09A4AD1F48B59ADA04E834F0811DC5534EE92AC5E4F0C3",
+    "lastWriteTime": "2026-10-08T13:03:45.1434960-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-1a62d251ff234dd39249ac22082d04d4.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-1a62d251ff234dd39249ac22082d04d4.log",
+    "sha256": "6D025A30045B73FFCDD0A80054D84B89634B1801B6E6C724790232C1E903A78F",
+    "lastWriteTime": "2026-10-08T15:59:53.7854693-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-1b18642766674a18a950831ff86b0eda.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-1b18642766674a18a950831ff86b0eda.log",
+    "sha256": "25E90260FF5A64EDE9D64E2A3E20622F93A4A384B7FDBABB98F6195339A95870",
+    "lastWriteTime": "2026-10-08T13:30:03.9313469-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-1b39943eeb764c69b89a62ec91b7a272.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-1b39943eeb764c69b89a62ec91b7a272.log",
+    "sha256": "2EE8DE8766632C1F68A5EAFCFA487B69683DCF1484A2358225D86FB440FABEA1",
+    "lastWriteTime": "2026-10-08T16:01:08.0112320-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-1c49077af4dc42aa9036fc19cc5f3ee7.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-1c49077af4dc42aa9036fc19cc5f3ee7.log",
+    "sha256": "8967E0327EE9ABFDB7F9626CD303B26D63DB79783EE5A50C2706911B2E4BBFBF",
+    "lastWriteTime": "2026-10-08T16:01:07.9862326-05:00",
+    "bytes": 268,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-1c561e592ee141ed9ac52def7783083d.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-1c561e592ee141ed9ac52def7783083d.log",
+    "sha256": "E8BAAFED318898B5F75891AF682A6C63E27DADB79FE7C67E5B3C750623129D84",
+    "lastWriteTime": "2026-10-08T15:59:53.6213988-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-207ac49adfa64c2b954152c0dc9aad18.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-207ac49adfa64c2b954152c0dc9aad18.log",
+    "sha256": "65235F92E50F7D6A2F8389A47AB39FB60063C369D51DE2DC1763703AB83913AE",
+    "lastWriteTime": "2026-10-08T15:59:53.5958829-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-22aeb2ea7ad34f30a9d09bb9cbaee56f.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-22aeb2ea7ad34f30a9d09bb9cbaee56f.log",
+    "sha256": "81F0BA95D91F292B1B1FBCBCB86714DC676377993CD658082E3141A6E2FCDA7D",
+    "lastWriteTime": "2026-10-08T12:28:41.6257494-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-23a5ada4949d4fdd94ff0b7f76b5015a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-23a5ada4949d4fdd94ff0b7f76b5015a.log",
+    "sha256": "3DE313F9BC46485EE46150533F8B6FB9CA30DEEF3CF11A45144C272A219717EF",
+    "lastWriteTime": "2026-10-08T13:30:03.7958238-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-23d7106e48544b6d8073c0b0621255bd.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-23d7106e48544b6d8073c0b0621255bd.log",
+    "sha256": "07096FA4509A5373732E0F6D7221DF3DE4E302C4A14A074A650C8A087ED416A8",
+    "lastWriteTime": "2026-10-08T14:25:16.2834016-05:00",
+    "bytes": 267,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-283331d942b94485bc13db5158cebe64.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-283331d942b94485bc13db5158cebe64.log",
+    "sha256": "8291F050B76EFC5F5311CD7924B100E0E3F852CFCA96900C9F04B35727A19759",
+    "lastWriteTime": "2026-10-08T16:01:07.8081917-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-28fb0b63a2174320a8eac6c53ebc1745.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-28fb0b63a2174320a8eac6c53ebc1745.log",
+    "sha256": "82D80994630B00BD13FDC7A4002EDCB0836DCEE189B67642786819C4FAA020C7",
+    "lastWriteTime": "2026-10-08T12:28:41.7559645-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-295cdb1985b64a1ebc97e18f12bb902e.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-295cdb1985b64a1ebc97e18f12bb902e.log",
+    "sha256": "725576DA95374C884118ADDD19EC3A00E38A8E2BE6ECAE2BFB77D9FAF1D2FFF0",
+    "lastWriteTime": "2026-10-08T12:28:41.6763644-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-2c2ba7ca069c41999b6ce3c580b2340f.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-2c2ba7ca069c41999b6ce3c580b2340f.log",
+    "sha256": "DCAC8B7E3585DCAD0634A018780D6ABFAFF2C0A3D19ED6471D65FE8E54D155DE",
+    "lastWriteTime": "2026-10-08T11:03:53.1802869-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-2c53df66e0f34b4184437c70b479be54.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-2c53df66e0f34b4184437c70b479be54.log",
+    "sha256": "4D1755DDFCAEBBEA70DDE970CBF07A36EC86A7ED564BB846491D7CBB6EB266A8",
+    "lastWriteTime": "2026-10-08T15:59:53.9435043-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-2caf7f98a00146c0b1398460ee76fa2c.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-2caf7f98a00146c0b1398460ee76fa2c.log",
+    "sha256": "4547B8E3DE50ADC7617F0DC0CDA51A976755679D4C899FA41148D315BD900DBB",
+    "lastWriteTime": "2026-10-08T12:28:41.5510692-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-2f1b1518cdb84f12a5080c07966262cc.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-2f1b1518cdb84f12a5080c07966262cc.log",
+    "sha256": "1F736EC8811F7172F77DE5E3C31F4674859565074E09220E69E867960C53CAC0",
+    "lastWriteTime": "2026-10-08T11:03:53.3463308-05:00",
+    "bytes": 259,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-33e0b851d71040a2aecd04088e03e0d9.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-33e0b851d71040a2aecd04088e03e0d9.log",
+    "sha256": "FE9F742C48885A5487FC983417604C068E23FE157CAA98FAB4846B1AAF560D76",
+    "lastWriteTime": "2026-10-08T13:03:44.9347559-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-36f7049557764464abefa4e44057913e.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-36f7049557764464abefa4e44057913e.log",
+    "sha256": "148A04B8FFACBD8942D76630D9F3297250346D1CAACDF5C0B578AE567AA5561B",
+    "lastWriteTime": "2026-10-08T12:28:41.6520564-05:00",
+    "bytes": 267,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-3913c626583a40c1b35f60dfaa700426.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-3913c626583a40c1b35f60dfaa700426.log",
+    "sha256": "A9CB0315670D24D7B15BE8B513F8F8C30AFE6812BE6CEB83F4173FE4926965DB",
+    "lastWriteTime": "2026-10-08T13:03:45.0333284-05:00",
+    "bytes": 267,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-3af12b58c33e4f788cc2e2cf11f79cce.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-3af12b58c33e4f788cc2e2cf11f79cce.log",
+    "sha256": "8F873601204DDB6AF7C515945E8104BF2DC4B51244B038AD0EBF2F6D831BDF62",
+    "lastWriteTime": "2026-10-08T14:25:15.9744304-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-41f57d073ff1478fa464b928a1b3ae91.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-41f57d073ff1478fa464b928a1b3ae91.log",
+    "sha256": "D72C0F344137083C2C3A60261950B94F64734A28AF6CB20B4A7EA1FAEED4A2E3",
+    "lastWriteTime": "2026-10-08T11:03:53.2248062-05:00",
+    "bytes": 315,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-42277852b04645c4be7253030be2d6bd.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-42277852b04645c4be7253030be2d6bd.log",
+    "sha256": "C2827680684FE4B3D234B1CAD62338BBAD2EE25A6D64D38D38194386077824E7",
+    "lastWriteTime": "2026-10-08T12:28:41.3769943-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-46a0ef0554244ba99cf6e176142724b3.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-46a0ef0554244ba99cf6e176142724b3.log",
+    "sha256": "0CCC13C366BFF588C15085A70953F7C78426B40F8D9F26BB4F16F9C3B1A84859",
+    "lastWriteTime": "2026-10-08T13:30:04.0195475-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-474de0a9fcec472fb78fd3444d53b7e2.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-474de0a9fcec472fb78fd3444d53b7e2.log",
+    "sha256": "9DDAD4A72759663B0EA2C14A9A9C383C7DF844C209E679A1DFD52754ACE00C75",
+    "lastWriteTime": "2026-10-08T15:59:53.8979925-05:00",
+    "bytes": 293,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-47de163dbba24e5d80b9a99f2c33d284.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-47de163dbba24e5d80b9a99f2c33d284.log",
+    "sha256": "30D2C125AED9E1AB5F07B1BC69853DE748C0B5E8ACE537C82A590232079ED199",
+    "lastWriteTime": "2026-10-08T13:03:45.0898635-05:00",
+    "bytes": 293,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-51c247aa2a4b44f3b2c8c2c41adad82a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-51c247aa2a4b44f3b2c8c2c41adad82a.log",
+    "sha256": "A7D10C7E415244398859C588B951AA382A63962C5497980123E28FD90BFB695B",
+    "lastWriteTime": "2026-10-08T11:03:53.0170117-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-5419d12d2df04f1296cf3f50119a300b.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-5419d12d2df04f1296cf3f50119a300b.log",
+    "sha256": "D05F62CC0707D97C1F885E3C16C8812B3AA0A4607D88B8A775F2F0F6A84668E7",
+    "lastWriteTime": "2026-10-08T15:59:53.6484037-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-5611d2446baf47d5a9ffbc7637d30f94.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-5611d2446baf47d5a9ffbc7637d30f94.log",
+    "sha256": "3743D0F92D53253D8F6F62493DAE9C86292300708C8BB7D78BF7BF9017CDF451",
+    "lastWriteTime": "2026-10-08T13:03:44.7795242-05:00",
+    "bytes": 258,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-5eb11eae23674d04bf992b31adc3d354.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-5eb11eae23674d04bf992b31adc3d354.log",
+    "sha256": "6E4F4813D53C516105E171EBBA671833DF60950161D3262713E019D2010FE432",
+    "lastWriteTime": "2026-10-08T16:01:07.8612025-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-5ec49c1d479d428cabb904a176e5e64e.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-5ec49c1d479d428cabb904a176e5e64e.log",
+    "sha256": "7BFDC22CC2F8AC9294FE725044E8DF3D9C17DFF2D0F0B390B1903A3686E1E257",
+    "lastWriteTime": "2026-10-08T14:25:16.0249488-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-615966811855494ebcaacdcfa027b9b7.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-615966811855494ebcaacdcfa027b9b7.log",
+    "sha256": "54B92876D0794D44C1AC8B000886536622530BDECC34C72066E7D45CC86AA676",
+    "lastWriteTime": "2026-10-08T13:30:03.9535487-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-6386a3d29b694e84b923f72705b8bbc6.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-6386a3d29b694e84b923f72705b8bbc6.log",
+    "sha256": "A0900C8C9B47ECFD2D1C5CC9560829EE5C8CED031959965DFAFFCE8000359165",
+    "lastWriteTime": "2026-10-08T12:28:41.5997495-05:00",
+    "bytes": 315,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-67602f7094834ca5aa897d60f6faf74b.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-67602f7094834ca5aa897d60f6faf74b.log",
+    "sha256": "BF136A33905BF6344804B11600C2400A2693FF39E5659CE0EC0552745D51F411",
+    "lastWriteTime": "2026-10-08T13:30:03.8198252-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-68cd38e773b8403ab606499cf8d2a265.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-68cd38e773b8403ab606499cf8d2a265.log",
+    "sha256": "A19D1FFACD8929456BC9F2D05F932C4D6D05BAD001104B1606C4731AF58E3BB8",
+    "lastWriteTime": "2026-10-08T15:59:53.8549865-05:00",
+    "bytes": 267,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-68d126ff98dc44e59dd6e6bd88f12881.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-68d126ff98dc44e59dd6e6bd88f12881.log",
+    "sha256": "80DE0AB6A59C49B8DC60328B9EB47431C19653EC0F2353A8E1BB420E2654079C",
+    "lastWriteTime": "2026-10-08T14:25:16.1714751-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-6bfc85e7ada54fe091edbd73eddebdd8.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-6bfc85e7ada54fe091edbd73eddebdd8.log",
+    "sha256": "918AEB434912089B9FE1FF2FF775BC6C9AC40C81E3B3A4561B011AE136835148",
+    "lastWriteTime": "2026-10-08T11:03:53.0690090-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-6ed61a362b6c4282a52cc8094f43c0b1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-6ed61a362b6c4282a52cc8094f43c0b1.log",
+    "sha256": "74B7CAF79759B6452FEC6F9A9EA4A8BF8EE4159CA531804A1D2736ECF08767FA",
+    "lastWriteTime": "2026-10-08T11:03:52.9619682-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-6f07cd79e7f14913804fd5c38ea48475.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-6f07cd79e7f14913804fd5c38ea48475.log",
+    "sha256": "7EE03A031AC9EE006E41EDA5C493846B98B7C3F08BE4443BE8F6D4253A98796B",
+    "lastWriteTime": "2026-10-08T15:59:53.8119864-05:00",
+    "bytes": 315,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-701182a26ac64e2093701100362fb6b8.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-701182a26ac64e2093701100362fb6b8.log",
+    "sha256": "60FE62A8B672BBA44440980EC32EA6A88A0624A1F6F04D0E7F8F541EE9E52C5A",
+    "lastWriteTime": "2026-10-08T13:03:44.5783809-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-743a2e152f8744d4af5d9857834f7166.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-743a2e152f8744d4af5d9857834f7166.log",
+    "sha256": "284F8F7FCED2B4DA6E3A970179BB634FF05F121A5D86721B8E63B7D1B49BEDF7",
+    "lastWriteTime": "2026-10-08T11:03:53.3713299-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-74cb5f64ab534db7a8911afadf8b606a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-74cb5f64ab534db7a8911afadf8b606a.log",
+    "sha256": "800A3DC43AA729C687740A4978B8B5DC01EBBF39F9EFAC0D34AECEA03261211A",
+    "lastWriteTime": "2026-10-08T14:25:16.0529497-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-799a38501ecc48afa5f8a3d3f8e092a1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-799a38501ecc48afa5f8a3d3f8e092a1.log",
+    "sha256": "DF00315A55B3E8A5A44F553542A571A85C0F5931FF50197C190CA055E49530D9",
+    "lastWriteTime": "2026-10-08T11:03:53.1162869-05:00",
+    "bytes": 268,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-7a641cacf94c40b8a84137b3650071d1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-7a641cacf94c40b8a84137b3650071d1.log",
+    "sha256": "8E723360C7C12AEEBB157C3EDBC082B6C0709FC0DE8787FA01796E6083FA488C",
+    "lastWriteTime": "2026-10-08T13:03:44.9672804-05:00",
+    "bytes": 315,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-7a8b72530b3e4a7d8295e28239ca92d6.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-7a8b72530b3e4a7d8295e28239ca92d6.log",
+    "sha256": "3D6C9CACEEDABA198DEBDDE2E392D9741935FE6D97C94FDCE457C82A37DE9B46",
+    "lastWriteTime": "2026-10-08T16:01:08.0332318-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-7bb6f188eaea47c5925aabb2613be030.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-7bb6f188eaea47c5925aabb2613be030.log",
+    "sha256": "3DE2224D891BF6BC4F9D0DCA4686BB7879D42069DEE2C0D2A2321B1831B1EB92",
+    "lastWriteTime": "2026-10-08T13:03:44.8727117-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-7c3094ce98c94624b19bd15517813bca.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-7c3094ce98c94624b19bd15517813bca.log",
+    "sha256": "442DE1EFB62271FA8BBFAE77A126E2071351C70C485622E0313FA19B8AFA265D",
+    "lastWriteTime": "2026-10-08T13:30:03.8418283-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-7f73199cf40447bd9d7407acbffad424.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-7f73199cf40447bd9d7407acbffad424.log",
+    "sha256": "F0631B806CDFA60BD8D0BA7AD7985E8BF323495CA37D690D77BEFCBB40C72EA5",
+    "lastWriteTime": "2026-10-08T16:01:07.8341875-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-81b516f98dd84c42bf2b90fad4770f89.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-81b516f98dd84c42bf2b90fad4770f89.log",
+    "sha256": "775D5E75EAA44ADCA9DBDFA726900BB60A345F28FBF752E1E87FFD36022070EA",
+    "lastWriteTime": "2026-10-08T13:30:03.9745474-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-8349dc4eccd64045b68f36edf67ca735.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-8349dc4eccd64045b68f36edf67ca735.log",
+    "sha256": "803FA2A6B7F0B6B86DDD1B09823FB5AA0CBAD4A999383DE1521FBFD7DC183F1C",
+    "lastWriteTime": "2026-10-08T12:28:41.3213447-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-83d8745fa5264739b6e78ab38ef51222.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-83d8745fa5264739b6e78ab38ef51222.log",
+    "sha256": "A280BDF719BAC54FF4C1F53E675746E372E619CC801C937BC870861DE240E2F8",
+    "lastWriteTime": "2026-10-08T12:28:41.5752280-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-84435bd1972441ea9268302d0a5aef84.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-84435bd1972441ea9268302d0a5aef84.log",
+    "sha256": "02720242491E8B47F05007CDF6BFE906E3399F21D9995A6A1105312BBC0C6108",
+    "lastWriteTime": "2026-10-08T15:59:53.6974067-05:00",
+    "bytes": 268,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-84df7b1ce4d24e7fa1d4fabc4f164db1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-84df7b1ce4d24e7fa1d4fabc4f164db1.log",
+    "sha256": "CFA5FF9C0C6CE646657D9711DEB83E60FE30F5BBD82C5A224469446EE082D74C",
+    "lastWriteTime": "2026-10-08T14:25:15.9474268-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-8565c55e80384caaa1ff882653bfcea1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-8565c55e80384caaa1ff882653bfcea1.log",
+    "sha256": "505919B2D3F8B1AC9848C23138E6436221021598FAA42BC4EC7C170BF9193E48",
+    "lastWriteTime": "2026-10-08T14:25:16.2364013-05:00",
+    "bytes": 315,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-8c99a63681484648b5976025014fc9c0.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-8c99a63681484648b5976025014fc9c0.log",
+    "sha256": "F7C8CA55E6196D69F003F04EFE2B3FA72A35CDF79FEBD0EF56BA45682114D4FA",
+    "lastWriteTime": "2026-10-08T13:30:03.8883398-05:00",
+    "bytes": 268,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-91d3495e68a34245a4a177b6dd714e43.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-91d3495e68a34245a4a177b6dd714e43.log",
+    "sha256": "4CAAB46EEC0801B5127C44FA8FACB819E06DD62F07AB239DDEE1F3BDFDF7A9AA",
+    "lastWriteTime": "2026-10-08T13:30:04.1376316-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-936f4ecbc2e64082a534ab76d3cb5144.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-936f4ecbc2e64082a534ab76d3cb5144.log",
+    "sha256": "2F42ED9E3639DF934CF09D12E0FCB54528462E167E5F26FBC7A413163CDA1B1C",
+    "lastWriteTime": "2026-10-08T13:30:03.7678236-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-97dd1a8ee7b74f579206cf0e2292b1ea.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-97dd1a8ee7b74f579206cf0e2292b1ea.log",
+    "sha256": "979E3E4956095C1DC44DC0C2621F806ED211F5BCD1F11D5B9CE6F316F956ED31",
+    "lastWriteTime": "2026-10-08T11:03:53.2738101-05:00",
+    "bytes": 267,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-99dda1fc26564ebfb6a15fab11275996.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-99dda1fc26564ebfb6a15fab11275996.log",
+    "sha256": "D0B91A138736487CF7B421CA183340E342391B3505BE821F318D0F29C30AF472",
+    "lastWriteTime": "2026-10-08T16:01:08.1527586-05:00",
+    "bytes": 267,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-9a58b8790c2e4e0e80ca32810aeeb7d0.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-9a58b8790c2e4e0e80ca32810aeeb7d0.log",
+    "sha256": "DF6CB6F06DC4D5D48B94CE65863E286101E7F1369A4F31992230D2E2998292EF",
+    "lastWriteTime": "2026-10-08T13:30:03.8653406-05:00",
+    "bytes": 258,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-9ebf550612de4ae3bbd9a7727eeb73df.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-9ebf550612de4ae3bbd9a7727eeb73df.log",
+    "sha256": "FF969A86AB058E08BA11F39BFA3940BBDCC8AE033094CF37609EA271422B1208",
+    "lastWriteTime": "2026-10-08T13:03:44.8397073-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a1e8b931c4724aa1a1ade17f239ab6a5.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a1e8b931c4724aa1a1ade17f239ab6a5.log",
+    "sha256": "42D37466853436F488F3EB4308E29EE41A9624A214097AA6CE977EEA25F46CDE",
+    "lastWriteTime": "2026-10-08T13:03:44.6759544-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a352b688b49340d693cdecef7d217af4.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a352b688b49340d693cdecef7d217af4.log",
+    "sha256": "479E6DEC443054CC373CA0A789EF47E762C3D311700FE0D70A719CBC214774FC",
+    "lastWriteTime": "2026-10-08T16:01:07.9087111-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a60c656f9f2d483eb1db4beff6ad8e91.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a60c656f9f2d483eb1db4beff6ad8e91.log",
+    "sha256": "6B4E47631B7650336FFAC7D473DDC71D849F2C30E63119AB37FF9876BD631926",
+    "lastWriteTime": "2026-10-08T11:03:53.2968099-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a6932297763f40779703d5bb3292891a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a6932297763f40779703d5bb3292891a.log",
+    "sha256": "FE4A97F7DA5B19C6A4DDC13D7A35E80216B8B39040C232B729E77952891F0CED",
+    "lastWriteTime": "2026-10-08T13:03:45.0608463-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a7d724e28f7e48659a8adbc4d2ac0da3.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a7d724e28f7e48659a8adbc4d2ac0da3.log",
+    "sha256": "69948E8345D93151517ABACE871D84EF6FD907E6DF1D702D41F4CBC9BC853280",
+    "lastWriteTime": "2026-10-08T13:03:45.1174250-05:00",
+    "bytes": 259,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a9a0848e48564ee59522557488d2ad86.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a9a0848e48564ee59522557488d2ad86.log",
+    "sha256": "D16157823982CC7887178C156FA85AC80A61671663B44D0AD660CF4A1DB81982",
+    "lastWriteTime": "2026-10-08T11:03:53.2478079-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a9aea215fff94dbfbe6ddc3d15b51b86.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a9aea215fff94dbfbe6ddc3d15b51b86.log",
+    "sha256": "1602EDE1DD362F6FE79E276CA60221C952232F83AA4CA221DE63F941DCC61A89",
+    "lastWriteTime": "2026-10-08T12:28:41.4528290-05:00",
+    "bytes": 258,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a9b4feb682424bb9a18bd7f5bbbb934d.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a9b4feb682424bb9a18bd7f5bbbb934d.log",
+    "sha256": "00A921613D05425D9C4E21DFB66B7A1291A3EF0504AF23D55C9C9F58C4CE6931",
+    "lastWriteTime": "2026-10-08T12:28:41.4295288-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-a9fac54ac58f421387a076747d6dc648.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-a9fac54ac58f421387a076747d6dc648.log",
+    "sha256": "51F20583CA9CE0ED9EEDAE7014940ACD3510EEECE1C736C6224583CFFAD6D63D",
+    "lastWriteTime": "2026-10-08T11:03:53.0930095-05:00",
+    "bytes": 258,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-acc5e87f0031487587cde64149b4645d.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-acc5e87f0031487587cde64149b4645d.log",
+    "sha256": "572CDDACA699916C3395541CCFE384CFE439AD6125C9E19B251D24D309714F5F",
+    "lastWriteTime": "2026-10-08T15:59:53.5478754-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-b16c36684caa47aa846ed1130f6f0e1d.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-b16c36684caa47aa846ed1130f6f0e1d.log",
+    "sha256": "DF908425E07DF3874838E08A1B8FCEF30097D1F34A1BE6016E280FF09F050374",
+    "lastWriteTime": "2026-10-08T13:30:03.9985492-05:00",
+    "bytes": 315,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-b1835043b921413da6d0188e6495dda0.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-b1835043b921413da6d0188e6495dda0.log",
+    "sha256": "4E3B8C788327B1A246011A24568BFC56B7CAA242D712A6A89C4D8F8DFD37022B",
+    "lastWriteTime": "2026-10-08T12:28:41.5278215-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-b47cdeb0eff24e8692d7af57bcd830df.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-b47cdeb0eff24e8692d7af57bcd830df.log",
+    "sha256": "326CBBDBCB594B28C1D16D907C463A474729836CFA4E5FE971803257C3A5861B",
+    "lastWriteTime": "2026-10-08T13:03:44.6074254-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-b4b0dfbf59d44ff69172ec3e1ea4f7ab.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-b4b0dfbf59d44ff69172ec3e1ea4f7ab.log",
+    "sha256": "120232CA20F3DFE106257ADA409CE4A053DBC6A849D078AA26F1B6E37CCD0B56",
+    "lastWriteTime": "2026-10-08T14:25:16.1044669-05:00",
+    "bytes": 258,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-b6c41686e91048d5b477c3c6c2d8427a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-b6c41686e91048d5b477c3c6c2d8427a.log",
+    "sha256": "1EDB39CAFDC0D05A07D81D591AD4BDBE2DDBD2F241492212AC3763A15F7018B9",
+    "lastWriteTime": "2026-10-08T12:28:41.4781660-05:00",
+    "bytes": 268,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-b96d54e87bc64556ba54a7c72636fb47.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-b96d54e87bc64556ba54a7c72636fb47.log",
+    "sha256": "7FCCE196913091BCEF176977F13A9AC6DA9C80398A04044C2EE92B95A9EF994B",
+    "lastWriteTime": "2026-10-08T16:01:08.2442719-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-baa043a7a88143e28457c13571d9da64.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-baa043a7a88143e28457c13571d9da64.log",
+    "sha256": "B75D3EBC0F6423ADB0D5D8AAF5B36BBD4B9883547AD08CCEADC4C2B0758F88BF",
+    "lastWriteTime": "2026-10-08T12:28:41.7283757-05:00",
+    "bytes": 259,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-bd205080ed9447fb9e5fdf52f2867817.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-bd205080ed9447fb9e5fdf52f2867817.log",
+    "sha256": "B14CF56F7C66543F86DCB8FC19BC2D414A735B6D1A13D5B49827544819EA971E",
+    "lastWriteTime": "2026-10-08T16:01:07.9347118-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-be2ace2360fe4ed9939b115c1100886a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-be2ace2360fe4ed9939b115c1100886a.log",
+    "sha256": "738E770E3F65D4EDF6D8703807B4A0566A44A2D74E3BAD78C65AF346EE5642BB",
+    "lastWriteTime": "2026-10-08T15:59:53.7414396-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-bec198af1f0649f09d73d369d650bba7.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-bec198af1f0649f09d73d369d650bba7.log",
+    "sha256": "C24078761744BC9DB7D402DE1A1DEAB4E97A584D24C562B719DF25C02A5BCFFE",
+    "lastWriteTime": "2026-10-08T12:28:41.5023006-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-bf0278110a2747ffbefd3874fc7d7f62.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-bf0278110a2747ffbefd3874fc7d7f62.log",
+    "sha256": "99B2873015462A16D4672166CF13BA7C144BF26091D8FD1765DF886C9631CF2D",
+    "lastWriteTime": "2026-10-08T13:30:04.0656221-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c06a823cc93c4081b8835f0be32ce091.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c06a823cc93c4081b8835f0be32ce091.log",
+    "sha256": "D1148FAE8829D6D9D11ED72FFC4D332F89D6B08FD973E0F1CB4478480B0AA7E8",
+    "lastWriteTime": "2026-10-08T15:59:53.7189189-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c0798103727d4545b391a72e078a7e82.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c0798103727d4545b391a72e078a7e82.log",
+    "sha256": "18262B03DD721FFFF96731639C4BAE899D5D0E76820C6E6B98536A5CF7628F9B",
+    "lastWriteTime": "2026-10-08T13:30:03.9103395-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c101cc0e526c4bbe9a7e6d0694497c20.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c101cc0e526c4bbe9a7e6d0694497c20.log",
+    "sha256": "5F62EDDE462A319D08D0B1CB907575A8CE6670A6B355382BA848E3508C582BE9",
+    "lastWriteTime": "2026-10-08T15:59:53.8759907-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c1f42afaed2d4ef2996581f7947f2baf.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c1f42afaed2d4ef2996581f7947f2baf.log",
+    "sha256": "1F79F845CBCF7380481615FC12188EC0BA85BC4EA032B612D45FB86A70055798",
+    "lastWriteTime": "2026-10-08T13:30:04.1126238-05:00",
+    "bytes": 259,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c34c096f3668472aaf1822a4399007a5.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c34c096f3668472aaf1822a4399007a5.log",
+    "sha256": "76BCEBEC7C9510B34C6FA230123BF6648451C39271C4291566325A9684FACC49",
+    "lastWriteTime": "2026-10-08T14:25:16.3757258-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c3c1fb962d8b4825b7b18f0534a68068.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c3c1fb962d8b4825b7b18f0534a68068.log",
+    "sha256": "5A3D415A1CB74C7D688AAE041C4C5847769C93DE8EA85DE01336584A4E754B0E",
+    "lastWriteTime": "2026-10-08T13:30:04.0446236-05:00",
+    "bytes": 267,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c49b044f91584acebd5ab1b02642aa40.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c49b044f91584acebd5ab1b02642aa40.log",
+    "sha256": "8452A3CCADAB550F76C4FFE485BCB5E338C2A67908C1D90C30675998D43C4D2B",
+    "lastWriteTime": "2026-10-08T16:01:08.1277529-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c50ce25c053d4c3f8e25af576eddcc1a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c50ce25c053d4c3f8e25af576eddcc1a.log",
+    "sha256": "7297139A376325A8EF6904F05C1052452736AB40167395DC2DE9C7876516ADF4",
+    "lastWriteTime": "2026-10-08T13:30:03.7212584-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c761cafb26d34efea04c1ad85481ea39.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c761cafb26d34efea04c1ad85481ea39.log",
+    "sha256": "B7B661CC16D4B71062AB7F9E16BE3FC27E3D51A4253B40C83F5B0461DF6BF729",
+    "lastWriteTime": "2026-10-08T16:01:07.8857089-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c7b62588a8bc452aa4e7f7965fe7f785.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c7b62588a8bc452aa4e7f7965fe7f785.log",
+    "sha256": "1BF7291764292E2AC07EBA2BF66EDB0F953D0C951A2DF8905AEE1A7C82474EC2",
+    "lastWriteTime": "2026-10-08T14:25:16.1274748-05:00",
+    "bytes": 268,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-c91ec3d7dd8f4a49b9a0b0375a0290d2.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-c91ec3d7dd8f4a49b9a0b0375a0290d2.log",
+    "sha256": "6B443EE508B2EB810616B69C7C00E7C90127F6CC1DBB7C288F2CAC2B80C1656A",
+    "lastWriteTime": "2026-10-08T14:25:16.3287205-05:00",
+    "bytes": 293,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-cc26c4d6c59b479f93eafee00a347af1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-cc26c4d6c59b479f93eafee00a347af1.log",
+    "sha256": "8D38FC4CCF1EEF21CAAD2496468ECFCF147D3AF5CEBEF0EE07370441A6A66609",
+    "lastWriteTime": "2026-10-08T12:28:41.7023658-05:00",
+    "bytes": 293,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-cca7b7a316ba49d98b0d1798d9f4f54c.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-cca7b7a316ba49d98b0d1798d9f4f54c.log",
+    "sha256": "DBD396D5B781E95764995FA66B9AC3F2B41523AFA2C16CFA1408CF2DD8045A53",
+    "lastWriteTime": "2026-10-08T14:25:16.3057221-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-cddb42a8935646a5953a52232c557518.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-cddb42a8935646a5953a52232c557518.log",
+    "sha256": "E745E35CC4CA8BE037CF3761CD30A41C221D32493B719457A7F6DF08D49E88DE",
+    "lastWriteTime": "2026-10-08T11:03:53.1382871-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-cee8ce0583d24612bb2fd9236e829e04.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-cee8ce0583d24612bb2fd9236e829e04.log",
+    "sha256": "6E572DA3276E9B4DC5BCE7B03FA3E3AC8BA02BC28B00405D7F16352E3B011E90",
+    "lastWriteTime": "2026-10-08T16:01:08.0797501-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-d13e8477a2f947a19f5dd727479eda73.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-d13e8477a2f947a19f5dd727479eda73.log",
+    "sha256": "09A7B063DBCA076679B6A2A301CA38172F4471C94D4A38EF2E2E86F943C074B0",
+    "lastWriteTime": "2026-10-08T16:01:08.2212703-05:00",
+    "bytes": 259,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-d179045fc2164a198010e43e4668ae1e.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-d179045fc2164a198010e43e4668ae1e.log",
+    "sha256": "58BD90FACBE6ED76F71800A078AC05E2DBD6BC4C498ADA5127DF240161ED882D",
+    "lastWriteTime": "2026-10-08T12:28:41.2923432-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-d223bd14a9b947e5afc500c41cdb88ef.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-d223bd14a9b947e5afc500c41cdb88ef.log",
+    "sha256": "3A23BB19DC2742B4F2253CB66AFCDE15CC84B1A43DC5FA48F882A6AEC0C80971",
+    "lastWriteTime": "2026-10-08T16:01:08.1037533-05:00",
+    "bytes": 315,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-d86571bcc27442008c60429626bc41ee.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-d86571bcc27442008c60429626bc41ee.log",
+    "sha256": "BA26B28F346FCC94B9493766D4EBC8A96E1BBD1632B258EC5D9E8CF04CF8BD65",
+    "lastWriteTime": "2026-10-08T14:25:16.3507257-05:00",
+    "bytes": 259,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-d9f23233d3164855a3eb0a759e7fa8a2.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-d9f23233d3164855a3eb0a759e7fa8a2.log",
+    "sha256": "4C1DCBAA9A532E2E29F5ADC63D5BC0CD362A1D84203BDA7BC2B7492541894B94",
+    "lastWriteTime": "2026-10-08T14:25:16.1935262-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-df08d0e085a4412882ad4508dd54b9b9.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-df08d0e085a4412882ad4508dd54b9b9.log",
+    "sha256": "CE1A07B6A5C92F269915ED58587496852B940576BE9A11C0D270126C865FB1E8",
+    "lastWriteTime": "2026-10-08T15:59:53.7634687-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-e09a0770961b48cb83ba869c2968d6bb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-e09a0770961b48cb83ba869c2968d6bb.log",
+    "sha256": "0528DB2F77E6B75006BAE993065288CD002DBE9FB688F04AD9A33063C3A54697",
+    "lastWriteTime": "2026-10-08T13:03:44.7434881-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-e5253de6197a45c59a891a6bf12a3319.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-e5253de6197a45c59a891a6bf12a3319.log",
+    "sha256": "3D8BAD513DF4A6E4EEF25C33C418B6BAA8CCAB1B2081D467D38B231C97E1D85E",
+    "lastWriteTime": "2026-10-08T12:28:41.3484725-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-eb5825719e4c4bb590a69abe36439842.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-eb5825719e4c4bb590a69abe36439842.log",
+    "sha256": "BD3AAC00E03C7BE91B214DB0A824312DD9E1A0ECD2CB881234CEC2250F3CF7FA",
+    "lastWriteTime": "2026-10-08T11:03:52.9369656-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-ec86fbbc3e4740c680085461745ac925.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-ec86fbbc3e4740c680085461745ac925.log",
+    "sha256": "C99F4258AB8D1747432317DF25CCDFEC6A9EAF3F8C956D0F112064D90E994E84",
+    "lastWriteTime": "2026-10-08T13:30:04.0886225-05:00",
+    "bytes": 293,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-ed9b886f4004414585d112f99e03baec.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-ed9b886f4004414585d112f99e03baec.log",
+    "sha256": "EAF4180442A16FB0D66C43276DC36441B0CFE130A1A723CDB3CE80FFC4A8DB75",
+    "lastWriteTime": "2026-10-08T16:01:08.1762706-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-f2e426d5d56d4c898a6bdb54c1b3d866.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-f2e426d5d56d4c898a6bdb54c1b3d866.log",
+    "sha256": "311A2F1D9B954D681277080AC3AAFE148EB8ADA351D320AD01FD2B3916FBF042",
+    "lastWriteTime": "2026-10-08T12:28:41.4035203-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-f58b53b4d8744e91a5c3f0ffa71ba3c0.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-f58b53b4d8744e91a5c3f0ffa71ba3c0.log",
+    "sha256": "D15F8CBFC929C42B07F0987B204BAE1D31EAF844EB4DD9B566402D60D04FACE7",
+    "lastWriteTime": "2026-10-08T14:25:16.2594024-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-f5bb394569954b1785b51bccae6caba6.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-f5bb394569954b1785b51bccae6caba6.log",
+    "sha256": "DC46C999B8CE1DF85BA0C150E2AA745A62C126E7A91A33A7804E6258F9F008EF",
+    "lastWriteTime": "2026-10-08T13:03:44.9042268-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-f847ba3307b9493d822cf2eb9aaf746e.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-f847ba3307b9493d822cf2eb9aaf746e.log",
+    "sha256": "8A484A5C210F6B4019F2684AF03654404F11E7F9CB2D7639C36D70D14DB1C9F3",
+    "lastWriteTime": "2026-10-08T13:03:44.7134900-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-f8acebba5f394c3ebe3cfbd6ed432b12.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-f8acebba5f394c3ebe3cfbd6ed432b12.log",
+    "sha256": "9A2A57E1063BECE5EED744AAE175DA874D0CCB4FF738D62D3A3E1CD6CBF6EA70",
+    "lastWriteTime": "2026-10-08T11:03:53.0430090-05:00",
+    "bytes": 279,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-fbe47b2260be4739a7e1d0132f73d7ed.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-fbe47b2260be4739a7e1d0132f73d7ed.log",
+    "sha256": "2525B4CC931FC63A106127D703CF0EC1A9D159B8636A781825555F5652415A64",
+    "lastWriteTime": "2026-10-08T15:59:53.5258737-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-fde218cf210a4ccba9483757854f53cb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-fde218cf210a4ccba9483757854f53cb.log",
+    "sha256": "2979A1F2F00610F9EB647ED43044FEBE7AC984FC9D2BB2B303B7C2946D0F5024",
+    "lastWriteTime": "2026-10-08T15:59:53.9205057-05:00",
+    "bytes": 259,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-fe2629a1190c4ca6ac65c1e78ebc9814.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-fe2629a1190c4ca6ac65c1e78ebc9814.log",
+    "sha256": "C2DE7F35349DE0C267C104FA457EA2B90DE50B54201F00000583BCAD98146BCC",
+    "lastWriteTime": "2026-10-08T16:01:08.0572393-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-fed5a66e4d764b0fba4dfe30c26db185.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-fed5a66e4d764b0fba4dfe30c26db185.log",
+    "sha256": "8E6F2983852EFE46AB163379BAF0E202F97E4DF16237158A0659679DEADC3ABE",
+    "lastWriteTime": "2026-10-08T13:03:45.0002889-05:00",
+    "bytes": 247,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-ffc4a7d62c28486c998734d895dd996b.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-ffc4a7d62c28486c998734d895dd996b.log",
+    "sha256": "E1123287D27324348162E5F55F614501A8BBFD5CE100A828E8D8906EB0435A20",
+    "lastWriteTime": "2026-10-08T14:25:16.2154055-05:00",
+    "bytes": 277,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\run-ffeb49b9c1164ad48d544619df32e66e.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-gate-evidence\\run-ffeb49b9c1164ad48d544619df32e66e.log",
+    "sha256": "FB699A299D9BD9AF35A900A7747CF2CDF660D642CB85F0DE020F98541BB5D961",
+    "lastWriteTime": "2026-10-08T15:59:53.5728718-05:00",
+    "bytes": 278,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\clock-fixture.exe",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\clock-fixture.exe",
+    "sha256": "22B9BFAA77A83D37558DFC5EA296343CB4DBD8DE63EF1EBECD009FF803C50280",
+    "lastWriteTime": "2026-10-08T10:59:57.4750570-05:00",
+    "bytes": 272427,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\clock-probe.exe",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\clock-probe.exe",
+    "sha256": "3703F571612FC79E19D80FE8DE5F5EA4FEE19256FD111DAA28F57B8CBBFA558A",
+    "lastWriteTime": "2026-10-08T16:01:07.8211885-05:00",
+    "bytes": 272427,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\compile.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\compile.log",
+    "sha256": "8817CF20ED394C9BF0A8C3FECF455FDB581772149840B20D52595CC2C1B5015A",
+    "lastWriteTime": "2026-10-08T16:01:07.8291876-05:00",
+    "bytes": 654,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-00b00148f20145c58eb498459f171f2a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-00b00148f20145c58eb498459f171f2a.log",
+    "sha256": "803A66F15D974A4895745EF2E6B54741F0957BD685BE8D055FF580FCF2E42C76",
+    "lastWriteTime": "2026-10-08T13:03:44.6559569-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-01f6e2484b424a4fbb34687b0bd17322.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-01f6e2484b424a4fbb34687b0bd17322.log",
+    "sha256": "ED9B0825D792598D873FD4CE3659380DB5931F6E08F0DC31F95A79E4574BF394",
+    "lastWriteTime": "2026-10-08T12:28:41.3303487-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-0b2db2634d0a47da9667ab63b215cda3.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-0b2db2634d0a47da9667ab63b215cda3.log",
+    "sha256": "EF2A50E93B3660AA60B9A146F6E5F3E909AC9ACDBEB2A7DA66096DC9DCE47989",
+    "lastWriteTime": "2026-10-08T13:30:03.8593412-05:00",
+    "bytes": 509,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-0de2f602d2474f998ba91a0762f3d691.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-0de2f602d2474f998ba91a0762f3d691.log",
+    "sha256": "40AAC293192EFE4A8CB332B073BAF51A0FAD9966800E808F8065D2795403C4E2",
+    "lastWriteTime": "2026-10-08T12:28:41.3584720-05:00",
+    "bytes": 254,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-10e1cc8441b84fc3b584047c89b4e0bb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-10e1cc8441b84fc3b584047c89b4e0bb.log",
+    "sha256": "65E5AB1F97BE17CA30B04C211805CDA0C04F455F46D9BE87CCC31D6F1551D117",
+    "lastWriteTime": "2026-10-08T14:25:16.0469497-05:00",
+    "bytes": 254,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-13ad08fa1f7c4f39966d73d44a9613e5.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-13ad08fa1f7c4f39966d73d44a9613e5.log",
+    "sha256": "81D6987D0209A3DDA5791313DAC42B5963FCCDE856D247468ABAED6748A3E6C1",
+    "lastWriteTime": "2026-10-08T10:59:57.6145846-05:00",
+    "bytes": 495,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-1a406af089ba45e0800cd252d48e9d02.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-1a406af089ba45e0800cd252d48e9d02.log",
+    "sha256": "CC4E4FBE8EFECEA0FC127EFE5D0CDF5A6C5CD0D3B8E16CBC083E1E9E84E267B0",
+    "lastWriteTime": "2026-10-08T14:25:16.1214745-05:00",
+    "bytes": 251,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-275cc90b8df64f8e82ed20a30062a5e3.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-275cc90b8df64f8e82ed20a30062a5e3.log",
+    "sha256": "5EC52B1E70CABE69651D4B2729921C51D70B53339BBFBA191EFE83AAD67FC525",
+    "lastWriteTime": "2026-10-08T11:03:53.0580093-05:00",
+    "bytes": 220,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-2769e75672434731aac2dfa313845a8c.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-2769e75672434731aac2dfa313845a8c.log",
+    "sha256": "98ECA5A7A1445B97F7BDB4ECEBDF3ABFF9D63F0581BF89D78CEC7B75BC756531",
+    "lastWriteTime": "2026-10-08T11:03:53.0840120-05:00",
+    "bytes": 509,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-28b477eecba04d30bc40cb7fd466f0cd.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-28b477eecba04d30bc40cb7fd466f0cd.log",
+    "sha256": "CD289CDA0C4BB650C04D6B4F1BD16854460A2E796ED9C0A09BBF343E2B575915",
+    "lastWriteTime": "2026-10-08T13:30:03.7648235-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-2b82b10776134266b66a6af08cd19b0f.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-2b82b10776134266b66a6af08cd19b0f.log",
+    "sha256": "191BE1C302A3E197CB0C41D4AA84FF42DCD08B624C996AB64EDBC9DD10F05BD3",
+    "lastWriteTime": "2026-10-08T16:01:07.9537175-05:00",
+    "bytes": 509,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-44558b0594784251801247c08bed475a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-44558b0594784251801247c08bed475a.log",
+    "sha256": "08E308E2343F8AE6BFAA0BA29331C9A9400816A7974CE39ABCDE1963FC25C59E",
+    "lastWriteTime": "2026-10-08T10:36:15.8562667-05:00",
+    "bytes": 271,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-45f1d27133204a41b5cdd8d288f7142c.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-45f1d27133204a41b5cdd8d288f7142c.log",
+    "sha256": "D4A509C8A38FC2FDAE569C04A1F2B3E49EDB25463189F3DB5EA28DC107788BDE",
+    "lastWriteTime": "2026-10-08T13:30:03.8118259-05:00",
+    "bytes": 254,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-491e641b481b4eaca091d998f7253cd0.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-491e641b481b4eaca091d998f7253cd0.log",
+    "sha256": "7E9615212D2B3EA849B8A269F63CF1A0AE8CFE96DB22C72146D83CA780BD3058",
+    "lastWriteTime": "2026-10-08T10:59:57.5895832-05:00",
+    "bytes": 206,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-4b2a6e4202d3413eb81d7cf5b451b9ca.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-4b2a6e4202d3413eb81d7cf5b451b9ca.log",
+    "sha256": "774D9F7B9485C728368EEB2C20D54157197487A7DA9394DBC7770662A227853A",
+    "lastWriteTime": "2026-10-08T15:59:53.5898744-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-4c584af1375a472dbd4009a996685a4b.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-4c584af1375a472dbd4009a996685a4b.log",
+    "sha256": "81CCF1C44EBB1900761B070765CF9EBF579EDE5CC152268DD9FBE4D27AA2751F",
+    "lastWriteTime": "2026-10-08T13:03:44.8316758-05:00",
+    "bytes": 251,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-4c6ed6274a4e463f9bd1faaf4d54e2a4.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-4c6ed6274a4e463f9bd1faaf4d54e2a4.log",
+    "sha256": "7A0A5145B0D2EAAED2709947505FD73148F0F57039E44A67B22927EDBFF13C44",
+    "lastWriteTime": "2026-10-08T10:59:57.5110573-05:00",
+    "bytes": 271,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-59b0f1be940a4af687af154ec42a5f02.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-59b0f1be940a4af687af154ec42a5f02.log",
+    "sha256": "363742C466CB550CD40B9F57FDEB1D67D7BCD65332EBBE9F2B87FA485971D314",
+    "lastWriteTime": "2026-10-08T15:59:53.6413956-05:00",
+    "bytes": 220,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-5a2ecc3e9fe64643a32d1d2aaa3bb9a7.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-5a2ecc3e9fe64643a32d1d2aaa3bb9a7.log",
+    "sha256": "24CDCE03ED836B82B37395D4E73D103B4DB76D5F385D1686EB175897CD838D63",
+    "lastWriteTime": "2026-10-08T14:25:16.0719514-05:00",
+    "bytes": 220,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-5ddac0dfcc034136999652fc7f1efd2f.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-5ddac0dfcc034136999652fc7f1efd2f.log",
+    "sha256": "6CCF16DED6B26BA8D8B541F6D35FE3CB3DCF8E7E8547F9C14E2069515A93A712",
+    "lastWriteTime": "2026-10-08T16:01:07.8561995-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-5fbbe46a5b1b4385bc860df4f361755c.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-5fbbe46a5b1b4385bc860df4f361755c.log",
+    "sha256": "F54C96FE4952633AFB843A26A590118748838F70BC103D6DD4EDD39AE9C4CD01",
+    "lastWriteTime": "2026-10-08T13:03:44.7995321-05:00",
+    "bytes": 509,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-5fbe4111b92047dfb5e800f48857354e.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-5fbe4111b92047dfb5e800f48857354e.log",
+    "sha256": "89598686E57F8BF30C4E2FFD0A2422C83A575EE230F95453622D93ECB8F345E2",
+    "lastWriteTime": "2026-10-08T16:01:07.9027095-05:00",
+    "bytes": 254,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-5fedf7c3a9b343bb9f6e3cbe921ab90d.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-5fedf7c3a9b343bb9f6e3cbe921ab90d.log",
+    "sha256": "0BE5BE847978CEA2EA786FD8A9BBA423ACE174D22EF9B7DF380C3F05C934010C",
+    "lastWriteTime": "2026-10-08T12:28:41.3865199-05:00",
+    "bytes": 220,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-60de89f5d7f24a459a2c23f45a8ed8fb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-60de89f5d7f24a459a2c23f45a8ed8fb.log",
+    "sha256": "462E90B5E05EA15BBE64EF269B2DEF13A29107C9C68D43492EE6AAF6898F9433",
+    "lastWriteTime": "2026-10-08T16:01:07.9287084-05:00",
+    "bytes": 220,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-66daec0b87b74d64a4251b89741fed67.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-66daec0b87b74d64a4251b89741fed67.log",
+    "sha256": "68C0B2C9ABEF79D175EC8500F7B925EED3DFF9787F1DEA847981A43B06AE0865",
+    "lastWriteTime": "2026-10-08T16:01:07.9792322-05:00",
+    "bytes": 251,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-677222e6168d4a3e822b02b4d78148fb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-677222e6168d4a3e822b02b4d78148fb.log",
+    "sha256": "56C0AED721995B89BC6BFFFBFE48F625E57B87EBC4ED7739030E8CA576786D44",
+    "lastWriteTime": "2026-10-08T12:28:41.4115198-05:00",
+    "bytes": 509,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-6ecd064503454f309c1085063b0e4ada.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-6ecd064503454f309c1085063b0e4ada.log",
+    "sha256": "E4AEB967B5099BDDDF4F8D20D19B9153BE27E4935B4563E2A4DCF4B8181600BF",
+    "lastWriteTime": "2026-10-08T14:25:16.0179504-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-74d3028d8a4f4d8ab60c21abe02463c4.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-74d3028d8a4f4d8ab60c21abe02463c4.log",
+    "sha256": "A91A2716FE82FB77F721EE9FDE9FE37AB3E4B9303CC63009B419FECC311AEB8B",
+    "lastWriteTime": "2026-10-08T13:03:44.7374910-05:00",
+    "bytes": 254,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-7c54b3835b2d495498fd49ca469d2244.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-7c54b3835b2d495498fd49ca469d2244.log",
+    "sha256": "C38B328D3137D8EE999FD95604CEFA053A078556668B136D9371F6875F445DD7",
+    "lastWriteTime": "2026-10-08T14:25:15.9914352-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-7cef3327dcb3450b9095759973f3cf1b.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-7cef3327dcb3450b9095759973f3cf1b.log",
+    "sha256": "AD09A92908BBEBA61B8492DBA7567A3B0D68E53E9497BCA08A6F9600B4F05824",
+    "lastWriteTime": "2026-10-08T15:59:53.6133966-05:00",
+    "bytes": 254,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-7f1217734edf4009bf222480084746cc.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-7f1217734edf4009bf222480084746cc.log",
+    "sha256": "91C49ECC31C8A68EED40F6B7260554C2500624FA478C4EBF04C338E6137C9531",
+    "lastWriteTime": "2026-10-08T12:28:41.3033449-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-83bb1ff1d090423a8e87396e42763694.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-83bb1ff1d090423a8e87396e42763694.log",
+    "sha256": "1A73FB1DB40BC86FAAAA375399EDF17B2108B7ECD9BF49B15941A581DAD6C6F4",
+    "lastWriteTime": "2026-10-08T14:25:16.0969645-05:00",
+    "bytes": 509,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-84c683986e914b439012f8a2ec199e0c.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-84c683986e914b439012f8a2ec199e0c.log",
+    "sha256": "26480E20941C77D1F48387E81EADAA36C6A383C451C62194BA6E963496CB4AF8",
+    "lastWriteTime": "2026-10-08T13:03:44.7084919-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-8f92f41f00e34da5ab648e8a644eaa19.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-8f92f41f00e34da5ab648e8a644eaa19.log",
+    "sha256": "30A576555856F1589AB412CB2BD860B65D4CAB96FB7A9C14427C229EC4E86526",
+    "lastWriteTime": "2026-10-08T11:03:53.1080148-05:00",
+    "bytes": 251,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-900075fc62b54665b8777f1166ca81c4.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-900075fc62b54665b8777f1166ca81c4.log",
+    "sha256": "41F5AB1A7F0DF84434A8CCF05B2D00921B533A27D9BD0C6E82E3F1EBB70AAA69",
+    "lastWriteTime": "2026-10-08T13:30:03.8358293-05:00",
+    "bytes": 220,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-9973d5812c474356b6121a3461e43fa5.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-9973d5812c474356b6121a3461e43fa5.log",
+    "sha256": "BF3464567CAF38F9832CD738230FD6091B5A4CDAB70EB48A263B48FC171C47E4",
+    "lastWriteTime": "2026-10-08T10:59:57.5645879-05:00",
+    "bytes": 240,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-9f36b3803b0946e5b77d1413bdb438a1.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-9f36b3803b0946e5b77d1413bdb438a1.log",
+    "sha256": "1F2D52F6064151CD90B8A2F19DE20C9ADD4036E18C49B2CF57301722166741E1",
+    "lastWriteTime": "2026-10-08T13:30:03.8823405-05:00",
+    "bytes": 251,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-a00a62a73f0646b69545b118ab8ae371.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-a00a62a73f0646b69545b118ab8ae371.log",
+    "sha256": "737967309A5F5A750A9F3C2776845F8686C0EE7A35C3F4D83EBD2DDB21C87390",
+    "lastWriteTime": "2026-10-08T12:28:41.4375281-05:00",
+    "bytes": 251,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-a690869f29e643a189da16dbcc112699.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-a690869f29e643a189da16dbcc112699.log",
+    "sha256": "CF7A186F7D5A59D7C638527699D9730C38EAE0829ACF7C71FDE2DE0DCC53351C",
+    "lastWriteTime": "2026-10-08T10:36:15.8792674-05:00",
+    "bytes": 271,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-abd4c83bf56047c49a75d3f85293afba.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-abd4c83bf56047c49a75d3f85293afba.log",
+    "sha256": "56945F5ACE25FA350E7FE298F0950AD088E11B5CA4F17A14851AE72539B6138A",
+    "lastWriteTime": "2026-10-08T15:59:53.6913964-05:00",
+    "bytes": 251,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-b5cac722d23146b382fd8d405a0cd1e9.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-b5cac722d23146b382fd8d405a0cd1e9.log",
+    "sha256": "06EA3D86EA542AE0A044E433E5C8D5D8DD3B12DD9498AF77EAE9FB59441C365F",
+    "lastWriteTime": "2026-10-08T10:36:15.9302680-05:00",
+    "bytes": 206,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-c3879bb8f9214b4380866f5726df25ee.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-c3879bb8f9214b4380866f5726df25ee.log",
+    "sha256": "EF80EBE79D51CC19233C27625CFAAAAE693C0C700C8F4ADD45D716427A6F961F",
+    "lastWriteTime": "2026-10-08T16:01:07.8797128-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-c3c8640157cc40278953f3d547512f6d.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-c3c8640157cc40278953f3d547512f6d.log",
+    "sha256": "EC17B5D4782ABCD95431A3D2C5D7A457FE368DAEACFD7FD465C62A66B55CAF7C",
+    "lastWriteTime": "2026-10-08T15:59:53.5658742-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-cfffc16dd7da47bdad6526ed79f7687f.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-cfffc16dd7da47bdad6526ed79f7687f.log",
+    "sha256": "D754E0FD20A95924EABE34C97B9BFEC152DE84BDCA1403876BAFDB1A36E5BF96",
+    "lastWriteTime": "2026-10-08T10:36:15.9547862-05:00",
+    "bytes": 495,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-d873c54b98d74411912038fcdba614cb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-d873c54b98d74411912038fcdba614cb.log",
+    "sha256": "7D6854B7A2A6B0C3FB00CF29E6D591F5C1469B0BEB6D3F99454A3AE9A7B0A183",
+    "lastWriteTime": "2026-10-08T10:59:57.6395911-05:00",
+    "bytes": 237,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-d9b393f3e20b49ccaa65fcf25defa984.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-d9b393f3e20b49ccaa65fcf25defa984.log",
+    "sha256": "094F0CB608B451628D0CB3219D6194DDC8EC3D2AFC78CBD8DAC7EEC957E10353",
+    "lastWriteTime": "2026-10-08T10:36:15.9072676-05:00",
+    "bytes": 240,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-db74e705d8f24167949be7059e90ce86.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-db74e705d8f24167949be7059e90ce86.log",
+    "sha256": "3A411598ECE0AEEB01987FD93ED0A92B85001B11238E8503C1935B95499DC6A1",
+    "lastWriteTime": "2026-10-08T10:36:15.9777945-05:00",
+    "bytes": 237,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-dc519682852e40cd91cd17a9943b8730.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-dc519682852e40cd91cd17a9943b8730.log",
+    "sha256": "4416BB4BA5C80E0B09BFFB039F5A949828E404B711176CFFC852A427147DD815",
+    "lastWriteTime": "2026-10-08T11:03:52.9869645-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-de83ea7f44cc4c8e95a9627e61be56eb.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-de83ea7f44cc4c8e95a9627e61be56eb.log",
+    "sha256": "689A234E3732688E9A9EE0B63E653268026893202CF67EB8FB3C1D98B6EEAAC1",
+    "lastWriteTime": "2026-10-08T10:59:57.5390680-05:00",
+    "bytes": 271,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-e3d4576fe6c14faea127cf595a4f011b.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-e3d4576fe6c14faea127cf595a4f011b.log",
+    "sha256": "3558CF764F3DE4515D9615224B23FAD7A37D4B7F99F4A3EEA7FF3FBAFB4E9B9C",
+    "lastWriteTime": "2026-10-08T11:03:53.0089704-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-ed814646571542a7aed0cd02d1e9751a.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-ed814646571542a7aed0cd02d1e9751a.log",
+    "sha256": "7446E234B5C02C15679086B25999414D8000F446BF28162BB843C26109984AD7",
+    "lastWriteTime": "2026-10-08T11:03:53.0340108-05:00",
+    "bytes": 254,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-f04f261c9a3d451e8c1d027616edffbc.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-f04f261c9a3d451e8c1d027616edffbc.log",
+    "sha256": "544760DEEE356C9DBD1A736EE0BEAC6A2D9E0B25103B80F4FAAA74BC54F2BC6C",
+    "lastWriteTime": "2026-10-08T13:03:44.7719015-05:00",
+    "bytes": 220,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-f157a9dd192a496795fc242abeb84905.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-f157a9dd192a496795fc242abeb84905.log",
+    "sha256": "1F3002F3D393D47A6ACD5A745422839F604081D7771B05EFA7800E4929CD6610",
+    "lastWriteTime": "2026-10-08T13:30:03.7888235-05:00",
+    "bytes": 285,
+    "verified": true
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\run-f3413d495f5a4854a1b5e5238a83a9e5.log",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T155754-0500-decision-single-fault-controls\\clock-probe-evidence\\run-f3413d495f5a4854a1b5e5238a83a9e5.log",
+    "sha256": "1194900D581E03F9954478DF980D02A28693A304AFB634A4D07519E37F2103A5",
+    "lastWriteTime": "2026-10-08T15:59:53.6663991-05:00",
+    "bytes": 509,
+    "verified": true
+  }
+]

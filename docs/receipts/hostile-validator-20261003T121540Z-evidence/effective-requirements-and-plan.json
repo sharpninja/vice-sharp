@@ -1,0 +1,322 @@
+{
+  "PhaseMappings": [
+    {
+      "Id": "FR-CPU-004",
+      "Status": "pending",
+      "AcceptanceCount": 7,
+      "TrIds": [
+        "TR-CYCLE-001"
+      ],
+      "TestIds": [
+        "TEST-CPU-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-MEM-006",
+      "Status": "pending",
+      "AcceptanceCount": 6,
+      "TrIds": [
+        "TR-CYCLE-001"
+      ],
+      "TestIds": [
+        "TEST-MEM-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-MEM-004",
+      "Status": "pending",
+      "AcceptanceCount": 5,
+      "TrIds": [
+        "TR-CYCLE-001"
+      ],
+      "TestIds": [
+        "TEST-MEM-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-SID-004",
+      "Status": "pending",
+      "AcceptanceCount": 7,
+      "TrIds": [
+        "TR-SID-EDGE-004"
+      ],
+      "TestIds": [
+        "TEST-SID-001",
+        "TEST-SID-002",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-SID-009",
+      "Status": "pending",
+      "AcceptanceCount": 5,
+      "TrIds": [
+        "TR-SID-EDGE-004"
+      ],
+      "TestIds": [
+        "TEST-SID-001",
+        "TEST-SID-002",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-UI-004",
+      "Status": "pending",
+      "AcceptanceCount": 4,
+      "TrIds": [
+        "TR-GRPC-BOUNDARY-001",
+        "TR-HOST-DIAG-002",
+        "TR-HOST-DIAG-003",
+        "TR-UI-SHELL-001"
+      ],
+      "TestIds": [
+        "TEST-GRPC-001",
+        "TEST-UI-001",
+        "TEST-UI-DIAG-001"
+      ]
+    },
+    {
+      "Id": "FR-CFG-003",
+      "Status": "pending",
+      "AcceptanceCount": 4,
+      "TrIds": [
+        "TR-DET-001",
+        "TR-SIMD-001"
+      ],
+      "TestIds": [
+        "TEST-CFG-001",
+        "TEST-CLI-LAUNCHER-001",
+        "TEST-HOST-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-CFG-004",
+      "Status": "pending",
+      "AcceptanceCount": 4,
+      "TrIds": [
+        "TR-GRPC-BOUNDARY-001",
+        "TR-UI-SHELL-001"
+      ],
+      "TestIds": [
+        "TEST-CFG-001",
+        "TEST-CLI-LAUNCHER-001",
+        "TEST-HOST-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-CIA-005",
+      "Status": "pending",
+      "AcceptanceCount": 6,
+      "TrIds": [
+        "TR-CYCLE-001"
+      ],
+      "TestIds": [
+        "TEST-CIA-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-CRT-002",
+      "Status": "pending",
+      "AcceptanceCount": 6,
+      "TrIds": [
+        "TR-CYCLE-001"
+      ],
+      "TestIds": [
+        "TEST-CRT-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-INP-003",
+      "Status": "pending",
+      "AcceptanceCount": 7,
+      "TrIds": [
+        "TR-CYCLE-001"
+      ],
+      "TestIds": [
+        "TEST-INPUT-001",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-MED-005",
+      "Status": "pending",
+      "AcceptanceCount": 7,
+      "TrIds": [
+        "TR-MEDIA-001"
+      ],
+      "TestIds": [
+        "TEST-MED-001"
+      ]
+    },
+    {
+      "Id": "FR-MON-005",
+      "Status": "pending",
+      "AcceptanceCount": 7,
+      "TrIds": [
+        "TR-LIB-001"
+      ],
+      "TestIds": [
+        "TEST-MON-001"
+      ]
+    },
+    {
+      "Id": "FR-MON-006",
+      "Status": "pending",
+      "AcceptanceCount": 8,
+      "TrIds": [
+        "TR-LIB-001"
+      ],
+      "TestIds": [
+        "TEST-MON-001"
+      ]
+    },
+    {
+      "Id": "FR-SID-005",
+      "Status": "pending",
+      "AcceptanceCount": 5,
+      "TrIds": [
+        "TR-SID-EDGE-004"
+      ],
+      "TestIds": [
+        "TEST-SID-001",
+        "TEST-SID-002",
+        "TEST-X64SC-LOCKSTEP-001"
+      ]
+    },
+    {
+      "Id": "FR-SNP-003",
+      "Status": "pending",
+      "AcceptanceCount": 8,
+      "TrIds": [
+        "TR-STATE-001"
+      ],
+      "TestIds": [
+        "TEST-SNP-001"
+      ]
+    },
+    {
+      "Id": "FR-VIC20-005",
+      "Status": "pending",
+      "AcceptanceCount": 5,
+      "TrIds": [
+        "TR-SETTINGS-TXN-001",
+        "TR-VIC20-FLASH-001"
+      ],
+      "TestIds": [
+        "TEST-SETTINGS-TXN-001",
+        "TEST-VIC20-FLASH-001"
+      ]
+    }
+  ],
+  "FR": [
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "scopeStartLayerKey": "layer-1",
+      "status": "pending",
+      "title": "Deterministic Input Replay",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-01",
+          "isSatisfied": false,
+          "text": "Recording mode captures all external input events with their precise frame and cycle timestamps."
+        },
+        {
+          "id": "ac-02",
+          "isSatisfied": false,
+          "text": "Playback mode loads a base snapshot and replays the recorded input events."
+        },
+        {
+          "id": "ac-03",
+          "isSatisfied": false,
+          "text": "Playback produces bit-exact results: the same memory contents, same VIC-II output, same audio output as the original recording at every point."
+        },
+        {
+          "id": "ac-04",
+          "isSatisfied": false,
+          "text": "The replay format stores: base snapshot reference, input event stream (event type, frame number, cycle within frame, value)."
+        },
+        {
+          "id": "ac-05",
+          "isSatisfied": false,
+          "text": "Replay can be paused, single-stepped, and fast-forwarded."
+        },
+        {
+          "id": "ac-06",
+          "isSatisfied": false,
+          "text": "The `IReplayEngine` interface provides record/playback/seek operations."
+        },
+        {
+          "id": "ac-07",
+          "isSatisfied": false,
+          "text": "Replay files are compact (only input events are stored, not full state per frame)."
+        },
+        {
+          "id": "ac-08",
+          "isSatisfied": false,
+          "text": "Seeking to an arbitrary frame is supported via periodic auto-snapshots during recording."
+        }
+      ],
+      "body": "The emulator shall support recording input events (keyboard, joystick, timing) from a starting snapshot and replaying them to reproduce the exact same execution. This enables tool-assisted speedruns (TAS), automated testing, and bug reproduction.\n\n## Acceptance Criteria\n- Recording mode captures all external input events with their precise frame and cycle timestamps.\n- Playback mode loads a base snapshot and replays the recorded input events.\n- Playback produces bit-exact results: the same memory contents, same VIC-II output, same audio output as the original recording at every point.\n- The replay format stores: base snapshot reference, input event stream (event type, frame number, cycle within frame, value).\n- Replay can be paused, single-stepped, and fast-forwarded.\n- The `IReplayEngine` interface provides record/playback/seek operations.\n- Replay files are compact (only input events are stored, not full state per frame).\n- Seeking to an arbitrary frame is supported via periodic auto-snapshots during recording.",
+      "id": "FR-SNP-003",
+      "priority": "medium"
+    }
+  ],
+  "TR": [
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "scopeStartLayerKey": "layer-1",
+      "status": "pending",
+      "title": "Mutation Queue with ACID State Transactions and Configurable State Window",
+      "acceptanceCriteria": [],
+      "body": "All mutations to emulated machine state shall be performed through a mutation queue that provides ACID-like transaction semantics. State changes within a single emulation step (one clock cycle or one instruction) are grouped into a transaction that is either fully applied or fully rolled back. A configurable state window maintains a ring buffer of recent states to support rewind, debugging, and snapshot operations.",
+      "id": "TR-STATE-001",
+      "priority": "high"
+    }
+  ],
+  "TEST": [
+    {
+      "condition": "Save/load, deterministic replay, and state diff behavior are verified through round-trip and byte/trace comparison tests.",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Snapshot and Replay Tests",
+      "acceptanceCriteria": [],
+      "id": "TEST-SNP-001",
+      "status": "pending",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "priority": "medium"
+    }
+  ],
+  "Todo": {
+    "description": [
+      "Avalonia Settings Computer+Model dropdowns like Xbox; hide VIC-20-only controls on C64 and vice-versa; RemoteControl validation of C64 variants (c64, c64c, ntsc at minimum) including PAL/NTSC CLOCK, Warp, shared inventory."
+    ],
+    "remaining": "Approved completion plan slices 4/5/8 pending; requirements reconciled, no implementation completion claimed.",
+    "dependsOn": [],
+    "functionalRequirements": [
+      "FR-MACHINEPICKER-001",
+      "FR-SETTINGS-TXN-001",
+      "FR-UISETVIS-001",
+      "FR-WARP-001"
+    ],
+    "technicalRequirements": [
+      "TR-SETTINGS-TXN-001",
+      "TR-UIAXAML-PICKER-001",
+      "TR-WARP-STATUS-001"
+    ],
+    "title": "C64 Settings RC, Computer/Model dropdowns, family visibility",
+    "section": "Backlog",
+    "implementationTasks": [],
+    "technicalDetails": [
+      "Approved continuation PLAN-GROKCOMPLETION-001; AC matrix docs/requirements/traceability/Grok-Completion-AC-Matrix-2026-09-06.md; tests TEST-SETTINGS-TXN-001, TEST-UISET-001/002/003, TEST-COMPLETION-001."
+    ],
+    "done": false,
+    "id": "PLAN-C64SET-001",
+    "priority": "High"
+  }
+}

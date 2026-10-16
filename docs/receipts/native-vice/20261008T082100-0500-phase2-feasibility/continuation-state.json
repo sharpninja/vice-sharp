@@ -1,0 +1,14 @@
+{
+  "timestampLocal": "2026-10-08T08:49:13.2253040-05:00",
+  "trackedChanges": [],
+  "buildPid": 36708,
+  "buildHasExited": false,
+  "nativeSourceRoot": "F:\\GitHub\\vice-sharp\\native\\vice",
+  "approvedGeneratedSourceRoot": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source",
+  "adapterMockPasses": 38,
+  "adapterImplementationAndMockPasses": 77,
+  "cumulativeOracleMockPasses": 82,
+  "nativeResumeProven": false,
+  "hvAccepted": false,
+  "phase2Complete": false
+}

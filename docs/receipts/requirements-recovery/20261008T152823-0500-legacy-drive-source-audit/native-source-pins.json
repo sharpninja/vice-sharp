@@ -1,0 +1,65 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\iecbus\\iecbus.c",
+    "relative": "vice/src/iecbus/iecbus.c",
+    "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "expectedBlob": "bcf3c609ac33336a6161012512e6c82320e75499",
+    "actualBlob": "bcf3c609ac33336a6161012512e6c82320e75499",
+    "exactMatch": true,
+    "sha256": "010BC96278C1D99A7EF2AEDFC3170D888DED174D7F174D18618945FCFEEABB25"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\iecieee\\via2d.c",
+    "relative": "vice/src/drive/iecieee/via2d.c",
+    "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "expectedBlob": "876b9f895130f939a84621b476e5c1a1cc1a44ed",
+    "actualBlob": "876b9f895130f939a84621b476e5c1a1cc1a44ed",
+    "exactMatch": true,
+    "sha256": "D5AB80C9C47B56A4B95CB5984A4502D9AD706114C1610AFB2D946F400CABE9EC"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\rotation.c",
+    "relative": "vice/src/drive/rotation.c",
+    "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "expectedBlob": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+    "actualBlob": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+    "exactMatch": true,
+    "sha256": "F8B10A8D383294D5357E769BB6FA91393C4EE28AC4F5BF629C1A187364BA55E9"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\drive.h",
+    "relative": "vice/src/drive/drive.h",
+    "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "expectedBlob": "f1964920f2aabe02dfd0ec876752ecb06e756061",
+    "actualBlob": "f1964920f2aabe02dfd0ec876752ecb06e756061",
+    "exactMatch": true,
+    "sha256": "AB0C34DA27DA3B855A212A2E215A90E0B8FE2465715AE0180527E890DC614C01"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\drive.c",
+    "relative": "vice/src/drive/drive.c",
+    "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "expectedBlob": "915c0fc2b1d5680706b0d6f6b8e233727fec97ca",
+    "actualBlob": "915c0fc2b1d5680706b0d6f6b8e233727fec97ca",
+    "exactMatch": true,
+    "sha256": "7C5B160CCBED60388411610E4902A9A516DA452C92D0C48E8EBB07240DA6274F"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64iec.c",
+    "relative": "vice/src/c64/c64iec.c",
+    "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "expectedBlob": "b216dbcca167591411724a78fed73cbdaa65ae28",
+    "actualBlob": "b216dbcca167591411724a78fed73cbdaa65ae28",
+    "exactMatch": true,
+    "sha256": "C6D79E742580474ECD7E117425391198E8E3D624A85B5EB72FB7A7122CF19950"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20iec.c",
+    "relative": "vice/src/vic20/vic20iec.c",
+    "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "expectedBlob": "e9c62bd039e4ae96ae9b092a6db4192d7499be86",
+    "actualBlob": "e9c62bd039e4ae96ae9b092a6db4192d7499be86",
+    "exactMatch": true,
+    "sha256": "6B70D69988DEC4F7927E587ACC75B7AF679DF6C4E10DBF74EDE4AAFC192C05A2"
+  }
+]

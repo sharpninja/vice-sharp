@@ -1,0 +1,213 @@
+MSYSTEM=MINGW64
+/mingw64/bin/gcc
+/usr/bin/make
+/usr/bin/autoconf
+/usr/bin/automake
+gcc.exe (Rev8, Built by MSYS2 project) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Checking autoconf version >= 2.60 .. OK: 2.72
+Checking automake version >= 1.10.2 .. OK: 1.18.1
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/resid: aclocal
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/resid: autoconf -f
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/resid: automake -a -c
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/resid-dtv: aclocal
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/resid-dtv: autoconf -f
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/resid-dtv: automake -a -c
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice: aclocal
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice: autoconf -f
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice: autoheader
+/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice: automake -a -c
+configure: loading site script /etc/config.site
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking xargs -n works... yes
+checking whether UID '197609' is supported by ustar format... yes
+checking whether GID '197609' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
+checking build system type... x86_64-w64-mingw32
+checking host system type... x86_64-w64-mingw32
+checking for cc... cc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.exe
+checking for suffix of executables... .exe
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether cc accepts -g... yes
+checking for cc option to enable C11 features... none needed
+checking whether cc understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of cc... gcc3
+checking how to run the C preprocessor... cc -E
+checking for c++... c++
+checking whether the compiler supports GNU C++... yes
+checking whether c++ accepts -g... yes
+checking for c++ option to enable C++11 features... none needed
+checking dependency style of c++... gcc3
+checking whether c++ supports C++11 features with -std=c++11... yes
+checking how to run the C++ preprocessor... c++ -std=c++11 -E
+checking for cc... cc
+checking whether the compiler supports GNU Objective C... no
+checking whether cc accepts -g... no
+checking dependency style of cc... gcc3
+checking if the C compiler supports -W... yes
+checking if the C compiler supports -Wall... yes
+checking if the C compiler supports -Wextra... yes
+checking if the C compiler supports -Wformat... yes
+checking if the C compiler supports -Wformat-signedness... yes
+checking if the C compiler supports -Wformat-pedantic... no
+checking if the C compiler supports -Wformat-security... yes
+checking if the C compiler supports -Wshadow... yes
+checking if the C compiler supports -Wpointer-arith... yes
+checking if the C compiler supports -Wmissing-prototypes... yes
+checking if the C compiler supports -Wstrict-prototypes... yes
+checking if the C compiler supports -Wuninitialized... yes
+checking if the C compiler supports -Wmissing-field-initializers... yes
+checking if the C compiler supports -Wunreachable-code... yes
+checking if the C compiler supports -Wmacro-redefined... no
+checking if the C compiler supports -Werror=implicit-function-declaration... yes
+checking if the C compiler supports -Wfatal-errors... yes
+checking if the C compiler supports -fdiagnostics-absolute-paths... no
+checking if the C compiler supports -Wshorten-64-to-32... no
+checking if the C compiler supports -Wdiscarded-qualifiers... yes
+checking if the C compiler supports -Wno-unknown-pragmas... yes
+checking if the C compiler supports -Wunused-but-set-variable... yes
+checking if the C compiler supports -Wno-sign-compare... yes
+checking if the C compiler supports -Wno-ignored-qualifiers... yes
+checking if the C compiler supports -Wno-unused-parameter... yes
+checking if the C++ compiler supports -Wall... yes
+checking if the C++ compiler supports -Wformat... yes
+checking if the C++ compiler supports -Wformat-pedantic... no
+checking if the C++ compiler supports -Wshadow... yes
+checking if the C++ compiler supports -Wpointer-arith... yes
+checking if the C++ compiler supports -Wuninitialized... yes
+checking if the C++ compiler supports -Wunreachable-code... yes
+checking if the C++ compiler supports -Wno-unused-parameter... yes
+checking if the C++ compiler supports -Wmissing-prototypes... no
+checking if the C++ compiler supports -Werror=implicit-function-declaration... no
+checking if the C++ compiler supports -Wfatal-errors... yes
+checking if the C++ compiler supports -fdiagnostics-absolute-paths... no
+checking if the C++ compiler supports -Wshorten-64-to-32... no
+checking if the C++ compiler supports -Wno-address-of-packed-member... yes
+checking if the C++ compiler supports -Wno-char-subscripts... yes
+checking if the C++ compiler supports -Wno-format-signedness... yes
+checking if the C++ compiler supports -Wno-missing-prototypes... no
+checking if the C++ compiler supports -Wno-c99-designator... yes
+checking if the C++ compiler supports -Wno-shorten-64-to-32... yes
+checking if the C++ compiler supports -Wno-nonnull-compare... yes
+checking if the C compiler supports -Wno-unused-label... yes
+checking if the C compiler supports -Wno-unreachable-code... yes
+checking if the C compiler supports -Wno-misleading-indentation... yes
+checking for gawk... (cached) gawk
+checking whether ln -s works... no, using cp -pR
+checking for flex... flex
+checking for lex output file root... lex.yy
+checking for lex library... none needed
+checking for library containing yywrap... no
+checking whether yytext is a pointer... yes
+checking for ld used by GCC... C:/msys64/mingw64/x86_64-w64-mingw32/bin/ld.exe
+checking if the linker (C:/msys64/mingw64/x86_64-w64-mingw32/bin/ld.exe) is GNU ld... yes
+checking for ar... ar
+checking for svn... svn
+checking for tar... tar
+checking for svnversion... svnversion
+checking for byacc... no
+checking for yacc... yacc
+checking for makeinfo... ${SHELL} '/f/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/missing' makeinfo
+checking for dos2unix... dos2unix
+checking for xa... xa
+checking for perl... perl
+checking for iconv... iconv
+checking for ranlib... ranlib
+checking for strip... strip
+checking for objdump... objdump
+checking for sdl-config... no
+checking for windres... windres
+checking dependency style of cc... gcc3
+checking for cc option to enable large file support... -D_FILE_OFFSET_BITS=64
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for vfork.h... no
+checking for ssize_t... yes
+checking for pkg-config... /mingw64/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for time_t in time.h... yes
+checking for time_t in sys/types.h... yes
+checking size of time_t... 8
+checking if the compiler supports -march=native... yes
+checking if ar truncates object names... no
+checking for commctrl.h... yes
+checking for shlobj.h... yes
+checking for winioctl.h... yes
+checking for winsock.h... yes
+checking for pkg-config... (cached) /mingw64/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for libusb-1.0/libusb.h... no
+checking for USBSID-Pico support... no (LIBUSB not found)
+checking for native OpenMP... yes
+checking for icotool... icotool
+checking for libiconv_open in -liconv... yes
+checking if the compiler accepts --param inline-unit-growth=60... yes
+checking if the compiler accepts --param max-inline-insns-single=600... yes
+checking whether the compiler supports GNU C++... (cached) yes
+checking whether c++ -std=c++11 accepts -g... (cached) yes
+checking for c++ -std=c++11 option to enable C++11 features... (cached) none needed
+checking dependency style of c++ -std=c++11... (cached) gcc3
+checking whether the C++ compiler (c++ -std=c++11  -fno-exceptions ) works... yes
+checking how to run the C++ preprocessor... c++ -std=c++11 -E
+checking for sys/types.h... (cached) yes
+checking for off_t... yes
+checking for pid_t... yes
+checking for size_t... yes
+checking for ssize_t... (cached) yes
+checking whether byte ordering is bigendian... no
+checking size of unsigned short... 2
+checking size of unsigned int... 4
+checking size of unsigned long... 4
+checking for dirent.h that defines DIR... yes
+checking for library containing opendir... none required
+checking for direct.h... yes
+checking for errno.h... yes
+checking for fcntl.h... yes
+checking for limits.h... yes
+checking for regex.h... no
+checking for unistd.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for sys/dirent.h... no
+checking for sys/stat.h... (cached) yes
+checking for inttypes.h... (cached) yes
+checking for libgen.h... yes
+checking for sys/ioctl.h... no
+checking for dir.h... yes
+checking for io.h... yes
+checking for process.h... yes
+checking for signal.h... yes
+checking for alloca.h... no
+checking for wchar.h... yes
+checking for stdint.h... (cached) yes
+checking for sys/time.h... yes
+checking for regexp.h... no
+checking for cc options needed to detect all undeclared functions... none needed
+checking whether sys_siglist is declared... no
+checking for sys/capability.h... no
+checking for math.h... yes
+checking for sqrt in -lm... yes
+checking for zlib.h... yes
+checking for zlibVersion in -lz... (cached) yes
+checking for libcurl... 

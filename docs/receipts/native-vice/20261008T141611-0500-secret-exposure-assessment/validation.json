@@ -1,0 +1,34 @@
+{
+  "capturedAtLocal": "2026-10-08T14:17:45-05:00",
+  "files": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "21B55995289E6F3EA677D579339E7A70226C4E9EDB747D12D41D1FDBCAC9C3F2",
+      "knownSensitiveValueMatches": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T141611-0500-secret-exposure-assessment\\assessment.json",
+      "sha256": "3862799416C49598CAB57D7D907DBDF1DF24F7A9718237310891B1C8344E0434",
+      "knownSensitiveValueMatches": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T141611-0500-secret-exposure-assessment\\README.md",
+      "sha256": "3919727A4975EB954419CDCDB0C4C64E946425C809D67D4AE07D17687B8ED336",
+      "knownSensitiveValueMatches": 0
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T141611-0500-secret-exposure-assessment\\HANDOFF.before.md",
+      "sha256": "2C05131E8D60A7BBB2570BBE2900445C1B02A7DE47D4B4E872AC0A32EDEF5F72",
+      "knownSensitiveValueMatches": 0
+    }
+  ],
+  "gitDiffCheckExit": 0,
+  "scope": "Only the current assessment, readme, handoff and retained handoff preimage; exact known sensitive-value comparison, not generic secret scanning",
+  "profile": {
+    "verifiedSnapshotCount": 22,
+    "otherGlobalCount": 15,
+    "manifestCount": 1,
+    "totalCount": 38
+  },
+  "primaryReadbackPending": true
+}

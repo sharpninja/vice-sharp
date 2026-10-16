@@ -1,0 +1,115 @@
+{
+  "viceCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "viceBuildHash": "c570738982419d1d8e850485d9edcaa068e15777c132825d5228653aeca50e19",
+  "xvicPath": "C:\\Users\\kingd\\AppData\\Local\\Microsoft\\WinGet\\Packages\\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\\GTK3VICE-3.10-win64\\bin\\xvic.exe",
+  "viceXvicDllSha256": "f03a7a3545c5964fbab863d3f3d1ab7a2eb99c2543ed94071f80f07648513886",
+  "machine": [
+    "vic20",
+    "vic20ntsc"
+  ],
+  "media": [],
+  "romHashes": [
+    {
+      "name": "basic-901486-01.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\basic-901486-01.bin",
+      "sha256": "8be2d882e0eeb1c6923a43660236ea69d43ca8a3bd0613b1b6c910601584fbed"
+    },
+    {
+      "name": "chargen-901460-02.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\chargen-901460-02.bin",
+      "sha256": "66a81f03332f46a289d175933d50bba9cc4636d18bba439d324b2eb1bd1c43ab"
+    },
+    {
+      "name": "chargen-901460-03.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\chargen-901460-03.bin",
+      "sha256": "bda280726cfe069ca70ef5e2f2d95a29f69d3950c859a12e6979464963fcf502"
+    },
+    {
+      "name": "kernal.901486-02.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-02.bin",
+      "sha256": "7e2df5778dfdf787a6e09f0576442d32c8e9160b7e34d22e07547c22bf9030e1"
+    },
+    {
+      "name": "kernal.901486-06.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-06.bin",
+      "sha256": "8fc94bd895f488ac0ae1a52abdc32988cd63c777770b89a9d415513098535cc2"
+    },
+    {
+      "name": "kernal.901486-07.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-07.bin",
+      "sha256": "ff6d1416b91a71f5240a5bb8adc9fdc1b955374c48322ca47b3e436334f168fb"
+    }
+  ],
+  "workloads": [
+    {
+      "program": "kernal.901486-07.bin",
+      "machine": "vic20",
+      "cycleStart": 0,
+      "cycleCount": 64,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs CycleCounts"
+    },
+    {
+      "program": "kernal.901486-07.bin",
+      "machine": "vic20",
+      "cycleStart": 0,
+      "cycleCount": 256,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs CycleCounts"
+    },
+    {
+      "program": "kernal.901486-07.bin",
+      "machine": "vic20",
+      "cycleStart": 0,
+      "cycleCount": 1024,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs CycleCounts"
+    },
+    {
+      "program": "kernal.901486-07.bin",
+      "machine": "vic20",
+      "cycleStart": 0,
+      "cycleCount": 4096,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs CycleCounts"
+    },
+    {
+      "program": "kernal.901486-07.bin",
+      "machine": "vic20",
+      "cycleStart": 0,
+      "cycleCount": 5000,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs CycleCounts"
+    },
+    {
+      "program": "kernal.901486-06.bin",
+      "machine": "vic20ntsc",
+      "cycleStart": 0,
+      "cycleCount": 256,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs CycleCounts"
+    },
+    {
+      "program": "kernal.901486-06.bin",
+      "machine": "vic20ntsc",
+      "cycleStart": 0,
+      "cycleCount": 1024,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs CycleCounts"
+    },
+    {
+      "program": "kernal.901486-06.bin",
+      "machine": "vic20ntsc",
+      "cycleStart": 0,
+      "cycleCount": 5000,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs CycleCounts"
+    },
+    {
+      "program": "kernal.901486-07.bin",
+      "machine": "vic20",
+      "cycleStart": 0,
+      "cycleCount": 11084050,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs TenSecondPalCycles"
+    },
+    {
+      "program": "kernal.901486-06.bin",
+      "machine": "vic20ntsc",
+      "cycleStart": 0,
+      "cycleCount": 10227270,
+      "source": "tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs TenSecondNtscCycles"
+    }
+  ]
+}

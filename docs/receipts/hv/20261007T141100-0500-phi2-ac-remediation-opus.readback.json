@@ -1,0 +1,118 @@
+{
+  "TimestampLocal": "2026-10-07T16:17:49.389-05:00",
+  "TimestampUtc": "2026-10-07T21:17:49.389Z",
+  "ValidatorIdentity": "ClaudeCode",
+  "Model": "claude-opus-5-5",
+  "ReasoningEffort": "max",
+  "PrimaryPersistence": true,
+  "PrimaryReadback": true,
+  "SessionId": "ClaudeCode-20261007T191324Z-plugin-session",
+  "RequestId": "req-20261007T191327Z-prompt-be46",
+  "TurnStatus": "completed",
+  "TurnModel": "claude-opus-5-5",
+  "TurnTitle": "Opus HV max: Phase 0 PHI2/AEC remediation readiness review",
+  "SessionModel": "claude-opus-5-5",
+  "SessionStatus": "in_progress",
+  "SessionStartedUtc": "2026-10-07T19:13:27.0000000+00:00",
+  "SessionTurnCount": 2,
+  "ResponseChars": 58553,
+  "ResponseFullTextEqual": true,
+  "DialogCount": 8,
+  "LastDialogFullTextEqual": true,
+  "DecisionDialogItems": 8,
+  "ActionsCount": 12,
+  "DesignDecisionActions": 6,
+  "ResponseParsedJsonEqual": true,
+  "DialogParsedJsonEqual": true,
+  "VerdictJsonFileParsedEqual": true,
+  "CanonicalVerdictTextSha256": "A98262BD240517861A456526955904A6BAC57BD98A00A6030613DBCADC901BD8",
+  "VerdictMarkdownPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.verdict.md",
+  "VerdictMarkdownSha256": "9443FCBE61A9B1B4F30F0D8BF000D4D99633C9ACA5B77611561E4929FFE2BCAE",
+  "VerdictMarkdownLineEnds": "CRLF on disk (PowerShell.MCP text-append cmdlet); the CRLF-to-LF normalized file text equals the primary response exactly (canonical LF text SHA-256 above).",
+  "VerdictJsonPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.verdict.json",
+  "VerdictJsonSha256": "E4C0356B458B0749044BF4D96B13171B50DAE0C3C834E63D63CB0A33DB4C180D",
+  "RawPrimaryQueryResponsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.primary-query-response.yaml",
+  "RawPrimaryQueryResponseSha256": "AE39A6E75ACDD4C1EBC28F86F96195ACC9A798DA37308C6C7FD97E2AFE5193BC",
+  "RawPrimaryQueryResponseBytes": 168391,
+  "RawPrimaryQuery": "client.SessionLog.QueryAsync through plugin 1.119.0 lib/repl-invoke.ps1 Invoke-ReplMethod in child pwsh (Start-Process stdout redirect, exit 0, stderr 0 bytes), params agent ClaudeCode, text Phase 0 readiness after PHI2/AEC, limit 3; 2026-10-07T16:16:45.253-05:00 to 2026-10-07T16:16:47.528-05:00",
+  "SessionVerbOutcomes": [
+    {
+      "Method": "workflow.sessionlog.setTurnTitle",
+      "StartLocal": "2026-10-07T16:03:04.399-05:00",
+      "EndLocal": "2026-10-07T16:03:06.661-05:00",
+      "ExitCode": 1,
+      "Code": "rejected"
+    },
+    {
+      "Method": "workflow.sessionlog.updateTurn",
+      "StartLocal": "2026-10-07T16:03:55.728-05:00",
+      "EndLocal": "2026-10-07T16:03:58.734-05:00",
+      "ExitCode": 0,
+      "Code": "persisted"
+    },
+    {
+      "Method": "workflow.sessionlog.appendDialog",
+      "StartLocal": "2026-10-07T16:15:38.796-05:00",
+      "EndLocal": "2026-10-07T16:15:41.173-05:00",
+      "ExitCode": 0,
+      "Code": "persisted"
+    },
+    {
+      "Method": "workflow.sessionlog.appendActions",
+      "StartLocal": "2026-10-07T16:16:01.564-05:00",
+      "EndLocal": "2026-10-07T16:16:04.950-05:00",
+      "ExitCode": 0,
+      "Code": "persisted"
+    },
+    {
+      "Method": "workflow.sessionlog.completeTurn",
+      "StartLocal": "2026-10-07T16:16:09.352-05:00",
+      "EndLocal": "2026-10-07T16:16:14.513-05:00",
+      "ExitCode": 0,
+      "Code": "persisted"
+    }
+  ],
+  "CompleteTurnPayloadBytes": 60049,
+  "CompleteTurnPayloadSha256": "DFA013C4612BB69AA338476F39898DE3C82A1BD8C17C8462B8CD081C165108C1",
+  "FailsafeCorrection": "The verdict (FailsafeRetained, D1 last sentence, R1) says redundant record 20261007T210305Z-session_setTurnTitle-2b93.yaml (SHA-256 6D623EA443D606B67A28E62C44EF26F5CD523FB64393AFDC8CECC3903DDCE920) stays retained and undrained. During completeTurn (ended 2026-10-07T16:16:14.513-05:00) the plugin automatically drained this isolated review queue: replayed 1, failed 0, quarantined 0, skipped 0. The isolated pending directory is now empty, so 2b93 is no longer retained. No other queue was touched.",
+  "FinalPinCheck": {
+    "AtLocal": "2026-10-07T16:17:11.887-05:00",
+    "Pinned": 17,
+    "Matched": 17
+  },
+  "FinalQueueCheck": {
+    "AtLocal": "2026-10-07T16:17:11.899-05:00",
+    "Active": 4,
+    "Quarantined": 6,
+    "AllByteIdenticalToSnapshot": true,
+    "IsolatedReviewQueueFiles": 0
+  },
+  "HookDuplicateTurn": "req-20261007T191327Z-prompt-d929 remains canceled as created by the first-launch hooks; untouched by this review.",
+  "Triage": [
+    "triage-report-211488b7fef94d8c81237210dde42bf7 (group triage-group-31e405e636a19a99)",
+    "triage-report-b294737ca70846a7bd42851a156ba444 (group triage-group-e932650b9cb8713d)"
+  ],
+  "Streams": {
+    "LaunchRequest": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.request.jsonl",
+    "LaunchResponse": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.response.jsonl (quota-only, no verdict)",
+    "ResumeRequest": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.request.jsonl",
+    "ResumeResponse": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T141100-0500-phi2-ac-remediation-opus.resume-01.response.jsonl (this review)"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 94,
+  "Completeness": 85,
+  "PassCount": 22,
+  "FailCount": 4,
+  "UnknownCount": 0,
+  "Phase0Accepted": false,
+  "MockValidatedTestPhasePermitted": false,
+  "ProductionImplementationPermitted": false,
+  "WholeGoalComplete": false,
+  "CompletionPercent": 100,
+  "Eta": null,
+  "Notes": [
+    "Session status stays in_progress because completeTurn closes the turn, not the session.",
+    "setTurnTitle returned rejected while primary shows the title (triaged); the other four verbs returned persisted.",
+    "Launcher request and response streams were not overwritten."
+  ]
+}

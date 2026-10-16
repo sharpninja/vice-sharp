@@ -1,0 +1,37 @@
+2026-10-01T17:31:42-05:00 - **DISAGREE. Phase 2 acceptance is not green.**
+
+Accuracy: **96/100**. Completeness: **94/100**. The corrected receipts and prior regression results are supported, but the claim still misses a real input-recording defect. Both scores fail the required 98 threshold. Counts below cover assertions 1 through 6: **5 PASS, 1 FAIL, 0 UNKNOWN**.
+
+**FAIL: RESTORE/NMI pressed during recording disappears from replay.** Using the current `phase2-f139link` production assemblies and independent fresh PAL C64 machines, I recorded A-down at cycle 0, stepped 30 cycles, called `SetRestoreState(true)`, stepped another 30 cycles, and recorded B-down at cycle 60. The reference received the same inputs directly. Playback ran on a third fresh machine.
+
+`SaveReplay` contained only A and B, with `inputCount=2`; the RESTORE event at frame 0, cycle 30 was missing. At cycle 60 on both machines:
+
+- RESTORE: reference `true`, playback `false`.
+- PC: reference `$0003`, playback `$FDAE`.
+- S: reference `$FC`, playback `$FD`.
+- RAM `$01FD`: reference `$25`, playback `$FF`.
+- RAM `$01FE`: reference `$EA`, playback `$F4`.
+
+[C64MemoryMap.SetRestoreState](F:/GitHub/vice-sharp/src/ViceSharp.Core/C64MemoryMap.cs:606) drives NMI without recording it. [Recorder attachment](F:/GitHub/vice-sharp/src/ViceSharp.Core/Snapshots/RuntimeSnapshotStore.cs:826) covers joystick, mouse deltas, and pots; [event application](F:/GitHub/vice-sharp/src/ViceSharp.Core/Snapshots/RuntimeSnapshotStore.cs:887) has no RESTORE branch. Native VICE explicitly [records EVENT_KEYBOARD_RESTORE](F:/GitHub/vice-sharp/native/vice/vice/src/keyboard.c:947) and [replays it](F:/GitHub/vice-sharp/native/vice/vice/src/keyboard.c:1225). This violates [FR-SNP-003 AC1, AC3, and AC4](F:/GitHub/vice-sharp/docs/requirements/functional/FR-Snapshot.md:97), within iteration 2. It is not a request for a new requirement.
+
+The six assertions resolve as follows:
+
+1. **PASS.** I read the coverage script and its test, then reran `tools/check_phase_acceptance_coverage.ps1 -ThroughPhase 2`: 94 in scope, missing from `tests/` 0, exit 0. Its scope uses the markdown Iteration integer and searches test sources, not `src/` alone. The current check retains the required failure behavior.
+2. **FAIL as behavioral acceptance.** Both saved Release summaries report 155 passed, 0 failed, 0 skipped and contain their required `TEST_EXIT=0` / `TEST2_EXIT=0` endings. I independently ran the entire specified filter with `dotnet vstest` against `tests/ViceSharp.TestHarness/bin/phase2-f139link/ViceSharp.TestHarness.dll`: 155 passed, exit 0. Those numerical claims pass. The RESTORE counterexample disproves complete FR-SNP-003 behavior despite the green filter.
+3. **PASS.** Source and tests support the specified reSID test-bit and live resonance behavior, full-byte DDR readback, fixed 350000-cycle discharge, alternating CIA serial phases without automatic retransmission, and GIF capture without audio. Local x64sc adds randomized discharge time; Vice# intentionally omits it. Requirement text is unchanged.
+4. **PASS.** `idle-lockstep.txt` reports 2 passed, 0 failed, 0 skipped and ends `EXIT:0`. Its `2026-10-01T21:58:06Z` timestamp is later than the named CPU/bus sources, including `C64MemoryMap.cs` at `21:52:22Z`. The current idle junction is `phase2-f139idle`. `AdoptElapsedCycles` only assigns elapsed cycles after argument validation; detailed execution state is restored separately in memory. Serialized replay snapshots remain 16 + 65536 bytes. No additional idle run was required by the supplied rule.
+5. **PASS.** The live MCP query returned `PLAN-C64SET-001 done:false`; the 17 named requirement rows remain pending with unsatisfied criteria. The plan checklist remains open. Git showed no requirement/TODO/provenance edit or Phase 3/4 start. `git diff --check` exited 0. No product, requirement, plan, HANDOFF, provenance, or TODO edits were made by this reviewer.
+6. **PASS.** The ledger diff closes items 2, 5, and 8 and explicitly says the recovered set is not accepted. That closure is not used as Phase 2 acceptance. The older ledger-match and timing-only AGREE reviews are excluded from this verdict.
+
+I rechecked all 66 enumerated prior findings against the current tests, product code, and state evidence. The current behavioral run includes the hidden RAM/processor-port cases; running and mid-instruction replay; CIA serial, timer and IRQ state; VIC borders, sprites, collisions, light pen and delayed writes; SID noise, envelopes and pending Fast writes; seek boundaries and held keys; capture encoders; palette rendering; hotkeys; monitor views; and joystick, mouse-button, mouse-delta and pot events. The same-machine mouse replay regression passes. An additional 2000-event probe saved all 2000 events through cycle 1999. The old missing-exit-marker findings are resolved in the actual files. None of these passing cases covers the newly reproduced RESTORE event loss.
+
+Surface A fails assertion 2; surface B's applicable process checks pass; surface C fails FR-SNP-003; surface D fails the plan's behavioral acceptance criterion. The plan therefore does not qualify for its required new AGREE. No done-state change is authorized.
+
+Process receipt: add-profile ran through **PowerShell.MCP before git or validation**, using `Show-TextFiles` to read the complete skill and all **21** dynamically enumerated profile files, excluding `add-profile*.md` as instructed. Required confirmation: `2026-10-01T22:08:10Z - Profile loaded: read 21 global profile files.` After automatic compaction, the full skill and all 21 files were read again; confirmation: `2026-10-01T17:24:49-05:00 - Profile loaded: read 21 global profile files.` No Python or non-MCP profile reader was used.
+
+The entire verdict is stored through the Codex MCP plugin in session `Codex-20261001T220956Z-plugin-session`, request `req-20261001T221036Z-phase2-hostile`; server history readback verifies the completed turn. Reviewer identity is Codex, gpt-6-astra, xhigh; the wrapper's generic model field is `codex`, while the launcher metadata and turn narrative preserve the requested model identity.
+
+Durable receipts: [request JSONL](F:/GitHub/vice-sharp/docs/receipts/hv/20261001T220648Z-phase2-acceptance.request.jsonl), [full response JSONL](F:/GitHub/vice-sharp/docs/receipts/hv/20261001T220648Z-phase2-acceptance.response.jsonl). The scratch request exists at `C:\Users\kingd\AppData\Local\Temp\grok-goal-0af1da0c5558\implementer\20261001T220648Z-phase2-acceptance.request.jsonl`. The parent must finalize the response stream and its scratch copy after this foreground review returns. Independent test output: [155-test run](F:/GitHub/vice-sharp/.mcpServer/tmp/PowerShell.MCP.Output/pwsh_output_20261001_171333_505_lupsclsi.zjy.txt).
+
+=== VERDICT JSON ===
+{"OverallVerdict":"DISAGREE","accuracy":96,"completeness":94,"passCount":5,"failCount":1,"unknownCount":0,"failList":["Assertion 2 / surfaces C and D: RESTORE/NMI pressed at cycle 30 during recording is absent from SaveReplay (inputCount=2 instead of 3), causing CPU and stack-RAM divergence at cycle 60. FR-SNP-003 AC1, AC3, AC4 and plan behavioral acceptance remain unsatisfied. Accuracy 96 and completeness 94 also fail the minimum 98 score gate."],"sessionId":"Codex-20261001T220956Z-plugin-session","requestId":"req-20261001T221036Z-phase2-hostile"}

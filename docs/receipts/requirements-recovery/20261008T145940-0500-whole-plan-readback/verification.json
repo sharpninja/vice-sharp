@@ -1,0 +1,57 @@
+{
+  "timestampLocal": "2026-10-08T15:01:01.4855207-05:00",
+  "previousPacketPinsChecked": 1123,
+  "previousPacketDifferences": [],
+  "newEvidenceFiles": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\effective-requirements.json",
+      "sha256": "191F6E0324DCB0013361B894A5270DFBE8428916EC26A3B70C2DAB3FD8DECA1B",
+      "bytes": 756761
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\git-status.before.txt",
+      "sha256": "847AA171DB55F3E2ADA63DF7DF2E23550370B0BF112110C54C990102C6A6FFBC",
+      "bytes": 70012
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\input-pins.json",
+      "sha256": "1E89C7C32987615E5625219129B2FBD9B9CDCB6C1CD8358BCD986980E8C7F495",
+      "bytes": 1352
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\live-todos.json",
+      "sha256": "3BE2ADDF7D0A8EDB69A6D543F2C27103A78E9237C7975AEAD96A8E480FD6FE32",
+      "bytes": 11712
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\native-baseline-comparison.json",
+      "sha256": "9FDBA4C2AB2F90D0ADC7C8C4597177AD590B5743E93FD70DF07452E596D953D6",
+      "bytes": 1826
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\native-readback.json",
+      "sha256": "60452B7587A85630765842C91B5B2524288B61FAEF7E4557E4B961E3DEC91E2A",
+      "bytes": 1467741
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\oracle-file-pin-readback.json",
+      "sha256": "770A7EF9B6654B1094FF2262BD73D62B2D29604F16FF9E8488473BCEF94A463E",
+      "bytes": 2441
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\result.json",
+      "sha256": "AB9CF9C0E17370229607C16F6AE57E25DF030CA489BE786B49D74BB8CF055910",
+      "bytes": 4973
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T145940-0500-whole-plan-readback\\structured-ac-inventory.json",
+      "sha256": "EB06CC31E7E03CBF6E2EE0E54C649FDEE7481E8C6DD0D5A3A2FD4C393E343D2F",
+      "bytes": 6538
+    }
+  ],
+  "nativeFieldsMatched": 8,
+  "gitDiffCheckExitCode": 0,
+  "requirementRecordsCompared": 516,
+  "requirementRecordDifferences": 0,
+  "isIndependentHostileValidation": false
+}

@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-10-07T14:22:13.5180000+00:00",
+  "source": "Codex local rollout raw tool response",
+  "rolloutPath": "C:\\Users\\kingd\\.codex\\sessions\\2026\\08\\16\\rollout-2026-08-16T18-26-23-01a00ce5-d30d-7451-ab45-fa3e4fbb825f.jsonl",
+  "callId": "call_khoV117Bmj95zcMFWhCeStho",
+  "toolOutput": [
+    {
+      "type": "input_text",
+      "text": "Script completed\nWall time 9.0 seconds\nOutput:\n"
+    },
+    {
+      "type": "input_text",
+      "text": "{\"content\":[{\"type\":\"text\",\"text\":\"✓ Pipeline executed successfully | Window: #28296 Falcon | Status: Standby | Pipeline: & 'C:\\\\Users\\\\kingd\\\\.codex\\\\pl... | Duration: 10.69s | Location [FileSystem]: F:\\\\GitHub\\\\vice-sharp\\n\\nfailsafeDir: F:\\\\GitHub\\\\vice-sharp\\\\.mcpServer\\\\failsafe\\\\Codex\\\\workspaces\\\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\\\pending\\r\\nscanned: 4\\r\\nreplayed: 4\\r\\nfailed: 0\\r\\nquarantined: 0\\r\\nskipped: 0\\r\\naborted: false\\r\\nabortReason: \\\"\\\"\\r\\n\\r\\n\"}]}"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+.echo VICE_CLOCK_PROBE_BEGIN
+.sympath
+lm m xvic
+? xvic+0x262a10
+dq xvic+0x262a10 L1
+ba w8 xvic+0x262a10
+bl
+g
+.echo VICE_CLOCK_STOP_01
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_02
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_03
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_04
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_05
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_06
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_07
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_08
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_09
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_10
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_11
+dq xvic+0x262a10 L1
+r rip
+g
+.echo VICE_CLOCK_STOP_12
+dq xvic+0x262a10 L1
+r rip
+bc *
+.echo VICE_CLOCK_PROBE_END
+q

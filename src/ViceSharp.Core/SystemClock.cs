@@ -61,6 +61,56 @@ public sealed partial class SystemClock : IClock
     public string DebugFetchIrqNote { get; private set; } = "";
 
     public long TotalCycles => _cycle;
+
+    /// <summary>
+    /// Sets the elapsed cycle counter without ticking devices.
+    /// Replay uses this when the restored image already contains those cycles.
+    /// </summary>
+    internal void AdoptElapsedCycles(long cycle)
+    {
+        if (cycle < 0)
+            throw new ArgumentOutOfRangeException(nameof(cycle));
+
+        _cycle = cycle;
+    }
+
+    /// <summary>
+    /// VICE interrupt snapshot: <c>irq_clk</c>, <c>irq_delay_cycles</c>, and
+    /// the NMI edge latch. Not part of the serialized machine image.
+    /// </summary>
+    internal readonly struct InterruptReplayState
+    {
+        public long IrqAssertCycle { get; init; }
+        public int IrqDelayCycles { get; init; }
+        public bool NmiWasAsserted { get; init; }
+        public bool NmiPending { get; init; }
+    }
+
+    /// <summary>Copies the interrupt timing <see cref="InjectInterruptTiming"/> writes back.</summary>
+    internal InterruptReplayState CaptureInterruptTiming() => new()
+    {
+        IrqAssertCycle = _irqAssertCycle,
+        IrqDelayCycles = _irqDelayCycles,
+        NmiWasAsserted = _nmiWasAsserted,
+        NmiPending = _nmiPending
+    };
+
+    /// <summary>
+    /// Puts a captured IRQ latch back. Restoring a CIA that is already
+    /// asserting IRQ raises a new 0-to-1 edge. That edge is the old one,
+    /// so it must not replace <c>irq_clk</c>.
+    /// </summary>
+    internal void InjectInterruptTiming(InterruptReplayState state)
+    {
+        _irqAssertCycle = state.IrqAssertCycle;
+        _irqDelayCycles = state.IrqDelayCycles;
+        _nmiWasAsserted = state.NmiWasAsserted;
+        _nmiPending = state.NmiPending;
+        if (_irqLine is InterruptLine irq)
+            irq.AcknowledgeRisingEdge();
+        if (_nmiLine is InterruptLine nmi)
+            nmi.AcknowledgeRisingEdge();
+    }
     public long FrequencyHz { get; }
 
     /// <summary>

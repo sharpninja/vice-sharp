@@ -1,0 +1,39 @@
+{
+  "timestampLocal": "2026-10-07T16:50:28.5945271-05:00",
+  "mockGroups": 6,
+  "canonicalPlan": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+  "checks": [
+    {
+      "name": "Missing access kind is distinct from idle",
+      "passed": true
+    },
+    {
+      "name": "Empty leading interior trailing gaps covered",
+      "passed": true
+    },
+    {
+      "name": "Rejected preflight prevents parity invocation",
+      "passed": true
+    },
+    {
+      "name": "All four provenance categories named",
+      "passed": true
+    },
+    {
+      "name": "Real C64 gate tracked",
+      "passed": true
+    },
+    {
+      "name": "Named filter no longer phase exit",
+      "passed": true
+    },
+    {
+      "name": "Phase4 full suite command present",
+      "passed": true
+    },
+    {
+      "name": "Full goal cannot complete at blocker",
+      "passed": true
+    }
+  ]
+}

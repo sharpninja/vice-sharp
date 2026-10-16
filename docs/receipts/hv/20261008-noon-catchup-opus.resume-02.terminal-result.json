@@ -1,0 +1,210 @@
+{
+  "schema": "vice-sharp-hv-terminal-capture/v1",
+  "capturedLocal": "2026-10-08T12:51:26.5471323-05:00",
+  "reviewer": "claude-opus-5-5",
+  "effort": "max",
+  "cliSessionId": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008",
+  "pid": 117120,
+  "exitCode": 1,
+  "stdoutCopyStatus": "RanToCompletion",
+  "stderrCopyStatus": "RanToCompletion",
+  "jsonlEventCount": 1438,
+  "parseErrors": [],
+  "terminalEvent": {
+    "duration_api_ms": 1832623,
+    "stop_reason": "stop_sequence",
+    "session_id": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008",
+    "total_cost_usd": 29.87451920000001,
+    "usage": {
+      "input_tokens": 322,
+      "cache_creation_input_tokens": 847988,
+      "cache_read_input_tokens": 92331974,
+      "output_tokens": 200673,
+      "output_tokens_details": {
+        "thinking_tokens": 100020
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 847988,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 4028,
+          "cache_read_input_tokens": 851888,
+          "cache_creation_input_tokens": 5172,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 5172
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 332,
+        "outputTokens": 206164,
+        "thinkingTokens": 103688,
+        "cacheReadInputTokens": 93558396,
+        "cacheCreationInputTokens": 879779,
+        "webSearchRequests": 0,
+        "costUSD": 29.87451920000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [],
+    "terminal_reason": "api_error",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": true,
+    "num_turns": 188,
+    "subtype": "success",
+    "api_error_status": 429,
+    "api_error": "usage_limit_reached",
+    "result": "You've hit your session limit · resets 4:50pm (America/Chicago)",
+    "type": "result",
+    "duration_ms": 2203065,
+    "uuid": "a10d8148-6a0a-47a1-931d-9fc4fd19a374",
+    "queued_turn_count": 0,
+    "result_index": 0
+  },
+  "artifacts": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.request.jsonl",
+      "bytes": 221625,
+      "sha256": "5FBE7BCAED27CB1BA15CEF2A16E472C254F907015B74DE09C167294878810176"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.response.jsonl",
+      "bytes": 3276225,
+      "sha256": "5CF0CC2C842576EF145CB23522D0C7FFE37ED321AA3C67608C6A3D4470CC607A"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.interrupted-draft-recovery.json",
+      "bytes": 73053,
+      "sha256": "725B370B6C15D5B82FD22AA41130D3BC60B56FDA239B26E606B7846B53571E75"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.post-terminal-integrity.json",
+      "bytes": 1911542,
+      "sha256": "FD459B4BBA90ADAC87BC20D770C5566AABE711408B6FC5C229374CE6AAF2DC75"
+    }
+  ],
+  "reviewerTests": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\native-clock-probe\\native-clock-probe.trx",
+      "sha256": "6D870A0EBE1FD3932A8FDE740B4C53884ECAB24B0C8F57F6C534E5E8A4B0AD96",
+      "outcome": "Completed",
+      "counters": {
+        "total": 50,
+        "executed": 50,
+        "passed": 50,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\oracle-contracts\\oracle-contracts.trx",
+      "sha256": "185E838809BD841F083860BAA2311C49F34A082631D97B3A9E723796BD5F8824",
+      "outcome": "Completed",
+      "counters": {
+        "total": 82,
+        "executed": 82,
+        "passed": 82,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008-noon-catchup-opus.resume-02.reviewer-tests\\vsf-compatibility\\vsf-compatibility.trx",
+      "sha256": "DB4B8E1B19B12A4A084D736829C9489B95A519F6216F907AB13A2F62E14BD043",
+      "outcome": "Completed",
+      "counters": {
+        "total": 199,
+        "executed": 199,
+        "passed": 199,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      }
+    }
+  ],
+  "reviewFinalized": false,
+  "accepted": false,
+  "automaticRetryStarted": false
+}

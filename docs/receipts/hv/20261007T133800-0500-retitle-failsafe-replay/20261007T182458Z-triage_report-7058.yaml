@@ -1,0 +1,15 @@
+method: workflow.triage.report
+label: triage_report
+timestamp: 20261007T182458Z
+params:
+  dedupeKey: codex-setturntitle-missing-retitled-result-20261007
+  summary: 'During ViceSharp mock-scope approval logging, updateTurn with title did not change queryTitle on primary readback. Supported workflow.sessionlog.setTurnTitle with queryTitle changed the local current-turn.yaml but returned code rejected persisted false queued false and a real failsafePath. Primary title outcome remains unconfirmed. Investigate result-schema compatibility and distinguish retained fallback from primary persistence. Expected: supported retitle confirms primary readback and reports actual retained queue consistently. No plugin repair requested here.'
+  reporterAgent: Codex
+  affectedPaths:
+    - C:\Users\kingd\.codex\plugins\cache\mcpserver-codex-plugin\mcpserver\1.118.0\lib\repl-invoke.ps1
+    - F:\GitHub\vice-sharp\.mcpServer\failsafe\Codex\workspaces\RjpcR2l0SHViXHZpY2Utc2hhcnA\pending\20261007T182422Z-session_setTurnTitle-978b.yaml
+  errorSignature: workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true.
+  component: McpServer / mcpserver-codex-plugin sessionlog
+  title: Codex setTurnTitle rejected because typed result did not confirm retitled=true
+  evidence: 2026-10-07T13:24:22-05:00; Codex-20261007T135626Z-plugin-session / req-20261007T180309Z-prompt-ae30. Wrapper exit1 code=rejected retryable=false persisted=false degraded=false queued=false failsafePath present. Test-Path true; local queryTitle is requested concise title. No claim of server retitle. Actual marker contract1.118.0; independently observed installed Grok1.119.0, no conclusion of causality.
+  workspacePath: F:\GitHub\vice-sharp

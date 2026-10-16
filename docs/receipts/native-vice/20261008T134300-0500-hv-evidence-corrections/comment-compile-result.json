@@ -1,0 +1,27 @@
+{
+  "timestampLocal": "2026-10-08T13:46:48-05:00",
+  "compiler": "C:\\msys64\\mingw64\\bin\\gcc.exe",
+  "compilerSha256": "5B6ED0D272A0B315712E304B52D0E1752CE39CA011CE867305280ACC42605EFF",
+  "arguments": [
+    "-c",
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-O0",
+    "-g",
+    "-IF:\\GitHub\\vice-sharp\\tools\\immutable-vice",
+    "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+    "-o",
+    "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\gate-observer-comment-check.o"
+  ],
+  "source": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+  "sourceSha256": "9E9DFB8A920C6766F372675E442B336C1B46A0B0A44581085ACBE05936437BD5",
+  "onlyHeaderCommentChanged": true,
+  "exitCode": 1,
+  "nativeUnchanged": true,
+  "output": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T134300-0500-hv-evidence-corrections\\gate-observer-comment-check.o",
+  "outputSha256": null,
+  "originalProbeExecutableNotReplaced": true,
+  "runtimeRerun": false
+}

@@ -1,0 +1,31 @@
+{
+  "startedLocal": "2026-10-08T11:35:35.9862611-05:00",
+  "executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\xvic.exe",
+  "executableSha256": "C01442BC1F15DD8C7006FABE0D35DFA9707664A3120DD1FA014A51EEB481B92C",
+  "arguments": [
+    "-default",
+    "-console",
+    "-sound",
+    "-sounddev",
+    "dummy",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data"
+  ],
+  "commandFile": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\bus-runtime\\stock-fast-fetch.cdb",
+  "commandFileSha256": "00997D652B00D1D739F7EFB26FCDF4D0A9C533EEA0C727EB3FE06E81E336D20D",
+  "successMarker": "STOCK_FAST_FETCH_AFTER",
+  "scope": "Diagnostic external stock-process observation; no parity acceptance.",
+  "targetPid": 77904,
+  "debuggerArguments": [
+    "-y",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\bus-runtime\"",
+    "-cf",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\bus-runtime\\stock-fast-fetch.cdb\"",
+    "-p",
+    "77904"
+  ],
+  "debuggerPid": 98560
+}

@@ -1,0 +1,7 @@
+.echo AFTER_INIT_WATCH_BEGIN
+lm m xvic*
+dq xvic_gate_probe+0x263170 L1
+ba w8 xvic_gate_probe+0x263170 ".echo AFTER_INIT_WATCH_HIT; dq xvic_gate_probe+0x263170 L1; r rip; bl; bc *; q"
+bl
+.echo AFTER_INIT_WATCH_ARMED
+g

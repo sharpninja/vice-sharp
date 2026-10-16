@@ -1,0 +1,31 @@
+{
+  "timestampLocal": "2026-10-09T02:08:46-05:00",
+  "parentSession": "Codex-20261007T135626Z-plugin-session",
+  "auditTurn": "req-20261009T070737Z-unintended-drain-audit",
+  "operatorError": "I invoked lib/stop-gate.ps1 without MCP_FAILSAFE_DRAIN_DISABLED=1 in the parent console, despite claiming the 11 pending Codex records would remain untouched.",
+  "exactObservedOutput": "Failsafe queue drain: replayed=11 failed=0 quarantined=0 skipped=0 dir='F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending'.",
+  "beforePendingCount": 11,
+  "afterPendingCount": 0,
+  "quarantineCountBefore": 2,
+  "quarantineCountAfter": 2,
+  "causeSource": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.118.0\\lib\\repl-invoke.ps1:1189",
+  "cause": "Invoke-ReplFailsafeDrainOnFirstSuccess opts out at line 1208 only when MCP_FAILSAFE_DRAIN_DISABLED equals 1; otherwise it invokes the queue drain after a successful backend call.",
+  "currentParentDisableFlag": "1",
+  "historicalClaudeSessions": [
+    {
+      "sessionId": "ClaudeCode-20261008T170040Z-plugin-session",
+      "exactEqual": true
+    },
+    {
+      "sessionId": "ClaudeCode-20261008T124507Z-phase1-oracle-contracts-hv",
+      "exactEqual": true
+    }
+  ],
+  "protectedClaudeQueueCount": 4,
+  "protectedClaudeQueueDifferences": [],
+  "nativeComparedCount": 6374,
+  "nativeDifferences": [],
+  "individualReplayedRecordEffectsEstablished": false,
+  "limitation": "The aggregate hook output identifies no individual replay paths. No retained pre-drain manifest of the 11 parent queue payloads was available in this bounded check. Record-by-record historical MCP effects are not established. No historical data has been reversed or altered to conceal the replay.",
+  "reviewOutcome": "Opus quota failure, no verdict, no acceptance; no further retry."
+}

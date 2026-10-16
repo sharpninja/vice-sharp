@@ -1,0 +1,22 @@
+{
+  "timestampLocal": "2026-10-08T10:07:49.7399797-05:00",
+  "pid": 52164,
+  "arguments": [
+    "-y",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\"",
+    "-cf",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\\entry-probe.cdb\"",
+    "\"F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\xvic.exe\"",
+    "-default",
+    "-console",
+    "-sound",
+    "-sounddev",
+    "dummy",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "\"F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data\""
+  ],
+  "purpose": "Diagnostic negative-control follow-up:hardware execute breakpoint at nm-pinned maincpu_mainloop entry with explicit single-step exception break; no software breakpoint"
+}

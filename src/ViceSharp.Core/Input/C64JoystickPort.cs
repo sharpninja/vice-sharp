@@ -5,7 +5,16 @@ namespace ViceSharp.Core.Input;
 /// <summary>
 /// C64 Digital Joystick Port implementation.
 /// </summary>
-public sealed class C64JoystickPort : IInputSource
+/// <summary>
+/// FR-INP-003. A mouse port accepts host pointer deltas.
+/// </summary>
+public interface IMousePort
+{
+    /// <summary>Apply host pointer deltas to the pot position.</summary>
+    void ApplyDelta(int deltaX, int deltaY);
+}
+
+public sealed class C64JoystickPort : IInputSource, IMousePort
 {
     [Flags]
     public enum JoystickButtons : byte
@@ -39,6 +48,11 @@ public sealed class C64JoystickPort : IInputSource
     public void Reset()
     {
         State = JoystickButtons.None;
+        _mouseMode = false;
+        _mouseX = 0;
+        _mouseY = 0;
+        _potX = 255;
+        _potY = 255;
     }
 
     /// <summary>
@@ -50,9 +64,15 @@ public sealed class C64JoystickPort : IInputSource
         return (byte)(0xE0 | ((byte)~(byte)State & 0x1F));
     }
     
-    // VICE-style: POT X/Y for paddles (255 = not pressed)
+    // VICE-style: POT X/Y for paddles (255 = not pressed).
+    // Mouse mode keeps a position counter. The pot byte is the 1351 code
+    // VICE writes: (position & 0x7f) + 0x40. Adding the delta to the pot
+    // byte clamps at 255 and never leaves the idle paddle value.
     private byte _potX = 255;
     private byte _potY = 255;
+    private int _mouseX;
+    private int _mouseY;
+    private bool _mouseMode;
     
     /// <summary>
     /// Read POT X value (paddle 1, VICE-style)
@@ -73,6 +93,22 @@ public sealed class C64JoystickPort : IInputSource
     /// Set POT Y value (0-255, VICE-style)
     /// </summary>
     public void SetPotY(byte value) => _potY = value;
+
+    /// <inheritdoc />
+    public void ApplyDelta(int deltaX, int deltaY)
+    {
+        if (!_mouseMode)
+        {
+            _mouseX = 0;
+            _mouseY = 0;
+            _mouseMode = true;
+        }
+
+        _mouseX += deltaX;
+        _mouseY += deltaY;
+        _potX = (byte)((_mouseX & 0x7F) + 0x40);
+        _potY = (byte)((_mouseY & 0x7F) + 0x40);
+    }
     
     public bool Up => (State & JoystickButtons.Up) != 0;
     public bool Down => (State & JoystickButtons.Down) != 0;

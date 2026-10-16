@@ -1,0 +1,8 @@
+{
+  "startedLocal": "2026-10-08T07:33:27.7823512-05:00",
+  "endedLocal": "2026-10-08T07:33:34.7129575-05:00",
+  "exitCode": 0,
+  "command": "dotnet test .\\tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj -c Release --logger \"trx;LogFileName=phase1-oracle-contracts.trx\" --results-directory .\\TestResults\\vice-immutable-phase1 --diag .\\TestResults\\vice-immutable-phase1\\vstest.diag.log --blame-hang --blame-hang-timeout 2m",
+  "nativeInventoryUnchanged": true,
+  "trxCounters": "<Counters total=\"82\" executed=\"82\" passed=\"82\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />"
+}

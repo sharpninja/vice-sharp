@@ -45,4 +45,21 @@ public sealed class TapImage
     }
 
     public TapPulseReader CreatePulseReader() => new(_pulseData, Version);
+
+    /// <summary>
+    /// Rebuilds the TAP file bytes this image was attached from.
+    /// </summary>
+    public byte[] ToImageBytes()
+    {
+        var buffer = new byte[20 + _pulseData.Length];
+        Header.CopyTo(buffer, 0);
+        buffer[12] = Version;
+        var length = _pulseData.Length;
+        buffer[16] = (byte)length;
+        buffer[17] = (byte)(length >> 8);
+        buffer[18] = (byte)(length >> 16);
+        buffer[19] = (byte)(length >> 24);
+        _pulseData.CopyTo(buffer, 20);
+        return buffer;
+    }
 }

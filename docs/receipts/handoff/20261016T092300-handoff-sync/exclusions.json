@@ -1,0 +1,2800 @@
+{
+  "measuredAtLocal": "2026-10-16T09:32:40",
+  "scope": "Approved checkpoint publication exclusions; retain every original locally, untrack index only, no history rewrite",
+  "originalHandoffSha256": "EA2737B0084B411D9E927227E183596A5779345D809E46B2C968F53A327A9579",
+  "count": 465,
+  "previouslyTracked": 113,
+  "exclusions": [
+    {
+      "path": ".codex-remote-attachments/01a0f7d6-69ab-7df1-af2a-571406599e53/890331b5-1435-40db-906a-abcae74cdf95/1-1000009801.jpg",
+      "sha256": "1E8240D13E40897F5FAB25DDA03E94986E54A4414AEDCFDCEB7442015D93E440",
+      "tracked": false,
+      "reason": "Private unrelated phone screenshot, including pairing credential"
+    },
+    {
+      "path": ".codex-remote-attachments/01a0f7d6-69ab-7df1-af2a-571406599e53/ca25e94d-1c40-400e-a098-a581264d9376/1-1000010169.png",
+      "sha256": "2313F100E822D098F61A6CC9B6CA4FE616635C41DAEE99AE467A68DD6A054706",
+      "tracked": false,
+      "reason": "Private unrelated phone screenshot, including pairing credential"
+    },
+    {
+      "path": ".codex-remote-attachments/01a0f7d6-69ab-7df1-af2a-571406599e53/cdd96d06-0859-4bd6-bd10-dc1987631665/1-1000010189.png",
+      "sha256": "5EBCD7B92954557F3A3987E9E4DEE91EBF27B4A8985D88D06D568B4BF9A89B3E",
+      "tracked": false,
+      "reason": "Private unrelated phone screenshot, including pairing credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/04172430-e88a-468e-901b-1b91661a704a.json",
+      "sha256": "F53C6B4C933E3DC7008ECFADEDFEFEF2118A0495698C2A37DB92323E60B39362",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/132eafb1-4cb2-4971-8403-5e1f42217e3c.json",
+      "sha256": "2CFCC3811B7956309A808EADBC4C968EAE2384317556926C3729568ECE12F0BD",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/2bb783b1-5b3b-4551-b22f-be4c1a468abc.json",
+      "sha256": "1949946375224396B366CC60A57D7410863D0A008076AE0A55595239D5EA421F",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/2cc64d92-cfe2-4f4c-9f81-972b2a8439c7.json",
+      "sha256": "437299843BF623EF8DA74F6577A4BE35BC790949AE49301C1F1BB5805E82901C",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/470d7221-659c-48e7-b5ab-c877e6a7e6ef.json",
+      "sha256": "29853EBCED61FAA5B9475DC2604335F3DD61AB4FFEB25843369F7E9DD6A1EBE9",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/60789dd9-e305-4e57-838e-c9cd255fdcd6.json",
+      "sha256": "C6FEE5B1DFA795E264D095752DFDBB419395CC36FBBDEC11EA49E0C713A39709",
+      "tracked": true,
+      "reason": "Unresolved credential-shaped raw transcript field"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/8478f6f3-150d-42d4-8625-210637384aa9.json",
+      "sha256": "6904FD7E57BF2C03C660C81B10EE8209AE69970706D5EFDD1DFB8F2FFF4883B4",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/a77a213b-c3b6-46d9-8429-809c68730c38.json",
+      "sha256": "1B8C7C82F0DD5BEF4C3A7B9D3233EDC0769B2C89AA967CB2DC076A8DC8006943",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/b3198f63-7932-45cd-bc49-c47e30c6d857.json",
+      "sha256": "5D7AF7C7FC7B5B53E0B501A555D9E32756924A8E4AB44E3735E60D047EC47298",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/ce636d19-938d-4a02-897c-6a9578e51f83.json",
+      "sha256": "E9C8A3BF3DE1F7EF58E4EFD1B5996306E4534B37762D8604D644FCFF03F8E4BB",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/e4de9323-7fb2-4cf3-ae75-0af8f93364b8.json",
+      "sha256": "F2AD929AEAD2D4371FEA0C07D0B21637CB62D27DAAFC67E7F10C2F3ECCE8194F",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction_requests/ee4521b0-ee5e-4be7-97a6-32b7d939cc38.json",
+      "sha256": "187ADC5F41BAE2D5B6575952BF0ED8CC737A9EFD48DEE20CB7B1379AB1049A94",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_000.md",
+      "sha256": "E9C742B40BCCC598B5E1F161C98D207E1689729458A3053A505E155789F36D02",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_001.md",
+      "sha256": "6EBDAB89B1FDB66169FB3D7D695645C5881A7860E6A4025F25051115B66BFC81",
+      "tracked": true,
+      "reason": "Unresolved credential-shaped raw transcript field"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_002.md",
+      "sha256": "67EA16E1C5DFA9B48D8D23C39C0EF25FD83D750828D51DB2F4916D5B404E4AC1",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_003.md",
+      "sha256": "17B21E97C8A8A6DD248EBA390615D2056507C0057C52F0E543487FDC7AFAEC98",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_004.md",
+      "sha256": "971D0F0AE2FA16ED80DEEC6288925DC5FD55F2CCFA5EEC9E880DEF38E01E26C4",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_007.md",
+      "sha256": "1F3C69ABB96B495751B9439688D1AD9F2C0D579BA04A1D001911EBA71450C9C3",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_011.md",
+      "sha256": "9458F966CFB99BC5349BECE9FD9D19EB5396D18689426787BDB7B823603C2DA9",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_012.md",
+      "sha256": "90CE41F499233280AAEC28B3710C2BFA59746B2BF963B9DE7C1089D20ABD4349",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_013.md",
+      "sha256": "5EEFB91B7562B3480C7907225219FB8A78F59ACB1CAB729D0D960E0D81A57ED7",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/compaction/segment_015.md",
+      "sha256": "24CA07025393E8E17E60083025819A5492A6FCB43A95C07CFE9E357DEE996A06",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/0c1e21b9-187b-442c-a0e1-e04f66f9ae3f.json",
+      "sha256": "17E4B6CA60197AA6D1DCE89AA5D05693C5E501E4CE4F0EACDCF6A17196C2D679",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/0e1af375-0354-4fe5-a101-e70ffd699a97.json",
+      "sha256": "39E858C8A3B9792272BCCC33DD1080D49EFDDD8D91E06AF9E6C7F2BC0E775F48",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/13add2b9-a4dc-4402-8e27-d7aac2bf3c9b.json",
+      "sha256": "C9D44B8B46C8E2A6B6860FC718717EC6B93D61AD19C40819C6C6B3B47AED0675",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/154e16c3-e02d-49cc-86d3-9f694ccd488c.json",
+      "sha256": "919059DFE6122B7A22DD33CD518B5C55348F49301F49FE13438ABEC07A9C786E",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/19e4d021-63c4-4d86-bacd-02f4c75f6f7d.json",
+      "sha256": "AA1E4AD24B37D403D4CF0ECE4CFD948974A475ECE5A67D530329A4C3A5326163",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/1c26565d-4360-4588-a372-d2d59bee0adf.json",
+      "sha256": "6369590CE9A8E450B8FBC99585FEB94D908354C4690BEC574EF8D759EA629126",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/26c10e1a-3a56-4322-a8c4-a84adb9ed1b9.json",
+      "sha256": "FDC221A1313425327236CB36B647E8D319E9B78051668553D7189738CA8DE664",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/2770cf4d-32de-4c7b-9661-df1f0511af6e.json",
+      "sha256": "6E90B6009B58F55E6E9DD89A5F7C4B95BC52F192B284741AA81DD9FCA3F4C4C5",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/299d0a60-2384-4338-9e04-d692c5a83498.json",
+      "sha256": "AB35230DDD70FF0D403DD8A84CE59E455F7201272BDCB9A48EB9FE62734B336A",
+      "tracked": true,
+      "reason": "Unresolved credential-shaped raw transcript field"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/7e5afb62-91b4-4d04-b749-5a1cf4c20fd4.json",
+      "sha256": "57DAC8A62D10551DA5D39C102A32BAE78F177781DF374DB192F98C93787D0370",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/820a3f34-f2ba-4c79-b215-b4907412be45.json",
+      "sha256": "787ED1017C662A04A5AF778F9220FF6C166EB9AB33C8912A3778979EFBD91066",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/8b1f4248-a006-4839-99b2-1625b762bd19.json",
+      "sha256": "8B486C9D13DCD46529DF2D24415F85CBC79812F2F069649F443C9023B869F798",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/a301a8d0-67fd-414b-967b-013dee66cb07.json",
+      "sha256": "25CAC55B344FAC2C6493BE97186179B40A9A27153E35F4651E3A1F005124CECA",
+      "tracked": true,
+      "reason": "Unresolved credential-shaped raw transcript field"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/ba36b65e-9598-40e4-8172-6ce91679bc9e.json",
+      "sha256": "30C1C149C2941F5E51D198140B8C255B34271DF06E3461F3C5FB27035528ED81",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/cb813d75-68a5-4da8-b1a5-c0ee28953f48.json",
+      "sha256": "25ED2CE1301997FEFCCE64BD70ED07EA277C67517DCB2DC3EC8DED0366DFECE3",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/d50ae609-06e6-4ae4-b5d6-f480a860d5cd.json",
+      "sha256": "3028797ABD1A1663F1BE13342AADE1F592C55451FB490CE026E574A45EF596B1",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/recap_requests/dcdd53e7-4b76-4132-9e49-6a8c45c573ee.json",
+      "sha256": "DB41B0A79D4CA3974190888C378CEF23AFBE5EF6FB0DA7FACB7BA47104E453D2",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/terminal/call-dce014b4-6ad4-4fa4-9ddb-8d0aaba29822-24.log",
+      "sha256": "FD35A6FD3565C3B3087CBDF319C9F43AE39DA3B539089DBDB668EFDC701AD663",
+      "tracked": true,
+      "reason": "Unresolved credential-shaped raw transcript field"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/session/updates.jsonl.gz",
+      "sha256": "3FF4AFDDA8F7F90943E4234AA327368A00CEAF0A09F12BB5884389222292119D",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/grok/2026-08-11-vic20-exact-session/TRANSCRIPT.md",
+      "sha256": "99CF8B85DD71B9797E2A0F6486958AC418FD19B92289E778BA3FEC403C436DC4",
+      "tracked": true,
+      "reason": "Exact historical workspace credential"
+    },
+    {
+      "path": "docs/receipts/hv/20260923T180000Z-wolf64-4146007.request.jsonl",
+      "sha256": "1701B2DA6EB370A3EE79DECB62E0B7ADCC1BD461648081A2E147A2239E751906",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260923T180000Z-wolf64-4146007.response.jsonl",
+      "sha256": "8CB8913201B49224B153A4D61A8D5D9CB9E2CD285A262371767C537180561BF0",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T180517Z-oldest-vice-requirements.request.jsonl",
+      "sha256": "C93BA8A57AC207D12E4EBC6C62B1CF7DF0B9112F31BC1731E0073C04D7CD9C3C",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T180517Z-oldest-vice-requirements.response.jsonl",
+      "sha256": "27218AED837F73D779A079422144EF04E614064CC015BF12E151DC40EB4905A1",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T184743Z-requirements-recovery-realignment-plan.request.jsonl",
+      "sha256": "4E522651CD732353D8212F67E43181DB6564816A8AF8A0B9E8C95C83543DCB50",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T184743Z-requirements-recovery-realignment-plan.response.jsonl",
+      "sha256": "C74BBC4F69DA57B1F8399A7F595131413AB46052CD98FC80CECF351300C05D16",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T191500Z-requirements-recovery-realignment-plan-r2.request.jsonl",
+      "sha256": "CC8D088727A22D4B06FB2F8AC302E368BF5096D3B4F0139FEBD9DF2955FE7B82",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T191500Z-requirements-recovery-realignment-plan-r2.response.jsonl",
+      "sha256": "1C16A5452D9C9BA091760E3E0CD98767D9B9174860BF704B1A7B7713CCA0D614",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T192900Z-requirements-recovery-realignment-plan-r3.request.jsonl",
+      "sha256": "981F908C31EBD694171C3B617A1584ACB502216B9521383980D2EE9971009D6F",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T192900Z-requirements-recovery-realignment-plan-r3.response.jsonl",
+      "sha256": "E3E517A00E49750A5A35621DC15712658F84EF0E61B5C01FA676B5748D569D64",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T203110Z-requirements-recovery-preview-gate.request.jsonl",
+      "sha256": "847A32C366655807F83AC4D25505F295CC377750345021DF6E57900BE71AB53F",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T203110Z-requirements-recovery-preview-gate.response.jsonl",
+      "sha256": "78357CA7748838127F8919D951D54695C539FAD41F24A889AF461204D417229B",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T212001Z-mcp-recovery-requirements-gate.request.jsonl",
+      "sha256": "62D0ED9A89508CE352FD8B3477AB9B23F295AB2BF4BC5C742A78045D99404E9A",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T212001Z-mcp-recovery-requirements-gate.response.jsonl",
+      "sha256": "4F10A7DC8E5F4F0D56B55555EE8B6246254CF365B28585B342190994DB602B81",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T220124Z-triage-failure-stop.request.jsonl",
+      "sha256": "99DE397E2DCB09D77A250528A9F10A251E4C563413530AF7E858821BDCB8510B",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260928T220124Z-triage-failure-stop.response.jsonl",
+      "sha256": "472B79DC8DBE632CA5DF88E48497610045251FE95B74829AB2E54F9BA31DE85C",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T000145Z-actual-current-failure-diagnosis.request.jsonl",
+      "sha256": "5DBFE11C26DB57CAA2C6FEF565E8F9F738366AAB022F8055F7D23D05CB731CD7",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T000145Z-actual-current-failure-diagnosis.response.jsonl",
+      "sha256": "EFD512857D5172B145562833047D516885012673F282384DDDF416E7231B6A1A",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T003029Z-vice-sharp-handoff-replacement.request.jsonl",
+      "sha256": "4BEAD1F933DCBFD4E3DD44B6A735A28225AE9209ACBA45152BF4B581DEF61711",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T224929Z-handoff-completion-plan.request.jsonl",
+      "sha256": "5A046F350FEB03789EA535F4A3CC06D1ABF45EACF850C6ADECA025C1569A9E5E",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T224929Z-handoff-completion-plan.response.jsonl",
+      "sha256": "78E637A1DCB704E11909D8CF4DE46220ED54E0A9C4B109DFC284D236A6327478",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T224929Z-handoff-completion-plan.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T230400Z-handoff-completion-plan.response.jsonl",
+      "sha256": "3AA2406991C2D25CA0EA4C353B92E218211DE8608540D376F9D3B40AFAB3E73A",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T230403Z-handoff-completion-plan-ignore-mcp.request.jsonl",
+      "sha256": "6B97D52D88C148B0F9B9A3B118299CBAEBE8E7A3BADA21AF63DDFB341D5A89DB",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T230403Z-handoff-completion-plan-ignore-mcp.response.jsonl",
+      "sha256": "B17FE32FFFC634C9918DC4E4AED9D2DB19E456F5EBF9B64EA798B9878B41BFD6",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T230403Z-handoff-completion-plan-ignore-mcp.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T232658Z-recovery-acceptance-audit.request.jsonl",
+      "sha256": "A5D4CF373E64EE176AF9E0E3A395DC44FA8D454E120AB268FA3D9A734B617A7A",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T232658Z-recovery-acceptance-audit.response.jsonl",
+      "sha256": "92F77B2AFF9861E7B43A4F319F32FA3DC5541E5FABBE8CECD522259E34219CB6",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T232658Z-recovery-acceptance-audit.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T233104Z-recovery-acceptance-audit-profile.request.jsonl",
+      "sha256": "ADE54910442F0EAF6393937FF595DC084A3249C23B6806434643F61561BEE6F0",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T233104Z-recovery-acceptance-audit-profile.response.jsonl",
+      "sha256": "48C08E0D2C26C83E1CFE37B09978E5E97901B57BD37BC69F5DA76769A841D521",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T233104Z-recovery-acceptance-audit-profile.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T233645Z-dense-session-smoke.request.jsonl",
+      "sha256": "BF18A522B22A286632313F766C8BC43A9CACA16B1E643FB31A9EF0D993DE64B8",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T233645Z-dense-session-smoke.response.jsonl",
+      "sha256": "CDC09129CA738705B33F22B8CA0F4A2DA616793941E74C3093941B44AB143CDF",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260929T233645Z-dense-session-smoke.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T002642Z-phase2-completion.request.jsonl",
+      "sha256": "6684748AFD57B6EC96EEE8E989E485D5653893BDD1F50CF09707982B790CD783",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T002642Z-phase2-completion.response.jsonl",
+      "sha256": "BF23545C4393FF2A09A87A7A267305CC9C0DA92B34F0AE15B620DB54EAD65724",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T002642Z-phase2-completion.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T002658Z-phase1-completion.request.jsonl",
+      "sha256": "D7A78D8D6FCD2349B4FE44895BEBD18116086C380BD9AF43E3F515493DF53391",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T002658Z-phase1-completion.response.jsonl",
+      "sha256": "F9D22A3D1D852A4F6CDE2CCC5A539031FE9414C9C163FD3586BD486A16B4B128",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T002658Z-phase1-completion.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T003712Z-phase1-supplied.request.jsonl",
+      "sha256": "9C6C4384F9785E3984F922747748618F277AC4A28AAFFD3A70270F76EC33B5C3",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T003712Z-phase1-supplied.response.jsonl",
+      "sha256": "081295D1E08C9702A4A9CE2A485C8BDD8C73BC5EB34F5E9855CA3C91726BB823",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T003712Z-phase1-supplied.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T003722Z-phase2-supplied.request.jsonl",
+      "sha256": "0908E0AF5EF13C53730BE73FFBCDE5E22E44BA1F0C655D2D4526A9629F1A078B",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T003722Z-phase2-supplied.response.jsonl",
+      "sha256": "23A4786059BEB4E841572739819680E48D2FD95E0DBF2C0AA39ABAFCD0F92A80",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T003722Z-phase2-supplied.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152129Z-requirement-set-acceptance.request.jsonl",
+      "sha256": "F98B767AEFDA649C85FCE9B0CF541F52DA305C14A2FF22DE1CABC1A52962EB38",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152129Z-requirement-set-acceptance.response.jsonl",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152129Z-requirement-set-acceptance.response.jsonl.err",
+      "sha256": "CF5BA05F93D786DC2E92E164F54DF943C49D91281945EF653AC85AAFD4B16A43",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152208Z-requirement-set-acceptance.request.jsonl",
+      "sha256": "4791C5C77E7A16277CF0998D0B0E5871A882918869E38A7DC9472DBCDEA43DC1",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152208Z-requirement-set-acceptance.response.jsonl",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152208Z-requirement-set-acceptance.response.jsonl.err",
+      "sha256": "6FBFD5567AA98DC1D9E17E94BA087ACD2DD45022D9EE127BECE9B72675C90AC7",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152310Z-requirement-set-acceptance.request.jsonl",
+      "sha256": "2DCCD373167FEEDF31318EBA1536AA5F536FABF0AD8B01225D0E4B20615885E1",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152310Z-requirement-set-acceptance.response.jsonl",
+      "sha256": "C8C6741B626C6A25D13D71DCD1147207B09DDD5FCC2A6B59A3CBDD2ADD93C516",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152310Z-requirement-set-acceptance.response.jsonl.err",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152603Z-requirement-set-acceptance.request.jsonl",
+      "sha256": "ED711009769B3CB0202D6BD441B34F6B05B51147ED95057D42968B220DFC06A0",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152603Z-requirement-set-acceptance.response.jsonl",
+      "sha256": "19BE346C628C10F43E0326376010AD66626D0B83C703668E1F0577E1781E418C",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T152603Z-requirement-set-acceptance.response.jsonl.err",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T155654Z-requirement-set-acceptance-r2.request.jsonl",
+      "sha256": "4F2700E1C53BC4A6D530C6E331B607B9FDC5736187AFDCAE26E050028F24F9EA",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T155654Z-requirement-set-acceptance-r2.response.jsonl",
+      "sha256": "FCFECE9F6F74B60A144300D2C80E840727A2454ED4D406D78DCDBE58E9EB49A6",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T155654Z-requirement-set-acceptance-r2.response.jsonl.err",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T163951Z-requirement-set-acceptance-r3.request.jsonl",
+      "sha256": "4BA129123A67B78149CC3CCB522BA436BC52B29D898BAA2609C9C6982EABE998",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T163951Z-requirement-set-acceptance-r3.response.jsonl",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T163951Z-requirement-set-acceptance-r3.response.jsonl.err",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T164102Z-requirement-set-acceptance-r3.request.jsonl",
+      "sha256": "EED0A9CA574E087CB30AD1C61FD63E58009ED2AC5B995C9A8D7E1AC098604C84",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T164102Z-requirement-set-acceptance-r3.response.jsonl",
+      "sha256": "19168DCD8283545DB3EDB38509DE91B919C005284D8B938A30E3D1A2E784BB68",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T164102Z-requirement-set-acceptance-r3.response.jsonl.err",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T165500Z-requirement-set-acceptance-r4.request.jsonl",
+      "sha256": "CC18DA62C1448713CA5B713A8E1DE2EB56E9876B5DFBD025AE311135F2C57FE2",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T165500Z-requirement-set-acceptance-r4.response.jsonl",
+      "sha256": "51D4672ECB9790EE3A80171AD057237E1E07330714935E79C7ED6B9797D8EA61",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T165500Z-requirement-set-acceptance-r4.response.jsonl.err",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": true,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T215341Z-phase2-acceptance.request.jsonl",
+      "sha256": "63274D6E078881D656F696887A3BBCBEC88B326C377829274A103A13C9982847",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T215341Z-phase2-acceptance.response.jsonl",
+      "sha256": "956C1A96DD62DD00E7B708E296C58568A91E03CBC025D7114C2A9FB57A96E94B",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T215341Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T225855Z-phase2-acceptance.request.jsonl",
+      "sha256": "29606AF5A407463226D5C8D30EA6C4A9B42096188DE229EFA01138975DBF94F2",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T225855Z-phase2-acceptance.response.jsonl",
+      "sha256": "E4DC5F208C73822A0B104B0A24DF6F2DC3307343A023A14B97CE2BC4AA838425",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T225855Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T231120Z-phase2-acceptance.request.jsonl",
+      "sha256": "AE24780192B109FC6C178DE1FB5E8CB5C8958DC7CAFCE021BF79B4A1FCA0FD4A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T231120Z-phase2-acceptance.response.jsonl",
+      "sha256": "01FF0E84FD863CB3D387A99F41C6CF3DAD3BD3788621BA0A9BA3AE08F2855F4C",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T231120Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T000445Z-phase2-acceptance.request.jsonl",
+      "sha256": "196CE8F3626CCDB71AE4E2D02C5B5972356775F2251BEA35000A3464729BFDCD",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T000445Z-phase2-acceptance.response.jsonl",
+      "sha256": "9015C3DC921C14CF378A34B5B8BD3DFB1B8D90C35CBE7716027BCAA94B351D6D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T000445Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T010135Z-phase2-acceptance.request.jsonl",
+      "sha256": "6CBC206481E61900C0A90AC06CA9E1CDFDBCB798F43F23238124B1F834FA2CC7",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T010135Z-phase2-acceptance.response.jsonl",
+      "sha256": "A2BE75FDDC41D5C1B4F58D7D41617BC5403CFDB2BFD142781A7D626EAE0E7C71",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T010135Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T021939Z-phase2-acceptance.request.jsonl",
+      "sha256": "A6E736E336DF37AABA4536F5F60FD9BABEEBCAB5A78FC63CB85809FEDACFBF0A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T021939Z-phase2-acceptance.response.jsonl",
+      "sha256": "DF6D0816878ECCCCEB5B4E1DD5EC448BCCC978C62BAA5B529E95E0CC0BC09472",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T021939Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T030459Z-phase2-acceptance.request.jsonl",
+      "sha256": "EC40B795109A77F849E91D5D5779F16504DDD81666B9F8AC39D08A4B558209A3",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T030459Z-phase2-acceptance.response.jsonl",
+      "sha256": "CA2FA9DA65B0D8A874775EF1FE7FC51A158B9AEA420223872E926E2E5FA50704",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T030459Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T035508Z-phase2-acceptance.request.jsonl",
+      "sha256": "D104793F0DF84529AD9F4DDFF4B7E1050E0567D3644088A893952CFD85D994A3",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T035508Z-phase2-acceptance.response.jsonl",
+      "sha256": "38E205606B080749904A1C4C0E6B19AFA7C239B8DC35630345D1ECFF8EDF6159",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T035508Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T043204Z-phase2-acceptance.request.jsonl",
+      "sha256": "7FBBBC33025D06D5848FEBD238D8654CFAAD7E218B377D68503FA60650926892",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T043204Z-phase2-acceptance.response.jsonl",
+      "sha256": "4FF36B47401971B5C964049FCEBE944C825C85668E259B84197123614A18EF56",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T043204Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T052047Z-phase2-acceptance.request.jsonl",
+      "sha256": "E102CBA1EC64945974A1F0FF510DA26208F0B89CD317AF8FC7F0101CF037A7E5",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T052047Z-phase2-acceptance.response.jsonl",
+      "sha256": "19DAE50FF6D5A9F7C9CD0D196AAC64C92EE226383752507230297C10AB3ED771",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T052047Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T055430Z-phase2-acceptance.request.jsonl",
+      "sha256": "842C49756FB036A325AD5978E7BE9531A166B25DD8A057A95A4039822BC7CF64",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T055430Z-phase2-acceptance.response.jsonl",
+      "sha256": "4C83BED7F646794BEC11CFB39F8A16E66CFC501B72B43B76411E2379F91EB46D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T055430Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T063335Z-phase2-acceptance.request.jsonl",
+      "sha256": "82505E9B17C0ADE4926880F6BD34CB3EA6EA590990333CF1C5572BDE6AF46E35",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T063335Z-phase2-acceptance.response.jsonl",
+      "sha256": "3C2CA5EE939762F2BE8000E9C49D5987DEA4DD8B34A5A31259507BE37C8C6651",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T063335Z-phase2-acceptance.stderr.txt",
+      "sha256": "080197B77BD884D8BD1EC850013D525271608833CC3E2CEA80852B838C549488",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T070955Z-phase2-acceptance.request.jsonl",
+      "sha256": "6C1545CB56CA8C3FE5083160B72F8ED994D03E3D452A12CF725CE5E56293D040",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T070955Z-phase2-acceptance.response.jsonl",
+      "sha256": "489964EAEB5B064EFD352A44E8BF340AF6F4DB16AC77D641EE750F16DF30CEC4",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T070955Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T074352Z-phase2-acceptance.request.jsonl",
+      "sha256": "0C7076F141765740BF02493DB5E2FADBB815048868B35FE6F0318158492BC0EA",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T074352Z-phase2-acceptance.response.jsonl",
+      "sha256": "CF014042387E32BF233D4F7AEB33D344055B315834AB2DCB4DD81A22DF3E0B2F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T074352Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T082657Z-phase2-acceptance.request.jsonl",
+      "sha256": "E6DA9B7F537BD4D74AD2F046159BB855F353C8D737D22F2111B14980F87ECAF7",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T082657Z-phase2-acceptance.response.jsonl",
+      "sha256": "8D91E661594AD5525569D8E39274F930A6F603F88BFC3CBD9E5617ED85D13183",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T082657Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T093554Z-phase2-acceptance.request.jsonl",
+      "sha256": "2655C7E035E9810CA37C0FEA35180DB9AB8FC19A78AA3D50A9471ED673735301",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T093554Z-phase2-acceptance.response.jsonl",
+      "sha256": "C2144F621C5A2835B47D5AE4E2FE3C8B14F969DEDEDF70876CA55FA0231E7695",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T093554Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T101055Z-phase2-acceptance.request.jsonl",
+      "sha256": "1305A58DE41B1EF1DA6DD0F21029EDAA33EE81780DF86309681FD269092A8FEA",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T101055Z-phase2-acceptance.response.jsonl",
+      "sha256": "9F1F97E3825B71F3EA35707A8B582C19A1AFDB5C6CA36BD684BED9CB9A3FD791",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T101055Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T110536Z-phase2-acceptance.request.jsonl",
+      "sha256": "34AD6F06D13BB837C3EEC68679C4D58B8AAD2DB916D69313712EE972DAEA09C3",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T110536Z-phase2-acceptance.response.jsonl",
+      "sha256": "98E74FFE17C8AFC0B69EF3626BD9AACF0C5A89ECFBD6B1CDB72AB27211585586",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T110536Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T115804Z-phase2-acceptance.request.jsonl",
+      "sha256": "EA787B0C53A0AFCB00360F02E1F5A0439C696D47F3F740D48DFEE76AF23F010C",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T115804Z-phase2-acceptance.response.jsonl",
+      "sha256": "1306B27068762207A97E59C79245179F0104213A6B0DBA3F4B9EF305ECAD6B53",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T115804Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T123716Z-phase2-acceptance.request.jsonl",
+      "sha256": "1E99707A7CEEFCA2F2A4D222C48944811F90B21D91D2FE50780AEF8C45EFCA51",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T123716Z-phase2-acceptance.response.jsonl",
+      "sha256": "17BE8BD9E85672BF34458C6BF4DEA6B78FECEFAAFB3BB6E0B042E7B94B081872",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T123716Z-phase2-acceptance.stderr.txt",
+      "sha256": "734377EB6276299BB5129EBAFC1D9A5B48B16D97B6C26196CA93156DD3ABA1D3",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T131357Z-phase2-acceptance.request.jsonl",
+      "sha256": "9D4B84D1B849676EC3158E3F06110BFCC0508B4541755CA9DFACBA1FCB5DD636",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T131357Z-phase2-acceptance.response.jsonl",
+      "sha256": "18C4F15DADB37042C7F7F2BCFD002909E61405A6152879DF7F06A157279B7597",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T131357Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T133455Z-phase2-acceptance.request.jsonl",
+      "sha256": "B4874B42DDB6834DF1359B6740D51928080317C4B02BCB11BD0F17C0E4E84205",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T133455Z-phase2-acceptance.response.jsonl",
+      "sha256": "74D2B503AEA55DBE5656CAAEB3FFA533D0A70FEF6D05998BDA0F64ACAFFFE1FD",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T133455Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T142109Z-phase2-acceptance.request.jsonl",
+      "sha256": "A8C7BDEF87B50926B3280358B578C6BEB41AE044ED6929596B48C1052C9EC661",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T142109Z-phase2-acceptance.response.jsonl",
+      "sha256": "1E1377E5E164F930C89B619516C107106811BC0510C8DAE8CF3433022ECFBF38",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T142109Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T150450Z-phase2-acceptance.request.jsonl",
+      "sha256": "D917C66967BAB930F26CA3E6B5AC526E587D2AA0FA1B7E93095C5FF4D6944462",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T150450Z-phase2-acceptance.response.jsonl",
+      "sha256": "4E3DF43F739F9E3FC4168D118D753F60CBB06BE958ACD2AFB3DFB0A4D0ADB0B7",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T150450Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T155317Z-phase2-acceptance.request.jsonl",
+      "sha256": "E116F43B7ADCE4C3AB0D7D864B430FBEC9086BF99CCA8967049D04A6B7F6EF0A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T155317Z-phase2-acceptance.response.jsonl",
+      "sha256": "506F811FDB39674DBDE865DD5B49EDF3BB74B4F2D6E03E96A62752EA6935714A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T155317Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T160335Z-phase2-acceptance.request.jsonl",
+      "sha256": "19310EA4E6767A094B16E214A18157E819AEDC99CC5E846FD4FE7404C447BC96",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T160335Z-phase2-acceptance.response.jsonl",
+      "sha256": "9073F66679A12700B5663246284F88BDCF5FFD9D88E1FD2A828CA35359CF623D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T160335Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T164652Z-phase2-acceptance.request.jsonl",
+      "sha256": "15FBBF36285706F54B009DC5ED126FA294B37C623B7EEBFE83CF7ED009F31A85",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T164652Z-phase2-acceptance.response.jsonl",
+      "sha256": "EAE2E09F889BD69CFF72D3929766F591EC5D735B8F72CA1E88715F759DD3A7F4",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T164652Z-phase2-acceptance.stderr.txt",
+      "sha256": "E30C3B694CF04C8125EC5F6BF744AD002DF4EF281C879E203E3A37913ED30D99",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T172520Z-phase2-acceptance.request.jsonl",
+      "sha256": "61156A0F65BA33CBB3C3C2CAC80E5F457976A998327F34F0BAB27016EFB95913",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T172520Z-phase2-acceptance.response.jsonl",
+      "sha256": "A6A4B7A60C01F9704F1FF3EFA46E458C551D9D9EC27BAA6C2D0743AEE22301F1",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T172520Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T173251Z-phase2-acceptance.request.jsonl",
+      "sha256": "631056BDD1EEE1F7F115246E523875076881038014E38E3FAECA6BFC6B3BE4AA",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T173251Z-phase2-acceptance.response.jsonl",
+      "sha256": "5828BE570D9E68BFFDFBABA56B05C0735ED66C49A4B9A3992032D9C427E41538",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T173251Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T174652Z-phase2-acceptance.request.jsonl",
+      "sha256": "424F8ADF44CAD22A83200C5FD89B06EF99650FD2FD7B4553B9E979DEA9FB0B2A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T174652Z-phase2-acceptance.response.jsonl",
+      "sha256": "79DAD18414FB7BE6682FEE1A401DA433DA6F3F7067657BB8A82C3575525D45B3",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T174652Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T180752Z-phase2-acceptance.request.jsonl",
+      "sha256": "BFA3A4FAF7BDE16968EECBF19418302B1E491B6DFDF58B85E63C3044397A7C36",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T180752Z-phase2-acceptance.response.jsonl",
+      "sha256": "BDAE8985BFFB49FBB9CD1E08A64528BCF410B14A991D0017B092301BF2A5D00C",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T180752Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T181723Z-phase2-acceptance.request.jsonl",
+      "sha256": "FE56180A1DD57416BAE57B44C4B6073E5C1397F3E991BF9A2A39FB56D787AA9B",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T181723Z-phase2-acceptance.response.jsonl",
+      "sha256": "F6516F46631AB57B7D2C7D04375D38565F754C87E6B3B0E6DFD3B41B7E39FC84",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T181723Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T191329Z-phase2-acceptance.request.jsonl",
+      "sha256": "35A49203FAF35914C7289CA0825A772131A97BCE54E7A9EB855A156EB64D356B",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T191329Z-phase2-acceptance.response.jsonl",
+      "sha256": "EF59DAB33409B1F0D0582CABA61F4D2CC327071F8ACDB6E1FD6F7CB6731CDCED",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T191329Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T200502Z-phase2-acceptance.request.jsonl",
+      "sha256": "0899DF9F5B057BF90BB77E6B5B66DB4FA22972801550C4F6124142E6CFA38C08",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T200502Z-phase2-acceptance.response.jsonl",
+      "sha256": "5230B2D2D9CA1C041D5464959AFADF955952D90BA6719E80CF9E340B4BCDBEA0",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T200502Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T204527Z-phase2-acceptance.request.jsonl",
+      "sha256": "4E16F48DF7E75EFC00D74980DF03882200A1C0677D8CC212E51099582716FCA1",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T204527Z-phase2-acceptance.response.jsonl",
+      "sha256": "5E4C785D5A1ACC9FC0146822BCD42EFCD7FD632F75540530906291C99BBEFA77",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T204527Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T212211Z-phase2-acceptance.request.jsonl",
+      "sha256": "847C8C5C5A052DFB9D70E960AAC81C0523938A8B877647CD079C16EF9997C42C",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T212211Z-phase2-acceptance.response.jsonl",
+      "sha256": "1B65E5ECCBFEA1D6B4A5C574CA9E5502953ED64B8D042DDDAFC8B3A7FBB3FB48",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T212211Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T215806Z-phase2-acceptance.request.jsonl",
+      "sha256": "5DCDCE00ABCC09AB2523B83B5DB2D407A9E9ACC2BA1C4FCD4D2962C28C1970E9",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T215806Z-phase2-acceptance.response.jsonl",
+      "sha256": "C0F5701B3EBC433B4E44CEF1940EAEBE796E6B2E45ED624527C98D563507232E",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T215806Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T220648Z-phase2-acceptance.request.jsonl",
+      "sha256": "3DE96B31C1E5FCF8E645F9C8235E94E69C96C26520945C5903FDE53F5938B495",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T220648Z-phase2-acceptance.response.jsonl",
+      "sha256": "D27965D245E743E653371DFBAFB75D3FB764FF286977E37EE07383500F2466F1",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T220648Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T224953Z-phase2-acceptance.request.jsonl",
+      "sha256": "A9293F234545ABEFA11D38D727736A343D0D25CC831E1ABD925217710F3F1645",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T224953Z-phase2-acceptance.response.jsonl",
+      "sha256": "7841862FA8D362F95E60506DC58369ECE8D1959B4F0ECE8BF513052746E4792B",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T224953Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T233651Z-phase2-acceptance.request.jsonl",
+      "sha256": "918F541DB2E01F6BEF7B31E23853D5D977BA3B145BAD95E28E5899C7FC57E084",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T233651Z-phase2-acceptance.response.jsonl",
+      "sha256": "0BFF87253EC358AB823D802014BC5FCFBDDDC3E5515E387C5609DAEB43DE7CB4",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T233651Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T234733Z-phase2-acceptance.request.jsonl",
+      "sha256": "A3F9A62EE3D1D24BE11F342A2CDA6A7930096026FFF899174841E535F5CDC729",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T234733Z-phase2-acceptance.response.jsonl",
+      "sha256": "64765968EA0E3BE4C2B321DA06D44BDB68139FB83AF3EE69D2C8347928A3E4B1",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261001T234733Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T003610Z-phase2-acceptance.request.jsonl",
+      "sha256": "56DA873027D1BCDACFF6746BAA9CEA240FE7F7518DCDA8D49A7139367912FE57",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T003610Z-phase2-acceptance.response.jsonl",
+      "sha256": "AF8AFB6DCE5427EFB286A8BF4FB3F7DD804DDABD34301D835BB06C950B3FA5D1",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T003610Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T012123Z-phase2-acceptance.request.jsonl",
+      "sha256": "4CFB07F3AE3B26C04CD51AA8E7E41F0A49A7B1AF46AFE70C1F8A15401BD19D2F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T012123Z-phase2-acceptance.response.jsonl",
+      "sha256": "8138F0C2088ABB2C66258E5444F4B3B6D73AC5FCA4FD5B6F17B5624B49922BFC",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T012123Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T025130Z-phase2-acceptance.request.jsonl",
+      "sha256": "1F3A72291CA5AC3693EF1BF4793A55E48E02556A2B62B64068A0BE4EF526E2C2",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T025130Z-phase2-acceptance.response.jsonl",
+      "sha256": "0D48AA1C2905C8CCF38BC407FFF2F959E091100A54C2EF48621432F226D90F36",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T025130Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T033927Z-phase2-acceptance.request.jsonl",
+      "sha256": "51A16262AC4E8EB7E31F54A0C8842C539EC82FF4636D71034754543DFB5326F9",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T033927Z-phase2-acceptance.response.jsonl",
+      "sha256": "B6F65A5FF8178EBB3975C34679A1DC6CF2F6BED916AFDF0DB4479636E879D848",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T033927Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T042730Z-phase2-acceptance.request.jsonl",
+      "sha256": "7CD1AE1E427F632E69AD0BA560049A8B6CD4D15EFF6C08E2A85E2DBF4AD0E8E7",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T042730Z-phase2-acceptance.response.jsonl",
+      "sha256": "DE8E9B27D088180118B1AA95F25FE2B0AEC18A65A43CDAEADC158C5B6B0A4932",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T042730Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T051408Z-phase2-acceptance.request.jsonl",
+      "sha256": "CAF9405F0BA23B3316DEA351EB46C524E49A8208407C96105DCF78F06818CE17",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T051408Z-phase2-acceptance.response.jsonl",
+      "sha256": "83AAC22EFCF1069B89599512669D3D8D3735245F0108C9D81B9E3527DFB6091E",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T051408Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T060547Z-phase2-acceptance.request.jsonl",
+      "sha256": "D2AEE8D95D3CD37283F98C1A9D63B462EAAB841C6CD0F540F48A1BC9CAB57383",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T060547Z-phase2-acceptance.response.jsonl",
+      "sha256": "B12CAEA1DEB0002E1962F190F193D37B990A9E642EE7C58CD34C10A4DE67D326",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T060547Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T071037Z-phase2-acceptance.request.jsonl",
+      "sha256": "7EBA6D8DA695995F30E8DDA68C40F5403932CB423C51D9AE71E0394FEFDAF861",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T071037Z-phase2-acceptance.response.jsonl",
+      "sha256": "436B4FABE36B0A775C9C1B2414E475DE74FEBD1C1DF44451ADF129A6D7FA4B65",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T071037Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T075209Z-phase2-acceptance.request.jsonl",
+      "sha256": "35B632F89A36BE4431D9736F0A7992B26446CE5678033EA7E72C15E1CBC1FED4",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T075209Z-phase2-acceptance.response.jsonl",
+      "sha256": "A655589A62C233E2A81B5A7CF38DDADCFC04639894CCAF7186FD0FD4462DF63F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T075209Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T084946Z-phase2-acceptance.request.jsonl",
+      "sha256": "36FFCF8F6849F376F0C9FBD6FF005214405736BBBE593342FC866EEAE7C26CF3",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T084946Z-phase2-acceptance.response.jsonl",
+      "sha256": "4C2C9763DC3568AE3FC9158F153748CCB584DEF4D8FC66F49EB5F1322E7543D7",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T084946Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T093921Z-phase2-acceptance.request.jsonl",
+      "sha256": "EE2A34D7F0F6CD1DD1BAC1BF9768A386E482AA10523C01C00DDD559EE61B26E8",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T093921Z-phase2-acceptance.response.jsonl",
+      "sha256": "7CBA835B690DB2015870E898206CF7760A78BF3B94C3ACA9A89A845135D4536D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T093921Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T102818Z-phase2-acceptance.request.jsonl",
+      "sha256": "C6D45D651EDB42E07A3C1AB789EABDB2D476C68849CA421CCAEFAF8385128BA7",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T102818Z-phase2-acceptance.response.jsonl",
+      "sha256": "D0911318C16540582C21559FD00E4DC28153D28BF850BF8278143DB0F54C11A2",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T102818Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T112441Z-phase2-acceptance.request.jsonl",
+      "sha256": "714071EEB34E17EF38C71E72BD9714F55782236EA67EDC5DB19DA1BF9E7D93AD",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T112441Z-phase2-acceptance.response.jsonl",
+      "sha256": "42F011AE7A60A4353808A42DF2A2D9074FA07EDA63C3A08133155747AD5F739C",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T112441Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T121516Z-phase2-acceptance.request.jsonl",
+      "sha256": "7F613028126E1B890E4616E1EBCEB5042CD3D92486F929FEFAD4D325513A1E45",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T121516Z-phase2-acceptance.response.jsonl",
+      "sha256": "32F3AF67D362E69188D34A8CBAF52BB357C7AB0637C7D88A9F0B45A932AC0687",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T121516Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T130629Z-phase2-acceptance.request.jsonl",
+      "sha256": "CFCFEA4E33A561F7292644012765AEDC9901C668C5C238AD3B488E5BCD1F7CEE",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T130629Z-phase2-acceptance.response.jsonl",
+      "sha256": "2135D6C075C38926CF37480724425DD35C443A22ADB4D026C5D6EFBFDFFE3C57",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T130629Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T134304Z-phase2-acceptance.request.jsonl",
+      "sha256": "571C6B8CDB007B53938A5BF56505B141668E645B330245581AAB4E975A25923B",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T134304Z-phase2-acceptance.response.jsonl",
+      "sha256": "E58132A47CF452E20789EC8DA43F96F667555397AE42925554CB265B6DAA076D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T134304Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T145052Z-phase2-acceptance.request.jsonl",
+      "sha256": "37679C83955A254DF821AAA90055398299DB013A66C51A456AE1C809D9F90A36",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T145052Z-phase2-acceptance.response.jsonl",
+      "sha256": "1A1E046606FE98B85D8E6A37B8013487489B1791DEB8F4B953FF3C26B81F5993",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T145052Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T154316Z-phase2-acceptance.request.jsonl",
+      "sha256": "E0A2FF5AA35141FB8AE26C01A14F2B23629F6A0A67180B3F71E592FADF3BCA73",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T154316Z-phase2-acceptance.response.jsonl",
+      "sha256": "CE7B9963E02960DB48359422E0325615CC008F9EE214EB480A51CC5D16E00FCB",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T154316Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T162738Z-phase2-acceptance.request.jsonl",
+      "sha256": "95EAF76E9ADAE731DEF5BF31EC85EFB439AA9112BBAA42BDA6F02B49B8DBFAC2",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T162738Z-phase2-acceptance.response.jsonl",
+      "sha256": "B17B984C228DB17958871AC6E7754D2F0B3937E8A4579F6F6A3CE1D1B9FF6071",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T162738Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T171428Z-phase2-acceptance.request.jsonl",
+      "sha256": "A453C34AEB1DE3CF34077907419604329E5D82144A29F4EEE0B0CEE4F463B366",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T171428Z-phase2-acceptance.response.jsonl",
+      "sha256": "EE98B7B9A35CA1E546ED5B8FA45330BBC5E8E195EDF091C9F5311ABA4ED86AC4",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T171428Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T175323Z-phase2-acceptance.request.jsonl",
+      "sha256": "6CC98A5BA3FC12FF25056D75AC8FBED38D4395987367505D09578B72E4297B09",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T175323Z-phase2-acceptance.response.jsonl",
+      "sha256": "2D57B723BCCAF5D4C297D2B007FD3BD8DF971F814ED3E2D603AC54C4D5EFFA14",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T175323Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T185547Z-phase2-acceptance.request.jsonl",
+      "sha256": "5FFE75F28AE2BC86408D33203C0ED1B97DA0035B9AB72514263C6B6DDA7994E2",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T185547Z-phase2-acceptance.response.jsonl",
+      "sha256": "9A959DBF32D4AC2DA8A247E8A74273CBBF050BFE58A34F1491876109488C92C5",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261002T185547Z-phase2-acceptance.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T112415Z-phase2-fr-snp003-cartridge-value.request.jsonl",
+      "sha256": "2F424A03160D8B2CCE6D80EF7505AB9E3D52F97C2913BEF2F5FF3F9ECF3D82EA",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T112415Z-phase2-fr-snp003-cartridge-value.response.jsonl",
+      "sha256": "36A00A53197A13163FC5F51904176F6C6A579CD73BE82FC62B4AB3998BCCCAFF",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T121540Z-phase2-fr-snp003-remediation.request.jsonl",
+      "sha256": "908B970D42C4E6454CEF5708412CC6F5E59FAB1A3F068E01E09726B6E8D05536",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T121540Z-phase2-fr-snp003-remediation.response.jsonl",
+      "sha256": "18B231A4C1150EC28E7B06D402C81BF33BD35BD0D54C9C4C0F48547304C518FC",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T122118-0500-handoff-phase4-green-local-grok.request.jsonl",
+      "sha256": "3C8883D7B10E97CB56D7639627043CD73F280F2E3C51D0C4F1E981B959A1091B",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T122118-0500-handoff-phase4-green-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T122405-0500-handoff-phase4-green-local-grok-continuation.request.jsonl",
+      "sha256": "B5BD85E6C58764D01E8D3F9E81C1A391694E17D2BCD5156DB49990F7DA6D52DF",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T122405-0500-handoff-phase4-green-local-grok-continuation.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.request.jsonl",
+      "sha256": "1CD756B5DD529560BEE6F4A96C764C68A816A7BEFA82F0DE52F832A36670C103",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.response.jsonl",
+      "sha256": "94EF69419145CC7DEAB0CF1F9F0D062F7BF8FC65D815B601B5A3202520417559",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.request.jsonl",
+      "sha256": "2F1DBF909087F960AE268D6C049A912E34E7D207F4E2EB79A6BD73EDE43CB984",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.response.jsonl",
+      "sha256": "CE5330F273DD7C9BD6459365664718569A9A61813817D4000E79EF1DD3E96411",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T125205-0500-phase3a-red-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T131341Z-vsf-plan-corrected.request.jsonl",
+      "sha256": "EE5276151E8E6D901E64EE5120D6BEB3FA22E1C1FB9B2E7F32A4AD87B8DEEB9D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T131341Z-vsf-plan-corrected.response.jsonl",
+      "sha256": "AA81841F0648EAD184584B004C027947BC664663A225DE34A5F4BEE5282064CE",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.request.jsonl",
+      "sha256": "7FABF451A9E83CEB058B012B47A7A106BE6E725776D7A485C7159F2E2024A686",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.response.jsonl",
+      "sha256": "5E52E8D6E49E762A14C64C331B5386CBEBF49CD35111CF987E33BDA598E79D20",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T132036-0500-phase3a-red-r2-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T133142Z-vsf-canonical-plan.request.jsonl",
+      "sha256": "0ACA2D037282629E33AC120102B017A329502AC2024E3BA63FAB17F9294FBE61",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T133142Z-vsf-canonical-plan.response.jsonl",
+      "sha256": "8C222334B1BCB8F3051880803940CFDE55C2F0FD3837460A957C29ED22344195",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.request.jsonl",
+      "sha256": "582001B13B9C11527B68FF3FB3B34B0A5823A7A5273765506A1A755AD5C2D11A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.response.jsonl",
+      "sha256": "43B0EF52509D2338DF95AAF61DD66A40A5A4D72C62F4C7ECA5EF72D52EC4D096",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T135801-0500-phase3a-green-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T140601-0500-phase3a-green-local-grok.request.jsonl",
+      "sha256": "9F9EF0BB613BC40F9148D821B07F8DCB46369C16361595709D56ACFF30EF8128",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T140601-0500-phase3a-green-local-grok.response.jsonl",
+      "sha256": "83E2942C8B53021AA872F04395F6FB78D560C573B84D3AE95E5C1C15A31FB9FB",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.request.jsonl",
+      "sha256": "0C64F56CED597D15E3250D963A532D985A20B3684BEB34A52707ACF06E605BA9",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.response.jsonl",
+      "sha256": "04291B63CAEF7072E9A98AA5F12D83B58A20EC4345B435B77C951A3E2AD63025",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T144113Z-vsf-canonical-plan-local-grok.response.json",
+      "sha256": "CFD7F8FB0FDF6EFBC3AD49DC941B2065F34C1E21115B4A866EFAE0681C446C6E",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T144113Z-vsf-canonical-plan-local-grok.verdict-request.md",
+      "sha256": "109FDB8487AB669D9A4CFE5C6DD62CB5D37EB31DD842ED8797CB640DE0ACAC69",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.request.jsonl",
+      "sha256": "9058409414612D5E874C36BB5D01AFEA01FBB515744DEC1408CFF052A75F90BF",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.response.jsonl",
+      "sha256": "A2D7F96C689C3A8E436A8CE942C918666EEE36995A42DE97DC9975C047DAD1CC",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T144115-0500-phase3b-red-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T151117-0500-phase3b-green-local-grok.request.jsonl",
+      "sha256": "969E1374596019E7F479E1F18B58CA6D0CA99C0FF3DF3611F145938E13A7AF79",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T151117-0500-phase3b-green-local-grok.response.jsonl",
+      "sha256": "D48D9B9DD90AAB0ECA88469504235E76529906C883EE2BF5E71B8B1E2EB0B89C",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T152312Z-vsf-gate0-remediated-local-grok.request.jsonl",
+      "sha256": "A00947875447949F17ED2647DA2A4927118339FFA664B2554F3C2B11EE318E7A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T152312Z-vsf-gate0-remediated-local-grok.verdict-request.md",
+      "sha256": "2310E3645EE816A812B31EB3889987F1317BA9C8C01105316829F53AB393B5CD",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T154410Z-vsf-gate0-uncapped-local-grok.request.jsonl",
+      "sha256": "3DB4F9813991886471279CD7DEAB0542EE08D6A236D5A8EEE9BCBF1C3DD56D38",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.request.jsonl",
+      "sha256": "4354532468CAF582CB83714886D8B78D35B949703A7E93FE17BCB3018CC2883C",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.response.jsonl",
+      "sha256": "391203E94F97295F5449B5E6923B1E710A717AFA9391848121CDECFC50FE7740",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T155201-0500-phase3c-red-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.request.jsonl",
+      "sha256": "FA9CDFC49E16E74DCCF0AE93C89D4B487A0F49AE4F08C4F7327B437F8499C043",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.response.jsonl",
+      "sha256": "7BF9D6B7F6F6419A5380AF9898ED24660E91F40E54EAC5037768BD0A673747DD",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T161713Z-vsf-gate0-uncapped-detached-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T165234Z-handoff-phase4-red-local-grok.request.jsonl",
+      "sha256": "B6EBF2D7C5B8E7B8D549F5C3FBF991464B7D42BD3411AFE6BB71800B5953B928",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T165234Z-handoff-phase4-red-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.request.jsonl",
+      "sha256": "67128DC414CB44F418F66B231291470E41B303892C533F07FA81879390A38FB3",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.response.jsonl",
+      "sha256": "966BBD8ED17315F22E85967F466B30517960991DB95C8F5F80D044085F0472D7",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T170113Z-handoff-phase4-red-local-grok-continuation.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T192556-0500-phase3c-red-correction-local-grok.request.jsonl",
+      "sha256": "52D240156F9129DC9EA296E83D65DBD671D05756B92F3DC22B7C7FF039CE7424",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261003T192556-0500-phase3c-red-correction-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.request.jsonl",
+      "sha256": "EE2090B0FDCCAF48C74F0D4BC18F5B16F8A6A2ED2EEB2C3522DF3A6589BCA685",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.response.jsonl",
+      "sha256": "4F2F9F838538778CC1CF17258F572606567A78DE77C696ECDE7294652CB3F219",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T085243-0500-immutable-vice-remediation-plan-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.request.jsonl",
+      "sha256": "2DFE837053A4A4E4F1FB17CDA0C31B54C297BF6DD99EC95CB540D74FE605D0D4",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.response.jsonl",
+      "sha256": "25521CAB98DA49C584C508A5229D6918A3D0648494E0E1365CD0EC750E182D76",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T094437-0500-immutable-vice-remediation-plan-rerun-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T170351Z-refresh-docs-failsafe-local-grok.request.jsonl",
+      "sha256": "61EA0348530349F229F6392570E986319F5B72E3775F49F435AA9695E2F0C815",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T170351Z-refresh-docs-failsafe-local-grok.response.jsonl",
+      "sha256": "8164E7EF41C6B00DB6F11CD804C3F4AC220650E25C82B5E73FAD3D6B90DDE96D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T172348Z-refresh-docs-final-failsafe-local-grok.request.jsonl",
+      "sha256": "DDCDADED76D49A174352B005FC676E02166C56F29FE0A619AAFD4547F9A97C47",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T172348Z-refresh-docs-final-failsafe-local-grok.response.jsonl",
+      "sha256": "9AC87F2736BD54B1362F1E12ADCB91B7BC414D6A265E745149622255ACE13B69",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T174137Z-refresh-docs-remediated-failsafe-local-grok.request.jsonl",
+      "sha256": "093CEEDD03B5705F7D18FAC6A5C218C7366220947BCEF5F9AA35A9D2649FEDD9",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T174137Z-refresh-docs-remediated-failsafe-local-grok.response.jsonl",
+      "sha256": "B5AF42E763C4F4352DFD1AE266F2B1C4F3828CDB8935FD33452DD6F6C5F35991",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.request.jsonl",
+      "sha256": "CE43E729991B8539C29D3744D3C94F7CE6294E2F4DBE5093AEF6D07A7AF80604",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.response.jsonl",
+      "sha256": "7EBF24835B3E6F9C8AA6B7D42211BBE5E0B812435A5F6888D8F7FE25EE584D4B",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T200406Z-refresh-docs-export-final-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T212800Z-lab-omarchy-host-migration-local-grok.request.jsonl",
+      "sha256": "947C38FA8F9684068CCF3D38AC97FBF88F2E0308A23C4837465E994ED1564D1E",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T213900Z-f-drive-capacity-location-local-grok.request.jsonl",
+      "sha256": "D8415F5927F0E686954541CCFF4F73F7BEED6AE3E99DCA841661D38AA9BB9670",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T221917Z-f-dev-drive-script-local-grok.request.jsonl",
+      "sha256": "4046054EC7603A17D085733080CCC2176E181BA89460383A97B1F1E08FC7F58F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T221917Z-f-dev-drive-script-local-grok.response.jsonl",
+      "sha256": "705F6A91F26B5DC25ADDCF1978CCD376E31C3C4EE8FC0B4522F657F51C6399AA",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T221917Z-f-dev-drive-script-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T225013Z-f-dev-drive-script-remediated-local-grok.request.jsonl",
+      "sha256": "35536CB9FA567BA0475F871E71EF37DB1B73021F9FDE573892456BC4A66F1271",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T225013Z-f-dev-drive-script-remediated-local-grok.response.jsonl",
+      "sha256": "9E140D1CD0837426EBD1D205060D0713C05A1EDC339ED1AD6098CEDDAC14AA37",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T225013Z-f-dev-drive-script-remediated-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T231848Z-f-dev-drive-script-final-local-grok.request.jsonl",
+      "sha256": "EA881661822F066AD8D25BB002F5B86B2F1703FF03992A054E30C6A98859A2CF",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T231848Z-f-dev-drive-script-final-local-grok.response.jsonl",
+      "sha256": "269C806D8B17C5ED2424DF321361277E806D34EA2EEC4BCADC8915C21675B747",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T231848Z-f-dev-drive-script-final-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T235257Z-f-dev-drive-script-final-remediation-local-grok.request.jsonl",
+      "sha256": "FC35D8F017AE94F1CCB74DB2D75D069EACAC3634AB3086C91CC8FEC806359A28",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T235257Z-f-dev-drive-script-final-remediation-local-grok.response.jsonl",
+      "sha256": "A121132E5CD090BCC16BCC261E55B2C3FDF805054B26C5ECD57FBA72012A845D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261004T235257Z-f-dev-drive-script-final-remediation-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T002219Z-f-dev-drive-script-runtime-remediation-local-grok.request.jsonl",
+      "sha256": "D89263C2293C148CCC55A2FEB40D6373174B1BA41912D954B5ADC7AC29AB8F74",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T002219Z-f-dev-drive-script-runtime-remediation-local-grok.response.jsonl",
+      "sha256": "405064107A526174604795A0F06B0BB01D2E5397FCA13AF35CA7E484398AD47C",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T002219Z-f-dev-drive-script-runtime-remediation-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T010415Z-f-dev-drive-script-timestamp-proof-local-grok.request.jsonl",
+      "sha256": "3BA4E5983BD077140DB1C32C7A87EEF1D028FDC8DD95E171D0D33EF61F6998EA",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T010415Z-f-dev-drive-script-timestamp-proof-local-grok.response.jsonl",
+      "sha256": "9F738981A645BFE97D8DF8C231DBAAE02C0AFBA21A85CCEB9DC51D9B6F059DEE",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T010415Z-f-dev-drive-script-timestamp-proof-local-grok.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T160033Z-f-dev-drive-final.request.jsonl",
+      "sha256": "30D4D34A0EFA761F74C573325291FB1986FC349D5C68FE729B7CF96BD9D96FAC",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T160033Z-f-dev-drive-final.response.jsonl",
+      "sha256": "2F25CE66D880AFE02D9D6842876F8146DD2CF3E3F1CADF8DB92B0AFA7F3D0448",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T160033Z-f-dev-drive-final.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T160826Z-f-dev-drive-grok-4-7-xhigh.request.jsonl",
+      "sha256": "F21B790E68A51EC7AFFA23CA6EE92162D38FAB39827CE526F797D7FDCD2D9E11",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T160826Z-f-dev-drive-grok-4-7-xhigh.response.jsonl",
+      "sha256": "53F88699767A416FC21EB128B9CD30C08E084C54F42C12A4CBAFBE9ED08697A9",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T160826Z-f-dev-drive-grok-4-7-xhigh.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T170723Z-f-dev-drive-grok-4-7-xhigh-remediation.request.jsonl",
+      "sha256": "CF70223578E3E328D72F46BFC4075878E4257280CF51F577BD4BA5D91F14B392",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T170723Z-f-dev-drive-grok-4-7-xhigh-remediation.response.jsonl",
+      "sha256": "4F9F602C6A0F484C7C53BEFD2C4A84756B058B2926D2D228014063171DF698A4",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T170723Z-f-dev-drive-grok-4-7-xhigh-remediation.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T174728Z-f-dev-drive-grok-4-7-xhigh-code-only.request.jsonl",
+      "sha256": "F153408A7B376A4E61897EC00C0573AED8974A7AAD7ED7EF74384176FA3DC0B0",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T174728Z-f-dev-drive-grok-4-7-xhigh-code-only.response.jsonl",
+      "sha256": "F170267E279E0080D1D748714B2216C5DA8447BB478F20A8D58FEFB7E74A7C73",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T174728Z-f-dev-drive-grok-4-7-xhigh-code-only.stderr.log",
+      "sha256": "0A126CB1D23F01CC9DB697DC4B4C5456FB06F81C97B2FCE924F4CF97C03BA04F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T181912Z-f-dev-drive-grok-4-7-xhigh-final.request.jsonl",
+      "sha256": "25B952682E636654CB770A56E030340CF18E057CA156E0BB3E0CE171A383A198",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T181912Z-f-dev-drive-grok-4-7-xhigh-final.response.jsonl",
+      "sha256": "21A4C1C3A7EDC5A7FEE8C35104F6D44688E8F70C0E12D03FE34BB1C277D44E15",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T181912Z-f-dev-drive-grok-4-7-xhigh-final.stderr.log",
+      "sha256": "0A126CB1D23F01CC9DB697DC4B4C5456FB06F81C97B2FCE924F4CF97C03BA04F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T185234Z-f-dev-drive-grok-4-7-xhigh-final2.request.jsonl",
+      "sha256": "D14CC65DABC99BC6483B3700C71C88CEEFF13366E57087C6BA6AC45B1C8D6FEC",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T185234Z-f-dev-drive-grok-4-7-xhigh-final2.response.jsonl",
+      "sha256": "0C54926A9A23C206B262FCFCA1B25B0029D54FCD34653AD347DCB2B3399DDF4A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T185234Z-f-dev-drive-grok-4-7-xhigh-final2.stderr.log",
+      "sha256": "0A126CB1D23F01CC9DB697DC4B4C5456FB06F81C97B2FCE924F4CF97C03BA04F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.request.jsonl",
+      "sha256": "494A72EDA015454D6E21D1E8ADD2A74A8465875D26DFBFED79091EBB62C68AAB",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.response.jsonl",
+      "sha256": "1542B2C41F65C6DCA0645C883D22BFE6225F4E313A8083B53235434294817E0E",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261005T191612Z-f-dev-drive-grok-4-7-xhigh-final3.stderr.log",
+      "sha256": "0A126CB1D23F01CC9DB697DC4B4C5456FB06F81C97B2FCE924F4CF97C03BA04F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.request.jsonl",
+      "sha256": "4B52386C7A15F578350F9BFA4FE546BD2422E560BF527EB87A76C1F7B8D2FFD7",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.response.jsonl",
+      "sha256": "FFE4449413612456C32F41BC0295FDDF375FD41FBA2FC8D1330BB54454188709",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T093300-0500-immutable-vice-phase0-recovery.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T102500-0500-immutable-vice-phase0-recovery-r2.request.jsonl",
+      "sha256": "6A57F63D49193A95C34DE6CF384A29AE68DE453528FF59735FA63D0314DEBEA8",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T102500-0500-immutable-vice-phase0-recovery-r2.response.jsonl",
+      "sha256": "838A4D8CE59AC3D5F9167075749B1EFF3155A261327F8EEC1E01108429F16C16",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T102500-0500-immutable-vice-phase0-recovery-r2.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.request.jsonl",
+      "sha256": "56924DBCC3340301E9E2B10B6FF1FA841E85D02ECE264F075937BB7A080913BE",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.response.jsonl",
+      "sha256": "D0054F06B7D46AB7CEC6A5533B5BC605B77D6521E767815F532ED0F5B4EBCFCF",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T103700-0500-immutable-vice-phase0-recovery-r2b.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.request.jsonl",
+      "sha256": "806299265B3B61196A2A97BA83B205B844E7390C23BDED8128FFBAD58F6E6148",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.response.jsonl",
+      "sha256": "5543100369328CE8384DF312182256DBD191131EE83681ADAB76251D081DFC98",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T110000-0500-bdpv4-mock-green-correction.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.request.jsonl",
+      "sha256": "1F69E0804250E50A2FA152F48FAEA1EB7EF7860BF9636438B2AAE7285A81DCFE",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.response.jsonl",
+      "sha256": "5314A96B3E100EA582063FA1867D6C6B7DF7BE36DFB1479A8CF46B198D2683CE",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T120522-0500-mock-green-wiki-opus.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.primary-query-response.json",
+      "sha256": "8BA430EF0DB24BDC1BD7E3EDBB87C5BB0898A5BE7B1A474E328C447B26511271",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.request.jsonl",
+      "sha256": "5B899CD844B58CAD3751372A53DE552D8D95CB66BDAB5C59B309F97E634000FC",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.response.jsonl",
+      "sha256": "990ED993984B4A11929476ADAFBE94023036430EFA06E66687DB82A1050EE25F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T131928-0500-phase0-mock-scope-grok.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.evidence/primary-query-stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.primary-query-response.yaml",
+      "sha256": "AE39A6E75ACDD4C1EBC28F86F96195ACC9A798DA37308C6C7FD97E2AFE5193BC",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.request.jsonl",
+      "sha256": "DB6BF26D43D10A17E4FE3A0C84DDF7DBE56C6096689CCAFF2336918EF473B606",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.response.jsonl",
+      "sha256": "04AA3AC97B5FE3AD34FB8D616AF5CA983CD7D73225F941BFC8B01FC2E08448F8",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.request.jsonl",
+      "sha256": "6DB4F9B855F8E540C4ED09A53FACC226631D00C5F2A8CE61702E400B3BAD90E4",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.response.jsonl",
+      "sha256": "3C392B47A6A27BB18C4A943AA4618110C2012152BA339EE14C678D1CDAD2E104",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.resume-01.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T141100-0500-phi2-ac-remediation-opus.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.request.jsonl",
+      "sha256": "360A12834CB39F92B33AF1EC4FBED115AEBF8DA4F30516BCF9C0DD6E3650224A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.response.jsonl",
+      "sha256": "2132F05EBA4A7AB13AECE5112772EE4632E4CA9EF6481F4C28596E689132CA4B",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008-noon-catchup-opus.resume-02.request.jsonl",
+      "sha256": "5FBE7BCAED27CB1BA15CEF2A16E472C254F907015B74DE09C167294878810176",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008-noon-catchup-opus.resume-02.response.jsonl",
+      "sha256": "5CF0CC2C842576EF145CB23522D0C7FFE37ED321AA3C67608C6A3D4470CC607A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008-noon-catchup-opus.resume-02.reviewer-tests/native-clock-probe.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008-noon-catchup-opus.resume-02.reviewer-tests/oracle-contracts.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008-noon-catchup-opus.resume-02.reviewer-tests/vsf-compatibility.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008-noon-catchup-opus.resume-02.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.request.jsonl",
+      "sha256": "02890488451CF4F85027CB5731967777C2F7DB931BEA81648FA13689D702BB9D",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.response.jsonl",
+      "sha256": "E895C7D5308F3C88ADD75B044835317890535F3B4E3451710B0E58BE685148A0",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.request.jsonl",
+      "sha256": "26F4967EFD3BB0D5875B40D99713194680688EA4B2AECB2CC145F95E86A990CF",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.response.jsonl",
+      "sha256": "4F5D1D9AB52BF1BCBBF6C117CFB032E0AAC26B67CBC70C28115FFE71E1173F8A",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008T073800-0500-phase1-oracle-contracts-opus.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261008T143538-0500-opus-remediation-packet/prepared-request.jsonl",
+      "sha256": "B17F8482FBB9C47980CA5A8A970338270CF2FD20FA0FF3DEB5DAA691E83E99AC",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261009T014822-0500-opus-remediation-resume/request.jsonl",
+      "sha256": "E1F39A115ECF03A97340D56CEF10760E6692A7D8FF53327ED2093F02AAB61B83",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261009T014822-0500-opus-remediation-resume/response.jsonl",
+      "sha256": "AF35F5BD9D85ABC3FAFE55B32BC2D84597C758633159B9D13015835CA791FD7F",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261009T014822-0500-opus-remediation-resume/stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261009T141130-0500-approved-tape-ac-opus/request.jsonl",
+      "sha256": "E2327863A589DCEA32B0B3880B6D08B75D58A7334D5DE239FCD646861ABB5B73",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261009T141130-0500-approved-tape-ac-opus/stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261010T161500-0500-tape-amendment-opus/request.jsonl",
+      "sha256": "D0050131DD61C78AF7A1D313BCA148255AFAEE886079EAC4F0C9C0D4BF95D9BA",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261010T161500-0500-tape-amendment-opus/response.supplement.jsonl",
+      "sha256": "7600650FB551BB7B730F0709A339C98F52D80543017EC65E7206C96BADAB65F8",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261010T161500-0500-tape-amendment-opus/resume-20261010T195800-0500/request.jsonl",
+      "sha256": "6E86AD0F0C91B25AC66A8BE251071A79DE079A1AB5A38A7012B65690773858B6",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    },
+    {
+      "path": "docs/receipts/hv/20261010T161500-0500-tape-amendment-opus/resume-20261011T000300-0500/request.jsonl",
+      "sha256": "56A7566508A09E104230C309092A3D6DCB0675C6437C8B912B4236ABAF17ABA2",
+      "tracked": false,
+      "reason": "Protected raw HV stream"
+    }
+  ],
+  "limitations": "Existing Git history is not rewritten. Screening does not assert exhaustive secret detection. Original files remain required local evidence."
+}

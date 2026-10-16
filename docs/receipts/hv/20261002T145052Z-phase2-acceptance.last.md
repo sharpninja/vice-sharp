@@ -1,0 +1,31 @@
+2026-10-02T15:26:46Z
+
+**DISAGREE. Phase 2 acceptance is not green.** Five assertions PASS, one FAIL, zero UNKNOWN. Accuracy **96**, completeness **94**: the receipt counts are accurate, but an uncovered input sequence disproves the broad behavior claim. Both scores fail the required 98 threshold.
+
+**Finding 99: a raw matrix release followed by a host-key re-press fails across keyboard maps.** I reproduced this with independent production C64 machines from `phase2-f158link`:
+
+- Recording and reference use shipped `gtk3_pos_de.vkm`; playback uses the default map. Hold Y before recording, then record A-down at cycle 0.
+- At cycle 30 call `SetKey(0x0C, false)`; at 40 call `SetKeyState("Y", true)`; at 60 record A-up.
+- `SaveReplay` contains all four events, including the raw release at 30 and `input key=Y pressed=1 frame=0 cycle=40 codes=0C`. This is not a missing-event report.
+- At cycle 60, with all keyboard columns selected, reference `$DC01=$EF`; playback `$DC01=$FF`.
+- Execute `LDA $DC01; STA $C100`. Both machines reach cycle **68**, PC **$C006**. Reference `$C100=$EF`; playback **$FF**.
+
+[ReleaseHostKeysOwning](F:/GitHub/vice-sharp/src/ViceSharp.Core/C64MemoryMap.cs:1860) resolves ownership through the destination keyboard map. It consequently leaves Y in the playback host-key down set after releasing recorded matrix code `$0C`. [ApplyRecordedKeyCodes](F:/GitHub/vice-sharp/src/ViceSharp.Core/C64MemoryMap.cs:919) then suppresses the valid Y-down as redundant. The event dispatcher applies these paths in [RuntimeSnapshotStore](F:/GitHub/vice-sharp/src/ViceSharp.Core/Snapshots/RuntimeSnapshotStore.cs:1230). This violates [FR-SNP-003 AC3](F:/GitHub/vice-sharp/docs/requirements/functional/FR-Snapshot.md:99), assertion 2, and the plan's behavior acceptance criterion. No fix was implemented.
+
+1. **Assertion 1 PASS.** Fresh coverage execution reports **94** in-scope requirements and **0** missing. The saved receipt contains `COV_EXIT=0`. Inspected script logic uses markdown Iteration integers and references under `tests/`; source-only mentions do not qualify. The coverage fact retains the exit-code assertion.
+2. **Assertion 2 FAIL.** Both saved acceptance summaries contain **198 passed, 0 failed, 0 skipped**, ending in `TEST_EXIT=0` and `TEST2_EXIT=0`. Those receipts do not cover finding 99 and therefore cannot establish the claimed complete behavior.
+3. **Assertion 3 PASS.** Inspected product code, tests, and local VICE sources support the stated SID test-bit/resonance, CIA serial/control-register, palette, and processor-port interpretations. GIF with an audio tap omits audio. The fixed 350000-cycle discharge intentionally omits x64sc's random addition; that omission is not attributed to x64sc. Requirement text remains unchanged.
+4. **Assertion 4 PASS.** The idle receipt contains **2 passed, 0 failed, 0 skipped**, ending `EXIT:0`. Its **2026-10-02T14:49:38Z** timestamp follows all three named CPU/bus sources. `AdoptElapsedCycles` only assigns elapsed cycles. A new idle run was not required.
+5. **Assertion 5 PASS.** Live MCP reports `PLAN-C64SET-001 done:false`; the 17 named requirement rows remain pending with no satisfied criteria. Plan checkboxes remain open. Git inspection shows no requirement, TODO, or provenance edit and no Phase 3/4 start. `git diff --check` exits 0. Undone state is not evidence for the green claim.
+6. **Assertion 6 PASS.** Ledger items 2, 5, and 8 are closed separately, while the ledger explicitly says the recovered set is not accepted. The older ledger-match and timing-only AGREE reviews are excluded from this gate's evidence.
+
+I directly executed **180 existing acceptance facts**, including all **94 replay facts** and the latest duplicate-key and completed-Timer-B regressions; all passed. These were actual method executions and assertions, not method-existence checks. This was not a fresh 198-test `dotnet test` run. File-writing capture and UI cases were assessed through their source and saved runs, as allowed for this read-only review. Portable-PDB checks matched **660 current source files** across Core, Chips, Host.InProcess, Protocol, and TestHarness. The new reproduction therefore uses code matching the inspected sources.
+
+All four [saved gate receipts](C:/Users/kingd/AppData/Local/Temp/grok-goal-0af1da0c5558/implementer/phase-coverage.txt) were read in full, including [acceptance run 1](C:/Users/kingd/AppData/Local/Temp/grok-goal-0af1da0c5558/implementer/phase-acceptance.txt), [acceptance run 2](C:/Users/kingd/AppData/Local/Temp/grok-goal-0af1da0c5558/implementer/phase-acceptance-2.txt), and [idle lockstep](C:/Users/kingd/AppData/Local/Temp/grok-goal-0af1da0c5558/implementer/idle-lockstep.txt).
+
+The complete add-profile skill ran through **PowerShell.MCP**, using `Show-TextFiles`, before git or validation. Dynamic enumeration read **21 profile files** in full, excluding `add-profile*.md` as directed. Required confirmation: `2026-10-02T14:52:56Z - Profile loaded: read 21 global profile files.` After automatic compaction, the full skill and all 21 files were reread, confirmed at `2026-10-02T15:20:00Z`. No Python, forbidden text reader, or local session-log edit was used.
+
+The full verdict is stored through the **Codex MCP plugin**, with server readback, under session `Codex-20261002T134925Z-plugin-session`, turn `req-20261002T145706Z-phase2-hostile`. Durable launch receipts are [request JSONL](F:/GitHub/vice-sharp/docs/receipts/hv/20261002T145052Z-phase2-acceptance.request.jsonl) and [response JSONL](F:/GitHub/vice-sharp/docs/receipts/hv/20261002T145052Z-phase2-acceptance.response.jsonl). The parent must retain the completed response stream after this final message. No product, requirement, plan, HANDOFF, provenance, or TODO edits were made by this reviewer.
+
+=== VERDICT JSON ===
+{"OverallVerdict":"DISAGREE","accuracy":96,"completeness":94,"passCount":5,"failCount":1,"unknownCount":0,"failList":["Assertion 2 / finding 99: replay uses the destination keyboard map when a raw matrix release removes host-key ownership, suppressing a subsequent recorded Y-down. At cycle 68 reference RAM $C100=$EF but playback=$FF, with both PCs=$C006. FR-SNP-003 AC3 fails."],"sessionId":"Codex-20261002T134925Z-plugin-session","requestId":"req-20261002T145706Z-phase2-hostile"}

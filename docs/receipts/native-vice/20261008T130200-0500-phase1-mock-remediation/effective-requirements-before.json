@@ -1,0 +1,103 @@
+[
+  {
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "pending",
+    "notes": "Operator directive 2026-10-03: VICE native is the immutable target. Wrappers are allowed; modifying VICE is forbidden.",
+    "title": "Immutable native VICE behavioral target",
+    "id": "FR-VICE-001",
+    "scopeStartLayerKey": "layer-1",
+    "body": "ViceSharp shall conform managed emulator behavior to a pinned, unmodified native VICE revision. Native VICE source and oracle behavior shall never be changed to make ViceSharp pass; observation and control integrations must be implemented as wrappers outside native/vice.",
+    "priority": "critical",
+    "acceptanceCriteria": [
+      {
+        "text": "Every parity or lockstep acceptance run identifies the pinned native/vice commit and proves no tracked native/vice file differs from that commit before or after the run.",
+        "isSatisfied": false,
+        "id": "ac-01"
+      },
+      {
+        "text": "Emulator-behavior corrections are made in managed ViceSharp; native integration code may wrap or observe VICE only from outside native/vice and may not alter target source or behavior.",
+        "isSatisfied": false,
+        "id": "ac-02"
+      },
+      {
+        "text": "Oracle binaries used as acceptance evidence are built from the pinned unmodified VICE target; evidence from a patched or behavior-modified VICE build is rejected.",
+        "isSatisfied": false,
+        "id": "ac-03"
+      },
+      {
+        "text": "When an external wrapper cannot obtain a required observation from immutable VICE, the parity gate fails closed and reports the missing observation instead of inferring data or changing VICE.",
+        "isSatisfied": false,
+        "id": "ac-04"
+      }
+    ]
+  },
+  {
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "pending",
+    "notes": "No patch application or direct source edit under native/vice is permitted.",
+    "title": "Read-only native VICE oracle boundary",
+    "id": "TR-VICE-ORACLE-001",
+    "scopeStartLayerKey": "layer-1",
+    "body": "The native/vice gitlink is a read-only behavioral oracle. All stepping, tracing, snapshot, bus-event, and lifecycle integration must be implemented by external wrappers, launchers, link-time interposition, or public VICE interfaces that leave the pinned target source and semantics unchanged.",
+    "priority": "critical",
+    "acceptanceCriteria": [
+      {
+        "text": "The native oracle preflight fails before validation when any tracked file under native/vice differs from the pinned gitlink commit.",
+        "isSatisfied": false,
+        "id": "ac-01"
+      },
+      {
+        "text": "Wrapper builds and tests do not edit, generate source into, or apply patches to tracked native/vice paths.",
+        "isSatisfied": false,
+        "id": "ac-02"
+      },
+      {
+        "text": "Required CPU bus events, timing, snapshots, and lifecycle observations come from real immutable VICE execution through external wrapper mechanisms; PeekBus, PC-derived values, and fabricated events are forbidden.",
+        "isSatisfied": false,
+        "id": "ac-03"
+      },
+      {
+        "text": "Each oracle receipt records the native/vice commit, wrapper version or hash, clean-target proof, command, and zero-failure/zero-skip result for the claimed scope.",
+        "isSatisfied": false,
+        "id": "ac-04"
+      },
+      {
+        "text": "A missing wrapper capability is an explicit blocker and cannot be remediated by modifying native/vice.",
+        "isSatisfied": false,
+        "id": "ac-05"
+      }
+    ]
+  },
+  {
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "pending",
+    "notes": "Covers FR-VICE-001 and TR-VICE-ORACLE-001.",
+    "title": "Immutable native VICE oracle integrity gates",
+    "id": "TEST-VICE-001",
+    "scopeStartLayerKey": "layer-1",
+    "priority": "critical",
+    "acceptanceCriteria": [
+      {
+        "text": "A clean-target preflight passes for the pinned native/vice commit and a simulated dirty-target fixture is rejected before parity execution.",
+        "isSatisfied": false,
+        "id": "ac-01"
+      },
+      {
+        "text": "The wrapper integration test proves no tracked native/vice file changes across build and execution.",
+        "isSatisfied": false,
+        "id": "ac-02"
+      },
+      {
+        "text": "Oracle receipts prove native commit identity, clean tracked source, wrapper provenance, exact commands, and failed 0 skipped 0 for the claimed gate.",
+        "isSatisfied": false,
+        "id": "ac-03"
+      },
+      {
+        "text": "When a required real bus or timing observation is unavailable, the test fails at that first missing observation and does not substitute PeekBus, PC inference, fabricated data, or a modified native build.",
+        "isSatisfied": false,
+        "id": "ac-04"
+      }
+    ],
+    "condition": "Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable."
+  }
+]

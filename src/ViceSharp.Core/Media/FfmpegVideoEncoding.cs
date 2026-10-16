@@ -78,8 +78,11 @@ public static class FfmpegVideoFormats
     /// <summary>MPEG-4 Part 2 + MP3 in an AVI container (matches VICE's classic default).</summary>
     public static readonly FfmpegVideoFormat Avi = new("avi", "avi", "mpeg4", "libmp3lame", null);
 
+    /// <summary>Animated GIF. VICE writes GIF screenshots; FR-MED-005 also records short GIF clips.</summary>
+    public static readonly FfmpegVideoFormat Gif = new("gif", "gif", "gif", "pcm_s16le", null);
+
     /// <summary>All supported muxed formats, in preference order.</summary>
-    public static readonly IReadOnlyList<FfmpegVideoFormat> All = [Mp4, Mkv, Avi];
+    public static readonly IReadOnlyList<FfmpegVideoFormat> All = [Mp4, Mkv, Avi, Gif];
 
     /// <summary>Resolve a format by its id (case-insensitive). Returns false for unknown ids.</summary>
     public static bool TryGet(string? id, out FfmpegVideoFormat format)
@@ -174,6 +177,10 @@ public static class FfmpegArgumentBuilder
             "-i", $"tcp://127.0.0.1:{videoPort}",
         };
 
+        var gif = string.Equals(format.Container, "gif", StringComparison.OrdinalIgnoreCase);
+        if (gif)
+            includeAudio = false;
+
         if (includeAudio)
         {
             // Input 1: raw signed-16 little-endian PCM over TCP.
@@ -201,7 +208,7 @@ public static class FfmpegArgumentBuilder
         }
 
         var microphoneIndex = includeAudio ? 2 : 1;
-        var hasAudioOutput = includeAudio || microphoneInput is not null;
+        var hasAudioOutput = !gif && (includeAudio || microphoneInput is not null);
         if (includeAudio && microphoneInput is not null)
         {
             args.AddRange(new[]

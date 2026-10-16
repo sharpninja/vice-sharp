@@ -1,0 +1,164 @@
+{
+  "timestampLocal": "2026-10-08T13:36:49-05:00",
+  "finding": "F-10 test-fixture/provider-seam portion only",
+  "classification": "Test-only remediation inside unaccepted Phase 1 mock gate",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T181223Z-prompt-3ff5",
+  "testResults": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-oracle-01\\result.json",
+      "sha256": "949582CA8B9B2D20A37B81FC6447AFB8D87B142C4572607DE7D77EBE9FBF1BCA",
+      "timestampLocal": "2026-10-08T13:29:50.1957788-05:00",
+      "project": "tests/ViceSharp.OracleContract.Tests/ViceSharp.OracleContract.Tests.csproj",
+      "command": "dotnet test tests/ViceSharp.OracleContract.Tests/ViceSharp.OracleContract.Tests.csproj -c Release --logger trx;LogFileName=phase1-f10-oracle-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-oracle-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-oracle-01\\phase1-f10-oracle-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "exitCode": 0,
+      "total": 87,
+      "passed": 87,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0,
+      "nativeUnchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-vsf-01\\result.json",
+      "sha256": "AC6284D18B76CB2D6EA5F46D7B1DCF6433430ABD9D51A8FBA2AA2B09A2AEC9E6",
+      "timestampLocal": "2026-10-08T13:29:58.4719221-05:00",
+      "project": "tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj",
+      "command": "dotnet test tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj -c Release --logger trx;LogFileName=phase1-f10-vsf-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-vsf-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-vsf-01\\phase1-f10-vsf-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "exitCode": 0,
+      "total": 199,
+      "passed": 199,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0,
+      "nativeUnchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-clock-01\\result.json",
+      "sha256": "2F4EDF0363BAB899238604954DB94C86D3E1BDE2E6301E650FF803F8D1BDD448",
+      "timestampLocal": "2026-10-08T13:30:06.1219349-05:00",
+      "project": "tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj",
+      "command": "dotnet test tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj -c Release --logger trx;LogFileName=phase1-f10-clock-01.trx --results-directory F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-clock-01 --diag F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\phase1-f10-clock-01\\phase1-f10-clock-01.diag.log --blame-hang --blame-hang-timeout 2m",
+      "exitCode": 0,
+      "total": 50,
+      "passed": 50,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "error": 0,
+      "timeout": 0,
+      "nativeUnchanged": true
+    }
+  ],
+  "totalPassed": 336,
+  "caseNameDifferences": 0,
+  "orderedTheoryRows": 85,
+  "sourceTokenComparisons": 17,
+  "addedIndependentBoundaryPathControls": 10,
+  "extractionProof": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\fixture-extraction-proof.json",
+  "extractionProofSha256": "BACECD222EDA4140FA75B0EB9186F63778F476EB2EAAF128F37D03DEE29E1259",
+  "scenarioLedger": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\scenario-ac-ledger.json",
+  "scenarioLedgerSha256": "ED15DC87604B7D26E0DF35ABB6C965DE70BF91E93C8878E43D9D6FC86AECEFAF",
+  "compilerLogCopies": [
+    {
+      "original": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-gate-evidence\\compile.log",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\clock-gate-compile.log",
+      "sha256": "F3CC20D12196B7135348BA83ED8DFE5DF52A55E3DD95E27F7FCB296399153FFD",
+      "length": 511,
+      "verified": true
+    },
+    {
+      "original": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\compile.log",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\clock-probe-compile.log",
+      "sha256": "2CC512AF3AAB8F05638EEA952BEFF11841162F24DD0422122FCE2D5721BBF000",
+      "length": 654,
+      "verified": true
+    }
+  ],
+  "nativeUnchanged": true,
+  "nativeAfter": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\native-after.json",
+  "nativeInventorySha256": "AD076D9119C812AAC59C5CC80D16F27D6B0F9E88B26E7C83998BE21924145CA2",
+  "gitDiffCheckExitCode": 0,
+  "newFileWhitespaceChecks": [
+    {
+      "path": "tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "tests\\ViceSharp.OracleContract.Tests\\OracleContractFixtures.cs",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "tests\\ViceSharp.OracleContract.Tests\\README.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\README.md",
+      "exitCode": 1,
+      "output": [],
+      "noWhitespaceErrors": true
+    }
+  ],
+  "hostileAccepted": false,
+  "realGatesSatisfied": false,
+  "phaseAdvanced": false,
+  "requiredFollowup": "Repin changed evidence and resume the same Opus max logical review when available/authorized. Actual provider bindings and real filesystem resolution remain required before real gate acceptance.",
+  "sourceSnapshots": [
+    {
+      "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\OracleContractTests.cs.after",
+      "sha256": "C10940A59A87C1692590D588DDEA89E4ABE4DF25F7EA056A54D96F1161390FC8"
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\ContractAssertions.cs.after",
+      "sha256": "72B973C94AA68CFBE0CDF516CACD4DD96F57C20351D49CA6AA70524F1114AE27"
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractFixtures.cs",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\OracleContractFixtures.cs.after",
+      "sha256": "CDB53550F2FBA6E8539CB264195E7A5A98406137C80F4CBE702A045082A9163B"
+    },
+    {
+      "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj",
+      "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\ViceSharp.OracleContract.Tests.csproj.after",
+      "sha256": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445"
+    }
+  ],
+  "documents": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "sha256": "9D426177B811D91AFFE965EFC62604E5216103BAE5C9DF5D75241ECE5E677AAC"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\README.md",
+      "sha256": "9E1FCDD68D81BA0E4FEA4D4D36ECA3362043B78D618043462832879E87F8E2D1"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T131300-0500-phase1-fixture-reuse\\README.md",
+      "sha256": "502F166E2E8EDB8CE6B1E1091C70C2DDE032AE910EF0E5409BC4D67AAE6A8A69"
+    }
+  ]
+}

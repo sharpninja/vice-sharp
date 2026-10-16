@@ -1,0 +1,212 @@
+[
+  {
+    "method": "workflow.requirements.getFr",
+    "id": "FR-VICE-001",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.getFr",
+    "id": "FR-SNP-005",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.getTr",
+    "id": "TR-VICE-ORACLE-001",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.getTr",
+    "id": "TR-CYCLE-001",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.getTr",
+    "id": "TR-LOCKSTEP-VSF-001",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.getTr",
+    "id": "TR-VSFLOCKSTEP-RESUME-001",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.getTest",
+    "id": "TEST-VICE-001",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.getTest",
+    "id": "TEST-SNP-002",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.listMappings",
+    "id": "FR-VICE-001",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  },
+  {
+    "method": "workflow.requirements.listMappings",
+    "id": "FR-SNP-005",
+    "status": "",
+    "title": "",
+    "condition": "",
+    "acCount": 0,
+    "unsatisfied": 0,
+    "satisfied": 0,
+    "ac": null,
+    "mentionsPatch": false,
+    "resultKeys": [
+      "IsReadOnly",
+      "IsFixedSize",
+      "IsSynchronized",
+      "Keys",
+      "Values",
+      "SyncRoot",
+      "Count"
+    ]
+  }
+]

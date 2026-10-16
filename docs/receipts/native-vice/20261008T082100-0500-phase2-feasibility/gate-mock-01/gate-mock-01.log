@@ -1,0 +1,10 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.NativeClockProbe.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll (.NETCoreApp,Version=v10.0)
+Logging Vstest Diagnostics in file: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\gate-mock-01\gate-mock-01.diag.log
+A total of 1 test files matched the specified pattern.
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+Results File: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\gate-mock-01\gate-mock-01.trx
+
+Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 586 ms - ViceSharp.NativeClockProbe.Tests.dll (net10.0)

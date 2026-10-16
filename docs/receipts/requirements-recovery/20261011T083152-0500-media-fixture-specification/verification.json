@@ -1,0 +1,443 @@
+{
+  "schema": "vicesharp-media-specification-verification/v1",
+  "checkedAtLocal": "2026-10-11T08:51:00.8321290-05:00",
+  "host": "PAYTON-LEGION2",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T134740Z-media-contract-verification",
+  "status": "draft verified as documents and deterministic data only; no gate acceptance",
+  "baseProposalSha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+  "fullPlanSha256": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+  "coverageSerializationExact": true,
+  "preparationSerializationExact": true,
+  "tapeCriteriaExact": true,
+  "tapeCoverageExact": true,
+  "tapeCriteriaCount": 8,
+  "tapeCaseGroupCount": 41,
+  "mediaCriteriaCount": 5,
+  "mediaCaseGroupCount": 20,
+  "mediaBindings": [
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_AllStandardSectors",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_RecognitionAndZoneBoundaries",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_InvalidGeometry",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_ErrorMapAllByteValues",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_WriteReadReopen",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_ReadOnlyPrecedence",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_UnrecognizedLengths",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_GeometryVersusExtent",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-01",
+      "caseGroup": "D64_IoFailuresAndPartialEffects",
+      "specification": "D64-CONTRACT.md",
+      "present": true
+    },
+    {
+      "acId": "ac-02",
+      "caseGroup": "Media_Vic20IecDigitalMatrix",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-02",
+      "caseGroup": "Media_C64IecDigitalMatrix",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-02",
+      "caseGroup": "Media_IecOrderedAtnEdges",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-02",
+      "caseGroup": "Media_MotorZoneAndStopEdges",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-02",
+      "caseGroup": "Media_DosBamAndModeSeparation",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-03",
+      "caseGroup": "Media_TapeFullContractBinding",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-04",
+      "caseGroup": "Media_EvidenceIdentity",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-04",
+      "caseGroup": "Media_ClockAndOrder",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-04",
+      "caseGroup": "Media_FirstMismatch",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-05",
+      "caseGroup": "Media_GateEvidenceBinding",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    },
+    {
+      "acId": "ac-05",
+      "caseGroup": "Media_ApprovalAndAcceptanceBoundary",
+      "specification": "MEDIA-COVERAGE.md",
+      "present": true
+    }
+  ],
+  "sourcePins": [
+    {
+      "relative": "vice/src/diskimage/fsimage-dxx.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage-dxx.c",
+      "expectedBlob": "001e2d021441d23311b741337560606fd005084a",
+      "actualBlob": "001e2d021441d23311b741337560606fd005084a",
+      "sha256": "7D2DAD50EEEE65644DE0EE2A45954EA5E7310474148CBF96B7AB18F787CA838E",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskimage/diskimage.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\diskimage.c",
+      "expectedBlob": "911f2e364c615c91fd1f164c987faf624cfa072d",
+      "actualBlob": "911f2e364c615c91fd1f164c987faf624cfa072d",
+      "sha256": "DDC53B5EBC6BF181DDA9F1088B26A760ACA4DF9F5CBA138A9CFA730CEA42E251",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskimage/fsimage-check.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage-check.c",
+      "expectedBlob": "9a9328b9cd3ec3513ef16b07a41e7114105196bf",
+      "actualBlob": "9a9328b9cd3ec3513ef16b07a41e7114105196bf",
+      "sha256": "FFDCAC825ED79140885FD8E1D872D762FA65F4FFDCD1CD92711F0108164153C3",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskimage/fsimage-probe.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage-probe.c",
+      "expectedBlob": "a6ff483fdf60df63dc33d7ca5426812d2ee3e694",
+      "actualBlob": "a6ff483fdf60df63dc33d7ca5426812d2ee3e694",
+      "sha256": "535AAD5521D4B077E68CC00FE76F49F6ECB8E31BA82A235CF66E15DA1A7FAEA7",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/util.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\util.c",
+      "expectedBlob": "ef60d991454797417754c438e08927868e96b16e",
+      "actualBlob": "ef60d991454797417754c438e08927868e96b16e",
+      "sha256": "CFFF1581EC5723C572190D97EAFC3BEAFDB371B9F9E6807F4304262E30353311",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/cbmdos.h",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\cbmdos.h",
+      "expectedBlob": "f6ad607f56bbdf883230524759fceb9866cf25bc",
+      "actualBlob": "f6ad607f56bbdf883230524759fceb9866cf25bc",
+      "sha256": "5E29E6486EF91AB2C8F025E91E5B9708CE3ED6C2D8C4C866F041FD60398CA5D8",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskconstants.h",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskconstants.h",
+      "expectedBlob": "117fc85da6ee25ef97bd03a9c5addc6162823ba2",
+      "actualBlob": "117fc85da6ee25ef97bd03a9c5addc6162823ba2",
+      "sha256": "085670F36751E8830248DACF491929896FB741ACF2EA41E4B94755B5B96AA295",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/vic20/vic20iec.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20iec.c",
+      "expectedBlob": "e9c62bd039e4ae96ae9b092a6db4192d7499be86",
+      "actualBlob": "e9c62bd039e4ae96ae9b092a6db4192d7499be86",
+      "sha256": "6B70D69988DEC4F7927E587ACC75B7AF679DF6C4E10DBF74EDE4AAFC192C05A2",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/c64/c64iec.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64iec.c",
+      "expectedBlob": "b216dbcca167591411724a78fed73cbdaa65ae28",
+      "actualBlob": "b216dbcca167591411724a78fed73cbdaa65ae28",
+      "sha256": "C6D79E742580474ECD7E117425391198E8E3D624A85B5EB72FB7A7122CF19950",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/iecbus/iecbus.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\iecbus\\iecbus.c",
+      "expectedBlob": "bcf3c609ac33336a6161012512e6c82320e75499",
+      "actualBlob": "bcf3c609ac33336a6161012512e6c82320e75499",
+      "sha256": "010BC96278C1D99A7EF2AEDFC3170D888DED174D7F174D18618945FCFEEABB25",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/drive/iecieee/via2d.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\iecieee\\via2d.c",
+      "expectedBlob": "876b9f895130f939a84621b476e5c1a1cc1a44ed",
+      "actualBlob": "876b9f895130f939a84621b476e5c1a1cc1a44ed",
+      "sha256": "D5AB80C9C47B56A4B95CB5984A4502D9AD706114C1610AFB2D946F400CABE9EC",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/drive/rotation.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\drive\\rotation.c",
+      "expectedBlob": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+      "actualBlob": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+      "sha256": "F8B10A8D383294D5357E769BB6FA91393C4EE28AC4F5BF629C1A187364BA55E9",
+      "exactMatch": true
+    },
+    {
+      "relative": "vice/src/diskimage/fsimage.c",
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\diskimage\\fsimage.c",
+      "expectedBlob": "064aaf70f5f0e888d9ce028755df358d1ce181bc",
+      "actualBlob": "064aaf70f5f0e888d9ce028755df358d1ce181bc",
+      "sha256": "B97B619EF0390F74A77294C5C29A84521DF442333625B966F01F438DDF16690E",
+      "exactMatch": true
+    }
+  ],
+  "recipeChecks": [
+    {
+      "fixtureId": "D64-PATTERN-35-NOMAP",
+      "sha256": "876711826FE3B15DFE3B95A80C62780C4E74EED78932A93DABC89BC2A994372B",
+      "sectors": 683,
+      "length": 174848,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-35-MAP01",
+      "sha256": "CC039D2B187195D38D7CF5EB1B697D1F41CA96DE39D7E3EABBB2D2B2490137F2",
+      "sectors": 683,
+      "length": 175531,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-36-NOMAP",
+      "sha256": "595BDBC3F8F076C205528064D08B826DC9226704965068A1E880058D9916B799",
+      "sectors": 700,
+      "length": 179200,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-36-MAP01",
+      "sha256": "FCF67FEC96E230F52A5CA65A97F707E73918C291BCF9B4A4B7B569D956794A21",
+      "sectors": 700,
+      "length": 179900,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-37-NOMAP",
+      "sha256": "58B04A569A2F89E8B24A78ED63BB051D3138F3CC82953CBD438E75E21450CAAF",
+      "sectors": 717,
+      "length": 183552,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-37-MAP01",
+      "sha256": "CFA40EA3BD220E6B1D74A6A52122123DBE9AA25D581DA7015CB3C0AF474768F4",
+      "sectors": 717,
+      "length": 184269,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-38-NOMAP",
+      "sha256": "636CB17397BBB9D5A821CE6F63AE726E84B62904A5AA0A0F2F09E8BC1AEF79C2",
+      "sectors": 734,
+      "length": 187904,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-38-MAP01",
+      "sha256": "27287BA9C97984C6BE0C4EA08B7703AD75D9CC0A80C46910BB059BE788BE7FFC",
+      "sectors": 734,
+      "length": 188638,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-39-NOMAP",
+      "sha256": "1119E920774ED2C59990210B399A7AC47F31052A980619FB2D22E4FEB64E0526",
+      "sectors": 751,
+      "length": 192256,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-39-MAP01",
+      "sha256": "1920EB78AC16A5AD3BF4F89AEED76E4FE40BA79907FE6D21693F36FC4580594E",
+      "sectors": 751,
+      "length": 193007,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-40-NOMAP",
+      "sha256": "463E983B0981B43E8947A691E8346B116171E9788FC70E758E0DCC61A299D729",
+      "sectors": 768,
+      "length": 196608,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-40-MAP01",
+      "sha256": "7D78BB84DB8587502C8B4A5A4F2A0C2999DA719F4D627F6A45B6F1E73F81DF51",
+      "sectors": 768,
+      "length": 197376,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-41-NOMAP",
+      "sha256": "B7DDBE7FAD05B16F6D1E2615B7B2438C69195F186E6A7776A273BCFBFB995CE6",
+      "sectors": 785,
+      "length": 200960,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-41-MAP01",
+      "sha256": "5BB882CC07CA071CFFB6748BE4D7CB9BD3D39D6260F2F19ECF4B466AAA08C251",
+      "sectors": 785,
+      "length": 201745,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-42-NOMAP",
+      "sha256": "15EB884A3AB860F7DA0F350C5E60EBDB65D61F7D8F1557BF11453BC560D229E3",
+      "sectors": 802,
+      "length": 205312,
+      "matches": true
+    },
+    {
+      "fixtureId": "D64-PATTERN-42-MAP01",
+      "sha256": "33BCB2F9E8680D1F6C23FC9A10A1147924624AD8BE27CFC38A41D8AF94B2A1EB",
+      "sectors": 802,
+      "length": 206114,
+      "matches": true
+    }
+  ],
+  "artifactChecks": [
+    {
+      "name": "D64-CONTRACT.md",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\D64-CONTRACT.md",
+      "bytes": 12169,
+      "sha256": "6AF5F2F7ED8B31DA100111EC4CC8CE4460BA415F44F853D4FDA1D0AF76813AFD",
+      "trailingWhitespace": 0,
+      "emOrEnDashes": 0
+    },
+    {
+      "name": "MEDIA-COVERAGE.md",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\MEDIA-COVERAGE.md",
+      "bytes": 13016,
+      "sha256": "47ECD09E9990CA15EB1C135DB450A4FE48E39A45D1E5F6BB660EAF35EAE3B095",
+      "trailingWhitespace": 0,
+      "emOrEnDashes": 0
+    },
+    {
+      "name": "coverage-supplement.json",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\coverage-supplement.json",
+      "bytes": 16606,
+      "sha256": "FFDAFB1E64214564FA211DA259C115AE5E549CB7460AA89999E973B5F4698A5B",
+      "trailingWhitespace": 0,
+      "emOrEnDashes": 0
+    },
+    {
+      "name": "preparation-evidence.json",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\preparation-evidence.json",
+      "bytes": 15469,
+      "sha256": "49BD2D9B9C57809E0C6D6CE182DF0B7BBE68466B4CA18E19122F284F5658BE11",
+      "trailingWhitespace": 0,
+      "emOrEnDashes": 0
+    },
+    {
+      "name": "README.md",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\README.md",
+      "bytes": 3340,
+      "sha256": "41D5CD1B7D169BB1B4E5CB123C87D771422323B071380F5CD18A066D0D3BDFAB",
+      "trailingWhitespace": 0,
+      "emOrEnDashes": 0
+    }
+  ],
+  "gitDiffCheck": {
+    "command": "git -C F:\\GitHub\\vice-sharp diff --check",
+    "exitCode": 0,
+    "scope": "tracked changes only; explicit formatting checks above cover new files"
+  },
+  "traceability": {
+    "commandSucceeded": true,
+    "outputExcerpt": [
+      "Requirement traceability audit",
+      "Repository: F:\\GitHub\\vice-sharp",
+      "Canonical IDs: 238",
+      "Referenced canonical IDs in src/tests: 152",
+      "Canonical IDs not referenced in src/tests: 86",
+      "Noncanonical IDs in src/tests: 1011",
+      "FR canonical/referenced/missing: 133/102/31",
+      "TR canonical/referenced/missing: 59/33/26",
+      "TEST canonical/referenced/missing: 46/17/29"
+    ],
+    "missingCanonical": 86,
+    "command": "& F:\\GitHub\\vice-sharp\\tools\\check_requirement_traceability.ps1",
+    "failSwitchesUsed": false,
+    "cleanGate": false,
+    "noncanonical": 1011,
+    "fullOutputRetainedInReceipt": false,
+    "scope": "diagnostic counts; no attribution of findings to this slice"
+  },
+  "mockTestsRun": 0,
+  "realTestsRun": 0,
+  "fixtureFilesWritten": 0,
+  "nativeExecutions": 0,
+  "requirementWrites": 0,
+  "newHostileReviews": 0,
+  "applicationAuthorized": false,
+  "goalComplete": false,
+  "scopeLimitations": [
+    "Case bindings and deterministic recipes are not executable coverage.",
+    "Native selected-file identity is not whole-checkout or executable cleanliness.",
+    "True-drive traces, tape matrices, fault observation, approval dependencies and guard schemas remain open.",
+    "The prior DISAGREE remains the last independent verdict."
+  ]
+}

@@ -10,42 +10,49 @@ ViceSharp is a **library-first** emulator: the emulation engine is a set of comp
 2. **Zero-allocation hot path**: The per-cycle emulation loop allocates zero managed objects. All transient data uses stack allocation, spans, or arena-pooled buffers.
 3. **Deterministic**: Given identical initial state and input sequence, execution is bit-exact reproducible. This enables snapshot comparison, replay, and regression testing.
 4. **Trim-aware managed runtime**: No reflection on the hot path. Source generators replace runtime discovery where useful. Supported desktop packaging is self-contained JIT + ReadyToRun rather than native ahead-of-time publishing.
-5. **MVVM**: ViewModels reference only `ViceSharp.Abstractions`. Views contain zero logic. The emulation engine has no UI dependencies.
+5. **MVVM-oriented UI**: Avalonia views bind primarily through ViewModels and host-client abstractions. The Avalonia composition project references `ViceSharp.Host`, `ViceSharp.Protocol`, `ViceSharp.Library.ViewModels`, `ViceSharp.RomM`, and the retained shared Xbox ViewModel project. The emulation engine remains independent of Avalonia.
 6. **Host/UI boundary**: UI control, media, session, input, snapshot, capture, and diagnostic operations communicate with `ViceSharp.Host` through versioned gRPC services or narrow gRPC-backed client abstractions. The host owns emulator sessions, devices, media, snapshots, diagnostics, and local render-source composition.
 
 ## Assembly Structure
 
-```
-ViceSharp.Abstractions     50 interface files: interfaces, value types, attributes
+```text
+ViceSharp.Abstractions     55 public interface declarations, value types, attributes
     |
-    +-- ViceSharp.Core         Bus, clock, mutation queue, pub/sub, snapshots, media recorders
+    +-- ViceSharp.Core         Bus, clock, mutation queue, pub/sub, runtime state services
     |       |
     |       +-- ViceSharp.Chips          CPU, VIC-II, SID, CIA, VIA, PLA implementations
     |       |
-    |       +-- ViceSharp.Architectures  Machine definitions (C64, C1541 drive, ad-hoc/multisystem)
+    |       +-- ViceSharp.Architectures  C64, VIC-20, C1541, ad-hoc, and multisystem definitions
     |
-    +-- ViceSharp.SourceGen    Roslyn source generator (device registration)
+    +-- ViceSharp.SourceGen    Roslyn source generator
     |
     +-- ViceSharp.Monitor      Debugger/monitor engine
     |
-    +-- ViceSharp.Host         Composition boundary: emulator sessions, service registration, gRPC host surface
+    +-- ViceSharp.Host         Session composition, services, and gRPC host surface
     |       |
-    |       +-- ViceSharp.Host.Android / .iOS / .MacOS           Platform host shells
+    |       +-- ViceSharp.Host.Android / .iOS / .MacOS   Platform host shells
     |
-    +-- ViceSharp.Protocol     gRPC/protobuf contracts and generated client/server types
+    +-- ViceSharp.Protocol     Protobuf contracts and generated client/server types
     |
-    +-- ViceSharp.Launcher     VICE-style command-line parsing and machine topology building
+    +-- ViceSharp.Launcher     VICE-style arguments and topology generation
     |
     +-- ViceSharp.Console      CLI/reference shell
     |
-    +-- ViceSharp.Avalonia     Desktop UI (Avalonia 12.x)
+    +-- ViceSharp.Library.ViewModels   Reusable library/catalog UI state
     |
-    +-- ViceSharp.AdhocHelper  Ad-hoc machine configuration helper UI (Avalonia)
+    +-- ViceSharp.RomM         RomM integration
     |
-    +-- ViceSharp.RomFetch     ROM download/validation tool
+    +-- ViceSharp.Avalonia     Supported desktop UI
     |
-    +-- ViceSharp.Core.Package Packaging shell for the ViceSharp.Core NuGet bundle
-                               (Abstractions + Chips + RomFetch + Core + Architectures)
+    +-- ViceSharp.AdhocHelper  Ad-hoc machine configuration helper UI
+    |
+    +-- ViceSharp.RomFetch     ROM download and validation
+    |
+    +-- ViceSharp.Core.Package NuGet bundle packaging shell
+
+ViceSharp.Xbox, ViceSharp.Xbox.ViewModels, ViceSharp.Xbox.Input, and
+ViceSharp.Host.Xbox remain frozen legacy projects. Xbox/UWP is outside
+the supported product scope.
 ```
 
 ## Host/UI gRPC Boundary
@@ -66,6 +73,12 @@ UI control clients consume the nine proto services defined in `src/ViceSharp.Pro
 The in-process Avalonia renderer is a narrow host-owned exception for frame presentation: it may bind directly to a local emulator/frame source so local rendering does not have to route frame buffers through gRPC. That binding belongs in the host/composition or render-surface layer, not in ViewModels, and it does not allow UI code to mutate emulator devices.
 
 External or remote UIs use the gRPC video service/stream APIs where direct in-process rendering is unavailable. The UI control layer does not hold direct references to live core devices. Generated gRPC clients are adapted behind ViewModel-facing abstractions so TR-MVVM-001 remains enforceable.
+
+## Native VICE Reference Boundary
+
+The pinned `native/vice` checkout is the immutable behavioral oracle. ViceSharp may observe and drive it through external adapters and wrappers, but parity work must not patch, generate into, or behaviorally change the VICE source tree. Managed behavior moves toward VICE. VICE is never changed to move toward managed behavior.
+
+External integration owns stepping, state extraction and injection, compatibility translation, build materialization, and lifecycle isolation. [PLAN-VICE-IMMUTABLE-001](plans/PLAN-VICE-IMMUTABLE-001.md) defines the remediation gates and source-tree cleanliness proofs.
 
 ## Device Model
 
@@ -120,11 +133,17 @@ The pool and arena reset at frame boundaries, making per-frame allocation effect
 
 ## State and Snapshots
 
-The `ISnapshot` interface captures the complete machine state as a flat byte array. Snapshots are:
-- **Serializable**: save/load to disk
-- **Comparable**: byte-exact comparison for determinism testing
+The public snapshot contract is not yet aligned with the required product format:
 
-The `StateWindow` concept (configurable snapshot interval, history depth, and memory budget) is an unimplemented design proposal; see `docs/StateWindow.md`. The shipped rewind surface is the tick-history write-delta capture (`TickHistoryRecorder` in `ViceSharp.Host`, exposed through `MonitorService`).
+- `SnapshotServiceHost` currently emits `vice-sharp.machine-snapshot.v2` for C64 sessions and `vice-sharp.runtime-snapshot.v1` for non-C64 sessions.
+- The C64 v2 payload captures RAM, color RAM, the 6510 port, CPU, VIC-II, CIA1, CIA2, and the SID register file. It does not capture full SID internals, banked cartridge registers, or drive state.
+- The non-C64 v1 path is a runtime snapshot-store payload, not a VICE file.
+- Managed VICE VSF staging already exists in the test harness through `LockstepValidator.RunFromSnapshot` and `StageManagedFromNative`.
+- Native VICE `.vsf` is the canonical required snapshot format for supported x64sc C64 and xvic VIC-20 product paths. Normal public and desktop save/load do not yet route through that production bridge.
+
+The current remediation is defined by [PLAN-VSFLOCKSTEP-001](plans/PLAN-VSFLOCKSTEP-001.md). Proprietary `vice-sharp.*` payloads may remain internal migration inputs during remediation, but they do not satisfy VICE snapshot interoperability.
+
+The `StateWindow` concept (configurable snapshot interval, history depth, and memory budget) is an unimplemented design proposal; see [StateWindow.md](StateWindow.md). The shipped rewind surface is tick-history write-delta capture in `ViceSharp.Host`, exposed through `MonitorService`.
 
 ## Clock and Timing
 

@@ -1,0 +1,11 @@
+.echo STOCK_ACCESS_STREAM_BEGIN
+lm m xvic
+r @$t0=0
+r @$t1=0
+r @$t2=0
+ba e1 xvic+0x50ce4 "$<stock-access-fetch.cdb"
+ba w8 xvic+0x262a10 "$<stock-access-clock.cdb"
+ba e1 xvic+0x507c0 "$<stock-access-store.cdb"
+ba e1 xvic+0x50740 "$<stock-access-dummy-store.cdb"
+bl
+g

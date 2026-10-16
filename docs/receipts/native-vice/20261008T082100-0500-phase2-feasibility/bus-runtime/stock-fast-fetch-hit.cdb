@@ -1,0 +1,8 @@
+.echo STOCK_FAST_FETCH_BEFORE
+r rip
+r rax
+r rdx
+? @rdx+@rax
+dq xvic+0x262a10 L1
+u @rip L1
+t 0n1 ".echo STOCK_FAST_FETCH_AFTER; r rip; r eax; dq xvic+0x262a10 L1; bc *; q"

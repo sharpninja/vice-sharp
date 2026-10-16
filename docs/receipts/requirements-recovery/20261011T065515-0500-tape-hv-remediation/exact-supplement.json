@@ -1,0 +1,438 @@
+{
+  "schema": "vice-sharp/tape-remediation-supplement/v1",
+  "status": "unapplied-partial-draft-not-an-approval-packet",
+  "createdAtLocal": "2026-10-11T06:59:38.1542953-05:00",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "baseProposalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\proposed-field-delta.json",
+  "baseProposalSha256": "1D8A442588ADD7883693694352954DF2077D166FB47ED4E2924AFE738A481507",
+  "sourceDocumentPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\N01-N02-EXACT-SUPPLEMENT.md",
+  "sourceDocumentSha256": "9C2FE6553F52FE6D1F83197C35BEDB346E0B12A0D73CE0817F4EB4E30DF5B10D",
+  "nativeCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeSourceChecks": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64pla.c",
+      "relativePath": "src/c64/c64pla.c",
+      "expectedGitBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+      "actualGitBlob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+      "matches": true,
+      "sha256": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64mem.c",
+      "relativePath": "src/c64/c64mem.c",
+      "expectedGitBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+      "actualGitBlob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+      "matches": true,
+      "sha256": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64memsc.c",
+      "relativePath": "src/c64/c64memsc.c",
+      "expectedGitBlob": "d08f9904d6874753c7d829bc00fc0482d7a54748",
+      "actualGitBlob": "d08f9904d6874753c7d829bc00fc0482d7a54748",
+      "matches": true,
+      "sha256": "85A08EA194E27735DA0C7A8282772B97E6EFB6E109F3B683C780EE0F2A37F2DB"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64.h",
+      "relativePath": "src/c64/c64.h",
+      "expectedGitBlob": "3733dcec1dc2392aa72ab0eedde49e40b2f990a0",
+      "actualGitBlob": "3733dcec1dc2392aa72ab0eedde49e40b2f990a0",
+      "matches": true,
+      "sha256": "23B26B78EFAC77C43FDF2FE20C399464DC0A9A7C0D103804D7FF65CEA6BF816F"
+    }
+  ],
+  "effectiveCounts": {
+    "functional": 235,
+    "technical": 139,
+    "testing": 142,
+    "mappings": 233,
+    "layer": "layer-1"
+  },
+  "fullRecordPreimagesAvailable": false,
+  "fieldDeltas": [
+    {
+      "requirementId": "FR-CPU-004",
+      "kind": "fr",
+      "acId": "ac-03",
+      "beforeText": "Bit 3 controls the cassette motor (active low).",
+      "afterText": "On C64, the cassette motor output is active low from DDR-masked bit 5, !(DDR & DATA & 0x20), and the cassette write output is bit 3, (~DDR | DATA) & 0x08. Match pinned VICE's changed-effective-output detection for data and DDR writes, including input/output transitions and repeated writes. Do not exchange the motor and write bits.",
+      "alsoReplaceExactBodySentence": true,
+      "expectedBodyOccurrences": 1,
+      "bodyBeforeSha256": "AD7DA25894049B50A4066A6DF82499D19E2A8A00D83BEC988DD5F57584A0ABBC",
+      "statusBefore": "pending",
+      "isSatisfiedBefore": false,
+      "statusAfter": "pending",
+      "isSatisfiedAfter": false
+    },
+    {
+      "requirementId": "FR-CPU-004",
+      "kind": "fr",
+      "acId": "ac-05",
+      "beforeText": "Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.",
+      "afterText": "On the C64 board, reading $0001 with DDR bit 5 clear returns bit 5 clear; with DDR bit 5 set, its output readback follows pinned VICE's port data/DDR calculation. Bit 5 is the motor-control bit, not an unused pin. Exercise both data levels, both DDR directions, and direction changes; do not substitute SX-64 floating-pin behavior for C64 behavior.",
+      "alsoReplaceExactBodySentence": true,
+      "expectedBodyOccurrences": 1,
+      "bodyBeforeSha256": "AD7DA25894049B50A4066A6DF82499D19E2A8A00D83BEC988DD5F57584A0ABBC",
+      "statusBefore": "pending",
+      "isSatisfiedBefore": false,
+      "statusAfter": "pending",
+      "isSatisfiedAfter": false
+    },
+    {
+      "requirementId": "FR-PRF-003",
+      "kind": "fr",
+      "acId": "ac-02",
+      "beforeText": "No cassette port: tape-related I/O port bits behave differently (cassette sense always reads \"no tape\").",
+      "afterText": "The SX-64 board has no connected cassette port. Match pinned VICE's board-specific PLA inputs and suppress forwarding of motor, write and sense-out changes to tapeport devices. CPU-visible reads of bits 3-5 must still follow the native data, DDR and retained floating-capacitor state; neither permanently-high nor permanently-low input values are a valid universal substitute.",
+      "alsoReplaceExactBodySentence": true,
+      "expectedBodyOccurrences": 1,
+      "bodyBeforeSha256": "AA8B6D7DD97A82B87E20BBE063A67A2A741DFF0CCD6DDBACD9B1AEC1E3FEFBE6",
+      "statusBefore": "pending",
+      "isSatisfiedBefore": false,
+      "statusAfter": "pending",
+      "isSatisfiedAfter": false
+    },
+    {
+      "requirementId": "FR-PRF-003",
+      "kind": "fr",
+      "acId": "ac-04",
+      "beforeText": "The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.",
+      "afterText": "For SX-64 CPU reads of $0001, each input-configured bit 3, 4 and 5 is replaced by its retained native data_set_bit value after native falloff processing. Reset clears those retained values. Output writes and output-to-input transitions seed the corresponding retained data bit, falloff flag and deadline as pinned VICE does. A flagged retained value clears on a read only when its stored deadline is strictly less than maincpu_clk: a charged input therefore remains charged at the exact deadline and clears on the first later read. Output-configured bits retain normal port readback. Match each bit independently, native RNG-dependent deadline selection, repeated writes, direction transitions, reset and read side effects; do not impose an always-high or always-zero sense bit.",
+      "alsoReplaceExactBodySentence": true,
+      "expectedBodyOccurrences": 1,
+      "bodyBeforeSha256": "AA8B6D7DD97A82B87E20BBE063A67A2A741DFF0CCD6DDBACD9B1AEC1E3FEFBE6",
+      "statusBefore": "pending",
+      "isSatisfiedBefore": false,
+      "statusAfter": "pending",
+      "isSatisfiedAfter": false
+    }
+  ],
+  "mappingReplacement": {
+    "before": {
+      "trIds": [
+        "TR-DRV-EDGE-001",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001"
+      ],
+      "testIds": [
+        "TEST-DRV-MOTOR-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001"
+      ],
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    "originalProposedAfter": {
+      "trIds": [
+        "TR-DRV-EDGE-001",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001",
+        "TR-IEC-EDGE-001",
+        "TR-MEDIA-D64-001"
+      ],
+      "testIds": [
+        "TEST-DRV-MOTOR-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001",
+        "TEST-IEC-TIMING-001",
+        "TEST-D64IO-001"
+      ],
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    "correctedProposedAfter": {
+      "trIds": [
+        "TR-DRV-EDGE-001",
+        "TR-TAP-EDGE-001",
+        "TR-TAPE-EDGE-001",
+        "TR-IEC-EDGE-001"
+      ],
+      "testIds": [
+        "TEST-DRV-MOTOR-001",
+        "TEST-TAPE-RAMP-001",
+        "TEST-TAPE-SENSE-001",
+        "TEST-IEC-TIMING-001"
+      ],
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    "withheldProposedTargets": [
+      "TR-MEDIA-D64-001",
+      "TEST-D64IO-001"
+    ],
+    "existingLinksRemoved": 0,
+    "mediaObligationsRetained": true
+  },
+  "originalMappingReferenceChecks": [
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "tr",
+      "id": "TR-DRV-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "tr",
+      "id": "TR-TAP-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "tr",
+      "id": "TR-TAPE-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "tr",
+      "id": "TR-IEC-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "tr",
+      "id": "TR-MEDIA-D64-001",
+      "exists": false
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "test",
+      "id": "TEST-DRV-MOTOR-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "test",
+      "id": "TEST-TAPE-RAMP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "test",
+      "id": "TEST-TAPE-SENSE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "test",
+      "id": "TEST-IEC-TIMING-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-BACKFILL-MEDIA-001",
+      "kind": "test",
+      "id": "TEST-D64IO-001",
+      "exists": false
+    },
+    {
+      "frId": "FR-RUNTIME-TAPE-002",
+      "kind": "tr",
+      "id": "TR-TAP-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-RUNTIME-TAPE-002",
+      "kind": "tr",
+      "id": "TR-TAPE-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-RUNTIME-TAPE-002",
+      "kind": "test",
+      "id": "TEST-TAPE-RAMP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-RUNTIME-TAPE-002",
+      "kind": "test",
+      "id": "TEST-TAPE-SENSE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-001",
+      "kind": "tr",
+      "id": "TR-CYCLE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-001",
+      "kind": "tr",
+      "id": "TR-TAPE-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-001",
+      "kind": "tr",
+      "id": "TR-TAP-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-001",
+      "kind": "test",
+      "id": "TEST-TAP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-001",
+      "kind": "test",
+      "id": "TEST-X64SC-LOCKSTEP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-001",
+      "kind": "test",
+      "id": "TEST-TAPE-RAMP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-001",
+      "kind": "test",
+      "id": "TEST-TAPE-SENSE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-002",
+      "kind": "tr",
+      "id": "TR-CYCLE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-002",
+      "kind": "tr",
+      "id": "TR-TAP-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-002",
+      "kind": "test",
+      "id": "TEST-TAP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-002",
+      "kind": "test",
+      "id": "TEST-X64SC-LOCKSTEP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-003",
+      "kind": "tr",
+      "id": "TR-CYCLE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-003",
+      "kind": "tr",
+      "id": "TR-TAP-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-003",
+      "kind": "test",
+      "id": "TEST-TAP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-003",
+      "kind": "test",
+      "id": "TEST-X64SC-LOCKSTEP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-004",
+      "kind": "tr",
+      "id": "TR-CYCLE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-004",
+      "kind": "tr",
+      "id": "TR-TAP-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-004",
+      "kind": "tr",
+      "id": "TR-TAPE-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-004",
+      "kind": "test",
+      "id": "TEST-TAP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-004",
+      "kind": "test",
+      "id": "TEST-X64SC-LOCKSTEP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-004",
+      "kind": "test",
+      "id": "TEST-TAPE-RAMP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-004",
+      "kind": "test",
+      "id": "TEST-TAPE-SENSE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-005",
+      "kind": "tr",
+      "id": "TR-CYCLE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-005",
+      "kind": "tr",
+      "id": "TR-TAP-EDGE-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-005",
+      "kind": "test",
+      "id": "TEST-TAP-001",
+      "exists": true
+    },
+    {
+      "frId": "FR-TAP-005",
+      "kind": "test",
+      "id": "TEST-X64SC-LOCKSTEP-001",
+      "exists": true
+    }
+  ],
+  "composition": {
+    "recordCount": 13,
+    "unchangedOriginalRecordCount": 11,
+    "additionalExistingFrCount": 2,
+    "changedAdditionalAcTexts": 4,
+    "proposedMappingAdditions": 13,
+    "liveMappingRemovals": 0,
+    "allOtherBaseProposalDataUnchanged": true
+  },
+  "knownRemainingWork": [
+    "Compose and validate complete thirteen-record delta and coverage",
+    "N-03/N-04 executable safeguards and fresh complete stable-metadata preimages",
+    "N-05/N-06 motor/start cases",
+    "N-07 through N-10 state and lifecycle cases",
+    "N-11 dependency wording",
+    "N-12 FR-TAP-005 audit",
+    "N-13 case denominator",
+    "N-14 obligation-change disclosure",
+    "N-15 existing-test disposition",
+    "N-18 handoff and TODO tracking",
+    "Retain N-16/N-17 and prior unresolved findings",
+    "Full independent HV then explicit expanded-delta approval"
+  ],
+  "triage": {
+    "primarySucceeded": false,
+    "queued": true,
+    "path": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261011T115419Z-goal_tape_getfr_triage_failure-eace.yaml",
+    "sha256": "86CFD2FF272DA233FE5BCC06435BD1F402D19690D5D05052794CA7AF24D3CA26"
+  }
+}

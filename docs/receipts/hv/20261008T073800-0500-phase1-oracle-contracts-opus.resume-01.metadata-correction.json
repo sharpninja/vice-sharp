@@ -1,0 +1,8 @@
+{
+  "timestampLocal": "2026-10-08T08:06:45.0627790-05:00",
+  "artifact": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008T073800-0500-phase1-oracle-contracts-opus.resume-01.request.jsonl",
+  "field": "reviewer.freshSession",
+  "recordedValue": true,
+  "correctValue": false,
+  "reason": "Resume request reused original reviewer metadata object. Actual CLI arguments include --resume cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008 and resume-specific prompt; this is the same logical review, not a fresh session. Original request preserved unchanged."
+}

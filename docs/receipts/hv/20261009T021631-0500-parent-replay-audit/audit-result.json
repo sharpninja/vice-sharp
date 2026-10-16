@@ -1,0 +1,64 @@
+{
+  "timestampLocal": "2026-10-09T02:18:08-05:00",
+  "scope": "Read-only continuation audit of unintended parent failsafe replay",
+  "classification": "operator workflow audit, not emulator implementation",
+  "candidateRecordCount": 11,
+  "operationCounts": {
+    "session_dialog": 1,
+    "triage_report": 4,
+    "session_submit": 6
+  },
+  "identificationEvidence": "Nine records appear in the retained reviewer queue inventory, plus two later creation receipts. All eleven have original tool-output references. This accounts for the prior count but is not a captured full pre-drain payload manifest.",
+  "originalPayloadsRecovered": 0,
+  "targetTurnCount": 5,
+  "currentTargetStates": [
+    {
+      "requestId": "req-20261008T120433Z-prompt-6e6f",
+      "status": "canceled",
+      "queryTitle": "Build full native-safe AC-mapped mock-contract suite"
+    },
+    {
+      "requestId": "req-20261008T122329Z-prompt-45e6",
+      "status": "completed",
+      "queryTitle": "User asks what current work is being performed and reports t"
+    },
+    {
+      "requestId": "req-20261008T122655Z-prompt-5ca3",
+      "status": "completed",
+      "queryTitle": "Continue active goal:100%completion of original Grok ViceSha"
+    },
+    {
+      "requestId": "req-20261008T123004Z-prompt-516f",
+      "status": "completed",
+      "queryTitle": "Resume full mock-contract gate after triage recovery"
+    },
+    {
+      "requestId": "req-20261008T130200Z-prompt-c779",
+      "status": "canceled",
+      "queryTitle": "Yes, use failsafe for triage too. Explicit operator reply au"
+    }
+  ],
+  "triageReadbackCount": 4,
+  "triageObservation": "All four linked reports exist under McpServer and retain original October 8 createdUtc timestamps. This does not prove that no duplicate or other record was created by replay.",
+  "prePostHistoricalTurnComparisonAvailable": false,
+  "historicalEffectsEstablished": false,
+  "deletedQueueFiles": "Installed plugin Clear-ReplFailsafe uses Remove-Item after successful replay. No archival copy is made by this path. Files are absent from the pending directory; retained snippets are not full payload recovery.",
+  "pluginSourcePath": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.118.0\\lib\\repl-invoke.ps1",
+  "pluginSourceSha256": "471F835EFC43052E55C74FFF33457686941E87E2906D1DE8D085A6BEBC430CC0",
+  "sourceLines": [
+    929,
+    932,
+    1158,
+    1159,
+    1160,
+    1208
+  ],
+  "limitations": [
+    "No byte-for-byte backups for these eleven queue payloads were found in the bounded retained-evidence search.",
+    "No complete immediately-before-replay primary snapshot of the five target turns is available in the searched receipts. Two current targets are canceled and three completed; this is current state, not proof that replay caused or preserved those statuses.",
+    "No claim of harmlessness, rollback, repaired historical compliance or HV acceptance."
+  ],
+  "reviewBlocker": "Opus exited 1 with rate_limit; reset 2026-10-09T05:40:00-05:00; no live reviewer and no further automatic retry.",
+  "goalPlanSha256": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+  "parentDrainDisabled": "1"
+}

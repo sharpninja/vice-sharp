@@ -1,0 +1,153 @@
+{
+  "type": "result",
+  "payload": {
+    "requestId": "req-20261009T190741Z-769e",
+    "result": {
+      "success": true,
+      "files": [
+        {
+          "lastModifiedUtc": {
+            "dayOfWeek": "Friday",
+            "ticks": 639271696622646313,
+            "totalOffsetMinutes": 0,
+            "dateTime": "2026-10-09T19:07:42.2646313",
+            "microsecond": 631,
+            "minute": 7,
+            "millisecond": 264,
+            "timeOfDay": "19:07:42.2646313",
+            "hour": 19,
+            "date": "2026-10-09T00:00:00.0000000",
+            "month": 10,
+            "year": 2026,
+            "utcTicks": 639271696622646313,
+            "localDateTime": "2026-10-09T14:07:42.2646313-05:00",
+            "dayOfYear": 282,
+            "offset": "00:00:00",
+            "nanosecond": 300,
+            "second": 42,
+            "utcDateTime": "2026-10-09T19:07:42.2646313Z",
+            "day": 9
+          },
+          "contentType": "text/markdown",
+          "fullPath": "F:\\GitHub\\vice-sharp\\docs\\Project\\Functional-Requirements.md",
+          "relativePath": "Functional-Requirements.md"
+        },
+        {
+          "lastModifiedUtc": {
+            "dayOfWeek": "Friday",
+            "ticks": 639271696622646313,
+            "totalOffsetMinutes": 0,
+            "dateTime": "2026-10-09T19:07:42.2646313",
+            "microsecond": 631,
+            "minute": 7,
+            "millisecond": 264,
+            "timeOfDay": "19:07:42.2646313",
+            "hour": 19,
+            "date": "2026-10-09T00:00:00.0000000",
+            "month": 10,
+            "year": 2026,
+            "utcTicks": 639271696622646313,
+            "localDateTime": "2026-10-09T14:07:42.2646313-05:00",
+            "dayOfYear": 282,
+            "offset": "00:00:00",
+            "nanosecond": 300,
+            "second": 42,
+            "utcDateTime": "2026-10-09T19:07:42.2646313Z",
+            "day": 9
+          },
+          "contentType": "text/markdown",
+          "fullPath": "F:\\GitHub\\vice-sharp\\docs\\Project\\Technical-Requirements.md",
+          "relativePath": "Technical-Requirements.md"
+        },
+        {
+          "lastModifiedUtc": {
+            "dayOfWeek": "Friday",
+            "ticks": 639271696622646313,
+            "totalOffsetMinutes": 0,
+            "dateTime": "2026-10-09T19:07:42.2646313",
+            "microsecond": 631,
+            "minute": 7,
+            "millisecond": 264,
+            "timeOfDay": "19:07:42.2646313",
+            "hour": 19,
+            "date": "2026-10-09T00:00:00.0000000",
+            "month": 10,
+            "year": 2026,
+            "utcTicks": 639271696622646313,
+            "localDateTime": "2026-10-09T14:07:42.2646313-05:00",
+            "dayOfYear": 282,
+            "offset": "00:00:00",
+            "nanosecond": 300,
+            "second": 42,
+            "utcDateTime": "2026-10-09T19:07:42.2646313Z",
+            "day": 9
+          },
+          "contentType": "text/markdown",
+          "fullPath": "F:\\GitHub\\vice-sharp\\docs\\Project\\Testing-Requirements.md",
+          "relativePath": "Testing-Requirements.md"
+        },
+        {
+          "lastModifiedUtc": {
+            "dayOfWeek": "Friday",
+            "ticks": 639271696622646313,
+            "totalOffsetMinutes": 0,
+            "dateTime": "2026-10-09T19:07:42.2646313",
+            "microsecond": 631,
+            "minute": 7,
+            "millisecond": 264,
+            "timeOfDay": "19:07:42.2646313",
+            "hour": 19,
+            "date": "2026-10-09T00:00:00.0000000",
+            "month": 10,
+            "year": 2026,
+            "utcTicks": 639271696622646313,
+            "localDateTime": "2026-10-09T14:07:42.2646313-05:00",
+            "dayOfYear": 282,
+            "offset": "00:00:00",
+            "nanosecond": 300,
+            "second": 42,
+            "utcDateTime": "2026-10-09T19:07:42.2646313Z",
+            "day": 9
+          },
+          "contentType": "text/markdown",
+          "fullPath": "F:\\GitHub\\vice-sharp\\docs\\Project\\TR-per-FR-Mapping.md",
+          "relativePath": "TR-per-FR-Mapping.md"
+        },
+        {
+          "lastModifiedUtc": {
+            "dayOfWeek": "Friday",
+            "ticks": 639271696622646313,
+            "totalOffsetMinutes": 0,
+            "dateTime": "2026-10-09T19:07:42.2646313",
+            "microsecond": 631,
+            "minute": 7,
+            "millisecond": 264,
+            "timeOfDay": "19:07:42.2646313",
+            "hour": 19,
+            "date": "2026-10-09T00:00:00.0000000",
+            "month": 10,
+            "year": 2026,
+            "utcTicks": 639271696622646313,
+            "localDateTime": "2026-10-09T14:07:42.2646313-05:00",
+            "dayOfYear": 282,
+            "offset": "00:00:00",
+            "nanosecond": 300,
+            "second": 42,
+            "utcDateTime": "2026-10-09T19:07:42.2646313Z",
+            "day": 9
+          },
+          "contentType": "text/markdown",
+          "fullPath": "F:\\GitHub\\vice-sharp\\docs\\Project\\Requirements-Matrix.md",
+          "relativePath": "Requirements-Matrix.md"
+        }
+      ],
+      "content": "",
+      "outputRoot": "F:\\GitHub\\vice-sharp\\docs\\Project",
+      "docType": "all",
+      "generatedAt": "2026-10-09T19:07:42.2646313+00:00",
+      "contentType": "application/json",
+      "format": "markdown"
+    },
+    "deprecated": true
+  }
+}

@@ -1,0 +1,4 @@
+C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: F:\GitHub\vice-sharp\artifacts\immutable-vice\clock-hook\clock-observer.o: definition of __wrap_vic_cycle
+C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: F:\GitHub\vice-sharp\artifacts\immutable-vice\clock-hook\clock-observer.o: reference to vic_cycle
+C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: ../src/vic20/libvic20.a(vic-cycle.o): definition of vic_cycle
+C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: ../src/vic20/libvic20.a(vic20cpu.o): reference to __wrap_vic_cycle

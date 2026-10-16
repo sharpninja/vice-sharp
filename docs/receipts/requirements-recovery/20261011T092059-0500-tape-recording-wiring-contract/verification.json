@@ -1,0 +1,686 @@
+{
+  "schema": "vicesharp.draft-specification-verification/v1",
+  "verifiedAtLocal": "2026-10-11T09:34:39.4792015-05:00",
+  "host": "PAYTON-LEGION2",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T141924Z-tape-recording-wiring-contract",
+  "status": "draft-specification-checks-only",
+  "commandRunner": "PowerShell.MCP execute_command",
+  "checks": [
+    {
+      "name": "serialized-json-roundtrip",
+      "passed": true,
+      "evidence": "Native PowerShell object serialization transported without content changes except CRLF-to-LF and terminal newline."
+    },
+    {
+      "name": "base-proposal-identity",
+      "passed": true,
+      "evidence": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83"
+    },
+    {
+      "name": "six-bindings-unchanged",
+      "passed": true,
+      "evidence": "All six original binding objects including source anchors and unexecuted status."
+    },
+    {
+      "name": "26-exact-named-group-headings",
+      "passed": true,
+      "evidence": [
+        {
+          "name": "TransportSense_MediaCommandMatrix",
+          "headings": 1
+        },
+        {
+          "name": "MachineSense_C64CpuPortAndVic20Via1",
+          "headings": 1
+        },
+        {
+          "name": "TapeRead_PulseInterruptRouting",
+          "headings": 1
+        },
+        {
+          "name": "Recording_EligibilityAndWriteEdges",
+          "headings": 1
+        },
+        {
+          "name": "Recording_DuringStartupWindow",
+          "headings": 1
+        },
+        {
+          "name": "Recording_DuringDelayedStop",
+          "headings": 1
+        },
+        {
+          "name": "Recording_AfterStopDeadlineBeforeCallback",
+          "headings": 1
+        },
+        {
+          "name": "Recording_AfterExecutedStop",
+          "headings": 1
+        },
+        {
+          "name": "MotorOnThenRecord_FirstEdgeFromZero",
+          "headings": 1
+        },
+        {
+          "name": "Recording_FileCursor_BufferBoundary",
+          "headings": 1
+        },
+        {
+          "name": "Recording_FileCursor_CommandOrder",
+          "headings": 1
+        },
+        {
+          "name": "Recording_GapEncodingAndFailures",
+          "headings": 1
+        },
+        {
+          "name": "Recording_LongGap_24BitBoundary",
+          "headings": 1
+        },
+        {
+          "name": "RecordThenMotorOn_FirstEdge",
+          "headings": 1
+        },
+        {
+          "name": "MachineMotor_C64Bit5AndDdr",
+          "headings": 1
+        },
+        {
+          "name": "MachineWrite_C64Bit3AndDdrEdges",
+          "headings": 1
+        },
+        {
+          "name": "MachineMotor_Vic20PcrRawByte",
+          "headings": 1
+        },
+        {
+          "name": "MachineWrite_Vic20Pb3AndDdrEdges",
+          "headings": 1
+        },
+        {
+          "name": "MachineTape_Sx64Disconnected",
+          "headings": 1
+        },
+        {
+          "name": "Datasette_AttachDetachResetState",
+          "headings": 1
+        },
+        {
+          "name": "Datasette_EnableAndFluxGating",
+          "headings": 1
+        },
+        {
+          "name": "Lifecycle_AttachNewStopImage_PendingAlarm",
+          "headings": 1
+        },
+        {
+          "name": "Lifecycle_ControlDispatch_EventPlaybackAndNetwork",
+          "headings": 1
+        },
+        {
+          "name": "Lifecycle_Detach_ReplaysNoTapeMode",
+          "headings": 1
+        },
+        {
+          "name": "Lifecycle_Reset_CancelsStopWithoutClearingRunning",
+          "headings": 1
+        },
+        {
+          "name": "Tapeport_DispatchAndPowerupGating",
+          "headings": 1
+        }
+      ]
+    },
+    {
+      "name": "27-literal-encoding-boundaries",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "ENC-v0-g0",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "ENC-v0-g6",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "ENC-v0-g7",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "ENC-v0-g8",
+          "expectedHex": "01",
+          "actualHex": "01",
+          "matches": true
+        },
+        {
+          "id": "ENC-v0-g2046",
+          "expectedHex": "FF",
+          "actualHex": "FF",
+          "matches": true
+        },
+        {
+          "id": "ENC-v0-g2047",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "ENC-v0-g16777215",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "ENC-v0-g16777216",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "ENC-v0-g16777217",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g0",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g6",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g7",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g8",
+          "expectedHex": "01",
+          "actualHex": "01",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g2046",
+          "expectedHex": "FF",
+          "actualHex": "FF",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g2047",
+          "expectedHex": "00FF0700",
+          "actualHex": "00FF0700",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g16777215",
+          "expectedHex": "00FFFFFF",
+          "actualHex": "00FFFFFF",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g16777216",
+          "expectedHex": "00000000",
+          "actualHex": "00000000",
+          "matches": true
+        },
+        {
+          "id": "ENC-v1-g16777217",
+          "expectedHex": "00010000",
+          "actualHex": "00010000",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g0",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g6",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g7",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g8",
+          "expectedHex": "01",
+          "actualHex": "01",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g2046",
+          "expectedHex": "FF",
+          "actualHex": "FF",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g2047",
+          "expectedHex": "00FF0700",
+          "actualHex": "00FF0700",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g16777215",
+          "expectedHex": "00FFFFFF",
+          "actualHex": "00FFFFFF",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g16777216",
+          "expectedHex": "00000000",
+          "actualHex": "00000000",
+          "matches": true
+        },
+        {
+          "id": "ENC-v2-g16777217",
+          "expectedHex": "00010000",
+          "actualHex": "00010000",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "name": "12-literal-partial-write-effects",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "FAIL-v0-short",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v0-prefix",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v1-short",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v1-prefix",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v2-short",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v2-prefix",
+          "expectedHex": "",
+          "actualHex": "",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v1-payload0",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v1-payload1",
+          "expectedHex": "00FF",
+          "actualHex": "00FF",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v1-payload2",
+          "expectedHex": "00FF07",
+          "actualHex": "00FF07",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v2-payload0",
+          "expectedHex": "00",
+          "actualHex": "00",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v2-payload1",
+          "expectedHex": "00FF",
+          "actualHex": "00FF",
+          "matches": true
+        },
+        {
+          "id": "FAIL-v2-payload2",
+          "expectedHex": "00FF07",
+          "actualHex": "00FF07",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "name": "117-unique-example-ids",
+      "passed": true,
+      "evidence": {
+        "notTestCount": true,
+        "count": 117
+      }
+    },
+    {
+      "name": "14-immutable-source-pins-unchanged",
+      "passed": true,
+      "evidence": [
+        {
+          "path": "src/datasette/datasette.c",
+          "sha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+          "blob": "06579175a8ae151fc83972487234d417a4743ec4",
+          "unchanged": true
+        },
+        {
+          "path": "src/c64/c64pla.c",
+          "sha256": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+          "blob": "f3bb97c2af94e5fb330c7469648d465a55dbc6b7",
+          "unchanged": true
+        },
+        {
+          "path": "src/c64/c64mem.c",
+          "sha256": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+          "blob": "31f4f3e4e5ab66c2c9834e4c2ff9cd35231a69b0",
+          "unchanged": true
+        },
+        {
+          "path": "src/c64/c64datasette.c",
+          "sha256": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29",
+          "blob": "81909fe436c20cd7b518079da2d2709b4e59c3fe",
+          "unchanged": true
+        },
+        {
+          "path": "src/vic20/vic20via1.c",
+          "sha256": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+          "blob": "92ffff352ead28d3527df520325ef1390b2513af",
+          "unchanged": true
+        },
+        {
+          "path": "src/vic20/vic20via2.c",
+          "sha256": "21B686FB0414BDE42DA51AA9D5D558917AFC63A3E3D675FBDE79FFC07FA4ADB5",
+          "blob": "432bc199e08fc0f580c7df0f2d637db592a2ed11",
+          "unchanged": true
+        },
+        {
+          "path": "src/vic20/vic20datasette.c",
+          "sha256": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31",
+          "blob": "157c4a981fe470502bd9866365ee53ed561cfd40",
+          "unchanged": true
+        },
+        {
+          "path": "src/core/ciacore.c",
+          "sha256": "D7C2AA2931CB8073606AED832AB74B95617EECC3D3A4295673F716DAE18C75AE",
+          "blob": "c8a431d927a1831c9d6f10161c87210d64820d75",
+          "unchanged": true
+        },
+        {
+          "path": "src/core/viacore.c",
+          "sha256": "52836103F80B7AE65685F3077D0F37C6FE8163A112849266939D630FBF599EC0",
+          "blob": "406a84720267a1821182ba9c33ab77e505507842",
+          "unchanged": true
+        },
+        {
+          "path": "src/cia.h",
+          "sha256": "DF55C1030A85D69E1BFCB549DEF6A9174C6C7DE489A093EA432F94284E9F4B1E",
+          "blob": "69a4532e88e9d2f9a08bfcfe6e7619b704faaa44",
+          "unchanged": true
+        },
+        {
+          "path": "src/via.h",
+          "sha256": "D74D81C7E5DF745D3A374A9C79A32E8D2588A614AE9DCD664EC52E95E8CC96BD",
+          "blob": "e52c92fb9df447be4d04036c8cde98c4a01b1ac4",
+          "unchanged": true
+        },
+        {
+          "path": "src/tapeport/tapeport.c",
+          "sha256": "BC73131BF535AA57DEED1AD2080C92C0C1ECB8AE1F1338B1A2CCC7DD9CE26B15",
+          "blob": "09a23aec4c553353ef63e93f6d380585378e9a06",
+          "unchanged": true
+        },
+        {
+          "path": "src/tape/tap.c",
+          "sha256": "4061AB1719A95F939E96E7BB41DBB86842F71A1B9F03F8F85D38ED54E22DBB73",
+          "blob": "eed6d8e741622857369f8838f3cab5319eb3e4c1",
+          "unchanged": true
+        },
+        {
+          "path": "src/tap.h",
+          "sha256": "B0AFFFED6C45E55B1C694FD806E9635F5B1E7E40B754E1C2F643A2CAC78E963F",
+          "blob": "d5dc30267559608cef094088b51e8f23e5dd860e",
+          "unchanged": true
+        }
+      ]
+    },
+    {
+      "name": "new-artifact-whitespace-conflict-dash-check",
+      "passed": true,
+      "evidence": {
+        "issues": []
+      }
+    },
+    {
+      "name": "git-diff-check",
+      "passed": true,
+      "evidence": {
+        "exitCode": 0,
+        "output": []
+      }
+    },
+    {
+      "name": "16-sense-bit-literal-table",
+      "passed": true,
+      "evidence": {
+        "expectedPerMachine": [
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "name": "four-c64-output-literal-table",
+      "passed": true,
+      "evidence": {
+        "motorAndSenseOut": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "writeRaw": [
+          8,
+          8,
+          0,
+          8
+        ]
+      }
+    },
+    {
+      "name": "six-raw-write-edge-examples",
+      "passed": true,
+      "evidence": {
+        "qualifyingId": "EDGE-0-8"
+      }
+    },
+    {
+      "name": "36-vic-pcr-sentinel-pairs",
+      "passed": true,
+      "evidence": {
+        "bad": [],
+        "fullPairMatrixStillRequired": 65536
+      }
+    },
+    {
+      "name": "16-vic-pb-effective-pairs",
+      "passed": true,
+      "evidence": {
+        "registerOrderExpansionStillRequired": true,
+        "bad": []
+      }
+    },
+    {
+      "name": "document-links-excluding-receipt-self-link",
+      "passed": true,
+      "evidence": [
+        {
+          "file": "README.md",
+          "target": "RECORDING-CONTRACT.md",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\RECORDING-CONTRACT.md",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "README.md",
+          "target": "WIRING-LIFECYCLE-CONTRACT.md",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\WIRING-LIFECYCLE-CONTRACT.md",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "README.md",
+          "target": "contract-vectors.json",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\contract-vectors.json",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "README.md",
+          "target": "../20261011T080155-0500-capacitor-guard-remediation/proposed-field-delta.json",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "README.md",
+          "target": "../20261011T083152-0500-media-fixture-specification/coverage-supplement.json",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\coverage-supplement.json",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "README.md",
+          "target": "../20261011T085402-0500-tape-motor-matrix/MOTOR-CONTRACT.md",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\MOTOR-CONTRACT.md",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "README.md",
+          "target": "../../hv/20261010T161500-0500-tape-amendment-opus/resume-20261011T000300-0500/verdict.md",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.md",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "RECORDING-CONTRACT.md",
+          "target": "../20261011T080155-0500-capacitor-guard-remediation/proposed-field-delta.json",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "RECORDING-CONTRACT.md",
+          "target": "../20261011T085402-0500-tape-motor-matrix/MOTOR-CONTRACT.md",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\MOTOR-CONTRACT.md",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "WIRING-LIFECYCLE-CONTRACT.md",
+          "target": "RECORDING-CONTRACT.md",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\RECORDING-CONTRACT.md",
+          "exists": true,
+          "selfReceipt": false
+        },
+        {
+          "file": "WIRING-LIFECYCLE-CONTRACT.md",
+          "target": "../20261011T085402-0500-tape-motor-matrix/MOTOR-CONTRACT.md",
+          "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\MOTOR-CONTRACT.md",
+          "exists": true,
+          "selfReceipt": false
+        }
+      ]
+    }
+  ],
+  "commands": [
+    "git diff --check",
+    "git -C F:\\GitHub\\vice-sharp\\native\\vice rev-parse cc67418cba58e71d8e70fd353e9de47199ad2075:vice/<source-relative-path>",
+    "git hash-object --no-filters -- <pinned-materialized-source-path>",
+    "Get-FileHash -LiteralPath <source-or-artifact-path> -Algorithm SHA256"
+  ],
+  "checkCount": 16,
+  "failedChecks": 0,
+  "mockTestsRun": 0,
+  "realProviderTestsRun": 0,
+  "nativeTestsRun": 0,
+  "hvRunForThisSupplement": false,
+  "requirementsApplied": false,
+  "goalCompleted": false,
+  "files": [
+    {
+      "name": "contract-vectors.json",
+      "bytes": 43294,
+      "sha256": "99B9572541FBDFECFF4809C7C80E854835CF8604BF4C01D36418919E9FD0C510"
+    },
+    {
+      "name": "README.md",
+      "bytes": 3120,
+      "sha256": "AA9068A976E7A381A96E7787698A92AC61BFD2044D87804C2F4A72D035641FF9"
+    },
+    {
+      "name": "RECORDING-CONTRACT.md",
+      "bytes": 12216,
+      "sha256": "103B73846C8E617D5F56C3DF9B53D876CD607C3E243E122D865D0936994E83ED"
+    },
+    {
+      "name": "WIRING-LIFECYCLE-CONTRACT.md",
+      "bytes": 16348,
+      "sha256": "CF2A9ABCAD171BDB4150161317857866A948F33B14D54C521AC0A8484682825F"
+    }
+  ],
+  "worktreeStatusDelta": [
+    {
+      "entry": "?? docs/receipts/requirements-recovery/20261011T092059-0500-tape-recording-wiring-contract/",
+      "side": "=>"
+    }
+  ],
+  "limitations": [
+    "Not test-run or runtime parity evidence.",
+    "Coverage of named groups is not completion of all dependencies.",
+    "Existing midnight DISAGREE remains authoritative acceptance state.",
+    "Verification file self-link is checked after this receipt is saved and logged in MCP.",
+    "Existing dirty worktree is retained; path-status comparison is not content identity proof.",
+    "No requirement or native source mutation authorized by this supplement."
+  ]
+}

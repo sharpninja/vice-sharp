@@ -1,0 +1,52 @@
+[
+  {
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "title": "True-Drive 1541 IEC timing and motor ramp",
+    "id": "FR-ARCH-TRUEDRIVE-1541-002",
+    "scopeStartLayerKey": "layer-1",
+    "body": "IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.",
+    "priority": "high",
+    "acceptanceCriteria": []
+  },
+  {
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "title": "1541 drive motor 300,000-cycle ramp before rotation",
+    "id": "TR-DRV-EDGE-001",
+    "scopeStartLayerKey": "layer-1",
+    "body": "IecDrive.Tick() enforces 300,000-cycle motor ramp-up (300ms at 1MHz drive clock) before MotorRotationCycles advances. Motor off resets ramp. VICE drive/drive.c.",
+    "priority": "medium",
+    "acceptanceCriteria": []
+  },
+  {
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "title": "IEC bus ATN-response within 985-cycle spec window",
+    "id": "TR-IEC-EDGE-001",
+    "scopeStartLayerKey": "layer-1",
+    "body": "IecBus.Tick() asserts CLK and DATA low within 985 cycles (Tat=1ms at PAL 985,248Hz) of ATN falling edge. Releases both on ATN rising edge. VICE iecbus/iecbus.c:247-266.",
+    "priority": "high",
+    "acceptanceCriteria": []
+  },
+  {
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "title": "IecDriveMotorRampTests: 1541 motor ramp (5 tests)",
+    "id": "TEST-DRV-MOTOR-001",
+    "scopeStartLayerKey": "layer-1",
+    "priority": "medium",
+    "acceptanceCriteria": [],
+    "condition": "After SetMotor(true) and 300,000 Tick() calls, MotorRotationCycles>0. Before 300,000, stays at 0. Motor off/on resets ramp. ReadSector(18,0) returns BAM bytes 0x12/0x01. 5 pass."
+  },
+  {
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "status": "closed",
+    "title": "IecTimingTests: ATN response within spec window (5 tests)",
+    "id": "TEST-IEC-TIMING-001",
+    "scopeStartLayerKey": "layer-1",
+    "priority": "medium",
+    "acceptanceCriteria": [],
+    "condition": "After setting IecBus.Atn=false and calling Tick() up to 985 times, Clock==false and Data==false. After ATN release and Tick() up to 985 times, both return true. 5 pass."
+  }
+]

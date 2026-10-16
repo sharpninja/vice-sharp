@@ -1,0 +1,129 @@
+
+Microsoft (R) Windows Debugger Version 10.0.19041.685 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+CommandLine: "F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\xvic.exe" -default -console -sound -sounddev dummy -warp -seed 1 -directory "F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data"
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+Symbol search path is: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+Executable search path is: 
+ModLoad: 00007ff7`f3920000 00007ff7`f5a1e000   image00007ff7`f3920000
+ModLoad: 00007fff`ad980000 00007fff`adbe7000   ntdll.dll
+ModLoad: 00007fff`ac1f0000 00007fff`ac2bb000   C:\WINDOWS\System32\KERNEL32.DLL
+ModLoad: 00007fff`aae30000 00007fff`ab232000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`aca80000 00007fff`acb3c000   C:\WINDOWS\System32\ADVAPI32.dll
+ModLoad: 00007fff`ac8c0000 00007fff`ac969000   C:\WINDOWS\System32\msvcrt.dll
+ModLoad: 00007fff`ac970000 00007fff`aca19000   C:\WINDOWS\System32\sechost.dll
+ModLoad: 00007fff`ab710000 00007fff`ab828000   C:\WINDOWS\System32\RPCRT4.dll
+ModLoad: 00007fff`ad1a0000 00007fff`ad938000   C:\WINDOWS\System32\SHELL32.dll
+ModLoad: 00007fff`ab5f0000 00007fff`ab693000   C:\WINDOWS\System32\msvcp_win.dll
+ModLoad: 00007fff`aac40000 00007fff`aad8c000   C:\WINDOWS\System32\ucrtbase.dll
+ModLoad: 00007fff`acc50000 00007fff`ace1f000   C:\WINDOWS\System32\USER32.dll
+ModLoad: 00007fff`ab5c0000 00007fff`ab5e7000   C:\WINDOWS\System32\win32u.dll
+ModLoad: 00007fff`ad170000 00007fff`ad19b000   C:\WINDOWS\System32\GDI32.dll
+ModLoad: 00007fff`ab300000 00007fff`ab429000   C:\WINDOWS\System32\gdi32full.dll
+ModLoad: 00007fff`5c200000 00007fff`5c247000   C:\msys64\mingw64\bin\libpng16-16.dll
+ModLoad: 00007fff`1ade0000 00007fff`1ae74000   C:\WINDOWS\SYSTEM32\DSOUND.dll
+ModLoad: 00007fff`19510000 00007fff`19643000   C:\msys64\mingw64\bin\libcurl-4.dll
+ModLoad: 00007fff`ac2e0000 00007fff`ac360000   C:\WINDOWS\System32\WS2_32.dll
+ModLoad: 00007fff`abe60000 00007fff`ac1e5000   C:\WINDOWS\System32\combase.dll
+ModLoad: 00007fff`ab430000 00007fff`ab5ae000   C:\WINDOWS\System32\CRYPT32.dll
+ModLoad: 00007fff`abde0000 00007fff`abe54000   C:\WINDOWS\System32\WLDAP32.dll
+ModLoad: 00007fff`99280000 00007fff`992b6000   C:\WINDOWS\SYSTEM32\WINMM.dll
+ModLoad: 00007fff`5e470000 00007fff`5e494000   C:\msys64\mingw64\bin\zlib1.dll
+ModLoad: 00007ffe`faef0000 00007ffe`fb14e000   C:\msys64\mingw64\bin\libstdc++-6.dll
+ModLoad: 00007fff`aa9e0000 00007fff`aaa3e000   C:\WINDOWS\SYSTEM32\powrprof.dll
+ModLoad: 00007fff`aaa70000 00007fff`aaa9a000   C:\WINDOWS\SYSTEM32\bcrypt.dll
+ModLoad: 00007fff`89450000 00007fff`89487000   C:\WINDOWS\SYSTEM32\winmmbase.dll
+ModLoad: 00007fff`1a7c0000 00007fff`1a877000   C:\WINDOWS\SYSTEM32\ResampleDmo.DLL
+ModLoad: 00007fff`6dd60000 00007fff`6dd77000   C:\msys64\mingw64\bin\libbrotlidec.dll
+ModLoad: 00007fff`ad070000 00007fff`ad16b000   C:\WINDOWS\System32\shcore.dll
+ModLoad: 00007fff`ab840000 00007fff`ab919000   C:\WINDOWS\System32\OLEAUT32.dll
+ModLoad: 00007fff`a9190000 00007fff`a91c3000   C:\WINDOWS\SYSTEM32\IPHLPAPI.DLL
+ModLoad: 00007fff`59e00000 00007fff`59e42000   C:\msys64\mingw64\bin\libidn2-0.dll
+ModLoad: 00007fff`59ba0000 00007fff`59bd5000   C:\msys64\mingw64\bin\libnghttp3-9.dll
+ModLoad: 00007fff`540d0000 00007fff`5410c000   C:\msys64\mingw64\bin\libnghttp2-14.dll
+ModLoad: 00007fff`1e610000 00007fff`1e66d000   C:\msys64\mingw64\bin\libngtcp2-16.dll
+ModLoad: 00007fff`a7c10000 00007fff`a7c1d000   C:\WINDOWS\SYSTEM32\Secur32.dll
+ModLoad: 00007fff`5dc40000 00007fff`5dc53000   C:\msys64\mingw64\bin\libngtcp2_crypto_ossl-0.dll
+ModLoad: 00007fff`5c1d0000 00007fff`5c1f1000   C:\msys64\mingw64\bin\libpsl-5.dll
+ModLoad: 00007fff`5d900000 00007fff`5d916000   C:\msys64\mingw64\bin\libwinpthread-1.dll
+ModLoad: 00007fff`59d40000 00007fff`59d6b000   C:\msys64\mingw64\bin\libgcc_s_seh-1.dll
+ModLoad: 00007fff`1e570000 00007fff`1e5c2000   C:\msys64\mingw64\bin\libssh2-1.dll
+ModLoad: 00007fff`18b50000 00007fff`18c7a000   C:\msys64\mingw64\bin\libzstd.dll
+ModLoad: 00007ffe`f7a80000 00007ffe`f8023000   C:\msys64\mingw64\bin\libcrypto-3-x64.dll
+ModLoad: 00007fff`0a720000 00007fff`0a821000   C:\msys64\mingw64\bin\libssl-3-x64.dll
+ModLoad: 00007fff`1e4b0000 00007fff`1e4db000   C:\msys64\mingw64\bin\libbrotlicommon.dll
+ModLoad: 00007fff`aa700000 00007fff`aa752000   C:\WINDOWS\SYSTEM32\cfgmgr32.dll
+ModLoad: 00007fff`1e460000 00007fff`1e4b0000   C:\msys64\mingw64\bin\libintl-8.dll
+ModLoad: 00007ffe`ffef0000 00007fff`0000e000   C:\msys64\mingw64\bin\libiconv-2.dll
+ModLoad: 00007fff`7a1e0000 00007fff`7a1ee000   C:\WINDOWS\SYSTEM32\msdmo.dll
+ModLoad: 00007ffe`f7850000 00007ffe`f7a78000   C:\msys64\mingw64\bin\libunistring-5.dll
+ModLoad: 000001fe`2e070000 000001fe`2e298000   C:\msys64\mingw64\bin\libunistring-5.dll
+ModLoad: 00007fff`a9aa0000 00007fff`a9ae9000   C:\WINDOWS\SYSTEM32\SSPICLI.DLL
+(c424.c594): Break instruction exception - code 80000003 (first chance)
+ntdll!RtlGetReturnAddressHijackTarget+0x749:
+00007fff`adaa2239 cc              int     3
+0:000> .echo VICE_CLOCK_PROBE_BEGIN
+VICE_CLOCK_PROBE_BEGIN
+0:000> .sympath
+Symbol search path is: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+Expanded Symbol search path is: f:\github\vice-sharp\docs\receipts\native-vice\20261008t082100-0500-phase2-feasibility\debugger-runtime
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\debugger-runtime
+0:000> lm m xvic
+start             end                 module name
+00007ff7`f3920000 00007ff7`f5a1e000   xvic       (deferred)             
+0:000> ? xvic+0x262a10
+Evaluate expression: 140702922582544 = 00007ff7`f3b82a10
+0:000> dq xvic+0x262a10 L1
+00007ff7`f3b82a10  00000000`00000000
+0:000> ba w8 xvic+0x262a10
+0:000> bl
+ 0 e 00007ff7`f3b82a10 w 8 0001 (0001)  0:**** xvic+0x262a10
+0:000> g
+ModLoad: 00007fff`a9fe0000 00007fff`a9fec000   C:\WINDOWS\SYSTEM32\CRYPTBASE.DLL
+ModLoad: 00007fff`aab80000 00007fff`aac2c000   C:\WINDOWS\System32\bcryptPrimitives.dll
+ModLoad: 00007fff`acc10000 00007fff`acc41000   C:\WINDOWS\System32\IMM32.DLL
+ModLoad: 00007fff`aa9c0000 00007fff`aa9d5000   C:\WINDOWS\SYSTEM32\UMPDC.dll
+ModLoad: 00007fff`a8590000 00007fff`a8e3e000   C:\WINDOWS\SYSTEM32\windows.storage.dll
+ModLoad: 00007fff`ab6a0000 00007fff`ab706000   C:\WINDOWS\System32\shlwapi.dll
+Detecting DLL based HardSID boards.
+Detecting DLL based HardSID boards.Cannot open hardsid.dll.
+Cannot open hardsid.dll. 
+ *** VICE Version 3.10 ***
+*** VICE Version 3.10 *** 
+ This is the condensed log, for the full log use --verbose or --debug.
+This is the condensed log, for the full log use --verbose or --debug. 
+ Main:  random seed was: 0x1
+Main:  random seed was: 0x1Main:  command line was: F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\xvic.exe -default -console -sound -sounddev dummy -warp -seed 1 -directory F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data
+Main:  command line was: F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\xvic.exe -default -console -sound -sounddev dummy -warp -seed 1 -directory F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/dataMain:  VICE system file directory: 'F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src'.
+Main:  VICE system file directory: 'F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src'.Main:  VICE system file search path: 'F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data'.
+Main:  VICE system file search path: 'F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data'.Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\kernal.901486-07.bin'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\kernal.901486-07.bin'.Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\basic-901486-01.bin'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\basic-901486-01.bin'.Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\chargen-901460-03.bin'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\chargen-901460-03.bin'.DriveROM: Error -  2000 ROM image not found. Hardware-level 2000 emulation is not available.
+DriveROM: Error -  2000 ROM image not found. Hardware-level 2000 emulation is not available.DriveROM: Error -  4000 ROM image not found. Hardware-level 4000 emulation is not available.
+DriveROM: Error -  4000 ROM image not found. Hardware-level 4000 emulation is not available.DriveROM: Error -  CMDHD ROM image not found. Hardware-level CMDHD emulation is not available.
+DriveROM: Error -  CMDHD ROM image not found. Hardware-level CMDHD emulation is not available.Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\DRIVES\dos1540-325302+3-01.bin'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\DRIVES\dos1540-325302+3-01.bin'.Sound:  Available sound devices: dx wmm dummy dump fs wav voc iff aiff soundmovie
+Sound:  Available sound devices: dx wmm dummy dump fs wav voc iff aiff soundmovieJoystick: Warning -  Failed to open `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\headless-joymap-VIC20.vjm'.
+Joystick: Warning -  Failed to open `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\headless-joymap-VIC20.vjm'.Joystick: Warning -  using minimal default mapping.
+Joystick: Warning -  using minimal default mapping.
+Main CPU:  starting at ($FFFC).
+Main CPU:  starting at ($FFFC).Main CPU:  RESET.
+Main CPU:  RESET.Unit 8:  RESET.
+Unit 8:  RESET.Main CPU:  RESET.
+Main CPU:  RESET.Sound:  Opened device `dummy', speed 48000Hz, fragment size 2.67ms, buffer size 32.00ms
+Sound:  Opened device `dummy', speed 48000Hz, fragment size 2.67ms, buffer size 32.00msSound:  reSID: MOS6581, filter on, sampling rate 48000Hz - resampling, pass to 21600Hz
+Sound:  reSID: MOS6581, filter on, sampling rate 48000Hz - resampling, pass to 21600HzVSync:  Sync reset
+VSync:  Sync resetUnit 8:  RESET.
+Unit 8:  RESET.

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPublishable>false</IsPublishable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/ViceSharp.ViceCompatibility/ViceSharp.ViceCompatibility.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="NSubstitute" />
+    <Using Include="Xunit" />
+    <None Update="Fixtures/*.vsf" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

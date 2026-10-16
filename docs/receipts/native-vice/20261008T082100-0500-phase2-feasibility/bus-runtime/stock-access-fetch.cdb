@@ -1,0 +1,7 @@
+.echo STOCK_ACCESS_FETCH_BEFORE
+r rip
+r rax
+r rdx
+? @rdx+@rax
+dq xvic+0x262a10 L1
+t 0n1 "$<stock-access-fetch-after.cdb"

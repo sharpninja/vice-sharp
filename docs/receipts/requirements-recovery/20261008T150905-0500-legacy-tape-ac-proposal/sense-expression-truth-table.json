@@ -1,0 +1,30 @@
+[
+  {
+    "play": false,
+    "record": false,
+    "storedRequirementExpression": true,
+    "managedExpression": true,
+    "same": true
+  },
+  {
+    "play": false,
+    "record": true,
+    "storedRequirementExpression": true,
+    "managedExpression": false,
+    "same": false
+  },
+  {
+    "play": true,
+    "record": false,
+    "storedRequirementExpression": true,
+    "managedExpression": false,
+    "same": false
+  },
+  {
+    "play": true,
+    "record": true,
+    "storedRequirementExpression": false,
+    "managedExpression": false,
+    "same": true
+  }
+]

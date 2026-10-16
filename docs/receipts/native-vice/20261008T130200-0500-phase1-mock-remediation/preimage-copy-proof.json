@@ -1,0 +1,26 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\OracleContractTests.cs.before",
+    "sourceSha256": "3D7272B4C271F995FECCDD7707B11E8A95B11CB35C4202FFDF03260FCDE08751",
+    "copySha256": "3D7272B4C271F995FECCDD7707B11E8A95B11CB35C4202FFDF03260FCDE08751"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\ContractAssertions.cs.before",
+    "sourceSha256": "7043EE1A93DBB690A70881AA778F2D53FAE057B75C78CB2A07268D1911C3CBF5",
+    "copySha256": "7043EE1A93DBB690A70881AA778F2D53FAE057B75C78CB2A07268D1911C3CBF5"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\README.md",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\README.md.before",
+    "sourceSha256": "7F07A4275D0F06F3620EA3966817801247D19CB993FC4146F3DC352917971F5C",
+    "copySha256": "7F07A4275D0F06F3620EA3966817801247D19CB993FC4146F3DC352917971F5C"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj",
+    "copy": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T130200-0500-phase1-mock-remediation\\ViceSharp.OracleContract.Tests.csproj.before",
+    "sourceSha256": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445",
+    "copySha256": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445"
+  }
+]

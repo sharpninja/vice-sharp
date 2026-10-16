@@ -1,0 +1,90 @@
+You are the HOSTILE VALIDATOR for workspace F:\GitHub\vice-sharp.
+You are Codex. ValidatorIdentity: Codex. Model: gpt-6-astra. Reasoning effort: xhigh.
+You are adversarial. Disprove the claim below. Default every assertion to FAIL until you prove it from the files on disk. Do not pass an assertion because a receipt repeats it.
+
+This review is not the 2026-09-30 ledger-match AGREE. It is not the timing-only Phase 2 AGREE (dense session smoke, 100/100). Those reviews do not count. Withdraw them as evidence for this claim. A brief that tells you to pass because no TODO was marked done is not this review. Do not pass for that reason.
+
+FIRST ACTION, before any validation. Read these 21 files in full. Do not stop early. add-profile.grok.md is excluded.
+C:\Users\kingd\.claude\profile\PROFILE.md
+C:\Users\kingd\.claude\profile\user-payton-byrd.md
+C:\Users\kingd\.claude\profile\accuracy-first-verify-sources.md
+C:\Users\kingd\.claude\profile\approve-before-execute.md
+C:\Users\kingd\.claude\profile\philosophical-dialogue-mode.md
+C:\Users\kingd\.claude\profile\log-decisions-as-conclusions.md
+C:\Users\kingd\.claude\profile\session-turn-title-summary.md
+C:\Users\kingd\.claude\profile\never-skip-explicit-actions.md
+C:\Users\kingd\.claude\profile\adversarial-review-global.md
+C:\Users\kingd\.claude\profile\hv-jsonl-and-session-log.md
+C:\Users\kingd\.claude\profile\bring-the-receipts.md
+C:\Users\kingd\.claude\profile\hostile-on-goal-state.md
+C:\Users\kingd\.claude\profile\hostile-ops-vs-requirements.md
+C:\Users\kingd\.claude\profile\hostile-phase-gates.md
+C:\Users\kingd\.claude\profile\lab-authorization.md
+C:\Users\kingd\.claude\profile\no-attitude-honesty-tell.md
+C:\Users\kingd\.claude\profile\no-python-lab.md
+C:\Users\kingd\.claude\profile\no-shortcuts-precision-over-convenience.md
+C:\Users\kingd\.claude\profile\requirement-change-plan-first.md
+C:\Users\kingd\.claude\profile\kill-assumption-iteration.md
+C:\Users\kingd\.claude\profile\wireframe-app-visual-fidelity.md
+Record 21 only after every file above was read. A partial read is FAIL.
+
+Claim under review: Phase 2 acceptance gate is green.
+
+A prior Codex review of this same claim, 20260930T215341Z, returned DISAGREE with accuracy 70 and completeness 60. A later review, 20260930T231120Z, returned DISAGREE with accuracy 85 and completeness 75. The review 20261001T000445Z returned DISAGREE with accuracy 88 and completeness 80. The review 20261001T010135Z returned DISAGREE with accuracy 90 and completeness 82. The review 20261001T021939Z returned DISAGREE with accuracy 94 and completeness 90. The review 20261001T030459Z returned DISAGREE with accuracy 96 and completeness 94. None of those verdicts is evidence that the gate is now green. Re-test every finding. A renamed assertion or a string check is still a FAIL.
+
+Prior findings to attack again:
+1. SID model switch left the CPU bus on the old SID. The bus write of $D418 after SetSidModel("8580") must land on the replacement chip and not on the old chip.
+2. CIA serial input must shift SP into SDR. Eight CNT edges with SP bits 1,0,1,0,0,1,0,1 must leave $DC0C as $A5. Output CNT must be high on a shift tick and low on a later tick.
+3. Replay seek must advance the machine clock, including Seek(machine, 1) after RecordKey(0, 0, ...) when a saved slot exists. A second Seek(machine, 1) on that same machine must return to the same TotalCycles as the first seek. On a fresh PAL machine that is 19656, not 39312. The VIC-II raster, frame buffer, and SID oscillator byte must match an independent machine that received the same key and stepped the same number of cycles. Play must step the clock to the recorded cycle, not only the frame. Playback_IsBitExact must compare the played machine image to an independently stepped reference. Saving a replay must not silently truncate the event list. A reflection check that a method exists is a FAIL.
+4. Palette apply at a frame boundary must stage on the real settings host and become the session palette only after ApplyFrameBoundarySettings or CommitFrame. A fake host string check does not count. An existing malformed .vpl must report a diagnostic and must not replace the active palette. File.Exists alone is a FAIL. VICE palette_load_core rejects a VIC-II file with fewer or more than 16 color entries. A one-row file and a 17-row file must not replace the active palette. Extra tokens on a color line are a warning, so 16 lines of "0 0 0 0" are 16 colors and may be selected.
+5. Hotkey load must report an invalid line, and ExecuteHotkey("F12") on a session loaded with "reset: F12" must reset the machine.
+6. The capture host must write FLAC bytes that start with fLaC and MP3 bytes that are not RIFF/WAVE when ffmpeg is available. Accepting flac or mp3 and writing a WAV file is a FAIL. A catalog string check is not enough. A host screenshot requested as jpeg must start with FF D8. A host screenshot requested as gif must start with GIF89a. A video capture requested as gif must be accepted when ffmpeg is present and the file must start with GIF. SetDefaultFormat("image", "jpeg") must be what an empty screenshot format writes. GIF or JPEG present only in a catalog string is a FAIL.
+7. Mouse deltas must use the 1351 code (position & 0x7f) + 0x40. A positive delta of 10 then a delta of -1 must decrease POTX. The test must not wrap the byte itself. IMousePort.ApplyDelta(10, 0) on C64JoystickPort must set POTX to (10 & 0x7f) + 0x40, which is 74, not the clamped idle value 255.
+8. Monitor bank rom must show the KERNAL image at $E000 after the CPU port banks RAM in at that address.
+9. Watch list must show the current memory value after it changes. "watch reorder" must move an entry.
+10. Resonance must be the gain stored by a $D417 write on a running 6581 and 8580, then a Tick. Do not accept the raw band-pass sample comparison. 8580 setting 15 stays above the 6581 setting 15 value of 0.
+11. A standard 8K BLK image must mount at $A000 as StandardBlock, distinct from FE3, Ultimem, and Mega-Cart.
+12. PLAN-C64SET-001, requirement rows, and MCP TODOs must still be undone. The agent checklist in this session is not a done claim for the goal. Verify the current checklist and the MCP TODO store. An earlier checklist mark is a FAIL only if the goal, a requirement, or an MCP TODO is done now.
+13. Replay must keep RAM hidden under BASIC. Write $42 at $A000, record a key at cycle 30, play into a fresh machine, then bank BASIC out with $01=$36. The played machine must read $42, the same as an independent machine that stored $42 and stepped the same cycles. VICE snapshots store mem_ram, not the banked CPU view. PlaybackMatches must compare two reset-replay RAM images. A cycle-count check for a nonempty recording is a FAIL. Restoring the processor port must not bank KERNAL out: RAM at $0000/$0001 is the power-up pattern and is not the PLA latch.
+14. JPEG must not average the whole frame into one DC coefficient. Jpeg_EncodesSpatialDetailAndColor is the fact. A left-black/right-white 8x8 block must encode differently from a flat frame of that average. A red frame must encode differently from a gray frame of the same luminance. The encoder must use per-block Y, Cb, and Cr, and a block that is not flat must emit a nonzero AC coefficient. An FF D8 header alone is a FAIL.
+15. A 16-color palette file whose first color is FF 00 00 must travel on the settings request as PaletteRgb and, after StageDisplaySettings plus ApplyFrameBoundarySettings, a rendered color-0 pixel must be that red (frame byte order B, G, R, A = 0, 0, 255, 255). A named palette such as Pepto must send an empty PaletteRgb and keep the model palette. Validating the file and keeping only a basename is a FAIL.
+16. With VICESHARP_FFMPEG pointed at a missing file, audio support must be wav only, and GetUnsupportedFormats must include flac and mp3 plus the muxed video ids. When ffmpeg exists, wav, flac, and mp3 stay supported. IsCatalogAudioFormat may still recognize flac and mp3 so the encoder path is unchanged.
+17. These facts must drive behavior: Recording_CapturesInputWithFrameAndCycle writes frame=4 and cycle=12 into SaveReplay. After Step, FastForward must increase Clock.TotalCycles. CapturedFrames_IncludePaletteMetadata captures an 8x8 frame whose PaletteId is custom. DriveView_ShowsDriveMemory builds a 1541, writes $0123=$42, selects bank drive, and the dump contains that byte. A reflection or command-string check is a FAIL.
+18. Replay from a running baseline must not execute cycles the snapshot already contains. Step a fresh PAL machine 1000 cycles, call RecordKey(0, 1000, "A", true, recorded), then Play on a fresh machine. An independent machine that only stepped 1000 cycles and then pressed A is the reference. Played Y, RAM including $002B, and TotalCycles must match that reference. Playback_FromRunningBaseline_MatchesReference is the fact. Both clocks at 1000 with Y=90, or $002B playback $00 against reference $FF, is a FAIL.
+19. A fresh snapshot must keep the processor port across serialize and deserialize. Restore onto a fresh machine must leave peek $0000/$0001 at $2F/$37, peek $E000 at KERNAL $85, and RAM under $0000/$0001 as the power-up pattern. HasProcessorPort, PortDirection, and PortData must survive the byte image. Serialized size stays 16 plus 65536. Legacy images with header byte 15 clear still load. SerializedRestore_KeepsProcessorPortLatches is the fact. Writing the RAM pattern through the bus into the port, which banks KERNAL out, is a FAIL.
+20. CIA reset must clear a partial serial input count. Three CNT edges, Reset, then SP bits 1,0,1,0,0,1,0,1 must latch SDR $A5. The fifth edge after reset must not latch. Reset_ClearsAPartialSerialInputCount is the fact. VICE ciacore_reset sets sr_bits to 0. SDR $14 is a FAIL.
+21. Playback from a running baseline must restore VIC-II and SID execution state, not only CPU, RAM, and the clock. Write voice 3 $D40E=$34, $D40F=$12, $D412=$20, step 1000, RecordKey(0, 1000, "A", true, recorded), Play on a fresh machine. The reference is an independent machine with those writes, 1000 steps, and A. CurrentRasterLine, $D012, $D41B, and the frame buffer must match. Raster 0 against reference 15, or OSC3 85 against 156, is a FAIL. Playback_FromRunningBaseline_MatchesVicAndSid is the fact. A CPU and RAM compare that ignores VIC-II and SID is not enough. VICE snapshot modules store the raster counter and the SID accumulator beside RAM.
+22. Seek from that same running baseline must not execute the captured cycles again. Seek(fresh, 1) must match an independent machine that stepped 1000, pressed A, then stepped only the remaining cycles of the first frame (frame length minus 1000). Y, PC, TotalCycles, raster, $D012, $D41B, and the frame buffer must match. Y 50 against reference 30 is a FAIL. Seek_FromRunningBaseline_AdvancesOnlyRemainingCycles is the fact. Resetting the clock and replaying from cycle 0 on top of the already-advanced image is a FAIL.
+
+Plan (read the acceptance criteria, verification plan, non-goals, and risks):
+C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\goal\plan.md
+
+Saved evidence. Re-read the files. Do not trust this prompt's counts until the files match.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-0af1da0c5558\implementer\phase-coverage.txt
+C:\Users\kingd\AppData\Local\Temp\grok-goal-0af1da0c5558\implementer\phase-acceptance.txt
+C:\Users\kingd\AppData\Local\Temp\grok-goal-0af1da0c5558\implementer\phase-acceptance-2.txt
+C:\Users\kingd\AppData\Local\Temp\grok-goal-0af1da0c5558\implementer\idle-lockstep.txt
+
+Assertions:
+1. tools/check_phase_acceptance_coverage.ps1 -ThroughPhase 2 exits 0. In-scope requirements with acceptance criteria is 94. Missing from tests/ is 0. Phase is the markdown Iteration integer, not Priority. The script and PhaseAcceptanceCoverageTests were not loosened. A mention only under src/ does not count.
+2. The Release filter that includes PhaseAcceptanceCoverageTests plus FrCpu004, FrMem006, FrMem004, FrSid004, FrSid009, FrUi004, FrCfg003, FrCfg004, FrCia005, FrCrt002, FrInp003, FrMed005, FrMon005, FrMon006, FrSid005, FrSnp003, and FrVic20005 acceptance classes passed twice. Both summaries are Failed 0, Skipped 0, exit 0. The saved summaries say Passed 111. Facts added for the 96/94 review are Playback_FromRunningBaseline_MatchesVicAndSid and Seek_FromRunningBaseline_AdvancesOnlyRemainingCycles. Earlier facts remain, including Playback_FromRunningBaseline_MatchesReference, SerializedRestore_KeepsProcessorPortLatches, Reset_ClearsAPartialSerialInputCount, Playback_PreservesRamHiddenUnderBasic, Jpeg_EncodesSpatialDetailAndColor, and PaletteFile_ColorsReachTheRenderer. Each pass exercises the product behavior. An assertion was not flipped, skipped, weakened, or left on a mock that still stands in for missing behavior. A count of 111 is not by itself a pass. The test assembly was written through tests/ViceSharp.TestHarness/bin/phase2-f96link, a directory junction to C:\Users\kingd\AppData\Local\Temp\grok-goal-0af1da0c5558\implementer\phase2-f96. phase2-accept could not be rebuilt because PowerShell pid 124252, the MCP default console, still had ViceSharp.Chips.dll and ViceSharp.RomFetch.dll mapped. The junction path is inside the repository. PhaseAcceptanceCoverageTests passed from that output, so the walk to ViceSharp.slnx works. The output directory is not a product change. Chip execution state is in memory only. The serialized snapshot stays 16 plus 65536.
+3. Where a written sentence disagrees with VICE x64sc or xvic, the passing behavior is VICE. FR-SID-009 test-bit behavior follows reSID: the test bit does not replace the shift register with all-ones. FR-SID-005 resonance is not proven by comparing raw band-pass magnitudes. The same stimulus produced 8580 FilterVbp 30320 versus 6581 FilterVbp 26265, so an inequality that requires the 8580 absolute sample to be smaller is the wrong stimulus. Requirement text was not edited in this goal. FR-CPU-002 ac-05 and FR-PRF-005 text stay as they stand.
+4. CPU and bus code changed earlier (Mos6502.cs, C64MemoryMap.cs, ArchitectureBuilder.cs). This round did not edit those three files. C64 idle LockstepValidationTests First10000CyclesMatch and First100000CyclesMatch are both green in idle-lockstep.txt, and that file is newer than those three sources. SystemClock.AdoptElapsedCycles only assigns the elapsed counter and does not change Step. Mos6526.Reset clears the serial input edge count. The 96/94 fix adds an in-memory VIC-II, SID, and CIA image and changes Seek placement. It does not change Step. Do not demand a new idle run unless those three sources are newer than the receipt. Wolf64 disk mismatch is not this exit. A cycle-0 reset PC compare is not the idle gate. Snapshot resume still keeps its one-cycle stagger.
+5. This work did not start Phase 3 or Phase 4. It did not mark PLAN-C64SET-001, any requirement, or any TODO done. It did not rewrite provenance-accepted-20260930.json. git status and git diff are the evidence. HANDOFF.md may still lack this run's HV paths. Missing HV paths in HANDOFF before this review finishes is not a FAIL. A done mark is a FAIL. If approval policy never blocks a live TODO or requirement query, do not mark this assertion UNKNOWN for that block alone. PASS it when git diff shows no requirement, TODO, or provenance edit, the goal and plan checkboxes are still open, and the saved query F:\GitHub\vice-sharp\docs\receipts\hv\plan-c64set-001-done-false.json shows PLAN-C64SET-001 done false. A live query that returns done true is a FAIL.
+6. The working tree diff closes nine-defect ledger items 2, 5, and 8 and says the recovered set is not accepted. That ledger close is not this gate. FAIL assertion 6 only if this claim treats that close, or the older ledger AGREE, as acceptance of the recovered requirement set or as this Phase 2 gate. If the acceptance gate stands on the coverage, filter, and idle receipts alone, assertion 6 PASSES.
+
+Surfaces:
+A. Assertions 1 through 6.
+B. Workspace rules that apply to this claim: receipts, no loosened tests, PowerShell, no Python, no requirement or TODO done edit, no Phase 3 or Phase 4 start.
+C. Requirements. The named iteration 0-2 acceptance criteria are implemented and tested. Do not demand that every requirement in the recovered set be accepted. Do not edit requirement text. Empty structured acceptance criteria on unrelated ids are not a FAIL unless this claim says those ids are accepted.
+D. The current goal plan holistically. Completion is the acceptance criteria in that plan. Non-goals stay undone.
+
+You are sandboxed read-only. Re-running dotnet test may fail because the sandbox blocks writes under bin or TestResults. A sandbox write block is not a product failure. Judge tests by reading their source and the saved summaries. Read product code for the VICE conflicts above. Use git status and git diff.
+
+Do not implement product features. Do not edit requirement files, HANDOFF.md, the plan, provenance, or TODO storage. Do not mark a TODO done.
+
+Persist this review in the MCP session log through the Codex MCP plugin (workflow.sessionlog or the plugin wrapper). Open a Codex session, begin a turn, and store the entire verdict: full prose, every finding, scores, OverallVerdict, the VERDICT JSON, and the jsonl paths once the parent names them. If the plugin cannot be called from this read-only sandbox, say so in the verdict and do not pretend a turn was written. The parent also stores the verdict. A missing reviewer turn is a process gap the parent must record. It is not, by itself, a product FAIL on assertions 1 through 5.
+
+OverallVerdict AGREE only when every applicable assertion PASSES and accuracy and completeness are both integers at least 98. Any FAIL or UNKNOWN on assertions 1 through 6 is DISAGREE. Scores below 98 are DISAGREE even if fail and unknown counts are zero.
+
+End with a line === VERDICT JSON === followed by one JSON object containing OverallVerdict, accuracy, completeness, passCount, failCount, unknownCount, failList, sessionId, requestId.

@@ -1,0 +1,88 @@
+{
+  "timestampLocal": "2026-10-08T11:09:35.5837512-05:00",
+  "runs": [
+    {
+      "pid": 30752,
+      "permissions": 16,
+      "finalCommand": "quit",
+      "exitCode": 67,
+      "expectedExit": 67,
+      "completed": true,
+      "forcedTermination": false,
+      "observations": 17
+    },
+    {
+      "pid": 115024,
+      "permissions": 16,
+      "finalCommand": "quit",
+      "exitCode": 67,
+      "expectedExit": 67,
+      "completed": true,
+      "forcedTermination": false,
+      "observations": 17
+    },
+    {
+      "pid": 90204,
+      "permissions": 0,
+      "finalCommand": "eof",
+      "exitCode": 66,
+      "expectedExit": 66,
+      "completed": true,
+      "forcedTermination": false,
+      "observations": 1
+    },
+    {
+      "pid": 113252,
+      "permissions": 0,
+      "finalCommand": "invalid",
+      "exitCode": 68,
+      "expectedExit": 68,
+      "completed": true,
+      "forcedTermination": false,
+      "observations": 1
+    },
+    {
+      "pid": 84084,
+      "permissions": 0,
+      "finalCommand": "newline",
+      "exitCode": 68,
+      "expectedExit": 68,
+      "completed": true,
+      "forcedTermination": false,
+      "observations": 1
+    },
+    {
+      "pid": 18500,
+      "permissions": 0,
+      "finalCommand": "nul",
+      "exitCode": 68,
+      "expectedExit": 68,
+      "completed": true,
+      "forcedTermination": false,
+      "observations": 1
+    },
+    {
+      "pid": 44412,
+      "permissions": 0,
+      "finalCommand": "uppercase",
+      "exitCode": 68,
+      "expectedExit": 68,
+      "completed": true,
+      "forcedTermination": false,
+      "observations": 1
+    }
+  ],
+  "repeatClockPrefixEqual": true,
+  "ungatedClockPrefixEqual": true,
+  "heldBoundaryCount": 39,
+  "minimumObservedHoldMilliseconds": 249.6824,
+  "stockLinkInputCount": 99,
+  "stockLinkInputChanges": [],
+  "originalSourceCount": 3847,
+  "originalSourceChanges": [],
+  "nativeChanges": [],
+  "stockXvicSha256": "C01442BC1F15DD8C7006FABE0D35DFA9707664A3120DD1FA014A51EEB481B92C",
+  "allDeviceFreezeProven": false,
+  "busParityProven": false,
+  "fullPhase2Accepted": false
+}

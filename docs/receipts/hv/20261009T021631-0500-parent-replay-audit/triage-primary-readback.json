@@ -1,0 +1,54 @@
+[
+  {
+    "reportId": "triage-report-70a8021a03c34270bacfde4f1c7e98c6",
+    "data": {
+      "reportId": "triage-report-70a8021a03c34270bacfde4f1c7e98c6",
+      "groupId": "triage-group-67df6e92fea64c1d",
+      "status": "grouped",
+      "title": "Session log primary storage unavailable during ViceSharp progress and status writes",
+      "summary": "Observed2026-10-08T07:22:45-05:00: Codex parent appendActions for sessionCodex-20261007T135626Z-plugin-session turn6e6f rejected storagebackendunreachable, retained normal failsafe20261008T122245Z-session_submit-bc6d.yaml. completeTurn45e6 timedout30s/backend_unavailable retained5680. Triage attempt07:25:59 alsofailedsamebackend. SubsequentbeginTurn5ca3 reportsopened. Expected supported writes persist or preserve fullfailsafe; no historicalcancel/regression. ActiveTODO PLAN-VICEORACLE-001. Existingtriage4b9fa6723d454f978930d130a791bc98 concerns same initialturnfailure. Continue emulator task only aftertriageaccepted. Neededrepair: reliablebackendavailability andaccurate persistence statuses, tests outages/recovery.",
+      "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+      "workspacePath": "F:\\GitHub\\McpServer",
+      "createdUtc": "2026-10-08T07:30:26.7756899-05:00"
+    }
+  },
+  {
+    "reportId": "triage-report-e85d4371f54c4751959e723de7b46b02",
+    "data": {
+      "reportId": "triage-report-e85d4371f54c4751959e723de7b46b02",
+      "groupId": "triage-group-0420cc09f47afcbd",
+      "status": "grouped",
+      "title": "Requirement getTr returns changing creation timestamps",
+      "summary": "Observed in ViceSharp through supported Codex plugin: getTr TR-VSFLOCKSTEP-RESUME-001 returned createdAt 2026-10-08T13:33:49.9304114+00:00 before an authorized AC2-only update. updateTr returned createdAt 2026-10-08T13:34:23.3298780+00:00; immediate getTr returned createdAt 2026-10-08T13:34:25.1948757+00:00. Creation timestamp should not change on update or read. Observation only; projection bug versus storage mutation is not diagnosed. Original requirement description and AC1 remained equal; status pending and both ACs false. Reporter Codex, session Codex-20261007T135626Z-plugin-session, turn req-20261008T133146Z-prompt-1e6c, TODO PLAN-VICEORACLE-001. Investigate get/update serialization and preserve original creation timestamp, add round-trip read/update regression tests. Current work continues, no server repair authorized.",
+      "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+      "workspacePath": "F:\\GitHub\\McpServer",
+      "createdUtc": "2026-10-08T08:47:44.2503334-05:00"
+    }
+  },
+  {
+    "reportId": "triage-report-ad5cb20268a041dfb8d5fefa6f231228",
+    "data": {
+      "reportId": "triage-report-ad5cb20268a041dfb8d5fefa6f231228",
+      "groupId": "triage-group-48b05172bfba670d",
+      "status": "grouped",
+      "title": "Codex wrapper places large ParamsObject YAML in child process argv",
+      "summary": "Saving the full interrupted HV recovery (73039 characters split into nine ordered dialog entries) through Invoke-CodexMcpPlugin.ps1 -ParamsObject fails before child start with filename or extension too long. One 9000-character dialog per call succeeds. Observed source passes serialized YAML as -ParamsYaml argv even for ParamsPath. Expected documented stdin or file-based transport to support full-content records without Windows argv limit.",
+      "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+      "workspacePath": "F:\\GitHub\\McpServer",
+      "createdUtc": "2026-10-08T12:54:06.4008619-05:00"
+    }
+  },
+  {
+    "reportId": "triage-report-13c287e9d2034e07ace0442a9c03697c",
+    "data": {
+      "reportId": "triage-report-13c287e9d2034e07ace0442a9c03697c",
+      "groupId": "triage-group-5fad2245878d8880",
+      "status": "grouped",
+      "title": "Codex wrapper overwrites actual runtime model with placeholder codex",
+      "summary": "Installed Codex plugin1.118.0 unconditionally sets MCP_SESSION_MODEL=codex in Invoke-CodexMcpPlugin.ps1:123 (also PLUGIN_MODEL_DEFAULT and CT2R_MODEL), while runtime turn_context records identify gpt-6-astra at xhigh. Supported workflow.sessionlog.updateTurn has no model field. Primary MCP records model codex, violating accurate agent/model audit identity. Do not repair historical completed turns automatically.",
+      "originalWorkspacePath": "F:\\GitHub\\vice-sharp",
+      "workspacePath": "F:\\GitHub\\McpServer",
+      "createdUtc": "2026-10-08T14:35:43.3048203-05:00"
+    }
+  }
+]

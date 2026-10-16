@@ -1,0 +1,8 @@
+{
+  "timestampLocal": "2026-10-08T11:27:28.3877283-05:00",
+  "pid": 25404,
+  "exitCode": 0,
+  "completed": true,
+  "traceMarker": 1,
+  "scope": "Ten native host instruction steps on independent C fixture; not VICE bus or hardware-breakpoint proof."
+}

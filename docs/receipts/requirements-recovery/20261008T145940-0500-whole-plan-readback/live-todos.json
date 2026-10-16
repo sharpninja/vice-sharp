@@ -1,0 +1,201 @@
+[
+  {
+    "dependsOn": [],
+    "description": [
+      "Execute docs/plans/PLAN-GROK-COMPLETION-20260906.md through all nine slices and final commit/push verification.",
+      "Operator removed credential remediation on 2026-09-06. Sol High implements; Astra xhigh independently validates each phase. Preserve unrelated dirty files."
+    ],
+    "technicalDetails": [
+      "Canonical AC matrix: docs/requirements/traceability/Grok-Completion-AC-Matrix-2026-09-06.md.",
+      "TEST coverage: ",
+      "TEST-NATIVE-LIFECYCLE-001, TEST-SETTINGS-TXN-001, TEST-REMOTECTRL-CLI-001, TEST-AIREVIEW-ROUTING-001, TEST-COMPLETION-001, TEST-UI-COREBOUNDARY-001, TEST-BASELINE-CORRECTNESS-001, TEST-REMOTE-INTEGRATION-001, TEST-UISET-001, TEST-UISET-002, TEST-UISET-003, TEST-REMOTECTRL-001",
+      "Requirements gate receipt validation-output/codex-grok-completion-20260906/astra-requirements-phase-review.md:42; review session Codex-20260907T024739Z-plugin-session/request req-20260907T025525Z-plan-requirements-audit completed and server-readback verified."
+    ],
+    "title": "Complete approved Grok ViceSharp work with hostile phase gates",
+    "remaining": "Resumed by operator; historical2026-09-06 pause/red-gate note is superseded. Execute the entire approved C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md. Prerequisite Phase0 accepted by local Grok4.7xhigh AGREE99/98,26PASS0FAIL0UNKNOWN, full primary proof docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json. PLAN-VICEORACLE-001 Phase0 task only accepted, five tasks remain. Next green native-safe mock-contract suite, then Opus5.5max HV. All original real gates/full current-plus-prior suites remain mandatory; no product/native/VSF/whole-goal completion. No commit or push without separate explicit order.",
+    "id": "PLAN-GROKCOMPLETION-001",
+    "done": false,
+    "technicalRequirements": [
+      "TR-NATIVE-LIFECYCLE-001",
+      "TR-SETTINGS-TXN-001",
+      "TR-REMOTECTRL-CLI-001",
+      "TR-AIREVIEW-ROUTING-001",
+      "TR-COMPLETION-MANIFEST-001",
+      "TR-UI-COREBOUNDARY-001",
+      "TR-BASELINE-CORRECTNESS-001",
+      "TR-REMOTE-INTEGRATION-001",
+      "TR-UIAXAML-PICKER-001",
+      "TR-WARP-STATUS-001",
+      "TR-REMOTECTRL-SERVER-001"
+    ],
+    "priority": "high",
+    "implementationTasks": [
+      {
+        "done": false,
+        "task": "Complete approved Slice 0 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Complete approved Slice 1 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Complete approved Slice 2 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Complete approved Slice 3 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Complete approved Slice 4 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Complete approved Slice 5 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Complete approved Slice 6 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Complete approved Slice 7 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Complete approved Slice 8 with requirements/red/green hostile gates"
+      },
+      {
+        "done": false,
+        "task": "Final complete evidence audit, explicit-manifest commit/push and matching local/origin SHA"
+      }
+    ],
+    "functionalRequirements": [
+      "FR-NATIVE-LIFECYCLE-001",
+      "FR-SETTINGS-TXN-001",
+      "FR-REMOTECTRL-CLI-001",
+      "FR-AIREVIEW-ROUTING-001",
+      "FR-COMPLETION-001",
+      "FR-MACHINEPICKER-001",
+      "FR-UISETVIS-001",
+      "FR-WARP-001",
+      "FR-REMOTECTRL-001"
+    ],
+    "section": "Plans"
+  },
+  {
+    "dependsOn": [],
+    "description": [
+      "Execute docs/plans/PLAN-VICE-IMMUTABLE-001.md as a prerequisite within the entire approved Grok handoff completion plan. Remediate original VICE-as-target violations, not a new behavior requirement.",
+      "FR-VICE-001 AC1-4; TR-VICE-ORACLE-001 AC1-5; TEST-VICE-001 AC1-4; TR-CYCLE-001 all seven ACs, including actual PHI2/AEC AC4. No requirement is retired or marked satisfied by mocks."
+    ],
+    "technicalDetails": [
+      "Testing requirement: TEST-VICE-001. Related real snapshot gates: FR-SNP-005, TEST-SNP-002, TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001.",
+      "Phase 1: full native-safe tests/ViceSharp.OracleContract.Tests project, all six AC-mapped groups, valid mocks and discriminating incorrect mocks; no product/native build dependency.",
+      "Deferred XMLDoc correction: tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs incorrectly cites TR-CYCLE-001 AC4. Correct only after a native-safe harness build exists; retain fixture and single LockstepValidator ownership.",
+      "Named real evidence gate REAL-C64-PHI2-AEC-001: after wrapper feasibility and native-safe harness integration, require actual immutable x64sc half-cycle CPU access observations covering PHI1/PHI2, AEC low/high, idle/read/write, fail closed at missing/unknown access kind or first missing half-cycle. Exercise real managed behavior and native provenance; mock results cannot satisfy TR-CYCLE-001 AC4.",
+      "All seven TR-CYCLE-001 ACs and all existing real-emulator/current-plus-prior suites remain mandatory. Every executable exit has zero failed, skipped or aborted tests, unfiltered applicable suite, and local alternating Grok xhigh / Opus max HV AGREE >=98/98, zero FAIL/UNKNOWN."
+    ],
+    "title": "Restore immutable VICE oracle boundary and prove all retained real parity gates",
+    "remaining": "Phase0 accepted by local Grok4.7 xhigh AGREE99/98,26PASS0FAIL0UNKNOWN. Completed primary GrokCode-20261007T222539Z-phase0-remediation-hv / req-20261007T222539Z-phase0-remediation-hv contains full22855character verdict; parent independent proof docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json plus final .exit.json. Next: entire native-safe AC-mapped mock-contract suite green before real implementation; next reviewer Opus5.5 max. Five implementation tasks remain open. Real emulator/native VSF/whole-goal gates unwaived; no mock project or product implementation yet.",
+    "id": "PLAN-VICEORACLE-001",
+    "done": false,
+    "technicalRequirements": [
+      "TR-VICE-ORACLE-001",
+      "TR-CYCLE-001"
+    ],
+    "priority": "high",
+    "implementationTasks": [
+      {
+        "done": true,
+        "task": "Reconcile Phase 0 preservation, primary requirements/projections and all workspace queues; obtain accepted HV"
+      },
+      {
+        "done": false,
+        "task": "Prove the entire native-safe AC-mapped mock-contract suite green, including deliberate incorrect controls, then HV"
+      },
+      {
+        "done": false,
+        "task": "Prove external-wrapper feasibility and snapshot compatibility on pinned immutable VICE without source mutation"
+      },
+      {
+        "done": false,
+        "task": "Safely migrate preserved native modifications to external wrappers/managed code and establish native-safe harness builds"
+      },
+      {
+        "done": false,
+        "task": "Correct deferred comparator XMLDoc mapping and pass REAL-C64-PHI2-AEC-001 with actual immutable x64sc evidence"
+      },
+      {
+        "done": false,
+        "task": "Complete real xvic half-cycle parity, native VSF resume and all original whole-plan gates with full suites and HV"
+      }
+    ],
+    "functionalRequirements": [
+      "FR-VICE-001"
+    ],
+    "section": "Plans"
+  },
+  {
+    "dependsOn": [],
+    "description": [
+      "Avalonia Settings Computer+Model dropdowns like Xbox; hide VIC-20-only controls on C64 and vice-versa; RemoteControl validation of C64 variants (c64, c64c, ntsc at minimum) including PAL/NTSC CLOCK, Warp, shared inventory."
+    ],
+    "technicalDetails": [
+      "Approved continuation PLAN-GROKCOMPLETION-001; AC matrix docs/requirements/traceability/Grok-Completion-AC-Matrix-2026-09-06.md; tests TEST-SETTINGS-TXN-001, TEST-UISET-001/002/003, TEST-COMPLETION-001."
+    ],
+    "title": "C64 Settings RC, Computer/Model dropdowns, family visibility",
+    "remaining": "Phase 4 VIC-20 settings-visibility notification slice is green: focused Release tests 8 passed, 0 failed, 0 skipped; local Grok HV AGREE with accuracy 99 and completeness 98 (docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.verdict.md). Phase 3 Slice 3a fail-closed xvic oracle is green: prerequisite tests 7 passed, 0 failed, 0 skipped; real checked-in oracle smoke 1 passed, 0 failed, 0 skipped; local Grok green HV AGREE 100/100 with corrected full MCP persistence (docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.verdict.md). Phase 3 Slice 3b manifest-contract input is green: focused manifest-input test 1 passed, 0 failed, 0 skipped; fail-closed mismatch test 1 passed, 0 failed, 0 skipped; local Grok green HV AGREE 99/99 with 21 PASS, 0 FAIL, 0 UNKNOWN and full MCP persistence (docs/receipts/hv/20261003T151117-0500-phase3b-green-local-grok.verdict.md). TODO remains open: Phase 3 Slices 3c onward, RemoteControl validation, PAL/NTSC clock, warp, the full 14-profile catalog, and other approved slices remain; FR-UISETVIS-001, TEST-UISET-003, FR-SNP-005, and TEST-SNP-002 stay pending.",
+    "id": "PLAN-C64SET-001",
+    "done": false,
+    "technicalRequirements": [
+      "TR-SETTINGS-TXN-001",
+      "TR-UIAXAML-PICKER-001",
+      "TR-WARP-STATUS-001"
+    ],
+    "priority": "High",
+    "implementationTasks": [],
+    "functionalRequirements": [
+      "FR-MACHINEPICKER-001",
+      "FR-SETTINGS-TXN-001",
+      "FR-UISETVIS-001",
+      "FR-WARP-001"
+    ],
+    "section": "Backlog"
+  },
+  {
+    "dependsOn": [],
+    "description": [
+      "Audit every test - including the ~50 subdir test files (~427 Fact/Theory methods) that XmlDocsConventionTests does not scan (top-directory only) - for the required XMLDOCs: an FR-/TR- citation, a Use case line, and an Acceptance line.",
+      "Verify each test's Acceptance line states the concrete pass/fail condition the test actually asserts, and that it traces to a real captured acceptance criterion in the requirements database.",
+      "Consider expanding XmlDocsConventionTests to scan all directories (ratchet down from the current violation count) so doc coverage is enforced going forward."
+    ],
+    "technicalDetails": [],
+    "title": "Audit all Tests to ensure proper Acceptance Criteria are defined and covered",
+    "id": "QA-TESTAC-001",
+    "done": false,
+    "technicalRequirements": [],
+    "priority": "high",
+    "implementationTasks": [
+      {
+        "done": false,
+        "task": "Enumerate undocumented subdir test methods and record the baseline violation count"
+      },
+      {
+        "done": false,
+        "task": "Add FR/TR + Use case + Acceptance to each, mapping to existing or newly captured requirements"
+      },
+      {
+        "done": false,
+        "task": "Expand XmlDocsConventionTests to AllDirectories with a ratchet baseline equal to the current count"
+      },
+      {
+        "done": false,
+        "task": "Remediate and ratchet the baseline down to zero"
+      }
+    ],
+    "functionalRequirements": [],
+    "section": "Backlog"
+  }
+]

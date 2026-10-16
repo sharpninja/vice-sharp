@@ -1,0 +1,103 @@
+{
+  "schema": "vicesharp-tape-motor-verification/v1",
+  "checkedAtLocal": "2026-10-11T09:03:00.7113846-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T134740Z-media-contract-verification",
+  "scope": "document/data structure and source identity, not behavioral execution",
+  "matrixReadbackExact": true,
+  "vectorCount": 64,
+  "uniqueVectorCount": 64,
+  "expandedProjectionCaseCount": 366,
+  "uniqueExpandedCaseCount": 366,
+  "requiredGroupCount": 15,
+  "actualGroupCount": 15,
+  "missingGroups": [],
+  "extraGroups": [],
+  "tupleFieldSetsExact": true,
+  "sourcePinsUnchanged": true,
+  "sourcePins": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+      "relative": "vice/src/datasette/datasette.c",
+      "gitBlob": "06579175a8ae151fc83972487234d417a4743ec4",
+      "sha256": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+      "matchesPinnedCommit": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\alarm.h",
+      "relative": "vice/src/alarm.h",
+      "gitBlob": "993ae410910e17264d4cebb9f4a251b56739b6db",
+      "sha256": "BFD69D427573607D5934678739DE781C7F846636AA08A65C8B6A8D53451BDD3C",
+      "matchesPinnedCommit": true
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "MOTOR-CONTRACT.md",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\MOTOR-CONTRACT.md",
+      "bytes": 10809,
+      "sha256": "5F9553123243E86704C4C14DEEB315835F7D595950F407A3D5257291E6EDF45B"
+    },
+    {
+      "name": "motor-matrix.json",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\motor-matrix.json",
+      "bytes": 60267,
+      "sha256": "7049D4AA1A85180FAAB3524B0910EA08BE7E6E042E9CE7CD0C8BC7E5D9C12F14"
+    },
+    {
+      "name": "README.md",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\README.md",
+      "bytes": 2458,
+      "sha256": "60E9421485EFC66D0A6A12FABB640F44C2477B9BF89C64A76CBC90ADE728ADC3"
+    }
+  ],
+  "trackedDiffCheckExitCode": 0,
+  "newArtifactFormattingChecked": true,
+  "straddlingLatenessCase": {
+    "id": "late-early-read-dispatched-at-stop",
+    "group": "MotorOff_ReadBeforeDeadline_ReschedulesPastDeadline",
+    "acId": "ac-04",
+    "action": "callback",
+    "clock": 132000,
+    "callbackOffset": 100,
+    "before": {
+      "motor": 1,
+      "stopClock": 132000,
+      "alarmAt": 131900,
+      "writeClock": 99000,
+      "writeBit": 1,
+      "mode": "START"
+    },
+    "expectedAfter": {
+      "motor": 0,
+      "stopClock": 0,
+      "alarmAt": null,
+      "writeClock": 99000,
+      "writeBit": 1,
+      "mode": "START"
+    },
+    "orderedMotorAlarmCalls": [
+      "AlarmUnset",
+      "MotorUiOff",
+      "MotorFlagOff"
+    ],
+    "machines": [
+      "C64",
+      "VIC20"
+    ],
+    "media": [
+      "none",
+      "read-only",
+      "writable"
+    ],
+    "testExecuted": false
+  },
+  "mockTestsRun": 0,
+  "realTestsRun": 0,
+  "negativeControlsRun": 0,
+  "nativeBuildOrExecution": false,
+  "requirementWrites": 0,
+  "newHvRun": false,
+  "applicationAuthorized": false,
+  "goalComplete": false
+}

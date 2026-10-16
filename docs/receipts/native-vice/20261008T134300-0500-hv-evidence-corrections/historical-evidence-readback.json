@@ -1,0 +1,248 @@
+{
+  "timestampLocal": "2026-10-08T13:44:22-05:00",
+  "gateStdout": [
+    {
+      "run": "permissions-a",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\permissions-a\\stdout.log",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "run": "permissions-b",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\permissions-b\\stdout.log",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "run": "terminal-eof",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-eof\\stdout.log",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "run": "terminal-invalid",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-invalid\\stdout.log",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "run": "terminal-uppercase",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-uppercase\\stdout.log",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "run": "terminal-newline",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-newline\\stdout.log",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "run": "terminal-nul",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\terminal-nul\\stdout.log",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    }
+  ],
+  "resetCorrelation": [
+    {
+      "run": "wrapped-100",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100\\stdout.log",
+      "length": 3722,
+      "sha256": "A27F157C76125A97B61F2408C86A8C0775C9374C9429BA55C773812B9415539E",
+      "excerpt": [
+        {
+          "line": 26,
+          "text": "VICE_CLOCK,7"
+        },
+        {
+          "line": 27,
+          "text": "VICE_CLOCK,8"
+        },
+        {
+          "line": 28,
+          "text": "Main CPU:  RESET."
+        },
+        {
+          "line": 29,
+          "text": "VICE_CLOCK,7"
+        },
+        {
+          "line": 30,
+          "text": "VICE_CLOCK,8"
+        },
+        {
+          "line": 31,
+          "text": "VICE_CLOCK,9"
+        }
+      ],
+      "interpretation": "Native reset log interleaves clock samples; correlation, not direct reset-event causal proof"
+    },
+    {
+      "run": "wrapped-100000-a",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100000-a\\stdout.log",
+      "length": 1791119,
+      "sha256": "E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F",
+      "excerpt": [
+        {
+          "line": 26,
+          "text": "VICE_CLOCK,7"
+        },
+        {
+          "line": 27,
+          "text": "VICE_CLOCK,8"
+        },
+        {
+          "line": 28,
+          "text": "Main CPU:  RESET."
+        },
+        {
+          "line": 29,
+          "text": "VICE_CLOCK,7"
+        },
+        {
+          "line": 30,
+          "text": "VICE_CLOCK,8"
+        },
+        {
+          "line": 31,
+          "text": "VICE_CLOCK,9"
+        }
+      ],
+      "interpretation": "Native reset log interleaves clock samples; correlation, not direct reset-event causal proof"
+    },
+    {
+      "run": "wrapped-100000-b",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\clock-runtime\\wrapped-100000-b\\stdout.log",
+      "length": 1791119,
+      "sha256": "E6B35774F7EEEC45A19F675547FD7AA9B6D213053B0F5B6397FF86731B65619F",
+      "excerpt": [
+        {
+          "line": 26,
+          "text": "VICE_CLOCK,7"
+        },
+        {
+          "line": 27,
+          "text": "VICE_CLOCK,8"
+        },
+        {
+          "line": 28,
+          "text": "Main CPU:  RESET."
+        },
+        {
+          "line": 29,
+          "text": "VICE_CLOCK,7"
+        },
+        {
+          "line": 30,
+          "text": "VICE_CLOCK,8"
+        },
+        {
+          "line": 31,
+          "text": "VICE_CLOCK,9"
+        }
+      ],
+      "interpretation": "Native reset log interleaves clock samples; correlation, not direct reset-event causal proof"
+    }
+  ],
+  "binaryMockChronology": [
+    {
+      "name": "binary-mock-01",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-01\\result.json",
+      "sha256": "1C9A5638ED1B8840A666551F2382BE9083AE2A02AAD8334F263D10853C51CBF4",
+      "timestampLocal": "2026-10-08T09:28:37.7273633-05:00",
+      "total": 125,
+      "passed": 125,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "exitCode": 0,
+      "trx": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-01\\binary-mock-01.trx",
+      "trxSha256": "50E532A64966FD5C93ABD55729FAE92C41853D1AFA41F552E3642E7C4424B1F5"
+    },
+    {
+      "name": "binary-mock-02",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-02\\result.json",
+      "sha256": "15E754005F666B0DD97244DE71E369E19B6A78A3D7739DF170591D1B0D4DBCEC",
+      "timestampLocal": "2026-10-08T09:30:20.7285338-05:00",
+      "total": 138,
+      "passed": 137,
+      "failed": 1,
+      "notExecuted": 0,
+      "aborted": 0,
+      "exitCode": 1,
+      "trx": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-02\\binary-mock-02.trx",
+      "trxSha256": "79B7FCA998CCE761049B2A54273741433E06C1EEB97AC9A5A1A8A7CF26D3BA61"
+    },
+    {
+      "name": "binary-mock-03",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-03\\result.json",
+      "sha256": "7F8A8B6E4885E0D70C74A27FE09C78D0077623425DF8963E5B0DF549B5B650C9",
+      "timestampLocal": "2026-10-08T09:31:04.1847546-05:00",
+      "total": 138,
+      "passed": 138,
+      "failed": 0,
+      "notExecuted": 0,
+      "aborted": 0,
+      "exitCode": 0,
+      "trx": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-mock-03\\binary-mock-03.trx",
+      "trxSha256": "A0E9EB38DA3305E2F519E64355D7E521C0783527C3DF6726C941547D9DB2D9F0"
+    }
+  ],
+  "addedCases": [
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"error-80\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"error-02\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"error-01\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"error-83\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"error-82\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"reserved-expected-id\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"error-ff\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"null-body\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Reader_mock_rejects_null_stream",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Encoder_mock_proves_inclusive_size_and_nonreserved_id_boundaries(length: 1048576, id: 4294967294)",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Acknowledgement_assertions_discriminate_false_acceptance_and_false_rejection(name: \"error-81\")",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Reader_mock_proves_inclusive_body_size_limit",
+      "SideIndicator": "=>"
+    },
+    {
+      "InputObject": "ViceSharp.VsfCompatibility.Tests.BinaryMonitorContractTests.Encoder_mock_proves_inclusive_size_and_nonreserved_id_boundaries(length: 0, id: 0)",
+      "SideIndicator": "=>"
+    }
+  ],
+  "noHistoricalLogsRecreated": true,
+  "historicalHelperPreimage": "Not retained. Current copies and rerun compiler logs do not prove the missing pre-refactor bytes."
+}

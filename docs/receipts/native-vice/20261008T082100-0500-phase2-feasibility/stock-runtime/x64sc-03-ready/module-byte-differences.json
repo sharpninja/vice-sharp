@@ -1,0 +1,154 @@
+[
+  {
+    "name": "SIDEXTENDED",
+    "major": 1,
+    "minor": 4,
+    "beforeSize": 155,
+    "afterSize": 155,
+    "count": 2,
+    "bytes": [
+      {
+        "after": 116,
+        "before": 0,
+        "payloadOffset": 28,
+        "moduleOffset": 50
+      },
+      {
+        "after": 116,
+        "before": 0,
+        "payloadOffset": 32,
+        "moduleOffset": 54
+      }
+    ]
+  },
+  {
+    "name": "DRIVE8",
+    "major": 2,
+    "minor": 0,
+    "beforeSize": 167,
+    "afterSize": 167,
+    "count": 1,
+    "bytes": [
+      {
+        "after": 0,
+        "before": 2,
+        "payloadOffset": 27,
+        "moduleOffset": 49
+      }
+    ]
+  },
+  {
+    "name": "DRIVECPU0",
+    "major": 1,
+    "minor": 3,
+    "beforeSize": 2174,
+    "afterSize": 2174,
+    "count": 8,
+    "bytes": [
+      {
+        "after": 113,
+        "before": 109,
+        "payloadOffset": 0,
+        "moduleOffset": 22
+      },
+      {
+        "after": 255,
+        "before": 12,
+        "payloadOffset": 8,
+        "moduleOffset": 30
+      },
+      {
+        "after": 66,
+        "before": 65,
+        "payloadOffset": 11,
+        "moduleOffset": 33
+      },
+      {
+        "after": 132,
+        "before": 131,
+        "payloadOffset": 12,
+        "moduleOffset": 34
+      },
+      {
+        "after": 165,
+        "before": 37,
+        "payloadOffset": 14,
+        "moduleOffset": 36
+      },
+      {
+        "after": 104,
+        "before": 170,
+        "payloadOffset": 15,
+        "moduleOffset": 37
+      },
+      {
+        "after": 110,
+        "before": 109,
+        "payloadOffset": 43,
+        "moduleOffset": 65
+      },
+      {
+        "after": 255,
+        "before": 104,
+        "payloadOffset": 51,
+        "moduleOffset": 73
+      }
+    ]
+  },
+  {
+    "name": "1541VIA1D0",
+    "major": 2,
+    "minor": 2,
+    "beforeSize": 50,
+    "afterSize": 50,
+    "count": 3,
+    "bytes": [
+      {
+        "after": 181,
+        "before": 185,
+        "payloadOffset": 6,
+        "moduleOffset": 28
+      },
+      {
+        "after": 149,
+        "before": 153,
+        "payloadOffset": 12,
+        "moduleOffset": 34
+      },
+      {
+        "after": 192,
+        "before": 224,
+        "payloadOffset": 22,
+        "moduleOffset": 44
+      }
+    ]
+  },
+  {
+    "name": "VIA2D0",
+    "major": 2,
+    "minor": 2,
+    "beforeSize": 50,
+    "afterSize": 50,
+    "count": 3,
+    "bytes": [
+      {
+        "after": 193,
+        "before": 197,
+        "payloadOffset": 6,
+        "moduleOffset": 28
+      },
+      {
+        "after": 149,
+        "before": 153,
+        "payloadOffset": 12,
+        "moduleOffset": 34
+      },
+      {
+        "after": 64,
+        "before": 96,
+        "payloadOffset": 22,
+        "moduleOffset": 44
+      }
+    ]
+  }
+]

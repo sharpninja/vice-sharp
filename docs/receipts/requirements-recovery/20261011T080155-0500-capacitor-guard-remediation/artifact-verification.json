@@ -1,0 +1,440 @@
+{
+  "schema": "vice-sharp/capacitor-artifact-verification/v1",
+  "recordedAt": "2026-10-11T08:12:20.9188054-05:00",
+  "files": [
+    {
+      "name": "CAPACITOR-SOURCE-AND-CASES.md",
+      "bytes": 7961,
+      "sha256": "5C3C125B6058E4268ACE6C921FC97C3BA8DF41F21571D4A79780C780BEDFA24B",
+      "trailingWhitespaceLines": 0
+    },
+    {
+      "name": "preparation-checks.json",
+      "bytes": 178117,
+      "sha256": "340A53A3C73898D80E8920074975E9ACE243AAA672BDC724510C2DF0F125E8F9",
+      "trailingWhitespaceLines": 0
+    },
+    {
+      "name": "proposed-field-delta.json",
+      "bytes": 159258,
+      "sha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+      "trailingWhitespaceLines": 0
+    },
+    {
+      "name": "R0-R1-GUARD-CONTRACT.md",
+      "bytes": 12961,
+      "sha256": "E76CFA5095BE4165B8E2C2F0C995649266441FAA3FAB2A824C710F9F43B7446E",
+      "trailingWhitespaceLines": 0
+    },
+    {
+      "name": "README.md",
+      "bytes": 4849,
+      "sha256": "C89D5E1765B3FE94AD5F50C1C72E27B39882F0880616794311B4C9549CF7927A",
+      "trailingWhitespaceLines": 0
+    },
+    {
+      "name": "typed-record-preimages.json",
+      "bytes": 125286,
+      "sha256": "EAF6B0C6004F6286741661FA2A62156B87CBBF0C70F04EFBD871E825DF405926",
+      "trailingWhitespaceLines": 0
+    }
+  ],
+  "jsonReadbacks": [
+    {
+      "name": "proposed-field-delta.json",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+      "sha256": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+      "matchesNativePowerShellSerialization": true,
+      "parsed": true
+    },
+    {
+      "name": "typed-record-preimages.json",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\typed-record-preimages.json",
+      "sha256": "EAF6B0C6004F6286741661FA2A62156B87CBBF0C70F04EFBD871E825DF405926",
+      "matchesNativePowerShellSerialization": true,
+      "parsed": true
+    },
+    {
+      "name": "preparation-checks.json",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\preparation-checks.json",
+      "sha256": "340A53A3C73898D80E8920074975E9ACE243AAA672BDC724510C2DF0F125E8F9",
+      "matchesNativePowerShellSerialization": true,
+      "parsed": true
+    }
+  ],
+  "strictValidation": {
+    "checkedAt": "2026-10-11T08:12:20.7958025-05:00",
+    "method": "System.Text.Json.Nodes.JsonNode.DeepEquals over ConvertTo-Json -InputObject; full object key presence and JSON types preserved",
+    "typed": [
+      {
+        "id": "TR-TAP-EDGE-001",
+        "equal": true,
+        "expectedFieldCount": 9,
+        "actualFieldCount": 9
+      },
+      {
+        "id": "TR-TAPE-EDGE-001",
+        "equal": true,
+        "expectedFieldCount": 9,
+        "actualFieldCount": 9
+      },
+      {
+        "id": "TEST-TAPE-RAMP-001",
+        "equal": true,
+        "expectedFieldCount": 9,
+        "actualFieldCount": 9
+      },
+      {
+        "id": "TEST-TAPE-SENSE-001",
+        "equal": true,
+        "expectedFieldCount": 9,
+        "actualFieldCount": 9
+      },
+      {
+        "id": "TEST-TAP-001",
+        "equal": true,
+        "expectedFieldCount": 9,
+        "actualFieldCount": 9
+      },
+      {
+        "id": "FR-RUNTIME-TAPE-002",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      },
+      {
+        "id": "FR-TAP-001",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      },
+      {
+        "id": "FR-TAP-002",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      },
+      {
+        "id": "FR-TAP-003",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      },
+      {
+        "id": "FR-TAP-004",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      },
+      {
+        "id": "FR-BACKFILL-MEDIA-001",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      },
+      {
+        "id": "FR-CPU-004",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      },
+      {
+        "id": "FR-PRF-003",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      },
+      {
+        "id": "FR-TAP-005",
+        "equal": true,
+        "expectedFieldCount": 8,
+        "actualFieldCount": 8
+      }
+    ],
+    "unrelatedRecords": [
+      {
+        "id": "FR-RUNTIME-TAPE-002",
+        "equal": true
+      },
+      {
+        "id": "TR-TAP-EDGE-001",
+        "equal": true
+      },
+      {
+        "id": "TR-TAPE-EDGE-001",
+        "equal": true
+      },
+      {
+        "id": "TEST-TAPE-RAMP-001",
+        "equal": true
+      },
+      {
+        "id": "TEST-TAPE-SENSE-001",
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-001",
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-002",
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-003",
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-004",
+        "equal": true
+      },
+      {
+        "id": "TEST-TAP-001",
+        "equal": true
+      },
+      {
+        "id": "FR-BACKFILL-MEDIA-001",
+        "equal": true
+      },
+      {
+        "id": "FR-PRF-003",
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-005",
+        "equal": true
+      }
+    ],
+    "mappingsUnchanged": true,
+    "pendingAndUnsatisfied": true,
+    "coverageMissing": [],
+    "changedFieldsChecks": [
+      {
+        "id": "FR-RUNTIME-TAPE-002",
+        "expected": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "equal": true
+      },
+      {
+        "id": "TR-TAP-EDGE-001",
+        "expected": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "equal": true
+      },
+      {
+        "id": "TR-TAPE-EDGE-001",
+        "expected": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "equal": true
+      },
+      {
+        "id": "TEST-TAPE-RAMP-001",
+        "expected": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "equal": true
+      },
+      {
+        "id": "TEST-TAPE-SENSE-001",
+        "expected": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-001",
+        "expected": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-002",
+        "expected": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body",
+          "title"
+        ],
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-003",
+        "expected": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-004",
+        "expected": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "equal": true
+      },
+      {
+        "id": "TEST-TAP-001",
+        "expected": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "condition",
+          "title"
+        ],
+        "equal": true
+      },
+      {
+        "id": "FR-BACKFILL-MEDIA-001",
+        "expected": [
+          "acceptanceCriteria",
+          "body",
+          "status",
+          "title"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body",
+          "status",
+          "title"
+        ],
+        "equal": true
+      },
+      {
+        "id": "FR-CPU-004",
+        "expected": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "equal": true
+      },
+      {
+        "id": "FR-PRF-003",
+        "expected": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "equal": true
+      },
+      {
+        "id": "FR-TAP-005",
+        "expected": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "actual": [
+          "acceptanceCriteria",
+          "body"
+        ],
+        "equal": true
+      }
+    ]
+  },
+  "sourceAfter": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64.h",
+      "expected": "23B26B78EFAC77C43FDF2FE20C399464DC0A9A7C0D103804D7FF65CEA6BF816F",
+      "actual": "23B26B78EFAC77C43FDF2FE20C399464DC0A9A7C0D103804D7FF65CEA6BF816F",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64mem.c",
+      "expected": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+      "actual": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64memsc.c",
+      "expected": "85A08EA194E27735DA0C7A8282772B97E6EFB6E109F3B683C780EE0F2A37F2DB",
+      "actual": "85A08EA194E27735DA0C7A8282772B97E6EFB6E109F3B683C780EE0F2A37F2DB",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64pla.c",
+      "expected": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+      "actual": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\lib.c",
+      "expected": "29A769179C00A80A502FDD3DD452E1716A286DFF7FDB3B72D0FFEAE2B5673C9E",
+      "actual": "29A769179C00A80A502FDD3DD452E1716A286DFF7FDB3B72D0FFEAE2B5673C9E",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\types.h",
+      "expected": "00A1C62B8A3CA58F04BA310DE22EE1289EEA4F9A69ED8ED6E818B68FCBF84758",
+      "actual": "00A1C62B8A3CA58F04BA310DE22EE1289EEA4F9A69ED8ED6E818B68FCBF84758",
+      "unchanged": true
+    }
+  ],
+  "gitDiffCheckExit": 0,
+  "applicationPerformed": false,
+  "emulatorTestsRun": 0,
+  "hostileAcceptance": false
+}

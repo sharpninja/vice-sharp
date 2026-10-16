@@ -1,0 +1,46 @@
+[
+  {
+    "oldId": "ARCH-TRUEDRIVE-1541-002",
+    "currentId": "FR-ARCH-TRUEDRIVE-1541-002",
+    "oldSnapshot": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\legacy-fr-rename-20260929T085555\\snapshot\\ARCH-TRUEDRIVE-1541-002.json",
+    "oldSnapshotSha256": "EF499A0023217F9256AEF723497DD86C95BF5463F6C2526D810BB3CF2E9E86AC",
+    "bodyExact": true,
+    "titleExact": true,
+    "statusExact": true,
+    "oldAcCount": 0,
+    "currentAcCount": 0
+  },
+  {
+    "oldId": "BACKFILL-MEDIA-001",
+    "currentId": "FR-BACKFILL-MEDIA-001",
+    "oldSnapshot": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\legacy-fr-rename-20260929T085555\\snapshot\\BACKFILL-MEDIA-001.json",
+    "oldSnapshotSha256": "09181E4120FBD3BB5317FEB4ABDF8833A8D754B9F37DA0177C2DCE421F1F43EC",
+    "bodyExact": true,
+    "titleExact": true,
+    "statusExact": true,
+    "oldAcCount": 0,
+    "currentAcCount": 0
+  },
+  {
+    "oldId": "BACKFILL-VIDEO-001",
+    "currentId": "FR-BACKFILL-VIDEO-001",
+    "oldSnapshot": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\legacy-fr-rename-20260929T085555\\snapshot\\BACKFILL-VIDEO-001.json",
+    "oldSnapshotSha256": "8E3983861F7E1A2BD29D72B2CC5B283AB7EA6EEC1CBFCF00C5C36B9E230E26B4",
+    "bodyExact": true,
+    "titleExact": true,
+    "statusExact": true,
+    "oldAcCount": 0,
+    "currentAcCount": 0
+  },
+  {
+    "oldId": "RUNTIME-TAPE-002",
+    "currentId": "FR-RUNTIME-TAPE-002",
+    "oldSnapshot": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\legacy-fr-rename-20260929T085555\\snapshot\\RUNTIME-TAPE-002.json",
+    "oldSnapshotSha256": "7007DE15187F486EA995E5B91DB44859990B599623D3A9DEDD717088F0414B2A",
+    "bodyExact": true,
+    "titleExact": true,
+    "statusExact": true,
+    "oldAcCount": 0,
+    "currentAcCount": 0
+  }
+]

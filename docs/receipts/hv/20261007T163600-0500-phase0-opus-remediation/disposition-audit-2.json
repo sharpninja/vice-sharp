@@ -1,0 +1,14 @@
+{
+  "timestampLocal": "2026-10-07T16:53:24.2601373-05:00",
+  "audit": 2,
+  "requestId": "req-20261007T215226Z-prompt-a59e",
+  "priorTurnClassification": "progress",
+  "thisTurnClassification": "no progress: verified unchanged authority blocker",
+  "pendingPath": "F:\\GitHub\\vice-sharp\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXHZpY2Utc2hhcnA\\pending\\20261007T185015Z-session_submit-7dc1.yaml",
+  "pendingSha256": "8B9267389EA6E3585F86DC0D3CF439C70FD1DE1E45A73A1BB92CD6BA417FB48F",
+  "queuedStatus": "in_progress",
+  "primaryStatus": "completed",
+  "operatorDispositionReceived": false,
+  "goalRemainsActive": true,
+  "noMutationToPendingRecord": true
+}

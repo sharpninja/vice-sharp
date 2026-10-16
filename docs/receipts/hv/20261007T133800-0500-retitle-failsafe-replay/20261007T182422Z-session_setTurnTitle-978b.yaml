@@ -1,0 +1,9 @@
+method: client.SessionLog.SetTurnTitleAsync
+label: session_setTurnTitle
+timestamp: 20261007T182422Z
+params:
+  agent: Codex
+  requestId: req-20261007T180309Z-prompt-ae30
+  sessionId: Codex-20261007T135626Z-plugin-session
+  title: Approve complete mock suite; retain every real gate
+payloadFingerprint: C17F449A75AE8C20BFD008E33F986A3611BBD39A71938757AA198B5DDEBD8FC4

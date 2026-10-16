@@ -18,11 +18,22 @@ public sealed partial class Mos906114 : IAddressSpace, IClockedDevice
     public bool IsReadOnly => false;
 
     /// <summary>
-    /// Processor-port DDR latch. Bits 0-5 select pin direction
-    /// (1 = output, 0 = input); bits 6-7 are unused on the 6510 and
-    /// always read zero.
+    /// Processor-port DDR latch. VICE stores the whole written byte.
+    /// Bits 6 and 7 are the floating pins.
     /// </summary>
     public byte DataDirection { get; private set; }
+
+    /// <summary>
+    /// VICE <c>C64_CPU6510_DATA_PORT_FALL_OFF_CYCLES</c>. Bits 6 and 7
+    /// keep the driven level for this many cycles after they become inputs.
+    /// The random jitter in c64mem.c is omitted so replay stays deterministic.
+    /// </summary>
+    public const int DataPortFalloffCycles = 350000;
+
+    private byte _capBit6;
+    private byte _capBit7;
+    private int _cap6Remaining;
+    private int _cap7Remaining;
 
     /// <summary>
     /// Processor-port data latch. Reads through
@@ -60,7 +71,10 @@ public sealed partial class Mos906114 : IAddressSpace, IClockedDevice
     /// <inheritdoc />
     public void Tick()
     {
-        // PLA banking logic runs synchronously with Phi1
+        if (_cap6Remaining > 0 && --_cap6Remaining == 0)
+            _capBit6 = 0;
+        if (_cap7Remaining > 0 && --_cap7Remaining == 0)
+            _capBit7 = 0;
     }
 
     /// <inheritdoc />
@@ -74,6 +88,10 @@ public sealed partial class Mos906114 : IAddressSpace, IClockedDevice
     {
         DataDirection = 0x00;
         DataRegister = 0x00;
+        _capBit6 = 0;
+        _capBit7 = 0;
+        _cap6Remaining = 0;
+        _cap7Remaining = 0;
     }
 
     /// <inheritdoc />
@@ -97,16 +115,64 @@ public sealed partial class Mos906114 : IAddressSpace, IClockedDevice
     {
         var output = (byte)(DataRegister & DataDirection);
         var input = (byte)(InputPullUp & (byte)~DataDirection);
-        return (byte)((output | input) & 0x3F);
+        var value = (byte)(output | input);
+        if ((DataDirection & 0x40) == 0)
+            value = (byte)((value & 0xBF) | _capBit6);
+        if ((DataDirection & 0x80) == 0)
+            value = (byte)((value & 0x7F) | _capBit7);
+        return value;
     }
 
     /// <summary>
-    /// Update the data-direction register. Bits 6-7 are masked off
-    /// since they are not implemented on the chip.
+    /// VICE <c>pport.data_set_bit6/7</c> and the falloff clocks. Not part
+    /// of the serialized machine snapshot. Replay injects this after the
+    /// DDR and data latches are written.
+    /// </summary>
+    internal readonly struct PortChargeReplay
+    {
+        public byte Bit6 { get; init; }
+        public byte Bit7 { get; init; }
+        public int Remaining6 { get; init; }
+        public int Remaining7 { get; init; }
+    }
+
+    /// <summary>Copies the charged input bits. VICE c64memsnapshot saves them.</summary>
+    internal PortChargeReplay CapturePortCharge() => new()
+    {
+        Bit6 = _capBit6,
+        Bit7 = _capBit7,
+        Remaining6 = _cap6Remaining,
+        Remaining7 = _cap7Remaining
+    };
+
+    /// <summary>Writes charged input bits back after the DDR and data latches.</summary>
+    internal void InjectPortCharge(PortChargeReplay charge)
+    {
+        _capBit6 = charge.Bit6;
+        _capBit7 = charge.Bit7;
+        _cap6Remaining = charge.Remaining6;
+        _cap7Remaining = charge.Remaining7;
+    }
+
+    /// <summary>
+    /// Update the data-direction register. VICE stores the whole byte.
+    /// A 1-to-0 edge on bit 6 or 7 starts the discharge countdown.
     /// </summary>
     public void WriteDataDirection(byte value)
     {
-        DataDirection = (byte)(value & 0x3F);
+        var previous = DataDirection;
+        DataDirection = value;
+        if ((previous & 0x40) != 0 && (value & 0x40) == 0)
+        {
+            _capBit6 = (byte)(DataRegister & 0x40);
+            _cap6Remaining = DataPortFalloffCycles;
+        }
+
+        if ((previous & 0x80) != 0 && (value & 0x80) == 0)
+        {
+            _capBit7 = (byte)(DataRegister & 0x80);
+            _cap7Remaining = DataPortFalloffCycles;
+        }
     }
 
     /// <summary>
@@ -116,7 +182,18 @@ public sealed partial class Mos906114 : IAddressSpace, IClockedDevice
     /// </summary>
     public void WriteDataPort(byte value)
     {
-        DataRegister = (byte)(value & 0x3F);
+        DataRegister = value;
+        if ((DataDirection & 0x40) != 0)
+        {
+            _capBit6 = (byte)(value & 0x40);
+            _cap6Remaining = DataPortFalloffCycles;
+        }
+
+        if ((DataDirection & 0x80) != 0)
+        {
+            _capBit7 = (byte)(value & 0x80);
+            _cap7Remaining = DataPortFalloffCycles;
+        }
     }
 
     /// <inheritdoc />

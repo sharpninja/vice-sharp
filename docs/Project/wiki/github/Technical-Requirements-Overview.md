@@ -41,7 +41,7 @@ This document indexes ViceSharp Technical Requirements (TRs). TRs define archite
 | TR ID | Title | Quality Attribute |
 |-------|-------|-------------------|
 | TR-ALLOC-001 | Zero Managed Allocations Per Emulation Cycle on Hot Path | Performance / GC |
-| TR-BUILD-001 | Nuke Build System with Azure DevOps CI and Release Pipelines | CI/CD / Build |
+| TR-BUILD-001 | Nuke Build System with GitHub origin as Source of Truth | CI/CD / Build |
 | TR-CYCLE-001 | Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior | Accuracy / Fidelity |
 | TR-DET-001 | Bit-Exact Reproducibility Given Same Initial State and Inputs | Correctness / Replay |
 | TR-GRPC-BOUNDARY-001 | Versioned gRPC Boundary Between Emulator Host and UI Clients | Architecture / Boundary |

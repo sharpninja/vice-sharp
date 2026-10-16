@@ -55,4 +55,22 @@ public static class FfmpegLocator
 
     /// <summary>True when an ffmpeg executable can be located.</summary>
     public static bool IsAvailable => Locate() is not null;
+
+    /// <summary>
+    /// FR-MED-005. True when capture may advertise ffmpeg formats.
+    /// A set <c>VICESHARP_FFMPEG</c> value is authoritative: a missing file
+    /// means unavailable and <c>PATH</c> is not consulted. Otherwise this is
+    /// <see cref="Locate"/>.
+    /// </summary>
+    public static bool IsUsable
+    {
+        get
+        {
+            var overridePath = Environment.GetEnvironmentVariable(OverrideEnvironmentVariable);
+            if (!string.IsNullOrWhiteSpace(overridePath))
+                return File.Exists(overridePath);
+
+            return Locate() is not null;
+        }
+    }
 }

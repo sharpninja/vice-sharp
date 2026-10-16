@@ -1,0 +1,242 @@
+[
+  {
+    "id": "F-01",
+    "originalFinding": {
+      "id": "F-01",
+      "severity": "Medium",
+      "surface": "B08",
+      "title": "Resume launch let plugin hooks cancel the historical review turn and relabel its model",
+      "location": "Request env MCP_CACHE_DIR_OVERRIDE=.mcpServer\\claude\\reviews\\20261008T073800-0500-phase1-oracle-contracts (reused); server session ClaudeCode-20261008T124507Z-phase1-oracle-contracts-hv",
+      "evidence": "client.SessionLog.QueryAsync (agent ClaudeCode, offset 1) at 2026-10-08T12:10-05:00: turn req-20261008T124548Z-001-independent-hostile-validation-phase1-mock status canceled, response \"Superseded by req-20261008T170045Z-prompt-d17e before it was completed.\", session and turn model claude, lastUpdated 17:00:46Z. Isolated queue holds hook records 20261008T170046Z-session_submit-2c6e (cancel), 20261008T170052Z-session_submit-6e35 and 20261008T170053Z-session_submit-f583 (model claude). HANDOFF.md line 113 requires launches that cannot supersede an old review turn.",
+      "remediation": "Operator decides any annotation of the canceled historical turn (reviewer made no mutation). For future resumes use a fresh isolated cache root and recover the review by explicit openSession/beginTurn, or a supported hook option that disables supersede-on-prompt for HV sessions. Plugin defect triaged as triage-report-1773cfcbe2bc4b41999aedeef90ba863 (hooks ignore MCP_SESSION_MODEL; setTurnTitle false negative). Do not replay 2c6e or 6e35.",
+      "classification": "process/audit-trail"
+    },
+    "parentDisposition": "Historical cancellation/relabeling preserved, not repaired. Future continuation candidate uses a new isolated MCP cache root and same Claude CLI conversation. Operator ruling on four queue records requested; no replay, delete or historical update. Fresh-cache protection must be verified at actual launch, not assumed from this packet.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-02",
+    "originalFinding": {
+      "id": "F-02",
+      "severity": "Medium",
+      "surface": "B06",
+      "title": "Disclosed secret exposure without a recorded rotation/revocation decision",
+      "location": "Parent tool transcripts (07:15 marker reload; MEMORY-LAB-002 prose filter); HANDOFF.md line 37",
+      "evidence": "Disclosed by the parent: the marker API key was rendered once through an incomplete regex redaction, and Tailscale credential identifiers from MEMORY-LAB-002 were rendered through an insufficient prose filter. Marker metadata shows a server restart at 2026-10-08T09:13:49-05:00, and the marker text says keys rotate on restart (inference: the 07:15 key is no longer valid; not verified). MEMORY-LAB-002 records that an earlier Tailscale key was revoked after transcript exposure. No revocation or rotation decision is recorded for the exposed identifiers.",
+      "remediation": "Ask the operator whether to revoke/replace the exposed Tailscale auth key, following the earlier precedent, and confirm workspace API key rotation through the normal Nuke-managed service restart if any doubt remains. Keep literal-value redaction of every parsed secret plus identifier patterns (auth key ..., Key ... was revoked, k...CNTRL, tskey-...) before any rendering.",
+      "classification": "security/process"
+    },
+    "parentDisposition": "Bounded local evidence distinguishes memory keyId from full authKey. Historical API key is redacted in retained output, so revocation unverified. Operator disposition requested and pending. No credentials/services/provider queries changed.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-03",
+    "originalFinding": {
+      "id": "F-03",
+      "severity": "Low",
+      "surface": "B07",
+      "title": "Web documentation consulted despite the local-only Operator Contract",
+      "location": "HANDOFF.md line 301; parent turn req-20261008T161608Z-prompt-c06c actions 2 and 4; debugger-runtime/README.md lines 24-28",
+      "evidence": "Actions typed web_reference read learn.microsoft.com pages for the t command, processor breakpoints, trace programs and .apply_dbp. The Operator Contract says implementation and investigation stay local and lists web tools as prohibited. The references were used only as hypotheses (good), and their use was disclosed.",
+      "remediation": "Obtain an explicit operator ruling. If not permitted, record the deviation and use locally installed debugger help instead. Keep web material out of evidentiary chains (already true).",
+      "classification": "workspace-rule"
+    },
+    "parentDisposition": "Historical prohibited web lookup retained as a deviation and excluded from runtime proof. No subsequent web lookup performed. Operator ruling on documented correction/local-only continuation requested and pending.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-04",
+    "originalFinding": {
+      "id": "F-04",
+      "severity": "Low",
+      "surface": "A15",
+      "title": "Gate runtime claims native diagnostics on stdout, but every gate stdout log is empty",
+      "location": "gate-runtime/gate-observer.c lines 2-3; gate-runtime/README.md lines 38-39; gate-runtime/*/stdout.log (7 files, 0 bytes)",
+      "evidence": "Clock runs with the same stock arguments and normal exit retained 2348 to 1791119 bytes of native stdout. The gate adapter ends nonzero runs with _Exit(status), which does not flush stdio buffers (inference for the cause). As a result, no native log (ROM loading, CPU reset lines) is retained for the seven gate probes.",
+      "remediation": "Flush stdout (fflush(NULL)) before _Exit, or make stdout unbuffered, in the diagnostic adapter. Correct the README and the adapter comment to say native stdout was not captured. Rerun only if native log evidence is needed.",
+      "classification": "evidence-accuracy"
+    },
+    "parentDisposition": "README and C header corrected to disclose seven empty stdout files; executable/body unchanged. Native stdout retention and real buffering behavior remain open. No claim that documentation repairs lost logs.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-05",
+    "originalFinding": {
+      "id": "F-05",
+      "severity": "Info",
+      "surface": "A13",
+      "title": "Clock reversal note omits the correlating native reset log",
+      "location": "clock-runtime/README.md lines 47-49; wrapped-*/stdout.log",
+      "evidence": "In all three wrapped runs, \"Main CPU:  RESET.\" is logged between the first 7,8 pair and the second 7,8 pair (reviewer extraction: reset log at record index 2). Correlation is not causal proof, and the README statement is not false.",
+      "remediation": "Cite the interleaved native reset line as correlated evidence while keeping the cause unproven unless a reset event is observed directly.",
+      "classification": "documentation"
+    },
+    "parentDisposition": "Clock README now cites native RESET line between initial clock pairs in all three logs, explicitly correlation only. No causal or reset-event proof claimed.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-06",
+    "originalFinding": {
+      "id": "F-06",
+      "severity": "Low",
+      "surface": "A11/A19",
+      "title": "Intermediate binary-mock-01 run omitted from the slice chronology",
+      "location": "docs/receipts/native-vice/20261008T082100-0500-phase2-feasibility/binary-mock-01/ (125/125 at 09:28:33); BINARY-MONITOR-SLICE.md lines 61-70; binary-runtime/README.md lines 102-114",
+      "evidence": "binary-mock-01 passed 125 tests: 77 prior plus 48 new mock cases. 13 cases (error-01..ff, reserved/null bodies, boundary encoders and readers) were added afterwards. Only mock-02 (failure) and mock-03 (final) are documented.",
+      "remediation": "Add binary-mock-01 to the chronology with its 48-case scope and the reason the 13 cases were added.",
+      "classification": "documentation"
+    },
+    "parentDisposition": "Binary chronology now includes125/125 mock-01 and exact13 added cases, then137/138 failed mock-02 and corrected138/138 mock-03. Raw receipts preserved.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-07",
+    "originalFinding": {
+      "id": "F-07",
+      "severity": "Low",
+      "surface": "A03",
+      "title": "Lifecycle transcript lacks a single-fault control for receipt acceptance after a changed postflight",
+      "location": "tests/ViceSharp.OracleContract.Tests/OracleContractTests.cs lines 50-61 and 79-84",
+      "evidence": "For (preflight true, postflight false), mutation 2 combines \"run before preflight\" with an inverted receipt, so the ordering assertion fails first. The receipt-value check (line 60) and the postflight-argument check (line 59) are never independently proven to reject a wrongly accepted receipt in that case. The receipt check is proven only for rejected preflight (Preflight(false), Receipt(true)). Decision-level coverage of post-inventory change exists in IdentityAndInventory.",
+      "remediation": "Add single-fault controls: correct order with Receipt(true) after Postflight(false), and correct order with a wrong Postflight argument.",
+      "classification": "test-discrimination"
+    },
+    "parentDisposition": "Four independent lifecycle controls added, including changed-postflight receipt acceptance and postflight-argument faults. Full current oracle87/87 passes. Requires reviewer revalidation.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-08",
+    "originalFinding": {
+      "id": "F-08",
+      "severity": "Low",
+      "surface": "A03",
+      "title": "Receipt contract accepts a vacuous zero-test receipt",
+      "location": "OracleContractTests.cs lines 128-181",
+      "evidence": "Every count scenario has at least one nonzero count. No scenario rejects Passed=0, Failed=0, Skipped=0, Aborted=0, which would let an empty run satisfy \"zero-failure/zero-skip for the claimed scope\" (TR-VICE-ORACLE-001 AC4, TEST-VICE-001 AC3).",
+      "remediation": "Add a no-tests-executed rejection scenario with a wrong-acceptance control. Optionally bind the expected executed count to the claimed scope.",
+      "classification": "test-completeness"
+    },
+    "parentDisposition": "Zero-executed receipt rejection case and wrong-acceptance control added. Full current oracle87/87 passes. Expected scope denominator beyond current contract not silently claimed.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-09",
+    "originalFinding": {
+      "id": "F-09",
+      "severity": "Low",
+      "surface": "A07",
+      "title": "Ledger maps missing-observation ACs to every PHI2/AEC case",
+      "location": "docs/receipts/native-vice/20261008T070900-0500-phase1-mocks/scenario-ac-ledger.json",
+      "evidence": "All 34 CpuPhi2AecContractTests rows carry \"FR-VICE-001 AC4 missing observations\" and \"TEST-VICE-001 AC4 missing observations\", including truth-table cases such as AccessForbidden and valid reads. The plan maps only missing observations to those ACs.",
+      "remediation": "Map ACs per scenario: missing/unknown/gap cases to FR-VICE-001 AC4 and TEST-VICE-001 AC4; truth-table cases to TR-CYCLE-001 AC4 only.",
+      "classification": "traceability"
+    },
+    "parentDisposition": "New per-scenario ledger distinguishes16 missing/unknown/gap PHI2 cases from18 truth-table cases. Original overbroad ledger preserved as historical evidence. Latest87-case ledger retained with fixture extraction.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-10",
+    "originalFinding": {
+      "id": "F-10",
+      "severity": "Low",
+      "surface": "A03",
+      "title": "Phase 1 fixtures are not yet reusable by real adapters without refactoring; boundary contract takes ResolvedPath as input",
+      "location": "ContractAssertions.cs lines 31-50; OracleContractTests.cs lines 101-118",
+      "evidence": "ProveDecision always constructs an NSubstitute probe, and fixtures live inline in [InlineData]/switch blocks. Unlike the Phase 2 suites, no provider seam binds a real adapter to the same rows. The wrapper-boundary DTO supplies ResolvedPath, so it cannot detect an adapter that mis-resolves traversal or links.",
+      "remediation": "Before production adapters, extract fixture rows to shared MemberData and add a provider seam. Require the real boundary binding to compute ResolvedPath from RequestedPath against real filesystem fixtures (junctions, .., case variants).",
+      "classification": "test-reusability"
+    },
+    "parentDisposition": "Shared MemberData/fixture builders and supplied-provider assertions added. Boundary requested input no longer supplies resolved path; result path independently asserted with wrong-path controls. Actual filesystem/junction resolver unimplemented and unproven. Names,rows and assertions preserved; current oracle87/87.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-11",
+    "originalFinding": {
+      "id": "F-11",
+      "severity": "Low",
+      "surface": "A14/A19",
+      "title": "Helper refactor provenance not retained",
+      "location": "tests/ViceSharp.NativeClockProbe.Tests/ClockHookImplementationTests.cs (lastWrite 11:03:05) and CompiledCFixture.cs (created 11:02:31); gate-fixture-evidence",
+      "evidence": "The untracked pre-refactor ClockHookImplementationTests.cs was overwritten, and the post-refactor clock compile log was not copied (only the gate compile log was). Assertions are unchanged (ClockHookContractTests.cs lastWrite 10:29:58). The reviewer rerun recompiled with the same -std=c11 -Wall -Wextra -Werror -O0 -g -Wl,--wrap=vic_cycle flags and passed 6/6 within 50/50.",
+      "remediation": "Retain read-only copies of files before refactoring, and copy every compile log produced by the bound real tests.",
+      "classification": "provenance"
+    },
+    "parentDisposition": "Missing historical pre-refactor bytes/compiler log explicitly remain missing. Subsequent preimages and both C compiler logs retained/hash-verified. Later evidence is not historical reconstruction; reviewer disposition still required.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-12",
+    "originalFinding": {
+      "id": "F-12",
+      "severity": "Low",
+      "surface": "A14",
+      "title": "Diagnostic stdio gate adapter has no mock-first contract tests",
+      "location": "docs/receipts/native-vice/20261008T082100-0500-phase2-feasibility/gate-runtime/gate-observer.c",
+      "evidence": "publish/flush/receive stdio bindings, EOF versus ferror mapping and _Exit termination are validated only by seven runtime probes. Unit failure controls exercise clock-gate.c with scripted I/O.",
+      "remediation": "Classify the adapter explicitly as diagnostic test tooling in GATE-SLICE.md, or add contract tests before it becomes part of any harness.",
+      "classification": "test-coverage"
+    },
+    "parentDisposition": "Adapter explicitly diagnostic-only.19 new reusable mock cases and incorrect-observation controls pass within full355/355 native-safe scope. Real C adapter binding, stdout retention and broken-pipe runtime unrun. No production adapter change or gate advance.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-13",
+    "originalFinding": {
+      "id": "F-13",
+      "severity": "Info",
+      "surface": "B",
+      "title": "Parent session-log model label is the placeholder codex",
+      "location": "Codex-20261007T135626Z-plugin-session, all 37 turns",
+      "evidence": "sourceType is Codex as required; model is codex on every turn. The actual Codex model is not recorded.",
+      "remediation": "Record the actual model identifier where the plugin supports it.",
+      "classification": "identity"
+    },
+    "parentDisposition": "Current runtime metadata proves gpt-6-astra xhigh; accurate identity recorded in current MCP dialog/action/tags. Wrapper1.118.0 hardcodes modelcodex and updateTurn has no model field. Direct triage13c287e9d2034e07ace0442a9c03697c grouped. No claim all historical turns used this model; structured placeholder remains pending plugin repair.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-14",
+    "originalFinding": {
+      "id": "F-14",
+      "severity": "Low",
+      "surface": "B11",
+      "title": "Decisions logged as dialog only, not also as design_decision actions",
+      "location": "AGENTS.md line 149; parent turns req-20261008T135637Z-prompt-5be7, req-20261008T142219Z-prompt-bc0b, req-20261008T151514Z-prompt-9817, req-20261008T161608Z-prompt-c06c",
+      "evidence": "These turns have 2, 4, 3 and 2 decision dialog entries and zero design_decision actions. Server turn shape has no designDecisions/filesModified fields, consistent with the parent disclosure that no structured-field repair was claimed.",
+      "remediation": "Append matching design_decision actions for each logged decision (supported appendActions), or obtain an operator ruling that dialog-only decisions suffice.",
+      "classification": "workspace-rule"
+    },
+    "parentDisposition": "Eleven full corrective decision action/dialog pairs persisted on current corrective turn with source linkage; all four immutable completed historical turns unchanged. Forward repair, not retroactive compliance; original field absence preserved.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-15",
+    "originalFinding": {
+      "id": "F-15",
+      "severity": "Info",
+      "surface": "B08",
+      "title": "Pending records in the isolated review queue",
+      "location": ".mcpServer\\claude\\reviews\\20261008T073800-0500-phase1-oracle-contracts\\failsafe\\pending",
+      "evidence": "2c6e (hook cancel of the historical turn), 6e35 (hook turn on the old session), f583 (hook open of d17e, superseded by the reviewer's primary write) and 20261008T171005Z-session_setTurnTitle-a8c8 (title already applied server-side). None was replayed or deleted by the reviewer.",
+      "remediation": "Do not drain this queue blindly. 2c6e and 6e35 must not be replayed. f583 and a8c8 are superseded and may be quarantined under an explicit operator decision.",
+      "classification": "persistence-hygiene"
+    },
+    "parentDisposition": "Four actual old reviewer queue files remain:2c6e,6e35,f583,a8c8. Explicit operator preserve/quarantine question pending. Do not replay any. This packet performs no queue disposition.",
+    "independentlyAccepted": false
+  },
+  {
+    "id": "F-16",
+    "originalFinding": {
+      "id": "F-16",
+      "severity": "Info",
+      "surface": "B",
+      "title": "Installed Claude plugin 1.119.0 versus marker 1.118.0",
+      "location": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0\\.version; AGENTS-README-FIRST.yaml agent_plugins.agents.Claude.plugin_version",
+      "evidence": "Known mismatch, preserved and disclosed; not repaired by the reviewer.",
+      "remediation": "None required for this review.",
+      "classification": "environment"
+    },
+    "parentDisposition": "Known installed Claude1.119.0 versus marker1.118.0 mismatch retained and disclosed. No plugin/settings repair. Reviewer originally requested no remediation for this finding.",
+    "independentlyAccepted": false
+  }
+]

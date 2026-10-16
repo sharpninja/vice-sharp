@@ -1,0 +1,64 @@
+Detecting DLL based HardSID boards.
+Cannot open hardsid.dll.
+Opening monitor command playback file: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\save-step.mon
+ 
+*** VICE Version 3.10 ***
+ 
+This is the condensed log, for the full log use --verbose or --debug.
+ 
+Main:  random seed was: 0x1
+Main:  command line was: F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\xvic.exe -default -console +sound -warp -seed 1 -directory F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data -monlog -monlogname F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\xvic-02\save-monitor.log -logfile F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\xvic-02\save-vice.log -initbreak reset -moncommands F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\save-step.mon
+Main:  VICE system file directory: 'F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src'.
+Main:  VICE system file search path: 'F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\kernal.901486-07.bin'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\basic-901486-01.bin'.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\VIC20\chargen-901460-03.bin'.
+DriveROM: Error -  2000 ROM image not found. Hardware-level 2000 emulation is not available.
+DriveROM: Error -  4000 ROM image not found. Hardware-level 4000 emulation is not available.
+DriveROM: Error -  CMDHD ROM image not found. Hardware-level CMDHD emulation is not available.
+Sysfile:  Loading `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\data\DRIVES\dos1540-325302+3-01.bin'.
+Sound:  Available sound devices: dx wmm dummy dump fs wav voc iff aiff soundmovie
+Joystick: Warning -  Failed to open `F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\headless-joymap-VIC20.vjm'.
+Joystick: Warning -  using minimal default mapping.
+
+Main CPU:  starting at ($FFFC).
+Main CPU:  RESET.
+Unit 8:  RESET.
+Monitor playback command: registers
+Monitor: #1 (Stop on  exec fd22)    0/$000,   6/$06
+.C:fd22  A2 FF       LDX #$FF       - A:00 X:00 Y:00 SP:00 ..-..IZ.          6
+
+Monitor:   ADDR A  X  Y  SP 00 01 NV-BDIZC 
+Monitor: LIN CYC  STOPWATCH
+
+Monitor: .;fd22 00 00 00 00 ff 00 00100110
+Monitor:  000 006
+Monitor:           6
+
+Monitor playback command: stopwatch
+Monitor: Stopwatch:          6
+
+Monitor playback command: dump "fresh.vsf"
+Monitor playback command: step 1
+Monitor: Stepping through the next 1 instruction(s).
+
+Main CPU:  RESET.
+Monitor: .C:fd22  A2 FF       LDX #$FF       - A:00 X:FF Y:00 SP:00 N.-..I.. 
+Monitor:          6
+
+Monitor playback command: registers
+Monitor:   ADDR A  X  Y  SP 00 01 NV-BDIZC 
+Monitor: LIN CYC  STOPWATCH
+
+Monitor: .;fd22 00 ff 00 00 ff 00 10100100
+Monitor:  000 006
+Monitor:           6
+
+Monitor playback command: stopwatch
+Monitor: Stopwatch:          6
+
+Monitor playback command: dump "after-step.vsf"
+Monitor playback command: quit
+
+Exiting...
+Closed monitor command playback file: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\stock-runtime\save-step.mon

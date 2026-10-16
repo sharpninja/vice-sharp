@@ -1,0 +1,18 @@
+{
+  "timestampLocal": "2026-10-08T09:10:08.1238163-05:00",
+  "exitCode": 0,
+  "monitorCommand": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\save-step.mon",
+  "snapshots": [
+    {
+      "sha256": "44585D00676AC4A7D0C4D80EFA52E2246E8C5DAA86FD56B1279E106BB2B990EE",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\x64sc-02\\after-step.vsf",
+      "length": 193261
+    },
+    {
+      "sha256": "C862485C2A96ABB5FD2B09616C6694A5BC673FB106904E5DB6F4A17C8508B675",
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\x64sc-02\\fresh.vsf",
+      "length": 193261
+    }
+  ],
+  "note": "Save and instruction-step smoke only, not bus-cycle or resume parity"
+}

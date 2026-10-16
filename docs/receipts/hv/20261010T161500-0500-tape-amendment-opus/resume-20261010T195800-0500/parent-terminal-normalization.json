@@ -1,0 +1,13 @@
+{
+  "recordedAt": "2026-10-10T20:02:33.9196323-05:00",
+  "source": "parent-turn-primary-readback.json",
+  "expectedLength": 3115,
+  "actualLength": 3006,
+  "byteIdentical": false,
+  "onlyDifference": "CRLF versus LF",
+  "normalizedTextExactMatch": true,
+  "expectedNormalizedSha256": "3DD2ECF2F2B557097E03D96BA5B523DEF54DCB6F1281C9A5243ACD89288D16C5",
+  "actualNormalizedSha256": "3DD2ECF2F2B557097E03D96BA5B523DEF54DCB6F1281C9A5243ACD89288D16C5",
+  "fullTerminalContentPreserved": true,
+  "note": "This explains the false byte-exact JSON field in primary proof. Full terminal text matches after newline normalization; no body truncation or changed error text."
+}

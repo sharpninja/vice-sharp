@@ -7,10 +7,10 @@ using Xunit;
 /// TR-VIC20-LOCKSTEP-001 / Slice N0-N1.
 /// Use case: native <c>xvic</c> oracle creates Vic20 machines and steps CPU
 /// in lockstep-compatible fashion with the managed Vic20 path.
-/// Acceptance: when <c>vice_xvic.dll</c> is present, Vic20 selectors create a
-/// real machine, reset lands at the kernal reset vector, and multi-cycle step
-/// advances PC/cycle. When the DLL is absent, create fails closed. Managed
-/// dual-machine determinism remains the interim accuracy gate.
+    /// Acceptance: the pinned xvic manifest, executable, native library, ROMs, and
+    /// workloads are mandatory. Vic20 selectors create a real machine, reset lands
+    /// at the kernal reset vector, and multi-cycle step advances PC/cycle. Managed
+    /// dual-machine determinism remains the interim accuracy gate.
 /// </summary>
 public sealed class Vic20LockstepScaffoldTests
 {
@@ -23,20 +23,7 @@ public sealed class Vic20LockstepScaffoldTests
     [InlineData("xvic")]
     public void NativeShim_CreatesVic20Models_WhenXvicOraclePresent(string modelSelector)
     {
-        if (!ViceNativeXvic.IsAvailable)
-        {
-            // Fail closed until N0 build ships vice_xvic.dll (same as pre-N0).
-            var ex = Assert.ThrowsAny<Exception>(() =>
-            {
-                using var native = ViceNative.CreateInstance(modelSelector);
-                _ = native;
-            });
-
-            Assert.True(
-                ex is InvalidOperationException or DllNotFoundException or EntryPointNotFoundException,
-                $"unexpected exception type {ex.GetType().Name}: {ex.Message}");
-            return;
-        }
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var instance = ViceNative.CreateInstance(modelSelector);
         instance.Reset();
@@ -51,10 +38,7 @@ public sealed class Vic20LockstepScaffoldTests
     [Fact]
     public void NativeXvic_StepAdvancesCycle_WhenOraclePresent()
     {
-        if (!ViceNativeXvic.IsAvailable)
-        {
-            return; // skip-by-return: oracle not built on this agent
-        }
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -89,10 +73,7 @@ public sealed class Vic20LockstepScaffoldTests
     [Fact]
     public void NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent()
     {
-        if (!ViceNativeXvic.IsAvailable)
-        {
-            return;
-        }
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();

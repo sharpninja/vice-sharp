@@ -1,0 +1,37 @@
+{
+  "timestampLocal": "2026-10-09T02:00:08-05:00",
+  "historicalSessions": [
+    {
+      "sessionId": "ClaudeCode-20261008T170040Z-plugin-session",
+      "beforeUpdated": "2026-10-08T12:11:59-05:00",
+      "afterUpdated": "2026-10-08T12:11:59-05:00",
+      "exactJsonEqual": true
+    },
+    {
+      "sessionId": "ClaudeCode-20261008T124507Z-phase1-oracle-contracts-hv",
+      "beforeUpdated": "2026-10-08T12:00:46-05:00",
+      "afterUpdated": "2026-10-08T12:00:46-05:00",
+      "exactJsonEqual": true
+    }
+  ],
+  "queue": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261008T073800-0500-phase1-oracle-contracts\\failsafe\\pending\\20261008T170046Z-session_submit-2c6e.yaml",
+      "exactEqual": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261008T073800-0500-phase1-oracle-contracts\\failsafe\\pending\\20261008T170052Z-session_submit-6e35.yaml",
+      "exactEqual": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261008T073800-0500-phase1-oracle-contracts\\failsafe\\pending\\20261008T170053Z-session_submit-f583.yaml",
+      "exactEqual": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261008T073800-0500-phase1-oracle-contracts\\failsafe\\pending\\20261008T171005Z-session_setTurnTitle-a8c8.yaml",
+      "exactEqual": true
+    }
+  ],
+  "historicalSessionCount": 2,
+  "queueCount": 4
+}

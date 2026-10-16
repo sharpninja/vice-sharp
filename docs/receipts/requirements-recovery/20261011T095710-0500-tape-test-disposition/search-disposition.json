@@ -1,0 +1,297 @@
+{
+  "preparedAt": "2026-10-11T10:06:00.5320731-05:00",
+  "search": "rg -l (?i)\\b(tap|tape|datasette)\\b tests -g *.cs",
+  "broadFileCount": 31,
+  "directInventoryFileCount": 13,
+  "unionFileCount": 32,
+  "additionalFileCount": 19,
+  "scope": "All matching lines retained for additional files; classification is not a full method/body audit.",
+  "rows": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\AttachPanelViewModelTests.cs",
+      "sha256": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+      "classification": "adjacent-regression-requires-preservation",
+      "reason": "Tape slot UI, IEC indicator and true-drive controls. Preserve UI assertions; do not infer runtime pulse coverage.",
+      "matchingLines": [
+        "53:            slot => Assert.Equal(MediaSlot.Tape, slot.Slot),",
+        "644:        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);",
+        "651:        Assert.False(tape.IsIecBusActive);",
+        "880:    /// Acceptance: Drive 8 and Drive 9 report SupportsTrueDrive true while Tape",
+        "890:        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);",
+        "895:        Assert.False(tape.SupportsTrueDrive);",
+        "1029:    /// PropertyChanged; the Tape slot never lights; SetDriveLed(true) lights a",
+        "1037:        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);",
+        "1047:        tape.SetIecActivity(true);",
+        "1048:        Assert.False(tape.LedOn);",
+        "1053:        tape.SetDriveLed(true);",
+        "1054:        Assert.False(tape.LedOn);"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Library.Tests\\Media\\MediaExtensionMapTests.cs",
+      "sha256": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+      "classification": "adjacent-regression-requires-preservation",
+      "reason": "TAP versus T64 extension routing. Keep both format identities; no tape timing claim.",
+      "matchingLines": [
+        "21:    [InlineData(\"creatures.tap\", MediaSlot.Tape, MediaKind.Tape, true)]",
+        "22:    [InlineData(\"game.t64\", MediaSlot.Drive8, MediaKind.Tape, true)]"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CaptureServiceHostTests.cs",
+      "sha256": "A4245A7A309A4BB736F5D68014CDED533B23AFFC5C16A698CD9CCB10FFD85D23",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "524:    /// submits samples through the tap, and the client stops the recording.",
+        "526:    /// samples submitted through the live tap are written; StopCapture finalises",
+        "576:    /// live audio backend (headless / test rig - no tap installed).",
+        "795:    /// FR-MED (review finding: single audio tap not arbitrated).",
+        "796:    /// Use case: a second audio-consuming capture starts while the tap is in use."
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CiaFlagPinTests.cs",
+      "sha256": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+      "classification": "adjacent-regression-requires-preservation",
+      "reason": "CIA FLAG chip behavior is a downstream tape dependency. Full chip gate stays mandatory.",
+      "matchingLines": [
+        "14:/// CIA1 FLAG is wired to the datasette READ line and CIA2 FLAG is on"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\FrMed005AcceptanceTests.cs",
+      "sha256": "AAC2CAB648095E3969898FE26EE1C8DC64F29CF4A3E35B947DC4D0DB614A5D39",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "467:    /// Ok and the file starts with GIF89a when an audio tap is installed.",
+        "468:    /// Mapping that tap into the GIF mux fails in ffmpeg."
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\GrpcHostServiceAdaptersTests.cs",
+      "sha256": "5C24A45A1C8689F371F3F575CDFBC4CA9CB61B1DAFD2FEF5290F2216E175AE70",
+      "classification": "adjacent-regression-requires-preservation",
+      "reason": "Tape attachment DTO serialization and ordered media listing. Preserve host boundary.",
+      "matchingLines": [
+        "295:            new MediaAttachmentDto(MediaSlot.Tape, \"b.tap\", \"B\", true, true, true),",
+        "311:        Assert.Equal(GrpcContracts.MediaSlot.Tape, response.Attachments[1].Slot);"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\IEC\\T64ImageTests.cs",
+      "sha256": "48B11DFCA89EE766165A85029E5597551A894DBB28FE70B1EE8B33701FF3B1E1",
+      "classification": "adjacent-regression-requires-preservation",
+      "reason": "T64 container extraction into D64 is distinct from raw TAP. Preserve tests and resolve source-backed T64 media dependencies without equating formats.",
+      "matchingLines": [
+        "3:using ViceSharp.Chips.Tape;",
+        "10:/// T64 tape-container support: extract first PRG and materialize a loadable single-file D64.",
+        "21:        var sig = \"C64S tape image file\"u8.ToArray();",
+        "30:        // tape name",
+        "31:        \"TEST TAPE\"u8.CopyTo(data.AsSpan(0x28));",
+        "34:        data[entry] = 0x01; // normal tape file"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+      "sha256": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+      "classification": "adjacent-regression-requires-preservation",
+      "reason": "Tape-related host error/status handling. Preserve negative service cases.",
+      "matchingLines": [
+        "16:/// disk/tape/cartridge attach success paths backed by",
+        "230:            new DetachMediaRequest(session.SessionId, MediaSlot.Tape),",
+        "234:        Assert.Contains(\"Tape\", response.Status.Message);"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Media\\CaptureAudioTapTests.cs",
+      "sha256": "63166932B57AE76422058F2B0C802A2CA834C767EC053E647FC253B61849EDAA",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "12:/// FR-MED-003 / TR-MEDIA-SOUND-001: runtime-swappable sound-recording tap.",
+        "13:/// The tap is installed once in the SID -> output path and lets the host",
+        "42:        var tap = new CaptureAudioTap(downstream);",
+        "44:        tap.SubmitSamples(new[] { 0.25f, -0.5f, 0.75f });",
+        "46:        Assert.False(tap.IsRecording);",
+        "59:        var tap = new CaptureAudioTap(downstream);",
+        "63:        tap.AttachRecorder(recorder);",
+        "64:        Assert.True(tap.IsRecording);",
+        "67:        tap.SubmitSamples(input);",
+        "69:        var detached = tap.DetachRecorder();",
+        "71:        Assert.False(tap.IsRecording);",
+        "95:        var tap = new CaptureAudioTap(downstream: null);",
+        "99:        tap.AttachRecorder(recorder);",
+        "101:        Assert.Same(recorder, tap.DetachRecorder());",
+        "102:        Assert.Null(tap.DetachRecorder());"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\ShellViewModelTests.cs",
+      "sha256": "A3A77872942964E2A0046018BF17FBA2D6B8C8D585C98BCC9A91E684BBBE9DFE",
+      "classification": "adjacent-regression-requires-preservation",
+      "reason": "Tape does not support true-drive UI toggle. Preserve no-op behavior.",
+      "matchingLines": [
+        "140:    /// Acceptance: ToggleTrueDrive on Drive 8 flips its TrueDrive; on Tape it is",
+        "141:    /// a no-op (Tape has no True Drive support).",
+        "148:        var tape = panel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);",
+        "154:        shell.ToggleTrueDrive(MediaSlot.Tape);",
+        "155:        Assert.False(tape.TrueDrive);"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidNoiseDivergentParityTests.cs",
+      "sha256": "07E7C412DA93FE5D306FA80253DC80B216E4548FBAC207192FC2540F15CCA595",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "44:    // 12-bit noise output tap packing (wave.h:354-367): SR bits 20,18,14,11,9,5,2,0",
+        "280:    /// scale and tap mapping from the 12-bit form.",
+        "318:                // Oracle OSC3 == 12-bit tap of oracle SR >> 4.",
+        "320:                // Managed OSC3 == 12-bit tap of managed SR >> 4.",
+        "446:    /// tap bits each cycle; after enough clocks the oracle SR[0] reaches 0.",
+        "717:    /// tap positions (wave.h:339-348), gradually corrupting the register.",
+        "766:    /// noise tap and the current waveform output bits. The managed code only AND'd",
+        "816:    /// Use case: combined waveforms including noise write zeros into the SR tap",
+        "850:            // (bit-19 rises every 16 cycles, each write zeros tap bits; 23 clocks needed)."
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidVoiceMixDivergentParityTests.cs",
+      "sha256": "84510C15535376D90F79F165729973E7549FBD7BD1ABC39A2FEC64E64C01E6DD",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "24:/// when 3OFF is set (mode bit7), and apply LP/BP/HP tap select from mode",
+        "597:    /// $D418 upper nibble. Acceptance: LP mode ($D418 bit4) routes LP tap",
+        "598:    /// to output; BP mode (bit5) routes BP tap; HP mode (bit6) routes HP tap.",
+        "605:        // With voice1 routed to filter, LP/BP/HP mode bits must select the tap.",
+        "660:        // reSID: silence is DC bias, not 0. Key assertion: no-tap output != LP output.",
+        "663:        // Verify that setting LP mode (bit4) brings voice1 back via the filter tap.",
+        "667:        // LP filter has integrated voice1 signal -> output differs from no-tap silence",
+        "669:        Assert.NotEqual(filterOut, filterOutLp); // LP changes output vs no-tap",
+        "769:    /// Use case: filter-tap dc_offset = 32767 * ((1&lt;&lt;12) - filterGain)"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidWaveOsc3DivergentParityTests.cs",
+      "sha256": "872C9A750ABA68D7FD41FC748C3698A321FD96FD40C97E03F5530B876C7B2435",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "300:    /// 600 single cycles the oracle's read($1B) equals exactly the tap",
+        "302:    /// managed $D41B read equals exactly the identical tap packing of the"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Vic20\\Vic20Via1IecPortTests.cs",
+      "sha256": "5EF92CBEDBCC82AC50A07EA121790B33957AD332396B36A5330D477F89B26005",
+      "classification": "adjacent-regression-requires-preservation",
+      "reason": "Idle VIA1 combined IEC/joystick/no-tape baseline. Retain, but add separate sense transition coverage only under approved later machine-glue gates.",
+      "matchingLines": [
+        "13:/// released joystick and no tape (VICE idle open-collector bus)."
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\WarpAudioDiscardTests.cs",
+      "sha256": "2EEC4B9F048CA468BF5BD2E094C3E5588D68D940864DCA5F2079DD59C26AC105",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "19:/// while the capture tap still feeds any attached recorder; leaving warp",
+        "231:    /// tap the moment it is attached."
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\GamepadMergeSocdTests.cs",
+      "sha256": "2BA29BEA1B0A894A683A77A9BEEB5E7FE044BB4F5F1200CD3F767D6AD8967740",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "44:    /// player can push the stick right and tap D-pad up for a diagonal, and the"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxAudioBackendFactoryTests.cs",
+      "sha256": "87D4FE2D74A89B5C2D53481F71055C0E8747037D8803FF6B6E0B4773C82EE554",
+      "classification": "lexical-false-positive",
+      "reason": "Matched tap refers to audio/filter/noise sampling or a controller tap, not Datasette/TAP transport. Not removed from applicable full-suite regression.",
+      "matchingLines": [
+        "43:    /// audio device (no live capture tap). With <c>VICESHARP_AUDIO=1</c> and no",
+        "83:            // A minimal session built headless engages no audio device (no live tap)."
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+      "sha256": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+      "classification": "retained-legacy-outside-implementation-scope",
+      "reason": "Legacy Xbox media slot/filter/attachment coverage retained; no Xbox implementation added.",
+      "matchingLines": [
+        "17:/// drive/tape/cartridge attach + eject, true-drive toggle, drive-model selection, and",
+        "30:    /// (Drive 8 / Drive 9 / Tape / Cartridge) with the same slot kinds and file",
+        "36:    /// the tape and cartridge slots are not true-drive capable and expose no models.",
+        "58:        var tape = vm.Slots[2];",
+        "59:        Assert.Equal(MediaSlot.Tape, tape.Slot);",
+        "60:        Assert.Equal(new[] { \"*.tap\" }, tape.FilePatterns);",
+        "61:        Assert.False(tape.SupportsTrueDrive);",
+        "62:        Assert.Empty(tape.AvailableDriveModels);",
+        "159:        var tape = vm.Slots.Single(slot => slot.Slot == MediaSlot.Tape);",
+        "161:        await vm.AttachAsync(tape, @\"C:\\tapes\\game.tap\", isReadOnly: false, cancellationToken: ct);",
+        "162:        Assert.True(tape.IsAttached);",
+        "164:        await vm.EjectAsync(tape, ct);",
+        "166:        Assert.Equal(MediaSlot.Tape, gateway.DetachedSlot);",
+        "167:        Assert.False(tape.IsAttached);",
+        "168:        Assert.Equal(string.Empty, tape.FilePath);"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDefaultCartridgeTests.cs",
+      "sha256": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+      "classification": "retained-legacy-outside-implementation-scope",
+      "reason": "Legacy Xbox default-cartridge selection interacts with tape attachment. Retain requirements/tests; no Xbox implementation added.",
+      "matchingLines": [
+        "22:/// media (disk/tape) clears it so the default stops overriding their choice.",
+        "32:///     cartridge replaces CartridgeFile; disk/tape media clears it; detaching the"
+      ],
+      "methodAudit": "not-performed-in-this-supplement",
+      "disposition": "Preserve; no test deletion, skip or gate exemption."
+    }
+  ]
+}

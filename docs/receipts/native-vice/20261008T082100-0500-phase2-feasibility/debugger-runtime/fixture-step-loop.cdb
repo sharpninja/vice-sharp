@@ -1,0 +1,1 @@
+.if (@rip == @$exentry) { .echo FIXTURE_ENTRY_REACHED_BY_TRACE; r @$t0; ba e1 (@$exentry+0xf0) ".echo FIXTURE_MAIN_HARDWARE_HIT; r rip; bl; bc *; q"; bl; g } .else { r @$t0=@$t0+1; .if (@$t0 > 0n50000) { .echo FIXTURE_STEP_LIMIT_FAILED; q } .else { t "$<fixture-step-loop.cdb" } }

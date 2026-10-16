@@ -1,0 +1,16 @@
+{
+  "timestampLocal": "2026-10-10T16:17:10.3198456-05:00",
+  "started": true,
+  "pid": 95168,
+  "hasExited": false,
+  "cliSessionId": "09cb215d-0e89-4272-aa11-a66514b50ea0",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "host": "PAYTON-LEGION2",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "requestPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\request.jsonl",
+  "responsePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\response.jsonl",
+  "cache": "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261010T161500-0500-tape-amendment-opus",
+  "artificialTimeout": null,
+  "artificialTurnLimit": null
+}

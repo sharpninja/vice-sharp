@@ -1,0 +1,2271 @@
+
+Microsoft (R) Windows Debugger Version 10.0.19041.685 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+*** wait with pending attach
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\bus-runtime
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\bus-runtime
+Symbol search path is: F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\bus-runtime
+Executable search path is: 
+ModLoad: 00007ff6`3f980000 00007ff6`41a7e000   F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\source\vice\src\xvic.exe
+ModLoad: 00007fff`ad980000 00007fff`adbe7000   C:\WINDOWS\SYSTEM32\ntdll.dll
+ModLoad: 00007fff`ac1f0000 00007fff`ac2bb000   C:\WINDOWS\System32\KERNEL32.DLL
+ModLoad: 00007fff`aae30000 00007fff`ab232000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`aca80000 00007fff`acb3c000   C:\WINDOWS\System32\ADVAPI32.dll
+ModLoad: 00007fff`ac8c0000 00007fff`ac969000   C:\WINDOWS\System32\msvcrt.dll
+ModLoad: 00007fff`ac970000 00007fff`aca19000   C:\WINDOWS\System32\sechost.dll
+ModLoad: 00007fff`ab710000 00007fff`ab828000   C:\WINDOWS\System32\RPCRT4.dll
+ModLoad: 00007fff`ad1a0000 00007fff`ad938000   C:\WINDOWS\System32\SHELL32.dll
+ModLoad: 00007fff`ab5f0000 00007fff`ab693000   C:\WINDOWS\System32\msvcp_win.dll
+ModLoad: 00007fff`aac40000 00007fff`aad8c000   C:\WINDOWS\System32\ucrtbase.dll
+ModLoad: 00007fff`acc50000 00007fff`ace1f000   C:\WINDOWS\System32\USER32.dll
+ModLoad: 00007fff`ab5c0000 00007fff`ab5e7000   C:\WINDOWS\System32\win32u.dll
+ModLoad: 00007fff`73f40000 00007fff`73fd4000   C:\WINDOWS\SYSTEM32\DSOUND.dll
+ModLoad: 00007fff`1b680000 00007fff`1b7b3000   C:\msys64\mingw64\bin\libcurl-4.dll
+ModLoad: 00007fff`85450000 00007fff`85497000   C:\msys64\mingw64\bin\libpng16-16.dll
+ModLoad: 00007fff`ad170000 00007fff`ad19b000   C:\WINDOWS\System32\GDI32.dll
+ModLoad: 00007fff`ab430000 00007fff`ab5ae000   C:\WINDOWS\System32\CRYPT32.dll
+ModLoad: 00007fff`abe60000 00007fff`ac1e5000   C:\WINDOWS\System32\combase.dll
+ModLoad: 00007fff`ab300000 00007fff`ab429000   C:\WINDOWS\System32\gdi32full.dll
+ModLoad: 00007fff`abde0000 00007fff`abe54000   C:\WINDOWS\System32\WLDAP32.dll
+ModLoad: 00007fff`ac2e0000 00007fff`ac360000   C:\WINDOWS\System32\WS2_32.dll
+ModLoad: 00007fff`60a80000 00007fff`60b37000   C:\WINDOWS\SYSTEM32\ResampleDmo.DLL
+ModLoad: 00007fff`aa9e0000 00007fff`aaa3e000   C:\WINDOWS\SYSTEM32\powrprof.dll
+ModLoad: 00007fff`ab840000 00007fff`ab919000   C:\WINDOWS\System32\OLEAUT32.dll
+ModLoad: 00007fff`aaa70000 00007fff`aaa9a000   C:\WINDOWS\SYSTEM32\bcrypt.dll
+ModLoad: 00007fff`ad070000 00007fff`ad16b000   C:\WINDOWS\System32\shcore.dll
+ModLoad: 00007fff`8b870000 00007fff`8b887000   C:\msys64\mingw64\bin\libbrotlidec.dll
+ModLoad: 00007fff`7c640000 00007fff`7c664000   C:\msys64\mingw64\bin\zlib1.dll
+ModLoad: 00007fff`75330000 00007fff`75372000   C:\msys64\mingw64\bin\libidn2-0.dll
+ModLoad: 00007fff`a9190000 00007fff`a91c3000   C:\WINDOWS\SYSTEM32\IPHLPAPI.DLL
+ModLoad: 00007fff`7adf0000 00007fff`7ae2c000   C:\msys64\mingw64\bin\libnghttp2-14.dll
+ModLoad: 00007fff`74f90000 00007fff`74fc5000   C:\msys64\mingw64\bin\libnghttp3-9.dll
+ModLoad: 00007fff`74560000 00007fff`745bd000   C:\msys64\mingw64\bin\libngtcp2-16.dll
+ModLoad: 00007fff`74f60000 00007fff`74f81000   C:\msys64\mingw64\bin\libpsl-5.dll
+ModLoad: 00007fff`a7c10000 00007fff`a7c1d000   C:\WINDOWS\SYSTEM32\Secur32.dll
+ModLoad: 00007fff`8b5f0000 00007fff`8b603000   C:\msys64\mingw64\bin\libngtcp2_crypto_ossl-0.dll
+ModLoad: 00007fff`6bef0000 00007fff`6bf42000   C:\msys64\mingw64\bin\libssh2-1.dll
+ModLoad: 00007fff`89450000 00007fff`89487000   C:\WINDOWS\SYSTEM32\winmmbase.dll
+ModLoad: 00007fff`99280000 00007fff`992b6000   C:\WINDOWS\SYSTEM32\WINMM.dll
+ModLoad: 00007ffe`fd850000 00007ffe`fdaae000   C:\msys64\mingw64\bin\libstdc++-6.dll
+ModLoad: 00007fff`18b50000 00007fff`18c7a000   C:\msys64\mingw64\bin\libzstd.dll
+ModLoad: 00007ffe`fd2a0000 00007ffe`fd843000   C:\msys64\mingw64\bin\libcrypto-3-x64.dll
+ModLoad: 00007fff`1a2c0000 00007fff`1a3c1000   C:\msys64\mingw64\bin\libssl-3-x64.dll
+ModLoad: 00007fff`7a1e0000 00007fff`7a1ee000   C:\WINDOWS\SYSTEM32\msdmo.dll
+ModLoad: 00007fff`74e40000 00007fff`74e6b000   C:\msys64\mingw64\bin\libbrotlicommon.dll
+ModLoad: 00007fff`0b520000 00007fff`0b63e000   C:\msys64\mingw64\bin\libiconv-2.dll
+ModLoad: 00007fff`59bb0000 00007fff`59c00000   C:\msys64\mingw64\bin\libintl-8.dll
+ModLoad: 00007ffe`ffde0000 00007fff`00008000   C:\msys64\mingw64\bin\libunistring-5.dll
+ModLoad: 00007fff`aa700000 00007fff`aa752000   C:\WINDOWS\SYSTEM32\cfgmgr32.dll
+ModLoad: 00007fff`6bec0000 00007fff`6beeb000   C:\msys64\mingw64\bin\libgcc_s_seh-1.dll
+ModLoad: 00007fff`7c6c0000 00007fff`7c6d6000   C:\msys64\mingw64\bin\libwinpthread-1.dll
+ModLoad: 00007fff`a9aa0000 00007fff`a9ae9000   C:\WINDOWS\SYSTEM32\SSPICLI.DLL
+ModLoad: 00007fff`a9fe0000 00007fff`a9fec000   C:\WINDOWS\SYSTEM32\CRYPTBASE.DLL
+ModLoad: 00007fff`aab80000 00007fff`aac2c000   C:\WINDOWS\System32\bcryptPrimitives.dll
+ModLoad: 00007fff`acc10000 00007fff`acc41000   C:\WINDOWS\System32\IMM32.DLL
+ModLoad: 00007fff`aa9c0000 00007fff`aa9d5000   C:\WINDOWS\SYSTEM32\UMPDC.dll
+ModLoad: 00007fff`a8590000 00007fff`a8e3e000   C:\WINDOWS\SYSTEM32\windows.storage.dll
+ModLoad: 00007fff`ab6a0000 00007fff`ab706000   C:\WINDOWS\System32\shlwapi.dll
+(1c7c8.ca9c): Break instruction exception - code 80000003 (first chance)
+ntdll!DbgBreakPoint:
+00007fff`adaa3ab0 cc              int     3
+0:004> .echo STOCK_ACCESS_STREAM_BEGIN
+STOCK_ACCESS_STREAM_BEGIN
+0:004> lm m xvic
+start             end                 module name
+00007ff6`3f980000 00007ff6`41a7e000   xvic       (deferred)             
+0:004> r @$t0=0
+0:004> r @$t1=0
+0:004> r @$t2=0
+0:004> ba e1 xvic+0x50ce4 "$<stock-access-fetch.cdb"
+0:004> ba w8 xvic+0x262a10 "$<stock-access-clock.cdb"
+0:004> ba e1 xvic+0x507c0 "$<stock-access-store.cdb"
+0:004> ba e1 xvic+0x50740 "$<stock-access-dummy-store.cdb"
+0:004> bl
+ 0 e 00007ff6`3f9d0ce4 e 1 0001 (0001)  0:**** xvic+0x50ce4 "$<stock-access-fetch.cdb"
+ 1 e 00007ff6`3fbe2a10 w 8 0001 (0001)  0:**** xvic+0x262a10 "$<stock-access-clock.cdb"
+ 2 e 00007ff6`3f9d07c0 e 1 0001 (0001)  0:**** xvic+0x507c0 "$<stock-access-store.cdb"
+ 3 e 00007ff6`3f9d0740 e 1 0001 (0001)  0:**** xvic+0x50740 "$<stock-access-dummy-store.cdb"
+0:004> g
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc26
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc27
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc27
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc27
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc28
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc29
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2a
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2a
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2b
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2b
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2b
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2c
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2d
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2e
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2e
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2e
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc2f
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc30
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc31
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc31
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc31
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc32
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc33
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc33
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc34
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc34
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc34
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc35
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc36
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc37
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc37
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc38
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc38
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc38
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc39
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3a
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3b
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3b
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3b
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3c
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3d
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3e
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3e
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3e
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc3f
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc40
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc40
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc41
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc41
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc41
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc42
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc43
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc44
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc44
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc45
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc45
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc45
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc46
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc47
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc48
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc48
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc48
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc49
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4a
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4b
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4b
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4b
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4c
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4d
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4d
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4e
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4e
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4e
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc4f
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc50
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc51
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc51
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc52
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc52
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc52
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc53
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc54
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc55
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc55
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc55
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc56
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc57
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc58
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc58
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc58
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc59
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5a
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5a
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5b
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5b
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5b
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5c
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5d
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5e
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5e
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5f
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5f
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc5f
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc60
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc61
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc62
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc62
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc62
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc63
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc64
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc65
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc65
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc65
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc66
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc67
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc67
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc68
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc68
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc68
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc69
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6a
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6b
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6b
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6c
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6c
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6c
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6d
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6e
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6f
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6f
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc6f
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc70
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc71
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc72
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc72
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc72
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc73
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc74
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc74
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc75
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc75
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc75
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc76
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc77
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc78
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc78
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc79
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc79
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc79
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7a
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7b
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7c
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7c
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7c
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7d
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7e
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7f
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7f
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc7f
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc80
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc81
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc81
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc82
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc82
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc82
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc83
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc84
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc85
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc85
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc86
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc86
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc86
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc87
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc88
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc89
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc89
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc89
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8a
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8b
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8c
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8c
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8c
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8d
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8e
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8e
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8f
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8f
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc8f
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc90
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc91
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc92
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc92
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc93
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc93
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc93
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc94
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc95
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc96
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc96
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc96
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc97
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc98
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc99
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ea
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210954 = 00007ff6`3fbfb60a
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc99
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=928dcc85
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc99
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9a
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9b
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=cc
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9b
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9c
+0:000> r rip
+rip=00007ff63f9d36cd
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ec
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210956 = 00007ff6`3fbfb60c
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9c
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=f002928d
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9c
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9d
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9e
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9f
+0:000> r rip
+rip=00007ff63f9d0ee6
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_STORE
+STOCK_ACCESS_STORE
+0:000> r rip
+rip=00007ff63f9d07c0
+0:000> r ecx
+ecx=292
+0:000> r edx
+edx=0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fc9f
+0:000> r @$t2=@$t2+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca0
+0:000> r rip
+rip=00007ff63f9d5520
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5ef
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210959 = 00007ff6`3fbfb60f
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca0
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=a578f7f0
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca0
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca1
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca2
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca3
+0:000> r rip
+rip=00007ff63f9d21c0
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_FETCH_BEFORE
+STOCK_ACCESS_FETCH_BEFORE
+0:000> r rip
+rip=00007ff63f9d0ce4
+0:000> r rax
+rax=000000000000e5e8
+0:000> r rdx
+rdx=00007ff63fbed020
+0:000> ? @rdx+@rax
+Evaluate expression: 140695608210952 = 00007ff6`3fbfb608
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca3
+0:000> t 0n1 "$<stock-access-fetch-after.cdb"
+0:000> .echo STOCK_ACCESS_FETCH_AFTER
+STOCK_ACCESS_FETCH_AFTER
+0:000> r rip
+rip=00007ff63f9d0ce7
+0:000> r eax
+eax=cc85c6a5
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca3
+0:000> r @$t1=@$t1+1
+0:000> g
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca4
+0:000> r rip
+rip=00007ff63f9d0d67
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca5
+0:000> r rip
+rip=00007ff63f9d0d74
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+0:000> .echo STOCK_ACCESS_CLOCK
+STOCK_ACCESS_CLOCK
+0:000> dq xvic+0x262a10 L1
+00007ff6`3fbe2a10  00000000`0075fca6
+0:000> r rip
+rip=00007ff63f9d5e4c
+0:000> r @$t0=@$t0+1
+0:000> .if (@$t0 >= 0n128) { .echo STOCK_ACCESS_STREAM_END; r @$t0; r @$t1; r @$t2; bc *; q } .else { g }
+STOCK_ACCESS_STREAM_END
+$t0=0000000000000080
+$t1=0000000000000027
+$t2=0000000000000014
+quit:
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'

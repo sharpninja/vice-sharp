@@ -1,0 +1,144 @@
+{
+  "CaseCount": 17,
+  "ValidatorIdentity": "Codex",
+  "TimestampUtc": "2026-10-03T11:42:02.1719765+00:00",
+  "Cases": [
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 0,
+      "RecordedMapping": 1,
+      "Bytes": 8192,
+      "DecodedBytes": 8192,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 1,
+      "RecordedMapping": 1,
+      "Bytes": 8192,
+      "DecodedBytes": 8192,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 2,
+      "RecordedMapping": 2,
+      "Bytes": 16384,
+      "DecodedBytes": 16384,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 3,
+      "RecordedMapping": 3,
+      "Bytes": 8192,
+      "DecodedBytes": 8192,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 4,
+      "RecordedMapping": 4,
+      "Bytes": 524288,
+      "DecodedBytes": 524288,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 5,
+      "RecordedMapping": 5,
+      "Bytes": 32768,
+      "DecodedBytes": 32768,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 6,
+      "RecordedMapping": 6,
+      "Bytes": 524288,
+      "DecodedBytes": 524288,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 7,
+      "RecordedMapping": 7,
+      "Bytes": 65536,
+      "DecodedBytes": 65536,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 8,
+      "RecordedMapping": 8,
+      "Bytes": 32768,
+      "DecodedBytes": 32768,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 9,
+      "RecordedMapping": 9,
+      "Bytes": 1048576,
+      "DecodedBytes": 1048576,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 10,
+      "RecordedMapping": 10,
+      "Bytes": 65536,
+      "DecodedBytes": 65536,
+      "Pass": true
+    },
+    {
+      "Case": "FullValueAndDefensiveCopy",
+      "RequestedMapping": 11,
+      "RecordedMapping": 11,
+      "Bytes": 65536,
+      "DecodedBytes": 65536,
+      "Pass": true
+    },
+    {
+      "Case": "RepeatedAttachDifferentTailAndMappingThenEject",
+      "Pass": true,
+      "EventCount": 3,
+      "EjectLine": "input cartridge attached=0 frame=0 cycle=50"
+    },
+    {
+      "Case": "RejectInvalidImageOrMapping",
+      "Length": 0,
+      "Mapping": 1,
+      "Rejected": true,
+      "StreamUnchanged": true,
+      "Pass": true,
+      "Reason": "Raw C64 cartridge images must be 8K or 16K and match the selected mapping mode."
+    },
+    {
+      "Case": "RejectInvalidImageOrMapping",
+      "Length": 8191,
+      "Mapping": 1,
+      "Rejected": true,
+      "StreamUnchanged": true,
+      "Pass": true,
+      "Reason": "Raw C64 cartridge images must be 8K or 16K and match the selected mapping mode."
+    },
+    {
+      "Case": "RejectInvalidImageOrMapping",
+      "Length": 0,
+      "Mapping": 0,
+      "Rejected": true,
+      "StreamUnchanged": true,
+      "Pass": true,
+      "Reason": "Raw C64 cartridge images must be 8K or 16K and match the selected mapping mode."
+    },
+    {
+      "Case": "ProductRejectsUnknownMapping999",
+      "Rejected": true,
+      "StreamUnchanged": true,
+      "Reason": "Raw C64 cartridge images must be 8K or 16K and match the selected mapping mode.",
+      "Pass": true
+    }
+  ],
+  "Method": "Real C64 ArchitectureBuilder, RuntimeSnapshotStore.RecordKey at 0, step 30, production ICartridgePort.AttachCartridge, SaveReplay exact full-hex equality; caller buffer mutated after attach; repeated attach/eject; invalid image and enum rejection without stream mutation."
+}

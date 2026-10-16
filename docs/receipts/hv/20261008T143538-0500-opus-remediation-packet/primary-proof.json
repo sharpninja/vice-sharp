@@ -1,0 +1,12 @@
+{
+  "verifiedAtLocal": "2026-10-08T14:48:25-05:00",
+  "requestId": "req-20261008T193152Z-prompt-658a",
+  "status": "completed",
+  "responseExact": true,
+  "decisionPairsExact": 2,
+  "structuredModelStillPlaceholder": "codex",
+  "runtimeIdentityRecordedInTagsAndDialog": true,
+  "primaryReadbackSha256": "3A18229BBFA0F2DA7B4A7437508BB8A5523AF5E9594CCB135B42CBD9F4F6FC27",
+  "candidatePinsExcludeThisLaterReadback": true,
+  "mustRevalidateAndIncludeAtActualLaunch": true
+}

@@ -22,8 +22,7 @@ public sealed class Vic20PixelFrameTests
     [Fact]
     public void CaptureVisibleFrame_AfterBoot_ReturnsPalNormalCanvas()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -55,8 +54,7 @@ public sealed class Vic20PixelFrameTests
     [Fact]
     public void ManagedAndNative_FrameGeometry_MatchAfterBoot()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();
@@ -95,8 +93,7 @@ public sealed class Vic20PixelFrameTests
     [Fact]
     public void CaptureFrameIndices_DimensionsMatchBgra()
     {
-        if (!ViceNativeXvic.IsAvailable)
-            return;
+        XvicOraclePrerequisites.ValidateCurrent();
 
         using var native = ViceNative.CreateInstance("vic20");
         native.Reset();

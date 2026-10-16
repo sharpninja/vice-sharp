@@ -1,0 +1,278 @@
+{
+  "kind": "mcp-todo-progress-only-reconciliation",
+  "timestampLocal": "2026-10-11T11:41:50-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T162438Z-goal-handoff-reconcile",
+  "preimages": "state-before.json",
+  "changedField": "remaining",
+  "changes": [
+    {
+      "id": "PLAN-GROKCOMPLETION-001",
+      "beforeRemaining": "Resumed by operator; historical2026-09-06 pause/red-gate note is superseded. Execute the entire approved C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md. Prerequisite Phase0 accepted by local Grok4.7xhigh AGREE99/98,26PASS0FAIL0UNKNOWN, full primary proof docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json. PLAN-VICEORACLE-001 Phase0 task only accepted, five tasks remain. Next green native-safe mock-contract suite, then Opus5.5max HV. All original real gates/full current-plus-prior suites remain mandatory; no product/native/VSF/whole-goal completion. No commit or push without separate explicit order.",
+      "after": {
+        "technicalRequirements": [
+          "TR-NATIVE-LIFECYCLE-001",
+          "TR-SETTINGS-TXN-001",
+          "TR-REMOTECTRL-CLI-001",
+          "TR-AIREVIEW-ROUTING-001",
+          "TR-COMPLETION-MANIFEST-001",
+          "TR-UI-COREBOUNDARY-001",
+          "TR-BASELINE-CORRECTNESS-001",
+          "TR-REMOTE-INTEGRATION-001",
+          "TR-UIAXAML-PICKER-001",
+          "TR-WARP-STATUS-001",
+          "TR-REMOTECTRL-SERVER-001"
+        ],
+        "title": "Complete approved Grok ViceSharp work with hostile phase gates",
+        "functionalRequirements": [
+          "FR-NATIVE-LIFECYCLE-001",
+          "FR-SETTINGS-TXN-001",
+          "FR-REMOTECTRL-CLI-001",
+          "FR-AIREVIEW-ROUTING-001",
+          "FR-COMPLETION-001",
+          "FR-MACHINEPICKER-001",
+          "FR-UISETVIS-001",
+          "FR-WARP-001",
+          "FR-REMOTECTRL-001"
+        ],
+        "id": "PLAN-GROKCOMPLETION-001",
+        "priority": "high",
+        "remaining": "2026-10-11T11:40:20-05:00 Full original Grok plan remains active and incomplete. Current checkpoint HANDOFF.md separates live state from preserved history. R0 tape/CPU/media draft docs/receipts/requirements-recovery/20261011T080155-0500-capacitor-guard-remediation remains UNAPPLIED/UNAPPROVED. Latest tape Opus5.5 max HV DISAGREE93/84,35PASS6FAIL0UNKNOWN. Later source/specification/disposition/API/observation supplements are not executed mocks or native proof. Finish decision-complete whole packet, fresh Opus HV >=98/98 zeroFAIL/UNKNOWN and exact-delta approval; then mocks-first guards/application and every original requirement, dense-session, immutable xvic/x64sc, canonical VSF, settings and cumulative-suite gate. Native-safe mock project and bounded external probes already exist; do not restart them as absent. Historical Phase0 acceptance remains scoped. Preserve Phase3 authorization history and reconcile provenance before further implementation. No gate or done-state change. Full prior TODO fields retained in docs/receipts/handoff/20261011T112946-0500-canonical-reconciliation/state-before.json. No commit/push without separate file-named order.",
+        "section": "Plans",
+        "dependsOn": [],
+        "description": [
+          "Execute docs/plans/PLAN-GROK-COMPLETION-20260906.md through all nine slices and final commit/push verification.",
+          "Operator removed credential remediation on 2026-09-06. Sol High implements; Astra xhigh independently validates each phase. Preserve unrelated dirty files."
+        ],
+        "technicalDetails": [
+          "Canonical AC matrix: docs/requirements/traceability/Grok-Completion-AC-Matrix-2026-09-06.md.",
+          "TEST coverage: ",
+          "TEST-NATIVE-LIFECYCLE-001, TEST-SETTINGS-TXN-001, TEST-REMOTECTRL-CLI-001, TEST-AIREVIEW-ROUTING-001, TEST-COMPLETION-001, TEST-UI-COREBOUNDARY-001, TEST-BASELINE-CORRECTNESS-001, TEST-REMOTE-INTEGRATION-001, TEST-UISET-001, TEST-UISET-002, TEST-UISET-003, TEST-REMOTECTRL-001",
+          "Requirements gate receipt validation-output/codex-grok-completion-20260906/astra-requirements-phase-review.md:42; review session Codex-20260907T024739Z-plugin-session/request req-20260907T025525Z-plan-requirements-audit completed and server-readback verified."
+        ],
+        "done": false,
+        "implementationTasks": [
+          {
+            "task": "Complete approved Slice 0 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Complete approved Slice 1 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Complete approved Slice 2 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Complete approved Slice 3 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Complete approved Slice 4 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Complete approved Slice 5 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Complete approved Slice 6 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Complete approved Slice 7 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Complete approved Slice 8 with requirements/red/green hostile gates",
+            "done": false
+          },
+          {
+            "task": "Final complete evidence audit, explicit-manifest commit/push and matching local/origin SHA",
+            "done": false
+          }
+        ]
+      },
+      "expectedExact": true,
+      "doneUnchanged": true,
+      "unrelatedFieldsUnchanged": true,
+      "readbackMethod": "workflow.todo.get"
+    },
+    {
+      "id": "PLAN-VICEORACLE-001",
+      "beforeRemaining": "2026-10-11T07:41:13.2835446-05:00 current tape correction: midnight Opus5.5 max review DISAGREE accuracy93/completeness84,35PASS6FAIL0UNKNOWN. Composite draft at docs/receipts/requirements-recovery/20261011T072531-0500-tape-state-composite/README.md contains14 existing-record updates,66 retained AC IDs,90 proposed AC, and fresh typed preimages. UNAPPLIED and not HV-ready. Remaining: CPU capacitor wording audit, complete fixture/case matrices and media dependencies, executable R0/R1 preservation/failure guards, root handoff reconciliation, then independent Opus HV >=98/98 zeroFAIL/UNKNOWN and explicit approval of exact expanded delta. Source/artifact checks are not mocks or runtime acceptance. Every real xvic/x64sc, native VSF, cumulative-suite, VIC20 settings and whole-plan gate remains mandatory. No goal/TODO/requirement done-state advances.\n\nHistorical prior remaining text retained below; not a current-state assertion:\nPhase0 accepted by local Grok4.7 xhigh AGREE99/98,26PASS0FAIL0UNKNOWN. Completed primary GrokCode-20261007T222539Z-phase0-remediation-hv / req-20261007T222539Z-phase0-remediation-hv contains full22855character verdict; parent independent proof docs/receipts/hv/20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json plus final .exit.json. Next: entire native-safe AC-mapped mock-contract suite green before real implementation; next reviewer Opus5.5 max. Five implementation tasks remain open. Real emulator/native VSF/whole-goal gates unwaived; no mock project or product implementation yet.",
+      "after": {
+        "technicalRequirements": [
+          "TR-VICE-ORACLE-001",
+          "TR-CYCLE-001"
+        ],
+        "title": "Restore immutable VICE oracle boundary and prove all retained real parity gates",
+        "functionalRequirements": [
+          "FR-VICE-001"
+        ],
+        "id": "PLAN-VICEORACLE-001",
+        "priority": "high",
+        "remaining": "2026-10-11T11:40:20-05:00 Phase0 task alone remains accepted; five tasks and whole TODO remain open. Current UNAPPLIED/UNAPPROVED fourteen-record candidate is docs/receipts/requirements-recovery/20261011T080155-0500-capacitor-guard-remediation/proposed-field-delta.json, not the earlier composite version. Current R0 supplements through 20261011T110100-0500-tape-observation-contract cover source/fixture specifications, 63 test dispositions and API/observer limitations; none is a new executed mock/native gate. Canonical handoff reconciled with preserved preimage, still awaits independent review. Remaining: full dependent corpus and loader/firmware/fault cases; real observer reachability/noninterference; adjacent test audit; decision-complete approved guard/writer strategy; whole-packet Opus5.5max HV >=98/98 zeroFAIL/UNKNOWN and explicit exact-delta approval. Then guard mocks before real implementation/application; retain full native-safe mock acceptance, immutable wrapper feasibility/migration, native-safe harness, comparator XMLDoc, REAL-C64-PHI2-AEC-001, real xvic/x64sc/VSF/UI and all original cumulative gates. Last HV remains DISAGREE93/84. See HANDOFF.md and docs/receipts/handoff/20261011T112946-0500-canonical-reconciliation/state-before.json for current context and complete previous fields. No requirement/native/done-state changes.",
+        "section": "Plans",
+        "dependsOn": [],
+        "description": [
+          "Execute docs/plans/PLAN-VICE-IMMUTABLE-001.md as a prerequisite within the entire approved Grok handoff completion plan. Remediate original VICE-as-target violations, not a new behavior requirement.",
+          "FR-VICE-001 AC1-4; TR-VICE-ORACLE-001 AC1-5; TEST-VICE-001 AC1-4; TR-CYCLE-001 all seven ACs, including actual PHI2/AEC AC4. No requirement is retired or marked satisfied by mocks."
+        ],
+        "technicalDetails": [
+          "Testing requirement: TEST-VICE-001. Related real snapshot gates: FR-SNP-005, TEST-SNP-002, TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001.",
+          "Phase 1: full native-safe tests/ViceSharp.OracleContract.Tests project, all six AC-mapped groups, valid mocks and discriminating incorrect mocks; no product/native build dependency.",
+          "Deferred XMLDoc correction: tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs incorrectly cites TR-CYCLE-001 AC4. Correct only after a native-safe harness build exists; retain fixture and single LockstepValidator ownership.",
+          "Named real evidence gate REAL-C64-PHI2-AEC-001: after wrapper feasibility and native-safe harness integration, require actual immutable x64sc half-cycle CPU access observations covering PHI1/PHI2, AEC low/high, idle/read/write, fail closed at missing/unknown access kind or first missing half-cycle. Exercise real managed behavior and native provenance; mock results cannot satisfy TR-CYCLE-001 AC4.",
+          "All seven TR-CYCLE-001 ACs and all existing real-emulator/current-plus-prior suites remain mandatory. Every executable exit has zero failed, skipped or aborted tests, unfiltered applicable suite, and local Opus5.5 max HV while Grok is unavailable AGREE >=98/98, zero FAIL/UNKNOWN."
+        ],
+        "done": false,
+        "implementationTasks": [
+          {
+            "task": "Reconcile Phase 0 preservation, primary requirements/projections and all workspace queues; obtain accepted HV",
+            "done": true
+          },
+          {
+            "task": "Prove the entire native-safe AC-mapped mock-contract suite green, including deliberate incorrect controls, then HV",
+            "done": false
+          },
+          {
+            "task": "Prove external-wrapper feasibility and snapshot compatibility on pinned immutable VICE without source mutation",
+            "done": false
+          },
+          {
+            "task": "Safely migrate preserved native modifications to external wrappers/managed code and establish native-safe harness builds",
+            "done": false
+          },
+          {
+            "task": "Correct deferred comparator XMLDoc mapping and pass REAL-C64-PHI2-AEC-001 with actual immutable x64sc evidence",
+            "done": false
+          },
+          {
+            "task": "Complete real xvic half-cycle parity, native VSF resume and all original whole-plan gates with full suites and HV",
+            "done": false
+          }
+        ]
+      },
+      "expectedExact": true,
+      "doneUnchanged": true,
+      "unrelatedFieldsUnchanged": true,
+      "readbackMethod": "workflow.todo.get"
+    },
+    {
+      "id": "PLAN-C64SET-001",
+      "beforeRemaining": "Phase 4 VIC-20 settings-visibility notification slice is green: focused Release tests 8 passed, 0 failed, 0 skipped; local Grok HV AGREE with accuracy 99 and completeness 98 (docs/receipts/hv/20261003T122555-0500-handoff-phase4-green-local-grok-powershell-resume.verdict.md). Phase 3 Slice 3a fail-closed xvic oracle is green: prerequisite tests 7 passed, 0 failed, 0 skipped; real checked-in oracle smoke 1 passed, 0 failed, 0 skipped; local Grok green HV AGREE 100/100 with corrected full MCP persistence (docs/receipts/hv/20261003T141152-0500-phase3a-green-mcp-correction-local-grok.verdict.md). Phase 3 Slice 3b manifest-contract input is green: focused manifest-input test 1 passed, 0 failed, 0 skipped; fail-closed mismatch test 1 passed, 0 failed, 0 skipped; local Grok green HV AGREE 99/99 with 21 PASS, 0 FAIL, 0 UNKNOWN and full MCP persistence (docs/receipts/hv/20261003T151117-0500-phase3b-green-local-grok.verdict.md). TODO remains open: Phase 3 Slices 3c onward, RemoteControl validation, PAL/NTSC clock, warp, the full 14-profile catalog, and other approved slices remain; FR-UISETVIS-001, TEST-UISET-003, FR-SNP-005, and TEST-SNP-002 stay pending.",
+      "after": {
+        "technicalRequirements": [
+          "TR-SETTINGS-TXN-001",
+          "TR-UIAXAML-PICKER-001",
+          "TR-WARP-STATUS-001"
+        ],
+        "title": "C64 Settings RC, Computer/Model dropdowns, family visibility",
+        "functionalRequirements": [
+          "FR-MACHINEPICKER-001",
+          "FR-SETTINGS-TXN-001",
+          "FR-UISETVIS-001",
+          "FR-WARP-001"
+        ],
+        "id": "PLAN-C64SET-001",
+        "priority": "High",
+        "remaining": "2026-10-11T11:40:20-05:00 Historical narrow results retained, not current full phase exits: settings visibility focused8/0/0 and Grok99/98; Phase3a prerequisites7/0/0 plus smoke1/0/0 and HV100/100; Phase3b manifest1/0/0 plus mismatch1/0/0 and HV99/99. Original receipt paths and entire prior remaining field preserved in docs/receipts/handoff/20261011T112946-0500-canonical-reconciliation/state-before.json and HANDOFF.before.md. Historical Phase3 start authorization is recorded; do not automatically ask again or claim never started. Reconcile its exact approval/gate provenance before further implementation; immutable prerequisites remain mandatory. Visibility must retain setter/host-refresh/restore notifications, family-switch drafts and existing bindings. Complete native-safe unfiltered current-plus-prior suites and accepted HV before phase exit; visibility flags do not prove actual keyboard/RemoteControl behavior. Phase3c onward, 14-profile catalog, PAL/NTSC clock, warp, RemoteControl and other approved slices remain. FR-UISETVIS-001, TEST-UISET-003, FR-SNP-005, TEST-SNP-002 remain pending. Full original goal and TODO remain incomplete.",
+        "section": "Backlog",
+        "dependsOn": [],
+        "description": [
+          "Avalonia Settings Computer+Model dropdowns like Xbox; hide VIC-20-only controls on C64 and vice-versa; RemoteControl validation of C64 variants (c64, c64c, ntsc at minimum) including PAL/NTSC CLOCK, Warp, shared inventory."
+        ],
+        "technicalDetails": [
+          "Approved continuation PLAN-GROKCOMPLETION-001; AC matrix docs/requirements/traceability/Grok-Completion-AC-Matrix-2026-09-06.md; tests TEST-SETTINGS-TXN-001, TEST-UISET-001/002/003, TEST-COMPLETION-001."
+        ],
+        "done": false,
+        "implementationTasks": []
+      },
+      "expectedExact": true,
+      "doneUnchanged": true,
+      "unrelatedFieldsUnchanged": true,
+      "readbackMethod": "workflow.todo.get"
+    },
+    {
+      "id": "PLAN-VSFLOCKSTEP-001",
+      "beforeRemaining": "The fresh local Grok review is DISAGREE (89 accuracy, 84 completeness, 4 pass, 8 fail, 7 unknown). Every numbered finding has been remediated in the plan, canonical FR/TR/TEST text, live MCP criteria/mappings, regenerated wiki projection, and retained local evidence. Gate 0 remains open until a new local Grok review independently returns AGREE at 98/98 or higher and the operator explicitly approves the corrected plan. No product implementation task is done or authorized.",
+      "after": {
+        "functionalRequirements": [
+          "FR-SNP-005",
+          "FR-VSFLOCKSTEP-001"
+        ],
+        "title": "Complete and productionize native VICE snapshot support",
+        "dependsOn": [],
+        "estimate": "multi-slice",
+        "implementationTasks": [
+          {
+            "task": "Gate 0: locally hostile-validate corrected requirements and decision-complete canonical-format plan",
+            "done": false
+          },
+          {
+            "task": "Slice 1: make native prerequisites, deterministic fixtures, manifest, and cumulative gate non-skippable",
+            "done": false
+          },
+          {
+            "task": "Slice 2: move existing C64 VSF staging into production with bounded native lifecycle and transaction tests",
+            "done": false
+          },
+          {
+            "task": "Slice 3: complete C64 pipeline/media state transfer and 100000-cycle x64sc lockstep",
+            "done": false
+          },
+          {
+            "task": "Slice 4: complete VIC-20 state transfer and 100000-cycle xvic lockstep",
+            "done": false
+          },
+          {
+            "task": "Slice 5: write native VSF from complete managed C64 and VIC-20 state",
+            "done": false
+          },
+          {
+            "task": "Slice 6: make native VSF canonical across host/protocol/desktop/slots and prove win-x64 MSI installation",
+            "done": false
+          },
+          {
+            "task": "Slice 7: bidirectional round trip, structural/native corruption matrix, and final cumulative gates",
+            "done": false
+          }
+        ],
+        "technicalRequirements": [
+          "TR-LOCKSTEP-VSF-001",
+          "TR-VSFLOCKSTEP-RESUME-001"
+        ],
+        "section": "Plans",
+        "done": false,
+        "description": [
+          "Preserve and productionize the existing managed VSF resume bridge.",
+          "Restore native VICE .vsf as the canonical ViceSharp snapshot format for every supported C64 and VIC-20 public and desktop snapshot path.",
+          "Complete x64sc C64 and xvic VIC-20 native .vsf load, save, bidirectional round trip, and deterministic continuation.",
+          "Use docs/plans/PLAN-VSFLOCKSTEP-001.md as the decision-complete BDPv4 plan."
+        ],
+        "technicalDetails": [
+          "Native VICE remains the version-specific VSF reader and writer; native .vsf is the day-one canonical ViceSharp snapshot format, never an opt-in or secondary export.",
+          "The current bridge exports RAM, written 6510 port values, CPU architectural registers, VIC-II and CIA state, but it resets rather than imports native CPU in-flight state; the plan requires real manifest-mapped pipeline transfer.",
+          "Production contracts have closed model selectors, typed immutable state records, exact protobuf/import boundaries, error codes, independent per-DLL 10-second cancellable native acquisition, lock boundaries, session-generation revalidation, rollback and rollback-failure behavior.",
+          "The envelope validator follows pinned VICE framing: current 58-byte and legacy 37-byte headers, 22-byte module headers, little-endian inclusive lengths, and exact EOF; it has no invented module-count or file-size compatibility cap. Native VICE parses payloads, and VSF has no general checksum.",
+          "Fixture generation is bound to exact ROM hashes. Local evidence verifies the 24-module C64 fixture, pinned VICE commit, MSYS2 paths, selector vocabularies, and current recursive PE dependency closure.",
+          "CaptureSnapshot, Avalonia file save/load, quick save/load, and ten named slots use native .vsf by default; generated protobuf ImportLegacySnapshot alone accepts proprietary readers. Unsupported hosts return unavailable without fallback.",
+          "win-x64 PublishMsi builds native runtime first, then stages the verified loose closure after DotNetPublish and before WiX, includes VICE license/source-offer material, excludes ROMs, and requires installed C64/VIC-20 smoke.",
+          "All work remains local in this chat; only a locally launched Grok reviewer performs hostile validation. No cloud runner or remote agent is authorized.",
+          "UWP and Xbox implementation is out of scope; their historical requirements remain active and are not retired."
+        ],
+        "id": "PLAN-VSFLOCKSTEP-001",
+        "priority": "high",
+        "remaining": "2026-10-11T11:40:20-05:00 Canonical native VICE VSF remains mandatory day-one functionality; existing managed resume support must be preserved and productionized, not treated as absent or optional. All eight tasks and gate0 remain open. Historical VSF plan review DISAGREE89/84 (4PASS8FAIL7UNKNOWN) and subsequent plan changes remain retained in prior fields at docs/receipts/handoff/20261011T112946-0500-canonical-reconciliation/state-before.json. The later tape review DISAGREE93/84 is not a VSF plan approval. Current designated reviewer is local Opus5.5max while Grok is unavailable, overriding stale Grok-only prose in historical fields. External compatibility/monitor/stock-build feasibility and mock receipts do not prove full state transfer, native pipeline resume, managed native-format save, public/desktop slots or installed MSI. Retain immutable/native-safe prerequisites and every plan contract, C64/VIC20 100000-cycle roundtrip/runtime gate and cumulative suite. Obtain current corrected-plan HV >=98/98 zeroFAIL/UNKNOWN and explicit approval at the prescribed gate before product implementation. No satisfaction/task/done-state changes."
+      },
+      "expectedExact": true,
+      "doneUnchanged": true,
+      "unrelatedFieldsUnchanged": true,
+      "readbackMethod": "workflow.todo.get"
+    }
+  ],
+  "doneStateChanges": 0,
+  "requirementWrites": 0
+}

@@ -1,0 +1,442 @@
+{
+  "timestampLocal": "2026-10-08T11:54:35-05:00",
+  "count": 59,
+  "changed": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "previousSha256": "797EDBB86DD2845678A1E32405459E296993336AD4026AA1C7B87B9B26853CED",
+      "currentSha256": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "exists": true,
+      "unchanged": false
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+      "previousSha256": "61597EDDF5346E69CDDA0B44BC9F835EA29B6B43C6F166BC948DD98448CE9F58",
+      "currentSha256": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "exists": true,
+      "unchanged": false
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "previousSha256": "A2162CD906FA7D327A0C3FA2DE1110E8053F433A6769BA2D11DCF981E15C4085",
+      "currentSha256": "983DD1F9E9E20CB32180B8AB139B666933B2C3FA44DC4F20F2C1284BC299C733",
+      "exists": true,
+      "unchanged": false
+    }
+  ],
+  "pins": [
+    {
+      "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+      "previousSha256": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+      "currentSha256": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\.github\\copilot-instructions.md",
+      "previousSha256": "74B669ABED9473B345B5E08EBE74A8B8CF2E48C6CFF99A4BC0C8E5CDC3429AC7",
+      "currentSha256": "74B669ABED9473B345B5E08EBE74A8B8CF2E48C6CFF99A4BC0C8E5CDC3429AC7",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\AGENTS.md",
+      "previousSha256": "5649ACD0870C000119185DF3C911EEF009407AA09C43C5A4C68182F1CB26D727",
+      "currentSha256": "5649ACD0870C000119185DF3C911EEF009407AA09C43C5A4C68182F1CB26D727",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\Directory.Build.props",
+      "previousSha256": "15BEC422A7EBA6C62F1EBD76562AAD8A3598C4DCEB9F84BF30AA65754091FC62",
+      "currentSha256": "15BEC422A7EBA6C62F1EBD76562AAD8A3598C4DCEB9F84BF30AA65754091FC62",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\Directory.Packages.props",
+      "previousSha256": "B1D7C95481E78B419EF4ABB5762C3748D86CAF4838F923BEAD9FD9D7F6136724",
+      "currentSha256": "B1D7C95481E78B419EF4ABB5762C3748D86CAF4838F923BEAD9FD9D7F6136724",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+      "previousSha256": "797EDBB86DD2845678A1E32405459E296993336AD4026AA1C7B87B9B26853CED",
+      "currentSha256": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "exists": true,
+      "unchanged": false
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VSFLOCKSTEP-001.md",
+      "previousSha256": "61597EDDF5346E69CDDA0B44BC9F835EA29B6B43C6F166BC948DD98448CE9F58",
+      "currentSha256": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "exists": true,
+      "unchanged": false
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.parent-final-primary-query.json",
+      "previousSha256": "5F1E9EEB7A53C84C175F42249990241FCBBE05805C2EA7154EF1E5C8D00E6027",
+      "currentSha256": "5F1E9EEB7A53C84C175F42249990241FCBBE05805C2EA7154EF1E5C8D00E6027",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.parent-primary-proof.json",
+      "previousSha256": "A432A7284C99673E76CD79A7FE1D93A45FFDC8C231FDD97E545D3414B5E05AD5",
+      "currentSha256": "A432A7284C99673E76CD79A7FE1D93A45FFDC8C231FDD97E545D3414B5E05AD5",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.verdict.json",
+      "previousSha256": "5042126C3DFF2F158953B345FEE85F20C7877DDCC8EDFC1AEACDE720CC7FBCB4",
+      "currentSha256": "5042126C3DFF2F158953B345FEE85F20C7877DDCC8EDFC1AEACDE720CC7FBCB4",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261007T171400-0500-phase0-remediation-grok.verdict.md",
+      "previousSha256": "2AD519BE241A877E4BEB9D5C68726E7EB2CDB23DEB57B817FC7A8951D6FFCBC1",
+      "currentSha256": "2AD519BE241A877E4BEB9D5C68726E7EB2CDB23DEB57B817FC7A8951D6FFCBC1",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008T073800-0500-phase1-oracle-contracts-opus.mcp-config.json",
+      "previousSha256": "780F5F1A8B7CAB15D5BD1A078DEDA9520B803E43DC219E460ADCA2958AC3BE52",
+      "currentSha256": "780F5F1A8B7CAB15D5BD1A078DEDA9520B803E43DC219E460ADCA2958AC3BE52",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261008T073800-0500-phase1-oracle-contracts-opus.prompt.md",
+      "previousSha256": "946C9FCB33A27B109BE64CEB6DC6963EF5E79D76AE7B45516E19E9FE14ECBA4D",
+      "currentSha256": "946C9FCB33A27B109BE64CEB6DC6963EF5E79D76AE7B45516E19E9FE14ECBA4D",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-code-verify-01.json",
+      "previousSha256": "E910483E268A3EFCF5F289E69E71E45361BA9DBA86EEA694404DE84F381C630E",
+      "currentSha256": "E910483E268A3EFCF5F289E69E71E45361BA9DBA86EEA694404DE84F381C630E",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-code-verify-02.json",
+      "previousSha256": "37A81C96D65641E5852790328B2C45F4716220834DE6EF25F5EA282D828EF816",
+      "currentSha256": "37A81C96D65641E5852790328B2C45F4716220834DE6EF25F5EA282D828EF816",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-code-verify-03.json",
+      "previousSha256": "2F2C1BC764B2A79058D6F2850E908FEBEEDB79FE513E75A6BA95BE75EBAFEF54",
+      "currentSha256": "2F2C1BC764B2A79058D6F2850E908FEBEEDB79FE513E75A6BA95BE75EBAFEF54",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-code-verify-04.json",
+      "previousSha256": "8A6ADD6BC82015BCF2DD72333DB7FE3B7C96F2AE45D6AA05FDF93436124D05BD",
+      "currentSha256": "8A6ADD6BC82015BCF2DD72333DB7FE3B7C96F2AE45D6AA05FDF93436124D05BD",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-full-tests-01.json",
+      "previousSha256": "9BEBE83129A9829E848ED3FAD29DB47A0EC48C3E51866BDB9D096B6DCC4C9317",
+      "currentSha256": "9BEBE83129A9829E848ED3FAD29DB47A0EC48C3E51866BDB9D096B6DCC4C9317",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\after-full-tests-02.json",
+      "previousSha256": "0C0090922D4DDBDCB415943957FA8CA16DD3FE7D83426F82C8226D1283FC67F4",
+      "currentSha256": "0C0090922D4DDBDCB415943957FA8CA16DD3FE7D83426F82C8226D1283FC67F4",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-code-verify-01.json",
+      "previousSha256": "06E2A9CC24490D8F8912AEB45774A9FB698997AD65D79B4D8A179661C3857607",
+      "currentSha256": "06E2A9CC24490D8F8912AEB45774A9FB698997AD65D79B4D8A179661C3857607",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-code-verify-02.json",
+      "previousSha256": "E720BF5A8642FC5AD6975850FBBFD9E49D544B38023769668FFBC56FFAA9E4F5",
+      "currentSha256": "E720BF5A8642FC5AD6975850FBBFD9E49D544B38023769668FFBC56FFAA9E4F5",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-code-verify-03.json",
+      "previousSha256": "45A41DD7D99CE56C9DCA713F540CA7E8E62EB4EEAB694443F1DA297C12A9A6FE",
+      "currentSha256": "45A41DD7D99CE56C9DCA713F540CA7E8E62EB4EEAB694443F1DA297C12A9A6FE",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-code-verify-04.json",
+      "previousSha256": "EFFD778FAB238A744BE22ABD11CF59D147A6A7A147C2E1267DCEA3AD05664921",
+      "currentSha256": "EFFD778FAB238A744BE22ABD11CF59D147A6A7A147C2E1267DCEA3AD05664921",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-edits.json",
+      "previousSha256": "CB2CC9E4108150368C04937C845C8A7D1937F463D1208B966935079A013E22F0",
+      "currentSha256": "CB2CC9E4108150368C04937C845C8A7D1937F463D1208B966935079A013E22F0",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-full-tests-01.json",
+      "previousSha256": "C63258C0925AE07D8CF0A6C3EAF7E916C5C9A9435F3295450C0534905F567753",
+      "currentSha256": "C63258C0925AE07D8CF0A6C3EAF7E916C5C9A9435F3295450C0534905F567753",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\before-full-tests-02.json",
+      "previousSha256": "0CE351E363256EFD74312831DDE1DE6E8E2F172DCD538F6E39BB5F7F1FC22D2F",
+      "currentSha256": "0CE351E363256EFD74312831DDE1DE6E8E2F172DCD538F6E39BB5F7F1FC22D2F",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-01-build.log",
+      "previousSha256": "1CD112F9F091EE21297F2ED61A304AFC5982F81C696FDCDA8CD12402448EB292",
+      "currentSha256": "1CD112F9F091EE21297F2ED61A304AFC5982F81C696FDCDA8CD12402448EB292",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-01.log",
+      "previousSha256": "43EF1BB413B29D0DE5DB4FFE2777D66507AE67BFFFFCB2E2E5D3669715E69261",
+      "currentSha256": "43EF1BB413B29D0DE5DB4FFE2777D66507AE67BFFFFCB2E2E5D3669715E69261",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-02-build.log",
+      "previousSha256": "C547E2121D17C37D897ED0404D7825BD4354911F79F53B5ABA306DF437C0815B",
+      "currentSha256": "C547E2121D17C37D897ED0404D7825BD4354911F79F53B5ABA306DF437C0815B",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-02.log",
+      "previousSha256": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+      "currentSha256": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-03-build.log",
+      "previousSha256": "6851F17FA10411CB729B1F432FAC261A0E7A10D7F7C2059D4261682CF7B6B66F",
+      "currentSha256": "6851F17FA10411CB729B1F432FAC261A0E7A10D7F7C2059D4261682CF7B6B66F",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-03.log",
+      "previousSha256": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+      "currentSha256": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-04-build.log",
+      "previousSha256": "AE4E9D332E26D57F52D117231AABB376899B84C9BF424598EB1239D24A6CB032",
+      "currentSha256": "AE4E9D332E26D57F52D117231AABB376899B84C9BF424598EB1239D24A6CB032",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\code-verify-04.log",
+      "previousSha256": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+      "currentSha256": "6D7CF849EB967B059C1BE1B15E435737EF09643BCA892459C171C38253EEA8EF",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\diff-check.json",
+      "previousSha256": "E59D2468792A8B6E6800B7DE42511E6BDF034A5A68460CF2929FC8332E9F346C",
+      "currentSha256": "E59D2468792A8B6E6800B7DE42511E6BDF034A5A68460CF2929FC8332E9F346C",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\effective-requirements.json",
+      "previousSha256": "F13985E5A32D71B5ACBE9F192357F5F31F2DCAB94A2FA2668C6EDB1325D3726F",
+      "currentSha256": "F13985E5A32D71B5ACBE9F192357F5F31F2DCAB94A2FA2668C6EDB1325D3726F",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-01-result.json",
+      "previousSha256": "B173B9490BB599CAD04FBB01FA695A016040883710C2799DB5EEF4C3D158A59E",
+      "currentSha256": "B173B9490BB599CAD04FBB01FA695A016040883710C2799DB5EEF4C3D158A59E",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-01.diag.log",
+      "previousSha256": "C6B88DFA1AD73FEBB257E61835C7F30C1D82D38635E6A1532F0183B0E86C0F7F",
+      "currentSha256": "C6B88DFA1AD73FEBB257E61835C7F30C1D82D38635E6A1532F0183B0E86C0F7F",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-01.log",
+      "previousSha256": "A7EF30D599E9C5E404CFEA763B9BE7908E76EA1706B869B8769FDBA29821E0FC",
+      "currentSha256": "A7EF30D599E9C5E404CFEA763B9BE7908E76EA1706B869B8769FDBA29821E0FC",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-01.trx",
+      "previousSha256": "58810B4390B2E9C5A2DF1DAE9233B11A532624E570FC51D0DCEED4B11B91C7BB",
+      "currentSha256": "58810B4390B2E9C5A2DF1DAE9233B11A532624E570FC51D0DCEED4B11B91C7BB",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-02-result.json",
+      "previousSha256": "22DA586113A1A6BA9B6E5C7EB4273DDE676935D25515ED78B8E90B97FB2B94FE",
+      "currentSha256": "22DA586113A1A6BA9B6E5C7EB4273DDE676935D25515ED78B8E90B97FB2B94FE",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-02.diag.log",
+      "previousSha256": "C4FA819C24E00A5C42BC7F4CE273F52647E0B5C8D43A9245E36167E275C4A2AE",
+      "currentSha256": "C4FA819C24E00A5C42BC7F4CE273F52647E0B5C8D43A9245E36167E275C4A2AE",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-02.log",
+      "previousSha256": "2124D6D71A65DF46AD3833B4579BCEE0B679613B80BE6994F72EA599DE4794CC",
+      "currentSha256": "2124D6D71A65DF46AD3833B4579BCEE0B679613B80BE6994F72EA599DE4794CC",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\full-tests-02.trx",
+      "previousSha256": "ECED7D118927771B95B59EA62B2991E046DE61FA95754FCF0DA4672CB37F791C",
+      "currentSha256": "ECED7D118927771B95B59EA62B2991E046DE61FA95754FCF0DA4672CB37F791C",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\native-comparison.json",
+      "previousSha256": "F4B3279A9C2BB2795972AEEAA819E8D3B4B20A7025C72462483C3EA3B9DA7350",
+      "currentSha256": "F4B3279A9C2BB2795972AEEAA819E8D3B4B20A7025C72462483C3EA3B9DA7350",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T070900-0500-phase1-mocks\\scenario-ac-ledger.json",
+      "previousSha256": "B74F9AE910D09F7E72C832860539BD9609BC097EBD3895E5F1A4BA416B9F0556",
+      "currentSha256": "B74F9AE910D09F7E72C832860539BD9609BC097EBD3895E5F1A4BA416B9F0556",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\functional\\FR-Snapshot.md",
+      "previousSha256": "32CD698E996290AB3A93F5CDFE99F65875166F60B3FF27579D6C021E30F565D8",
+      "currentSha256": "32CD698E996290AB3A93F5CDFE99F65875166F60B3FF27579D6C021E30F565D8",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\functional\\FR-Vice-Reference.md",
+      "previousSha256": "634CE192E9A202D90F6FEA16D2000ED89C334278F9A163C9B683B442C077E003",
+      "currentSha256": "634CE192E9A202D90F6FEA16D2000ED89C334278F9A163C9B683B442C077E003",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\technical\\TR-Cycle-Accuracy.md",
+      "previousSha256": "BD2F3DB5662DE43C07F2C49F5EDABA27561492156365FEC263C5C6FDEE270F4C",
+      "currentSha256": "BD2F3DB5662DE43C07F2C49F5EDABA27561492156365FEC263C5C6FDEE270F4C",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\technical\\TR-Vice-Oracle.md",
+      "previousSha256": "66F487A572815998BFC5662168F015710BCCC1B809CD920FB839CA845446DF36",
+      "currentSha256": "66F487A572815998BFC5662168F015710BCCC1B809CD920FB839CA845446DF36",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\test\\TEST-Requirements.md",
+      "previousSha256": "982130856C3326FA0DF5BE3993268B70C88D11FF00ABF0396661F8E878C487F6",
+      "currentSha256": "982130856C3326FA0DF5BE3993268B70C88D11FF00ABF0396661F8E878C487F6",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\test\\TEST-Vice-Oracle.md",
+      "previousSha256": "32FFCD6F3E1965862480873B1A7CF52EB04ED7B09C9FDCA1CA93FC6DA48487E7",
+      "currentSha256": "32FFCD6F3E1965862480873B1A7CF52EB04ED7B09C9FDCA1CA93FC6DA48487E7",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\global.json",
+      "previousSha256": "DDD94EFBAA73CBD137C7ADB70C4AB3314ABDB37055635F370211FA716A16682B",
+      "currentSha256": "DDD94EFBAA73CBD137C7ADB70C4AB3314ABDB37055635F370211FA716A16682B",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+      "previousSha256": "A2162CD906FA7D327A0C3FA2DE1110E8053F433A6769BA2D11DCF981E15C4085",
+      "currentSha256": "983DD1F9E9E20CB32180B8AB139B666933B2C3FA44DC4F20F2C1284BC299C733",
+      "exists": true,
+      "unchanged": false
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\Directory.Build.props",
+      "previousSha256": "542AB9BC622E06D936A16A2F79EE0DF575336CEFAE06771F30B1C73E7C24782D",
+      "currentSha256": "542AB9BC622E06D936A16A2F79EE0DF575336CEFAE06771F30B1C73E7C24782D",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ContractAssertions.cs",
+      "previousSha256": "7043EE1A93DBB690A70881AA778F2D53FAE057B75C78CB2A07268D1911C3CBF5",
+      "currentSha256": "7043EE1A93DBB690A70881AA778F2D53FAE057B75C78CB2A07268D1911C3CBF5",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\OracleContractTests.cs",
+      "previousSha256": "3D7272B4C271F995FECCDD7707B11E8A95B11CB35C4202FFDF03260FCDE08751",
+      "currentSha256": "3D7272B4C271F995FECCDD7707B11E8A95B11CB35C4202FFDF03260FCDE08751",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\README.md",
+      "previousSha256": "7F07A4275D0F06F3620EA3966817801247D19CB993FC4146F3DC352917971F5C",
+      "currentSha256": "7F07A4275D0F06F3620EA3966817801247D19CB993FC4146F3DC352917971F5C",
+      "exists": true,
+      "unchanged": true
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.OracleContract.Tests\\ViceSharp.OracleContract.Tests.csproj",
+      "previousSha256": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445",
+      "currentSha256": "F7614C497D7E1EA8789AEBE1A4F7C6C891F4A04701B562A67B44611CCC28F445",
+      "exists": true,
+      "unchanged": true
+    }
+  ]
+}

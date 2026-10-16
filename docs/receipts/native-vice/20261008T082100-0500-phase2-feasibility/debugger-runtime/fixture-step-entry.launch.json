@@ -1,0 +1,17 @@
+{
+  "timestampLocal": "2026-10-08T11:28:18.3842636-05:00",
+  "pid": 90236,
+  "arguments": [
+    "-y",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\"",
+    "-cf",
+    "\"F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\debugger-runtime\\fixture-step-entry.cdb\"",
+    "\"F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\bin\\Release\\net10.0\\clock-probe-evidence\\clock-probe.exe\"",
+    "7",
+    "11"
+  ],
+  "fixtureSha256": "4056243984FE8B596CE24D6531BDFF7781728BA86E446331E863DAAE080D5D31",
+  "mainRva": "0x14f0",
+  "entryRva": "0x1400",
+  "purpose": "Instruction trace to PE entry, then hardware breakpoint at nm-pinned fixture main. Counter50000 is a diagnostic fail bound, not HV limit."
+}

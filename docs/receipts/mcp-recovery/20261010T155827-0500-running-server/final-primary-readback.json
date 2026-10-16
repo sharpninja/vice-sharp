@@ -1,0 +1,118 @@
+{
+  "observedAtLocal": "2026-10-10T16:11:49-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261010T205827Z-running-server-missing-vice-workspace",
+  "turnStatus": "completed",
+  "responseExact": true,
+  "actions": 6,
+  "dialog": 4,
+  "oldTurnStatus": "in_progress",
+  "failsafeDrained": false,
+  "readbackTurn": {
+    "requestId": "req-20261010T205827Z-running-server-missing-vice-workspace",
+    "tags": [
+      "mcp-recovery",
+      "tape-amendment",
+      "hv-pending",
+      "no-requirements-applied"
+    ],
+    "actions": [
+      {
+        "filePath": "C:\\ProgramData\\QBrainAi\\AGENTS-README-FIRST.yaml",
+        "order": 1,
+        "status": "completed",
+        "description": "{\n  \"observedAtLocal\": \"2026-10-10T15:58:27-05:00\",\n  \"service\": {\n    \"name\": \"McpServer\",\n    \"status\": \"Running\",\n    \"pid\": 72172,\n    \"binaryPath\": \"C:\\\\ProgramData\\\\QBrainAi\\\\QBrainAi.Support.Mcp.exe\"\n  },\n  \"controlMarker\": {\n    \"path\": \"C:\\\\ProgramData\\\\QBrainAi\\\\AGENTS-README-FIRST.yaml\",\n    \"sha256\": \"814423C6AC39B7DC85F749070D7BA8634F4734BE24C7264ECC56766DB33D5C3F\",\n    \"signatureVerified\": true,\n    \"healthNonceVerified\": true,\n    \"declaredVersion\": \"1.4.40+407a80272b6c90861ea5994ca6c648d9204e14cc\",\n    \"declaredPluginVersion\": \"1.26.0\",\n    \"actualPluginVersion\": \"1.118.0\"\n  },\n  \"workspaceQuery\": {\n    \"method\": \"client.Workspace.ListAsync\",\n    \"requestId\": \"req-20261010T205607Z-6419\",\n    \"controlWorkspace\": \"C:\\\\ProgramData\\\\QBrainAi\",\n    \"totalCount\": 5,\n    \"items\": [\n      {\n        \"workspacePath\": \"C:\\\\ProgramData\\\\QBrainAi\",\n        \"name\": \"QBrainAi\",\n        \"isPrimary\": true,\n        \"isEnabled\": true\n      },\n      {\n        \"workspacePath\": \"F:\\\\GitHub\\\\McpServer\\\\src\\\\QBrainAi.Support.Mcp\",\n        \"name\": \"QBrainAi.Support.Mcp\",\n        \"isPrimary\": true,\n        \"isEnabled\": true\n      },\n      {\n        \"workspacePath\": \"F:\\\\GitHub\\\\TruckMate\",\n        \"name\": \"TruckMate\",\n        \"isPrimary\": false,\n        \"isEnabled\": true\n      },\n      {\n        \"workspacePath\": \"\",\n        \"name\": \"global\",\n        \"isPrimary\": false,\n        \"isEnabled\": true\n      },\n      {\n        \"workspacePath\": \"F:\\\\GitHub\\\\McpServer\\\\.mcpServer\\\\codex\\\\throwaway-host-root\",\n        \"name\": \"throwaway-host-root\",\n        \"isPrimary\": true,\n        \"isEnabled\": true\n      }\n    ],\n    \"viceSharpMatches\": 0\n  },\n  \"globalMemoryQuery\": {\n    \"method\": \"workflow.memory.list\",\n    \"params\": {\n      \"scope\": \"Global\"\n    },\n    \"requestId\": \"req-20261010T205642Z-7941\",\n    \"result\": {\n      \"totalCount\": 0,\n      \"items\": []\n    },\n    \"profileManifestPresent\": false,\n    \"profileReloadComplete\": false\n  },\n  \"configuration\": {\n    \"source\": \"C:\\\\ProgramData\\\\QBrainAi\\\\appsettings.yaml\",\n    \"databaseProvider\": \"sqlite\",\n    \"dataDirectory\": \".\",\n    \"dataSource\": \"mcp.db\",\n    \"federationRole\": \"Standalone\",\n    \"limitation\": \"Configuration file values only; runtime environment overrides not inspected.\"\n  },\n  \"targetMarkerPresent\": false,\n  \"actionsNotTaken\": [\n    \"No service restart or stop\",\n    \"No workspace create/init\",\n    \"No database/config changes\",\n    \"No data import or failsafe replay\",\n    \"No requirement or acceptance mutation\"\n  ],\n  \"conclusion\": \"Trusted running service does not expose the existing ViceSharp workspace or Global profile. Cause and historical data disposition remain unproven.\"\n}",
+        "type": "validation"
+      },
+      {
+        "filePath": "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml",
+        "order": 6,
+        "status": "completed",
+        "description": "{\n  \"observedAtLocal\": \"2026-10-10T16:06:19-05:00\",\n  \"serviceStatus\": \"Running\",\n  \"servicePid\": 73428,\n  \"markerPath\": \"F:\\\\GitHub\\\\vice-sharp\\\\AGENTS-README-FIRST.yaml\",\n  \"markerSha256\": \"96ACFE5069A1FC5D8E39A6248CA9CD1FD9328308E576B79FBEB4FFC85516B508\",\n  \"markerPid\": 73428,\n  \"markerWrittenAtUtc\": \"2026-10-10T21:00:39.0413705+00:00\",\n  \"signatureVerified\": true,\n  \"healthNonceVerified\": true,\n  \"plugin\": \"mcpserver-codex-plugin\",\n  \"pluginVersion\": \"1.118.0\",\n  \"globalTotal\": 38,\n  \"verifiedProfileParts\": 22,\n  \"otherGlobalMemories\": 15,\n  \"profileFullReadComplete\": true,\n  \"originalSessionId\": \"Codex-20261007T135626Z-plugin-session\",\n  \"priorServerTurnCount\": 60,\n  \"currentRequestId\": \"req-20261010T205827Z-running-server-missing-vice-workspace\",\n  \"isolatedCache\": \"F:\\\\GitHub\\\\vice-sharp\\\\.mcpServer\\\\codex\\\\recovery-20261010-current-turn\",\n  \"failsafeDrainDisabled\": \"1\",\n  \"replayedRecords\": 0,\n  \"primaryBeginTurnReturnedPersisted\": true,\n  \"productGatePassed\": false\n}",
+        "type": "validation"
+      },
+      {
+        "filePath": "F:\\GitHub\\vice-sharp\\.mcpServer\\codex\\recovery-20261010-current-turn",
+        "order": 7,
+        "status": "completed",
+        "description": "Use isolated plugin cache bound to existing primary session. Preserve stale original current-turn cache and old pending records. Do not call beginTurn over older in-progress turn because wrapper supersedes it as canceled. Do not invent duplicate primary session or drain old queue.",
+        "type": "design_decision"
+      },
+      {
+        "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server",
+        "order": 8,
+        "status": "completed",
+        "description": "Preserved chronological service recovery, fresh effective requirements, eleven full record preimages, duplicate FR timestamp observations, and 116 individual baseline checks. Receipt SHA256s: recovery.json F69733AAA3ED2C21477A776D46846501E0D2B1453A3D025336D313F1E46935EB; tape-preimages.json 470F6E228C95EE45D17082AF2158EBCE2ADB0853AD1CA96FAC5B93CC8D399550.",
+        "type": "create"
+      },
+      {
+        "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\tape-preimages.json",
+        "order": 9,
+        "status": "completed",
+        "description": "Do not infer historical metadata from getFr timestamps that changed between read-only calls. Preserve full responses for review. Triage intake report-25583068f60e48b19d678d556ea2b304 succeeded; independent readback not confirmed. No repair work or acceptance claim.",
+        "type": "design_decision"
+      },
+      {
+        "filePath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\README.md",
+        "order": 10,
+        "status": "completed",
+        "description": "git diff --check exit 0. New README read back from disk. Structural baseline checks are not mocked/emulator tests or HV.",
+        "type": "validation"
+      }
+    ],
+    "timestamp": "2026-10-10T21:05:38.0000000+00:00",
+    "queryTitle": "Verify running server and recover ViceSharp MCP access",
+    "model": "codex",
+    "planFile": "None",
+    "designDecisions": [
+      "Preserve historical and current service observations separately; do not describe earlier empty inventory as current state.",
+      "Recover original session through supported isolated plugin cache without canceling historical turn or replaying pending queue.",
+      "No requirement or implementation acceptance gate advances on infrastructure recovery alone."
+    ],
+    "contextList": [
+      "C:\\ProgramData\\QBrainAi\\AGENTS-README-FIRST.yaml",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\README.md",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\recovery.json",
+      "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml",
+      "C:\\Users\\kingd\\.codex\\skills\\add-profile\\SKILL.md",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\tape-preimages.json",
+      "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\proposed-field-delta.json",
+      "F:\\GitHub\\vice-sharp\\.mcpServer\\codex\\recovery-20261010-current-turn",
+      "MEMORY-PROFILE-000",
+      "MEMORY-PROCEDURE-002"
+    ],
+    "response": "Trusted MCP access restored locally on PAYTON-LEGION2. Marker signature and health nonce verified; full profile loaded from 38 Global records, including 22 hash-verified snapshots. Original Codex-20261007T135626Z-plugin-session recovered; current turn primary readback confirmed, historical in-progress turn preserved, old failsafe queue undrained. Active tape proposal baseline refreshed: all 88 retained fields across 11 records and 28 mapping fields across 7 rows unchanged. Full preimages retained; getFr creation/update timestamps changed across reads, so historical metadata is unproven. Triage intake accepted report triage-report-25583068f60e48b19d678d556ea2b304 and routed it to McpServer; separate ViceSharp-context readback returned not-found. No product/native edits, requirement writes, tests, builds, commits, pushes, or HV acceptance. git diff --check exit 0. Evidence: docs/receipts/mcp-recovery/20261010T155827-0500-running-server/README.md, recovery.json, tape-preimages.json. Next full-goal step: carry fresh baseline and metadata caveat into pinned local Opus 5.5 max review of exact unapplied eleven-record tape amendment, then seek its explicit expanded-delta approval. This turn records recovery observations, not goal completion.",
+    "tokenCount": 0,
+    "status": "completed",
+    "processingDialog": [
+      {
+        "role": "model",
+        "category": "decision",
+        "content": "Workspace Initialization skill documents trusted-control-marker recovery. Validated signature/nonce and used Codex wrapper for read-only workspace and Global memory queries. ViceSharp is absent and Globals empty; do not recreate or import prior state without authorization. Current evidence does not prove deletion or root cause.",
+        "timestamp": "2026-10-10T20:58:27.8987752+00:00"
+      },
+      {
+        "role": "model",
+        "category": "observation",
+        "content": "Automatic context compaction occurred during profile recovery. After compaction reread complete add-profile and caveman skills, re-read fresh marker with secrets redacted, retrieved fresh unfiltered Global inventory, hash-verified all 22 encoded parts, and consumed all 101443 decoded/profile/global characters. Latest dated mocks-first and sortable-local-time guidance overrides older embedded red/UTC wording.",
+        "timestamp": "2026-10-10T21:06:19.3816916+00:00"
+      },
+      {
+        "role": "model",
+        "category": "decision",
+        "content": "Earlier missing workspace and profile observations applied to old PID 72172 only. An external replacement produced ViceSharp marker PID18000, followed by current marker PID73428. Do not infer data loss or service-start causality. Current access supersedes outage conclusion while preserving historical observations and original old-store triage readback limitation.",
+        "timestamp": "2026-10-10T21:06:19.3816916+00:00"
+      },
+      {
+        "role": "model",
+        "category": "decision",
+        "content": "Current server is operational for trusted memory, requirements and primary session writes. Keep old 15-record queue undrained; adding a triage failsafe does not authorize replay. All 88 retained record fields and 28 mapping fields match the tape amendment preimage. Capture the volatile getFr timestamps as unproven metadata, submit incidental triage, and continue exact amendment review without applying requirements or accepting a gate. Triage intake succeeded and routed to McpServer; separate getReport in ViceSharp context returned not-found, so independent triage persistence remains unconfirmed.",
+        "timestamp": "2026-10-10T21:10:51.6100003+00:00"
+      }
+    ],
+    "queryText": "MCP Server is running",
+    "interpretation": "Verify server recovery and resume safe read-only prerequisite work toward existing full ViceSharp parity goal. Preserve historical turns and queued records.",
+    "todoId": "None"
+  },
+  "stopGateOutput": "{}\r\n"
+}

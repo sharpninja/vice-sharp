@@ -42,6 +42,12 @@ public sealed class InterruptLine : IInterruptLine
         return true;
     }
 
+    /// <summary>
+    /// Drops a 0-to-1 edge without releasing the line. Replay already
+    /// recorded when that edge happened.
+    /// </summary>
+    internal void AcknowledgeRisingEdge() => _risingEdge = false;
+
     // Clock snapshots preserve the physical combined line as well as its
     // unconsumed edge; replaying chip registers cannot reconstruct either.
     internal bool PendingRisingEdge => _risingEdge;

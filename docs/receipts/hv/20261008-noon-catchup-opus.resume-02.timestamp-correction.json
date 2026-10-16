@@ -1,0 +1,48 @@
+{
+  "timestampLocal": "2026-10-08T12:34:49.3225100-05:00",
+  "author": {
+    "agent": "ClaudeCode",
+    "model": "claude-opus-5-5",
+    "effort": "max",
+    "cliSessionId": "cd19ecc2-b410-4b7c-8a8a-dca9bbb6b008"
+  },
+  "subject": "Correction of manually supplied progress timestamp labels in the original HV run (pid 44552) of 2026-10-08",
+  "statement": "I typed the bracketed progress labels myself as estimates without reading any clock. They are unreliable: several were ahead of the host clock, one sequence was non-monotonic (07:51 followed by 07:47), and none carried a UTC offset. They must not be used as evidence of when anything happened.",
+  "labelsInOriginalResponseStream": [
+    "[2026-10-08 07:40] (hook-supplied response-timestamp at prompt submit)",
+    "[2026-10-08 07:42]",
+    "[2026-10-08 07:44]",
+    "[2026-10-08 07:46]",
+    "[2026-10-08 07:48]",
+    "[2026-10-08 07:51]",
+    "[2026-10-08 07:47]",
+    "[2026-10-08 07:53]",
+    "[2026-10-08 07:54]",
+    "[2026-10-08 08:03]"
+  ],
+  "additionalUnreliableLabelsWrittenInThatRun": [
+    "[2026-10-08 07:50]",
+    "[2026-10-08 07:51] stop-boundary notice",
+    "[2026-10-08 07:55]",
+    "[2026-10-08 08:02]"
+  ],
+  "parentHostObservations": [
+    "parent host 2026-10-08T07:44:24.8554671-05:00 had already received labels [07:46] and [07:48]",
+    "parent host 2026-10-08T07:49:06.2123560-05:00 had already received [07:53]",
+    "monitor.jsonl 2026-10-08T07:47:03.8048833-05:00 recorded the discrepancy"
+  ],
+  "measuredTimesFromThatRun": {
+    "firstConsoleGetDate": "2026-10-08T07:42:40.812-05:00",
+    "bootstrapReplRequestUtc": "2026-10-08T12:45:08Z (07:45:08-05:00)",
+    "beginTurnRequestUtc": "2026-10-08T12:45:48Z",
+    "triageAttemptsUtc": [
+      "12:49:12Z failed",
+      "12:52:00Z failed",
+      "12:54:29Z failed",
+      "12:57:22Z failed",
+      "13:01:28Z accepted triage-report-7bcd68e2e45745e3b444827d0887452c"
+    ],
+    "progressJsonlRecordFileTime": "2026-10-08T07:59:02.5120002-05:00"
+  },
+  "correctiveAction": "From resume-02 onward every reviewer timestamp is taken from live Get-Date in sortable local form with offset; this file and the original progress JSONL receive appended corrections; the preserved original response stream is not altered."
+}

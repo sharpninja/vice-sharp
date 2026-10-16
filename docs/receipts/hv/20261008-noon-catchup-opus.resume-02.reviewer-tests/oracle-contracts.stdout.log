@@ -1,0 +1,10 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.OracleContract.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\bin\Release\net10.0\ViceSharp.OracleContract.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\bin\Release\net10.0\ViceSharp.OracleContract.Tests.dll (.NETCoreApp,Version=v10.0)
+Logging Vstest Diagnostics in file: F:\GitHub\vice-sharp\docs\receipts\hv\20261008-noon-catchup-opus.resume-02.reviewer-tests\oracle-contracts\vstest.diag.log
+A total of 1 test files matched the specified pattern.
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+Results File: F:\GitHub\vice-sharp\docs\receipts\hv\20261008-noon-catchup-opus.resume-02.reviewer-tests\oracle-contracts\oracle-contracts.trx
+
+Passed!  - Failed:     0, Passed:    82, Skipped:     0, Total:    82, Duration: 174 ms - ViceSharp.OracleContract.Tests.dll (net10.0)

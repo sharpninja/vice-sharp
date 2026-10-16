@@ -1,5 +1,8 @@
+using System.Globalization;
 using System.IO;
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.VicIi;
+using ViceSharp.Core.Input;
 using ViceSharp.Core.Media;
 using ViceSharp.Protocol;
 
@@ -33,9 +36,10 @@ public sealed class EmulatorRuntimeSession
     // SyncRoot so the lock-free UI frame read path is unaffected.
     private readonly object _captureSync = new();
     private IVideoCaptureSink? _videoCapture;
+    private readonly CapturedFrame _capturedFrameMetadata = new();
     private IAudioRecorder? _videoAudioTrack;
     private string? _videoCaptureId;
-    private WavAudioRecorder? _audioRecorder;
+    private IAudioRecorder? _audioRecorder;
     private Stream? _audioStream;
     private string? _audioCaptureId;
 
@@ -264,6 +268,84 @@ public sealed class EmulatorRuntimeSession
 
     public DisplaySettingsDto DisplaySettings { get; set; } = new();
 
+    private DisplaySettingsDto? _pendingDisplay;
+
+    /// <summary>True after staged display settings were applied on a frame boundary.</summary>
+    public bool DisplayAppliedAtFrameBoundary { get; private set; }
+
+    /// <summary>FR-CFG-003. Hold a palette until the next committed frame.</summary>
+    public void StageDisplaySettings(DisplaySettingsDto display)
+    {
+        ArgumentNullException.ThrowIfNull(display);
+        _pendingDisplay = display;
+        DisplayAppliedAtFrameBoundary = false;
+    }
+
+    /// <summary>FR-CFG-003. Apply display settings that were waiting for a frame boundary.</summary>
+    public void ApplyFrameBoundarySettings()
+    {
+        if (_pendingDisplay is null)
+            return;
+
+        DisplaySettings = _pendingDisplay;
+        _pendingDisplay = null;
+        DisplayAppliedAtFrameBoundary = true;
+        ApplyPaletteColors(DisplaySettings.PaletteRgb);
+    }
+
+    /// <summary>
+    /// FR-CFG-003. A 96-character rrggbb payload replaces the 16 VIC-II colors.
+    /// An empty payload installs the model palette used by named selections.
+    /// </summary>
+    private void ApplyPaletteColors(string paletteRgb)
+    {
+        if (Machine.Devices.GetByRole(DeviceRole.VideoChip) is not Mos6569 vic)
+            return;
+
+        if (paletteRgb.Length != 96)
+        {
+            vic.ResetPaletteToModel();
+            return;
+        }
+
+        Span<byte> parsed = stackalloc byte[48];
+        for (var i = 0; i < 16; i++)
+        {
+            var chunk = paletteRgb.AsSpan(i * 6, 6);
+            if (!byte.TryParse(chunk[..2], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out parsed[i * 3])
+                || !byte.TryParse(chunk.Slice(2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out parsed[i * 3 + 1])
+                || !byte.TryParse(chunk.Slice(4, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out parsed[i * 3 + 2]))
+            {
+                vic.ResetPaletteToModel();
+                return;
+            }
+        }
+
+        for (var i = 0; i < 16; i++)
+            vic.SetPaletteColor(i, parsed[i * 3], parsed[i * 3 + 1], parsed[i * 3 + 2]);
+    }
+
+    private string _hotkeyText = "";
+
+    /// <summary>FR-CFG-004. Lines from the last hotkey load that are not mappings.</summary>
+    public IReadOnlyList<string> HotkeyDiagnostics { get; private set; } = [];
+
+    /// <summary>FR-CFG-004. Load hotkey text and keep diagnostics for invalid lines.</summary>
+    public void LoadHotkeyText(string text)
+    {
+        _hotkeyText = HotkeyBindings.LoadHotkeys(text);
+        HotkeyDiagnostics = HotkeyBindings.Diagnostics;
+    }
+
+    /// <summary>FR-CFG-004. Dispatch a hotkey. host:reset resets the machine.</summary>
+    public string ExecuteHotkey(string key, string scope)
+    {
+        var command = HotkeyBindings.DispatchHotkey(_hotkeyText, key, scope);
+        if (string.Equals(command, "host:reset", StringComparison.OrdinalIgnoreCase))
+            Machine.Reset();
+        return command;
+    }
+
     public InputSettingsDto InputSettings { get; set; } = new();
 
     public AudioSettingsDto AudioSettings { get; set; } = new();
@@ -376,6 +458,7 @@ public sealed class EmulatorRuntimeSession
     public void CommitFrame(IVideoChip videoChip, long cycle)
     {
         ArgumentNullException.ThrowIfNull(videoChip);
+        ApplyFrameBoundarySettings();
 
         var source = videoChip.FrameBuffer;
         // Choose the buffer that is NOT currently published so a concurrent reader
@@ -419,6 +502,14 @@ public sealed class EmulatorRuntimeSession
 
         if (sink is null)
             return;
+
+        var paletteId = DisplaySettings?.Palette;
+        if (string.IsNullOrWhiteSpace(paletteId))
+            paletteId = "vice";
+        sink.PaletteId = paletteId;
+        _capturedFrameMetadata.Width = width;
+        _capturedFrameMetadata.Height = height;
+        _capturedFrameMetadata.PaletteId = paletteId;
 
         // Burn the live-stats overlay into a private copy so the recording carries the numbers
         // while the presented frame stays clean. The byte writer copies on enqueue, so one
@@ -554,7 +645,7 @@ public sealed class EmulatorRuntimeSession
     /// for the duration of the capture and finalises both in
     /// <see cref="EndAudioCapture"/>.
     /// </summary>
-    public void BeginAudioCapture(string captureId, WavAudioRecorder recorder, Stream stream)
+    public void BeginAudioCapture(string captureId, IAudioRecorder recorder, Stream stream)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(captureId);
         ArgumentNullException.ThrowIfNull(recorder);
@@ -585,21 +676,22 @@ public sealed class EmulatorRuntimeSession
     /// </summary>
     public long EndAudioCapture()
     {
-        WavAudioRecorder? recorder;
+        IAudioRecorder? recorder;
         Stream? stream;
         lock (_captureSync)
         {
             (recorder, stream) = DetachAudioLocked();
         }
 
+        var written = recorder is WavAudioRecorder wav ? wav.DataBytesWritten : 0;
         recorder?.Dispose();   // off-lock: Stop() flushes + joins the writer
         stream?.Dispose();
-        return recorder?.DataBytesWritten ?? 0;
+        return written;
     }
 
-    // Detaches the active WAV recorder + stream under _captureSync, returning them
+    // Detaches the active audio recorder + stream under _captureSync, returning them
     // for the caller to Dispose OFF the lock. Returns (null, null) when none active.
-    private (WavAudioRecorder? Recorder, Stream? Stream) DetachAudioLocked()
+    private (IAudioRecorder? Recorder, Stream? Stream) DetachAudioLocked()
     {
         AudioCaptureTap?.DetachRecorder();
         var recorder = _audioRecorder;
@@ -618,7 +710,7 @@ public sealed class EmulatorRuntimeSession
     public void EndAllCaptures()
     {
         IVideoCaptureSink? sink;
-        WavAudioRecorder? recorder;
+        IAudioRecorder? recorder;
         Stream? stream;
         lock (_captureSync)
         {

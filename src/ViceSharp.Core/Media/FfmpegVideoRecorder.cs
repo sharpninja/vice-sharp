@@ -61,6 +61,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     private byte[] _pendingAudio = [];
     private int _pendingAudioLen;
     private int _frameCount;
+    private readonly CapturedFrame _capturedFrame = new();
     private bool _started;
     private bool _stopped;
     private bool _faulted;
@@ -73,6 +74,12 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     // truly no longer draining.
     private const int VideoQueueCapacity = 32;
     private const int AudioQueueCapacity = 8192;
+
+    /// <summary>FR-CFG-003: palette id stamped onto each accepted frame.</summary>
+    public string PaletteId { get; set; } = "vice";
+
+    /// <summary>Metadata for the most recent accepted frame, including <see cref="PaletteId"/>.</summary>
+    public CapturedFrame LastCapturedFrame => _capturedFrame;
 
     /// <summary>Recording video payloads drop under back-pressure instead of freezing emulation.</summary>
     public const bool VideoWriterDropsWhenFull = true;
@@ -395,6 +402,9 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
 
             writer = _videoWriter;
             _frameCount++;
+            _capturedFrame.Width = width;
+            _capturedFrame.Height = height;
+            _capturedFrame.PaletteId = string.IsNullOrWhiteSpace(PaletteId) ? "vice" : PaletteId;
         }
 
         // Copy + enqueue happen OUTSIDE _sync: the (rare) lossless back-pressure block

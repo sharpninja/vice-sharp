@@ -1,0 +1,18 @@
+[
+  {
+    "source": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Fixtures\\Vsf\\ready-c64sc-truedrive.vsf",
+    "destination": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.VsfCompatibility.Tests\\Fixtures\\native-maincpu-1.2.vsf",
+    "sha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+    "sourceRetained": true,
+    "copiedByteIdentical": true,
+    "provenance": "Retained workspace fixture, not a fresh immutable-native run"
+  },
+  {
+    "source": "F:\\GitHub\\vice-sharp\\validation-output\\wolf64-frame-diff-20260915\\wolf64-menu.vsf",
+    "destination": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.VsfCompatibility.Tests\\Fixtures\\native-maincpu-1.4.vsf",
+    "sha256": "1D6A178A1C415FA1B5BCCC30551E5FC210701E363762B05EEDCDF237F88F8EFF",
+    "sourceRetained": true,
+    "copiedByteIdentical": true,
+    "provenance": "Retained workspace fixture, not a fresh immutable-native run"
+  }
+]

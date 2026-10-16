@@ -1,0 +1,1622 @@
+[
+  {
+    "path": "C:\\msys64\\mingw64\\bin\\nm.exe",
+    "before": "9054A37B5A8C0C2A1F64F18A92980A9F1D1E4B98950D0CB265C7B8C2B48F434A",
+    "after": "9054A37B5A8C0C2A1F64F18A92980A9F1D1E4B98950D0CB265C7B8C2B48F434A",
+    "equal": true
+  },
+  {
+    "path": "C:\\msys64\\mingw64\\bin\\objdump.exe",
+    "before": "95316F5D85AC63712323E49C2EE00CCF41B3F0B60E6BD55872CA0F0E412EDDDB",
+    "after": "95316F5D85AC63712323E49C2EE00CCF41B3F0B60E6BD55872CA0F0E412EDDDB",
+    "equal": true
+  },
+  {
+    "path": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0\\.claude-plugin\\plugin.json",
+    "before": "7D0056AC572A9669A45F2931D925CA5B98DAFBDD7951CF2DB34EDCF028E88A77",
+    "after": "7D0056AC572A9669A45F2931D925CA5B98DAFBDD7951CF2DB34EDCF028E88A77",
+    "equal": true
+  },
+  {
+    "path": "C:\\Users\\kingd\\.claude\\profile\\PROFILE-MERGED.md",
+    "before": "A6AD7EAC0CB9CFFE9B9687E02A936484A3ED34FC49CF0CDD2C5FD6C869112AF3",
+    "after": "A6AD7EAC0CB9CFFE9B9687E02A936484A3ED34FC49CF0CDD2C5FD6C869112AF3",
+    "equal": true
+  },
+  {
+    "path": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "before": "9B8AB476410BB2E778A97BA545C94D4A4591A1E40B7E6352777C40C95229A86E",
+    "after": "9B8AB476410BB2E778A97BA545C94D4A4591A1E40B7E6352777C40C95229A86E",
+    "equal": true
+  },
+  {
+    "path": "C:\\Users\\kingd\\.codex\\skills\\add-profile\\SKILL.md",
+    "before": "618E4807ADBDD963A7DF201F3967AEAD36A5824F0FDD7C96AD42D379733FF5FB",
+    "after": "618E4807ADBDD963A7DF201F3967AEAD36A5824F0FDD7C96AD42D379733FF5FB",
+    "equal": true
+  },
+  {
+    "path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a0ef2b-2331-70d1-9c65-0ef12b15d09a\\plan.md",
+    "before": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+    "after": "436BB2B1DA834491A9B0C8F0F6EFD3F1EBD81F001885AD31D6FE8180CDE26473",
+    "equal": true
+  },
+  {
+    "path": "C:\\Users\\kingd\\.grok\\skills\\hostile-validator\\SKILL.md",
+    "before": "F600F16720FC559060DE65B2A6AEF6947BC57A1FF6D4B447704B240CFD1F4BBD",
+    "after": "F600F16720FC559060DE65B2A6AEF6947BC57A1FF6D4B447704B240CFD1F4BBD",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\AGENTS-README-FIRST.yaml",
+    "before": "8ADA0C1316EB8499C352FEA7BF62490BE9F6F9B12264D5168D9DF1DA75AC071D",
+    "after": "8ADA0C1316EB8499C352FEA7BF62490BE9F6F9B12264D5168D9DF1DA75AC071D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\AGENTS.md",
+    "before": "5649ACD0870C000119185DF3C911EEF009407AA09C43C5A4C68182F1CB26D727",
+    "after": "5649ACD0870C000119185DF3C911EEF009407AA09C43C5A4C68182F1CB26D727",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\alarm.h",
+    "before": "BFD69D427573607D5934678739DE781C7F846636AA08A65C8B6A8D53451BDD3C",
+    "after": "BFD69D427573607D5934678739DE781C7F846636AA08A65C8B6A8D53451BDD3C",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64-snapshot.c",
+    "before": "22F09184364E2E7BF23E8CD68395814F1B6BFA81F16885A58D3369A672DFF1B1",
+    "after": "22F09184364E2E7BF23E8CD68395814F1B6BFA81F16885A58D3369A672DFF1B1",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64.c",
+    "before": "967A52413C31B43F0B51C793D608C171E34AA31728230B03391327BCCA1A9352",
+    "after": "967A52413C31B43F0B51C793D608C171E34AA31728230B03391327BCCA1A9352",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64datasette.c",
+    "before": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29",
+    "after": "D88DE5664421A667A3715C0347D336B5D7236B35474B5310E520612077FE3D29",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64mem.c",
+    "before": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+    "after": "4EE45952CAC4A572D57F3BBEA7EA0D52F5D303499167228B6EEA24D7EC5EBF95",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\c64\\c64pla.c",
+    "before": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+    "after": "21574C654D7FEAAF9B860CADA61C74BEE1B3D0EBA1F2CDB3FF814D9F940E3737",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\ciacore.c",
+    "before": "D7C2AA2931CB8073606AED832AB74B95617EECC3D3A4295673F716DAE18C75AE",
+    "after": "D7C2AA2931CB8073606AED832AB74B95617EECC3D3A4295673F716DAE18C75AE",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\rtc\\pcf8583.c",
+    "before": "4B4A7147EF1B0828E1E2E68A950EBDBFC27ECABA7CF8D9FD9C4CD796A2E0202D",
+    "after": "4B4A7147EF1B0828E1E2E68A950EBDBFC27ECABA7CF8D9FD9C4CD796A2E0202D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\rtc\\rtc.c",
+    "before": "AA1A1D60DB2D82D8CBA046AC3EB42984FCDDEA86FD57C28F3A4FE04465036A96",
+    "after": "AA1A1D60DB2D82D8CBA046AC3EB42984FCDDEA86FD57C28F3A4FE04465036A96",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\core\\viacore.c",
+    "before": "52836103F80B7AE65685F3077D0F37C6FE8163A112849266939D630FBF599EC0",
+    "after": "52836103F80B7AE65685F3077D0F37C6FE8163A112849266939D630FBF599EC0",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette-sound.c",
+    "before": "B28ACECF95D404C0C67291BD0C7BE57FD9EA9994505BD8B7384C3DCC647A3BB6",
+    "after": "B28ACECF95D404C0C67291BD0C7BE57FD9EA9994505BD8B7384C3DCC647A3BB6",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.c",
+    "before": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+    "after": "FF38524B8CB131DA01BA62275A1F43CA7A813F87C279D3F55A8A7226E42FD368",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.h",
+    "before": "A7D6F6763E72A2D9C4A7128E7974806C5921D408AC3CFF41141F88804F88C71A",
+    "after": "A7D6F6763E72A2D9C4A7128E7974806C5921D408AC3CFF41141F88804F88C71A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\datasette\\datasette.o",
+    "before": "84128444DFD020C25C963151D86508A41405C8032F97846A121A0D53DCAE0308",
+    "after": "84128444DFD020C25C963151D86508A41405C8032F97846A121A0D53DCAE0308",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\sound.c",
+    "before": "CDB42660B9D0C1E4B44E99734FC36628F10A3DDFA2A732618790AC8BC75CF426",
+    "after": "CDB42660B9D0C1E4B44E99734FC36628F10A3DDFA2A732618790AC8BC75CF426",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tape\\tap.c",
+    "before": "4061AB1719A95F939E96E7BB41DBB86842F71A1B9F03F8F85D38ED54E22DBB73",
+    "after": "4061AB1719A95F939E96E7BB41DBB86842F71A1B9F03F8F85D38ED54E22DBB73",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tape\\tape-snapshot.c",
+    "before": "B443907238976D3529DA913F85E81B5C30156BF388894AD02C190E3785FFD128",
+    "after": "B443907238976D3529DA913F85E81B5C30156BF388894AD02C190E3785FFD128",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\cp-clockf83.c",
+    "before": "ED74CAD4F778CEDB433B5BC095D7615B9D1E44AC974DC82D190F49F834B93369",
+    "after": "ED74CAD4F778CEDB433B5BC095D7615B9D1E44AC974DC82D190F49F834B93369",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\sense-dongle.c",
+    "before": "C569B2502B6B37F34BDA16E34999AA4E8BBE2B5A8DCBF69BE15B251CE6B40D1F",
+    "after": "C569B2502B6B37F34BDA16E34999AA4E8BBE2B5A8DCBF69BE15B251CE6B40D1F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\tapeport\\tapeport.c",
+    "before": "BC73131BF535AA57DEED1AD2080C92C0C1ECB8AE1F1338B1A2CCC7DD9CE26B15",
+    "after": "BC73131BF535AA57DEED1AD2080C92C0C1ECB8AE1F1338B1A2CCC7DD9CE26B15",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20-snapshot.c",
+    "before": "69D765823C678E6286419D0C023DE4B8C46B54714C66922FDF5A11B404544DCE",
+    "after": "69D765823C678E6286419D0C023DE4B8C46B54714C66922FDF5A11B404544DCE",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20.c",
+    "before": "AE776199B6ABD85E5FBFA58F12F575B4893519E19A60035A7E5B7B9EBDF2187F",
+    "after": "AE776199B6ABD85E5FBFA58F12F575B4893519E19A60035A7E5B7B9EBDF2187F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20datasette.c",
+    "before": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31",
+    "after": "879B38A7FF25A81020EB3CD1A4DCA2347ABB3BB460473E39A5FF42B09B692A31",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via1.c",
+    "before": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+    "after": "C85DDB92399D7ABB19CC409D77D247A8FAD8CDC2667CAD4E077830BFBEA419B9",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\vic20\\vic20via2.c",
+    "before": "21B686FB0414BDE42DA51AA9D5D558917AFC63A3E3D675FBDE79FFC07FA4ADB5",
+    "after": "21B686FB0414BDE42DA51AA9D5D558917AFC63A3E3D675FBDE79FFC07FA4ADB5",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\plans\\PLAN-VICE-IMMUTABLE-001.md",
+    "before": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+    "after": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\Functional-Requirements.md",
+    "before": "391CFD0D4FC831530914EB7C69CCD2BD8C809CF29CA5A20B2D3262B64275498B",
+    "after": "391CFD0D4FC831530914EB7C69CCD2BD8C809CF29CA5A20B2D3262B64275498B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\Requirements-Matrix.md",
+    "before": "DA8662EC44B88C5320939DF837E44D2AD10CB213532584B0D3EFA612CA176427",
+    "after": "DA8662EC44B88C5320939DF837E44D2AD10CB213532584B0D3EFA612CA176427",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\Technical-Requirements.md",
+    "before": "21F6F3C5815ED28089256B51E6F970CD24E2C8EF3C0CE852EDDA83BC764AA2B1",
+    "after": "21F6F3C5815ED28089256B51E6F970CD24E2C8EF3C0CE852EDDA83BC764AA2B1",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\Testing-Requirements.md",
+    "before": "E7B1C93D17D4137347D67E636BA151BF6FA68189EDB92BF3C7F769B979C31E2B",
+    "after": "E7B1C93D17D4137347D67E636BA151BF6FA68189EDB92BF3C7F769B979C31E2B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\TR-per-FR-Mapping.md",
+    "before": "0477D488B4F3AC1C2EE45128D2D5106C67E79B2C389390FFD3C2B960E5FEC160",
+    "after": "0477D488B4F3AC1C2EE45128D2D5106C67E79B2C389390FFD3C2B960E5FEC160",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\_Footer.md",
+    "before": "E17666C5C6206EDFB1F6BB1DD058B5BD6215D38142DFA36883C4CCEFBB3E3BFE",
+    "after": "E17666C5C6206EDFB1F6BB1DD058B5BD6215D38142DFA36883C4CCEFBB3E3BFE",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\_Sidebar.md",
+    "before": "ABFDAC7E020E90FB52277D0FDB9BF1A6EEDC419EDE9A8F915B09003E98D1D979",
+    "after": "ABFDAC7E020E90FB52277D0FDB9BF1A6EEDC419EDE9A8F915B09003E98D1D979",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\.mcp-requirements-manifest.json",
+    "before": "39FB85880AEAC3BD590FBF0EBBC663409341A7072BEDA9651B64B73C2E68DE71",
+    "after": "39FB85880AEAC3BD590FBF0EBBC663409341A7072BEDA9651B64B73C2E68DE71",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\AI-Review.md",
+    "before": "2995DE694DCEE102EBDA546535F0862AC32227651B8640331F48D241C9B71B8F",
+    "after": "2995DE694DCEE102EBDA546535F0862AC32227651B8640331F48D241C9B71B8F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Architecture.md",
+    "before": "FB8013717DB4EB6F021E054D7B40F6528C73DA16EA8578824060C5BEE45781F6",
+    "after": "FB8013717DB4EB6F021E054D7B40F6528C73DA16EA8578824060C5BEE45781F6",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Classic-VICE-Edge-Case-TR-Backfill.md",
+    "before": "3592F14190843AD880F9B0D0C980ED7A406D8DE5573DBB636894FFD78F369717",
+    "after": "3592F14190843AD880F9B0D0C980ED7A406D8DE5573DBB636894FFD78F369717",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Cross-Platform-Wireframes.md",
+    "before": "77DB9D239E76D5C4DE6171AE0B0E04BB2F424A5044099D750E2AAA9A7884F661",
+    "after": "77DB9D239E76D5C4DE6171AE0B0E04BB2F424A5044099D750E2AAA9A7884F661",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Desktop-Windows-UI.md",
+    "before": "7EB47B407FB2F041352EF49D3EACEB60FB78E990DA6D845FB7FA23C4064A16DE",
+    "after": "7EB47B407FB2F041352EF49D3EACEB60FB78E990DA6D845FB7FA23C4064A16DE",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Flash-Cart-Builder.md",
+    "before": "5BEF74B022480FD51818C832E8FEF99ECC39FA9210D2BA1D7B566892ACB0D3BB",
+    "after": "5BEF74B022480FD51818C832E8FEF99ECC39FA9210D2BA1D7B566892ACB0D3BB",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\FR-VIC20.md",
+    "before": "C835FF0DD91CADF1FE37D46C3D0BB039350CD060F0A31912996DAA859F01C4E5",
+    "after": "C835FF0DD91CADF1FE37D46C3D0BB039350CD060F0A31912996DAA859F01C4E5",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Functional-Requirements-Overview.md",
+    "before": "C8F6418C0F5DDFB829D9B7B7DFF5FFE8EAEB9E77054362BCCD9FC1BFC432472D",
+    "after": "C8F6418C0F5DDFB829D9B7B7DFF5FFE8EAEB9E77054362BCCD9FC1BFC432472D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Functional-Requirements.md",
+    "before": "391CFD0D4FC831530914EB7C69CCD2BD8C809CF29CA5A20B2D3262B64275498B",
+    "after": "391CFD0D4FC831530914EB7C69CCD2BD8C809CF29CA5A20B2D3262B64275498B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Home.md",
+    "before": "E9AC6FEC6EFF8C034194A5E657DD76E329A009990E80F06DEF2D3D7E9A84BD57",
+    "after": "E9AC6FEC6EFF8C034194A5E657DD76E329A009990E80F06DEF2D3D7E9A84BD57",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Iteration-Roadmap.md",
+    "before": "B3079C18253FE12618566A29C5292735B1662916498DBB94CACEA5F88FB1DF3B",
+    "after": "B3079C18253FE12618566A29C5292735B1662916498DBB94CACEA5F88FB1DF3B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Machine-Architecture-Schema.md",
+    "before": "9ADFF1490D7B73415F53EA98CDA7D9D3C6AAD189D2F9D43D9B6F9C9EA316A80F",
+    "after": "9ADFF1490D7B73415F53EA98CDA7D9D3C6AAD189D2F9D43D9B6F9C9EA316A80F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Immutable-Native-VICE.md",
+    "before": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+    "after": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Plan-Native-VICE-VSF-Lockstep.md",
+    "before": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+    "after": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Privacy-Policy.md",
+    "before": "2AEB9732C8EB0AF134AF04D8A04A20F74E2B627C6ED4DD93588E22458529791E",
+    "after": "2AEB9732C8EB0AF134AF04D8A04A20F74E2B627C6ED4DD93588E22458529791E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Project-Overview.md",
+    "before": "D9405BBFD7EDE139C67A1EAA52925A7052F587B2599799214B07D4A2353ED034",
+    "after": "D9405BBFD7EDE139C67A1EAA52925A7052F587B2599799214B07D4A2353ED034",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Public-API.md",
+    "before": "EDF3B36B89C7E1AD84E0E1786B4247553B00F51ECDB2CE84DC5D43A765F30D1F",
+    "after": "EDF3B36B89C7E1AD84E0E1786B4247553B00F51ECDB2CE84DC5D43A765F30D1F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\PubSub.md",
+    "before": "ED7FC9F73847F72F1A8F0751F993401BAEA1E3801F6E1A50382D29CFBEE134E9",
+    "after": "ED7FC9F73847F72F1A8F0751F993401BAEA1E3801F6E1A50382D29CFBEE134E9",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Registry-of-Lore.md",
+    "before": "0DBE56DD8939BD89BA8810A30799566756BD37629EB731907791EA879F882019",
+    "after": "0DBE56DD8939BD89BA8810A30799566756BD37629EB731907791EA879F882019",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Requirements-Matrix.md",
+    "before": "DA8662EC44B88C5320939DF837E44D2AD10CB213532584B0D3EFA612CA176427",
+    "after": "DA8662EC44B88C5320939DF837E44D2AD10CB213532584B0D3EFA612CA176427",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\ROM-Setup.md",
+    "before": "B04D88DF9A818A33D03DBE7768D32D742E898744A6C493683DD2045993BD1E2A",
+    "after": "B04D88DF9A818A33D03DBE7768D32D742E898744A6C493683DD2045993BD1E2A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\State-Window.md",
+    "before": "96B40594A9F31604063B87C8827CBE68110ECD51540894F1B18AB571AA48284F",
+    "after": "96B40594A9F31604063B87C8827CBE68110ECD51540894F1B18AB571AA48284F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Technical-Requirements-Overview.md",
+    "before": "8BDF0E5F2B90E9A9F83A321529A731A4457F981B4B783950492DC3372CF54FEB",
+    "after": "8BDF0E5F2B90E9A9F83A321529A731A4457F981B4B783950492DC3372CF54FEB",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Technical-Requirements.md",
+    "before": "21F6F3C5815ED28089256B51E6F970CD24E2C8EF3C0CE852EDDA83BC764AA2B1",
+    "after": "21F6F3C5815ED28089256B51E6F970CD24E2C8EF3C0CE852EDDA83BC764AA2B1",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Test-Requirements.md",
+    "before": "982130856C3326FA0DF5BE3993268B70C88D11FF00ABF0396661F8E878C487F6",
+    "after": "982130856C3326FA0DF5BE3993268B70C88D11FF00ABF0396661F8E878C487F6",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Testing-Requirements.md",
+    "before": "E8DE980B80FEEE9DC0CC41E9FE69AB49EDE185B6BC1636CB2B672C4432B5D15A",
+    "after": "E8DE980B80FEEE9DC0CC41E9FE69AB49EDE185B6BC1636CB2B672C4432B5D15A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\TR-Host-Prg.md",
+    "before": "E43260B80F27DC1D1F0B7C26B535DD746E69522C3C577E67103B3BBCEEF89CC6",
+    "after": "E43260B80F27DC1D1F0B7C26B535DD746E69522C3C577E67103B3BBCEEF89CC6",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\TR-per-FR-Mapping.md",
+    "before": "0477D488B4F3AC1C2EE45128D2D5106C67E79B2C389390FFD3C2B960E5FEC160",
+    "after": "0477D488B4F3AC1C2EE45128D2D5106C67E79B2C389390FFD3C2B960E5FEC160",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\TR-RomM-Security.md",
+    "before": "06B37040437A3EB00E7EB3BFECA93E57010942A614B71D12695FC6B3125FF41A",
+    "after": "06B37040437A3EB00E7EB3BFECA93E57010942A614B71D12695FC6B3125FF41A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\TR-VIC20.md",
+    "before": "F0D0F60C92EFA0920EC933DC8BFFEFB3460D4C36CFBFA06A11F8DE97DEC9BA56",
+    "after": "F0D0F60C92EFA0920EC933DC8BFFEFB3460D4C36CFBFA06A11F8DE97DEC9BA56",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\User-Guide.md",
+    "before": "FBA7FD8279E01C90B4A57BEF21B49B8770D0FEEF4AA0EF561C7380FE44B8006D",
+    "after": "FBA7FD8279E01C90B4A57BEF21B49B8770D0FEEF4AA0EF561C7380FE44B8006D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\VIC20-vs-VICE-Audit.md",
+    "before": "29646F918955E02EA928E3CA206174D02C5D14E23E65BBB50F15A5BD16CDD621",
+    "after": "29646F918955E02EA928E3CA206174D02C5D14E23E65BBB50F15A5BD16CDD621",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\VICE-Migration.md",
+    "before": "B92362C04519C95D4B45022ED7D007B1E212FCD8828B97AE68A16920D81FC6BC",
+    "after": "B92362C04519C95D4B45022ED7D007B1E212FCD8828B97AE68A16920D81FC6BC",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\VICE-Source-Manifest.md",
+    "before": "32ECD2112724467609AB5DEC1E0AAEDE6216E78CA0CE219F7E4DD714FD657C4F",
+    "after": "32ECD2112724467609AB5DEC1E0AAEDE6216E78CA0CE219F7E4DD714FD657C4F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\Video-Audio-Decoupling.md",
+    "before": "3758044A9676CC4C0ACEC4DDCE9A13E69F83B4AC2D99E8DC21411BB2F22560E8",
+    "after": "3758044A9676CC4C0ACEC4DDCE9A13E69F83B4AC2D99E8DC21411BB2F22560E8",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\X64sc-Model-Matrix.md",
+    "before": "6AB24CC95196C3FEABFB97975A4A816FD4B3DE53FFFA143C449AB92AF8055ACB",
+    "after": "6AB24CC95196C3FEABFB97975A4A816FD4B3DE53FFFA143C449AB92AF8055ACB",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\Project\\wiki\\github\\X64sc-Requirement-Coverage.md",
+    "before": "8B535BEB587BEBDC0320185878224E0B3F9C1D161DFD9331CB63AE3BB4AC1672",
+    "after": "8B535BEB587BEBDC0320185878224E0B3F9C1D161DFD9331CB63AE3BB4AC1672",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T021631-0500-parent-replay-audit\\README.md",
+    "before": "77A936631BF64B85C2F5F6CF213E8516384F76648A63EE751A5712C3E19A61B4",
+    "after": "77A936631BF64B85C2F5F6CF213E8516384F76648A63EE751A5712C3E19A61B4",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\input-pins.json",
+    "before": "0188E14718C12C59EB3109349F69F2A96983FA77AC5A4078181AE07A40EF4A0C",
+    "after": "0188E14718C12C59EB3109349F69F2A96983FA77AC5A4078181AE07A40EF4A0C",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\launch-result.json",
+    "before": "823AF1C7FC6E4670788C0974F3A4134EF4CDC98115B8922B0CC8C908AA6FA07D",
+    "after": "823AF1C7FC6E4670788C0974F3A4134EF4CDC98115B8922B0CC8C908AA6FA07D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\parent-closeout-proof.json",
+    "before": "40FD106AAB716EB63B1E66F3CA9ED9F7F62AC665D89FB67C9F06609D3662B9CA",
+    "after": "40FD106AAB716EB63B1E66F3CA9ED9F7F62AC665D89FB67C9F06609D3662B9CA",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\parent-completion-and-redaction-proof.json",
+    "before": "BF81173E1E30C5ED467651E0AB082C972610168A5155E7F035868E38D118AD76",
+    "after": "BF81173E1E30C5ED467651E0AB082C972610168A5155E7F035868E38D118AD76",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\prompt.md",
+    "before": "6F4A6EEF8E3CDF4A20F699B428ACB1AE99D42F3BC9741DBEE9379C94ED75FB3E",
+    "after": "6F4A6EEF8E3CDF4A20F699B428ACB1AE99D42F3BC9741DBEE9379C94ED75FB3E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\request.jsonl",
+    "before": "E2327863A589DCEA32B0B3880B6D08B75D58A7334D5DE239FCD646861ABB5B73",
+    "after": "E2327863A589DCEA32B0B3880B6D08B75D58A7334D5DE239FCD646861ABB5B73",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\response.redacted.jsonl",
+    "before": "1BCB8FC0712153B620D0274256CDD897A9E17218AD53CF6D3270AF4291BF157A",
+    "after": "1BCB8FC0712153B620D0274256CDD897A9E17218AD53CF6D3270AF4291BF157A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\stderr.log",
+    "before": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "after": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.json",
+    "before": "E470778B4C80CE53CFFED14DCF4BD8EB1FA0B9CA1E7644236E86F245D482FA78",
+    "after": "E470778B4C80CE53CFFED14DCF4BD8EB1FA0B9CA1E7644236E86F245D482FA78",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.md",
+    "before": "9FFD9FA24618FAC60E8FC650FFE6CDD20D63EBE5D8A7F554370DC4540FAF0B3A",
+    "after": "9FFD9FA24618FAC60E8FC650FFE6CDD20D63EBE5D8A7F554370DC4540FAF0B3A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261009T141130-0500-approved-tape-ac-opus\\verdict.persistence.json",
+    "before": "CD93CC0BFA09B16E1A7DE298ED4196932D0AE46CB5F715906625894406717AEF",
+    "after": "CD93CC0BFA09B16E1A7DE298ED4196932D0AE46CB5F715906625894406717AEF",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\EVIDENCE-CORRECTION.md",
+    "before": "15CC5F5794B60A61AE0D61E86B7181547A63E00E8FA9DF9C4254BCF8D749AD90",
+    "after": "15CC5F5794B60A61AE0D61E86B7181547A63E00E8FA9DF9C4254BCF8D749AD90",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\parent-turn-primary-readback.json",
+    "before": "CDFFE17C2A0B5D541BE8D875D672DAEECDF3D0A69A39C782909CAF1AA5924C3E",
+    "after": "CDFFE17C2A0B5D541BE8D875D672DAEECDF3D0A69A39C782909CAF1AA5924C3E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\prompt.md",
+    "before": "DBD0D16B022830B0796E157B5EC4BF0825E60BA4439A112F9CB394215B2691B0",
+    "after": "DBD0D16B022830B0796E157B5EC4BF0825E60BA4439A112F9CB394215B2691B0",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\request.jsonl",
+    "before": "D0050131DD61C78AF7A1D313BCA148255AFAEE886079EAC4F0C9C0D4BF95D9BA",
+    "after": "D0050131DD61C78AF7A1D313BCA148255AFAEE886079EAC4F0C9C0D4BF95D9BA",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\response.supplement.jsonl",
+    "before": "7600650FB551BB7B730F0709A339C98F52D80543017EC65E7206C96BADAB65F8",
+    "after": "7600650FB551BB7B730F0709A339C98F52D80543017EC65E7206C96BADAB65F8",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261010T195800-0500\\resume.prompt.md",
+    "before": "49DE6D6FDE0481D5CE3316F1E06C5E817349C03B2D6719C3816EE80069F1CEAF",
+    "after": "49DE6D6FDE0481D5CE3316F1E06C5E817349C03B2D6719C3816EE80069F1CEAF",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\parent-primary-readback.json",
+    "before": "06BCFAE5D6506B0127C36BAA0A5DF35430ADA645DF94A2753F12D86487EA10CC",
+    "after": "06BCFAE5D6506B0127C36BAA0A5DF35430ADA645DF94A2753F12D86487EA10CC",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\terminal-result.json",
+    "before": "955A5941D1CA83A6C4FB04E4352360FF2BC22CF2E9AB933BF3E04C422D203323",
+    "after": "955A5941D1CA83A6C4FB04E4352360FF2BC22CF2E9AB933BF3E04C422D203323",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.json",
+    "before": "E87F607E6F533823A59E7FF7EAFDB7A8A88B3FE0548D82163797383B3EB9FC0B",
+    "after": "E87F607E6F533823A59E7FF7EAFDB7A8A88B3FE0548D82163797383B3EB9FC0B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\verdict.md",
+    "before": "0D3680D6F1C09F076D201A6C795B0BA7520E788803952DDA402C736196985BB2",
+    "after": "0D3680D6F1C09F076D201A6C795B0BA7520E788803952DDA402C736196985BB2",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\terminal-result.current.json",
+    "before": "5CC6962F01DB894FFD917C39DEF256CE2CE57992626165242CC9B48224BA72F3",
+    "after": "5CC6962F01DB894FFD917C39DEF256CE2CE57992626165242CC9B48224BA72F3",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261011T123239-0500-r0-consolidated-opus\\prompt.md",
+    "before": "1139737EA86780B39F27728462600A20530861763955F8AF03AF373047833F62",
+    "after": "1139737EA86780B39F27728462600A20530861763955F8AF03AF373047833F62",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261011T123239-0500-r0-consolidated-opus\\resume-20261011T130239-0500\\verdict.md",
+    "before": "A7BC4062F1B9E908AEA9375FD304D3C3FD6CFBF1580CFC9CE68981448CE95E9E",
+    "after": "A7BC4062F1B9E908AEA9375FD304D3C3FD6CFBF1580CFC9CE68981448CE95E9E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus\\Launch-Review.ps1",
+    "before": "E6DD5AA3B3D56C5ED0F263AD152BE1911CD1530A4A5B57E4C92C9B538A341EFB",
+    "after": "E6DD5AA3B3D56C5ED0F263AD152BE1911CD1530A4A5B57E4C92C9B538A341EFB",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus\\prompt.md",
+    "before": "F8C5F11341F5422DC888A04DB0EDFE3DC3DF9610180354F4D9F3AA5072AC5C90",
+    "after": "F8C5F11341F5422DC888A04DB0EDFE3DC3DF9610180354F4D9F3AA5072AC5C90",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261013T213639-r0-remediation-opus\\SELF-REVIEW.md",
+    "before": "8DC6B5CD7E4F714DB649916C5A6E1326C338F25E897AE122DE50E7A1B1FA1367",
+    "after": "8DC6B5CD7E4F714DB649916C5A6E1326C338F25E897AE122DE50E7A1B1FA1367",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\final-primary-readback.json",
+    "before": "B0A85C59F943B6F87173CA0E18B8B58891B794C6828DB21AADEA2A59C156CCE8",
+    "after": "B0A85C59F943B6F87173CA0E18B8B58891B794C6828DB21AADEA2A59C156CCE8",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\README.md",
+    "before": "3DBCE41F775FC3369DAAD44E5B34CBA9CF107A0848B47B2BC02A17CD5E962174",
+    "after": "3DBCE41F775FC3369DAAD44E5B34CBA9CF107A0848B47B2BC02A17CD5E962174",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\recovery.json",
+    "before": "F69733AAA3ED2C21477A776D46846501E0D2B1453A3D025336D313F1E46935EB",
+    "after": "F69733AAA3ED2C21477A776D46846501E0D2B1453A3D025336D313F1E46935EB",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\mcp-recovery\\20261010T155827-0500-running-server\\tape-preimages.json",
+    "before": "470F6E228C95EE45D17082AF2158EBCE2ADB0853AD1CA96FAC5B93CC8D399550",
+    "after": "470F6E228C95EE45D17082AF2158EBCE2ADB0853AD1CA96FAC5B93CC8D399550",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\gate-runtime\\gate-observer.c",
+    "before": "9E9DFB8A920C6766F372675E442B336C1B46A0B0A44581085ACBE05936437BD5",
+    "after": "9E9DFB8A920C6766F372675E442B336C1B46A0B0A44581085ACBE05936437BD5",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\effective-linked-records.before.json",
+    "before": "89FA93B6AEA6DE2426E2DE6C39EC8BEDDF5FF76DDE693D86A254960CF0840CD1",
+    "after": "89FA93B6AEA6DE2426E2DE6C39EC8BEDDF5FF76DDE693D86A254960CF0840CD1",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\effective-requirements.after.json",
+    "before": "191F6E0324DCB0013361B894A5270DFBE8428916EC26A3B70C2DAB3FD8DECA1B",
+    "after": "191F6E0324DCB0013361B894A5270DFBE8428916EC26A3B70C2DAB3FD8DECA1B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\historical-inferred-proposals.json",
+    "before": "F4CDA21F9F9DFFB22B3C79307C4570BC14B93AB3460C7DA85C3367802AD32743",
+    "after": "F4CDA21F9F9DFFB22B3C79307C4570BC14B93AB3460C7DA85C3367802AD32743",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\live-fr-readback.json",
+    "before": "BCDE382755F506554DB1E30BAE7BC8B1E79993728CDA2C00E33118A71A959D77",
+    "after": "BCDE382755F506554DB1E30BAE7BC8B1E79993728CDA2C00E33118A71A959D77",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\managed-input-pins.json",
+    "before": "934E2B5D6ABA62B78A7A0D023EDAACFAC49C25A785E26D3A2FE50ED104DAC11E",
+    "after": "934E2B5D6ABA62B78A7A0D023EDAACFAC49C25A785E26D3A2FE50ED104DAC11E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\native-readback.json",
+    "before": "C529B71AE183BFE9EAFD1DFE4D6163C30B9C40D40B5D20A901F90E061CEFA24B",
+    "after": "C529B71AE183BFE9EAFD1DFE4D6163C30B9C40D40B5D20A901F90E061CEFA24B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\native-source-pins.json",
+    "before": "984869EFCE5B06C65F9A7969A39BCF9A98E9840EE1776F3B3404EB2050C514F2",
+    "after": "984869EFCE5B06C65F9A7969A39BCF9A98E9840EE1776F3B3404EB2050C514F2",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\primary-proof.json",
+    "before": "76FB6E6BB3B665BBB1FBD02E2C96FF88303EB11398671F2D38785E1EAF399D9D",
+    "after": "76FB6E6BB3B665BBB1FBD02E2C96FF88303EB11398671F2D38785E1EAF399D9D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\proposed-field-delta.initial.json",
+    "before": "5004608206F617FEED8A45A7DB92C44AE6EBB48AEEF85580F0BD298280371650",
+    "after": "5004608206F617FEED8A45A7DB92C44AE6EBB48AEEF85580F0BD298280371650",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\proposed-field-delta.json",
+    "before": "5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A",
+    "after": "5E4AF883A53EE1AE9ED5105B51F9AEE3A175D13E47464B2355BAF9B64DB9BC0A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\README.md",
+    "before": "7EE21E50CB6E39ADEC4D020AA0A2123A59B61DDEA260443277BF5E30C02FA1A5",
+    "after": "7EE21E50CB6E39ADEC4D020AA0A2123A59B61DDEA260443277BF5E30C02FA1A5",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\rename-preservation-proof.json",
+    "before": "5571B68945F2875081302C6D52880866F225021B583056580C92FF44ACC2E0E3",
+    "after": "5571B68945F2875081302C6D52880866F225021B583056580C92FF44ACC2E0E3",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\sense-expression-truth-table.json",
+    "before": "30D452FB67061AEA6F34C9B12B2E0ADF7E9D641939E826ACB005C5AF48D05F16",
+    "after": "30D452FB67061AEA6F34C9B12B2E0ADF7E9D641939E826ACB005C5AF48D05F16",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\session-turn.completed-primary-readback.json",
+    "before": "94F1E2F86C89F9F672F5D72A46620D8EDAA94ABB629E10ED8072A5DEAF28B187",
+    "after": "94F1E2F86C89F9F672F5D72A46620D8EDAA94ABB629E10ED8072A5DEAF28B187",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\session-turn.in-progress-primary-readback.json",
+    "before": "BC657DB8E7EF6305D8B5C8A86DFB36C14B1CBB0ECC45B78C03B52F9B08988AED",
+    "after": "BC657DB8E7EF6305D8B5C8A86DFB36C14B1CBB0ECC45B78C03B52F9B08988AED",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\source-excerpts.json",
+    "before": "7E4EB008D590ABFF2F56567381CC0D27728183A307F9C38B1375D2D29CEDD0E4",
+    "after": "7E4EB008D590ABFF2F56567381CC0D27728183A307F9C38B1375D2D29CEDD0E4",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261008T150905-0500-legacy-tape-ac-proposal\\verification.json",
+    "before": "F665B01EA00A0DFD894E8BAB542A332C35A4E6A2EC8AC5CE3D7F940F84ABFEB9",
+    "after": "F665B01EA00A0DFD894E8BAB542A332C35A4E6A2EC8AC5CE3D7F940F84ABFEB9",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T023102-0500-legacy-media-video-ac-proposal\\proposed-ac-coverage.json",
+    "before": "D8931B94085EF6979A4B55FD5835EBDCD3D8F5024BF972EBFAACF26BFAE5A4D1",
+    "after": "D8931B94085EF6979A4B55FD5835EBDCD3D8F5024BF972EBFAACF26BFAE5A4D1",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T023102-0500-legacy-media-video-ac-proposal\\proposed-field-delta.json",
+    "before": "4CF5B9A3A8FA47A5904F53FC3DC39140FDB7E5A8A852F8B65AA723A285D0C1AD",
+    "after": "4CF5B9A3A8FA47A5904F53FC3DC39140FDB7E5A8A852F8B65AA723A285D0C1AD",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\approval.json",
+    "before": "6A12165196898AE9D8CD1BDE1B0BF5B31F0F313864B27758B5822041F267FE5F",
+    "after": "6A12165196898AE9D8CD1BDE1B0BF5B31F0F313864B27758B5822041F267FE5F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\batch-request.json",
+    "before": "16102FE1564BBF7F045201B9952E3EAE061D3E00D209FA4533F706489713BF6E",
+    "after": "16102FE1564BBF7F045201B9952E3EAE061D3E00D209FA4533F706489713BF6E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\batch-response.json",
+    "before": "1E63D7B4FCBF1B73BD341B190471BAEC021F0DC4B506EEB6C08D85AC08DA3276",
+    "after": "1E63D7B4FCBF1B73BD341B190471BAEC021F0DC4B506EEB6C08D85AC08DA3276",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\effective-requirements.after.json",
+    "before": "AB9DA69694A25B869AA1BD5D0F5C451029358E63247D8B66CF3A3674AB26C07E",
+    "after": "AB9DA69694A25B869AA1BD5D0F5C451029358E63247D8B66CF3A3674AB26C07E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\effective-requirements.before.json",
+    "before": "92FA51BDF3EE42BD9ABBB763E26C74703609A1104EE76B04EC6912BB16F92659",
+    "after": "92FA51BDF3EE42BD9ABBB763E26C74703609A1104EE76B04EC6912BB16F92659",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\export-response.json",
+    "before": "C156ADCE50DC0E3CEE3D1E1E42FBC93C9C3BB985D6A0C25D0D2404D3A841A69D",
+    "after": "C156ADCE50DC0E3CEE3D1E1E42FBC93C9C3BB985D6A0C25D0D2404D3A841A69D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\five-records.before.json",
+    "before": "036D7C31F546D80196BA9519EE41051E2DFB90F5275528B26E6F30E748E4503F",
+    "after": "036D7C31F546D80196BA9519EE41051E2DFB90F5275528B26E6F30E748E4503F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\five-records.primary-readback.json",
+    "before": "9E6D53217E83A0BC88FB0A79EEFB9BCEE3DE6A6A86942B5947CD362A7B91BBE7",
+    "after": "9E6D53217E83A0BC88FB0A79EEFB9BCEE3DE6A6A86942B5947CD362A7B91BBE7",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\parent-turn-primary-readback.in-progress.json",
+    "before": "2BA06FDDCDEE9C8B89DF225249693D1A2CF599CEA278C6E69EB839DC94B26495",
+    "after": "2BA06FDDCDEE9C8B89DF225249693D1A2CF599CEA278C6E69EB839DC94B26495",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\projection-backup-pins.json",
+    "before": "08B5DA80C647F973474AB870E9320F0FD300E4AB32DC785F3985D970A83B8972",
+    "after": "08B5DA80C647F973474AB870E9320F0FD300E4AB32DC785F3985D970A83B8972",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\projection-file-changes.json",
+    "before": "478626F16617C74F11056D2506EB5EA9EAD904AF16C525923A8BA33C5D9DAE0B",
+    "after": "478626F16617C74F11056D2506EB5EA9EAD904AF16C525923A8BA33C5D9DAE0B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\projection-validation.json",
+    "before": "0486B54650ADF6F2CB15E0783B5654BDA4D7343D7B0D7B64A047BDFC28B38976",
+    "after": "0486B54650ADF6F2CB15E0783B5654BDA4D7343D7B0D7B64A047BDFC28B38976",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\requirements-verification.json",
+    "before": "25B61462C13689E6FCE371224C8F33EF1494BE01529C5A76F4E0D9FE878C913B",
+    "after": "25B61462C13689E6FCE371224C8F33EF1494BE01529C5A76F4E0D9FE878C913B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\source-pins.rechecked.json",
+    "before": "B1DC56E927649BE807CAAAEA29668AA10259E04A08A618628DE53726AA570453",
+    "after": "B1DC56E927649BE807CAAAEA29668AA10259E04A08A618628DE53726AA570453",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\tracked-status.before.json",
+    "before": "9EDCBD3028673999AA13FE2660777EFBA4CD7ECF74DFEBE77B95F8B0722B36D3",
+    "after": "9EDCBD3028673999AA13FE2660777EFBA4CD7ECF74DFEBE77B95F8B0722B36D3",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\triage-export-schema.json",
+    "before": "DDBFE66A3CE2078CAF99D16F7A56E9F90D5E59B7EF02106A549C0CB6C6D67808",
+    "after": "DDBFE66A3CE2078CAF99D16F7A56E9F90D5E59B7EF02106A549C0CB6C6D67808",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T140421-0500-approved-tape-ac-application\\wiki-export-response.json",
+    "before": "05D0C95776FEF4A45A6DC374776FF3934E7D631E039D64309247AFDF11BEE053",
+    "after": "05D0C95776FEF4A45A6DC374776FF3934E7D631E039D64309247AFDF11BEE053",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154018-0500-tape-hv-source-audit\\README.md",
+    "before": "3304F8FEA8795DABC5540DD6BD34D73ADE7E4CE0A189CFCEB5DBAD7BC51585BD",
+    "after": "3304F8FEA8795DABC5540DD6BD34D73ADE7E4CE0A189CFCEB5DBAD7BC51585BD",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154018-0500-tape-hv-source-audit\\verification.json",
+    "before": "BAD6097FB84CFA097F0F8A277B89CF4CA50E8C0A6680E65915A106F2D8CE67BD",
+    "after": "BAD6097FB84CFA097F0F8A277B89CF4CA50E8C0A6680E65915A106F2D8CE67BD",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\artifact-checks.initial.json",
+    "before": "CD73E038341B473C4D89AE9E17E021EB5415640D65F41527D1EBDD34F30136F9",
+    "after": "CD73E038341B473C4D89AE9E17E021EB5415640D65F41527D1EBDD34F30136F9",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\artifact-checks.json",
+    "before": "3B238190C418F3BE5B0E4DF0984D0463F8709BEC12DC69A98F6FBAFBC4D17EBF",
+    "after": "3B238190C418F3BE5B0E4DF0984D0463F8709BEC12DC69A98F6FBAFBC4D17EBF",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\FIELD-DELTA.md",
+    "before": "6E298C9E6881CA3115D5CCDC3227E20ECB1DC5D571258DF887F0EDDC44997949",
+    "after": "6E298C9E6881CA3115D5CCDC3227E20ECB1DC5D571258DF887F0EDDC44997949",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\New-Proposal.ps1",
+    "before": "236E081455B12FF922344EDCB206845DBA0A4C430F02A4F5A148743EFADE6011",
+    "after": "236E081455B12FF922344EDCB206845DBA0A4C430F02A4F5A148743EFADE6011",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\proposed-field-delta.draft1.json",
+    "before": "7020A59D11EEF640919579EC404E3DC237B70C9E7C33272D5195F7B3B3F4845C",
+    "after": "7020A59D11EEF640919579EC404E3DC237B70C9E7C33272D5195F7B3B3F4845C",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\proposed-field-delta.json",
+    "before": "1D8A442588ADD7883693694352954DF2077D166FB47ED4E2924AFE738A481507",
+    "after": "1D8A442588ADD7883693694352954DF2077D166FB47ED4E2924AFE738A481507",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\README.md",
+    "before": "6D78BD5D9571EAF81F536CF865A03B1D74339DA4F4CAD029480907897723B74B",
+    "after": "6D78BD5D9571EAF81F536CF865A03B1D74339DA4F4CAD029480907897723B74B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\verification.json",
+    "before": "ADE576F02485F1780787B9C1883435F6B95E0E69937FE2BE174E57D937CAE99A",
+    "after": "ADE576F02485F1780787B9C1883435F6B95E0E69937FE2BE174E57D937CAE99A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261009T154620-0500-tape-amendment-proposal\\Verify-Proposal.ps1",
+    "before": "1295B4D1DE8367B2DAC0B18BD3F4DE9BF61A2C0EBEA12FD47FD34A2739B83A2C",
+    "after": "1295B4D1DE8367B2DAC0B18BD3F4DE9BF61A2C0EBEA12FD47FD34A2739B83A2C",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\artifact-validation.json",
+    "before": "D21E7E268922251B7EA1490FD8B69DD2E9E842B71D750B04335975F9304F6B0C",
+    "after": "D21E7E268922251B7EA1490FD8B69DD2E9E842B71D750B04335975F9304F6B0C",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\exact-supplement.json",
+    "before": "7454FD2BE8E1AF3ADEE291582288325B38393611A99F121FF245206CDEDE0962",
+    "after": "7454FD2BE8E1AF3ADEE291582288325B38393611A99F121FF245206CDEDE0962",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\motor-supplement.json",
+    "before": "B2B1843D2ECD8FA28C79CE34B196F9B0045A1C1FDB7DC6483EB7B6C1192E7EF3",
+    "after": "B2B1843D2ECD8FA28C79CE34B196F9B0045A1C1FDB7DC6483EB7B6C1192E7EF3",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\N01-N02-EXACT-SUPPLEMENT.md",
+    "before": "9C2FE6553F52FE6D1F83197C35BEDB346E0B12A0D73CE0817F4EB4E30DF5B10D",
+    "after": "9C2FE6553F52FE6D1F83197C35BEDB346E0B12A0D73CE0817F4EB4E30DF5B10D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\N05-N06-EXACT-SUPPLEMENT.md",
+    "before": "CEBA40FC3C1B0379CD42FA3035A45AD448AE355A90DB1D330C7E9A6796E8515B",
+    "after": "CEBA40FC3C1B0379CD42FA3035A45AD448AE355A90DB1D330C7E9A6796E8515B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T065515-0500-tape-hv-remediation\\README.md",
+    "before": "AE57B80B0D5618445ED3A992A44ECC13968694B810C589F4F0224919592C8196",
+    "after": "AE57B80B0D5618445ED3A992A44ECC13968694B810C589F4F0224919592C8196",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\artifact-validation.json",
+    "before": "D21E5C09C21A0133242045514B527FC469AEB9DFAE6B816BD9B7491EF361B426",
+    "after": "D21E5C09C21A0133242045514B527FC469AEB9DFAE6B816BD9B7491EF361B426",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\EXISTING-TEST-DISPOSITIONS.md",
+    "before": "80088B05B52C7B6F43C96A187FF5A5768954482B373E6D0A0D2AE5609A5251FC",
+    "after": "80088B05B52C7B6F43C96A187FF5A5768954482B373E6D0A0D2AE5609A5251FC",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\N07-N12-SOURCE-AUDIT.md",
+    "before": "2CED9B96E12FFF7D11502BF586D4EFB135010AC8E3E2BBE487F79CE427139972",
+    "after": "2CED9B96E12FFF7D11502BF586D4EFB135010AC8E3E2BBE487F79CE427139972",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\preparation-checks.json",
+    "before": "9B30C1DA412178151D24674A4C6BBE0BF9FD45493021A0A4C469853A73A01A3A",
+    "after": "9B30C1DA412178151D24674A4C6BBE0BF9FD45493021A0A4C469853A73A01A3A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\proposed-field-delta.json",
+    "before": "2739BDA2EACF1206ACD9074684BA4FD4CDC8F34CD8C0A93739B01D2815AC4C34",
+    "after": "2739BDA2EACF1206ACD9074684BA4FD4CDC8F34CD8C0A93739B01D2815AC4C34",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\README.md",
+    "before": "0E94DD90A07144BF0EA0DEDB060E319759A1F60DBDA11B602FB87B7BEDF22EDF",
+    "after": "0E94DD90A07144BF0EA0DEDB060E319759A1F60DBDA11B602FB87B7BEDF22EDF",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\todo-tracking-readback.json",
+    "before": "B9F25EB9778841F8FD5E84755E141D7BBFD6B0339FD5435753D7B71915794015",
+    "after": "B9F25EB9778841F8FD5E84755E141D7BBFD6B0339FD5435753D7B71915794015",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T072531-0500-tape-state-composite\\typed-record-preimages.json",
+    "before": "63C3801EA3CE46EF6DBB64569C8BA81482FD965DA97C88F5504065BDE5544974",
+    "after": "63C3801EA3CE46EF6DBB64569C8BA81482FD965DA97C88F5504065BDE5544974",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\artifact-verification.json",
+    "before": "EC9E3C998EFA82B1A721F17C348CB3DF130B70749D1A50A9BDD37165785814E4",
+    "after": "EC9E3C998EFA82B1A721F17C348CB3DF130B70749D1A50A9BDD37165785814E4",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\CAPACITOR-SOURCE-AND-CASES.md",
+    "before": "5C3C125B6058E4268ACE6C921FC97C3BA8DF41F21571D4A79780C780BEDFA24B",
+    "after": "5C3C125B6058E4268ACE6C921FC97C3BA8DF41F21571D4A79780C780BEDFA24B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\preparation-checks.json",
+    "before": "340A53A3C73898D80E8920074975E9ACE243AAA672BDC724510C2DF0F125E8F9",
+    "after": "340A53A3C73898D80E8920074975E9ACE243AAA672BDC724510C2DF0F125E8F9",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\proposed-field-delta.json",
+    "before": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+    "after": "320887C5F2F09154F1EC7970B041A638632741A7750E838FE05F77883BB1DA83",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\R0-R1-GUARD-CONTRACT.md",
+    "before": "E76CFA5095BE4165B8E2C2F0C995649266441FAA3FAB2A824C710F9F43B7446E",
+    "after": "E76CFA5095BE4165B8E2C2F0C995649266441FAA3FAB2A824C710F9F43B7446E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\README.md",
+    "before": "C89D5E1765B3FE94AD5F50C1C72E27B39882F0880616794311B4C9549CF7927A",
+    "after": "C89D5E1765B3FE94AD5F50C1C72E27B39882F0880616794311B4C9549CF7927A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T080155-0500-capacitor-guard-remediation\\typed-record-preimages.json",
+    "before": "EAF6B0C6004F6286741661FA2A62156B87CBBF0C70F04EFBD871E825DF405926",
+    "after": "EAF6B0C6004F6286741661FA2A62156B87CBBF0C70F04EFBD871E825DF405926",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\coverage-supplement.json",
+    "before": "FFDAFB1E64214564FA211DA259C115AE5E549CB7460AA89999E973B5F4698A5B",
+    "after": "FFDAFB1E64214564FA211DA259C115AE5E549CB7460AA89999E973B5F4698A5B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\D64-CONTRACT.md",
+    "before": "6AF5F2F7ED8B31DA100111EC4CC8CE4460BA415F44F853D4FDA1D0AF76813AFD",
+    "after": "6AF5F2F7ED8B31DA100111EC4CC8CE4460BA415F44F853D4FDA1D0AF76813AFD",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\MEDIA-COVERAGE.md",
+    "before": "47ECD09E9990CA15EB1C135DB450A4FE48E39A45D1E5F6BB660EAF35EAE3B095",
+    "after": "47ECD09E9990CA15EB1C135DB450A4FE48E39A45D1E5F6BB660EAF35EAE3B095",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\preparation-evidence.json",
+    "before": "49BD2D9B9C57809E0C6D6CE182DF0B7BBE68466B4CA18E19122F284F5658BE11",
+    "after": "49BD2D9B9C57809E0C6D6CE182DF0B7BBE68466B4CA18E19122F284F5658BE11",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\README.md",
+    "before": "41D5CD1B7D169BB1B4E5CB123C87D771422323B071380F5CD18A066D0D3BDFAB",
+    "after": "41D5CD1B7D169BB1B4E5CB123C87D771422323B071380F5CD18A066D0D3BDFAB",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T083152-0500-media-fixture-specification\\verification.json",
+    "before": "EEF24193EC1BA7EBE4ABC7F5BB1BE2E81893D6105E172C8BE675A3FCEB093B17",
+    "after": "EEF24193EC1BA7EBE4ABC7F5BB1BE2E81893D6105E172C8BE675A3FCEB093B17",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\MOTOR-CONTRACT.md",
+    "before": "5F9553123243E86704C4C14DEEB315835F7D595950F407A3D5257291E6EDF45B",
+    "after": "5F9553123243E86704C4C14DEEB315835F7D595950F407A3D5257291E6EDF45B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\motor-matrix.json",
+    "before": "7049D4AA1A85180FAAB3524B0910EA08BE7E6E042E9CE7CD0C8BC7E5D9C12F14",
+    "after": "7049D4AA1A85180FAAB3524B0910EA08BE7E6E042E9CE7CD0C8BC7E5D9C12F14",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\README.md",
+    "before": "60E9421485EFC66D0A6A12FABB640F44C2477B9BF89C64A76CBC90ADE728ADC3",
+    "after": "60E9421485EFC66D0A6A12FABB640F44C2477B9BF89C64A76CBC90ADE728ADC3",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\verification.json",
+    "before": "CC28DEEC5FE910AF33501C14ED99E9011936DBCBACE775C08DDCA7778F51BE20",
+    "after": "CC28DEEC5FE910AF33501C14ED99E9011936DBCBACE775C08DDCA7778F51BE20",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\contract-vectors.json",
+    "before": "99B9572541FBDFECFF4809C7C80E854835CF8604BF4C01D36418919E9FD0C510",
+    "after": "99B9572541FBDFECFF4809C7C80E854835CF8604BF4C01D36418919E9FD0C510",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\README.md",
+    "before": "AA9068A976E7A381A96E7787698A92AC61BFD2044D87804C2F4A72D035641FF9",
+    "after": "AA9068A976E7A381A96E7787698A92AC61BFD2044D87804C2F4A72D035641FF9",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\RECORDING-CONTRACT.md",
+    "before": "103B73846C8E617D5F56C3DF9B53D876CD607C3E243E122D865D0936994E83ED",
+    "after": "103B73846C8E617D5F56C3DF9B53D876CD607C3E243E122D865D0936994E83ED",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\verification.json",
+    "before": "55E29EE9699A8F851E422B4FD36D298F1C7F8268EA88595FEA3163F4A0AC447B",
+    "after": "55E29EE9699A8F851E422B4FD36D298F1C7F8268EA88595FEA3163F4A0AC447B",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\WIRING-LIFECYCLE-CONTRACT.md",
+    "before": "CF2A9ABCAD171BDB4150161317857866A948F33B14D54C521AC0A8484682825F",
+    "after": "CF2A9ABCAD171BDB4150161317857866A948F33B14D54C521AC0A8484682825F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\disposition-ledger.json",
+    "before": "0A0738C2276196E0736B8F4381A6259ACBCE2BB380FA416B217551991F13267E",
+    "after": "0A0738C2276196E0736B8F4381A6259ACBCE2BB380FA416B217551991F13267E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\README.md",
+    "before": "7029447DFBCDDC041F317F6496BD2AAADE0284EA5972A8623F50A6DC47BF0DE4",
+    "after": "7029447DFBCDDC041F317F6496BD2AAADE0284EA5972A8623F50A6DC47BF0DE4",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\search-disposition.json",
+    "before": "F1F1C60D6EF45D42307B8CB4AA55B228DC022EFBDB0E9D2395C7780AC0F52857",
+    "after": "F1F1C60D6EF45D42307B8CB4AA55B228DC022EFBDB0E9D2395C7780AC0F52857",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\verification.json",
+    "before": "CB066D7F66FF3B3831450C9C53F5C35616FE4A8EED7340E5FD35B490252049F8",
+    "after": "CB066D7F66FF3B3831450C9C53F5C35616FE4A8EED7340E5FD35B490252049F8",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\api-evidence.json",
+    "before": "1904E54B3A2AC3EA3D4896BBB4A293A12A2B6C069282ABD9F40A6BB61E0CBFCF",
+    "after": "1904E54B3A2AC3EA3D4896BBB4A293A12A2B6C069282ABD9F40A6BB61E0CBFCF",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\guard-fixtures.json",
+    "before": "77C03C8D15D6058F647B288301723EC06100EAE23F9C3B78F12C9F71994D8A86",
+    "after": "77C03C8D15D6058F647B288301723EC06100EAE23F9C3B78F12C9F71994D8A86",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\README.md",
+    "before": "C2B0D861B30070FBDA3CE32B4FBF0D1076651124E61347925C40A6131849B399",
+    "after": "C2B0D861B30070FBDA3CE32B4FBF0D1076651124E61347925C40A6131849B399",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\verification.json",
+    "before": "52FF12AD6AB0A5459A4081DB558748ADBBD98C72A792DA52D1E4B6F59B99D8A6",
+    "after": "52FF12AD6AB0A5459A4081DB558748ADBBD98C72A792DA52D1E4B6F59B99D8A6",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\observation-contract.json",
+    "before": "2D1692BCBD8E8DD922CE40C483A7DC41CF470E80565C1E357021BFB594D449CD",
+    "after": "2D1692BCBD8E8DD922CE40C483A7DC41CF470E80565C1E357021BFB594D449CD",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\README.md",
+    "before": "377BF9D126351FEAE51F56B96E18A3CBDB843933956508362D3BF45890E202B5",
+    "after": "377BF9D126351FEAE51F56B96E18A3CBDB843933956508362D3BF45890E202B5",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\verification.json",
+    "before": "694518E14104DB6E0638C3011A93EB1D0DD47166987249BDD7ED71B58798225A",
+    "after": "694518E14104DB6E0638C3011A93EB1D0DD47166987249BDD7ED71B58798225A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T115707-0500-adjacent-tape-test-disposition\\adjacent-disposition.json",
+    "before": "2AFFCA718881D7A78199BB464C81B97CF4980292D0CA7EC864B4D11A534517BD",
+    "after": "2AFFCA718881D7A78199BB464C81B97CF4980292D0CA7EC864B4D11A534517BD",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T115707-0500-adjacent-tape-test-disposition\\README.md",
+    "before": "EA25A2F460E914E5568387814EF1C037745C8F032DC02F58D53FBA23E08EB730",
+    "after": "EA25A2F460E914E5568387814EF1C037745C8F032DC02F58D53FBA23E08EB730",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T115707-0500-adjacent-tape-test-disposition\\verification.json",
+    "before": "65C68A006EBC1F331D649FA290A756EA3F42A0E3F0B94D3C58F4FBF336BB9344",
+    "after": "65C68A006EBC1F331D649FA290A756EA3F42A0E3F0B94D3C58F4FBF336BB9344",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T121006-0500-r0-review-packet\\consolidated-coverage.json",
+    "before": "4BF751F7822F25CDF57B090976B546161A22C2205374084B32444AD372B120ED",
+    "after": "4BF751F7822F25CDF57B090976B546161A22C2205374084B32444AD372B120ED",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T121006-0500-r0-review-packet\\FINDING-DISPOSITIONS.md",
+    "before": "5833B140B3C258E4FFF8CF5EBF6CBE61B379635C6B0B51418AAB76ABF8A3A11D",
+    "after": "5833B140B3C258E4FFF8CF5EBF6CBE61B379635C6B0B51418AAB76ABF8A3A11D",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T121006-0500-r0-review-packet\\live-baseline.json",
+    "before": "FE739F4EA63B0FB491F4C1CC3F1E3960DEE3FF0A5F80BB5B4FEED98C8C3605FC",
+    "after": "FE739F4EA63B0FB491F4C1CC3F1E3960DEE3FF0A5F80BB5B4FEED98C8C3605FC",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T121006-0500-r0-review-packet\\preserved-adjacent-receipt\\adjacent-disposition.json",
+    "before": "793813B7E44627A83A87D8F8C4ECA629B188397D2A240298AAB484454D35D543",
+    "after": "793813B7E44627A83A87D8F8C4ECA629B188397D2A240298AAB484454D35D543",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T121006-0500-r0-review-packet\\preserved-adjacent-receipt\\README.md",
+    "before": "7FE716AB59E5B6FF56DB711C88ED894C2E79EFEA040A0CB60DA6C84D959FCA7A",
+    "after": "7FE716AB59E5B6FF56DB711C88ED894C2E79EFEA040A0CB60DA6C84D959FCA7A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T121006-0500-r0-review-packet\\preserved-adjacent-receipt\\verification.json",
+    "before": "65C68A006EBC1F331D649FA290A756EA3F42A0E3F0B94D3C58F4FBF336BB9344",
+    "after": "65C68A006EBC1F331D649FA290A756EA3F42A0E3F0B94D3C58F4FBF336BB9344",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T121006-0500-r0-review-packet\\README.md",
+    "before": "0C288B6C701F269E34191E83198DBF6F1F6798CAC1B8E3607C4BC9537D51E1BF",
+    "after": "0C288B6C701F269E34191E83198DBF6F1F6798CAC1B8E3607C4BC9537D51E1BF",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T121006-0500-r0-review-packet\\verification.json",
+    "before": "34B7D687FCBC88B76BC55E3C64034745F2424D891FF55118CBDCA6A9535DE6CC",
+    "after": "34B7D687FCBC88B76BC55E3C64034745F2424D891FF55118CBDCA6A9535DE6CC",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\consolidated-coverage.json",
+    "before": "B77F6B40BC8C021CA672E2E597A2A2DF16F7BE0EC95AF77E4AAEB206381AAE8E",
+    "after": "B77F6B40BC8C021CA672E2E597A2A2DF16F7BE0EC95AF77E4AAEB206381AAE8E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\FINDINGS.md",
+    "before": "582193B4ADFDE58AB62E27B4A4BD54BBA6898A9BB644202BBC4D6BD8D0BA5C63",
+    "after": "582193B4ADFDE58AB62E27B4A4BD54BBA6898A9BB644202BBC4D6BD8D0BA5C63",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\HANDOFF.before.md",
+    "before": "16C4DB7EB1EB92CF5DF7FA8509DC956DA9667FE4702E4071552C67E9BB6E5C48",
+    "after": "16C4DB7EB1EB92CF5DF7FA8509DC956DA9667FE4702E4071552C67E9BB6E5C48",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\live-baseline.json",
+    "before": "AE3BB5674E30ED6C241E295F8D930D1C1FF125101EC106E8C04653DC140D72D4",
+    "after": "AE3BB5674E30ED6C241E295F8D930D1C1FF125101EC106E8C04653DC140D72D4",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\Prepare-Candidate.ps1",
+    "before": "1E7CF1A6216293D03AE25703974BA9482035D4D6E53DFC1261925690608D3C2A",
+    "after": "1E7CF1A6216293D03AE25703974BA9482035D4D6E53DFC1261925690608D3C2A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\proposed-field-delta.json",
+    "before": "98D42B84FBA5AB833BC41F199A9A9CE0C56B5CF8D5B3EF0689895FAAE3D73BC9",
+    "after": "98D42B84FBA5AB833BC41F199A9A9CE0C56B5CF8D5B3EF0689895FAAE3D73BC9",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\R2-BACKLOG.md",
+    "before": "8FEA1900D946C0C80395317A1D4951A946281431091543BBAB5C820FD79FADB0",
+    "after": "8FEA1900D946C0C80395317A1D4951A946281431091543BBAB5C820FD79FADB0",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\README.md",
+    "before": "9243C0FAE6FC11D9D8423D546FFA3FA9615575054310D1F93B6874B67A9F33A2",
+    "after": "9243C0FAE6FC11D9D8423D546FFA3FA9615575054310D1F93B6874B67A9F33A2",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\TEST-TRACEABILITY.md",
+    "before": "5194E918BA0BE586A9CBEE9A2A1D1519BF786403237D3FAC4DEDD01AC947968F",
+    "after": "5194E918BA0BE586A9CBEE9A2A1D1519BF786403237D3FAC4DEDD01AC947968F",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\verification.json",
+    "before": "1E98013BE80C7593BC94C0FBA95164A0496D9384CFFB24736A0F1E65E1212679",
+    "after": "1E98013BE80C7593BC94C0FBA95164A0496D9384CFFB24736A0F1E65E1212679",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261013T212217-r0-two-finding-remediation\\Verify-Candidate.ps1",
+    "before": "19E2E98E70C935EBE129C035E98E5576890348A1BF016C7388A16D7B35D54A74",
+    "after": "19E2E98E70C935EBE129C035E98E5576890348A1BF016C7388A16D7B35D54A74",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\backfill\\Classic-VICE-Edge-Case-TR-Backfill.md",
+    "before": "3592F14190843AD880F9B0D0C980ED7A406D8DE5573DBB636894FFD78F369717",
+    "after": "3592F14190843AD880F9B0D0C980ED7A406D8DE5573DBB636894FFD78F369717",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\requirements\\legacy-tape-acceptance-correction.md",
+    "before": "FED0D46878DE1EDC8C19B3DC8F3CB4B980B80F6B4A75C4CEB3E9524D133D8CFF",
+    "after": "FED0D46878DE1EDC8C19B3DC8F3CB4B980B80F6B4A75C4CEB3E9524D133D8CFF",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\HANDOFF.md",
+    "before": "D6B7DF521EFEF3CE14F08B91736FE2B42068CB37DDCF6A472FEE8A8EDE1E91D9",
+    "after": "59B479B66BF781B2B67AB2C691C283C67B5AB23C7A5DBA4E783C5F6F477BE3FA",
+    "equal": false
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\native\\vice-shim-vic20.c",
+    "before": "9225463FE0C657EDE249ECAE9167468C9223E779ABB9C0A662BD30C212230197",
+    "after": "9225463FE0C657EDE249ECAE9167468C9223E779ABB9C0A662BD30C212230197",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\native\\vice-shim.c",
+    "before": "30369B9EA3BB8E805DF171C948A15467A8C174218899181C4ECC89B663CC08A6",
+    "after": "30369B9EA3BB8E805DF171C948A15467A8C174218899181C4ECC89B663CC08A6",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Abstractions\\IViceNative.cs",
+    "before": "21F45B664479C552D5E66B3C587FB15825312D16FAE7D0A506986C7C395F3FA8",
+    "after": "21F45B664479C552D5E66B3C587FB15825312D16FAE7D0A506986C7C395F3FA8",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\C64MemoryMap.cs",
+    "before": "4FC0DFDB6BA93C72E8437D1D37870841298F0354F04FDBC95F7AC4A9AB7989B1",
+    "after": "4FC0DFDB6BA93C72E8437D1D37870841298F0354F04FDBC95F7AC4A9AB7989B1",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\Datasette.cs",
+    "before": "E4BFE3BD7CD381585B595AD75933A540A8666FC8DB60EB3FE1612FF94E39D250",
+    "after": "E4BFE3BD7CD381585B595AD75933A540A8666FC8DB60EB3FE1612FF94E39D250",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\ViceNative.cs",
+    "before": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+    "after": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\ViceNative.Xvic.cs",
+    "before": "1245E78407C9C25BBD8C87E33BD65DC236DE2D1699F6DE2BC53E54F3E82CF0A9",
+    "after": "1245E78407C9C25BBD8C87E33BD65DC236DE2D1699F6DE2BC53E54F3E82CF0A9",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Core\\Wiring\\DatasetteCia1FlagBinding.cs",
+    "before": "9DE4D879EDBCC66F3E7ECA089F64D0CC64920D6E48AF16C9C5718E518B8D2876",
+    "after": "9DE4D879EDBCC66F3E7ECA089F64D0CC64920D6E48AF16C9C5718E518B8D2876",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Library.ViewModels\\MediaExtensionMap.cs",
+    "before": "B78896082C55FF1397BFA705EBC55334261164A993EA8959E89EB7E879CB9687",
+    "after": "B78896082C55FF1397BFA705EBC55334261164A993EA8959E89EB7E879CB9687",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Library.Tests\\Media\\MediaExtensionMapTests.cs",
+    "before": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+    "after": "4818C02E7140E30E4114D9D4F81F8443EC9280CF94E651F2B5FFE31141C20E4E",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\GATE-SLICE.md",
+    "before": "0A8787761A7569332D2DA899DF393BA6CEDF8664964A4AF909BE507AEFBC94FB",
+    "after": "0A8787761A7569332D2DA899DF393BA6CEDF8664964A4AF909BE507AEFBC94FB",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\README.md",
+    "before": "7D50B9F2D1B56994FE44634C12A7A9E9389B8D858411C72866A763FBF07ABDCA",
+    "after": "7D50B9F2D1B56994FE44634C12A7A9E9389B8D858411C72866A763FBF07ABDCA",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.NativeClockProbe.Tests\\STDIO-ADAPTER-SLICE.md",
+    "before": "AD5699E68514B3319A5A483AAE8187C50DD12F5EC95ECF705B43975FEFB47166",
+    "after": "AD5699E68514B3319A5A483AAE8187C50DD12F5EC95ECF705B43975FEFB47166",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\AttachPanelViewModelTests.cs",
+    "before": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+    "after": "F29D80F61B332DE422D6AC58F016A4C7F1E56C6CB12397A32BBAD8B2EF7375EE",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CaptureServiceHostTests.cs",
+    "before": "A4245A7A309A4BB736F5D68014CDED533B23AFFC5C16A698CD9CCB10FFD85D23",
+    "after": "A4245A7A309A4BB736F5D68014CDED533B23AFFC5C16A698CD9CCB10FFD85D23",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\CiaFlagPinTests.cs",
+    "before": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+    "after": "CDAB4F8801ECA0C7FE419E0D182967E979030DBEE6EE28175D24CD9D8E5DC455",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\FrMed005AcceptanceTests.cs",
+    "before": "AAC2CAB648095E3969898FE26EE1C8DC64F29CF4A3E35B947DC4D0DB614A5D39",
+    "after": "AAC2CAB648095E3969898FE26EE1C8DC64F29CF4A3E35B947DC4D0DB614A5D39",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\GrpcHostServiceAdaptersTests.cs",
+    "before": "5C24A45A1C8689F371F3F575CDFBC4CA9CB61B1DAFD2FEF5290F2216E175AE70",
+    "after": "5C24A45A1C8689F371F3F575CDFBC4CA9CB61B1DAFD2FEF5290F2216E175AE70",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\IEC\\T64ImageTests.cs",
+    "before": "48B11DFCA89EE766165A85029E5597551A894DBB28FE70B1EE8B33701FF3B1E1",
+    "after": "48B11DFCA89EE766165A85029E5597551A894DBB28FE70B1EE8B33701FF3B1E1",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Media\\CaptureAudioTapTests.cs",
+    "before": "63166932B57AE76422058F2B0C802A2CA834C767EC053E647FC253B61849EDAA",
+    "after": "63166932B57AE76422058F2B0C802A2CA834C767EC053E647FC253B61849EDAA",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\MediaServiceHostTests.cs",
+    "before": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+    "after": "455BEF14BA0726F64939BC9E48622E50BC5FD7519CAB5EA999ABD7B60C7691B0",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\ShellViewModelTests.cs",
+    "before": "A3A77872942964E2A0046018BF17FBA2D6B8C8D585C98BCC9A91E684BBBE9DFE",
+    "after": "A3A77872942964E2A0046018BF17FBA2D6B8C8D585C98BCC9A91E684BBBE9DFE",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidNoiseDivergentParityTests.cs",
+    "before": "07E7C412DA93FE5D306FA80253DC80B216E4548FBAC207192FC2540F15CCA595",
+    "after": "07E7C412DA93FE5D306FA80253DC80B216E4548FBAC207192FC2540F15CCA595",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidVoiceMixDivergentParityTests.cs",
+    "before": "84510C15535376D90F79F165729973E7549FBD7BD1ABC39A2FEC64E64C01E6DD",
+    "after": "84510C15535376D90F79F165729973E7549FBD7BD1ABC39A2FEC64E64C01E6DD",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\SidWaveOsc3DivergentParityTests.cs",
+    "before": "872C9A750ABA68D7FD41FC748C3698A321FD96FD40C97E03F5530B876C7B2435",
+    "after": "872C9A750ABA68D7FD41FC748C3698A321FD96FD40C97E03F5530B876C7B2435",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Tape\\DatasetteMotorRampTests.cs",
+    "before": "5C06136A1E4820558E4781214492043785EC4F4151CD8C50C2ED1E079901E408",
+    "after": "5C06136A1E4820558E4781214492043785EC4F4151CD8C50C2ED1E079901E408",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Tape\\DatasetteSenseLineTests.cs",
+    "before": "7DAC564E613CB660D523A56D3E68120DE5B30818824646BB5ABF2B564E69A54C",
+    "after": "7DAC564E613CB660D523A56D3E68120DE5B30818824646BB5ABF2B564E69A54C",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Vic20\\Vic20Via1IecPortTests.cs",
+    "before": "5EF92CBEDBCC82AC50A07EA121790B33957AD332396B36A5330D477F89B26005",
+    "after": "5EF92CBEDBCC82AC50A07EA121790B33957AD332396B36A5330D477F89B26005",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\WarpAudioDiscardTests.cs",
+    "before": "2EEC4B9F048CA468BF5BD2E094C3E5588D68D940864DCA5F2079DD59C26AC105",
+    "after": "2EEC4B9F048CA468BF5BD2E094C3E5588D68D940864DCA5F2079DD59C26AC105",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\Fakes\\FakeXboxSettingsGateway.cs",
+    "before": "3D8DFCD31D42503CEED2554067E1DEE99DEC6C46F7F89A0F2EB6E64BEA2E5712",
+    "after": "3D8DFCD31D42503CEED2554067E1DEE99DEC6C46F7F89A0F2EB6E64BEA2E5712",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\GamepadMergeSocdTests.cs",
+    "before": "2BA29BEA1B0A894A683A77A9BEEB5E7FE044BB4F5F1200CD3F767D6AD8967740",
+    "after": "2BA29BEA1B0A894A683A77A9BEEB5E7FE044BB4F5F1200CD3F767D6AD8967740",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxAudioBackendFactoryTests.cs",
+    "before": "87D4FE2D74A89B5C2D53481F71055C0E8747037D8803FF6B6E0B4773C82EE554",
+    "after": "87D4FE2D74A89B5C2D53481F71055C0E8747037D8803FF6B6E0B4773C82EE554",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDefaultCartridgeTests.cs",
+    "before": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+    "after": "0DAB931FC741BE95CC00C7C03D6AEDACDFE52048594AD484E2CD5F2E15D4CD6A",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.TestHarness\\Xbox\\XboxDeviceSetupViewModelTests.cs",
+    "before": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+    "after": "CF54670D30B85FD49AB9FC82738D352AB54EF5FB61967F13CF4D7242D7FB5941",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.c",
+    "before": "673A7E7899FD022BFF5C45AB55D05568E6FB4DECAFBFF88EEF80D0157551BA4C",
+    "after": "673A7E7899FD022BFF5C45AB55D05568E6FB4DECAFBFF88EEF80D0157551BA4C",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-gate.h",
+    "before": "E8EB1E690F4F0616E54B80EAFE347C516F12236F2A8B7AEF1A9A61388FFFE390",
+    "after": "E8EB1E690F4F0616E54B80EAFE347C516F12236F2A8B7AEF1A9A61388FFFE390",
+    "equal": true
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tools\\immutable-vice\\clock-observer.c",
+    "before": "CD59B89B488B8DD9207F4A7FA28549C9D61D4142FA24E58CFD231578F9AFEEC8",
+    "after": "CD59B89B488B8DD9207F4A7FA28549C9D61D4142FA24E58CFD231578F9AFEEC8",
+    "equal": true
+  }
+]

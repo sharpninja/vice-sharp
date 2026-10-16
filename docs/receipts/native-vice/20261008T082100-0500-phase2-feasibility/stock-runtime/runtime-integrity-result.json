@@ -1,0 +1,11 @@
+{
+  "timestampLocal": "2026-10-08T09:16:56.6966375-05:00",
+  "stockSource": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source",
+  "stockHead": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "originalTrackedCount": 3847,
+  "originalTrackedChanges": [],
+  "stockTrackedStatus": [],
+  "nativeMismatches": [],
+  "nativeBefore": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\native-before-runtime.json",
+  "nativeAfter": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\stock-runtime\\native-after-runtime.json"
+}

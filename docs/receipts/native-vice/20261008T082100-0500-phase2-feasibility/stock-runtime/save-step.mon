@@ -1,0 +1,8 @@
+registers
+stopwatch
+dump "fresh.vsf"
+step 1
+registers
+stopwatch
+dump "after-step.vsf"
+quit

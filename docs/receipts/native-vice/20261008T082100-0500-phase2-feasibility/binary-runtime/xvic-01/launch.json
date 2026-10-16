@@ -1,0 +1,29 @@
+{
+  "timestampLocal": "2026-10-08T09:37:42.8406128-05:00",
+  "pid": 62340,
+  "executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source\\vice\\src\\xvic.exe",
+  "sha256": "C01442BC1F15DD8C7006FABE0D35DFA9707664A3120DD1FA014A51EEB481B92C",
+  "arguments": [
+    "-default",
+    "-console",
+    "-sound",
+    "-sounddev",
+    "dummy",
+    "-warp",
+    "-seed",
+    "1",
+    "-directory",
+    "F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/data",
+    "-binarymonitor",
+    "-binarymonitoraddress",
+    "ip4://127.0.0.1:50111",
+    "-logfile",
+    "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-runtime\\xvic-01\\vice.log",
+    "-initbreak",
+    "ready"
+  ],
+  "workingDirectory": "F:\\GitHub\\vice-sharp\\docs\\receipts\\native-vice\\20261008T082100-0500-phase2-feasibility\\binary-runtime\\xvic-01",
+  "codec": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.ViceCompatibility\\bin\\Release\\net10.0\\ViceSharp.ViceCompatibility.dll",
+  "codecHash": "862F7B2FE4399075D944D470E6ABCB67ACA7C1C97C0469D96BC62EA162D4A560",
+  "loading": "Assembly.Load(byte[]) to avoid locking build outputs"
+}

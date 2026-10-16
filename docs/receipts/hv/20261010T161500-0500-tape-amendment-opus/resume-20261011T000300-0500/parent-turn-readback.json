@@ -1,0 +1,16 @@
+{
+  "readAt": "2026-10-11T00:57:58.0272030-05:00",
+  "method": "client.SessionLog.QueryAsync",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261011T050131Z-midnight-opus-retry",
+  "status": "completed",
+  "responseExact": true,
+  "actions": 10,
+  "decisions": 2,
+  "terminalParts": 9,
+  "terminalChars": 50824,
+  "terminalExact": true,
+  "terminalTextSha256": "4B98C2DE11C69A4ACC1A39DFDE59259424E557F2ADF96FB771DB38ABD99250FF",
+  "fullVerdictReviewerProof": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261010T161500-0500-tape-amendment-opus\\resume-20261011T000300-0500\\parent-primary-readback.json",
+  "primaryReadback": true
+}

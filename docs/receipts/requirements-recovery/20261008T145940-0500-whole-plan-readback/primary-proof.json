@@ -1,0 +1,20 @@
+{
+  "timestampLocal": "2026-10-08T15:02:42.0471343-05:00",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261008T194908Z-prompt-7723",
+  "status": "completed",
+  "responseExact": true,
+  "actions": 4,
+  "dialogs": 4,
+  "decisionPairs": [
+    {
+      "actionMatches": 1,
+      "dialogMatches": 1
+    },
+    {
+      "actionMatches": 1,
+      "dialogMatches": 1
+    }
+  ],
+  "receiptSha256": "151FD001B64E1FD31FCC086FE8471F3F9E2484BBB05D9BE74499FE813DF298B3"
+}

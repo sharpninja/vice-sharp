@@ -7,4 +7,5 @@ public enum Vic20ExpansionCartKind
     FinalExpansion3 = 1,
     Ultimem = 2,
     MegaCart = 3,
+    StandardBlock = 4,
 }

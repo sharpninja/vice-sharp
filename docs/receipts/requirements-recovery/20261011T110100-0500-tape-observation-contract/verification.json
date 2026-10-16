@@ -1,0 +1,202 @@
+{
+  "checkedAt": "2026-10-11T11:10:42.4026628-05:00",
+  "kind": "Document, pinned-source and MCP readback verification only",
+  "checks": [
+    {
+      "name": "JSON full serialized readback",
+      "pass": true
+    },
+    {
+      "name": "Native source pins",
+      "pass": true
+    },
+    {
+      "name": "Current input hashes unchanged",
+      "pass": true
+    },
+    {
+      "name": "Capability and fixture IDs unique",
+      "pass": true
+    },
+    {
+      "name": "All ten capabilities covered",
+      "pass": true
+    },
+    {
+      "name": "44 negative controls declared, none executed",
+      "pass": true
+    },
+    {
+      "name": "Native module field lists 18 and 13",
+      "pass": true
+    },
+    {
+      "name": "No acceptance booleans true",
+      "pass": true
+    },
+    {
+      "name": "Inspection exits and alarm_set absence",
+      "pass": true
+    },
+    {
+      "name": "Bounded search outputs consistent",
+      "pass": true
+    },
+    {
+      "name": "Four current requirements remain pending and AC false",
+      "pass": true
+    },
+    {
+      "name": "Native worktree status unchanged",
+      "pass": true
+    },
+    {
+      "name": "git diff --check",
+      "pass": true
+    },
+    {
+      "name": "README other artifact links resolve (verification file created next)",
+      "pass": true
+    },
+    {
+      "name": "Original whole-goal plan unchanged",
+      "pass": true
+    },
+    {
+      "name": "TODO primary readback exact, old note preserved, no other fields changed",
+      "pass": true
+    },
+    {
+      "name": "Root status delta limited to new receipt directory",
+      "pass": true
+    },
+    {
+      "name": "New text files no trailing whitespace and end with LF",
+      "pass": true
+    }
+  ],
+  "checkCount": 18,
+  "failedChecks": 0,
+  "files": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\README.md",
+      "bytes": 10674,
+      "sha256": "377BF9D126351FEAE51F56B96E18A3CBDB843933956508362D3BF45890E202B5"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\observation-contract.json",
+      "bytes": 49390,
+      "sha256": "2D1692BCBD8E8DD922CE40C483A7DC41CF470E80565C1E357021BFB594D449CD"
+    }
+  ],
+  "nativeStatusBeforeCount": 2539,
+  "nativeStatusAfterCount": 2539,
+  "nativeStatusChanged": [],
+  "rootStatusBeforeCount": 879,
+  "rootStatusAfterCount": 880,
+  "rootStatusDelta": [
+    {
+      "InputObject": "?? docs/receipts/requirements-recovery/20261011T110100-0500-tape-observation-contract/",
+      "SideIndicator": "=>"
+    }
+  ],
+  "gitDiffCheck": {
+    "command": "git diff --check",
+    "exitCode": 0,
+    "output": [],
+    "limitation": "Tracked diff check supplemented by direct whitespace checks on new text artifacts."
+  },
+  "todoProof": {
+    "id": "PLAN-REQAUDIT-001",
+    "checkedAt": "2026-10-11T11:09:40.7286917-05:00",
+    "done": false,
+    "noteExact": true,
+    "priorNoteRetained": true,
+    "unrelatedFieldsChanged": [],
+    "beforeKeys": [
+      "dependsOn",
+      "description",
+      "done",
+      "functionalRequirements",
+      "id",
+      "implementationTasks",
+      "note",
+      "priority",
+      "section",
+      "technicalDetails",
+      "technicalRequirements",
+      "title"
+    ],
+    "afterKeys": [
+      "dependsOn",
+      "description",
+      "done",
+      "functionalRequirements",
+      "id",
+      "implementationTasks",
+      "note",
+      "priority",
+      "section",
+      "technicalDetails",
+      "technicalRequirements",
+      "title"
+    ],
+    "noteCharacters": 5859
+  },
+  "todoAppendedNote": "2026-10-11T11:09:36.7416197-05:00 R0 observation audit: docs/receipts/requirements-recovery/20261011T110100-0500-tape-observation-contract/README.md and observation-contract.json retain 14 upstream blob-matched source files, 14 local input pins, 3 binary/tool pins, 10 observation capability assessments and 10 proposed conformance groups with44 unexecuted negative controls. The current observer is clock-only; alarm_set is inline with no external relocation in the inspected object; native VSF save has sound/drive and optional tape-stream side effects; omitted process-static state and RTC serial-train restore need explicit native histories. Bounded fixture search found no standalone TAP/T64 or five named loader C# references, not universal absence. Contract SHA256=2D1692BCBD8E8DD922CE40C483A7DC41CF470E80565C1E357021BFB594D449CD. Other retained R0 supplements now include docs/receipts/requirements-recovery/20261011T095710-0500-tape-test-disposition/README.md (63 method dispositions, broader adjacent audit still open) and docs/receipts/requirements-recovery/20261011T102600-0500-requirements-api-guard/README.md (typed field/mapping guards and18 groups/69 specified negative controls; not executed guard tests). Remaining: complete corpus and dependency proofs, observer reachability and noninterference, adjacent-test and handoff reconciliation, approved/executable application guards and exclusive-writer window, whole corrected packet Opus max HV, then explicit approval before requirement application. No production/test/native changes or done-state/gate advance; mock and native test execution count this turn0. Last HV remains DISAGREE93/84,35PASS6FAIL0UNKNOWN. Full original xvic/x64sc, native VSF, all-AC mocks-first, cumulative suites and system-specific settings obligations remain mandatory.",
+  "readmeLinksBeforeVerificationCreation": [
+    {
+      "target": "observation-contract.json",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\observation-contract.json",
+      "exists": true
+    },
+    {
+      "target": "verification.json",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T110100-0500-tape-observation-contract\\verification.json",
+      "exists": false
+    },
+    {
+      "target": "../20261011T085402-0500-tape-motor-matrix/MOTOR-CONTRACT.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T085402-0500-tape-motor-matrix\\MOTOR-CONTRACT.md",
+      "exists": true
+    },
+    {
+      "target": "../20261011T092059-0500-tape-recording-wiring-contract/RECORDING-CONTRACT.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T092059-0500-tape-recording-wiring-contract\\RECORDING-CONTRACT.md",
+      "exists": true
+    },
+    {
+      "target": "../20261011T095710-0500-tape-test-disposition/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T095710-0500-tape-test-disposition\\README.md",
+      "exists": true
+    },
+    {
+      "target": "../20261011T102600-0500-requirements-api-guard/README.md",
+      "resolved": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261011T102600-0500-requirements-api-guard\\README.md",
+      "exists": true
+    }
+  ],
+  "recoveredDiscoveryErrors": [
+    "Initial guessed src/datasette.c did not exist; rg --files located src/datasette/datasette.c.",
+    "Initial guessed src/tapeport/tapertc.c did not exist; rg --files located cp-clockf83.c."
+  ],
+  "counts": {
+    "nativeSourceFiles": 14,
+    "localInputs": 14,
+    "binaryToolInputs": 3,
+    "capabilityGroups": 10,
+    "specifiedFixtureGroups": 10,
+    "specifiedNegativeControls": 44,
+    "executedMockTests": 0,
+    "executedNativeTests": 0,
+    "newHvReviews": 0
+  },
+  "limitations": [
+    "No full native content inventory generated this turn; exact worktree status and selected source/object hashes checked.",
+    "Object read-only symbol inspection is not final-link or runtime interception proof.",
+    "Remaining fixture discovery excludes archives, generated temporary fixtures and external corpora.",
+    "Root HANDOFF.md has not been reconciled by this slice; D4 is not closed.",
+    "All requirements, plan, native/vice, product and test sources left untouched; expanded amendment still unapproved and unapplied.",
+    "No gate accepted; original goal remains active."
+  ]
+}
