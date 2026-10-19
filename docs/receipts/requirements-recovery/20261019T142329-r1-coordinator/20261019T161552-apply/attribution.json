@@ -1,0 +1,8 @@
+{
+  "Kind": "fr",
+  "Id": "FR-BACKFILL-MEDIA-001",
+  "Field": "status",
+  "JournalPath": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-audit\\20261019T141229-d8-preapply-export\\apply\\journal.jsonl",
+  "JournalSha256": "526E39A81A57906457FFD04690372BD493F1422283102205C09976250F85158D",
+  "Reason": "D8 (Payton \"Follow the rules\") lowered closed to pending at 2026-10-19 14:13 to 14:19; equals the approved R0 after-value."
+}

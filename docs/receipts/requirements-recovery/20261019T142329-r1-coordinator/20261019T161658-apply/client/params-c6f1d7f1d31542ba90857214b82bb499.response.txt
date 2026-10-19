@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20261019T212113Z-9a2b
+  result:
+    id: FR-TAP-001
+    title: Datasette Motor Control
+    description: Motor input, native running state, transport motion, public state exposure and tape audio shall follow pinned immutable VICE for the selected machine and resources. C64 motor control is DDR-masked CPU-port bit 5, not bit 3. Ordinary startup scheduling and actual delayed-stop callback execution are distinct from physical-drive approximations. Preserve the existing public MotorState obligation and tape-audio functionality.
+    status: pending
+    priority: medium
+    area: TAP
+    acceptanceCriteria:
+    - id: ac-01
+      text: C64 CPU-port bit 5 controls active-low motor output as !((DDR & DATA) & 0x20); input direction drives motor-on. Bit 3 is tape write, not motor. VIC-20 and SX-64 behavior follows FR-RUNTIME-TAPE-002 ac-07.
+      isSatisfied: false
+    - id: ac-02
+      text: 'Use the native emulated-clock schedule: ordinary start adds 32000 only if no alarm is pending; FORWARD/REWIND uses its 1000-cycle command alarm. Do not substitute an approximate real-hardware half-second timer.'
+      isSatisfied: false
+    - id: ac-03
+      text: Tape motion, read-pulse delivery and stopping match the ordered native transport/alarm trace, including late stop execution and pending-alarm cases. Do not conflate immediate native running-state assertion with first movement or apply a universal spin-up-complete gate to every operation.
+      isSatisfied: false
+    - id: ac-04
+      text: PLAY/sense is not a prerequisite for asserting the native motor-running flag. Cover motor-on in STOP and RECORD, and distinguish transport mode/sense from motor control and running state.
+      isSatisfied: false
+    - id: ac-05
+      text: Motor state changes are reflected in the `ITapeUnit.MotorState` property.
+      isSatisfied: false
+    - id: ac-06
+      text: Tape audio remains required. With identical sound-enabled/volume/sample-format/rate and tape halfwave/gap inputs, match pinned VICE datasette sound buffer and output samples, including disabled flush, buffer wrap, empty output and gap boundaries. Native datasette sound-chip output, not an assumed SID EXT IN route, is the acceptance target.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:21:14.2185034+00:00
+    updatedAt: 2026-10-19T21:21:14.2185917+00:00
+  deprecated: true
+
+---
+

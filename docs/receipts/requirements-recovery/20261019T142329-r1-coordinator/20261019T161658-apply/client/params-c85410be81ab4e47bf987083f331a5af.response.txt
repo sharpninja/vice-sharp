@@ -1,0 +1,14 @@
+type: result
+payload:
+  requestId: req-20261019T211937Z-f891
+  result:
+    frId: FR-PRF-003
+    trIds:
+    - TR-DET-001
+    testIds:
+    - TEST-PRF-001
+    - TEST-X64SC-LOCKSTEP-001
+    workspaceId: F:\GitHub\vice-sharp
+
+---
+

@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261019T211847Z-8731
+  result:
+    id: TEST-X64SC-LOCKSTEP-001
+    title: Native x64sc Variant Lockstep Tests
+    description: Every required x64sc model profile is validated against native x64sc for deterministic startup, BASIC prompt, keyboard input, disk attach/autostart, cartridge boot, and reset scenarios. Validation compares CPU registers, flags, cycle count, selected memory windows, CIA/VIC/SID observable register state, IRQ/NMI state, and frame/raster checkpoints. Missing ROMs, unavailable native x64sc binaries, unsupported variants, skipped variants, or stubbed checks fail the gate.
+    status: pending
+    priority: high
+    area: X64SC
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:18:47.6420356+00:00
+    updatedAt: 2026-10-19T21:18:47.6421300+00:00
+  deprecated: true
+
+---
+

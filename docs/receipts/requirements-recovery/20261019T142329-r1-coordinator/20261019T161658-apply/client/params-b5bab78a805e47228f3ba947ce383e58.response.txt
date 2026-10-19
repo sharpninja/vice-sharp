@@ -1,0 +1,56 @@
+type: result
+payload:
+  requestId: req-20261019T212200Z-ea81
+  result:
+    success: true
+    content: ''
+    contentType: application/json
+    outputRoot: F:\GitHub\vice-sharp\docs\Project
+    files:
+    - relativePath: Functional-Requirements.md
+      fullPath: F:\GitHub\vice-sharp\docs\Project\Functional-Requirements.md
+      contentType: text/markdown
+      lastModifiedUtc: &o0
+        dateTime: 2026-10-19T21:22:00.9825049
+        utcDateTime: 2026-10-19T21:22:00.9825049Z
+        localDateTime: 2026-10-19T16:22:00.9825049-05:00
+        date: 2026-10-19T00:00:00.0000000
+        day: 19
+        dayOfWeek: Monday
+        dayOfYear: 292
+        hour: 21
+        millisecond: 982
+        microsecond: 504
+        nanosecond: 900
+        minute: 22
+        month: 10
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 0
+        ticks: 639280417209825049
+        utcTicks: 639280417209825049
+        timeOfDay: 21:22:00.9825049
+        year: 2026
+    - relativePath: Technical-Requirements.md
+      fullPath: F:\GitHub\vice-sharp\docs\Project\Technical-Requirements.md
+      contentType: text/markdown
+      lastModifiedUtc: *o0
+    - relativePath: Testing-Requirements.md
+      fullPath: F:\GitHub\vice-sharp\docs\Project\Testing-Requirements.md
+      contentType: text/markdown
+      lastModifiedUtc: *o0
+    - relativePath: TR-per-FR-Mapping.md
+      fullPath: F:\GitHub\vice-sharp\docs\Project\TR-per-FR-Mapping.md
+      contentType: text/markdown
+      lastModifiedUtc: *o0
+    - relativePath: Requirements-Matrix.md
+      fullPath: F:\GitHub\vice-sharp\docs\Project\Requirements-Matrix.md
+      contentType: text/markdown
+      lastModifiedUtc: *o0
+    format: markdown
+    docType: all
+    generatedAt: 2026-10-19T21:22:00.9825049+00:00
+  deprecated: true
+
+---
+

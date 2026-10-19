@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="88" errors="0" failures="10" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="14:28:50">
+  <environment cwd="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator" user-domain="" user="SYSTEM" os-version="10.0.26200" nunit-version="2.5.8.0" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" clr-version="10.0.13" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Failure" success="False" time="3.0037" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1" executed="True" result="Failure" success="False" time="3.0037" asserts="0" description="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="G01 ExactPacketAndApproval" executed="True" result="Failure" success="False" time="0.3676" asserts="0" description="G01 ExactPacketAndApproval">
+            <results>
+              <test-case description="passes a correct binding" name="G01 ExactPacketAndApproval.passes a correct binding" time="0.1626" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected no exception to be thrown, but an exception "The property 'ApprovalDefect' cannot be found on this object. Verify that the property exists." was thrown from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:73 char:9
+    +     if ($Context.Scenario.ApprovalDefect) { Assert-R1Blocked $Result  …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.</message>
+                  <stack-trace>at It 'passes a correct binding' { $c = New-Ctx; { Assert-R1G01 (New-HappyResult $c) $c } | Should -Not -Throw }, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:92
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:92</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="passes a blocked run when approval is absent" name="G01 ExactPacketAndApproval.passes a blocked run when approval is absent" time="0.0213" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a valid binding without an approval-verified entry" name="G01 ExactPacketAndApproval.rejects a valid binding without an approval-verified entry" time="0.0342" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected an exception with message like '*G01*' to be thrown, but the message was 'The property 'ApprovalDefect' cannot be found on this object. Verify that the property exists.'. from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:73 char:9
+    +     if ($Context.Scenario.ApprovalDefect) { Assert-R1Blocked $Result  …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</message>
+                  <stack-trace>at $c = New-Ctx; $r = New-HappyResult $c; $r.Journal = @($r.Journal | Where-Object State -ne 'approval-verified'); { Assert-R1G01 $r $c } | Should -Throw '*G01*', F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:98
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:98</stack-trace>
+                </failure>
+              </test-case>
+              <test-suite type="ParameterizedTest" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (&lt;_&gt;)" executed="True" result="Success" success="True" time="0.1194" asserts="0" description="rejects a fake that reports approved anyway (&lt;_&gt;)">
+                <results>
+                  <test-case description="rejects a fake that reports approved anyway (absent)" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (absent)" time="0.0526" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that reports approved anyway (stale-hash)" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (stale-hash)" time="0.0222" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that reports approved anyway (changed-nested-ac)" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (changed-nested-ac)" time="0.0224" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that reports approved anyway (prior-scope)" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (prior-scope)" time="0.0222" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G02 UniqueOrdinalTypedIdentity" executed="True" result="Failure" success="False" time="0.5511" asserts="0" description="G02 UniqueOrdinalTypedIdentity">
+            <results>
+              <test-case description="passes exact identities" name="G02 UniqueOrdinalTypedIdentity.passes exact identities" time="0.0312" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected no exception to be thrown, but an exception "The property 'IdentityDefect' cannot be found on this object. Verify that the property exists." was thrown from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:80 char:9
+    +     if ($Context.Scenario.IdentityDefect) { Assert-R1Blocked $Result  …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.</message>
+                  <stack-trace>at It 'passes exact identities' { $c = New-Ctx; { Assert-R1G02 (New-HappyResult $c) $c } | Should -Not -Throw }, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:103
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:103</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="passes a blocked run on a duplicate" name="G02 UniqueOrdinalTypedIdentity.passes a blocked run on a duplicate" time="0.0129" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that substitutes a differently cased read" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that substitutes a differently cased read" time="0.0358" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected an exception with message like '*G02*' to be thrown, but the message was 'The property 'IdentityDefect' cannot be found on this object. Verify that the property exists.'. from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:80 char:9
+    +     if ($Context.Scenario.IdentityDefect) { Assert-R1Blocked $Result  …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</message>
+                  <stack-trace>at { Assert-R1G02 $r $c } | Should -Throw '*G02*', F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:110
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:110</stack-trace>
+                </failure>
+              </test-case>
+              <test-suite type="ParameterizedTest" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on &lt;_&gt;" executed="True" result="Success" success="True" time="0.1" asserts="0" description="rejects a fake that proceeds on &lt;_&gt;">
+                <results>
+                  <test-case description="rejects a fake that proceeds on missing" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on missing" time="0.0295" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that proceeds on duplicate" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on duplicate" time="0.0231" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that proceeds on wrong-kind" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on wrong-kind" time="0.0256" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that proceeds on case-only" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on case-only" time="0.0217" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G03 PresenceAndType" executed="True" result="Success" success="True" time="0.6876" asserts="0" description="G03 PresenceAndType">
+            <results>
+              <test-suite type="ParameterizedTest" name="G03 PresenceAndType.passes a blocked run on &lt;_&gt;" executed="True" result="Success" success="True" time="0.0559" asserts="0" description="passes a blocked run on &lt;_&gt;">
+                <results>
+                  <test-case description="passes a blocked run on present-null" name="G03 PresenceAndType.passes a blocked run on present-null" time="0.0185" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="passes a blocked run on absent" name="G03 PresenceAndType.passes a blocked run on absent" time="0.0089" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="passes a blocked run on empty-array" name="G03 PresenceAndType.passes a blocked run on empty-array" time="0.0092" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="passes a blocked run on string-for-number" name="G03 PresenceAndType.passes a blocked run on string-for-number" time="0.0108" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="passes a blocked run on bool-for-string" name="G03 PresenceAndType.passes a blocked run on bool-for-string" time="0.0086" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="ParameterizedTest" name="G03 PresenceAndType.rejects a fake that null-coalesces &lt;_&gt;" executed="True" result="Success" success="True" time="0.0769" asserts="0" description="rejects a fake that null-coalesces &lt;_&gt;">
+                <results>
+                  <test-case description="rejects a fake that null-coalesces present-null" name="G03 PresenceAndType.rejects a fake that null-coalesces present-null" time="0.0308" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that null-coalesces absent" name="G03 PresenceAndType.rejects a fake that null-coalesces absent" time="0.0237" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that null-coalesces empty-array" name="G03 PresenceAndType.rejects a fake that null-coalesces empty-array" time="0.0225" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G04 StableMetadata" executed="True" result="Success" success="True" time="0.8769" asserts="0" description="G04 StableMetadata">
+            <results>
+              <test-case description="passes when every unmodified field survives" name="G04 StableMetadata.passes when every unmodified field survives" time="0.0445" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects cleared notes" name="G04 StableMetadata.rejects cleared notes" time="0.0373" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a dropped field" name="G04 StableMetadata.rejects a dropped field" time="0.0343" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a changed area" name="G04 StableMetadata.rejects a changed area" time="0.0415" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an unclassified new field" name="G04 StableMetadata.rejects an unclassified new field" time="0.0283" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G05 VolatileReadTimestamps" executed="True" result="Failure" success="False" time="0.9474" asserts="0" description="G05 VolatileReadTimestamps">
+            <results>
+              <test-case description="passes a completed run under timestamp drift" name="G05 VolatileReadTimestamps.passes a completed run under timestamp drift" time="0.0253" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that blocks on timestamp drift" name="G05 VolatileReadTimestamps.rejects a fake that blocks on timestamp drift" time="0.016" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that writes observed timestamps" name="G05 VolatileReadTimestamps.rejects a fake that writes observed timestamps" time="0.0261" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected an exception with message like '*G05*' to be thrown, but the message was 'The property 'VolatileDrift' cannot be found on this object. Verify that the property exists.'. from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:114 char:9
+    +     if ($Context.Scenario.VolatileDrift -and $Result.State -eq 'block …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</message>
+                  <stack-trace>at { Assert-R1G05 $r $c } | Should -Throw '*G05*', F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:136
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:136</stack-trace>
+                </failure>
+              </test-case>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G06 ExactChangedFields" executed="True" result="Success" success="True" time="1.1733" asserts="0" description="G06 ExactChangedFields">
+            <results>
+              <test-case description="passes exact patches" name="G06 ExactChangedFields.passes exact patches" time="0.0482" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a body alias" name="G06 ExactChangedFields.rejects a body alias" time="0.0263" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an unapproved status" name="G06 ExactChangedFields.rejects an unapproved status" time="0.0457" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects the whole projection" name="G06 ExactChangedFields.rejects the whole projection" time="0.0296" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a value that is not the approved after-value" name="G06 ExactChangedFields.rejects a value that is not the approved after-value" time="0.0325" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects resending a field already attributed at its after-value" name="G06 ExactChangedFields.rejects resending a field already attributed at its after-value" time="0.0401" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G07 AcIdentityAndMeaning" executed="True" result="Success" success="True" time="1.3527" asserts="0" description="G07 AcIdentityAndMeaning">
+            <results>
+              <test-case description="passes exact criteria" name="G07 AcIdentityAndMeaning.passes exact criteria" time="0.0339" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a dropped criterion with the count kept" name="G07 AcIdentityAndMeaning.rejects a dropped criterion with the count kept" time="0.0416" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects stale text" name="G07 AcIdentityAndMeaning.rejects stale text" time="0.0306" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a satisfied criterion" name="G07 AcIdentityAndMeaning.rejects a satisfied criterion" time="0.0344" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects added evidence" name="G07 AcIdentityAndMeaning.rejects added evidence" time="0.0352" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G08 MappingExistenceAndPreservation" executed="True" result="Failure" success="False" time="1.5294" asserts="0" description="G08 MappingExistenceAndPreservation">
+            <results>
+              <test-case description="passes full-union upserts" name="G08 MappingExistenceAndPreservation.passes full-union upserts" time="0.031" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected no exception to be thrown, but an exception "The property 'MissingTarget' cannot be found on this object. Verify that the property exists." was thrown from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:155 char:9
+    +     if ($Context.Scenario.MissingTarget) { Assert-R1Blocked $Result ' …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.</message>
+                  <stack-trace>at It 'passes full-union upserts' { $c = New-Ctx; { Assert-R1G08 (New-HappyResult $c) $c } | Should -Not -Throw }, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:163
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:163</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="rejects a lost old edge" name="G08 MappingExistenceAndPreservation.rejects a lost old edge" time="0.0337" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected an exception with message like '*G08*' to be thrown, but the message was 'The property 'MissingTarget' cannot be found on this object. Verify that the property exists.'. from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:155 char:9
+    +     if ($Context.Scenario.MissingTarget) { Assert-R1Blocked $Result ' …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</message>
+                  <stack-trace>at It 'rejects a lost old edge' { $c = New-Ctx; $r = Copy-Result (New-HappyResult $c); $r.Store.Mappings.'FR-TAP-001'.trIds = @($r.Store.Mappings.'FR-TAP-001'.trIds | Select-Object -Skip 1); { Assert-R1G08 $r $c } | Should -Throw '*G08*' }, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:164
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:164</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="rejects an additions-only upsert" name="G08 MappingExistenceAndPreservation.rejects an additions-only upsert" time="0.0322" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected an exception with message like '*G08*' to be thrown, but the message was 'The property 'MissingTarget' cannot be found on this object. Verify that the property exists.'. from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:155 char:9
+    +     if ($Context.Scenario.MissingTarget) { Assert-R1Blocked $Result ' …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</message>
+                  <stack-trace>at $before = $c.Packet.mappingsBefore | Where-Object frId -eq $u.FrId; $u.TrIds = @($u.TrIds | Where-Object { $_ -notin $before.trIds }); { Assert-R1G08 $r $c } | Should -Throw '*G08*', F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:167
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:167</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="rejects a duplicate edge" name="G08 MappingExistenceAndPreservation.rejects a duplicate edge" time="0.0351" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected an exception with message like '*G08*' to be thrown, but the message was 'The property 'MissingTarget' cannot be found on this object. Verify that the property exists.'. from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:155 char:9
+    +     if ($Context.Scenario.MissingTarget) { Assert-R1Blocked $Result ' …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</message>
+                  <stack-trace>at It 'rejects a duplicate edge' { $c = New-Ctx; $r = Copy-Result (New-HappyResult $c); $r.Store.Mappings.'FR-TAP-002'.testIds = @($r.Store.Mappings.'FR-TAP-002'.testIds) + @($r.Store.Mappings.'FR-TAP-002'.testIds)[0]; { Assert-R1G08 $r $c } | Should -Throw '*G08*' }, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:169
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:169</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="passes a blocked run on a missing target" name="G08 MappingExistenceAndPreservation.passes a blocked run on a missing target" time="0.0122" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that admits a missing target" name="G08 MappingExistenceAndPreservation.rejects a fake that admits a missing target" time="0.0272" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G09 DriftBeforeFirstWrite" executed="True" result="Success" success="True" time="1.586" asserts="0" description="G09 DriftBeforeFirstWrite">
+            <results>
+              <test-case description="passes a blocked run on drift" name="G09 DriftBeforeFirstWrite.passes a blocked run on drift" time="0.0125" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that compares a cached projection" name="G09 DriftBeforeFirstWrite.rejects a fake that compares a cached projection" time="0.0251" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a blocked state that still wrote" name="G09 DriftBeforeFirstWrite.rejects a blocked state that still wrote" time="0.0158" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G10 BatchSuccessNeedsReadback" executed="True" result="Success" success="True" time="1.6822" asserts="0" description="G10 BatchSuccessNeedsReadback">
+            <results>
+              <test-case description="passes readback before mappings" name="G10 BatchSuccessNeedsReadback.passes readback before mappings" time="0.0312" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects mapping before full readback" name="G10 BatchSuccessNeedsReadback.rejects mapping before full readback" time="0.0358" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects count-only success" name="G10 BatchSuccessNeedsReadback.rejects count-only success" time="0.0261" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G11 BatchRejectedNoMutation" executed="True" result="Success" success="True" time="1.7805" asserts="0" description="G11 BatchRejectedNoMutation">
+            <results>
+              <test-case description="passes an unchanged stop" name="G11 BatchRejectedNoMutation.passes an unchanged stop" time="0.0362" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a changed record" name="G11 BatchRejectedNoMutation.rejects a changed record" time="0.0217" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a mapping call" name="G11 BatchRejectedNoMutation.rejects a mapping call" time="0.0139" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects reported success" name="G11 BatchRejectedNoMutation.rejects reported success" time="0.0234" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G12 LostAcknowledgementApplied" executed="True" result="Success" success="True" time="1.8572" asserts="0" description="G12 LostAcknowledgementApplied">
+            <results>
+              <test-case description="passes applied-once" name="G12 LostAcknowledgementApplied.passes applied-once" time="0.0269" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a blind retry" name="G12 LostAcknowledgementApplied.rejects a blind retry" time="0.0256" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects reporting not applied" name="G12 LostAcknowledgementApplied.rejects reporting not applied" time="0.021" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G13 LostAcknowledgementUnapplied" executed="True" result="Success" success="True" time="1.9171" asserts="0" description="G13 LostAcknowledgementUnapplied">
+            <results>
+              <test-case description="passes a before-state stop" name="G13 LostAcknowledgementUnapplied.passes a before-state stop" time="0.0155" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects reported success" name="G13 LostAcknowledgementUnapplied.rejects reported success" time="0.0261" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a retry without revalidation" name="G13 LostAcknowledgementUnapplied.rejects a retry without revalidation" time="0.0152" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G14 UnknownOrMixedOutcome" executed="True" result="Success" success="True" time="1.9987" asserts="0" description="G14 UnknownOrMixedOutcome">
+            <results>
+              <test-case description="passes unknown on unavailable readback" name="G14 UnknownOrMixedOutcome.passes unknown on unavailable readback" time="0.012" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects treating missing readback as before-state" name="G14 UnknownOrMixedOutcome.rejects treating missing readback as before-state" time="0.0144" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects continuing to mappings" name="G14 UnknownOrMixedOutcome.rejects continuing to mappings" time="0.0118" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a mixed stop on partial batch" name="G14 UnknownOrMixedOutcome.passes a mixed stop on partial batch" time="0.0136" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects unapproved compensation" name="G14 UnknownOrMixedOutcome.rejects unapproved compensation" time="0.0127" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a mixed stop on a concurrent third state" name="G14 UnknownOrMixedOutcome.passes a mixed stop on a concurrent third state" time="0.0138" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G15 PartialMappingSequence" executed="True" result="Success" success="True" time="2.1091" asserts="0" description="G15 PartialMappingSequence">
+            <results>
+              <test-case description="passes two confirmed rows then a stop at row 3" name="G15 PartialMappingSequence.passes two confirmed rows then a stop at row 3" time="0.0328" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a retried completed row" name="G15 PartialMappingSequence.rejects a retried completed row" time="0.0235" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an all-or-nothing claim" name="G15 PartialMappingSequence.rejects an all-or-nothing claim" time="0.0254" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects continuing past the failure" name="G15 PartialMappingSequence.rejects continuing past the failure" time="0.024" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G16 FinalWholeScopeReadback" executed="True" result="Success" success="True" time="2.3309" asserts="0" description="G16 FinalWholeScopeReadback">
+            <results>
+              <test-case description="passes a whole-scope match" name="G16 FinalWholeScopeReadback.passes a whole-scope match" time="0.0557" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects verifying only one record" name="G16 FinalWholeScopeReadback.rejects verifying only one record" time="0.0504" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a wrong final mapping" name="G16 FinalWholeScopeReadback.rejects a wrong final mapping" time="0.0568" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects completion without final readback" name="G16 FinalWholeScopeReadback.rejects completion without final readback" time="0.0558" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G17 PersistenceAndExportEvidence" executed="True" result="Success" success="True" time="2.4688" asserts="0" description="G17 PersistenceAndExportEvidence">
+            <results>
+              <test-case description="passes retained export and labelled journal" name="G17 PersistenceAndExportEvidence.passes retained export and labelled journal" time="0.0278" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a surfaced export failure" name="G17 PersistenceAndExportEvidence.passes a surfaced export failure" time="0.0273" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects missing export evidence" name="G17 PersistenceAndExportEvidence.rejects missing export evidence" time="0.0324" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a hidden export failure" name="G17 PersistenceAndExportEvidence.rejects a hidden export failure" time="0.0236" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an unlabelled journal entry" name="G17 PersistenceAndExportEvidence.rejects an unlabelled journal entry" time="0.0237" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G18 NoUnapprovedRecoveryOrDone" executed="True" result="Failure" success="False" time="2.6262" asserts="0" description="G18 NoUnapprovedRecoveryOrDone">
+            <results>
+              <test-case description="passes a clean run" name="G18 NoUnapprovedRecoveryOrDone.passes a clean run" time="0.031" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected no exception to be thrown, but an exception "The property 'Fault' cannot be found on this object. Verify that the property exists." was thrown from F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Assertions.psm1:279 char:9
+    +     if ($Context.Scenario.Fault -and @($Result.Calls | Where-Object M …
+    +         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.</message>
+                  <stack-trace>at It 'passes a clean run' { $c = New-Ctx; { Assert-R1G18 (New-HappyResult $c) $c } | Should -Not -Throw }, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:250
+at &lt;ScriptBlock&gt;, F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1:250</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="rejects a delete call" name="G18 NoUnapprovedRecoveryOrDone.rejects a delete call" time="0.0243" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a queue replay" name="G18 NoUnapprovedRecoveryOrDone.rejects a queue replay" time="0.0273" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a done status" name="G18 NoUnapprovedRecoveryOrDone.rejects a done status" time="0.0231" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a satisfied criterion in a patch" name="G18 NoUnapprovedRecoveryOrDone.rejects a satisfied criterion in a patch" time="0.0304" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a recovery batch after a fault" name="G18 NoUnapprovedRecoveryOrDone.rejects a recovery batch after a fault" time="0.017" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

@@ -1,0 +1,31 @@
+type: result
+payload:
+  requestId: req-20261019T211705Z-c9e5
+  result:
+    id: TR-TAPE-EDGE-001
+    title: Datasette motor 32,000-cycle ramp before pulse delivery
+    description: Represent datasette startup and delayed motor-stop state in emulated-clock units, preserving pinned VICE alarm scheduling and event order. Preserve pending alarms, cancel a pending stop when motor is re-enabled before the stop executes, and distinguish motor control input from the running-motor state. The observable timing contract must not depend on whether a particular managed Tick method has already been called.
+    status: pending
+    priority: medium
+    area: TAPE
+    subarea: EDGE
+    acceptanceCriteria:
+    - id: ac-01
+      text: Assert the native startup schedule at t+32000 from a stopped motor with no pending alarm, and assert that a pending alarm is not overwritten by the start helper.
+      isSatisfied: false
+    - id: ac-02
+      text: Assert motor-off at t on a running motor retains running state before the stop executes at t+32000, and that repeated motor-off preserves the first deadline.
+      isSatisfied: false
+    - id: ac-03
+      text: Assert motor-on before pending stop execution clears the stop deadline and preserves running state without another startup delay; assert motor-on after an executed stop schedules a new native startup alarm.
+      isSatisfied: false
+    - id: ac-04
+      text: Compare ordered pulse and motor-state traces at deadline-1, deadline, and deadline+1 using fixed clock/control/alarm order. Do not use a first-Tick bypass or an unconditional off/on ramp reset as a substitute for native behavior.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:17:06.4165137+00:00
+    updatedAt: 2026-10-19T21:17:06.4165977+00:00
+  deprecated: true
+
+---
+

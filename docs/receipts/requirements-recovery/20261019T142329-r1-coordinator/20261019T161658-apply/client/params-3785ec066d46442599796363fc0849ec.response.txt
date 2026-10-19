@@ -1,0 +1,37 @@
+type: result
+payload:
+  requestId: req-20261019T212104Z-d6b2
+  result:
+    id: TR-TAP-EDGE-001
+    title: TAP decoding, datasette sense and recording edge parity
+    description: 'This existing ID retains both historical obligations: TAP version/long-pulse/clock/CBM/TurboTape decoding and datasette transport/sense/recording. Keep the file/block decoder distinct from the clocked datasette read path. Use one reconciled canonical contract; do not retire either meaning or remove its FR/TEST mappings.'
+    status: pending
+    priority: medium
+    area: TAP
+    subarea: EDGE
+    acceptanceCriteria:
+    - id: ac-01
+      text: Apply FR-RUNTIME-TAPE-002 ac-01 media/control matrix to accepted transport state and sense. Ignored RECORD is not a RecordPressed success. Include enabled-state gating and unchanged observations.
+      isSatisfied: false
+    - id: ac-02
+      text: Apply FR-RUNTIME-TAPE-002 ac-02 and ac-07 to separate machine sense inputs, read-pulse interrupt inputs and motor/write outputs, including direction registers, raw VIC-20 PCR behavior and SX-64.
+      isSatisfied: false
+    - id: ac-03
+      text: Apply FR-RUNTIME-TAPE-002 ac-05 to ordered recording eligibility and write edges; assert output absence as well as writes and retained line state. Native running state is distinct from control input and completed startup delay.
+      isSatisfied: false
+    - id: ac-04
+      text: Apply FR-RUNTIME-TAPE-002 ac-06 to exact recording bytes and side effects, including both RECORD/motor orderings, first-edge clock handling, 24-bit truncation and failed/partial writes.
+      isSatisfied: false
+    - id: ac-05
+      text: Retain legacy TAP v0/v1/v2 decoding, long-pulse, header and clock-selection coverage. v0 zero consumes no extension. The file/block decoder uses its native pulse units and v2 halfwave combination; the live datasette path uses its own zero-gap resources, direction, machine-specific halfwave handling, wobble and azimuth state. Cover truncated extensions and warning-versus-rejection outcomes without merging these paths. Include all version-byte values and independent physical/declared-size cases from FR-TAP-002 ac-04/ac-08. Use the explicit hidden-state/resource fixture contract in TEST-TAP-001 ac-06; an ordinary reset is not a fresh process.
+      isSatisfied: false
+    - id: ac-06
+      text: Retain legacy CBM and TurboTape pilot/header detection with boundary fixtures against pinned tap.c. C64 and VIC-20 configured CBM pulse-unit ranges are inclusive 36-54, 55-73 and 74-100 after tap_init; TurboTape uses its own ranges and pilot/header control flow. Test each endpoint, adjacent outside value, missing/truncated pilot/header and malformed stream; do not replace loader behavior with a count of parsed pulses.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:21:05.0686355+00:00
+    updatedAt: 2026-10-19T21:21:05.0687203+00:00
+  deprecated: true
+
+---
+

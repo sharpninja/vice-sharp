@@ -1,0 +1,40 @@
+type: result
+payload:
+  requestId: req-20261019T212357Z-15b8
+  result:
+    id: TR-TAPE-EDGE-001
+    title: Datasette timing and tapeport peripheral line parity
+    description: 'This existing ID retains both historical obligations: datasette startup/delayed-stop/fast-wind timing and tapeport sense/motor/RTC/dongle semantics. Model scheduling in the emulated clock domain and preserve the selected native device behavior. A datasette is not the only possible source of tape sense.'
+    status: pending
+    priority: medium
+    area: TAPE
+    subarea: EDGE
+    acceptanceCriteria:
+    - id: ac-01
+      text: 'Assert stopped-motor ordinary startup at t+32000 with no pending alarm and preservation of an existing pending alarm. Observe callback dispatch separately from scheduled time; no first-Tick bypass. Exercise the separate command-entry path: START on an already-running motor invokes the start helper with and without media, schedules t+32000 only without a pending alarm, and preserves a pending alarm while still performing the native seek and write-state initialization. Distinguish command START from motor-line re-enable, and preserve the t+1000 alarm already installed by FORWARD/REWIND before their helper call.'
+      isSatisfied: false
+    - id: ac-02
+      text: Assert motor-off sets t+32000 stop deadline, retains a pending alarm and running state until a callback executes at or after that deadline, and repeated motor-off does not extend it. Include no-pending exact-deadline stop, retained late read/STOP alarms and a before-deadline callback rescheduling beyond the deadline.
+      isSatisfied: false
+    - id: ac-03
+      text: Assert motor-on cancels a stop not yet executed, including after the nominal deadline but before a late callback, without imposing a new startup delay on an already-running motor. After an executed stop, obey the ordinary start helper and its pending-alarm preservation. Include cancellation before the deadline and same-clock cancellation before callback dispatch as separate cases from cancellation after the deadline; for an already-running motor, preserve the existing alarm and write state and clear only the stop deadline in this path.
+      isSatisfied: false
+    - id: ac-04
+      text: Compare complete ordered control, alarm, running-state and pulse traces at deadline-1/deadline/deadline+1 and at actual callback boundaries. Pin same-clock ordering, callback offset, tape resources and effective gap; reject missing, extra, duplicate, reordered or synthesized events.
+      isSatisfied: false
+    - id: ac-05
+      text: FORWARD and REWIND schedule a 1000-cycle alarm after the mode assignment, with absent or attached media and motor on or off. Cover replacement of a pending read alarm and motor-on before/after the fast callback; preserve the executed native behavior rather than the helper comment intent.
+      isSatisfied: false
+    - id: ac-06
+      text: Retain legacy sense-dongle and CP Clock F83 semantics. Dongle enable and power-up assert sense, while its disable callback does not itself clear sense. RTC motor input drives inverted SDA, write input drives normalized SCL, and sense is asserted only when RTC data is high and motor-state is false. Cover repeated calls, all truth-table inputs and selected-device lifecycle without synthesizing datasette PLAY.
+      isSatisfied: false
+    - id: ac-07
+      text: Apply FR-RUNTIME-TAPE-002 ac-08 to per-call-site device enable gating, tapeport dispatch, attachment and reset. Assert internal motor state independently of the UI reset indication and pin reset resources. The lifecycle matrix must include every retained-mode, pending-alarm, cancelled-stop/running-state and dispatch-routing case explicitly listed by FR-RUNTIME-TAPE-002 ac-08, including transient intermediate observations.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:23:57.6626703+00:00
+    updatedAt: 2026-10-19T21:23:57.6627777+00:00
+  deprecated: true
+
+---
+

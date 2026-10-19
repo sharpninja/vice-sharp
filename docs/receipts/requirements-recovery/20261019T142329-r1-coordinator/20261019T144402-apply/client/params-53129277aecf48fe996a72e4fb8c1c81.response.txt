@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261019T194628Z-8558
+  result:
+    id: TEST-PRF-001
+    title: Machine Profile Tests
+    description: C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for required devices, ROMs, clocks, and address maps.
+    status: pending
+    priority: medium
+    area: PRF
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T19:46:28.8839458+00:00
+    updatedAt: 2026-10-19T19:46:28.8840324+00:00
+  deprecated: true
+
+---
+

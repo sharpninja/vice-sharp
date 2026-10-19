@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="88" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="14:29:20">
+  <environment cwd="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator" user-domain="" user="SYSTEM" os-version="10.0.26200" nunit-version="2.5.8.0" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" clr-version="10.0.13" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="2.0578" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1" executed="True" result="Success" success="True" time="2.0578" asserts="0" description="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="G01 ExactPacketAndApproval" executed="True" result="Success" success="True" time="0.1598" asserts="0" description="G01 ExactPacketAndApproval">
+            <results>
+              <test-case description="passes a correct binding" name="G01 ExactPacketAndApproval.passes a correct binding" time="0.0312" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a blocked run when approval is absent" name="G01 ExactPacketAndApproval.passes a blocked run when approval is absent" time="0.018" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a valid binding without an approval-verified entry" name="G01 ExactPacketAndApproval.rejects a valid binding without an approval-verified entry" time="0.0206" asserts="0" success="True" result="Success" executed="True" />
+              <test-suite type="ParameterizedTest" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (&lt;_&gt;)" executed="True" result="Success" success="True" time="0.0868" asserts="0" description="rejects a fake that reports approved anyway (&lt;_&gt;)">
+                <results>
+                  <test-case description="rejects a fake that reports approved anyway (absent)" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (absent)" time="0.0208" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that reports approved anyway (stale-hash)" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (stale-hash)" time="0.0207" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that reports approved anyway (changed-nested-ac)" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (changed-nested-ac)" time="0.0245" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that reports approved anyway (prior-scope)" name="G01 ExactPacketAndApproval.rejects a fake that reports approved anyway (prior-scope)" time="0.0209" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G02 UniqueOrdinalTypedIdentity" executed="True" result="Success" success="True" time="0.316" asserts="0" description="G02 UniqueOrdinalTypedIdentity">
+            <results>
+              <test-case description="passes exact identities" name="G02 UniqueOrdinalTypedIdentity.passes exact identities" time="0.0302" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a blocked run on a duplicate" name="G02 UniqueOrdinalTypedIdentity.passes a blocked run on a duplicate" time="0.0069" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that substitutes a differently cased read" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that substitutes a differently cased read" time="0.025" asserts="0" success="True" result="Success" executed="True" />
+              <test-suite type="ParameterizedTest" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on &lt;_&gt;" executed="True" result="Success" success="True" time="0.0912" asserts="0" description="rejects a fake that proceeds on &lt;_&gt;">
+                <results>
+                  <test-case description="rejects a fake that proceeds on missing" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on missing" time="0.0254" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that proceeds on duplicate" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on duplicate" time="0.0209" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that proceeds on wrong-kind" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on wrong-kind" time="0.0207" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that proceeds on case-only" name="G02 UniqueOrdinalTypedIdentity.rejects a fake that proceeds on case-only" time="0.0242" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G03 PresenceAndType" executed="True" result="Success" success="True" time="0.4214" asserts="0" description="G03 PresenceAndType">
+            <results>
+              <test-suite type="ParameterizedTest" name="G03 PresenceAndType.passes a blocked run on &lt;_&gt;" executed="True" result="Success" success="True" time="0.0411" asserts="0" description="passes a blocked run on &lt;_&gt;">
+                <results>
+                  <test-case description="passes a blocked run on present-null" name="G03 PresenceAndType.passes a blocked run on present-null" time="0.0074" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="passes a blocked run on absent" name="G03 PresenceAndType.passes a blocked run on absent" time="0.0094" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="passes a blocked run on empty-array" name="G03 PresenceAndType.passes a blocked run on empty-array" time="0.0073" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="passes a blocked run on string-for-number" name="G03 PresenceAndType.passes a blocked run on string-for-number" time="0.0097" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="passes a blocked run on bool-for-string" name="G03 PresenceAndType.passes a blocked run on bool-for-string" time="0.0073" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="ParameterizedTest" name="G03 PresenceAndType.rejects a fake that null-coalesces &lt;_&gt;" executed="True" result="Success" success="True" time="0.0615" asserts="0" description="rejects a fake that null-coalesces &lt;_&gt;">
+                <results>
+                  <test-case description="rejects a fake that null-coalesces present-null" name="G03 PresenceAndType.rejects a fake that null-coalesces present-null" time="0.022" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that null-coalesces absent" name="G03 PresenceAndType.rejects a fake that null-coalesces absent" time="0.0202" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fake that null-coalesces empty-array" name="G03 PresenceAndType.rejects a fake that null-coalesces empty-array" time="0.0193" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G04 StableMetadata" executed="True" result="Success" success="True" time="0.5749" asserts="0" description="G04 StableMetadata">
+            <results>
+              <test-case description="passes when every unmodified field survives" name="G04 StableMetadata.passes when every unmodified field survives" time="0.0347" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects cleared notes" name="G04 StableMetadata.rejects cleared notes" time="0.0312" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a dropped field" name="G04 StableMetadata.rejects a dropped field" time="0.0283" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a changed area" name="G04 StableMetadata.rejects a changed area" time="0.031" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an unclassified new field" name="G04 StableMetadata.rejects an unclassified new field" time="0.0252" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G05 VolatileReadTimestamps" executed="True" result="Success" success="True" time="0.6321" asserts="0" description="G05 VolatileReadTimestamps">
+            <results>
+              <test-case description="passes a completed run under timestamp drift" name="G05 VolatileReadTimestamps.passes a completed run under timestamp drift" time="0.0203" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that blocks on timestamp drift" name="G05 VolatileReadTimestamps.rejects a fake that blocks on timestamp drift" time="0.0123" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that writes observed timestamps" name="G05 VolatileReadTimestamps.rejects a fake that writes observed timestamps" time="0.0217" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G06 ExactChangedFields" executed="True" result="Success" success="True" time="0.8048" asserts="0" description="G06 ExactChangedFields">
+            <results>
+              <test-case description="passes exact patches" name="G06 ExactChangedFields.passes exact patches" time="0.0365" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a body alias" name="G06 ExactChangedFields.rejects a body alias" time="0.0268" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an unapproved status" name="G06 ExactChangedFields.rejects an unapproved status" time="0.0315" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects the whole projection" name="G06 ExactChangedFields.rejects the whole projection" time="0.0212" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a value that is not the approved after-value" name="G06 ExactChangedFields.rejects a value that is not the approved after-value" time="0.0255" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects resending a field already attributed at its after-value" name="G06 ExactChangedFields.rejects resending a field already attributed at its after-value" time="0.0283" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G07 AcIdentityAndMeaning" executed="True" result="Success" success="True" time="0.9536" asserts="0" description="G07 AcIdentityAndMeaning">
+            <results>
+              <test-case description="passes exact criteria" name="G07 AcIdentityAndMeaning.passes exact criteria" time="0.0256" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a dropped criterion with the count kept" name="G07 AcIdentityAndMeaning.rejects a dropped criterion with the count kept" time="0.0309" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects stale text" name="G07 AcIdentityAndMeaning.rejects stale text" time="0.03" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a satisfied criterion" name="G07 AcIdentityAndMeaning.rejects a satisfied criterion" time="0.0306" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects added evidence" name="G07 AcIdentityAndMeaning.rejects added evidence" time="0.0282" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G08 MappingExistenceAndPreservation" executed="True" result="Success" success="True" time="1.1016" asserts="0" description="G08 MappingExistenceAndPreservation">
+            <results>
+              <test-case description="passes full-union upserts" name="G08 MappingExistenceAndPreservation.passes full-union upserts" time="0.0297" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a lost old edge" name="G08 MappingExistenceAndPreservation.rejects a lost old edge" time="0.032" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an additions-only upsert" name="G08 MappingExistenceAndPreservation.rejects an additions-only upsert" time="0.0237" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a duplicate edge" name="G08 MappingExistenceAndPreservation.rejects a duplicate edge" time="0.0269" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a blocked run on a missing target" name="G08 MappingExistenceAndPreservation.passes a blocked run on a missing target" time="0.0077" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that admits a missing target" name="G08 MappingExistenceAndPreservation.rejects a fake that admits a missing target" time="0.0246" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G09 DriftBeforeFirstWrite" executed="True" result="Success" success="True" time="1.1448" asserts="0" description="G09 DriftBeforeFirstWrite">
+            <results>
+              <test-case description="passes a blocked run on drift" name="G09 DriftBeforeFirstWrite.passes a blocked run on drift" time="0.0074" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a fake that compares a cached projection" name="G09 DriftBeforeFirstWrite.rejects a fake that compares a cached projection" time="0.0206" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a blocked state that still wrote" name="G09 DriftBeforeFirstWrite.rejects a blocked state that still wrote" time="0.0119" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G10 BatchSuccessNeedsReadback" executed="True" result="Success" success="True" time="1.2306" asserts="0" description="G10 BatchSuccessNeedsReadback">
+            <results>
+              <test-case description="passes readback before mappings" name="G10 BatchSuccessNeedsReadback.passes readback before mappings" time="0.0314" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects mapping before full readback" name="G10 BatchSuccessNeedsReadback.rejects mapping before full readback" time="0.0279" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects count-only success" name="G10 BatchSuccessNeedsReadback.rejects count-only success" time="0.0233" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G11 BatchRejectedNoMutation" executed="True" result="Success" success="True" time="1.3235" asserts="0" description="G11 BatchRejectedNoMutation">
+            <results>
+              <test-case description="passes an unchanged stop" name="G11 BatchRejectedNoMutation.passes an unchanged stop" time="0.0356" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a changed record" name="G11 BatchRejectedNoMutation.rejects a changed record" time="0.0246" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a mapping call" name="G11 BatchRejectedNoMutation.rejects a mapping call" time="0.0083" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects reported success" name="G11 BatchRejectedNoMutation.rejects reported success" time="0.0212" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G12 LostAcknowledgementApplied" executed="True" result="Success" success="True" time="1.3913" asserts="0" description="G12 LostAcknowledgementApplied">
+            <results>
+              <test-case description="passes applied-once" name="G12 LostAcknowledgementApplied.passes applied-once" time="0.0253" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a blind retry" name="G12 LostAcknowledgementApplied.rejects a blind retry" time="0.0217" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects reporting not applied" name="G12 LostAcknowledgementApplied.rejects reporting not applied" time="0.0178" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G13 LostAcknowledgementUnapplied" executed="True" result="Success" success="True" time="1.4383" asserts="0" description="G13 LostAcknowledgementUnapplied">
+            <results>
+              <test-case description="passes a before-state stop" name="G13 LostAcknowledgementUnapplied.passes a before-state stop" time="0.013" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects reported success" name="G13 LostAcknowledgementUnapplied.rejects reported success" time="0.0198" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a retry without revalidation" name="G13 LostAcknowledgementUnapplied.rejects a retry without revalidation" time="0.0111" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G14 UnknownOrMixedOutcome" executed="True" result="Success" success="True" time="1.497" asserts="0" description="G14 UnknownOrMixedOutcome">
+            <results>
+              <test-case description="passes unknown on unavailable readback" name="G14 UnknownOrMixedOutcome.passes unknown on unavailable readback" time="0.0084" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects treating missing readback as before-state" name="G14 UnknownOrMixedOutcome.rejects treating missing readback as before-state" time="0.0106" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects continuing to mappings" name="G14 UnknownOrMixedOutcome.rejects continuing to mappings" time="0.008" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a mixed stop on partial batch" name="G14 UnknownOrMixedOutcome.passes a mixed stop on partial batch" time="0.0102" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects unapproved compensation" name="G14 UnknownOrMixedOutcome.rejects unapproved compensation" time="0.0085" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a mixed stop on a concurrent third state" name="G14 UnknownOrMixedOutcome.passes a mixed stop on a concurrent third state" time="0.0097" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G15 PartialMappingSequence" executed="True" result="Success" success="True" time="1.5789" asserts="0" description="G15 PartialMappingSequence">
+            <results>
+              <test-case description="passes two confirmed rows then a stop at row 3" name="G15 PartialMappingSequence.passes two confirmed rows then a stop at row 3" time="0.0216" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a retried completed row" name="G15 PartialMappingSequence.rejects a retried completed row" time="0.018" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an all-or-nothing claim" name="G15 PartialMappingSequence.rejects an all-or-nothing claim" time="0.0203" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects continuing past the failure" name="G15 PartialMappingSequence.rejects continuing past the failure" time="0.0185" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G16 FinalWholeScopeReadback" executed="True" result="Success" success="True" time="1.775" asserts="0" description="G16 FinalWholeScopeReadback">
+            <results>
+              <test-case description="passes a whole-scope match" name="G16 FinalWholeScopeReadback.passes a whole-scope match" time="0.0496" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects verifying only one record" name="G16 FinalWholeScopeReadback.rejects verifying only one record" time="0.048" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a wrong final mapping" name="G16 FinalWholeScopeReadback.rejects a wrong final mapping" time="0.0494" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects completion without final readback" name="G16 FinalWholeScopeReadback.rejects completion without final readback" time="0.0458" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G17 PersistenceAndExportEvidence" executed="True" result="Success" success="True" time="1.8753" asserts="0" description="G17 PersistenceAndExportEvidence">
+            <results>
+              <test-case description="passes retained export and labelled journal" name="G17 PersistenceAndExportEvidence.passes retained export and labelled journal" time="0.0196" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="passes a surfaced export failure" name="G17 PersistenceAndExportEvidence.passes a surfaced export failure" time="0.0199" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects missing export evidence" name="G17 PersistenceAndExportEvidence.rejects missing export evidence" time="0.0207" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a hidden export failure" name="G17 PersistenceAndExportEvidence.rejects a hidden export failure" time="0.0192" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects an unlabelled journal entry" name="G17 PersistenceAndExportEvidence.rejects an unlabelled journal entry" time="0.0178" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="G18 NoUnapprovedRecoveryOrDone" executed="True" result="Success" success="True" time="1.9966" asserts="0" description="G18 NoUnapprovedRecoveryOrDone">
+            <results>
+              <test-case description="passes a clean run" name="G18 NoUnapprovedRecoveryOrDone.passes a clean run" time="0.0237" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a delete call" name="G18 NoUnapprovedRecoveryOrDone.rejects a delete call" time="0.0201" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a queue replay" name="G18 NoUnapprovedRecoveryOrDone.rejects a queue replay" time="0.0185" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a done status" name="G18 NoUnapprovedRecoveryOrDone.rejects a done status" time="0.0206" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a satisfied criterion in a patch" name="G18 NoUnapprovedRecoveryOrDone.rejects a satisfied criterion in a patch" time="0.0257" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects a recovery batch after a fault" name="G18 NoUnapprovedRecoveryOrDone.rejects a recovery batch after a fault" time="0.0098" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

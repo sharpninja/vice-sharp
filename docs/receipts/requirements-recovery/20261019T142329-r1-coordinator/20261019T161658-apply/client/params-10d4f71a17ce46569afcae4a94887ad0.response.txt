@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20261019T212000Z-6b92
+  result:
+    id: FR-TAP-003
+    title: Cycle-Accurate Tape Read Timing
+    description: Tape read pulse delivery, timer/interrupt effects and data decoding shall match immutable VICE for the selected C64 or VIC-20, clock/resources, firmware and workload. File/block decoder thresholds and real machine signal timing are different observable layers; neither can substitute for the other.
+    status: pending
+    priority: medium
+    area: TAP
+    acceptanceCriteria:
+    - id: ac-01
+      text: C64 read pulses reach CIA1 FLAG and VIC-20 read pulses reach VIA2 CA1 with the pinned native edge/state semantics. Tape sense remains a distinct input.
+      isSatisfied: false
+    - id: ac-02
+      text: With identical pinned firmware and tape workload, timer/interrupt observations used to measure pulses match native VICE, including boundary and pending-interrupt state. A decoder return value is not timer/interrupt evidence.
+      isSatisfied: false
+    - id: ac-03
+      text: Configured C64/VIC-20 file-decoder CBM pulse-unit ranges are inclusive 36-54 short, 55-73 middle and 74-100 long. Test endpoint and adjacent values after tap_init conversion. Keep live pulse clocks separate; do not pair inconsistent fixed cycle counts with TAP byte values.
+      isSatisfied: false
+    - id: ac-04
+      text: Pinned standard Commodore header, data-block and checksum workloads produce the same decoded bytes/status and machine-visible load outcome as native VICE. Include malformed, truncated and checksum-error fixtures.
+      isSatisfied: false
+    - id: ac-05
+      text: At normal speed, the same named tape workload produces the same ordered native and managed machine-visible pulse/state/output observations. Hardware assumptions or source inspection alone cannot replace the immutable native target.
+      isSatisfied: false
+    - id: ac-06
+      text: Run PAL and NTSC selected-machine/resource profiles with separately pinned tape headers and clock domains. Preserve native differences and any lack of cross-standard rescaling; do not improve the native target.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:20:00.6307549+00:00
+    updatedAt: 2026-10-19T21:20:00.6308437+00:00
+  deprecated: true
+
+---
+

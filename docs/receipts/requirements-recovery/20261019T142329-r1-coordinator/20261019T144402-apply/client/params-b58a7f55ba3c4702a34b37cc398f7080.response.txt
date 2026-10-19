@@ -1,0 +1,52 @@
+type: result
+payload:
+  requestId: req-20261019T194420Z-9d14
+  result:
+    id: FR-TAP-003
+    title: Cycle-Accurate Tape Read Timing
+    description: >-
+      Tape reading relies on the CIA1 Timer A or the FLAG pin to measure the time between pulses from the datasette. The Kernal tape routine uses Timer A in one-shot mode to measure pulse widths and classify them as short, medium, or long pulses for data decoding.
+
+
+      ## Acceptance Criteria
+
+      - Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).
+
+      - The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.
+
+      - Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).
+
+      - The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.
+
+      - Tape reading at normal speed produces identical results to real hardware.
+
+      - The timing accuracy supports both PAL and NTSC system clock rates.
+    status: pending
+    priority: medium
+    area: TAP
+    acceptanceCriteria:
+    - id: ac-01
+      text: Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).
+      isSatisfied: false
+    - id: ac-02
+      text: The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.
+      isSatisfied: false
+    - id: ac-03
+      text: 'Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).'
+      isSatisfied: false
+    - id: ac-04
+      text: The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.
+      isSatisfied: false
+    - id: ac-05
+      text: Tape reading at normal speed produces identical results to real hardware.
+      isSatisfied: false
+    - id: ac-06
+      text: The timing accuracy supports both PAL and NTSC system clock rates.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T19:44:20.7719691+00:00
+    updatedAt: 2026-10-19T19:44:20.7720545+00:00
+  deprecated: true
+
+---
+

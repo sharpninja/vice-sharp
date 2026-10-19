@@ -1,0 +1,57 @@
+type: result
+payload:
+  requestId: req-20261019T212128Z-c88c
+  result:
+    id: FR-CPU-004
+    title: 6510 I/O Port at Addresses $0000/$0001
+    description: >-
+      The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction register) and $0001 (data port) shall be emulated. This port controls the PLA memory banking configuration (LORAM, HIRAM, CHAREN bits), the cassette motor, and the cassette sense line. The data port shall exhibit the correct behavior with pull-up/pull-down resistors and the capacitive discharge timing that affects reads of floating input pins.
+
+
+      ## Acceptance Criteria
+
+      - Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.
+
+      - Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.
+
+      - On C64, the cassette motor output is active low from DDR-masked bit 5, !(DDR & DATA & 0x20), and the cassette write output is bit 3, (~DDR | DATA) & 0x08. Match pinned VICE's changed-effective-output detection for data and DDR writes, including input/output transitions and repeated writes. Do not exchange the motor and write bits.
+
+      - Bit 4 reads the cassette switch sense (active low).
+
+      - On the C64 board, reading $0001 with DDR bit 5 clear returns bit 5 clear; with DDR bit 5 set, its output readback follows pinned VICE's port data/DDR calculation. Bit 5 is the motor-control bit, not an unused pin. Exercise both data levels, both DDR directions, and direction changes; do not substitute SX-64 floating-pin behavior for C64 behavior.
+
+      - Unused CPU-port pins reproduce the pinned VICE C64/SX-64 charge and decay behavior: bits 6 and 7 on both boards use a deadline of the current CPU clock plus 350000 cycles plus an inclusive random value from 0 through 70000; SX-64 bits 3, 4 and 5 use 1500000 plus an inclusive 0 through 300000. Writing a pin while configured as output, including a repeated identical data write, or changing it from output to input captures its data bit and sets its deadline. Other DDR transitions do not reset that deadline. Reads of $0001 clear active retained charge only when the deadline is strictly less than the current CPU clock, and substitute retained charge only for pins configured as input; reads of $0000 do not perform this discharge. Preserve native board selection, random-state consumption order, unsigned 64-bit clock arithmetic and reset behavior. Do not replace the executed behavior with a fixed 350-microsecond delay, an unused 8500 constant, or host-time expiration.
+
+      - The `IMemoryMappedDevice` interface exposes the port to the address decoder.
+    status: pending
+    priority: high
+    area: CPU
+    acceptanceCriteria:
+    - id: ac-01
+      text: Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.
+      isSatisfied: false
+    - id: ac-02
+      text: Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.
+      isSatisfied: false
+    - id: ac-03
+      text: On C64, the cassette motor output is active low from DDR-masked bit 5, !(DDR & DATA & 0x20), and the cassette write output is bit 3, (~DDR | DATA) & 0x08. Match pinned VICE's changed-effective-output detection for data and DDR writes, including input/output transitions and repeated writes. Do not exchange the motor and write bits.
+      isSatisfied: false
+    - id: ac-04
+      text: Bit 4 reads the cassette switch sense (active low).
+      isSatisfied: false
+    - id: ac-05
+      text: On the C64 board, reading $0001 with DDR bit 5 clear returns bit 5 clear; with DDR bit 5 set, its output readback follows pinned VICE's port data/DDR calculation. Bit 5 is the motor-control bit, not an unused pin. Exercise both data levels, both DDR directions, and direction changes; do not substitute SX-64 floating-pin behavior for C64 behavior.
+      isSatisfied: false
+    - id: ac-06
+      text: 'Unused CPU-port pins reproduce the pinned VICE C64/SX-64 charge and decay behavior: bits 6 and 7 on both boards use a deadline of the current CPU clock plus 350000 cycles plus an inclusive random value from 0 through 70000; SX-64 bits 3, 4 and 5 use 1500000 plus an inclusive 0 through 300000. Writing a pin while configured as output, including a repeated identical data write, or changing it from output to input captures its data bit and sets its deadline. Other DDR transitions do not reset that deadline. Reads of $0001 clear active retained charge only when the deadline is strictly less than the current CPU clock, and substitute retained charge only for pins configured as input; reads of $0000 do not perform this discharge. Preserve native board selection, random-state consumption order, unsigned 64-bit clock arithmetic and reset behavior. Do not replace the executed behavior with a fixed 350-microsecond delay, an unused 8500 constant, or host-time expiration.'
+      isSatisfied: false
+    - id: ac-07
+      text: The `IMemoryMappedDevice` interface exposes the port to the address decoder.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:21:28.9873276+00:00
+    updatedAt: 2026-10-19T21:21:28.9874333+00:00
+  deprecated: true
+
+---
+

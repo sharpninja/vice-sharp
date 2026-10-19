@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261019T211747Z-dd80
+  result:
+    id: TEST-DRV-MOTOR-001
+    title: 'IecDriveMotorRampTests: 1541 motor ramp (5 tests)'
+    description: After SetMotor(true) and 300,000 Tick() calls, MotorRotationCycles>0. Before 300,000, stays at 0. Motor off/on resets ramp. ReadSector(18,0) returns BAM bytes 0x12/0x01. 5 pass.
+    status: pending
+    priority: medium
+    area: DRV
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:17:48.1825585+00:00
+    updatedAt: 2026-10-19T21:17:48.1826463+00:00
+  deprecated: true
+
+---
+

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="33" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="14:39:51">
+  <environment cwd="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator" user-domain="" user="SYSTEM" os-version="10.0.26200" nunit-version="2.5.8.0" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" clr-version="10.0.13" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="3.6404" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Binding.Tests.ps1" executed="True" result="Success" success="True" time="3.6404" asserts="0" description="F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20261019T142329-r1-coordinator\R1Guard.Binding.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Binding: happy path" executed="True" result="Success" success="True" time="0.8214" asserts="0" description="Binding: happy path">
+            <results>
+              <test-case description="applies 16 records and 6 changed rows, skips 3 unchanged rows, verifies, exports" name="Binding: happy path.applies 16 records and 6 changed rows, skips 3 unchanged rows, verifies, exports" time="0.3243" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="survives read-synthesized timestamp drift (G05)" name="Binding: happy path.survives read-synthesized timestamp drift (G05)" time="0.2361" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="surfaces a failed export (G17)" name="Binding: happy path.surfaces a failed export (G17)" time="0.2487" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Binding: approval (G01)" executed="True" result="Success" success="True" time="1.0678" asserts="0" description="Binding: approval (G01)">
+            <results>
+              <test-case description="blocks with no approval" name="Binding: approval (G01).blocks with no approval" time="0.0418" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks a stale hash" name="Binding: approval (G01).blocks a stale hash" time="0.0351" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks a packet with a changed nested criterion" name="Binding: approval (G01).blocks a packet with a changed nested criterion" time="0.0441" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks an approval for a prior scope" name="Binding: approval (G01).blocks an approval for a prior scope" time="0.038" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks without the locked decision 2 departure" name="Binding: approval (G01).blocks without the locked decision 2 departure" time="0.0386" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks outside the writer window" name="Binding: approval (G01).blocks outside the writer window" time="0.0386" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09)" executed="True" result="Success" success="True" time="1.7315" asserts="0" description="Binding: identity, presence, targets, drift (G02, G03, G08, G09)">
+            <results>
+              <test-case description="blocks a missing mapping target" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks a missing mapping target" time="0.0622" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks baseline drift" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks baseline drift" time="0.0557" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks mapping drift" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks mapping drift" time="0.0695" asserts="0" success="True" result="Success" executed="True" />
+              <test-suite type="ParameterizedTest" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks identity defect &lt;_&gt;" executed="True" result="Success" success="True" time="0.1685" asserts="0" description="blocks identity defect &lt;_&gt;">
+                <results>
+                  <test-case description="blocks identity defect missing" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks identity defect missing" time="0.0414" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="blocks identity defect duplicate" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks identity defect duplicate" time="0.0422" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="blocks identity defect wrong-kind" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks identity defect wrong-kind" time="0.0413" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="blocks identity defect case-only" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks identity defect case-only" time="0.0435" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="ParameterizedTest" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks presence/type defect &lt;Name&gt;" executed="True" result="Success" success="True" time="0.297" asserts="0" description="blocks presence/type defect &lt;Name&gt;">
+                <results>
+                  <test-case description="blocks presence/type defect present-null" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks presence/type defect present-null" time="0.084" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="blocks presence/type defect absent" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks presence/type defect absent" time="0.0545" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="blocks presence/type defect empty-array" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks presence/type defect empty-array" time="0.0541" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="blocks presence/type defect string-for-number" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks presence/type defect string-for-number" time="0.0504" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="blocks presence/type defect bool-for-string" name="Binding: identity, presence, targets, drift (G02, G03, G08, G09).blocks presence/type defect bool-for-string" time="0.054" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Binding: batch outcomes (G10-G14)" executed="True" result="Success" success="True" time="2.6704" asserts="0" description="Binding: batch outcomes (G10-G14)">
+            <results>
+              <test-case description="stops unchanged on a rejected batch" name="Binding: batch outcomes (G10-G14).stops unchanged on a rejected batch" time="0.1599" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="records a lost acknowledgement that applied, never retries, and completes" name="Binding: batch outcomes (G10-G14).records a lost acknowledgement that applied, never retries, and completes" time="0.2262" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="stops on a lost acknowledgement that did not apply" name="Binding: batch outcomes (G10-G14).stops on a lost acknowledgement that did not apply" time="0.1378" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="stops as unknown when readback is unavailable" name="Binding: batch outcomes (G10-G14).stops as unknown when readback is unavailable" time="0.1148" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="stops mixed on a partial batch" name="Binding: batch outcomes (G10-G14).stops mixed on a partial batch" time="0.1457" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="stops mixed on a concurrent third state" name="Binding: batch outcomes (G10-G14).stops mixed on a concurrent third state" time="0.1469" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Binding: mapping sequence (G15)" executed="True" result="Success" success="True" time="3.2398" asserts="0" description="Binding: mapping sequence (G15)">
+            <results>
+              <test-case description="stops at the failing third changed row with two rows confirmed" name="Binding: mapping sequence (G15).stops at the failing third changed row with two rows confirmed" time="0.1776" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="skips a row already at its approved union" name="Binding: mapping sequence (G15).skips a row already at its approved union" time="0.2412" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="stops before a mapping write when the writer window closes mid-run" name="Binding: mapping sequence (G15).stops before a mapping write when the writer window closes mid-run" time="0.1449" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Binding: attributed prior write (D8 status on FR-BACKFILL-MEDIA-001)" executed="True" result="Success" success="True" time="3.5952" asserts="0" description="Binding: attributed prior write (D8 status on FR-BACKFILL-MEDIA-001)">
+            <results>
+              <test-case description="accepts a verified attribution and omits status from the patch" name="Binding: attributed prior write (D8 status on FR-BACKFILL-MEDIA-001).accepts a verified attribution and omits status from the patch" time="0.2351" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks the same state without an attribution" name="Binding: attributed prior write (D8 status on FR-BACKFILL-MEDIA-001).blocks the same state without an attribution" time="0.0542" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="blocks an attribution whose journal hash does not match" name="Binding: attributed prior write (D8 status on FR-BACKFILL-MEDIA-001).blocks an attribution whose journal hash does not match" time="0.0609" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

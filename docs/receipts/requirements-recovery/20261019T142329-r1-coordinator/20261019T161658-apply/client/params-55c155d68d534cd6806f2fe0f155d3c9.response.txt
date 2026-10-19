@@ -1,0 +1,52 @@
+type: result
+payload:
+  requestId: req-20261019T211731Z-54b1
+  result:
+    id: FR-TAP-005
+    title: Turbo Tape Loader Compatibility
+    description: >-
+      Many commercial C64 programs used turbo tape loaders that employ faster pulse encoding than the standard Commodore format. The emulator shall support turbo loaders by providing accurate tape read timing down to individual clock cycles.
+
+
+      ## Acceptance Criteria
+
+      - Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.
+
+      - Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.
+
+      - Custom pulse encoding schemes are supported through accurate pulse-level emulation.
+
+      - The CIA FLAG input timing is accurate to 1 system clock cycle.
+
+      - Half-wave and full-wave detection methods both work correctly.
+
+      - Multi-speed loaders (that change pulse rates mid-load) are supported.
+    status: pending
+    priority: low
+    area: TAP
+    acceptanceCriteria:
+    - id: ac-01
+      text: Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.
+      isSatisfied: false
+    - id: ac-02
+      text: Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.
+      isSatisfied: false
+    - id: ac-03
+      text: Custom pulse encoding schemes are supported through accurate pulse-level emulation.
+      isSatisfied: false
+    - id: ac-04
+      text: The CIA FLAG input timing is accurate to 1 system clock cycle.
+      isSatisfied: false
+    - id: ac-05
+      text: Half-wave and full-wave detection methods both work correctly.
+      isSatisfied: false
+    - id: ac-06
+      text: Multi-speed loaders (that change pulse rates mid-load) are supported.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:17:32.0953580+00:00
+    updatedAt: 2026-10-19T21:17:32.0954472+00:00
+  deprecated: true
+
+---
+

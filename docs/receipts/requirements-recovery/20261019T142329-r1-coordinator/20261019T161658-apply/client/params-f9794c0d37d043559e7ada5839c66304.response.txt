@@ -1,0 +1,15 @@
+type: result
+payload:
+  requestId: req-20261019T212037Z-6e0a
+  result:
+    frId: FR-TAP-002
+    trIds:
+    - TR-CYCLE-001
+    - TR-TAP-EDGE-001
+    testIds:
+    - TEST-TAP-001
+    - TEST-X64SC-LOCKSTEP-001
+    workspaceId: ''
+
+---
+
