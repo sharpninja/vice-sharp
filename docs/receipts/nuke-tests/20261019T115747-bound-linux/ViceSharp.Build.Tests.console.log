@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> /home/sharpninja/github/vice-sharp/build/bin/Release/_build.dll
+  ViceSharp.Build.Tests -> /home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll
+Test run for /home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T115747-bound-linux/ViceSharp.Build.Tests.trx
+
+Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 164 ms - ViceSharp.Build.Tests.dll (net10.0)

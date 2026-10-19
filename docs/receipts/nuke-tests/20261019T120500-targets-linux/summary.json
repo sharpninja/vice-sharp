@@ -1,0 +1,18 @@
+{
+  "BuildTest": [
+    "2026-10-19T12:01:54 BuildTest: /usr/lib/powershell-7/pwsh -NoProfile -NonInteractive -File ./build.ps1 BuildTest",
+    "2026-10-19T12:02:02 BuildTest: exit 0",
+    0
+  ],
+  "Compile": [
+    "2026-10-19T12:02:02 Compile: /usr/lib/powershell-7/pwsh -NoProfile -NonInteractive -File ./build.ps1 Compile",
+    "2026-10-19T12:02:12 Compile: exit 0",
+    0
+  ],
+  "VerifyDeployYay": [
+    "2026-10-19T12:02:12 VerifyDeployYay: /usr/lib/powershell-7/pwsh -NoProfile -NonInteractive -File ./tests/packaging/Verify-DeployYay.ps1",
+    "2026-10-19T12:02:20 VerifyDeployYay: exit 0",
+    0
+  ],
+  "DiffCheck": 0
+}

@@ -1,4 +1,4 @@
-namespace ViceSharp.Library.Tests;
+namespace ViceSharp.Build.Tests.Completion;
 
 using System.Text.Json;
 using ViceSharp.Build.Completion;

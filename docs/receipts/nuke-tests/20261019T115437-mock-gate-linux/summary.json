@@ -1,0 +1,11 @@
+{
+  "stamp": "20261019T115437",
+  "label": "mock-gate-linux",
+  "project": "build.tests/ViceSharp.Build.Tests.csproj",
+  "filter": "",
+  "exitCode": 0,
+  "total": 15,
+  "passed": 15,
+  "failed": 0,
+  "skipped": 0
+}

@@ -1,0 +1,34 @@
+2026-10-19T14:27:40 HEAD: 6fb84afcc1ab980c4b40525efe23324183a3c8f4
+2026-10-19T14:27:40 BuildTest: /usr/lib/powershell-7/pwsh -NoProfile -NonInteractive -File ./build.ps1 BuildTest
+2026-10-19T14:27:48 BuildTest: exit 0
+2026-10-19T14:27:48 BuildTest TRX ./TestResults/build-tests/20261019T142744/ViceSharp.Build.Tests.trx: total 109, passed 109, failed 0, skipped 0
+2026-10-19T14:27:48    at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject(String errorSubCategoryResourceName, IElementLocation elementLocation, String resourceName, Object[] args)
+2026-10-19T14:27:48    at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject[T1,T2](IElementLocation elementLocation, String resourceName, T1 arg0, T2 arg1)
+2026-10-19T14:27:48    14:27:48 [INF] BuildTest: selected 109, passed 109, host filter none (Linux-host cases are pinned by LinuxHostTrait_MarksOnlyTheDeploymentContract)
+2026-10-19T14:27:48    ║ Errors & Warnings
+2026-10-19T14:27:48    Build succeeded on 10/19/2026 14:27:48. ＼（＾ᴗ＾）／
+2026-10-19T14:27:48 Compile: /usr/lib/powershell-7/pwsh -NoProfile -NonInteractive -File ./build.ps1 Compile
+2026-10-19T14:27:56 Compile: exit 0
+2026-10-19T14:27:56    at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject(String errorSubCategoryResourceName, IElementLocation elementLocation, String resourceName, Object[] args)
+2026-10-19T14:27:56    at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject[T1,T2](IElementLocation elementLocation, String resourceName, T1 arg0, T2 arg1)
+2026-10-19T14:27:56    14:27:56 [DBG] Build succeeded.
+2026-10-19T14:27:56    14:27:56 [DBG]     0 Warning(s)
+2026-10-19T14:27:56    14:27:56 [DBG]     0 Error(s)
+2026-10-19T14:27:56    ║ Errors & Warnings
+2026-10-19T14:27:56    Restore            Succeeded       0:01
+2026-10-19T14:27:56    Compile            Succeeded       0:02
+2026-10-19T14:27:56    Build succeeded on 10/19/2026 14:27:56. ＼（＾ᴗ＾）／
+2026-10-19T14:27:56 VerifyDeployYay: /usr/lib/powershell-7/pwsh -NoProfile -NonInteractive -File ./tests/packaging/Verify-DeployYay.ps1
+2026-10-19T14:28:04 VerifyDeployYay: exit 0
+2026-10-19T14:28:04    --skip                        List of targets to be skipped. Empty list skips
+2026-10-19T14:28:04    all dependencies.
+2026-10-19T14:28:04    --target                      List of targets to be invoked. Default is
+2026-10-19T14:28:04    'Compile'.
+2026-10-19T14:28:04    --verbosity                   Logging verbosity during build execution.
+2026-10-19T14:28:04    Default is 'Normal'.
+2026-10-19T14:28:04    
+2026-10-19T14:28:04    PASS: 13 installer tests; zero failures/skips; actual desktop launch verified; DeployYay delegates only to DeployUser. No installation performed.
+2026-10-19T14:28:04 git diff --check: exit 0, 0 lines
+2026-10-19T14:28:04 trailing whitespace in new untracked files: 0
+2026-10-19T14:28:04 .nuke/build.schema.json changed by the run: False
+2026-10-19T14:28:04 receipt: /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T143500-targets-linux

@@ -1,0 +1,9 @@
+2026-10-19T11:51:51 HEAD: 6fb84afcc1ab980c4b40525efe23324183a3c8f4
+2026-10-19T11:51:51 working tree:  M docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md |  M tests/ViceSharp.TestHarness/SettingsRestartLifecycleTests.cs | ?? docs/plans/PLAN-NUKETESTS-001.md | ?? docs/receipts/lockstep/ | ?? docs/receipts/nuke-tests/
+2026-10-19T11:51:51 dotnet test /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj -c Release --nologo --logger trx;LogFileName=Library.Tests.trx
+2026-10-19T11:51:58 exit 0
+2026-10-19T11:51:58 Library.Tests: total 214, passed 214, failed 0, skipped 0
+2026-10-19T11:51:58 ViceSharp.Library.Tests.Packaging.UserLocalDeploymentTests: total 13, passed 13, failed 0, skipped 0
+2026-10-19T11:51:58 ViceSharp.Library.Tests.CompletionTestManifestTests: total 77, passed 77, failed 0, skipped 0
+2026-10-19T11:51:58 ViceSharp.Library.Tests.Packaging.PackageMetadataTests: total 2, passed 2, failed 0, skipped 0
+2026-10-19T11:51:58 receipt: /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T115300-baseline-linux

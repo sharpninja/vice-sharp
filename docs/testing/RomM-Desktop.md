@@ -34,11 +34,12 @@ environment value when it finishes. Current contract references include
 `FR-ROMM-AVUI-001`, `FR-ROMM-COVER-001` and `TEST-ROMM-AVUI-001`; focused tests
 do not establish satisfaction of every acceptance criterion in those records.
 
-On Windows only, the real Library run excludes
-`ViceSharp.Library.Tests.Packaging.UserLocalDeploymentTests`: 13 cases requiring
-Linux. The operator explicitly approved this exclusion. The tests remain in the
-repository and are not excluded by this target on Linux. No Linux validation is
-claimed by the Windows result.
+The real Library run applies no host filter on either host. The 13 Linux
+user-local deployment cases that the 2026-10-16 Windows run excluded are Nuke
+build tests, not product tests: since PLAN-NUKETESTS-001 they live in
+`build.tests/ViceSharp.Build.Tests.csproj` and run through `nuke BuildTest`
+(TR-BUILD-001 ac-12), where non-Linux hosts exclude them by the `Host!=Linux`
+trait filter instead of skipping them.
 
 ## Retained integration evidence
 

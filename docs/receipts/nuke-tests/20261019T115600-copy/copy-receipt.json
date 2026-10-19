@@ -1,0 +1,18 @@
+[
+  {
+    "original": "tests/ViceSharp.Library.Tests/Packaging/UserLocalDeploymentTests.cs",
+    "copy": "build.tests/Packaging/UserLocalDeploymentTests.cs",
+    "sha256": "F7AE10E4D4C67196D9BC6B8CBA4B1D954A3A98526FCECE3B0757613D583A2AB4",
+    "verified": true,
+    "originalRetained": true,
+    "copiedAt": "2026-10-19T11:56:04"
+  },
+  {
+    "original": "tests/ViceSharp.Library.Tests/CompletionTestManifestTests.cs",
+    "copy": "build.tests/Completion/CompletionTestManifestTests.cs",
+    "sha256": "5AEF7302CEB477C55E0F1E97DF68E666C89A6311132212F1AAD9A432EC162E4B",
+    "verified": true,
+    "originalRetained": true,
+    "copiedAt": "2026-10-19T11:56:04"
+  }
+]

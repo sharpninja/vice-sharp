@@ -1,0 +1,11 @@
+{
+  "stamp": "20261019T115801",
+  "label": "library-after-linux",
+  "project": "tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj",
+  "filter": "",
+  "exitCode": 0,
+  "total": 124,
+  "passed": 124,
+  "failed": 0,
+  "skipped": 0
+}

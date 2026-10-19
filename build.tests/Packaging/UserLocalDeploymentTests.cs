@@ -1,15 +1,18 @@
-namespace ViceSharp.Library.Tests.Packaging;
+namespace ViceSharp.Build.Tests.Packaging;
 
 using System.Diagnostics;
 using ViceSharp.Build.Packaging;
 using Xunit;
 
-/// <summary>TR-BUILD-001 / TR-PLAT-001: deployments only activate retained, complete user-owned releases.</summary>
+/// <summary>
+/// TR-BUILD-001 / TR-PLAT-001: deployments only activate retained, complete user-owned releases.
+/// Linux desktop deployment contract: every case carries the Host=Linux trait, and the BuildTest target
+/// excludes that trait on other hosts by filter (TR-BUILD-001 ac-12), so no case is ever skipped.
+/// </summary>
+[Trait("Host", "Linux")]
 public sealed class UserLocalDeploymentTests
 {
-    public static bool IsLinux => OperatingSystem.IsLinux();
-
-    [Fact(SkipUnless = nameof(IsLinux), Skip = "Linux desktop deployment contract.")]
+    [Fact]
     public void Install_RejectsNonExecutableApphostBeforeReplacingExistingRelease()
     {
         if (!OperatingSystem.IsLinux())
@@ -24,7 +27,7 @@ public sealed class UserLocalDeploymentTests
         Assert.Equal(first.ReleasePath, new DirectoryInfo(paths.Current).ResolveLinkTarget(true)!.FullName);
     }
 
-    [Fact(SkipUnless = nameof(IsLinux), Skip = "Linux desktop deployment contract.")]
+    [Fact]
     public async Task Install_PreservesDataAndForwardsSpecialPathsAndArguments()
     {
         var fixture = Fixture.Create("home=space ' $cash % quote\" tick` slash\\");
@@ -58,7 +61,7 @@ public sealed class UserLocalDeploymentTests
         }
     }
 
-    [Fact(SkipUnless = nameof(IsLinux), Skip = "Linux desktop deployment contract.")]
+    [Fact]
     public async Task Update_RetainsOldReleaseAndPublishesNewCurrent()
     {
         var fixture = Fixture.Create();
@@ -75,7 +78,7 @@ public sealed class UserLocalDeploymentTests
         Assert.Equal(second.ReleasePath, new DirectoryInfo(paths.Current).ResolveLinkTarget(true)!.FullName);
     }
 
-    [Fact(SkipUnless = nameof(IsLinux), Skip = "Linux desktop deployment contract.")]
+    [Fact]
     public async Task LateFailure_RestoresEntrypointsAndKeepsPreviousReleaseUsable()
     {
         var fixture = Fixture.Create();
@@ -95,7 +98,7 @@ public sealed class UserLocalDeploymentTests
         Assert.Equal(2, Directory.GetDirectories(paths.Releases).Length);
     }
 
-    [Theory(SkipUnless = nameof(IsLinux), Skip = "Linux desktop deployment contract.")]
+    [Theory]
     [InlineData("root")]
     [InlineData("relative")]
     [InlineData("outside")]
@@ -110,7 +113,7 @@ public sealed class UserLocalDeploymentTests
         Assert.False(Directory.Exists(Path.Combine(fixture.Home, ".local")));
     }
 
-    [Theory(SkipUnless = nameof(IsLinux), Skip = "Linux desktop deployment contract.")]
+    [Theory]
     [InlineData("destination-link")]
     [InlineData("payload-link")]
     [InlineData("unmanaged-launcher")]

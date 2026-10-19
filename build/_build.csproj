@@ -20,4 +20,9 @@
     <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- PLAN-NUKETESTS-001 / TR-BUILD-001 ac-12: the Nuke build tests beside build/ exercise internal build code. -->
+    <InternalsVisibleTo Include="ViceSharp.Build.Tests" />
+  </ItemGroup>
+
 </Project>

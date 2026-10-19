@@ -1,0 +1,11 @@
+{
+  "stamp": "20261019T115747",
+  "label": "bound-linux",
+  "project": "build.tests/ViceSharp.Build.Tests.csproj",
+  "filter": "",
+  "exitCode": 0,
+  "total": 109,
+  "passed": 109,
+  "failed": 0,
+  "skipped": 0
+}

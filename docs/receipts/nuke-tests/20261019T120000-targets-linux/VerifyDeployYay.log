@@ -1,0 +1,18 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Protocol -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Protocol/bin/Release/net10.0/ViceSharp.Protocol.dll
+  ViceSharp.Library.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Library.ViewModels/bin/Release/net10.0/ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomM -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomM/bin/Release/net10.0/ViceSharp.RomM.dll
+  ViceSharp.Library.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.Tests/bin/Release/net10.0/ViceSharp.Library.Tests.dll
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.Tests/bin/Release/net10.0/ViceSharp.Library.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+No test matches the given testcase filter `FullyQualifiedName~UserLocalDeploymentTests` in /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.Tests/bin/Release/net10.0/ViceSharp.Library.Tests.dll
+WARNING: Overwriting results file: /home/sharpninja/github/vice-sharp/TestResults/user-local-deploy/installer-verified.trx
+Results File: /home/sharpninja/github/vice-sharp/TestResults/user-local-deploy/installer-verified.trx
+
+Exception: /home/sharpninja/github/vice-sharp/tests/packaging/Verify-DeployYay.ps1:43
+Line |
+  43 |          throw 'Installer gate must execute at least 13 cases, all pas …
+     |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Installer gate must execute at least 13 cases, all passing and none
+     | skipped.

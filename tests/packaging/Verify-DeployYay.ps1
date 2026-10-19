@@ -29,9 +29,10 @@ $savedDesktopTools = [Environment]::GetEnvironmentVariable('VICESHARP_DEPLOY_TES
 Push-Location $repository
 try {
     $env:VICESHARP_DEPLOY_TEST_DESKTOP_TOOLS = '1'
-    'Command: dotnet test tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj -c Release --filter FullyQualifiedName~UserLocalDeploymentTests --logger trx;LogFileName=installer-verified.trx --results-directory TestResults/user-local-deploy' |
+    # PLAN-NUKETESTS-001 / TR-BUILD-001 ac-12: the deployment cases are Nuke build tests in build.tests/.
+    'Command: dotnet test build.tests/ViceSharp.Build.Tests.csproj -c Release --filter FullyQualifiedName~UserLocalDeploymentTests --logger trx;LogFileName=installer-verified.trx --results-directory TestResults/user-local-deploy' |
         Set-Content -LiteralPath $testLog
-    & dotnet test tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj -c Release `
+    & dotnet test build.tests/ViceSharp.Build.Tests.csproj -c Release `
         --filter 'FullyQualifiedName~UserLocalDeploymentTests' `
         --logger 'trx;LogFileName=installer-verified.trx' --results-directory $evidence 2>&1 |
         Tee-Object -FilePath $testLog -Append

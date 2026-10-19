@@ -1,0 +1,10 @@
+2026-10-19T11:57:47 HEAD: 6fb84afcc1ab980c4b40525efe23324183a3c8f4
+2026-10-19T11:57:47 working tree:  M build/Build.Romm.cs |  M build/_build.csproj |  M docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md |  M tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj |  M tests/ViceSharp.TestHarness/SettingsRestartLifecycleTests.cs | ?? build.tests/ | ?? build/Build.Tests.cs | ?? build/BuildTestFilter.cs | ?? docs/plans/PLAN-NUKETESTS-001.md | ?? docs/receipts/lockstep/ | ?? docs/receipts/nuke-tests/
+2026-10-19T11:57:47 dotnet test /home/sharpninja/github/vice-sharp/build.tests/ViceSharp.Build.Tests.csproj -c Release --nologo --logger trx;LogFileName=ViceSharp.Build.Tests.trx --results-directory /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T115747-bound-linux
+2026-10-19T11:57:52 exit 0
+2026-10-19T11:57:52 ViceSharp.Build.Tests: total 109, passed 109, failed 0, skipped 0
+2026-10-19T11:57:52    ViceSharp.Build.Tests.Completion.CompletionTestManifestTests: total 77, passed 77, failed 0, skipped 0
+2026-10-19T11:57:52    ViceSharp.Build.Tests.Packaging.UserLocalDeploymentTests: total 13, passed 13, failed 0, skipped 0
+2026-10-19T11:57:52    ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests: total 15, passed 15, failed 0, skipped 0
+2026-10-19T11:57:52    ViceSharp.Build.Tests.Placement.BuildPlacementTests: total 4, passed 4, failed 0, skipped 0
+2026-10-19T11:57:52 receipt: /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T115747-bound-linux
