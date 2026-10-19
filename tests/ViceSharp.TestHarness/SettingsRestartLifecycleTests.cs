@@ -334,6 +334,8 @@ public sealed class SettingsRestartLifecycleTests
         public bool Disposed { get; private set; }
         public bool ThrowOnDispose { get; init; }
         public int FrameCount => 0;
+        /// <summary>FR-CFG-003: palette id stamped onto accepted frames; mirrors the production sinks.</summary>
+        public string PaletteId { get; set; } = "vice";
         public void CaptureFrame(ReadOnlySpan<byte> bgra, int width, int height) { }
         public void Dispose()
         {
