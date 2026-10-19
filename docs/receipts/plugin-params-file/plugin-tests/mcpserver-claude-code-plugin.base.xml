@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="69" errors="0" failures="3" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="15:56:19">
+  <environment os-version="10.0.26200" cwd="C:\Users\kingd\AppData\Local\Temp\mcp-hook-dedupe-6c7aa88c5f064d06a0f013369b8d41a9" machine-name="PAYTON-LEGION2" user="kingd" clr-version="10.0.13" user-domain="PAYTON-LEGION2" nunit-version="2.5.8.0" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Failure" success="False" time="12.8481" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ClaudeHookWiring.Tests.ps1" executed="True" result="Success" success="True" time="0.3404" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ClaudeHookWiring.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Claude hook validation and wiring" executed="True" result="Success" success="True" time="0.0863" asserts="0" description="Claude hook validation and wiring">
+            <results>
+              <test-case description="TEST-MCP-BUGTRIAGE-026 validate accepts enabled plugin hooks without settings hooks" name="Claude hook validation and wiring.TEST-MCP-BUGTRIAGE-026 validate accepts enabled plugin hooks without settings hooks" time="0.0362" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-BUGTRIAGE-026 install removes redundant managed settings hooks when plugin hooks are enabled" name="Claude hook validation and wiring.TEST-MCP-BUGTRIAGE-026 install removes redundant managed settings hooks when plugin hooks are enabled" time="0.0439" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Claude hook validator and installer recognize the enabled plugin" executed="True" result="Success" success="True" time="0.2788" asserts="0" description="Claude hook validator and installer recognize the enabled plugin">
+            <results>
+              <test-case description="EnabledPluginAssertion_AcceptsObjectFormAndRejectsCastOrBooleanBlindRules" name="Claude hook validator and installer recognize the enabled plugin.EnabledPluginAssertion_AcceptsObjectFormAndRejectsCastOrBooleanBlindRules" time="0.0624" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="EnabledPlugin_BothScripts_PinnedSettingsShapes" name="Claude hook validator and installer recognize the enabled plugin.EnabledPlugin_BothScripts_PinnedSettingsShapes" time="0.0627" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="Validator_ObjectFormWithoutPluginRoot_ReportsValid" name="Claude hook validator and installer recognize the enabled plugin.Validator_ObjectFormWithoutPluginRoot_ReportsValid" time="0.0184" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="Validator_DisabledObjectForm_ReportsMissing" name="Claude hook validator and installer recognize the enabled plugin.Validator_DisabledObjectForm_ReportsMissing" time="0.0143" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="Installer_ObjectFormWithoutPluginRoot_AddsNoBridgeHooks" name="Claude hook validator and installer recognize the enabled plugin.Installer_ObjectFormWithoutPluginRoot_AddsNoBridgeHooks" time="0.025" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\CurrentTurnSessionRebind.Tests.ps1" executed="True" result="Success" success="True" time="0.3235" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\CurrentTurnSessionRebind.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Assert-ReplCurrentTurnFresh session rotation" executed="True" result="Success" success="True" time="0.294" asserts="0" description="Assert-ReplCurrentTurnFresh session rotation">
+            <results>
+              <test-case description="returns fresh and keeps the turn in its own session after rotation" name="Assert-ReplCurrentTurnFresh session rotation.returns fresh and keeps the turn in its own session after rotation" time="0.0639" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="fills an empty turn session id from the active session" name="Assert-ReplCurrentTurnFresh session rotation.fills an empty turn session id from the active session" time="0.0273" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\HookTurnDedupe.Tests.ps1" executed="True" result="Success" success="True" time="0.3956" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\HookTurnDedupe.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Open-PluginTurn duplicate-prompt dedupe" executed="True" result="Success" success="True" time="0.3567" asserts="0" description="Open-PluginTurn duplicate-prompt dedupe">
+            <results>
+              <test-case description="reuses the open turn when the same prompt arrives again" name="Open-PluginTurn duplicate-prompt dedupe.reuses the open turn when the same prompt arrives again" time="0.2001" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="opens a new turn when the prompt differs" name="Open-PluginTurn duplicate-prompt dedupe.opens a new turn when the prompt differs" time="0.1524" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\MemoryInjection.Tests.ps1" executed="True" result="Success" success="True" time="1.0644" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\MemoryInjection.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="UserPromptSubmit required-memory injection" executed="True" result="Success" success="True" time="1.0273" asserts="0" description="UserPromptSubmit required-memory injection">
+            <results>
+              <test-case description="loads the host descriptor and maps memory_* aliases to workflow.memory.*" name="UserPromptSubmit required-memory injection.loads the host descriptor and maps memory_* aliases to workflow.memory.*" time="0.0272" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="renders explicit None when the stubbed memory fetch is empty" name="UserPromptSubmit required-memory injection.renders explicit None when the stubbed memory fetch is empty" time="0.0277" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="renders descriptor prefix plus raw memory text from a stubbed fetch" name="UserPromptSubmit required-memory injection.renders descriptor prefix plus raw memory text from a stubbed fetch" time="0.0228" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="uses a custom descriptor path for prefix and empty fallback" name="UserPromptSubmit required-memory injection.uses a custom descriptor path for prefix and empty fallback" time="0.0186" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="fail-softs to None when the memory fetch throws" name="UserPromptSubmit required-memory injection.fail-softs to None when the memory fetch throws" time="0.0311" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="merges stubbed memories into UserPromptSubmit hook JSON using the descriptor" name="UserPromptSubmit required-memory injection.merges stubbed memories into UserPromptSubmit hook JSON using the descriptor" time="0.0198" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="user-prompt-submit reads the descriptor and injects stubbed memories into additionalContext" name="UserPromptSubmit required-memory injection.user-prompt-submit reads the descriptor and injects stubbed memories into additionalContext" time="0.3755" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="user-prompt-submit injects explicit None and keeps going when memory fetch fails" name="UserPromptSubmit required-memory injection.user-prompt-submit injects explicit None and keeps going when memory fetch fails" time="0.3309" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="invoke.ps1 resolves memory_* aliases through the descriptor registry" name="UserPromptSubmit required-memory injection.invoke.ps1 resolves memory_* aliases through the descriptor registry" time="0.1621" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\MemorySkill.Tests.ps1" executed="True" result="Success" success="True" time="0.0515" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\MemorySkill.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Claude Code memory skill and descriptor" executed="True" result="Success" success="True" time="0.0231" asserts="0" description="Claude Code memory skill and descriptor">
+            <results>
+              <test-case description="loads the memory skill with required verbs and injection/fallback notes" name="Claude Code memory skill and descriptor.loads the memory skill with required verbs and injection/fallback notes" time="0.0121" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="loads the memory descriptor JSON without live cloud keys" name="Claude Code memory skill and descriptor.loads the memory descriptor JSON without live cloud keys" time="0.0054" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\MemoryWrapperHelper.Tests.ps1" executed="True" result="Success" success="True" time="3.0294" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\MemoryWrapperHelper.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (mock gate)" executed="True" result="Success" success="True" time="2.0397" asserts="0" description="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (mock gate)">
+            <results>
+              <test-case description="MemoryDispatchAssertion_AcceptsHelperInSearchPathAndRejectsMissingMisplacedOrWrongDispatch" name="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (mock gate).MemoryDispatchAssertion_AcceptsHelperInSearchPathAndRejectsMissingMisplacedOrWrongDispatch" time="2.0364" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (binding)" executed="True" result="Success" success="True" time="2.9974" asserts="0" description="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (binding)">
+            <results>
+              <test-case description="MemoryWrapper_ThisPlugin_DispatchesThroughItsHelper" name="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (binding).MemoryWrapper_ThisPlugin_DispatchesThroughItsHelper" time="0.9509" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\NativeSmoke.Tests.ps1" executed="True" result="Success" success="True" time="4.6135" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\NativeSmoke.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Official plugin PowerShell native smoke" executed="True" result="Success" success="True" time="4.5826" asserts="0" description="Official plugin PowerShell native smoke">
+            <results>
+              <test-case description="PowerShell session-start wrapper exists and is non-empty" name="Official plugin PowerShell native smoke.PowerShell session-start wrapper exists and is non-empty" time="0.0034" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="PowerShell user-prompt-submit wrapper exists and is non-empty" name="Official plugin PowerShell native smoke.PowerShell user-prompt-submit wrapper exists and is non-empty" time="0.0027" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="runtime wrappers are PowerShell, not bash" name="Official plugin PowerShell native smoke.runtime wrappers are PowerShell, not bash" time="0.0042" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="CORE-MANIFEST.yaml exists" name="Official plugin PowerShell native smoke.CORE-MANIFEST.yaml exists" time="0.0028" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="canonical lib-ps entrypoints exist" name="Official plugin PowerShell native smoke.canonical lib-ps entrypoints exist" time="0.0062" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="session-start wrapper emits JSON without crashing when no marker is present" name="Official plugin PowerShell native smoke.session-start wrapper emits JSON without crashing when no marker is present" time="4.557" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplFailsafe.Tests.ps1" executed="True" result="Failure" success="False" time="0.7263" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplFailsafe.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="REPL session-log persistence bridge" executed="True" result="Failure" success="False" time="0.695" asserts="0" description="REPL session-log persistence bridge">
+            <results>
+              <test-case description="submits the canonical SubmitAsync snapshot and accepts a durable result" name="REPL session-log persistence bridge.submits the canonical SubmitAsync snapshot and accepts a durable result" time="0.3711" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>RuntimeException: The variable '$script:OriginalFailsafeDir' cannot be retrieved because it has not been set.</message>
+                  <stack-trace>at &lt;ScriptBlock&gt;, F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplFailsafe.Tests.ps1:33</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="reports the core failsafe path when close completes in degraded mode" name="REPL session-log persistence bridge.reports the core failsafe path when close completes in degraded mode" time="0.3213" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>RuntimeException: The variable '$script:OriginalFailsafeDir' cannot be retrieved because it has not been set.</message>
+                  <stack-trace>at &lt;ScriptBlock&gt;, F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplFailsafe.Tests.ps1:33</stack-trace>
+                </failure>
+              </test-case>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplMethodTimeout.Tests.ps1" executed="True" result="Success" success="True" time="0.2083" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplMethodTimeout.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Per-method REPL timeout" executed="True" result="Success" success="True" time="0.1753" asserts="0" description="Per-method REPL timeout">
+            <results>
+              <test-case description="gives analyzeRequirements an extended budget and keeps sessionlog at the short default" name="Per-method REPL timeout.gives analyzeRequirements an extended budget and keeps sessionlog at the short default" time="0.0116" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="honors REPL_TIMEOUT for the short default and REPL_LONG_TIMEOUT for long methods" name="Per-method REPL timeout.honors REPL_TIMEOUT for the short default and REPL_LONG_TIMEOUT for long methods" time="0.0052" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplWorkspaceResolution.Tests.ps1" executed="True" result="Failure" success="False" time="0.2603" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplWorkspaceResolution.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Resolve-ReplWorkspaceDirectory precedence" executed="True" result="Failure" success="False" time="0.2253" asserts="0" description="Resolve-ReplWorkspaceDirectory precedence">
+            <results>
+              <test-case description="prefers the marker-bearing current directory over an inherited MCP_WORKSPACE_PATH" name="Resolve-ReplWorkspaceDirectory precedence.prefers the marker-bearing current directory over an inherited MCP_WORKSPACE_PATH" time="0.0328" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="falls back to MCP_WORKSPACE_PATH when the current directory has no marker" name="Resolve-ReplWorkspaceDirectory precedence.falls back to MCP_WORKSPACE_PATH when the current directory has no marker" time="0.0269" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected strings to be the same, but they were different.
+Expected length: 75
+Actual length:   78
+Strings differ at index 41.
+Expected: 'C:\Users\kingd\AppData\Local\Temp\mcp-ws-b-6c1a6a955bb04caab...'
+But was:  'C:\Users\kingd\AppData\Local\Temp\mcp-ws-none-042efc9ce60949...'
+           -----------------------------------------^</message>
+                  <stack-trace>at $resolved | Should -Be ((Resolve-Path -LiteralPath $script:WorkspaceB).ProviderPath), F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplWorkspaceResolution.Tests.ps1:66
+at &lt;ScriptBlock&gt;, F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\ReplWorkspaceResolution.Tests.ps1:66</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="falls back to the current directory when no workspace env vars are set" name="Resolve-ReplWorkspaceDirectory precedence.falls back to the current directory when no workspace env vars are set" time="0.0285" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\SessionIdCanonicalAgent.Tests.ps1" executed="True" result="Success" success="True" time="0.2321" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\SessionIdCanonicalAgent.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Canonical PascalCase agent + openSession persistence" executed="True" result="Success" success="True" time="0.2035" asserts="0" description="Canonical PascalCase agent + openSession persistence">
+            <results>
+              <test-case description="maps default and lowercase hosts to a PascalCase agent matching the server regex" name="Canonical PascalCase agent + openSession persistence.maps default and lowercase hosts to a PascalCase agent matching the server regex" time="0.0163" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="openSession persists the explicit sessionId into session-state.yaml" name="Canonical PascalCase agent + openSession persistence.openSession persists the explicit sessionId into session-state.yaml" time="0.0267" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\Skills.Tests.ps1" executed="True" result="Success" success="True" time="0.0655" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\Skills.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Claude plugin skill guidance" executed="True" result="Success" success="True" time="0.0263" asserts="0" description="Claude plugin skill guidance">
+            <results>
+              <test-case description="TEST-MCP-PLUGIN-PSONLY-001 sync-logs treats deprecated workflow metadata as success and blocks REST fallback" name="Claude plugin skill guidance.TEST-MCP-PLUGIN-PSONLY-001 sync-logs treats deprecated workflow metadata as success and blocks REST fallback" time="0.006" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-PLUGIN-PSONLY-001 session skill treats deprecated workflow metadata and empty history as valid wrapper outcomes" name="Claude plugin skill guidance.TEST-MCP-PLUGIN-PSONLY-001 session skill treats deprecated workflow metadata and empty history as valid wrapper outcomes" time="0.0065" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-CLEARSESSION-001 clear-session skill ends session, clears context best-effort, reloads instruction file and profile, reports ready" name="Claude plugin skill guidance.TEST-MCP-CLEARSESSION-001 clear-session skill ends session, clears context best-effort, reloads instruction file and profile, reports ready" time="0.008" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\StopGateHardening.Tests.ps1" executed="True" result="Success" success="True" time="0.3607" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\StopGateHardening.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Close-PluginTurnIfNeeded hardening" executed="True" result="Success" success="True" time="0.3298" asserts="0" description="Close-PluginTurnIfNeeded hardening">
+            <results>
+              <test-case description="does not block a completed code-edit turn whose only audit signal is commits" name="Close-PluginTurnIfNeeded hardening.does not block a completed code-edit turn whose only audit signal is commits" time="0.1619" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="no-ops instead of blocking for a task-notification phantom turn" name="Close-PluginTurnIfNeeded hardening.no-ops instead of blocking for a task-notification phantom turn" time="0.1643" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\TimeoutEnvelope.Tests.ps1" executed="True" result="Success" success="True" time="0.1335" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\TimeoutEnvelope.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="command_timeout envelope is object-built and serialized" executed="True" result="Success" success="True" time="0.0928" asserts="0" description="command_timeout envelope is object-built and serialized">
+            <results>
+              <test-suite type="TestFixture" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes" executed="True" result="Success" success="True" time="0.0374" asserts="0" description="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes">
+                <results>
+                  <test-case description="accepts the contract-derived fixture envelope" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes.accepts the contract-derived fixture envelope" time="0.0071" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fixture whose retryable flag is wrong (negative control)" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes.rejects a fixture whose retryable flag is wrong (negative control)" time="0.0076" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fixture with the wrong error code (negative control)" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes.rejects a fixture with the wrong error code (negative control)" time="0.008" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="shows why handwritten YAML is unsafe: a colon in a hand-joined message breaks the parse (negative control)" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes.shows why handwritten YAML is unsafe: a colon in a hand-joined message breaks the parse (negative control)" time="0.0062" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml" executed="True" result="Success" success="True" time="0.0727" asserts="0" description="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml">
+                <results>
+                  <test-case description="builds the envelope as a native ordered object with the contract shape" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml.builds the envelope as a native ordered object with the contract shape" time="0.0075" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="serializes to YAML that round-trips to the same contract shape" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml.serializes to YAML that round-trips to the same contract shape" time="0.0113" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="keeps YAML valid when the message carries YAML-significant characters" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml.keeps YAML valid when the message carries YAML-significant characters" time="0.0067" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a non-positive timeout" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml.rejects a non-positive timeout" time="0.0062" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="command_timeout envelope is object-built and serialized.wrapper source no longer hand-joins the envelope" executed="True" result="Success" success="True" time="0.085" asserts="0" description="command_timeout envelope is object-built and serialized.wrapper source no longer hand-joins the envelope">
+                <results>
+                  <test-case description="Invoke-McpPlugin.ps1 contains no literal YAML envelope lines" name="command_timeout envelope is object-built and serialized.wrapper source no longer hand-joins the envelope.Invoke-McpPlugin.ps1 contains no literal YAML envelope lines" time="0.0091" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\YamlConstruction.Tests.ps1" executed="True" result="Success" success="True" time="1.0431" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\base-20261019\tests\YamlConstruction.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize" executed="True" result="Success" success="True" time="0.9931" asserts="0" description="Plugin YAML producers build objects and serialize">
+            <results>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks" executed="True" result="Success" success="True" time="0.0279" asserts="0" description="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks">
+                <results>
+                  <test-case description="a serialized fixture with a colon-bearing value round-trips exactly" name="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks.a serialized fixture with a colon-bearing value round-trips exactly" time="0.007" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="the same value hand-joined into YAML lines does not parse (negative control)" name="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks.the same value hand-joined into YAML lines does not parse (negative control)" time="0.0112" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="a hand-built pending record with a nested colon value loses or breaks the params (negative control)" name="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks.a hand-built pending record with a nested colon value loses or breaks the params (negative control)" time="0.0054" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.repl-invoke session-state writer" executed="True" result="Success" success="True" time="0.1747" asserts="0" description="Plugin YAML producers build objects and serialize.repl-invoke session-state writer">
+                <results>
+                  <test-case description="writes session-state.yaml as a serialized mapping" name="Plugin YAML producers build objects and serialize.repl-invoke session-state writer.writes session-state.yaml as a serialized mapping" time="0.0125" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.shim failsafe record ToYaml" executed="True" result="Success" success="True" time="0.2142" asserts="0" description="Plugin YAML producers build objects and serialize.shim failsafe record ToYaml">
+                <results>
+                  <test-case description="serializes method, label, timestamp and params as a nested mapping" name="Plugin YAML producers build objects and serialize.shim failsafe record ToYaml.serializes method, label, timestamp and params as a nested mapping" time="0.0288" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="maps an empty params body to an empty mapping" name="Plugin YAML producers build objects and serialize.shim failsafe record ToYaml.maps an empty params body to an empty mapping" time="0.0073" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.cache-manager pending records" executed="True" result="Success" success="True" time="0.8298" asserts="0" description="Plugin YAML producers build objects and serialize.cache-manager pending records">
+                <results>
+                  <test-case description="writes a pending record whose params survive as a nested object" name="Plugin YAML producers build objects and serialize.cache-manager pending records.writes a pending record whose params survive as a nested object" time="0.1626" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="replays the same params object on flush and clears the record" name="Plugin YAML producers build objects and serialize.cache-manager pending records.replays the same params object on flush and clears the record" time="0.1593" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="increments retryCount through the object on a failed replay and keeps the file parseable" name="Plugin YAML producers build objects and serialize.cache-manager pending records.increments retryCount through the object on a failed replay and keeps the file parseable" time="0.2802" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.plan-to-TODO map" executed="True" result="Success" success="True" time="0.8657" asserts="0" description="Plugin YAML producers build objects and serialize.plan-to-TODO map">
+                <results>
+                  <test-case description="writes and reads the map as an object, including a Windows path with backslashes" name="Plugin YAML producers build objects and serialize.plan-to-TODO map.writes and reads the map as an object, including a Windows path with backslashes" time="0.0221" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="still reads a legacy map written as plain lines" name="Plugin YAML producers build objects and serialize.plan-to-TODO map.still reads a legacy map written as plain lines" time="0.0064" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="returns nothing for a missing map" name="Plugin YAML producers build objects and serialize.plan-to-TODO map.returns nothing for a missing map" time="0.0039" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.REPL diagnostic log entries" executed="True" result="Success" success="True" time="0.8885" asserts="0" description="Plugin YAML producers build objects and serialize.REPL diagnostic log entries">
+                <results>
+                  <test-case description="appends entries that read back as YAML documents with method and params text" name="Plugin YAML producers build objects and serialize.REPL diagnostic log entries.appends entries that read back as YAML documents with method and params text" time="0.0191" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills" executed="True" result="Success" success="True" time="0.9712" asserts="0" description="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills">
+                <results>
+                  <test-case description="the lint detects the old joined-array style (negative control)" name="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills.the lint detects the old joined-array style (negative control)" time="0.0097" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="the lint ignores regex patterns and comments" name="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills.the lint ignores regex patterns and comments" time="0.0099" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="finds no hand-built YAML lines in the plugin" name="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills.finds no hand-built YAML lines in the plugin" time="0.0574" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

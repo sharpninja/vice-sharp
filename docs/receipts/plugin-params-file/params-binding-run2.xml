@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="8" errors="0" failures="0" not-run="21" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="15:08:25">
+  <environment cwd="F:\GitHub\McpServer\.worktrees\plugin-params-file-20261019" user-domain="" user="SYSTEM" os-version="10.0.26200" nunit-version="2.5.8.0" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" clr-version="10.0.13" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="9.7278" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\.worktrees\plugin-params-file-20261019\plugins\core\test-fixtures\pester\ReplParamsTransfer.Tests.ps1" executed="True" result="Success" success="True" time="9.7278" asserts="0" description="F:\GitHub\McpServer\.worktrees\plugin-params-file-20261019\plugins\core\test-fixtures\pester\ReplParamsTransfer.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Params transfer bound to the real core (binding)" executed="True" result="Success" success="True" time="9.6666" asserts="0" description="Params transfer bound to the real core (binding)">
+            <results>
+              <test-case description="C1 C2 the helper writes an exact file and keeps the text off the command line" name="Params transfer bound to the real core (binding).C1 C2 the helper writes an exact file and keeps the text off the command line" time="0.0396" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C3 empty params produce no transfer" name="Params transfer bound to the real core (binding).C3 empty params produce no transfer" time="0.0008" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C4 repl-invoke.ps1 -ParamsPath delivers a 200 KB value through a real process" name="Params transfer bound to the real core (binding).C4 repl-invoke.ps1 -ParamsPath delivers a 200 KB value through a real process" time="1.6854" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C4 -ParamsPath and -ParamsYaml deliver the same params" name="Params transfer bound to the real core (binding).C4 -ParamsPath and -ParamsYaml deliver the same params" time="3.2203" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C5 the wrapper carries a payload above 32,767 characters" name="Params transfer bound to the real core (binding).C5 the wrapper carries a payload above 32,767 characters" time="2.2989" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C6 no synced core file launches repl-invoke.ps1 with -ParamsYaml on a command line" name="Params transfer bound to the real core (binding).C6 no synced core file launches repl-invoke.ps1 with -ParamsYaml on a command line" time="0.0095" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C7 repl-invoke.ps1 rejects both params sources" name="Params transfer bound to the real core (binding).C7 repl-invoke.ps1 rejects both params sources" time="0.5168" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C7 repl-invoke.ps1 rejects a missing params file" name="Params transfer bound to the real core (binding).C7 repl-invoke.ps1 rejects a missing params file" time="0.5085" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

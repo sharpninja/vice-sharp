@@ -1,0 +1,170 @@
+[
+  {
+    "repo": "mcpserver-claude-code-plugin",
+    "file": "hooks/scripts/memory-context.ps1",
+    "line": 326,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', $Method, '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-claude-code-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 334,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-claude-code-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-codex-plugin",
+    "file": "Invoke-CodexMcpPlugin.ps1",
+    "line": 206,
+    "text": "Invoke-PowerShellPluginScript -ScriptPath (Join-Path $pluginRootFull 'lib\\repl-invoke.ps1') -Arguments @('-Method', $Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-codex-plugin",
+    "file": "hooks/scripts/memory-context.ps1",
+    "line": 335,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', $Method, '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-codex-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 334,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-codex-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-cline-plugin",
+    "file": "hooks/scripts/memory-context.ps1",
+    "line": 329,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', $Method, '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-cline-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 334,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-cline-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-cline-v2-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 334,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-cline-v2-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-copilot-plugin",
+    "file": "Invoke-CopilotMcpPlugin.ps1",
+    "line": 208,
+    "text": "Invoke-PowerShellPluginScript -ScriptPath (Join-Path $pluginRootFull 'lib\\repl-invoke.ps1') -Arguments @('-Method', $Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-copilot-plugin",
+    "file": "hooks/scripts/memory-context.ps1",
+    "line": 335,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', $Method, '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-copilot-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 334,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-copilot-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-grok-plugin",
+    "file": "hooks/scripts/memory-context.ps1",
+    "line": 331,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', $Method, '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-grok-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 334,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-grok-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-opencode-plugin",
+    "file": "hooks/scripts/memory-context.ps1",
+    "line": 329,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', $Method, '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-opencode-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 334,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-opencode-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-grok-bot-plugin",
+    "file": "hooks/scripts/memory-context.ps1",
+    "line": 331,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', $Method, '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-grok-bot-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 335,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-grok-bot-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-claude-cowork-plugin",
+    "file": "hooks/scripts/memory-context.ps1",
+    "line": 335,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', $Method, '-ParamsYaml', $ParamsYaml)) {"
+  },
+  {
+    "repo": "mcpserver-claude-cowork-plugin",
+    "file": "lib/Invoke-McpPlugin.ps1",
+    "line": 334,
+    "text": "Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))"
+  },
+  {
+    "repo": "mcpserver-claude-cowork-plugin",
+    "file": "lib/plugin-hook.ps1",
+    "line": 358,
+    "text": "foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {"
+  }
+]

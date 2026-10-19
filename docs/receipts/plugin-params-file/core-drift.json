@@ -1,0 +1,254 @@
+[
+  {
+    "file": "Invoke-McpPlugin.ps1",
+    "core": {
+      "origin/main": "aafd65a4b6",
+      "origin/develop": "aafd65a4b6"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "differs (83ed2cc322)",
+      "mcpserver-codex-plugin": "differs (83ed2cc322)",
+      "mcpserver-cline-plugin": "differs (83ed2cc322)",
+      "mcpserver-cline-v2-plugin": "differs (83ed2cc322)",
+      "mcpserver-copilot-plugin": "differs (83ed2cc322)",
+      "mcpserver-grok-plugin": "differs (83ed2cc322)",
+      "mcpserver-opencode-plugin": "differs (83ed2cc322)",
+      "mcpserver-grok-bot-plugin": "differs (7dcf941086)",
+      "mcpserver-claude-cowork-plugin": "differs (83ed2cc322)"
+    }
+  },
+  {
+    "file": "McpPluginShim.psm1",
+    "core": {
+      "origin/main": "3b390d9f70",
+      "origin/develop": "3b390d9f70"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "differs (df41d48c0b)",
+      "mcpserver-codex-plugin": "differs (df41d48c0b)",
+      "mcpserver-cline-plugin": "differs (df41d48c0b)",
+      "mcpserver-cline-v2-plugin": "differs (df41d48c0b)",
+      "mcpserver-copilot-plugin": "differs (df41d48c0b)",
+      "mcpserver-grok-plugin": "differs (df41d48c0b)",
+      "mcpserver-opencode-plugin": "differs (df41d48c0b)",
+      "mcpserver-grok-bot-plugin": "differs (df41d48c0b)",
+      "mcpserver-claude-cowork-plugin": "differs (df41d48c0b)"
+    }
+  },
+  {
+    "file": "agent-runtime-header.ps1",
+    "core": {
+      "origin/main": "9158c9ca26",
+      "origin/develop": "9158c9ca26"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "= origin/main,origin/develop",
+      "mcpserver-codex-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-v2-plugin": "= origin/main,origin/develop",
+      "mcpserver-copilot-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-plugin": "= origin/main,origin/develop",
+      "mcpserver-opencode-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-bot-plugin": "differs (2b58c33234)",
+      "mcpserver-claude-cowork-plugin": "= origin/main,origin/develop"
+    }
+  },
+  {
+    "file": "cache-manager.ps1",
+    "core": {
+      "origin/main": "1496c461dc",
+      "origin/develop": "1496c461dc"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "differs (20762a3fb9)",
+      "mcpserver-codex-plugin": "differs (20762a3fb9)",
+      "mcpserver-cline-plugin": "differs (20762a3fb9)",
+      "mcpserver-cline-v2-plugin": "differs (20762a3fb9)",
+      "mcpserver-copilot-plugin": "differs (20762a3fb9)",
+      "mcpserver-grok-plugin": "differs (20762a3fb9)",
+      "mcpserver-opencode-plugin": "differs (20762a3fb9)",
+      "mcpserver-grok-bot-plugin": "differs (20762a3fb9)",
+      "mcpserver-claude-cowork-plugin": "differs (20762a3fb9)"
+    }
+  },
+  {
+    "file": "classified-error.ps1",
+    "core": {
+      "origin/main": "0ff1f29ca7",
+      "origin/develop": "0ff1f29ca7"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "= origin/main,origin/develop",
+      "mcpserver-codex-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-v2-plugin": "= origin/main,origin/develop",
+      "mcpserver-copilot-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-plugin": "= origin/main,origin/develop",
+      "mcpserver-opencode-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-bot-plugin": "= origin/main,origin/develop",
+      "mcpserver-claude-cowork-plugin": "= origin/main,origin/develop"
+    }
+  },
+  {
+    "file": "ensure-repl.ps1",
+    "core": {
+      "origin/main": "1ed169e48d",
+      "origin/develop": "1ed169e48d"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "= origin/main,origin/develop",
+      "mcpserver-codex-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-v2-plugin": "= origin/main,origin/develop",
+      "mcpserver-copilot-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-plugin": "= origin/main,origin/develop",
+      "mcpserver-opencode-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-bot-plugin": "= origin/main,origin/develop",
+      "mcpserver-claude-cowork-plugin": "= origin/main,origin/develop"
+    }
+  },
+  {
+    "file": "final-response.ps1",
+    "core": {
+      "origin/main": "78b25c3b20",
+      "origin/develop": "78b25c3b20"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "= origin/main,origin/develop",
+      "mcpserver-codex-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-v2-plugin": "= origin/main,origin/develop",
+      "mcpserver-copilot-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-plugin": "= origin/main,origin/develop",
+      "mcpserver-opencode-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-bot-plugin": "= origin/main,origin/develop",
+      "mcpserver-claude-cowork-plugin": "= origin/main,origin/develop"
+    }
+  },
+  {
+    "file": "marker-resolver.ps1",
+    "core": {
+      "origin/main": "85db98a2d9",
+      "origin/develop": "85db98a2d9"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "= origin/main,origin/develop",
+      "mcpserver-codex-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-v2-plugin": "= origin/main,origin/develop",
+      "mcpserver-copilot-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-plugin": "= origin/main,origin/develop",
+      "mcpserver-opencode-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-bot-plugin": "= origin/main,origin/develop",
+      "mcpserver-claude-cowork-plugin": "= origin/main,origin/develop"
+    }
+  },
+  {
+    "file": "mcp-status.ps1",
+    "core": {
+      "origin/main": "2a602eb2c8",
+      "origin/develop": "2a602eb2c8"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "= origin/main,origin/develop",
+      "mcpserver-codex-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-v2-plugin": "= origin/main,origin/develop",
+      "mcpserver-copilot-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-plugin": "= origin/main,origin/develop",
+      "mcpserver-opencode-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-bot-plugin": "= origin/main,origin/develop",
+      "mcpserver-claude-cowork-plugin": "= origin/main,origin/develop"
+    }
+  },
+  {
+    "file": "plugin-env.ps1",
+    "core": {
+      "origin/main": "27e0d7b8a2",
+      "origin/develop": "27e0d7b8a2"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "= origin/main,origin/develop",
+      "mcpserver-codex-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-plugin": "= origin/main,origin/develop",
+      "mcpserver-cline-v2-plugin": "= origin/main,origin/develop",
+      "mcpserver-copilot-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-plugin": "= origin/main,origin/develop",
+      "mcpserver-opencode-plugin": "= origin/main,origin/develop",
+      "mcpserver-grok-bot-plugin": "differs (06248611b6)",
+      "mcpserver-claude-cowork-plugin": "= origin/main,origin/develop"
+    }
+  },
+  {
+    "file": "plugin-hook.ps1",
+    "core": {
+      "origin/main": "927a9a5322",
+      "origin/develop": "927a9a5322"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "differs (98f8ef95c8)",
+      "mcpserver-codex-plugin": "differs (98f8ef95c8)",
+      "mcpserver-cline-plugin": "differs (98f8ef95c8)",
+      "mcpserver-cline-v2-plugin": "differs (98f8ef95c8)",
+      "mcpserver-copilot-plugin": "differs (98f8ef95c8)",
+      "mcpserver-grok-plugin": "differs (98f8ef95c8)",
+      "mcpserver-opencode-plugin": "differs (98f8ef95c8)",
+      "mcpserver-grok-bot-plugin": "differs (9cb9afc69a)",
+      "mcpserver-claude-cowork-plugin": "differs (98f8ef95c8)"
+    }
+  },
+  {
+    "file": "repl-invoke.ps1",
+    "core": {
+      "origin/main": "9bc8f692a6",
+      "origin/develop": "9bc8f692a6"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "differs (5927374145)",
+      "mcpserver-codex-plugin": "differs (5927374145)",
+      "mcpserver-cline-plugin": "differs (5927374145)",
+      "mcpserver-cline-v2-plugin": "differs (5927374145)",
+      "mcpserver-copilot-plugin": "differs (5927374145)",
+      "mcpserver-grok-plugin": "differs (5927374145)",
+      "mcpserver-opencode-plugin": "differs (5927374145)",
+      "mcpserver-grok-bot-plugin": "differs (8947acfb49)",
+      "mcpserver-claude-cowork-plugin": "differs (5927374145)"
+    }
+  },
+  {
+    "file": "resolve-cache-dir.ps1",
+    "core": {
+      "origin/main": "c031998522",
+      "origin/develop": "c031998522"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "differs (030fe591bd)",
+      "mcpserver-codex-plugin": "differs (030fe591bd)",
+      "mcpserver-cline-plugin": "differs (030fe591bd)",
+      "mcpserver-cline-v2-plugin": "differs (030fe591bd)",
+      "mcpserver-copilot-plugin": "differs (030fe591bd)",
+      "mcpserver-grok-plugin": "differs (030fe591bd)",
+      "mcpserver-opencode-plugin": "differs (030fe591bd)",
+      "mcpserver-grok-bot-plugin": "differs (ee5d60b32b)",
+      "mcpserver-claude-cowork-plugin": "differs (030fe591bd)"
+    }
+  },
+  {
+    "file": "yaml-object-mutation.ps1",
+    "core": {
+      "origin/main": "ee059e2875",
+      "origin/develop": "ee059e2875"
+    },
+    "plugins": {
+      "mcpserver-claude-code-plugin": "differs (d0010bb116)",
+      "mcpserver-codex-plugin": "differs (d0010bb116)",
+      "mcpserver-cline-plugin": "differs (d0010bb116)",
+      "mcpserver-cline-v2-plugin": "differs (d0010bb116)",
+      "mcpserver-copilot-plugin": "differs (d0010bb116)",
+      "mcpserver-grok-plugin": "differs (d0010bb116)",
+      "mcpserver-opencode-plugin": "differs (d0010bb116)",
+      "mcpserver-grok-bot-plugin": "differs (d0010bb116)",
+      "mcpserver-claude-cowork-plugin": "differs (d0010bb116)"
+    }
+  }
+]

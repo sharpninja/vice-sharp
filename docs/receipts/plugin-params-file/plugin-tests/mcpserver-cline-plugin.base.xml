@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="27" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="15:56:43">
+  <environment os-version="10.0.26200" cwd="F:\GitHub\mcpserver-cline-plugin\.worktrees\base-20261019" machine-name="PAYTON-LEGION2" user="kingd" clr-version="10.0.13" user-domain="PAYTON-LEGION2" nunit-version="2.5.8.0" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="3.8449" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-cline-plugin\.worktrees\base-20261019\tests\MemoryWrapperHelper.Tests.ps1" executed="True" result="Success" success="True" time="2.906" asserts="0" description="F:\GitHub\mcpserver-cline-plugin\.worktrees\base-20261019\tests\MemoryWrapperHelper.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (mock gate)" executed="True" result="Success" success="True" time="1.9382" asserts="0" description="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (mock gate)">
+            <results>
+              <test-case description="MemoryDispatchAssertion_AcceptsHelperInSearchPathAndRejectsMissingMisplacedOrWrongDispatch" name="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (mock gate).MemoryDispatchAssertion_AcceptsHelperInSearchPathAndRejectsMissingMisplacedOrWrongDispatch" time="1.9359" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (binding)" executed="True" result="Success" success="True" time="2.8796" asserts="0" description="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (binding)">
+            <results>
+              <test-case description="MemoryWrapper_ThisPlugin_DispatchesThroughItsHelper" name="TR-MCP-MEMORY-008 AC-001 memory wrapper helper (binding).MemoryWrapper_ThisPlugin_DispatchesThroughItsHelper" time="0.9361" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-cline-plugin\.worktrees\base-20261019\tests\TimeoutEnvelope.Tests.ps1" executed="True" result="Success" success="True" time="0.1158" asserts="0" description="F:\GitHub\mcpserver-cline-plugin\.worktrees\base-20261019\tests\TimeoutEnvelope.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="command_timeout envelope is object-built and serialized" executed="True" result="Success" success="True" time="0.0909" asserts="0" description="command_timeout envelope is object-built and serialized">
+            <results>
+              <test-suite type="TestFixture" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes" executed="True" result="Success" success="True" time="0.0373" asserts="0" description="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes">
+                <results>
+                  <test-case description="accepts the contract-derived fixture envelope" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes.accepts the contract-derived fixture envelope" time="0.005" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fixture whose retryable flag is wrong (negative control)" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes.rejects a fixture whose retryable flag is wrong (negative control)" time="0.0161" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a fixture with the wrong error code (negative control)" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes.rejects a fixture with the wrong error code (negative control)" time="0.0072" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="shows why handwritten YAML is unsafe: a colon in a hand-joined message breaks the parse (negative control)" name="command_timeout envelope is object-built and serialized.mock gate: the assertions discriminate correct and incorrect envelopes.shows why handwritten YAML is unsafe: a colon in a hand-joined message breaks the parse (negative control)" time="0.006" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml" executed="True" result="Success" success="True" time="0.0714" asserts="0" description="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml">
+                <results>
+                  <test-case description="builds the envelope as a native ordered object with the contract shape" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml.builds the envelope as a native ordered object with the contract shape" time="0.007" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="serializes to YAML that round-trips to the same contract shape" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml.serializes to YAML that round-trips to the same contract shape" time="0.014" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="keeps YAML valid when the message carries YAML-significant characters" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml.keeps YAML valid when the message carries YAML-significant characters" time="0.0065" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="rejects a non-positive timeout" name="command_timeout envelope is object-built and serialized.production: New-McpPluginTimeoutEnvelope and ConvertTo-McpPluginYaml.rejects a non-positive timeout" time="0.0041" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="command_timeout envelope is object-built and serialized.wrapper source no longer hand-joins the envelope" executed="True" result="Success" success="True" time="0.0775" asserts="0" description="command_timeout envelope is object-built and serialized.wrapper source no longer hand-joins the envelope">
+                <results>
+                  <test-case description="Invoke-McpPlugin.ps1 contains no literal YAML envelope lines" name="command_timeout envelope is object-built and serialized.wrapper source no longer hand-joins the envelope.Invoke-McpPlugin.ps1 contains no literal YAML envelope lines" time="0.0042" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-cline-plugin\.worktrees\base-20261019\tests\YamlConstruction.Tests.ps1" executed="True" result="Success" success="True" time="0.823" asserts="0" description="F:\GitHub\mcpserver-cline-plugin\.worktrees\base-20261019\tests\YamlConstruction.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize" executed="True" result="Success" success="True" time="0.7847" asserts="0" description="Plugin YAML producers build objects and serialize">
+            <results>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks" executed="True" result="Success" success="True" time="0.017" asserts="0" description="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks">
+                <results>
+                  <test-case description="a serialized fixture with a colon-bearing value round-trips exactly" name="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks.a serialized fixture with a colon-bearing value round-trips exactly" time="0.0049" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="the same value hand-joined into YAML lines does not parse (negative control)" name="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks.the same value hand-joined into YAML lines does not parse (negative control)" time="0.0041" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="a hand-built pending record with a nested colon value loses or breaks the params (negative control)" name="Plugin YAML producers build objects and serialize.mock gate: fixtures prove the assertions and show why hand-built YAML breaks.a hand-built pending record with a nested colon value loses or breaks the params (negative control)" time="0.0048" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.repl-invoke session-state writer" executed="True" result="Success" success="True" time="0.1664" asserts="0" description="Plugin YAML producers build objects and serialize.repl-invoke session-state writer">
+                <results>
+                  <test-case description="writes session-state.yaml as a serialized mapping" name="Plugin YAML producers build objects and serialize.repl-invoke session-state writer.writes session-state.yaml as a serialized mapping" time="0.0219" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.shim failsafe record ToYaml" executed="True" result="Success" success="True" time="0.2069" asserts="0" description="Plugin YAML producers build objects and serialize.shim failsafe record ToYaml">
+                <results>
+                  <test-case description="serializes method, label, timestamp and params as a nested mapping" name="Plugin YAML producers build objects and serialize.shim failsafe record ToYaml.serializes method, label, timestamp and params as a nested mapping" time="0.0261" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="maps an empty params body to an empty mapping" name="Plugin YAML producers build objects and serialize.shim failsafe record ToYaml.maps an empty params body to an empty mapping" time="0.0119" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.cache-manager pending records" executed="True" result="Success" success="True" time="0.6729" asserts="0" description="Plugin YAML producers build objects and serialize.cache-manager pending records">
+                <results>
+                  <test-case description="writes a pending record whose params survive as a nested object" name="Plugin YAML producers build objects and serialize.cache-manager pending records.writes a pending record whose params survive as a nested object" time="0.1186" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="replays the same params object on flush and clears the record" name="Plugin YAML producers build objects and serialize.cache-manager pending records.replays the same params object on flush and clears the record" time="0.1195" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="increments retryCount through the object on a failed replay and keeps the file parseable" name="Plugin YAML producers build objects and serialize.cache-manager pending records.increments retryCount through the object on a failed replay and keeps the file parseable" time="0.2208" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.plan-to-TODO map" executed="True" result="Success" success="True" time="0.7057" asserts="0" description="Plugin YAML producers build objects and serialize.plan-to-TODO map">
+                <results>
+                  <test-case description="writes and reads the map as an object, including a Windows path with backslashes" name="Plugin YAML producers build objects and serialize.plan-to-TODO map.writes and reads the map as an object, including a Windows path with backslashes" time="0.0227" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="still reads a legacy map written as plain lines" name="Plugin YAML producers build objects and serialize.plan-to-TODO map.still reads a legacy map written as plain lines" time="0.0053" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="returns nothing for a missing map" name="Plugin YAML producers build objects and serialize.plan-to-TODO map.returns nothing for a missing map" time="0.0026" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.REPL diagnostic log entries" executed="True" result="Success" success="True" time="0.7186" asserts="0" description="Plugin YAML producers build objects and serialize.REPL diagnostic log entries">
+                <results>
+                  <test-case description="appends entries that read back as YAML documents with method and params text" name="Plugin YAML producers build objects and serialize.REPL diagnostic log entries.appends entries that read back as YAML documents with method and params text" time="0.0104" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills" executed="True" result="Success" success="True" time="0.7697" asserts="0" description="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills">
+                <results>
+                  <test-case description="the lint detects the old joined-array style (negative control)" name="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills.the lint detects the old joined-array style (negative control)" time="0.013" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="the lint ignores regex patterns and comments" name="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills.the lint ignores regex patterns and comments" time="0.0062" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="finds no hand-built YAML lines in the plugin" name="Plugin YAML producers build objects and serialize.static lint: no hand-built YAML remains in lib, hooks or skills.finds no hand-built YAML lines in the plugin" time="0.0282" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

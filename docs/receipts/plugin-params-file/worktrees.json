@@ -1,0 +1,74 @@
+[
+  {
+    "repo": "mcpserver-claude-code-plugin",
+    "defaultBranch": "origin/main",
+    "baseHead": "3082d83e",
+    "worktree": "F:\\GitHub\\mcpserver-claude-code-plugin\\.worktrees\\params-file-20261019",
+    "head": "3082d83e",
+    "worktreeDirIgnored": false
+  },
+  {
+    "repo": "mcpserver-codex-plugin",
+    "defaultBranch": "origin/main",
+    "baseHead": "837302ac",
+    "worktree": "F:\\GitHub\\mcpserver-codex-plugin\\.worktrees\\params-file-20261019",
+    "head": "837302ac",
+    "worktreeDirIgnored": false
+  },
+  {
+    "repo": "mcpserver-cline-plugin",
+    "defaultBranch": "origin/main",
+    "baseHead": "2739f5d4",
+    "worktree": "F:\\GitHub\\mcpserver-cline-plugin\\.worktrees\\params-file-20261019",
+    "head": "2739f5d4",
+    "worktreeDirIgnored": false
+  },
+  {
+    "repo": "mcpserver-cline-v2-plugin",
+    "defaultBranch": "origin/main",
+    "baseHead": "78dc4e8b",
+    "worktree": "F:\\GitHub\\mcpserver-cline-v2-plugin\\.worktrees\\params-file-20261019",
+    "head": "78dc4e8b",
+    "worktreeDirIgnored": false
+  },
+  {
+    "repo": "mcpserver-copilot-plugin",
+    "defaultBranch": "origin/main",
+    "baseHead": "e0c80525",
+    "worktree": "F:\\GitHub\\mcpserver-copilot-plugin\\.worktrees\\params-file-20261019",
+    "head": "e0c80525",
+    "worktreeDirIgnored": false
+  },
+  {
+    "repo": "mcpserver-grok-plugin",
+    "defaultBranch": "origin/main",
+    "baseHead": "da6a00a2",
+    "worktree": "F:\\GitHub\\mcpserver-grok-plugin\\.worktrees\\params-file-20261019",
+    "head": "da6a00a2",
+    "worktreeDirIgnored": false
+  },
+  {
+    "repo": "mcpserver-opencode-plugin",
+    "defaultBranch": "origin/master",
+    "baseHead": "3280b140",
+    "worktree": "F:\\GitHub\\mcpserver-opencode-plugin\\.worktrees\\params-file-20261019",
+    "head": "3280b140",
+    "worktreeDirIgnored": false
+  },
+  {
+    "repo": "mcpserver-grok-bot-plugin",
+    "defaultBranch": "origin/main",
+    "baseHead": "64fe6402",
+    "worktree": "F:\\GitHub\\mcpserver-grok-bot-plugin\\.worktrees\\params-file-20261019",
+    "head": "64fe6402",
+    "worktreeDirIgnored": false
+  },
+  {
+    "repo": "mcpserver-claude-cowork-plugin",
+    "defaultBranch": "origin/main",
+    "baseHead": "8e7bebab",
+    "worktree": "F:\\GitHub\\mcpserver-claude-cowork-plugin\\.worktrees\\params-file-20261019",
+    "head": "8e7bebab",
+    "worktreeDirIgnored": false
+  }
+]

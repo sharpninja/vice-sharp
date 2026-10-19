@@ -1,0 +1,26 @@
+fix(plugin-core): back-port plugin YAML-from-objects fix 7991235 into plugins/core
+
+The 2026-10-17 fix "build all plugin YAML from objects, never from strings"
+(mcpserver-claude-code-plugin 7991235 and its siblings in the other plugin repos)
+was committed to the plugin copies only, against the core README rule
+"Fix in this directory and re-sync; never patch a plugin's copy". A re-sync from
+core would have reverted it.
+
+Base check: on this branch plugins/core/lib-ps equals 88032108, the core the
+plugins were synced from on 2026-10-15, and the plugin copies are 88032108 plus
+7991235 only, so the plugin files are copied byte-exact (no three-way conflict):
+lib-ps Invoke-McpPlugin.ps1, McpPluginShim.psm1, cache-manager.ps1,
+plugin-hook.ps1, repl-invoke.ps1, yaml-object-mutation.ps1, new plan-todo-map.ps1,
+and skills/handoff/invoke.ps1.
+
+The plugin tests YamlConstruction.Tests.ps1 (with its static hand-built-YAML
+lint) and TimeoutEnvelope.Tests.ps1 move into test-fixtures/pester and run
+against a staged plugin (Write-TestStagedPlugin), so every future sync is
+guarded. Result: 25 total, 25 passed, 0 failed, 0 skipped.
+
+Prepares the params-file fix for the Windows command-line limit
+(triage-report-821fe2da58284b4ea21604cb2da2fccb).
+
+Signed: claude-opus-5-5@ClaudeCode (effort not exposed to the agent) | Confidence: correctness 95%, accuracy 96%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

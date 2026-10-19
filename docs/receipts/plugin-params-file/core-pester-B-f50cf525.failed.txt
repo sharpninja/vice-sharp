@@ -1,0 +1,12 @@
+TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-YAML-MUTATION-001 all staged plugin skills teach object-first YAML mutation
+TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-PLUGIN-PSONLY-001 writes pending cache records with deterministic sequence and payload fields
+TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-PLUGIN-PSONLY-001 flushes cache records in order and leaves no pending records on success
+TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-PLUGIN-PSONLY-001 increments retry count on failed cache replay and skips exhausted retries
+TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-PLUGIN-PSONLY-001 resolves explicit override, active workspace, and fails closed without workspace
+TEST-MCP-SESSIONEND-001 SessionEnd unresolved cache is a silent no-op.session-end flushes pending YAML identified by CLAUDE_PROJECT_DIR
+TEST-MCP-SESSIONEND-001 SessionEnd unresolved cache is a silent no-op.session-end identified-workspace flush failure is not a silent {} success
+FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema
+FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery
+TRIAGEPLUGIN identity and timeouts.Get-ReplMethodTimeoutSeconds treats workflow.agenthelp.submitTurn as a long helper timeout
+TRIAGEPLUGIN identity and timeouts.Get-ReplMethodTimeoutSeconds keeps sessionlog methods on the short default
+TRIAGEPLUGIN identity and timeouts.CacheScope.BackgroundOpenSession_DoesNotRebindRootActiveSession
