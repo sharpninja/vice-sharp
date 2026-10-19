@@ -1,0 +1,211 @@
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.40]     ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle [FAIL]
+[xUnit.net 00:00:03.48]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64) [FAIL]
+[xUnit.net 00:00:03.49]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256) [FAIL]
+[xUnit.net 00:00:03.49]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024) [FAIL]
+[xUnit.net 00:00:03.50]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [FAIL]
+[xUnit.net 00:00:03.50]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 5000) [FAIL]
+[xUnit.net 00:00:03.50]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 1024) [FAIL]
+[xUnit.net 00:00:03.50]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [FAIL]
+[xUnit.net 00:00:03.51]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 5000) [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle [18 ms]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs:line 23
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64) [62 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 101
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256) [1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 101
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 101
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 5000) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 1024) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 5000) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 1024) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:03.52]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [FAIL]
+[xUnit.net 00:00:03.52]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 1024) [FAIL]
+[xUnit.net 00:00:03.52]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [FAIL]
+[xUnit.net 00:00:03.53]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 64) [FAIL]
+[xUnit.net 00:00:03.53]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [FAIL]
+[xUnit.net 00:00:03.53]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256) [FAIL]
+[xUnit.net 00:00:03.53]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 5000) [FAIL]
+[xUnit.net 00:00:03.53]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [FAIL]
+[xUnit.net 00:00:03.53]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 64) [2 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 134
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 134
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 134
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 5000) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 134
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 212
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 71
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.54]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged [1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 180
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T103200-phase-a-step2-rom-rerun-linux/harness-vic20-romroot.trx
+
+Failed!  - Failed:    19, Passed:     0, Skipped:     0, Total:    19, Duration: 171 ms - ViceSharp.TestHarness.dll (net10.0)

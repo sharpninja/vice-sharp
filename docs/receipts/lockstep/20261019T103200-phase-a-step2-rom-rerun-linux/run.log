@@ -1,0 +1,31 @@
+2026-10-19T10:29:28 VICESHARP_ROM_PATH = /home/sharpninja/github/vice-sharp/native/vice/vice/data
+2026-10-19T10:29:28 HEAD: 6fb84afcc1ab980c4b40525efe23324183a3c8f4
+2026-10-19T10:29:28 working tree:  M docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md |  M tests/ViceSharp.TestHarness/SettingsRestartLifecycleTests.cs | ?? docs/receipts/lockstep/
+2026-10-19T10:29:28 native-inventory-before.txt: 163 entries, sha256 A31D0C086A9A36D1
+2026-10-19T10:29:28 dotnet test /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --no-build --nologo --filter "FullyQualifiedName~AcceptanceTests" --logger trx;LogFileName=harness-acceptance-romroot.trx
+2026-10-19T10:29:44 harness-acceptance-romroot: exit 0, total 210, passed 210, failed 0, skipped 0
+2026-10-19T10:29:44 dotnet test /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --no-build --nologo --filter "FullyQualifiedName~Vic20NativeLockstepTests|FullyQualifiedName~Vic20HalfCycleComparatorTests" --logger trx;LogFileName=harness-vic20-romroot.trx
+2026-10-19T10:29:49 harness-vic20-romroot: exit 1, total 19, passed 0, failed 19, skipped 0
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 1024)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 5000)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 1024)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 5000)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 5000)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 64)
+2026-10-19T10:29:49    failed: ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged
+2026-10-19T10:29:49    first failure: System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+2026-10-19T10:29:49 native-inventory-after.txt: 163 entries, sha256 A31D0C086A9A36D1
+2026-10-19T10:29:49 native inventory unchanged: True
+2026-10-19T10:29:49 receipt: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T103200-phase-a-step2-rom-rerun-linux

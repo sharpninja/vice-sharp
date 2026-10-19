@@ -1,0 +1,6 @@
+B1EF324968E81634   2050 tests/ViceSharp.TestHarness/LockstepValidator.cs
+A81CA731F90D7608    148 tests/ViceSharp.TestHarness/LockstepValidationTests.cs
+99A56995DD6A604A    230 tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs
+4E96D5803FAB27D2     91 tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs
+3E327CC85FE49E6A   7983 tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs
+0CD909121EB3DBEB   1923 tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs

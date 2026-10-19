@@ -1,0 +1,10 @@
+  Determining projects to restore...
+  Restored /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj (in 524 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.ViceCompatibility/ViceSharp.ViceCompatibility.csproj (in 524 ms).
+  ViceSharp.ViceCompatibility -> /home/sharpninja/github/vice-sharp/src/ViceSharp.ViceCompatibility/bin/Release/net10.0/ViceSharp.ViceCompatibility.dll
+  ViceSharp.VsfCompatibility.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261018T031828-phase-a-baseline-linux/VsfCompatibility.trx
+
+Passed!  - Failed:     0, Passed:   199, Skipped:     0, Total:   199, Duration: 1 s - ViceSharp.VsfCompatibility.Tests.dll (net10.0)

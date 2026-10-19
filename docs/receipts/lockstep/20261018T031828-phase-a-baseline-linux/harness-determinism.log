@@ -1,0 +1,5 @@
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261018T031828-phase-a-baseline-linux/harness-determinism.trx
+
+Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5, Duration: 259 ms - ViceSharp.TestHarness.dll (net10.0)

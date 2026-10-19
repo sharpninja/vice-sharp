@@ -1,0 +1,47 @@
+  Determining projects to restore...
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Library.ViewModels/ViceSharp.Library.ViewModels.csproj (in 794 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Abstractions/ViceSharp.Abstractions.csproj (in 796 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj (in 794 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Protocol/ViceSharp.Protocol.csproj (in 796 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Chips/ViceSharp.Chips.csproj (in 668 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.RomM/ViceSharp.RomM.csproj (in 796 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Monitor/ViceSharp.Monitor.csproj (in 794 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/ViceSharp.Core.csproj (in 794 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.Input/ViceSharp.Xbox.Input.csproj (in 667 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.ViewModels/ViceSharp.Xbox.ViewModels.csproj (in 669 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Architectures/ViceSharp.Architectures.csproj (in 796 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Host/ViceSharp.Host.csproj (in 796 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj (in 807 ms).
+  Restored /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.InProcess/ViceSharp.Host.InProcess.csproj (in 794 ms).
+  7 of 21 projects are up-to-date for restore.
+  ViceSharp.Abstractions -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Abstractions/bin/Release/net10.0/ViceSharp.Abstractions.dll
+  ViceSharp.RomFetch -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomFetch/bin/Release/net10.0/ViceSharp.RomFetch.dll
+  ViceSharp.Chips -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Chips/bin/Release/net10.0/ViceSharp.Chips.dll
+  ViceSharp.Protocol -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Protocol/bin/Release/net10.0/ViceSharp.Protocol.dll
+  ViceSharp.Library.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Library.ViewModels/bin/Release/net10.0/ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.Input/bin/Release/net10.0/ViceSharp.Xbox.Input.dll
+  ViceSharp.RomM -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomM/bin/Release/net10.0/ViceSharp.RomM.dll
+  ViceSharp.Xbox.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.ViewModels/bin/Release/net10.0/ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Core -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/bin/Release/net10.0/ViceSharp.Core.dll
+  ViceSharp.Monitor -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Monitor/bin/Release/net10.0/ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Architectures/bin/Release/net10.0/ViceSharp.Architectures.dll
+  ViceSharp.Benchmarks -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Benchmarks/bin/Release/net10.0/ViceSharp.Benchmarks.dll
+  ViceSharp.Launcher -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Launcher/bin/Release/net10.0/ViceSharp.Launcher.dll
+  ViceSharp.Console -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Console/bin/Release/net10.0/ViceSharp.Console.dll
+  ViceSharp.Host.InProcess -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.InProcess/bin/Release/net10.0/ViceSharp.Host.InProcess.dll
+  ViceSharp.Xbox -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox/bin/Release/net10.0/ViceSharp.Xbox.dll
+  ViceSharp.AdhocHelper -> /home/sharpninja/github/vice-sharp/src/ViceSharp.AdhocHelper/bin/Release/net10.0/ViceSharp.AdhocHelper.dll
+  ViceSharp.Host -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host/bin/Release/net10.0/ViceSharp.Host.dll
+/home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/Views/SettingsView.axaml(76,18,76,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [/home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj]
+  ViceSharp.Avalonia -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/bin/Release/net10.0/ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.MacOS/bin/Release/net10.0/ViceSharp.Host.MacOS.dll
+/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SettingsRestartLifecycleTests.cs(332,46): error CS0535: 'SettingsRestartLifecycleTests.TrackingVideoSink' does not implement interface member 'IVideoCaptureSink.PaletteId' [/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj]
+
+Build FAILED.
+
+/home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/Views/SettingsView.axaml(76,18,76,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [/home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj]
+/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SettingsRestartLifecycleTests.cs(332,46): error CS0535: 'SettingsRestartLifecycleTests.TrackingVideoSink' does not implement interface member 'IVideoCaptureSink.PaletteId' [/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj]
+    1 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:20.38
