@@ -1,0 +1,117 @@
+{
+  "stamp": "20261019T100900-phase-a-baseline-windows",
+  "part": "phase-a-step1-part2-testharness",
+  "machine": "PAYTON-LEGION2",
+  "user": "SYSTEM",
+  "buildExitCode": 0,
+  "buildViceNativeSkipped": false,
+  "viceNativeProjInBuildLog": false,
+  "results": [
+    {
+      "filter": "CpuNmiFive",
+      "expression": "FullyQualifiedName~CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch|FullyQualifiedName~CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode|FullyQualifiedName~CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch|FullyQualifiedName~Mos6510NmiTests.Nmi_IsEdgeTriggered_HoldingLineDoesNotRefire|FullyQualifiedName~Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState",
+      "exitCode": 1,
+      "counts": {
+        "total": 5,
+        "executed": 5,
+        "passed": 1,
+        "failed": 4,
+        "skipped": 0,
+        "trxPresent": true
+      }
+    },
+    {
+      "filter": "Determinism",
+      "expression": "Category=Determinism",
+      "exitCode": 0,
+      "counts": {
+        "total": 5,
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "trxPresent": true
+      }
+    },
+    {
+      "filter": "Acceptance",
+      "expression": "FullyQualifiedName~AcceptanceTests",
+      "exitCode": 0,
+      "counts": {
+        "total": 210,
+        "executed": 210,
+        "passed": 210,
+        "failed": 0,
+        "skipped": 0,
+        "trxPresent": true
+      }
+    },
+    {
+      "filter": "LockstepValidationTests",
+      "expression": "FullyQualifiedName~LockstepValidationTests",
+      "exitCode": 0,
+      "counts": {
+        "total": 6,
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "trxPresent": true
+      }
+    },
+    {
+      "filter": "Vic20NativeLockstepTests",
+      "expression": "FullyQualifiedName~Vic20NativeLockstepTests",
+      "exitCode": 1,
+      "counts": {
+        "total": 4,
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0,
+        "trxPresent": true
+      }
+    },
+    {
+      "filter": "Vic20HalfCycleComparatorTests",
+      "expression": "FullyQualifiedName~Vic20HalfCycleComparatorTests",
+      "exitCode": 1,
+      "counts": {
+        "total": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "trxPresent": true
+      }
+    },
+    {
+      "filter": "CpuVisiblePcTimingTests",
+      "expression": "FullyQualifiedName~CpuVisiblePcTimingTests",
+      "exitCode": 1,
+      "counts": {
+        "total": 148,
+        "executed": 148,
+        "passed": 132,
+        "failed": 16,
+        "skipped": 0,
+        "trxPresent": true
+      }
+    },
+    {
+      "filter": "X64ScVariantLockstepTests",
+      "expression": "FullyQualifiedName~X64ScVariantLockstepTests",
+      "exitCode": 1,
+      "counts": {
+        "total": 307,
+        "executed": 306,
+        "passed": 292,
+        "failed": 14,
+        "skipped": 0,
+        "trxPresent": true
+      }
+    }
+  ],
+  "nativeInventoryUnchanged": true,
+  "finishedAt": "2026-10-19T11:27:03"
+}

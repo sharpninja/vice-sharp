@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="327d125c-a07b-41e4-a94d-9ce0eb47800c" name="SYSTEM@PAYTON-LEGION2 2026-10-19 10:32:00" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-19T10:32:00.9045352-05:00" queuing="2026-10-19T10:32:00.9045355-05:00" start="2026-10-19T10:31:57.8301146-05:00" finish="2026-10-19T10:32:00.9114790-05:00" />
+  <TestSettings name="default" id="7c77b648-b304-4c2d-8895-95a53c6cb186">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-10-19_10_32_00" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="82971c54-e256-4121-97f6-12ea3e4d2afc" testId="01ce23ce-a07e-9206-6c1e-7c71082099d9" testName="ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode" computerName="PAYTON-LEGION2" duration="00:00:00.0051425" startTime="2026-10-19T10:32:00.7770399-05:00" endTime="2026-10-19T10:32:00.7824347-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82971c54-e256-4121-97f6-12ea3e4d2afc">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: 169&#xD;
+Actual:   0</Message>
+          <StackTrace>   at ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs:line 302&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="19c5549d-6f2e-4b58-a343-5ea3a3025c15" testId="98ba1c88-f496-61ad-e89f-dc357d669dd6" testName="ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState" computerName="PAYTON-LEGION2" duration="00:00:00.0028458" startTime="2026-10-19T10:32:00.7530442-05:00" endTime="2026-10-19T10:32:00.7708593-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19c5549d-6f2e-4b58-a343-5ea3a3025c15">
+      <Output>
+        <ErrorInfo>
+          <Message>CPU did not reach PC=$0400 within 64 ticks (PC=$0000).</Message>
+          <StackTrace>   at ViceSharp.TestHarness.Mos6510NmiTests.StepUntilPcReaches(Mos6502 cpu, UInt16 targetPc, Int32 maxTicks) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Mos6510NmiTests.cs:line 252&#xD;
+   at ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Mos6510NmiTests.cs:line 143&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="fb7dd3d8-4471-4645-bd5c-1c19d64ac375" testId="678c9672-a4e3-3c30-9136-759f89800548" testName="ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch" computerName="PAYTON-LEGION2" duration="00:00:00.0005622" startTime="2026-10-19T10:32:00.7827433-05:00" endTime="2026-10-19T10:32:00.7834139-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fb7dd3d8-4471-4645-bd5c-1c19d64ac375">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: 169&#xD;
+Actual:   0</Message>
+          <StackTrace>   at ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs:line 346&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="51ca1626-7a5f-4299-96b7-bc8861961ce6" testId="b1d0e779-d844-d087-a6bf-2140b392921c" testName="ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch" computerName="PAYTON-LEGION2" duration="00:00:00.0026492" startTime="2026-10-19T10:32:00.7836835-05:00" endTime="2026-10-19T10:32:00.7865709-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="51ca1626-7a5f-4299-96b7-bc8861961ce6">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: 169&#xD;
+Actual:   0</Message>
+          <StackTrace>   at ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs:line 263&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6885d3b5-2c2b-437f-ab4a-404935a2fe24" testId="85ff694e-d4bb-6b87-9acd-f7db125701cf" testName="ViceSharp.TestHarness.Mos6510NmiTests.Nmi_IsEdgeTriggered_HoldingLineDoesNotRefire" computerName="PAYTON-LEGION2" duration="00:00:00.0342851" startTime="2026-10-19T10:32:00.7041084-05:00" endTime="2026-10-19T10:32:00.7469520-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6885d3b5-2c2b-437f-ab4a-404935a2fe24" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="01ce23ce-a07e-9206-6c1e-7c71082099d9">
+      <Execution id="82971c54-e256-4121-97f6-12ea3e4d2afc" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.CpuInterruptTests" name="RtsThenLdaImm_NextTick_FetchesFollowingOpcode" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="98ba1c88-f496-61ad-e89f-dc357d669dd6">
+      <Execution id="19c5549d-6f2e-4b58-a343-5ea3a3025c15" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.Mos6510NmiTests" name="Nmi_RtiReturnsCpuToPreNmiState" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.Mos6510NmiTests.Nmi_IsEdgeTriggered_HoldingLineDoesNotRefire" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="85ff694e-d4bb-6b87-9acd-f7db125701cf">
+      <Execution id="6885d3b5-2c2b-437f-ab4a-404935a2fe24" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.Mos6510NmiTests" name="Nmi_IsEdgeTriggered_HoldingLineDoesNotRefire" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="678c9672-a4e3-3c30-9136-759f89800548">
+      <Execution id="fb7dd3d8-4471-4645-bd5c-1c19d64ac375" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.CpuInterruptTests" name="LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="b1d0e779-d844-d087-a6bf-2140b392921c">
+      <Execution id="51ca1626-7a5f-4299-96b7-bc8861961ce6" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.CpuInterruptTests" name="Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="01ce23ce-a07e-9206-6c1e-7c71082099d9" executionId="82971c54-e256-4121-97f6-12ea3e4d2afc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98ba1c88-f496-61ad-e89f-dc357d669dd6" executionId="19c5549d-6f2e-4b58-a343-5ea3a3025c15" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="678c9672-a4e3-3c30-9136-759f89800548" executionId="fb7dd3d8-4471-4645-bd5c-1c19d64ac375" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b1d0e779-d844-d087-a6bf-2140b392921c" executionId="51ca1626-7a5f-4299-96b7-bc8861961ce6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="85ff694e-d4bb-6b87-9acd-f7db125701cf" executionId="6885d3b5-2c2b-437f-ab4a-404935a2fe24" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="5" executed="5" passed="1" failed="4" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.33]   Discovering: ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.87]   Discovered:  ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:02.10]   Starting:    ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:02.25]       CPU did not reach PC=$0400 within 64 ticks (PC=$0000).&#xD;
+[xUnit.net 00:00:02.25]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.25]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Mos6510NmiTests.cs(252,0): at ViceSharp.TestHarness.Mos6510NmiTests.StepUntilPcReaches(Mos6502 cpu, UInt16 targetPc, Int32 maxTicks)&#xD;
+[xUnit.net 00:00:02.25]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Mos6510NmiTests.cs(143,0): at ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState()&#xD;
+[xUnit.net 00:00:02.25]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:02.25]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:02.25]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:02.25]       Expected: 169&#xD;
+[xUnit.net 00:00:02.25]       Actual:   0&#xD;
+[xUnit.net 00:00:02.25]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.25]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs(302,0): at ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode()&#xD;
+[xUnit.net 00:00:02.25]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:02.25]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:02.25]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:02.25]       Expected: 169&#xD;
+[xUnit.net 00:00:02.25]       Actual:   0&#xD;
+[xUnit.net 00:00:02.25]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.25]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs(346,0): at ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch()&#xD;
+[xUnit.net 00:00:02.25]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:02.25]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:02.26]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:02.26]       Expected: 169&#xD;
+[xUnit.net 00:00:02.26]       Actual:   0&#xD;
+[xUnit.net 00:00:02.26]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.26]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs(263,0): at ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch()&#xD;
+[xUnit.net 00:00:02.26]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:02.26]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:02.26]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-19T10:32:00.7766824-05:00">
+        <Text>[xUnit.net 00:00:02.24]     ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-19T10:32:00.7836118-05:00">
+        <Text>[xUnit.net 00:00:02.25]     ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-19T10:32:00.7858400-05:00">
+        <Text>[xUnit.net 00:00:02.25]     ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-19T10:32:00.7891240-05:00">
+        <Text>[xUnit.net 00:00:02.26]     ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Warning" timestamp="2026-10-19T10:32:00.8566217-05:00">
+        <Text>Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

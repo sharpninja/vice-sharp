@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3f48e0e4-e3b0-4c41-96ff-43c926d32235" name="SYSTEM@PAYTON-LEGION2 2026-10-19 11:54:33" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-19T11:54:33.3375824-05:00" queuing="2026-10-19T11:54:33.3375826-05:00" start="2026-10-19T11:54:29.3123649-05:00" finish="2026-10-19T11:57:33.5745059-05:00" />
+  <TestSettings name="default" id="2faf3c81-9bb9-4540-bfea-ca48327284ae">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-10-19_11_54_33" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="21f9617e-347d-4c73-a874-58dcd0a4bec3" testId="40e1dd24-57d6-291b-fb2b-9e3d7dc32af7" testName="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024)" computerName="PAYTON-LEGION2" duration="00:00:01.1622408" startTime="2026-10-19T11:54:31.7966445-05:00" endTime="2026-10-19T11:54:32.9672046-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21f9617e-347d-4c73-a874-58dcd0a4bec3" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024)" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="40e1dd24-57d6-291b-fb2b-9e3d7dc32af7">
+      <Execution id="21f9617e-347d-4c73-a874-58dcd0a4bec3" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests" name="NativeXvic_Managed_DualVia_ControlRegs_Lockstep" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="40e1dd24-57d6-291b-fb2b-9e3d7dc32af7" executionId="21f9617e-347d-4c73-a874-58dcd0a4bec3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.25]   Discovering: ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.62]   Discovered:  ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.82]   Starting:    ViceSharp.TestHarness&#xD;
+xvic vice_machine_create call=1 model=vic20&#xD;
+xvic vice_machine_reset call=1 machine=000002661e350440&#xD;
+xvic vice_machine_step_cycle call=1 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=2 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=3 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=4 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=5 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=6 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=7 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=8 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=9 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=10 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=11 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=12 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=13 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=14 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=15 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=16 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_create call=2 model=vic20&#xD;
+xvic vice_machine_reset call=2 machine=000002661e3503c0&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-19T11:57:33.5255340-05:00">
+        <Text>The active test run was aborted. Reason: Test host process crashed : xvic vice_machine_create call=1 model=vic20&#xD;
+xvic vice_machine_reset call=1 machine=000002661e350440&#xD;
+xvic vice_machine_step_cycle call=1 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=2 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=3 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=4 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=5 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=6 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=7 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=8 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=9 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=10 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=11 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=12 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=13 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=14 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=15 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=16 machine=000002661e350440&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_create call=2 model=vic20&#xD;
+xvic vice_machine_reset call=2 machine=000002661e3503c0&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Warning" timestamp="2026-10-19T11:57:33.5333280-05:00">
+        <Text>Data collector 'Blame' message: The specified inactivity time of 3 minutes has elapsed. Collecting hang dumps from testhost and its child processes.</Text>
+      </RunInfo>
+    </RunInfos>
+    <CollectorDataEntries>
+      <Collector agentName="PAYTON-LEGION2" uri="datacollector://microsoft/TestPlatform/Extensions/Blame/v1" collectorDisplayName="Blame">
+        <UriAttachments>
+          <UriAttachment>
+            <A href="PAYTON-LEGION2\Sequence_92635d9bfed9475fbdefff9d14c2e67e.xml"></A>
+          </UriAttachment>
+        </UriAttachments>
+      </Collector>
+    </CollectorDataEntries>
+  </ResultSummary>
+</TestRun>

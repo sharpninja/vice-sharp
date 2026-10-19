@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a38c056f-feaf-47b5-8fb2-787400a5a38c" name="SYSTEM@PAYTON-LEGION2 2026-10-19 10:32:35" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-19T10:32:35.2288810-05:00" queuing="2026-10-19T10:32:35.2288815-05:00" start="2026-10-19T10:32:31.1287323-05:00" finish="2026-10-19T11:23:30.7320960-05:00" />
+  <TestSettings name="default" id="51c16b21-7925-4a87-ad27-8d0ac98061ba">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-10-19_10_32_35" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="efa2eb7d-c566-4f3c-b5da-d816e21dcd3f" testId="95b22201-ae82-4002-0948-ad1af9bfca8e" testName="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64)" computerName="PAYTON-LEGION2" duration="00:05:24.0600620" startTime="2026-10-19T10:42:41.7750388-05:00" endTime="2026-10-19T10:48:05.8351878-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="efa2eb7d-c566-4f3c-b5da-d816e21dcd3f" />
+    <UnitTestResult executionId="bc0c4c6a-7a6e-445d-85b5-d7e93958c5c3" testId="754a16d5-7af2-e96e-d0a9-a8384aaa3342" testName="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256)" computerName="PAYTON-LEGION2" duration="00:10:07.0892877" startTime="2026-10-19T10:32:34.6849728-05:00" endTime="2026-10-19T10:42:41.7744036-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc0c4c6a-7a6e-445d-85b5-d7e93958c5c3" />
+    <UnitTestResult executionId="b6f1bf1a-cda3-4620-8e3b-5f9c1b059cbb" testId="79cbb9bb-6991-b35b-beec-77c5c13c2182" testName="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: &quot;vic20&quot;, cycles: 64)" computerName="PAYTON-LEGION2" duration="00:05:24.0663172" startTime="2026-10-19T10:48:05.8378068-05:00" endTime="2026-10-19T10:53:29.9174803-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6f1bf1a-cda3-4620-8e3b-5f9c1b059cbb">
+      <Output>
+        <ErrorInfo>
+          <Message>CPU mismatch after 64 cycles model=vic20: native PC=$FD22 A=$00 X=$00 Y=$00 S=$00 P=$26; managed PC=$FD99 A=$00 X=$01 Y=$00 S=$FD P=$25</Message>
+          <StackTrace>   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 59&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4672833c-0f07-40ba-a5bc-78a6c440309f" testId="40e1dd24-57d6-291b-fb2b-9e3d7dc32af7" testName="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024)" computerName="PAYTON-LEGION2" duration="00:00:00.9788410" startTime="2026-10-19T10:32:33.6921598-05:00" endTime="2026-10-19T10:32:34.6802684-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4672833c-0f07-40ba-a5bc-78a6c440309f" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64)" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="95b22201-ae82-4002-0948-ad1af9bfca8e">
+      <Execution id="efa2eb7d-c566-4f3c-b5da-d816e21dcd3f" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests" name="NativeXvic_Managed_DualVia_ControlRegs_Lockstep" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024)" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="40e1dd24-57d6-291b-fb2b-9e3d7dc32af7">
+      <Execution id="4672833c-0f07-40ba-a5bc-78a6c440309f" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests" name="NativeXvic_Managed_DualVia_ControlRegs_Lockstep" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: &quot;vic20&quot;, cycles: 64)" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="79cbb9bb-6991-b35b-beec-77c5c13c2182">
+      <Execution id="b6f1bf1a-cda3-4620-8e3b-5f9c1b059cbb" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests" name="NativeXvic_Managed_CpuRegs_Lockstep" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256)" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="754a16d5-7af2-e96e-d0a9-a8384aaa3342">
+      <Execution id="bc0c4c6a-7a6e-445d-85b5-d7e93958c5c3" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests" name="NativeXvic_Managed_DualVia_ControlRegs_Lockstep" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="95b22201-ae82-4002-0948-ad1af9bfca8e" executionId="efa2eb7d-c566-4f3c-b5da-d816e21dcd3f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="754a16d5-7af2-e96e-d0a9-a8384aaa3342" executionId="bc0c4c6a-7a6e-445d-85b5-d7e93958c5c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79cbb9bb-6991-b35b-beec-77c5c13c2182" executionId="b6f1bf1a-cda3-4620-8e3b-5f9c1b059cbb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="40e1dd24-57d6-291b-fb2b-9e3d7dc32af7" executionId="4672833c-0f07-40ba-a5bc-78a6c440309f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="4" executed="4" passed="3" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.25]   Discovering: ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.68]   Discovered:  ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.88]   Starting:    ViceSharp.TestHarness&#xD;
+xvic vice_machine_create call=1 model=vic20&#xD;
+xvic vice_machine_reset call=1 machine=00000226e25d0280&#xD;
+xvic vice_machine_step_cycle call=1 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=2 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=3 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=4 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=5 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=6 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=7 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=8 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=9 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=10 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=11 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=12 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=13 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=14 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=15 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=16 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_create call=2 model=vic20&#xD;
+xvic vice_machine_reset call=2 machine=00000226e25d0590&#xD;
+xvic vice_machine_create call=3 model=vic20&#xD;
+xvic vice_machine_reset call=3 machine=00000226e25d0310&#xD;
+xvic vice_machine_create call=4 model=vic20&#xD;
+xvic vice_machine_reset call=4 machine=00000226e25d0350&#xD;
+[xUnit.net 00:20:58.18]       CPU mismatch after 64 cycles model=vic20: native PC=$FD22 A=$00 X=$00 Y=$00 S=$00 P=$26; managed PC=$FD99 A=$00 X=$01 Y=$00 S=$FD P=$25&#xD;
+[xUnit.net 00:20:58.18]       Stack Trace:&#xD;
+[xUnit.net 00:20:58.18]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs(59,0): at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles)&#xD;
+[xUnit.net 00:20:58.19]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:20:58.19]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+xvic vice_machine_create call=5 model=vic20ntsc&#xD;
+xvic vice_machine_reset call=5 machine=00000226e25d03d0&#xD;
+[createdump] Writing full dump for process 22084 to file F:\GitHub\McpServer\.worktrees\p1-5-workspace-rekey-20261016\.mcp-p1-5-tmp\84196198-61a5-43a8-b1b2-087d12968910\testhost_22084_20261019T112329_hangdump.dmp&#xD;
+[createdump] Dump successfully written in 676ms&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-19T10:53:29.9232329-05:00">
+        <Text>[xUnit.net 00:20:58.18]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-19T11:23:30.6874372-05:00">
+        <Text>The active test run was aborted. Reason: Test host process crashed : xvic vice_machine_create call=1 model=vic20&#xD;
+xvic vice_machine_reset call=1 machine=00000226e25d0280&#xD;
+xvic vice_machine_step_cycle call=1 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=2 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=3 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=4 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=5 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=6 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=7 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=8 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=9 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=10 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=11 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=12 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=13 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=14 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=15 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_step_cycle call=16 machine=00000226e25d0280&#xD;
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0&#xD;
+xvic vice_machine_create call=2 model=vic20&#xD;
+xvic vice_machine_reset call=2 machine=00000226e25d0590&#xD;
+xvic vice_machine_create call=3 model=vic20&#xD;
+xvic vice_machine_reset call=3 machine=00000226e25d0310&#xD;
+xvic vice_machine_create call=4 model=vic20&#xD;
+xvic vice_machine_reset call=4 machine=00000226e25d0350&#xD;
+xvic vice_machine_create call=5 model=vic20ntsc&#xD;
+xvic vice_machine_reset call=5 machine=00000226e25d03d0&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Warning" timestamp="2026-10-19T11:23:30.6967083-05:00">
+        <Text>Data collector 'Blame' message: The specified inactivity time of 30 minutes has elapsed. Collecting hang dumps from testhost and its child processes.</Text>
+      </RunInfo>
+    </RunInfos>
+    <CollectorDataEntries>
+      <Collector agentName="PAYTON-LEGION2" uri="datacollector://microsoft/TestPlatform/Extensions/Blame/v1" collectorDisplayName="Blame">
+        <UriAttachments>
+          <UriAttachment>
+            <A href="PAYTON-LEGION2\testhost_22084_20261019T112329_hangdump.dmp"></A>
+          </UriAttachment>
+          <UriAttachment>
+            <A href="PAYTON-LEGION2\ViceSharp.TestHarness_25876_20261019T112329_hangdump.dmp"></A>
+          </UriAttachment>
+          <UriAttachment>
+            <A href="PAYTON-LEGION2\Sequence_58456923f54540989f5b2ad43bbe4d5e.xml"></A>
+          </UriAttachment>
+        </UriAttachments>
+      </Collector>
+    </CollectorDataEntries>
+  </ResultSummary>
+</TestRun>
