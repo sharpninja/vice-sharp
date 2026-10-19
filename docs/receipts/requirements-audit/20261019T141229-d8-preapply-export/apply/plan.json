@@ -1,0 +1,490 @@
+[
+  {
+    "kind": "fr",
+    "id": "FR-ARCH-TRUEDRIVE-1541-002",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "fr",
+    "id": "FR-BACKFILL-MEDIA-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "fr",
+    "id": "FR-BACKFILL-VIDEO-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "fr",
+    "id": "FR-CHIPSTATE-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 4,
+    "flagsCleared": 4
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PACESEL-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 4,
+    "flagsCleared": 4
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PERF-RUNFRAME-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 5,
+    "flagsCleared": 5
+  },
+  {
+    "kind": "fr",
+    "id": "FR-PUBSUB-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 3,
+    "flagsCleared": 3
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SID-014",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 4,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SIDEBARUI-001",
+    "statusBefore": "pending",
+    "statusAfter": "pending",
+    "criteria": 3,
+    "flagsCleared": 3
+  },
+  {
+    "kind": "fr",
+    "id": "FR-SNDREG-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 4,
+    "flagsCleared": 4
+  },
+  {
+    "kind": "fr",
+    "id": "FR-TICKHIST-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 4,
+    "flagsCleared": 4
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 8,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "fr",
+    "id": "FR-VIC-008",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 5,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "fr",
+    "id": "FR-XBOXGPL-007",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 5,
+    "flagsCleared": 5
+  },
+  {
+    "kind": "tr",
+    "id": "TR-ALLOC-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CHIPSTATE-CAPTURE-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CORE-CYCLE-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-CORE-DET-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DEPS-202607-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-DRV-EDGE-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-IEC-EDGE-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PACESEL-STRAT-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PERF-ALLOC-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PERF-AOT-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-PUBSUB-PERF-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 7,
+    "flagsCleared": 7
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SIDAUDIO-CLOCK-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SIDEBARUI-LAYOUT-001",
+    "statusBefore": "pending",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SID-EDGE-004",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SID-ORACLE-002",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SID-RESAMPLE-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-SNDREG-GATE-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TICKHIST-CAPTURE-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TICKHIST-PERF-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 3,
+    "flagsCleared": 3
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TICKHIST-RPC-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-TICKHIST-UI-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC20-PIXEL-001",
+    "statusBefore": "pending",
+    "statusAfter": "pending",
+    "criteria": 3,
+    "flagsCleared": 3
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-002",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-003",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-004",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-005",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-VIC-EDGE-006",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "tr",
+    "id": "TR-XBOXGPL-BRAND-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "test",
+    "id": "TEST-CHIPSTATE-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DEPS-202607-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 1,
+    "flagsCleared": 1
+  },
+  {
+    "kind": "test",
+    "id": "TEST-DRV-MOTOR-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "test",
+    "id": "TEST-IEC-TIMING-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "test",
+    "id": "TEST-NATIVERESIDUE-001",
+    "statusBefore": "pending",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "test",
+    "id": "TEST-PACESEL-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "test",
+    "id": "TEST-PERF-RUNFRAME-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 4,
+    "flagsCleared": 4
+  },
+  {
+    "kind": "test",
+    "id": "TEST-PUBSUB-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 3,
+    "flagsCleared": 3
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SID-002",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SIDAUDIO-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SIDEBARUI-001",
+    "statusBefore": "pending",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "test",
+    "id": "TEST-SNDREG-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TICKHIST-001",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "test",
+    "id": "TEST-TICKHIST-002",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 2,
+    "flagsCleared": 2
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC20-001",
+    "statusBefore": "pending",
+    "statusAfter": "pending",
+    "criteria": 5,
+    "flagsCleared": 5
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC-CHECKPOINT-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "test",
+    "id": "TEST-VIC-RC-001",
+    "statusBefore": "closed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  },
+  {
+    "kind": "test",
+    "id": "TEST-XBOXGPL-002",
+    "statusBefore": "completed",
+    "statusAfter": "pending",
+    "criteria": 0,
+    "flagsCleared": 0
+  }
+]

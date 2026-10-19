@@ -1,0 +1,2410 @@
+type: result
+payload:
+  requestId: req-20261019T165851Z-7f58
+  result:
+    items:
+    - id: TEST-AIREVIEW-ROUTING-001
+      title: Auditable Astra xhigh AI review routing
+      description: >-
+        Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
+
+        Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
+
+        Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
+
+        Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
+
+        - **ac-02**: Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
+
+        - **ac-03**: Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
+
+        - **ac-04**: Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
+      status: pending
+      priority: high
+      area: AIREVIEW
+      testType: unit
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
+        isSatisfied: false
+      - id: ac-02
+        text: Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
+        isSatisfied: false
+      - id: ac-03
+        text: Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
+        isSatisfied: false
+      - id: ac-04
+        text: Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1779079+00:00
+      updatedAt: 2026-10-19T16:58:52.1779295+00:00
+    - id: TEST-ARCH-CHIPGLUE-001
+      title: Shared Chip Glue Boundary Tests
+      description: >-
+        Source-boundary, focused integration, and lockstep/checkpoint tests verify that reusable chip implementations stay free of machine-specific board and device glue. Machine-specific wiring for C64, C1541, IEC, datasette, cartridge, input, and media helper behavior is owned by Core machine/device definitions or host services.
+
+
+        ## Acceptance Criteria
+
+        - `ChipGlueBoundaryTests` prove moved and retired helper locations: duplicate/fake chip stubs are absent from `src/ViceSharp.Chips`, Core-owned device adapters exist, and shared chip files do not contain guarded C64/C1541 board policy.
+
+        - Focused tests cover the moved or guarded behavior for C64 memory map, processor port, CIA, VIA, SID, VIC-II/video, IEC/drive, standard cartridge mapping, C64 input/VKM, datasette/TAP, and media capture.
+
+        - The `ARCH-CHIPGLUE-001` audit document inventories every remaining `src/ViceSharp.Chips` type and maps each acceptance criterion to direct evidence.
+
+        - The x64sc lockstep/checkpoint gate passes after the remediation with `0` failed and `0` skipped tests.
+      status: pending
+      priority: high
+      area: ARCH
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-01
+        text: '`ChipGlueBoundaryTests` prove moved and retired helper locations: duplicate/fake chip stubs are absent from `src/ViceSharp.Chips`, Core-owned device adapters exist, and shared chip files do not contain guarded C64/C1541 board policy.'
+        isSatisfied: false
+      - id: ac-02
+        text: Focused tests cover the moved or guarded behavior for C64 memory map, processor port, CIA, VIA, SID, VIC-II/video, IEC/drive, standard cartridge mapping, C64 input/VKM, datasette/TAP, and media capture.
+        isSatisfied: false
+      - id: ac-03
+        text: The `ARCH-CHIPGLUE-001` audit document inventories every remaining `src/ViceSharp.Chips` type and maps each acceptance criterion to direct evidence.
+        isSatisfied: false
+      - id: ac-04
+        text: The x64sc lockstep/checkpoint gate passes after the remediation with `0` failed and `0` skipped tests.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1789898+00:00
+      updatedAt: 2026-10-19T16:58:52.1790088+00:00
+    - id: TEST-BASELINE-CORRECTNESS-001
+      title: Approved baseline regression repairs
+      description: >-
+        Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.
+
+        Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.
+
+        Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.
+
+        Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.
+
+        - **ac-02**: Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.
+
+        - **ac-03**: Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.
+
+        - **ac-04**: Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.
+      status: pending
+      priority: high
+      area: BASELINE
+      testType: unit
+      notes: Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.
+        isSatisfied: false
+      - id: ac-02
+        text: Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.
+        isSatisfied: false
+      - id: ac-03
+        text: Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.
+        isSatisfied: false
+      - id: ac-04
+        text: Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1800582+00:00
+      updatedAt: 2026-10-19T16:58:52.1800775+00:00
+    - id: TEST-CFG-001
+      title: Configuration and Resource Tests
+      description: >-
+        ## TEST-CFG-001: Configuration and Resource Tests
+
+
+        **ID:** TEST-CFG-001
+
+        **Title:** Configuration and Resource Tests
+
+        **Priority:** P1 -- Important
+
+
+        ### Condition
+
+
+        Resource files, ROM/romset selection, palettes, hotkeys, autostart, peripherals, RAM init, debug resources, and limiter settings are verified with configuration and host service tests.
+
+
+        Desktop C64 bootstrap coverage verifies complete local-set reuse, configured-root precedence over the per-user cache, acquisition of only missing default ROMs, canonical filenames, pinned-hash rejection, offline cache reuse, and actionable acquisition failure/cancellation. Startup coverage verifies a ROM-backed C64 with video after provisioning and no silent minimal-machine fallback. Generic/headless factories and remote-host connections must not trigger local downloads; UI/runtime boundary tests remain applicable.
+
+
+        ### Traceability
+
+
+        - **Related FR Area(s):** FR-CFG
+
+        - **Related FR:** FR-CFG-002
+
+        - **Related TRs:** TR-LIB-001, TR-MVVM-001
+      status: in_progress
+      priority: high
+      area: CFG
+      testType: unit
+      notes: 'Narrow reconciliation of requirements materially changed by the Linux desktop work. Canonical source: docs/requirements/test/TEST-Requirements.md:415. Existing Linux workspace layer-1 inventory is empty; create this canonical ID without migrating unrelated historical requirements. Desktop bootstrap/root precedence/pinned hashes/offline/failure/no silent minimal/video and boundary coverage. Status remains partial/in_progress; no whole-requirement completion claim. Structured criteria are initially unsatisfied pending explicit evidence reconciliation. Preserve broad platform/packaging/ROM scope beyond the verified Linux slice.'
+      acceptanceCriteria:
+      - id: ac-1
+        text: Resource files, ROM/romset selection, palettes, hotkeys, autostart, peripherals, RAM init, debug resources, and limiter settings are verified with configuration and host service tests.
+        isSatisfied: false
+      - id: ac-2
+        text: Desktop C64 bootstrap coverage verifies complete local-set reuse, configured-root precedence over the per-user cache, acquisition of only missing default ROMs, canonical filenames, pinned-hash rejection, offline cache reuse, and actionable acquisition failure/cancellation. Startup coverage verifies a ROM-backed C64 with video after provisioning and no silent minimal-machine fallback. Generic/headless factories and remote-host connections must not trigger local downloads; UI/runtime boundary tests remain applicable.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1810990+00:00
+      updatedAt: 2026-10-19T16:58:52.1811192+00:00
+    - id: TEST-CHIPSTATE-001
+      title: Per-tick chip-state capture tests
+      description: Recorder tests with a fake stateful device verify per-tick chip-state capture and that Snapshot deep-copies (a later capture does not corrupt an earlier snapshot). VIC/SID/CIA/PLA CaptureState/DecodeState round-trip exercised end to end via GetChipStateAtTick.
+      status: completed
+      priority: medium
+      area: CHIPSTATE
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: OnInstructionCompleted captures the device state into the tick
+        isSatisfied: true
+      - id: ac-2
+        text: Snapshot deep-copies chip state across ring rotation
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1814431+00:00
+      updatedAt: 2026-10-19T16:58:52.1814629+00:00
+    - id: TEST-CIA-001
+      title: CIA and Keyboard Matrix Tests
+      description: CIA timers, TOD, keyboard matrix, joystick interaction, serial shift register, IRQ, and NMI behavior are verified with unit and integration tests.
+      status: pending
+      priority: medium
+      area: CIA
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1818688+00:00
+      updatedAt: 2026-10-19T16:58:52.1818901+00:00
+    - id: TEST-CLI-LAUNCHER-001
+      title: CLI Launcher and Testbench Smoke Tests
+      description: VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`, PRG autostart dispatch, help text, and process smoke behavior are verified with parser, stub entrypoint, and real console process tests.
+      status: pending
+      priority: medium
+      area: CLI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1821017+00:00
+      updatedAt: 2026-10-19T16:58:52.1821217+00:00
+    - id: TEST-COMPLETION-001
+      title: Exhaustive approved-work completion evidence
+      description: >-
+        Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+
+        Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
+
+        Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
+
+        Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
+
+        Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+
+        - **ac-02**: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
+
+        - **ac-03**: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
+
+        - **ac-04**: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
+
+        - **ac-05**: Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.
+
+        - **ac-06**: Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence.
+      status: pending
+      priority: high
+      area: COMPLETION
+      testType: unit
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+        isSatisfied: false
+      - id: ac-02
+        text: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
+        isSatisfied: false
+      - id: ac-03
+        text: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
+        isSatisfied: false
+      - id: ac-04
+        text: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
+        isSatisfied: false
+      - id: ac-05
+        text: Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.
+        isSatisfied: false
+      - id: ac-06
+        text: 'Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence.'
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1835340+00:00
+      updatedAt: 2026-10-19T16:58:52.1835545+00:00
+    - id: TEST-CPU-001
+      title: CPU Execution Reference Tests
+      description: CPU instruction, timing, interrupt, and port behavior is verified with unit tests and VICE/Lorenz-style reference comparisons.
+      status: pending
+      priority: medium
+      area: CPU
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1837196+00:00
+      updatedAt: 2026-10-19T16:58:52.1837394+00:00
+    - id: TEST-CPUTICK-001
+      title: Per-CPU tick counter and rate tests
+      description: Unit tests covering ExecutedCycles increments per executed (non-stolen) cycle, per-CPU rate = executed/elapsed/target, reset zeroes counters, and the status surface lists host and peripheral CPU rates distinctly.
+      status: pending
+      priority: high
+      area: CPUTICK
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1839418+00:00
+      updatedAt: 2026-10-19T16:58:52.1839615+00:00
+    - id: TEST-CRT-001
+      title: Cartridge Mapping Tests
+      description: Standard, Ocean, EasyFlash, Action Replay, Retro Replay, and Final Cartridge mapping behavior is verified with cartridge image and banking tests.
+      status: pending
+      priority: medium
+      area: CRT
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1841309+00:00
+      updatedAt: 2026-10-19T16:58:52.1841507+00:00
+    - id: TEST-CTX-001
+      title: Test TEST-CTX-001
+      description: 'Full transition table + menu neutralization + neutral push + UI-nav mapping. Acceptance: every (state,input) edge deterministic; A does not fire in menu; one-shot neutral push emitted.'
+      status: pending
+      priority: medium
+      area: CTX
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1843318+00:00
+      updatedAt: 2026-10-19T16:58:52.1843515+00:00
+    - id: TEST-DEPS-202607-001
+      title: Dependency upgrade slice gates (2026-07 wave)
+      description: 'Each upgrade slice S1-S8 exits on: dotnet restore + Release build with TreatWarningsAsErrors + slice-focused test filter + the full filtered TestHarness suite at 100 percent green (0 failed, 21 skipped baseline, >= 2594 passed; filter Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy). S3 adds an interactive Avalonia smoke; S6 proves nuget.org-only restore for aiUnit/RemoteControl; S7 proves PackNuget locally; S8 proves the source generator loads under the raised SDK floor (Roslyn 5.6).'
+      status: completed
+      priority: medium
+      area: DEPS
+      testType: unit
+      notes: 'All slice gates executed and green: full filtered suite 0 failed / 21 skipped every run (totals 2612-2615 inside the proven-cosmetic trx wobble); S3 live gRPC smoke (speed probe real-time, limiter bands 49.9-199.6 vs 50-200); S6 cleared-cache nuget.org-only restore + AiReview discovery 5 / non-AI 3/3; S7 PackNuget local (13 packages); S8 generator load proven under Roslyn 5.6 with machine-construction 201/201.'
+      acceptanceCriteria:
+      - id: ac-1
+        text: Every upgrade slice exits with the full filtered suite at 0 failed and stable skips, plus its slice-specific proof.
+        isSatisfied: true
+        evidence: Local gates S1-S8 all 0 failed / 21 skipped; CI runs 1086, 1087, 1088, 1089, 1091, 1092, 1093, 1094, 1095 all succeeded.
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1849608+00:00
+      updatedAt: 2026-10-19T16:58:52.1849808+00:00
+    - id: TEST-DRV-001
+      title: Drive and IEC Tests
+      description: Drive CPU/timing, image formats, GCR, IEC bus protocol, fast loader, and host media attachment behavior are verified with smoke, protocol, and reference tests.
+      status: in_progress
+      priority: medium
+      area: DRV
+      testType: unit
+      notes: ''
+      acceptanceCriteria:
+      - id: test-drv-ac-1
+        text: Tests prove mounted D64 directory and file operations execute through IEC bus line activity.
+        isSatisfied: false
+      - id: test-drv-ac-2
+        text: Tests prove the same D64 operations complete with correct directory and file data over the IEC path.
+        isSatisfied: false
+      - id: test-drv-ac-3
+        text: Focused IEC/D64 tests run with zero failed and zero skipped tests.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1853496+00:00
+      updatedAt: 2026-10-19T16:58:52.1853695+00:00
+    - id: TEST-DRV1540-LOCKSTEP-001
+      title: 1540 full lockstep gates
+      description: 'Boot witness: drive {PC,A,X,Y,P,SP} equals native x64sc (Drive8Type=1540, TDE=1) at equal drive clocks sampled every 19,656 host cycles over 2M host cycles, plus host CPU state. Media gate: KERNAL-CLOSE anchored LOAD convergence from frostpoint.d64 over 30 emulated seconds.'
+      status: pending
+      priority: high
+      area: DRV1540
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1856050+00:00
+      updatedAt: 2026-10-19T16:58:52.1856248+00:00
+    - id: TEST-DRV1541II-LOCKSTEP-001
+      title: 1541-II full lockstep gates
+      description: Boot witness + anchored D64 LOAD gate vs native x64sc with Drive8Type=1542, same procedure as TEST-DRV1540-LOCKSTEP-001.
+      status: pending
+      priority: high
+      area: DRV1541II
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1857899+00:00
+      updatedAt: 2026-10-19T16:58:52.1858097+00:00
+    - id: TEST-DRV1571-LOCKSTEP-001
+      title: 1571 full lockstep gates
+      description: Boot witness (no disk; WD1770 idle-state parity implied) + anchored LOAD gates from BOTH frostpoint.d64 and a committed canonical frostpoint.d71 (349,696 bytes, size-pinned) vs native x64sc with Drive8Type=1571.
+      status: pending
+      priority: high
+      area: DRV1571
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1860074+00:00
+      updatedAt: 2026-10-19T16:58:52.1860270+00:00
+    - id: TEST-DRV1581-LOCKSTEP-001
+      title: 1581 full lockstep gates
+      description: Boot witness + anchored LOAD gate from a committed canonical frostpoint.d81 (819,200 bytes, size-pinned) vs native x64sc with Drive8Type=1581; the LOAD exercises the WD1770 type-2 read path end-to-end.
+      status: pending
+      priority: high
+      area: DRV1581
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1862365+00:00
+      updatedAt: 2026-10-19T16:58:52.1862671+00:00
+    - id: TEST-DRVLED-001
+      title: Per-drive activity LED
+      description: Drive DOS ROM setting VIA2 PB3 sets the drive LedOn; per-drive status DTO reflects it; the card LED view-model binds it.
+      status: pending
+      priority: medium
+      area: DRVLED
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1864327+00:00
+      updatedAt: 2026-10-19T16:58:52.1864635+00:00
+    - id: TEST-DRVLIFE-001
+      title: Drive attach/detach lifecycle
+      description: Attach creates+clocks+bus-connects the drive instance; detach unregisters from clock and disconnects from bus.
+      status: pending
+      priority: medium
+      area: DRVLIFE
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1866835+00:00
+      updatedAt: 2026-10-19T16:58:52.1867036+00:00
+    - id: TEST-DRV-MOTOR-001
+      title: 'IecDriveMotorRampTests: 1541 motor ramp (5 tests)'
+      description: After SetMotor(true) and 300,000 Tick() calls, MotorRotationCycles>0. Before 300,000, stays at 0. Motor off/on resets ramp. ReadSector(18,0) returns BAM bytes 0x12/0x01. 5 pass.
+      status: closed
+      priority: medium
+      area: DRV
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1869043+00:00
+      updatedAt: 2026-10-19T16:58:52.1869254+00:00
+    - id: TEST-DRVTRUE-001
+      title: Per-drive True Drive toggle + runtime gating
+      description: 'VM: TrueDrive toggles per drive (default off). Runtime: with TrueDrive on, the session uses the coordinator true-drive 1541 path (LOAD works); with it off, the simulated drive is used and existing tests stay green.'
+      status: pending
+      priority: high
+      area: DRVTRUE
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1871313+00:00
+      updatedAt: 2026-10-19T16:58:52.1871507+00:00
+    - id: TEST-DRV-TYPE-001
+      title: Native shim drive-type control
+      description: 'DriveTypeShimTests (Collection NativeVice): vice_drive_set_type sets Drive8Type and vice_drive_get_type reads it back; out-of-range units rejected; after set+reset the native drive PC lands in $8000-$FFFF for 32KB-ROM models (proves memiec re-init); vice_drivecpu_get_clk is monotonic under stepping; vice_drivecpu_execute_all callable; Drive8Type re-baselines to 1541 on the next machine create (no cross-test residue).'
+      status: pending
+      priority: high
+      area: DRV
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1874142+00:00
+      updatedAt: 2026-10-19T16:58:52.1874398+00:00
+    - id: TEST-GAMEPAD-001
+      title: Test TEST-GAMEPAD-001
+      description: 'Off-console converter/merge/SOCD/fire/profile/pump behavior. Acceptance: 0 failed/0 skipped.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1876014+00:00
+      updatedAt: 2026-10-19T16:58:52.1876212+00:00
+    - id: TEST-GAMEPAD-002
+      title: Test TEST-GAMEPAD-002
+      description: 'On-console live-controller smoke. Acceptance: live pad drives JOY2/JOY1 with fire per mapping.'
+      status: pending
+      priority: medium
+      area: GAMEPAD
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1877738+00:00
+      updatedAt: 2026-10-19T16:58:52.1877935+00:00
+    - id: TEST-GRPC-001
+      title: gRPC Boundary Tests
+      description: Protocol, status, control, input, monitor, media, snapshot, capture, and boundary enforcement paths are verified through generated clients and host integration tests.
+      status: pending
+      priority: medium
+      area: GRPC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1879696+00:00
+      updatedAt: 2026-10-19T16:58:52.1879895+00:00
+    - id: TEST-HOST-001
+      title: Host Service Tests
+      description: Host lifecycle, status, media, state, capture, diagnostics, and session ownership behavior are verified with in-process host service tests.
+      status: pending
+      priority: medium
+      area: HOST
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1881530+00:00
+      updatedAt: 2026-10-19T16:58:52.1881725+00:00
+    - id: TEST-HOST-DIAG-001
+      title: Diagnostics Host Attach Tests
+      description: Diagnostics protocol descriptors, session enumeration, host info, current UI session resolution, performance snapshots, streaming snapshots, attach file lifecycle, and development-scoped reflection are verified with red-first unit and in-process gRPC tests.
+      status: pending
+      priority: high
+      area: HOST
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1883860+00:00
+      updatedAt: 2026-10-19T16:58:52.1884055+00:00
+    - id: TEST-IECDECODE-001
+      title: IEC protocol decoder
+      description: Canonical captured sequences (LOAD command frame, directory read) decode to the expected IEC event list.
+      status: pending
+      priority: high
+      area: IECDECODE
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1885682+00:00
+      updatedAt: 2026-10-19T16:58:52.1885879+00:00
+    - id: TEST-IECELEC-001
+      title: Faithful IEC electrical idle parity
+      description: With the live electrical model + true-drive, normal C64 idle CIA2 PA reads $47 and C64GS reads $07; native CIA2-IO lockstep stays green.
+      status: pending
+      priority: high
+      area: IECELEC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1887586+00:00
+      updatedAt: 2026-10-19T16:58:52.1887805+00:00
+    - id: TEST-IECHOTPLUG-001
+      title: Hot drive add/remove and renumber tests
+      description: Tests that a drive attached mid-run answers on the bus, a detached drive removes its pulls and recomputes line states, and a renumbered drive answers its new device number.
+      status: pending
+      priority: medium
+      area: IECHOTPLUG
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1889788+00:00
+      updatedAt: 2026-10-19T16:58:52.1889986+00:00
+    - id: TEST-IECLOAD-001
+      title: True-drive LOAD over IEC
+      description: LOAD"*",8,1 and LOAD"$",8 complete over IEC against a real D64 on a single-system C64.
+      status: pending
+      priority: high
+      area: IECLOAD
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1891480+00:00
+      updatedAt: 2026-10-19T16:58:52.1891676+00:00
+    - id: TEST-IECMON-001
+      title: IEC scope panel
+      description: Scope view-model binds trace + decoded events; host trace-delta contract returns samples since cycle N; step/rewind move the cursor.
+      status: pending
+      priority: medium
+      area: IECMON
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1893327+00:00
+      updatedAt: 2026-10-19T16:58:52.1893525+00:00
+    - id: TEST-IECSPY-001
+      title: IEC bus snapshot/spy
+      description: Snapshot reports idle all-high/no-talkers; single puller -> line low + talker; multi-puller wired-AND lists all; release restores high; snapshot never mutates bus. DONE (5/5 green).
+      status: pending
+      priority: high
+      area: IECSPY
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1895705+00:00
+      updatedAt: 2026-10-19T16:58:52.1895966+00:00
+    - id: TEST-IEC-TIMING-001
+      title: 'IecTimingTests: ATN response within spec window (5 tests)'
+      description: After setting IecBus.Atn=false and calling Tick() up to 985 times, Clock==false and Data==false. After ATN release and Tick() up to 985 times, both return true. 5 pass.
+      status: closed
+      priority: medium
+      area: IEC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1897985+00:00
+      updatedAt: 2026-10-19T16:58:52.1898180+00:00
+    - id: TEST-IECTRACE-001
+      title: IEC trace recorder
+      description: Edge capture order + cycle stamps; step-boundary marks; ring bound; rewind re-derivation equals original trace.
+      status: pending
+      priority: high
+      area: IECTRACE
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1899973+00:00
+      updatedAt: 2026-10-19T16:58:52.1900168+00:00
+    - id: TEST-INPROC-001
+      title: Test TEST-INPROC-001
+      description: 'Assembly-reference (no ASP.NET in the portable lib) + moved-type re-run. Acceptance: EmulationPumpService.Assembly == Host.InProcess with no Microsoft.AspNetCore.* referenced.'
+      status: pending
+      priority: medium
+      area: INPROC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1901975+00:00
+      updatedAt: 2026-10-19T16:58:52.1902172+00:00
+    - id: TEST-INPROC-002
+      title: Test TEST-INPROC-002
+      description: 'Facade + determinism gate (bit-exact TotalCycles across two runs) + explicit-port + geometry + single-worker. Acceptance: bit-exact repro; BufferLength==FrameBuffer.Length; AppliedWorkerAffinityMask==null.'
+      status: pending
+      priority: medium
+      area: INPROC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1904020+00:00
+      updatedAt: 2026-10-19T16:58:52.1904217+00:00
+    - id: TEST-INPROC-003
+      title: Test TEST-INPROC-003
+      description: 'Gate zero-P/Invoke + inline-sleep-seam + no-thread-growth + Pause-unparks. Acceptance: no [DllImport]/[LibraryImport]; no new timer thread; Pause unparks.'
+      status: pending
+      priority: medium
+      area: INPROC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1905921+00:00
+      updatedAt: 2026-10-19T16:58:52.1906117+00:00
+    - id: TEST-INPROC-DEVICE
+      title: Test TEST-INPROC-DEVICE
+      description: 'On-console boot throughput (>=100 frames/2s, unpinned, two emulation threads). Acceptance: sustained on-device throughput.'
+      status: pending
+      priority: medium
+      area: INPROC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1907827+00:00
+      updatedAt: 2026-10-19T16:58:52.1908022+00:00
+    - id: TEST-INPUT-001
+      title: Input and VKM Tests
+      description: >-
+        ## TEST-INPUT-001: Input and VKM Tests
+
+
+        **ID:** TEST-INPUT-001
+
+        **Title:** Input and VKM Tests
+
+        **Priority:** P1 -- Important
+
+
+        ### Condition
+
+
+        Keyboard, joystick, mouse, lightpen, paddle, and VICE VKM behavior is verified with parser, matrix, protocol, and machine integration tests.
+
+
+        Desktop packaging verification checks every vendored C64 `.vkm` file in the installable archive against its source content. `BundledKeyboardMapTests` verifies host discovery of the packaged alternate layouts without an external VICE installation and preserves configured data-root priority (FR-INP-006, TR-INPUT-VKM-001).
+
+
+        ### Traceability
+
+
+        - **Related FR Area(s):** FR-INP
+      status: in_progress
+      priority: high
+      area: INPUT
+      testType: unit
+      notes: 'Narrow reconciliation of requirements materially changed by the Linux desktop work. Canonical source: docs/requirements/test/TEST-Requirements.md:185. Existing Linux workspace layer-1 inventory is empty; create this canonical ID without migrating unrelated historical requirements. Bundled map byte-identity packaging and resolver discovery/priority verification. Status remains partial/in_progress; no whole-requirement completion claim. Structured criteria are initially unsatisfied pending explicit evidence reconciliation. Preserve broad platform/packaging/ROM scope beyond the verified Linux slice.'
+      acceptanceCriteria:
+      - id: ac-1
+        text: Keyboard, joystick, mouse, lightpen, paddle, and VICE VKM behavior is verified with parser, matrix, protocol, and machine integration tests.
+        isSatisfied: false
+      - id: ac-2
+        text: Desktop packaging verification checks every vendored C64 `.vkm` file in the installable archive against its source content. `BundledKeyboardMapTests` verifies host discovery of the packaged alternate layouts without an external VICE installation and preserves configured data-root priority (FR-INP-006, TR-INPUT-VKM-001).
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1916031+00:00
+      updatedAt: 2026-10-19T16:58:52.1916228+00:00
+    - id: TEST-INSTALL-001
+      title: Test TEST-INSTALL-001
+      description: 'InstallerFileAssociationTests: wxs registers each DesktopFileAssociations entry and open command; TryGetOpenPath skips exe/flags and unknown extensions.'
+      status: pending
+      priority: medium
+      area: INSTALL
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1917948+00:00
+      updatedAt: 2026-10-19T16:58:52.1918143+00:00
+    - id: TEST-MED-001
+      title: Media Capture Tests
+      description: >-
+        ## TEST-MED-001: Media Capture Tests
+
+
+        **ID:** TEST-MED-001
+
+        **Title:** Media Capture Tests
+
+        **Priority:** P1 -- Important
+
+
+        ### Condition
+
+
+        Screenshot, video, audio, synchronized capture, and format selection behavior are verified through capture metadata and round-trip output tests.
+
+
+        ### Traceability
+
+
+        - **Related FR Area(s):** FR-MED
+      status: in_progress
+      priority: high
+      area: MED
+      testType: unit
+      notes: PR7 regression remediation. Canonical source docs/requirements/test/TEST-Requirements.md. Capture only requirements relevant to explicitly requested fixes, preserving existing text; not a whole-requirement completion or historical project migration. Scope remains partial, with retained test evidence in TestResults/pr7-resolution.
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1921870+00:00
+      updatedAt: 2026-10-19T16:58:52.1922066+00:00
+    - id: TEST-MED-002
+      title: BMP all/unique frame export tests
+      description: FrameSequenceCapture unique-dedup, drop-on-mismatch, and host frames=unique routing.
+      status: pending
+      priority: high
+      area: MED
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1923522+00:00
+      updatedAt: 2026-10-19T16:58:52.1923765+00:00
+    - id: TEST-MED-003
+      title: WAV recorder + tap tests
+      description: WAV header/data correctness, after-stop ignore, concurrent-stop lock safety; CaptureAudioTap clamp/forward.
+      status: pending
+      priority: high
+      area: MED
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1925254+00:00
+      updatedAt: 2026-10-19T16:58:52.1925446+00:00
+    - id: TEST-MED-004
+      title: ffmpeg muxed-recording integration tests
+      description: ffprobe-verified video+audio streams; Start failure cleanup; BackgroundByteWriter ordering/fault.
+      status: pending
+      priority: high
+      area: MED
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1927261+00:00
+      updatedAt: 2026-10-19T16:58:52.1927459+00:00
+    - id: TEST-MEM-001
+      title: Memory and Banking Tests
+      description: Address decoding, RAM-under-ROM, Ultimax, VIC bank selection, color RAM, and stack/zero-page behavior are verified with unit and integration tests.
+      status: pending
+      priority: medium
+      area: MEM
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1929207+00:00
+      updatedAt: 2026-10-19T16:58:52.1929401+00:00
+    - id: TEST-MON-001
+      title: Monitor Tests
+      description: Disassembly, memory display, breakpoints, register operations, bank selection, watch expressions, and monitor RPC behavior are verified through monitor engine tests.
+      status: pending
+      priority: medium
+      area: MON
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1931060+00:00
+      updatedAt: 2026-10-19T16:58:52.1931252+00:00
+    - id: TEST-NATIVE-LIFECYCLE-001
+      title: Bounded and isolated native oracle lifecycle
+      description: >-
+        Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.
+
+        Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.
+
+        Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.
+
+        Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.
+
+        Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.
+
+        - **ac-02**: Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.
+
+        - **ac-03**: Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.
+
+        - **ac-04**: Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.
+
+        - **ac-05**: Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.
+      status: pending
+      priority: high
+      area: NATIVE
+      testType: unit
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.
+        isSatisfied: false
+      - id: ac-02
+        text: Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.
+        isSatisfied: false
+      - id: ac-03
+        text: Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.
+        isSatisfied: false
+      - id: ac-04
+        text: Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.
+        isSatisfied: false
+      - id: ac-05
+        text: Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1943026+00:00
+      updatedAt: 2026-10-19T16:58:52.1943227+00:00
+    - id: TEST-NATIVERESIDUE-001
+      title: Native shim .vsf-resume residue probes (TEST-NATIVE-RESIDUE-01/02)
+      description: "NativeResidueDiagTests: probe 01 diffs a fresh machine's 200-cycle boot state before/after a demo .vsf resume on a scratch machine; probe 02 replicates the post-activity-reset divergence (boot + full PAL frame + reset + per-cycle walk 140-260 sampling DD00/DD01, CIA1+CIA2, VIC beam, CPU). Guards the PLAN-NATIVERESIDUE-001 mechanism fix: vice_machine_create_model re-baselines Drive{8..11}TrueEmulation to the VICE default 1 via resources_set_int so a has_tde=0 DRIVE8 snapshot module cannot disable True Drive Emulation process-wide."
+      status: pending
+      priority: high
+      area: NATIVERESIDUE
+      testType: unit
+      notes: 'Red-first receipts: probe 02 failed pre-fix with walk[140+] DD00=47 vs C7, CIA2 PA 57 vs D7, postReset.dd00 3F vs BF; green post-fix. Full suite single-process: Failed 0 / Passed 2594 / Skipped 21 / Total 2615 (2026-07-08, commit ba0f94f).'
+      acceptanceCriteria:
+      - id: ac-1
+        text: Fresh-machine boot state is bit-identical before and after a .vsf snapshot resume in the same process.
+        isSatisfied: true
+        evidence: TEST-NATIVE-RESIDUE-01 green post-fix; poison combo 36 passed / 0 failed / 1 skipped in one process.
+      - id: ac-2
+        text: Post-activity-reset per-cycle trace (DD00/CIA/VIC/CPU, cycles 140-260) is bit-identical before and after a .vsf resume.
+        isSatisfied: true
+        evidence: TEST-NATIVE-RESIDUE-02 green post-fix; full suite one process 0 failed / 2594 passed.
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1955784+00:00
+      updatedAt: 2026-10-19T16:58:52.1955989+00:00
+    - id: TEST-NATIVERESIDUE-002
+      title: Drive attach/detach clock residue zeroed at machine boundary
+      description: 'A machine created after a scratch machine attaches/detaches a disk (or resumes a has_tde=0 .vsf) must present drive-8 attach_clk/detach_clk/attach_detach_clk == 0. Guards drive-snapshot.c uninitialized-stack + shim create-time re-baseline. Code: NativeResidueDiagTests.FreshMachine_DriveAttachDetachClocks_AreZero_AfterResidue (label TEST-NATIVE-RESIDUE-03).'
+      status: pending
+      priority: high
+      area: NATIVERESIDUE
+      testType: unit
+      notes: 'RED before fix: got 99746/99746/99746.'
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1958942+00:00
+      updatedAt: 2026-10-19T16:58:52.1959144+00:00
+    - id: TEST-NATIVERESIDUE-003
+      title: Drive CPU cycle_accum residue zeroed at machine boundary
+      description: 'A machine created after a scratch machine resumes a true-drive .vsf and runs activity must present drive-8 cycle_accum == 0. Guards drivecpu_reset_clk cycle_accum omission. Code: NativeResidueDiagTests.FreshMachine_DriveCycleAccum_IsZero_AfterSnapshotResumeActivity (label TEST-NATIVE-RESIDUE-04).'
+      status: pending
+      priority: high
+      area: NATIVERESIDUE
+      testType: unit
+      notes: 'RED before fix: got 30820.'
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1961712+00:00
+      updatedAt: 2026-10-19T16:58:52.1961907+00:00
+    - id: TEST-PACESEL-001
+      title: Pacing strategy selection tests
+      description: PacingStrategySelectionTests (factory + live SetStrategy), SettingsServiceHostTests (UpdateSettings applies PacingStrategy to the pump and round-trips it), and AttachPanelViewModelTests (pacing change flags pending, not restart).
+      status: completed
+      priority: medium
+      area: PACESEL
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: SetStrategy on a not-started pump switches GateName immediately; unknown defaults to Semaphore
+        isSatisfied: true
+      - id: ac-2
+        text: UpdateSettings with a VICE pacing strategy sets the pump gate to VICE and round-trips vice
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1965242+00:00
+      updatedAt: 2026-10-19T16:58:52.1965438+00:00
+    - id: TEST-PERF-RUNFRAME-001
+      title: C64 PAL RunFrame Performance Tests
+      description: >-
+        The benchmark harness builds a real-ROM C64 PAL machine through `ArchitectureBuilder`, measures `IMachine.RunFrame()` after warmup over the required 600-frame window, reports median and p95 frame time, and proves the measured hot path allocates zero bytes on the current thread.
+
+
+        ## Acceptance Criteria
+
+        - `C64PalRunFrameBenchmark` builds Commodore 64 PAL through `ArchitectureBuilder` with the real ROM provider.
+
+        - `RunFramePerfProbe` reports median `<= 18 ms`, p95 `<= 22 ms`, and `0` allocated bytes for the 60 warmup / 600 measured frame workflow.
+
+        - Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID tests pass with `0` failed and `0` skipped.
+
+        - Lockstep and checkpoint gates pass with `0` failed and `0` skipped.
+
+        - BenchmarkDotNet completes `C64PalRunFrameBenchmark` and reports no managed allocation.
+      status: completed
+      priority: high
+      area: PERF
+      testType: unit
+      notes: 'Implemented by tests/ViceSharp.Benchmarks and focused TestHarness gates on PR #3.'
+      acceptanceCriteria:
+      - id: ac-benchmark-real-pal
+        text: Benchmark/probe builds Commodore 64 PAL through ArchitectureBuilder with the real ROM provider.
+        isSatisfied: true
+        evidence: BenchmarksSmokeTests.C64PalRunFrameBenchmark_UsesRealC64Pal passed
+      - id: ac-probe-thresholds
+        text: RunFramePerfProbe 60/600 reports median <= 18 ms, p95 <= 22 ms, and 0 allocated bytes.
+        isSatisfied: true
+        evidence: median=1.575ms; p95=2.753ms; allocated=0 bytes
+      - id: ac-correctness-gates
+        text: Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID and Lockstep/Checkpoint gates pass with 0 failed and 0 skipped tests.
+        isSatisfied: true
+        evidence: focused=182 passed; lockstep/checkpoint=333 passed
+      - id: ac-bdn
+        text: BenchmarkDotNet C64PalRunFrameBenchmark completes and reports no managed allocation.
+        isSatisfied: true
+        evidence: BenchmarkDotNet mean=2.262ms median=2.255ms; Allocated reported none
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1973944+00:00
+      updatedAt: 2026-10-19T16:58:52.1974144+00:00
+    - id: TEST-PRF-001
+      title: Machine Profile Tests
+      description: C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for required devices, ROMs, clocks, and address maps.
+      status: pending
+      priority: medium
+      area: PRF
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1975732+00:00
+      updatedAt: 2026-10-19T16:58:52.1975964+00:00
+    - id: TEST-PUBSUB-001
+      title: Pub/Sub Event Bus Correctness and Performance Tests
+      description: Focused unit, smoke, and benchmark-probe coverage shall verify the Pub/Sub event bus contract, including typed/raw/packed delivery, unsubscription, deterministic delivery order, collision isolation, route growth, message pool exhaustion/reset, frame arena payloads, zero publish allocation, and release probe performance.
+      status: completed
+      priority: high
+      area: PUBSUB
+      testType: unit
+      notes: Implemented by tests/ViceSharp.TestHarness/LockFreePubSubTests.cs, tests/ViceSharp.TestHarness/BenchmarksSmokeTests.cs, tests/ViceSharp.Benchmarks/PubSubBenchmarks.cs, and tests/ViceSharp.Benchmarks/PubSubPerfProbe.cs in commit b5d38630a4d6feb63eecd6ffd86883b2197dcbd2.
+      acceptanceCriteria:
+      - id: ac-test-pubsub-001-focused
+        text: Focused Pub/Sub test suite and benchmark smoke tests pass.
+        isSatisfied: true
+        evidence: 'dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj --no-restore --filter FullyQualifiedName~LockFreePubSubTests|FullyQualifiedName~BenchmarksSmokeTests.PubSub => Passed: 22, Failed: 0'
+      - id: ac-test-pubsub-001-probe
+        text: Release quick probe proves the Pub/Sub performance targets without managed allocation.
+        isSatisfied: true
+        evidence: dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000 => publish-one=43.78ns publish-three=58.14ns publish-packed=35.62ns pool-rent-return=16.80ns arena-alloc=3.20ns allocated=0 bytes
+      - id: ac-test-pubsub-001-build
+        text: The full solution builds after the Pub/Sub implementation.
+        isSatisfied: true
+        evidence: dotnet build ViceSharp.slnx --no-restore => Build succeeded
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1983186+00:00
+      updatedAt: 2026-10-19T16:58:52.1983382+00:00
+    - id: TEST-QA-TESTSILENCE-001
+      title: WindowsAudioSessionMute engages, mutes, and restores the process audio session
+      description: 'WindowsAudioSessionMuteTests (tests/ViceSharp.TestHarness/Audio) verifies: when a render endpoint exists the fixture engages and the process Windows audio session reads muted (endpointExists equals IsEngaged, then muted is true); disposing an engaged fixture restores the prior mute state; and construction plus double-dispose never throw on any host. Validates TR-QA-TESTSILENCE-001.'
+      status: pending
+      priority: low
+      area: QA
+      testType: unit
+      notes: 3 of 3 green on a device-present box; commit 9b06b3b.
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1986374+00:00
+      updatedAt: 2026-10-19T16:58:52.1986570+00:00
+    - id: TEST-REMOTECTRL-001
+      title: RemoteControl server gating + root provider
+      description: >-
+        Tests prove the RemoteControl integration is off by default (no host started when VICESHARP_REMOTECONTROL_ENABLE is unset) and fails closed when enabled without a token; and that, when enabled with a token, the configured IRemoteControlRootProvider returns the live MainWindow. App-launch gate: connect the RemoteControl client tool and confirm the visual tree is readable.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Test unset enable switch and enabled-without-token startup; both expose no usable control host.
+
+        - **ac-02**: Launch the owned app with explicit valid enable/token settings; read capabilities and the live MainWindow tree over gRPC.
+
+        - **ac-03**: Verify missing/wrong bearer token rejection, loopback policy and separate denied/enabled action/frame permissions.
+
+        - **ac-04**: Retain the two fresh final-binary live passes and real gRPC CLI contract evidence required by TEST-REMOTECTRL-CLI-001 and TEST-COMPLETION-001.
+      status: pending
+      priority: medium
+      area: REMOTECTRL
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-01
+        text: Test unset enable switch and enabled-without-token startup; both expose no usable control host.
+        isSatisfied: false
+      - id: ac-02
+        text: Launch the owned app with explicit valid enable/token settings; read capabilities and the live MainWindow tree over gRPC.
+        isSatisfied: false
+      - id: ac-03
+        text: Verify missing/wrong bearer token rejection, loopback policy and separate denied/enabled action/frame permissions.
+        isSatisfied: false
+      - id: ac-04
+        text: Retain the two fresh final-binary live passes and real gRPC CLI contract evidence required by TEST-REMOTECTRL-CLI-001 and TEST-COMPLETION-001.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.1994087+00:00
+      updatedAt: 2026-10-19T16:58:52.1994329+00:00
+    - id: TEST-REMOTECTRL-CLI-001
+      title: Portable RemoteControl gRPC command line
+      description: >-
+        Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.
+
+        Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.
+
+        Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.
+
+        Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.
+
+        Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.
+
+        - **ac-02**: Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.
+
+        - **ac-03**: Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.
+
+        - **ac-04**: Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.
+
+        - **ac-05**: Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.
+      status: pending
+      priority: high
+      area: REMOTECTRL
+      testType: unit
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.
+        isSatisfied: false
+      - id: ac-02
+        text: Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.
+        isSatisfied: false
+      - id: ac-03
+        text: Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.
+        isSatisfied: false
+      - id: ac-04
+        text: Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.
+        isSatisfied: false
+      - id: ac-05
+        text: Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2003552+00:00
+      updatedAt: 2026-10-19T16:58:52.2003747+00:00
+    - id: TEST-REMOTE-INTEGRATION-001
+      title: Existing RomM and CSDb integration gate
+      description: >-
+        Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.
+
+        Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.
+
+        Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.
+
+        - **ac-02**: Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.
+
+        - **ac-03**: Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.
+      status: pending
+      priority: high
+      area: REMOTE
+      testType: unit
+      notes: Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.
+        isSatisfied: false
+      - id: ac-02
+        text: Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.
+        isSatisfied: false
+      - id: ac-03
+        text: Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2011081+00:00
+      updatedAt: 2026-10-19T16:58:52.2011277+00:00
+    - id: TEST-REVEXEC-001
+      title: Reverse step restores exact state
+      description: RewindCycle/RewindFrame restore exact prior state; step-then-rewind round-trips; ring eviction bound honored.
+      status: pending
+      priority: high
+      area: REVEXEC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2012880+00:00
+      updatedAt: 2026-10-19T16:58:52.2013090+00:00
+    - id: TEST-ROMM-AVUI-001
+      title: RomM Avalonia UI validation
+      description: Build, headless view-model, and end-to-end validation prove LibraryView and ListsView binding, connection, browse, search, list, collection, and launch behavior.
+      status: pending
+      priority: medium
+      area: ROMM
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2014839+00:00
+      updatedAt: 2026-10-19T16:58:52.2015035+00:00
+    - id: TEST-ROMM-DETAIL-001
+      title: RomM ROM detail validation
+      description: RomMGateway detail mapping and RomDetailViewModel add-to-collection behavior are proven by deterministic automated tests for files, cover, summary, launchability, and collection mutation.
+      status: pending
+      priority: medium
+      area: ROMM
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2016970+00:00
+      updatedAt: 2026-10-19T16:58:52.2017163+00:00
+    - id: TEST-ROMM-LAUNCH-001
+      title: Supported media and launch recovery
+      description: >-
+        ## TEST-ROMM-LAUNCH-001: Supported media and launch recovery
+
+
+        **ID:** TEST-ROMM-LAUNCH-001
+
+        **Title:** Supported media and launch recovery
+
+        **Priority:** P1 -- Important
+
+
+        ### Condition
+
+
+        Verify download completion and cache reuse, slot selection, supported D64/T64 attach and autostart, UI-visible failure and retry, and each desktop launch boundary. Unsupported G64/D71/D81 selections, including uppercase names, must disable attachment and issue neither a download request nor a launcher call. Use synthetic media and in-memory HTTP fixtures; never commit user game files.
+
+
+        ### Traceability
+
+
+        - Functional requirement: FR-ROMM-LAUNCH-001.
+
+        - Technical requirements: TR-LIB-001, TR-ROMM-SEC-001.
+
+        - Regressions: `MediaExtensionMapTests.UnsupportedDiskFormat_NotLaunchable`, `LibraryBrowseViewModelTests.UnsupportedDisk_AttachDisabled`, plus the existing D64/T64 and launcher suites.
+      status: in_progress
+      priority: high
+      area: ROMM
+      testType: unit
+      notes: PR7 regression remediation. Canonical source docs/requirements/test/TEST-RomM-Launch.md. Capture only requirements relevant to explicitly requested fixes, preserving existing text; not a whole-requirement completion or historical project migration. Scope remains partial, with retained test evidence in TestResults/pr7-resolution.
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2022889+00:00
+      updatedAt: 2026-10-19T16:58:52.2023083+00:00
+    - id: TEST-ROMM-PKG-001
+      title: RomM NuGet package validation
+      description: Package metadata and pack-output tests prove both RomM libraries are packable with the approved package ids, GPL-2.0-or-later metadata, and exact dependency graph.
+      status: pending
+      priority: medium
+      area: ROMM
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2024926+00:00
+      updatedAt: 2026-10-19T16:58:52.2025122+00:00
+    - id: TEST-ROMM-SEC-001
+      title: RomM trusted-boundary regression suite
+      description: >-
+        ## TEST-ROMM-SEC-001: RomM credential, origin, and download safety
+
+
+        **ID:** TEST-ROMM-SEC-001
+
+        **Title:** RomM trusted-boundary regression suite
+
+        **Priority:** P0 -- Critical
+
+
+        ### Condition
+
+
+        `RomMCoverImageSourceTests` verifies anonymous public covers and rejection of absolute authenticated-path inputs. `RomMGatewayDownloadTests` verifies filename containment and that truncated content never publishes a partial cache entry. `FileRomMConnectionStoreTests` verifies current-user DPAPI round-trip and immediate migration of legacy plaintext tokens. `LinuxSecretServiceRomMConnectionStoreTests` uses an injected command runner to verify Linux keyring round-trip, secret-free metadata and arguments, unavailable/locked keyring failures, cancellation, legacy migration, atomic replacement rollback, and successful replacement despite old-item cleanup failure. Deployment validation additionally performs a real Secret Service round-trip without logging credential values.
+
+
+        ### Traceability
+
+
+        - **Related FRs:** FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001
+
+        - **Related TR:** TR-ROMM-SEC-001
+      status: in_progress
+      priority: critical
+      area: ROMM
+      testType: unit
+      notes: 'Narrow reconciliation of requirements materially changed by the Linux desktop work. Canonical source: docs/requirements/test/TEST-Requirements.md:534. Existing Linux workspace layer-1 inventory is empty; create this canonical ID without migrating unrelated historical requirements. Linux injected-keyring tests and real Secret Service smoke without credential logging. Status remains partial/in_progress; no whole-requirement completion claim. Structured criteria are initially unsatisfied pending explicit evidence reconciliation. Preserve broad platform/packaging/ROM scope beyond the verified Linux slice.'
+      acceptanceCriteria:
+      - id: ac-1
+        text: '`RomMCoverImageSourceTests` verifies anonymous public covers and rejection of absolute authenticated-path inputs. `RomMGatewayDownloadTests` verifies filename containment and that truncated content never publishes a partial cache entry. `FileRomMConnectionStoreTests` verifies current-user DPAPI round-trip and immediate migration of legacy plaintext tokens. `LinuxSecretServiceRomMConnectionStoreTests` uses an injected command runner to verify Linux keyring round-trip, secret-free metadata and arguments, unavailable/locked keyring failures, cancellation, legacy migration, atomic replacement rollback, and successful replacement despite old-item cleanup failure. Deployment validation additionally performs a real Secret Service round-trip without logging credential values.'
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2035744+00:00
+      updatedAt: 2026-10-19T16:58:52.2035939+00:00
+    - id: TEST-SETTINGS-TXN-001
+      title: Truthful transactional Settings state
+      description: >-
+        Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.
+
+        Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.
+
+        Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.
+
+        Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.
+
+        Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.
+
+        Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.
+
+        Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.
+
+        Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.
+
+        - **ac-02**: Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.
+
+        - **ac-03**: Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.
+
+        - **ac-04**: Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.
+
+        - **ac-05**: Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.
+
+        - **ac-06**: Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.
+
+        - **ac-07**: Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.
+
+        - **ac-08**: Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.
+      status: pending
+      priority: high
+      area: SETTINGS
+      testType: unit
+      notes: Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.
+        isSatisfied: false
+      - id: ac-02
+        text: Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.
+        isSatisfied: false
+      - id: ac-03
+        text: Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.
+        isSatisfied: false
+      - id: ac-04
+        text: Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.
+        isSatisfied: false
+      - id: ac-05
+        text: Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.
+        isSatisfied: false
+      - id: ac-06
+        text: Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.
+        isSatisfied: false
+      - id: ac-07
+        text: 'Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.'
+        isSatisfied: false
+      - id: ac-08
+        text: Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2086785+00:00
+      updatedAt: 2026-10-19T16:58:52.2086990+00:00
+    - id: TEST-SID-001
+      title: SID Audio Behavior Tests
+      description: >-
+        ## TEST-SID-001: SID Audio Behavior Tests
+
+
+        **ID:** TEST-SID-001
+
+        **Title:** SID Audio Behavior Tests
+
+        **Priority:** P1 -- Important
+
+
+        ### Condition
+
+
+        Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external input, and multi-SID behavior are verified with deterministic audio/register tests.
+
+
+        For Linux host output, fake-device regressions verify platform selection, opt-out/headless silence, ordered PCM conversion, master volume/mute, bounded queues, pause/resume/stop/disposal, and missing or failed devices. Device loss must stop audio-driven pacing without changing SID synthesis. Unit tests do not open a real Linux audio device; installed-device smoke evidence is retained separately.
+
+
+        ### Traceability
+
+
+        - **Related FR Area(s):** FR-SID
+
+        - **Linux output mappings:** FR-SID-013, TR-PLAT-001; `LinuxSdlAudioBackendTests` and `ViceGateSoundRegulatorTests`.
+      status: in_progress
+      priority: high
+      area: SID
+      testType: unit
+      notes: 'Narrow reconciliation of requirements materially changed by the Linux desktop work. Canonical source: docs/requirements/test/TEST-Requirements.md:67. Existing Linux workspace layer-1 inventory is empty; create this canonical ID without migrating unrelated historical requirements. Fake-device Linux PCM, lifecycle, failure/pacing and silence; installed-device evidence separate. Status remains partial/in_progress; no whole-requirement completion claim. Structured criteria are initially unsatisfied pending explicit evidence reconciliation. Preserve broad platform/packaging/ROM scope beyond the verified Linux slice.'
+      acceptanceCriteria:
+      - id: ac-1
+        text: Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external input, and multi-SID behavior are verified with deterministic audio/register tests.
+        isSatisfied: false
+      - id: ac-2
+        text: For Linux host output, fake-device regressions verify platform selection, opt-out/headless silence, ordered PCM conversion, master volume/mute, bounded queues, pause/resume/stop/disposal, and missing or failed devices. Device loss must stop audio-driven pacing without changing SID synthesis. Unit tests do not open a real Linux audio device; installed-device smoke evidence is retained separately.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2096400+00:00
+      updatedAt: 2026-10-19T16:58:52.2096596+00:00
+    - id: TEST-SID-002
+      title: VICE-Compatible SID Pacing Runtime Validation
+      description: SID waveform centering, PCM equivalency, and Pieces of Light runtime capture validation prove that live audio back-pressure paces the emulator like VICE before and after runtime segment transitions.
+      status: completed
+      priority: high
+      area: SID
+      testType: unit
+      notes: Evidence includes SidCombinedWaveformTests, SidPcmEquivalencyTests, and vicesharp-pieces-release-space-final.mp4 with status sample CSV.
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2099052+00:00
+      updatedAt: 2026-10-19T16:58:52.2099248+00:00
+    - id: TEST-SIDAUDIO-001
+      title: SID phi2-rate pitch tests
+      description: SidClockRateTests drives the SID via the SystemClock and asserts OSC3 = 0x10 after 8192 master cycles at voice freq 0x8000 (was 0x01). SidAudioPumpTests recalibrated to ClockDivisor 1 (PalTicksPerFrame 19656) with sample counts unchanged.
+      status: completed
+      priority: high
+      area: SIDAUDIO
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: SidPhase_AdvancesAtPhi2Rate_WhenClockedBySystemClock passes (OSC3 == 0x10)
+        isSatisfied: true
+      - id: ac-2
+        text: SidAudioPumpTests sample-count assertions still pass after recalibration
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2102365+00:00
+      updatedAt: 2026-10-19T16:58:52.2102560+00:00
+    - id: TEST-SIDEBARUI-001
+      title: Collapse expander dock and glyph track the anchor
+      description: AttachPanelViewModelTests.CollapseExpander_DockAndGlyph_TrackAnchorSide asserts the expander dock side and chevron glyph follow the panel anchor and raise PropertyChanged.
+      status: pending
+      priority: medium
+      area: SIDEBARUI
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: Anchored Left yields CollapseExpanderDock Right and glyph the left chevron
+        isSatisfied: true
+      - id: ac-2
+        text: Anchored Right yields CollapseExpanderDock Left and glyph the right chevron, with PropertyChanged raised for both
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2106348+00:00
+      updatedAt: 2026-10-19T16:58:52.2106633+00:00
+    - id: TEST-SNAPFULL-001
+      title: Snapshot round-trip determinism
+      description: Restore then run N cycles equals continuous run N (full MachineState + memory equality) at multiple cut points, for C64 and C64+1541.
+      status: pending
+      priority: high
+      area: SNAPFULL
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2108605+00:00
+      updatedAt: 2026-10-19T16:58:52.2108800+00:00
+    - id: TEST-SNDREG-001
+      title: Sound back-pressure regulator tests
+      description: ViceGateSoundRegulatorTests (13) cover EvaluateSound outcomes and boundary, gate regulator selection, back-pressure blocking advance, warp precedence, and the SID IsAudioTimingSource/QueuedSampleCount wiring.
+      status: completed
+      priority: high
+      area: SNDREG
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: Back-pressure when queue at/over high-water advances zero cycles; below advances a chunk
+        isSatisfied: true
+      - id: ac-2
+        text: Warp selects Warp regulator even when audio buffer is full
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2111863+00:00
+      updatedAt: 2026-10-19T16:58:52.2112059+00:00
+    - id: TEST-SNP-001
+      title: Snapshot and Replay Tests
+      description: >-
+        ## TEST-SNP-001: Snapshot and Replay Tests
+
+
+        **ID:** TEST-SNP-001
+
+        **Title:** Snapshot and Replay Tests
+
+        **Priority:** P1 -- Important
+
+
+        ### Condition
+
+
+        Save/load, deterministic replay, and state diff behavior are verified through round-trip and byte/trace comparison tests.
+
+
+        ### Traceability
+
+
+        - **Related FR Area(s):** FR-SNP
+      status: in_progress
+      priority: high
+      area: SNP
+      testType: unit
+      notes: PR7 regression remediation. Canonical source docs/requirements/test/TEST-Requirements.md. Capture only requirements relevant to explicitly requested fixes, preserving existing text; not a whole-requirement completion or historical project migration. Scope remains partial, with retained test evidence in TestResults/pr7-resolution.
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2115659+00:00
+      updatedAt: 2026-10-19T16:58:52.2115851+00:00
+    - id: TEST-SNP-002
+      title: Native VICE Snapshot Compatibility Gates
+      description: 'Prove native VICE .vsf as the canonical ViceSharp snapshot format using the existing managed resume bridge after productionization and completion: default public and desktop snapshot paths, native x64sc/xvic read and write, complete managed state transfer, bidirectional round trips, 100000-cycle lockstep, transactionality, corruption handling, and mandatory non-skipped prerequisites.'
+      status: pending
+      priority: critical
+      area: SNP
+      testType: unit
+      notes: No skipped test counts as proof. UWP/Xbox are outside this target scope. Proprietary snapshot payloads are not accepted as peer or default snapshot formats.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Load mandatory x64sc and xvic .vsf fixtures through the managed production path and compare every supported module field with the native VICE oracle.
+        isSatisfied: false
+      - id: ac-02
+        text: Save C64 and VIC-20 state from ViceSharp as .vsf, load the files in x64sc and xvic, and prove matching represented state.
+        isSatisfied: false
+      - id: ac-03
+        text: Run VICE-to-ViceSharp-to-VICE and ViceSharp-to-VICE-to-ViceSharp round trips and prove all supported module fields survive.
+        isSatisfied: false
+      - id: ac-04
+        text: From each restored C64 and VIC-20 checkpoint, run at least 100000 cycles in lockstep and fail at the first CPU, bus, video, timer, interrupt, or mapped-memory divergence.
+        isSatisfied: false
+      - id: ac-05
+        text: Accept pinned-reader-compatible 58-byte current and 37-byte legacy VICE headers; walk 22-byte module headers with little-endian inclusive total lengths to exact EOF; reject wrong machine, unsupported versions, invalid/missing/duplicate mandatory modules, truncated framing, invalid or overflowing lengths, trailing bytes, and corruption rejected by structure or native VICE without visible mutation. Do not claim arbitrary bit-flip detection because VSF has no general checksum.
+        isSatisfied: false
+      - id: ac-06
+        text: Treat both shims, the pinned VICE commit, exact MSYS2 MINGW64 tool paths, exact ROM-hash allowlist, and fixture/state-transfer manifests as mandatory prerequisites. Missing or stale prerequisites fail Category=NativeViceSnapshot with zero skipped tests.
+        isSatisfied: false
+      - id: ac-07
+        text: Verify CaptureSnapshot, Avalonia .vsf file save/load, quick save/load, and ten named slots use native VSF by default; unsupported hosts return unavailable without fallback. Only generated protobuf ImportLegacySnapshot accepts the two proprietary formats, normal restore rejects them, and no capture emits them. UWP/Xbox implementation is not changed or claimed complete.
+        isSatisfied: false
+      - id: ac-08
+        text: Build and inspect the local win-x64 publish and MSI for both shims, the recursively verified loose PE closure staged after publish and before WiX, VICE license/source-offer files, and no ROMs; install locally and pass default C64/VIC-20 native-VSF capture/restore smoke from the installed app.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2128208+00:00
+      updatedAt: 2026-10-19T16:58:52.2128401+00:00
+    - id: TEST-SYSBTN-001
+      title: Test TEST-SYSBTN-001
+      description: 'Binding table + edge/LT-hysteresis + swap-flag (off-console). Acceptance: Default matches locked table; Press once; LT one On + one Off.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2130046+00:00
+      updatedAt: 2026-10-19T16:58:52.2130239+00:00
+    - id: TEST-SYSBTN-002
+      title: Test TEST-SYSBTN-002
+      description: 'Dispatcher command->host mapping (fakes). Acceptance: each command maps to one correct host call; Swap issues no ISettingsService call.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2131833+00:00
+      updatedAt: 2026-10-19T16:58:52.2132083+00:00
+    - id: TEST-SYSBTN-003
+      title: Test TEST-SYSBTN-003
+      description: 'Source-gen round-trip + reset-to-defaults + remap. Acceptance: profile round-trips byte-identical; ResetToDefaults yields Default.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2133671+00:00
+      updatedAt: 2026-10-19T16:58:52.2133863+00:00
+    - id: TEST-SYSBTN-DEVICE
+      title: Test TEST-SYSBTN-DEVICE
+      description: 'On-console button response (Menu/X/LT/A gating). Acceptance: system-button behaviors confirmed on device.'
+      status: pending
+      priority: medium
+      area: SYSBTN
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2135449+00:00
+      updatedAt: 2026-10-19T16:58:52.2135641+00:00
+    - id: TEST-SYSINDEP-001
+      title: Independent scheduling and bus-event ordering tests
+      description: Tests that the drive CPU advances on its own clock (not host lockstep), IEC bus edges are observed by other systems before a read, per-system pacing sustains clock under load, and the true-drive LOAD parity test still passes.
+      status: pending
+      priority: high
+      area: SYSINDEP
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2137683+00:00
+      updatedAt: 2026-10-19T16:58:52.2137875+00:00
+    - id: TEST-TAP-001
+      title: Tape and Datasette Tests
+      description: Datasette motor, TAP parsing, pulse timing, write behavior, and turbo loader compatibility are verified with unit and timing tests.
+      status: pending
+      priority: medium
+      area: TAP
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2139422+00:00
+      updatedAt: 2026-10-19T16:58:52.2139612+00:00
+    - id: TEST-TAPE-RAMP-001
+      title: Datasette motor startup and delayed-stop parity
+      description: Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and every TR-TAPE-EDGE-001 criterion using shared clock/control/alarm fixtures. First prove correct and deliberately incorrect mock traces discriminate in an entirely passing native-safe suite. Then bind unchanged fixtures and assertions to managed behavior and immutable native VICE observations. Preserve historical results but remove fixed historical pass-count claims from the acceptance condition.
+      status: pending
+      priority: medium
+      area: TAPE
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-01
+        text: Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.
+        isSatisfied: false
+      - id: ac-02
+        text: Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.
+        isSatisfied: false
+      - id: ac-03
+        text: The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.
+        isSatisfied: false
+      - id: ac-04
+        text: All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2147151+00:00
+      updatedAt: 2026-10-19T16:58:52.2147341+00:00
+    - id: TEST-TAPE-SENSE-001
+      title: Datasette transport, sense wiring and recording parity
+      description: Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.
+      status: pending
+      priority: medium
+      area: TAPE
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-01
+        text: TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.
+        isSatisfied: false
+      - id: ac-02
+        text: MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.
+        isSatisfied: false
+      - id: ac-03
+        text: Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.
+        isSatisfied: false
+      - id: ac-04
+        text: Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.
+        isSatisfied: false
+      - id: ac-05
+        text: Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2156850+00:00
+      updatedAt: 2026-10-19T16:58:52.2157092+00:00
+    - id: TEST-TESTGATE-002
+      title: Test TEST-TESTGATE-002
+      description: "XboxTestConventionTests: Category=Xbox uses plain [Fact]/[Theory] + [Trait], never [ViceFact]/Assert.Skip, so 0-skipped is genuine per slice scope. Acceptance: each slice trx within its --filter reports Failed=0 and Skipped=0. (Shaped TEST id created to carry the plan's named XboxTestConventionTests, which the store rejects as a raw testId.)"
+      status: pending
+      priority: medium
+      area: TESTGATE
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2159432+00:00
+      updatedAt: 2026-10-19T16:58:52.2159624+00:00
+    - id: TEST-TESTGATE-008
+      title: Test TEST-TESTGATE-008
+      description: 'AOT proxy + on-console feasibility (= S0). Acceptance: the three S0 go/no-go criteria GREEN.'
+      status: pending
+      priority: medium
+      area: TESTGATE
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2161125+00:00
+      updatedAt: 2026-10-19T16:58:52.2161316+00:00
+    - id: TEST-TESTGATE-009
+      title: Test TEST-TESTGATE-009
+      description: 'DesktopRegressionGuard. Acceptance: Determinism pass-count == baseline; AvaloniaBoundaryTests green; AOT 0 warnings.'
+      status: pending
+      priority: medium
+      area: TESTGATE
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2162972+00:00
+      updatedAt: 2026-10-19T16:58:52.2163166+00:00
+    - id: TEST-TESTGATE-010
+      title: Test TEST-TESTGATE-010
+      description: 'On-console device checklists. Acceptance: device slices marked onConsole; checklists recorded.'
+      status: pending
+      priority: medium
+      area: TESTGATE
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2164629+00:00
+      updatedAt: 2026-10-19T16:58:52.2164821+00:00
+    - id: TEST-TICKHIST-001
+      title: Tick-history capture, RPC and view-model tests
+      description: TickHistoryRecorderTests (ring order/capacity, write bundling, reconstruction), TickHistoryCaptureTests (bus event + pump capture + GetTickHistory/ReadMemoryAtTick), TickHistoryViewModelTests (refresh newest-first, paused inspect, close).
+      status: completed
+      priority: medium
+      area: TICKHIST
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: Reconstruct at the newest tick yields current memory; at an earlier tick yields the pre-write byte
+        isSatisfied: true
+      - id: ac-2
+        text: InspectAsync opens the debug screen with a memory dump only when paused
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2168045+00:00
+      updatedAt: 2026-10-19T16:58:52.2168234+00:00
+    - id: TEST-TICKHIST-002
+      title: Opt-in tick-history capture gating
+      description: Verify the emulation pump does not capture when recording is disabled (default) and that GetTickHistory arms recording.
+      status: completed
+      priority: high
+      area: TICKHIST
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: Pump_DoesNotCaptureHistory_WhenRecordingDisabled - default off yields empty history after pumping.
+        isSatisfied: true
+      - id: ac-2
+        text: GetTickHistory_ArmsHistoryRecording - calling the RPC sets HistoryRecordingEnabled true.
+        isSatisfied: true
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2171017+00:00
+      updatedAt: 2026-10-19T16:58:52.2171210+00:00
+    - id: TEST-UI-001
+      title: Avalonia Shell ViewModel Tests
+      description: Sidebar, status bar, attach panel, settings, keyboard map selection, monitor dock/pop-out, focus, and startup behavior are verified with fake host clients.
+      status: in_progress
+      priority: medium
+      area: UI
+      testType: unit
+      notes: ''
+      acceptanceCriteria:
+      - id: test-ui-ac-1
+        text: ViewModel tests prove peripherals panel drive entries show IEC active and idle states from host telemetry.
+        isSatisfied: false
+      - id: test-ui-ac-2
+        text: ViewModel tests prove status bar IEC activity uses the same source while preserving status fields.
+        isSatisfied: false
+      - id: test-ui-ac-3
+        text: Focused UI tests run with zero failed and zero skipped tests.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2174780+00:00
+      updatedAt: 2026-10-19T16:58:52.2174974+00:00
+    - id: TEST-UI-COREBOUNDARY-001
+      title: Avalonia flash-cart builder abstraction boundary
+      description: >-
+        Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.
+
+        Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.
+
+
+        ## Acceptance Criteria
+
+        - **ac-01**: Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.
+
+        - **ac-02**: Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.
+      status: pending
+      priority: high
+      area: UI
+      testType: unit
+      notes: Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.
+      acceptanceCriteria:
+      - id: ac-01
+        text: Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.
+        isSatisfied: false
+      - id: ac-02
+        text: Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2180492+00:00
+      updatedAt: 2026-10-19T16:58:52.2180685+00:00
+    - id: TEST-UI-DEVCARDART-001
+      title: Device art key mapping
+      description: 'DeviceArtKeyTests: slot-kind defaults (Drive8/9 to Breadbin, Tape to Datasette, Cartridge to Cartridge); model mapping rows (1540/1541 to Breadbin, 1541-II, 1571, 1581, SFD-1001, CMD-HD, CMD-FD/fd2000, unknown/empty to Breadbin); AllKeys superset of every resolvable key; DeviceArtKey PropertyChanged on ApplyAttachment; MarkEmpty retains last model.'
+      status: pending
+      priority: medium
+      area: UI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2183151+00:00
+      updatedAt: 2026-10-19T16:58:52.2183341+00:00
+    - id: TEST-UI-DEVCARDART-002
+      title: Device art asset and sync contract
+      description: 'DeviceArtAssetTests: every SVG source exists with a viewBox; DeviceArt.axaml exists, XML-parses, DrawingImage key set is a superset of the catalog keys, all 6 brushes present; per-SVG sha256 (CRLF-normalized) matches the generated source comments and the comment set equals the SVG file set; PeripheralCardView/App.axaml wiring text-asserts.'
+      status: pending
+      priority: medium
+      area: UI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2185759+00:00
+      updatedAt: 2026-10-19T16:58:52.2185949+00:00
+    - id: TEST-UI-DEVCARDART-003
+      title: Device art headless resource resolution
+      description: 'DeviceArtHeadlessTests (AvaloniaFact): AvaloniaXamlLoader loads DeviceArt.axaml; every catalog key resolves to a DrawingImage with non-null Drawing; DeviceArtKeyConverter returns null without throwing for unknown keys.'
+      status: pending
+      priority: medium
+      area: UI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2187919+00:00
+      updatedAt: 2026-10-19T16:58:52.2188149+00:00
+    - id: TEST-UI-DIAG-001
+      title: UI Debug Attach Info Tests
+      description: The Avalonia shell exposes a Copy Debug Attach Info command and formats endpoint, current session id, app version, attach JSON, and latest status for clipboard use.
+      status: pending
+      priority: medium
+      area: UI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2189851+00:00
+      updatedAt: 2026-10-19T16:58:52.2190043+00:00
+    - id: TEST-UIDROP-002
+      title: PRG drag-drop load and BASIC RUN tests
+      description: 'Verify PRG drop acceptance and host RAM load: `ShellViewModel` routes `*.prg` to `LoadProgramAsync` without attach/reset; `IsDropStartSupported` is true for `.prg` and existing media and false for unsupported types; `PrgMemoryLoader` writes at the load address, updates BASIC pointers only when load equals TXTTAB, and reports ran; `EmulatorHostService.LoadProgramAsync` loads payload into the session, sets Ran, and starts BASIC RUN automation only for BASIC-start PRGs; invalid PRGs return InvalidArgument; `GrpcEmulatorHostService` maps LoadProgram request/response fields.'
+      status: pending
+      priority: medium
+      area: UIDROP
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2193302+00:00
+      updatedAt: 2026-10-19T16:58:52.2193493+00:00
+    - id: TEST-UIFLYOUT-001
+      title: Flyout sidebar + single side-toggle
+      description: 'VM: toggling DockSide flips Left<->Right and IsPaneOpen opens/closes; default state correct. App-launch: flyout opens/closes, docks both sides via the single icon button, no Left/Right buttons.'
+      status: pending
+      priority: high
+      area: UIFLYOUT
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2195688+00:00
+      updatedAt: 2026-10-19T16:58:52.2195885+00:00
+    - id: TEST-UIMENUBAR-001
+      title: VICE-style menu bar
+      description: 'VM: menu commands invoke the existing actions/host services (attach/eject, reset, snapshot, warp, true-drive toggle, swap joysticks). App-launch: menu structure matches the plan and commands work.'
+      status: pending
+      priority: medium
+      area: UIMENUBAR
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2197745+00:00
+      updatedAt: 2026-10-19T16:58:52.2197936+00:00
+    - id: TEST-UIPERIPHERAL-001
+      title: Reusable peripheral card UserControl
+      description: 'VM: AttachSlotViewModel exposes status/RO/activity/TrueDrive/SupportsTrueDrive and Attach/Eject route to host. App-launch: Drive8/Drive9/Tape/Cartridge all render via the one PeripheralCardView with correct per-slot controls.'
+      status: pending
+      priority: high
+      area: UIPERIPHERAL
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2200003+00:00
+      updatedAt: 2026-10-19T16:58:52.2200195+00:00
+    - id: TEST-UISET-001
+      title: VIC-20 RAM settings acceptance
+      description: >-
+        ## TEST-UISET-001: VIC-20 RAM settings acceptance
+
+
+        **ID:** TEST-UISET-001
+
+        **Priority:** medium
+
+        **Status:** pending; no completion claim.
+
+
+        ### Description
+
+
+        VIC-20 RAM settings acceptance verifies all selected BLK regions in fresh host/runtime state after Apply+Restart and exactly 28159 BASIC bytes free with the pinned ROM.
+
+
+        ### Acceptance Criteria
+
+
+        - **ac-all-spec**: All+Apply+Restart keeps BLK checks and Vic20MemorySpec all.
+
+        - **ac-bytes-free**: After pinned-ROM VIC-20 All RAM plus Apply+Restart, the READY BASIC boot reports exactly 28159 BYTES FREE; verify actual runtime memory as well as checked BLK controls.
+
+
+        ### Traceability
+
+
+        - Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+
+        - Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+
+        - Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+      status: in_progress
+      priority: high
+      area: UISET
+      testType: unit
+      notes: PR7 regression remediation. Canonical source docs/requirements/test/TEST-Requirements.md. Capture only requirements relevant to explicitly requested fixes, preserving existing text; not a whole-requirement completion or historical project migration. Scope remains partial, with retained test evidence in TestResults/pr7-resolution.
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2206190+00:00
+      updatedAt: 2026-10-19T16:58:52.2206383+00:00
+    - id: TEST-UISET-002
+      title: VIC-20 Settings RemoteControl matrix
+      description: >-
+        Two fresh final-binary RemoteControl passes exercise every applicable VIC-20 Settings control. Verify effective visibility, Active/Accepted/Draft semantics, single-transaction Warp above150 percent, PAL/NTSC runtime geometry/clocks, Revert, cartridge persistence and actual uIEC I/O.
+
+
+        ## Acceptance Criteria
+
+        - **ac-inventory**: In each of two fresh final-binary live passes, drive every applicable VIC-20 Settings control and verify effective visibility, fresh host Active/Accepted state and actual runtime effects, including image/bank/preset/writeback and uIEC I/O.
+
+        - **ac-warp**: Warp via the single Settings transaction sets LIMITER WARP, LimiterRatePercent 0 and measured EffectiveClockPercent greater than 150 in WarpModeTests and live RemoteControl receipts.
+
+        - **ac-palntsc**: PAL vs NTSC Apply+Restart yields CLOCK ~1.108 vs ~1.023 MHz and ContentHeight 284 vs 234 with READY.
+
+        - **ac-revert**: Revert is exercised while dirty and restores Accepted values without cancelling an earlier accepted pending restart; save-on-exit preferences remain independent.
+
+        - **ac-state-and-runtime**: Apply, Apply+Restart, validation failure, speed cycling, every RAM BLK, persistence preferences and builder open/close follow TEST-SETTINGS-TXN-001 and TEST-COMPLETION-001, with host/runtime oracles after refreshing owned-process debug attach and session IDs.
+      status: pending
+      priority: medium
+      area: UISET
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-inventory
+        text: In each of two fresh final-binary live passes, drive every applicable VIC-20 Settings control and verify effective visibility, fresh host Active/Accepted state and actual runtime effects, including image/bank/preset/writeback and uIEC I/O.
+        isSatisfied: false
+      - id: ac-warp
+        text: Warp via the single Settings transaction sets LIMITER WARP, LimiterRatePercent 0 and measured EffectiveClockPercent greater than 150 in WarpModeTests and live RemoteControl receipts.
+        isSatisfied: false
+      - id: ac-palntsc
+        text: PAL vs NTSC Apply+Restart yields CLOCK ~1.108 vs ~1.023 MHz and ContentHeight 284 vs 234 with READY.
+        isSatisfied: false
+      - id: ac-revert
+        text: Revert is exercised while dirty and restores Accepted values without cancelling an earlier accepted pending restart; save-on-exit preferences remain independent.
+        isSatisfied: false
+      - id: ac-state-and-runtime
+        text: Apply, Apply+Restart, validation failure, speed cycling, every RAM BLK, persistence preferences and builder open/close follow TEST-SETTINGS-TXN-001 and TEST-COMPLETION-001, with host/runtime oracles after refreshing owned-process debug attach and session IDs.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2341847+00:00
+      updatedAt: 2026-10-19T16:58:52.2342062+00:00
+    - id: TEST-UISET-003
+      title: C64 Settings RC plus family visibility
+      description: >-
+        Headless and live RemoteControl tests for C64 variants (at least c64, c64c, ntsc from host catalog) mutate shared Settings controls, Apply+Restart PAL vs NTSC CLOCK ~0.985 vs ~1.023 MHz with READY, Warp LIMITER WARP and CLOCK percent well above 100, and assert VIC-20-only AutomationIds are not effectively visible on C64 and are visible on VIC-20.
+
+
+        ## Acceptance Criteria
+
+        - **ac-c64-inventory**: Shared Settings inventory mutates and sticks for C64 models c64, c64c, and ntsc.
+
+        - **ac-c64-palntsc-warp**: C64 PAL versus NTSC boots READY with clocks approximately 0.985 versus 1.023 MHz; Warp status and live runtime satisfy TR-WARP-STATUS-001, including EffectiveClockPercent greater than 150.
+
+        - **ac-visibility**: VIC-20-only AutomationIds are not effectively visible on C64 Computer and are visible on VIC-20 Computer.
+
+        - **ac-catalog-14**: Automatically cover all 14 available C64 host catalog profiles and live c64/c64c/ntsc representatives. Cover case-insensitive IDs, unavailable/out-of-family/null/reentry rejection, stable Models within family and disabled Apply with a visible explanation for unusable catalog.
+
+        - **ac-draft-preservation**: Exercise shared synchronization for initial load, refresh, Apply, Revert and persisted state, preserving VIC-20 draft RAM/cart fields across family switches without attaching VIC-20 hardware to a C64 runtime.
+      status: pending
+      priority: high
+      area: UISET
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-c64-inventory
+        text: Shared Settings inventory mutates and sticks for C64 models c64, c64c, and ntsc.
+        isSatisfied: false
+      - id: ac-c64-palntsc-warp
+        text: C64 PAL versus NTSC boots READY with clocks approximately 0.985 versus 1.023 MHz; Warp status and live runtime satisfy TR-WARP-STATUS-001, including EffectiveClockPercent greater than 150.
+        isSatisfied: false
+      - id: ac-visibility
+        text: VIC-20-only AutomationIds are not effectively visible on C64 Computer and are visible on VIC-20 Computer.
+        isSatisfied: false
+      - id: ac-catalog-14
+        text: Automatically cover all 14 available C64 host catalog profiles and live c64/c64c/ntsc representatives. Cover case-insensitive IDs, unavailable/out-of-family/null/reentry rejection, stable Models within family and disabled Apply with a visible explanation for unusable catalog.
+        isSatisfied: false
+      - id: ac-draft-preservation
+        text: Exercise shared synchronization for initial load, refresh, Apply, Revert and persisted state, preserving VIC-20 draft RAM/cart fields across family switches without attaching VIC-20 hardware to a C64 runtime.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2352002+00:00
+      updatedAt: 2026-10-19T16:58:52.2352195+00:00
+    - id: TEST-UISETTINGS-001
+      title: Settings UserControl
+      description: 'VM: settings VM exposes machine/video/audio/input/limiter/resource selections + apply. App-launch: SettingsView renders + applies settings.'
+      status: pending
+      priority: medium
+      area: UISETTINGS
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2353936+00:00
+      updatedAt: 2026-10-19T16:58:52.2354131+00:00
+    - id: TEST-VIA-001
+      title: VIA Integration Tests
+      description: VIA timer, shift register, port handshake, VIC-20, and drive integration behavior are verified with unit and machine integration tests.
+      status: pending
+      priority: medium
+      area: VIA
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2355743+00:00
+      updatedAt: 2026-10-19T16:58:52.2355933+00:00
+    - id: TEST-VIC-001
+      title: VIC-II Video Reference Tests
+      description: Raster timing, display modes, sprites, collisions, badlines, borders, FLI/AFLI, banking, and DMA timing are verified with deterministic frame or trace comparisons. The gate includes closed-border sprite masking, open-border sprite visibility, sprite priority over background/foreground pixels, per-model sprite DMA access timing, and VIC-II matrix/idle fetch behavior including prefetch `$ff` fill and ECM idle graphics addresses.
+      status: pending
+      priority: medium
+      area: VIC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2358566+00:00
+      updatedAt: 2026-10-19T16:58:52.2358757+00:00
+    - id: TEST-VIC20-001
+      title: Index and BGRA SequenceEqual READY PAL/NTSC/busy vs xvic
+      description: 'Vic20PixelLockstep verifies normal-border geometry and named SequenceEqual facts vs xvic capture_visible_frame: Index_ReadyPal_SequenceEqual, Index_ReadyNtsc_SequenceEqual, Index_BusyPal_SequenceEqual, Bgra_ReadyPal_SequenceEqual, Bgra_ReadyNtsc_SequenceEqual, Bgra_BusyPal_SequenceEqual. Capture is non-sentinel with opaque alpha (NTSC unpainted clamp rows opaque black). Other border modes remain Partial; not whole-machine Exact.'
+      status: pending
+      priority: high
+      area: VIC20
+      testType: unit
+      acceptanceCriteria:
+      - id: AC-TEST-PX-02
+        text: Vic20PixelLockstep.Index_ReadyPal_SequenceEqual passes 0 fail 0 skip
+        isSatisfied: true
+        evidence: isolated pixel gate 2026-09-04
+      - id: AC-TEST-PX-03
+        text: Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual passes 0 fail 0 skip
+        isSatisfied: true
+        evidence: isolated pixel gate 2026-09-04
+      - id: AC-TEST-PX-04
+        text: Vic20PixelLockstep.Index_BusyPal_SequenceEqual passes 0 fail 0 skip
+        isSatisfied: true
+        evidence: isolated pixel gate 2026-09-04
+      - id: AC-TEST-PX-05
+        text: Vic20PixelLockstep.Bgra_ReadyPal_SequenceEqual and Bgra_BusyPal_SequenceEqual pass 0 fail 0 skip
+        isSatisfied: true
+        evidence: isolated pixel gate 2026-09-04
+      - id: AC-TEST-PX-06
+        text: Vic20PixelLockstep.Bgra_ReadyNtsc_SequenceEqual passes 0 fail 0 skip (opaque clamp-row alpha)
+        isSatisfied: true
+        evidence: isolated pixel gate 2026-09-04
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2365411+00:00
+      updatedAt: 2026-10-19T16:58:52.2365603+00:00
+    - id: TEST-VIC20-FLASH-001
+      title: VIC-20 flash timing and expansion write-back regression suite
+      description: '`Flash040EraseLatencyTests` verifies the VICE TYPE_B sector timeout, sector/chip cycle budgets, busy status, cancel, suspend, and resume behavior. `Vic20ExpansionCartTests`, `UltimemParityTests`, `MegaCartParityTests`, and `MediaServiceHostVic20ExpansionTests` verify mapping, dirty-state separation, and atomic detach persistence.'
+      status: pending
+      priority: medium
+      area: VIC20
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2368779+00:00
+      updatedAt: 2026-10-19T16:58:52.2368972+00:00
+    - id: TEST-VIC20-SOUND-001
+      title: Deterministic VIC-I PCM and live backend regression suite
+      description: '`Vic20SoundLockstep` verifies deterministic managed silence/tone/multi-register output, no silent register-store allocation after warmup, and focused byte-identical silence/tone batches against native xvic. `Vic20AudioWiringTests` verifies machine-clock advancement and 256-sample delivery to the configured audio backend.'
+      status: pending
+      priority: medium
+      area: VIC20
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2371391+00:00
+      updatedAt: 2026-10-19T16:58:52.2371583+00:00
+    - id: TEST-VIC-CHECKPOINT-001
+      title: VicIiCheckpointTests + VicIISpriteDmaNativeCheckpointTests (9 tests)
+      description: Managed PAL frame periodic raster/cycle-counter (2 Facts), native screen-RAM roundtrip and one-frame DMA read-only (2 ViceFacts), sprite-3 DMA window for 5 models (5 ViceTheory). All 9 pass.
+      status: closed
+      priority: medium
+      area: VIC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2373586+00:00
+      updatedAt: 2026-10-19T16:58:52.2373776+00:00
+    - id: TEST-VICE-001
+      title: Immutable native VICE oracle integrity gates
+      description: Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable.
+      status: pending
+      priority: critical
+      area: VICE
+      testType: unit
+      notes: Covers FR-VICE-001 and TR-VICE-ORACLE-001.
+      acceptanceCriteria:
+      - id: ac-01
+        text: A clean-target preflight passes for the pinned native/vice commit and a simulated dirty-target fixture is rejected before parity execution.
+        isSatisfied: false
+      - id: ac-02
+        text: The wrapper integration test proves no tracked native/vice file changes across build and execution.
+        isSatisfied: false
+      - id: ac-03
+        text: Oracle receipts prove native commit identity, clean tracked source, wrapper provenance, exact commands, and failed 0 skipped 0 for the claimed gate.
+        isSatisfied: false
+      - id: ac-04
+        text: When a required real bus or timing observation is unavailable, the test fails at that first missing observation and does not substitute PeekBus, PC inference, fabricated data, or a modified native build.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2378944+00:00
+      updatedAt: 2026-10-19T16:58:52.2379136+00:00
+    - id: TEST-VIC-RC-001
+      title: 'VicIIRcWindowTests: RC window state machine (11 tests)'
+      description: After writing DEN=1/YSCROLL=0/1 and advancing to specific rasterLine/rasterX, CurrentRowCounter and IsGraphicsIdle match VICE viciisc/vicii-cycle.c:541-563 expectations. All 11 pass.
+      status: closed
+      priority: medium
+      area: VIC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2381053+00:00
+      updatedAt: 2026-10-19T16:58:52.2381245+00:00
+    - id: TEST-VSFLOCKSTEP-001
+      title: External x64sc .vsf full-resume acceptance
+      description: The current focused external-x64sc VSF acceptance gate must load the committed hash-pinned ready-c64sc-truedrive.vsf through the pinned native shim, prove the complete 24-module container frames exactly to EOF, assert rc=0 and snapshot_last_error=0, and compare resumed MAINCPU registers to the MAINCPU module. Historical pass or skip counts are not evidence; this record remains pending until current zero-skip execution proof exists.
+      status: pending
+      priority: high
+      area: VSFLOCKSTEP
+      testType: unit
+      acceptanceCriteria:
+      - id: test-vsflockstep-001-ac-1
+        text: The focused ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot gate runs without skipped prerequisites, loads the hash-pinned 24-module fixture through pinned x64sc with rc=0 and snapshot_last_error=0, and proves resumed A, X, Y, SP, and PC equal the MAINCPU module values.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2385379+00:00
+      updatedAt: 2026-10-19T16:58:52.2385575+00:00
+    - id: TEST-X64SC-LOCKSTEP-001
+      title: Native x64sc Variant Lockstep Tests
+      description: Every required x64sc model profile is validated against native x64sc for deterministic startup, BASIC prompt, keyboard input, disk attach/autostart, cartridge boot, and reset scenarios. Validation compares CPU registers, flags, cycle count, selected memory windows, CIA/VIC/SID observable register state, IRQ/NMI state, and frame/raster checkpoints. Missing ROMs, unavailable native x64sc binaries, unsupported variants, skipped variants, or stubbed checks fail the gate.
+      status: pending
+      priority: high
+      area: X64SC
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2388421+00:00
+      updatedAt: 2026-10-19T16:58:52.2388613+00:00
+    - id: TEST-XAUDIO-001
+      title: Test TEST-XAUDIO-001
+      description: 'Factory-null + SID inert. Acceptance: headless CreateDefault() null; SID null-backend IsAudioTimingSource==false, no samples.'
+      status: pending
+      priority: medium
+      area: XAUDIO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2390200+00:00
+      updatedAt: 2026-10-19T16:58:52.2390393+00:00
+    - id: TEST-XAUDIO-002
+      title: Test TEST-XAUDIO-002
+      description: 'XAudio2AudioMath queue/ring boundaries. Acceptance: full ring RoomAvailable false + drop-oldest; empty under-run silence; index wraps.'
+      status: pending
+      priority: medium
+      area: XAUDIO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2392067+00:00
+      updatedAt: 2026-10-19T16:58:52.2392259+00:00
+    - id: TEST-XAUDIO-003
+      title: Test TEST-XAUDIO-003
+      description: 'Volume/mute gain-once. Acceptance: EffectiveGain applied once in AudioSampleConverter.'
+      status: pending
+      priority: medium
+      area: XAUDIO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2393682+00:00
+      updatedAt: 2026-10-19T16:58:52.2393874+00:00
+    - id: TEST-XAUDIO-004
+      title: Test TEST-XAUDIO-004
+      description: 'Non-blocking submit + Pause unparks worker (off-console). Acceptance: SubmitSamples non-blocking; Pause releases waiter/unparks worker.'
+      status: pending
+      priority: medium
+      area: XAUDIO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2395500+00:00
+      updatedAt: 2026-10-19T16:58:52.2395691+00:00
+    - id: TEST-XAUDIO-DEVICE
+      title: Test TEST-XAUDIO-DEVICE
+      description: 'On-console audio smoke. Acceptance: SID audible; mute silences; suspend/resume clean.'
+      status: pending
+      priority: medium
+      area: XAUDIO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2397150+00:00
+      updatedAt: 2026-10-19T16:58:52.2397340+00:00
+    - id: TEST-XBOXAOT-001
+      title: Test TEST-XBOXAOT-001
+      description: 'Off-console AOT/trim link gate 0 IL warnings + reflection-free audit. Acceptance: publish exit 0, 0 IL2xxx/IL3xxx; ViceNative uncalled.'
+      status: pending
+      priority: medium
+      area: XBOXAOT
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2398928+00:00
+      updatedAt: 2026-10-19T16:58:52.2399152+00:00
+    - id: TEST-XBOXCI-001
+      title: Test TEST-XBOXCI-001
+      description: 'azure-pipelines.*.yml exclude device targets. Acceptance: no PublishXbox/DeployXbox in CI/release YAMLs.'
+      status: pending
+      priority: medium
+      area: XBOXCI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2400634+00:00
+      updatedAt: 2026-10-19T16:58:52.2400823+00:00
+    - id: TEST-XBOXDEPLOY-007
+      title: Test TEST-XBOXDEPLOY-007
+      description: 'On-console install/launch/first-frame + rollback. Acceptance: MSIX deploys clean; first frame; rollback documented/works.'
+      status: pending
+      priority: medium
+      area: XBOXDEPLOY
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2402455+00:00
+      updatedAt: 2026-10-19T16:58:52.2402644+00:00
+    - id: TEST-XBOXGPL-001
+      title: Test TEST-XBOXGPL-001
+      description: 'License/vkm/no-ROM/source-URL staging. Acceptance: Licenses/ contents + vkm present + no ROM *.bin + compiled SourceUrl.'
+      status: pending
+      priority: medium
+      area: XBOXGPL
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2404276+00:00
+      updatedAt: 2026-10-19T16:58:52.2404466+00:00
+    - id: TEST-XBOXGPL-002
+      title: C= logo attribution regression suite
+      description: >
+        Automated tests must fail if C= logo attribution is missing from THIRD_PARTY_NOTICES.md
+
+        or from AboutInfo/AboutViewModel. Cover Alien426, CC BY-SA 4.0, and commons.wikimedia.org.
+      status: completed
+      priority: high
+      area: XBOXGPL
+      testType: unit
+      notes: >
+        XboxGplComplianceTests.ThirdPartyNotices_AttributesVice_AndBundledVkmKeymaps
+
+        (C= assertions); AboutViewModelTests.LogoAttributionText_MentionsCcBySa_AndSurfacedFromConstants.
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2407001+00:00
+      updatedAt: 2026-10-19T16:58:52.2407216+00:00
+    - id: TEST-XBOXPKG-001
+      title: Test TEST-XBOXPKG-001
+      description: 'Csproj/slnx shape. Acceptance: core refs present, forbidden refs absent, slnx builds.'
+      status: pending
+      priority: medium
+      area: XBOXPKG
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2408702+00:00
+      updatedAt: 2026-10-19T16:58:52.2408892+00:00
+    - id: TEST-XBOXPKG-003
+      title: Test TEST-XBOXPKG-003
+      description: 'Manifest XML + capability rule. Acceptance: Windows.Xbox device family, x64, internetClient-iff-download-kept.'
+      status: pending
+      priority: medium
+      area: XBOXPKG
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2410425+00:00
+      updatedAt: 2026-10-19T16:58:52.2410619+00:00
+    - id: TEST-XBOXTOPO-001
+      title: Test TEST-XBOXTOPO-001
+      description: 'Csproj shape + reference-ban. Acceptance: conditional TFM + core refs present; banned refs absent.'
+      status: pending
+      priority: medium
+      area: XBOXTOPO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2412136+00:00
+      updatedAt: 2026-10-19T16:58:52.2412327+00:00
+    - id: TEST-XBOXTOPO-002
+      title: Test TEST-XBOXTOPO-002
+      description: 'Default-props solution build needs no UWP workload. Acceptance: slnx build exit 0 workload-absent.'
+      status: pending
+      priority: medium
+      area: XBOXTOPO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2413847+00:00
+      updatedAt: 2026-10-19T16:58:52.2414037+00:00
+    - id: TEST-XBOXUI-001
+      title: Test TEST-XBOXUI-001
+      description: 'NavigationViewModel push/GoBack stack correctness; overlays push no stack entry. Acceptance: Settings->DeviceSetup, GoBack twice -> Home in order.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2415931+00:00
+      updatedAt: 2026-10-19T16:58:52.2416270+00:00
+    - id: TEST-XBOXUI-002a
+      title: Test TEST-XBOXUI-002a
+      description: FocusMapBuilder BuildGrid(3,2) edges correct, top-edge Up null, no wrap.
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2418788+00:00
+      updatedAt: 2026-10-19T16:58:52.2419123+00:00
+    - id: TEST-XBOXUI-002b
+      title: Test TEST-XBOXUI-002b
+      description: 'On-console focus-visual smoke. Acceptance: high-visibility focus in TV-safe rect.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2421600+00:00
+      updatedAt: 2026-10-19T16:58:52.2421931+00:00
+    - id: TEST-XBOXUI-003
+      title: Test TEST-XBOXUI-003
+      description: 'InputContext observer: quick menu -> non-Gameplay; closing with empty stack -> Gameplay.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2424447+00:00
+      updatedAt: 2026-10-19T16:58:52.2424782+00:00
+    - id: TEST-XBOXUI-004
+      title: Test TEST-XBOXUI-004
+      description: Simulated navigation/overlay toggles never stop/dispose the pull adapter.
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2427144+00:00
+      updatedAt: 2026-10-19T16:58:52.2427569+00:00
+    - id: TEST-XBOXUI-005a
+      title: Test TEST-XBOXUI-005a
+      description: 'Cadence: 10 fires/200ms -> 10 pulls +/-1.'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2429705+00:00
+      updatedAt: 2026-10-19T16:58:52.2430040+00:00
+    - id: TEST-XBOXUI-005b
+      title: Test TEST-XBOXUI-005b
+      description: VideoSurfacePureSink forbidden-identifier scan (no RunFrame/StepInstruction/Reset/SetJoystickState/SetKeyState).
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2432730+00:00
+      updatedAt: 2026-10-19T16:58:52.2433063+00:00
+    - id: TEST-XBOXUI-006
+      title: Test TEST-XBOXUI-006
+      description: RETURN tile emits SetKeyState("Return",true) then false; shift-latch+F1 emits "F2"; every KeyName in known-good list; RESTORE tile calls SetRestoreState.
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2436115+00:00
+      updatedAt: 2026-10-19T16:58:52.2436452+00:00
+    - id: TEST-XBOXUI-007
+      title: Test TEST-XBOXUI-007
+      description: 'Boundary: ViewModels reference only Abstractions+Protocol+Xbox.Input; forbidden-identifier scan (no Core/Chips/Architectures/Host/Avalonia/Grpc/XAML).'
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2439314+00:00
+      updatedAt: 2026-10-19T16:58:52.2439649+00:00
+    - id: TEST-XBOXUI-008
+      title: Test TEST-XBOXUI-008
+      description: AboutViewModel LicenseIdentifier=="GPL-2.0-or-later", AttributionText contains "VICE", SourceOfferText non-empty + URL.
+      status: pending
+      priority: medium
+      area: XBOXUI
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2442327+00:00
+      updatedAt: 2026-10-19T16:58:52.2442662+00:00
+    - id: TEST-XKBD-001
+      title: Test TEST-XKBD-001
+      description: 'Off-console facade + ViewModel test against a fake/spy keyboard input. Acceptance: SetRestoreState routes to NMI path keycode 0x31 distinct from SetKeyState.'
+      status: pending
+      priority: medium
+      area: XKBD
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2445605+00:00
+      updatedAt: 2026-10-19T16:58:52.2445943+00:00
+    - id: TEST-XSET-001
+      title: Test TEST-XSET-001
+      description: 'Umbrella off-console suite (XboxDataPathBridgeTests, SettingsOptionCatalogTests, XboxSettingsViewModelTests, XboxDeviceSetupViewModelTests, RomProvisionEvaluatorTests, XboxRomProvisioningViewModelTests, XboxUiStateStoreTests, XboxViewModelBindabilityTests). Acceptance: 0 failed/0 skipped per slice filter.'
+      status: pending
+      priority: medium
+      area: XSET
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2449821+00:00
+      updatedAt: 2026-10-19T16:58:52.2450156+00:00
+    - id: TEST-XSET-DEVICE
+      title: Test TEST-XSET-DEVICE
+      description: 'On-console first-run provisioning + persistence E2E. Acceptance: ROMs provisioned + boot to READY; setting persists across relaunch; d64 attach with drive-model selector.'
+      status: pending
+      priority: medium
+      area: XSET
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2453101+00:00
+      updatedAt: 2026-10-19T16:58:52.2453434+00:00
+    - id: TEST-XVIDEO-001
+      title: Test TEST-XVIDEO-001
+      description: 'Pure byte-exact copy + no-advance spy. Acceptance: 384x272 BGRA copy sized from FrameGeometry.BufferLength; core never advanced.'
+      status: pending
+      priority: medium
+      area: XVIDEO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2456152+00:00
+      updatedAt: 2026-10-19T16:58:52.2456491+00:00
+    - id: TEST-XVIDEO-002
+      title: Test TEST-XVIDEO-002
+      description: 'GC.GetAllocatedBytes delta==0 steady-state render tick. Acceptance: zero-allocation over steady-state window.'
+      status: pending
+      priority: medium
+      area: XVIDEO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2459084+00:00
+      updatedAt: 2026-10-19T16:58:52.2459423+00:00
+    - id: TEST-XVIDEO-DEVICE
+      title: Test TEST-XVIDEO-DEVICE
+      description: 'On-console video smoke. Acceptance: image correct, letterboxed, no tear.'
+      status: pending
+      priority: medium
+      area: XVIDEO
+      testType: unit
+      acceptanceCriteria: []
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-19T16:58:52.2461849+00:00
+      updatedAt: 2026-10-19T16:58:52.2462186+00:00
+    totalCount: 143
+  deprecated: true
+
+---

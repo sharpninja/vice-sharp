@@ -1,0 +1,12 @@
+{
+  "records": 61,
+  "statusChanges": 55,
+  "flagsCleared": 100.0,
+  "byKind": {
+    "fr": 14,
+    "test": 18,
+    "tr": 29
+  },
+  "appliedVerified": 61,
+  "finishedAt": "2026-10-19T14:19:51"
+}
