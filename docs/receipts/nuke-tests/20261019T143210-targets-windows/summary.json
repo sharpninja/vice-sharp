@@ -1,0 +1,71 @@
+{
+  "machine": "PAYTON-LEGION2",
+  "finishedAt": "2026-10-19T14:32:59",
+  "results": [
+    {
+      "step": "BuildTest",
+      "exitCode": 0,
+      "trx": [
+        {
+          "trx": "BuildTest-ViceSharp.Build.Tests.trx",
+          "total": 96,
+          "executed": 96,
+          "passed": 96,
+          "failed": 0,
+          "notExecuted": 0,
+          "notPassed": []
+        }
+      ],
+      "warningLines": [
+        "Microsoft.Build.Exceptions.InvalidProjectFileException: The expression \"[MSBuild]::GetTargetFrameworkIdentifier(net10.0)\" cannot be evaluated. Could not load file or assembly 'NuGet.Frameworks, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'. The located assembly's manifest definition does not match the assembly reference. (0x80131040)  C:\\Program Files\\dotnet\\sdk\\10.0.402\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+        "║ Errors & Warnings"
+      ]
+    },
+    {
+      "step": "LibraryTests",
+      "exitCode": 0,
+      "trx": [
+        {
+          "trx": "ViceSharp.Library.Tests.trx",
+          "total": 124,
+          "executed": 124,
+          "passed": 124,
+          "failed": 0,
+          "notExecuted": 0,
+          "notPassed": []
+        }
+      ],
+      "warningLines": []
+    },
+    {
+      "step": "RommDesktopTest",
+      "exitCode": 0,
+      "trx": [
+        {
+          "trx": "RommDesktopTest-ViceSharp.Heads.Tests.trx",
+          "total": 61,
+          "executed": 61,
+          "passed": 61,
+          "failed": 0,
+          "notExecuted": 0,
+          "notPassed": []
+        },
+        {
+          "trx": "RommDesktopTest-ViceSharp.Library.Tests.trx",
+          "total": 124,
+          "executed": 124,
+          "passed": 124,
+          "failed": 0,
+          "notExecuted": 0,
+          "notPassed": []
+        }
+      ],
+      "warningLines": [
+        "Microsoft.Build.Exceptions.InvalidProjectFileException: The expression \"[MSBuild]::GetTargetFrameworkIdentifier(net10.0)\" cannot be evaluated. Could not load file or assembly 'NuGet.Frameworks, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'. The located assembly's manifest definition does not match the assembly reference. (0x80131040)  C:\\Program Files\\dotnet\\sdk\\10.0.402\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+        "14:32:47 [DBG] F:\\GitHub\\vice-sharp\\src\\ViceSharp.Avalonia\\Views/SettingsView.axaml(76,18,76,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [F:\\GitHub\\vice-sharp\\src\\ViceSharp.Avalonia\\ViceSharp.Avalonia.csproj]",
+        "║ Errors & Warnings"
+      ]
+    }
+  ],
+  "nativeInventoryUnchanged": true
+}
