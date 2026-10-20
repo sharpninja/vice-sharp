@@ -65,7 +65,7 @@ public sealed class BusObserverRowsContractTests
     [Fact]
     public void Fixture_names_cover_the_single_row_rules_plus_the_row_rules()
     {
-        Assert.Equal(15, FixtureNames.Length);
+        Assert.Equal(17, FixtureNames.Length);
         Assert.Equal(FixtureNames.Length, FixtureNames.Distinct().Count());
         foreach (var name in FixtureNames) Assert.NotNull(GetFixture(name));
         var kinds = FixtureNames.SelectMany(n => GetFixture(n).Expected).Select(e => e.Kind).Distinct().Order().ToArray();
@@ -86,6 +86,8 @@ public sealed class BusObserverRowsContractTests
     [InlineData("watch-toggle")]
     [InlineData("watch-flag1-after-rebuild")]
     [InlineData("foreign-row")]
+    [InlineData("translate-keep")]
+    [InlineData("bank-by-store")]
     [InlineData("bank-switch")]
     [InlineData("rewrite-noncurrent-row")]
     [InlineData("bank-then-rebuild")]

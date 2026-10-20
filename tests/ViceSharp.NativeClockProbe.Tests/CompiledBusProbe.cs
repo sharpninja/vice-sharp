@@ -24,7 +24,7 @@ internal sealed class CompiledBusProbe : IBusObserverProbe
     {
         var arguments = steps.Select(step => step.Op switch
         {
-            "init" or "cycle" or "alias" or "foreign" => step.Op,
+            "init" or "cycle" or "alias" or "foreign" or "keep" => step.Op,
             "clock" or "read" or "dread" or "translate" or "rewrite" or "toggle" or "bank" =>
                 step.Op + ":" + step.A.ToString(CultureInfo.InvariantCulture),
             "write" or "dwrite" or "rewriterow" =>

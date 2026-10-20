@@ -233,12 +233,22 @@ function Step-Link {
 function Step-Inventory {
     $listPath = Join-Path $receipts 'materialization-hashes.txt'
     if (-not (Test-Path -LiteralPath $listPath)) { throw "Run the Copy stage first: $listPath missing" }
-    $before = Get-Content -LiteralPath $listPath
-    $after = Get-TreeHashList -Root $source | ForEach-Object { "{0} {1}" -f $_.Sha256, $_.Path }
-    $same = ($before.Count -eq $after.Count) -and (@(Compare-Object -ReferenceObject $before -DifferenceObject $after).Count -eq 0)
-    Write-Receipt -Name 'inventory' -Object ([pscustomobject]@{ Stage = 'Inventory'; Before = $before.Count; After = $after.Count; MaterializationUnchanged = $same }) | Out-Null
-    if (-not $same) { throw 'Materialization source changed during the build; this is a finding, not a pass.' }
-    Write-Output ("materialization unchanged: {0} files" -f $after.Count)
+    $beforeMap = @{}
+    foreach ($line in Get-Content -LiteralPath $listPath) { $sha, $path = $line -split ' ', 2; $beforeMap[$path] = $sha }
+    $afterList = Get-TreeHashList -Root $source
+    $afterMap = @{}
+    foreach ($e in $afterList) { $afterMap[$e.Path] = $e.Sha256 }
+    $changed = @($beforeMap.Keys | Where-Object { $afterMap.ContainsKey($_) -and $afterMap[$_] -ne $beforeMap[$_] } | Sort-Object)
+    $removed = @($beforeMap.Keys | Where-Object { -not $afterMap.ContainsKey($_) } | Sort-Object)
+    $added = @($afterMap.Keys | Where-Object { -not $beforeMap.ContainsKey($_) } | Sort-Object)
+    # Changed or removed original files are a failure. Added files are reported by path and left in place for
+    # the operator's disposition (a plugin hook writing session state into a drifted working directory is the
+    # known cause, not the build); they are a finding, not a pass, and are never deleted here.
+    $unchanged = ($changed.Count -eq 0 -and $removed.Count -eq 0)
+    Write-Receipt -Name 'inventory' -Object ([pscustomobject]@{ Stage = 'Inventory'; Before = $beforeMap.Count; After = $afterList.Count; OriginalFilesUnchanged = $unchanged; Changed = $changed; Removed = $removed; Added = $added }) | Out-Null
+    if (-not $unchanged) { throw ('Materialization source changed during the build ({0} changed, {1} removed); this is a finding, not a pass.' -f $changed.Count, $removed.Count) }
+    if ($added.Count) { Write-Output ('FINDING: {0} file(s) added to the materialization, left for disposition: {1}' -f $added.Count, ($added -join ', ')) }
+    Write-Output ("original materialization files unchanged: {0}" -f $beforeMap.Count)
 }
 
 $stages = if ($Stage -eq 'All') { @('Copy', 'Autogen', 'Configure', 'Make', 'Link', 'Inventory') } else { @($Stage) }

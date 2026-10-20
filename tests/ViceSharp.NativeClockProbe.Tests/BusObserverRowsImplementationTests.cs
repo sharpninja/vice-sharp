@@ -23,6 +23,8 @@ public sealed class BusObserverRowsImplementationTests
     [InlineData("watch-toggle")]
     [InlineData("watch-flag1-after-rebuild")]
     [InlineData("foreign-row")]
+    [InlineData("translate-keep")]
+    [InlineData("bank-by-store")]
     [InlineData("bank-switch")]
     [InlineData("rewrite-noncurrent-row")]
     [InlineData("bank-then-rebuild")]

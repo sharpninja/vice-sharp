@@ -61,6 +61,22 @@ public sealed class BusObserverContractTests
         "translate" => new(
             [new("init"), new("translate", 0x1234)],
             [InitOk, InitPatch, new("translate", "0,1,8189,1")]),
+        // A store that itself reassigns the pointers (the C64 CPU port at $0001: zero_store calls
+        // mem_pla_config_changed, c64memsc.c 226 to 243, which re-aliases the dummy pointers intra-object)
+        // keeps its own kind, decided at entry, and the wrapper heals the dummy pointers right after the
+        // original store returns, so the following accesses are not reported as missing (S3 finding, x64sc
+        // reset workload: the two writes STX $01 and STX $00 were the only kind-missing accesses in 100,000 cycles).
+        "bank-by-store" => new(
+            [new("init"), new("write", 0x0001, 7), new("read", 0x0100), new("cycle")],
+            [InitOk, InitPatch,
+             new("access", "write,1,7,0"), new("repatch", "0,1"),
+             new("access", "read,256,165,0"), new("cycle", "0")]),
+        // S3 control: with VICESHARP_FAST_PATH=keep in the environment at rebuild time the wrapped translate
+        // forwards the real result unchanged (limit kept, base not nulled), so the same binary can run the
+        // equivalence pair; the default remains withheld.
+        "translate-keep" => new(
+            [new("keep"), new("init"), new("translate", 0x1234)],
+            [InitOk, InitPatch, new("translate", "8189,0,8189,1")]),
         "rebuild-at-runtime" => new(
             [new("init"), new("read", 0x0100), new("cycle"), new("init"), new("read", 0x0100), new("cycle")],
             [InitOk, InitPatch, new("access", "read,256,165,0"), new("cycle", "0"),
@@ -104,7 +120,7 @@ public sealed class BusObserverContractTests
     [
         "empty", "init-only", "read", "fetch", "write-and-dummy", "translate",
         "rebuild-at-runtime", "rewrite-outside-init", "dummy-alias", "watch-toggle",
-        "watch-flag1-after-rebuild", "foreign-row"
+        "watch-flag1-after-rebuild", "foreign-row", "translate-keep", "bank-by-store"
     ];
 
     /// <summary>Exact event order proves capture, fail-closed rescan, re-patch timing and preserved input.</summary>
@@ -142,6 +158,8 @@ public sealed class BusObserverContractTests
     [InlineData("watch-toggle")]
     [InlineData("watch-flag1-after-rebuild")]
     [InlineData("foreign-row")]
+    [InlineData("translate-keep")]
+    [InlineData("bank-by-store")]
     public void Correct_mock_passes_and_every_wrong_mock_is_rejected(string name)
     {
         var fixture = GetFixture(name);
@@ -208,6 +226,11 @@ public sealed class BusObserverContractTests
         RejectVariant("translate", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "8189,1,8189,1" } : x).ToArray());
         RejectVariant("translate", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "0,0,8189,1" } : x).ToArray());
         RejectVariant("translate", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "0,1,0,0" } : x).ToArray());
+        // The store that reassigns the pointers must keep its own kind and heal the dummies before the next access.
+        RejectVariant("bank-by-store", e => e.Select(x => x.Detail == "write,1,7,0" ? x with { Detail = "missing,1,7,0" } : x).ToArray());
+        RejectVariant("bank-by-store", e => e.Select(x => x.Detail == "read,256,165,0" ? x with { Detail = "missing,256,165,0" } : x).ToArray());
+        // Keep mode must forward the real result, not withhold it, and must not be the default.
+        RejectVariant("translate-keep", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "0,1,8189,1" } : x).ToArray());
         // An untraced access must surface as missing, not be silently dropped.
         RejectVariant("rewrite-outside-init", e => e.Where(x => x.Kind != "missing").ToArray());
         // An aliased dummy pointer must not be reported as a plain read.

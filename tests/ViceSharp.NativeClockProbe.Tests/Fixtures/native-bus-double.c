@@ -44,10 +44,20 @@ static uint8_t stock_read(uint16_t addr)
     return (uint8_t)((addr & 0xff) ^ 0xa5);
 }
 
+static void mem_update_tab_ptrs(int flag);
+
+/* A store to $0001 behaves like the C64 CPU port: it reconfigures the banks and re-points all
+ * four pointers intra-object (c64memsc.c 226 to 243 via the static mem_update_tab_ptrs). In the
+ * single-row shape only the pointer reassignment happens. */
 static void stock_store(uint16_t addr, uint8_t value)
 {
-    (void)addr;
     (void)value;
+    if (addr == 1) {
+#if VICE_SHARP_ROWS > 1
+        mem_config = 7 % VICE_SHARP_ROWS;
+#endif
+        mem_update_tab_ptrs(watchpoints_active);
+    }
 }
 
 static uint8_t read_watch(uint16_t addr)

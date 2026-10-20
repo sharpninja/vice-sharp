@@ -36,6 +36,8 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifndef VICE_SHARP_ROWS
 #define VICE_SHARP_ROWS 1
@@ -72,6 +74,10 @@ static store_func_ptr_t dummy_write_row[VICE_SHARP_PAGES];
 static read_func_ptr_t *watch_read_row;
 static store_func_ptr_t *watch_write_row;
 static int initialized;
+/* S3 control: VICESHARP_FAST_PATH=keep in the environment at rebuild time makes the wrapped
+ * translate forward the real result unchanged, so one binary runs both halves of the
+ * equivalence pair; read once per rebuild, never per call. Default: withheld. */
+static int keep_fast_path;
 
 /* After the real rebuild or toggle, watch flag 1 leaves the real pointers on the watch
  * rows and the dummy pointers on the data rows; that difference identifies the watch rows. */
@@ -100,23 +106,42 @@ static void emit_access(const char *kind, uint16_t addr, uint8_t data)
     vice_sharp_bus_sink("access", detail);
 }
 
+static int repoint_dummy(void);
+static void emit_repatch(int entries, int dummy);
+
+/* An access can itself reassign the pointers (a store to the C64 CPU port at $0001 runs
+ * mem_pla_config_changed, c64memsc.c 226 to 243; cartridge registers likewise), so the kind
+ * is decided at entry, from the pointer state the access was dispatched through, and the
+ * dummy pointers are healed right after the original returns, before the next access. */
+static void heal_after_access(void)
+{
+    if (repoint_dummy()) {
+        emit_repatch(0, 1);
+    }
+}
+
 static uint8_t read_real(int page, uint16_t addr)
 {
+    const char *kind = _mem_read_tab_ptr_dummy == dummy_read_row ? "read" : "missing";
     uint8_t value = saved_read[current_row()][page](addr);
-    emit_access(_mem_read_tab_ptr_dummy == dummy_read_row ? "read" : "missing", addr, value);
+    emit_access(kind, addr, value);
+    heal_after_access();
     return value;
 }
 
 static void write_real(int page, uint16_t addr, uint8_t value)
 {
+    const char *kind = _mem_write_tab_ptr_dummy == dummy_write_row ? "write" : "missing";
     saved_write[current_row()][page](addr, value);
-    emit_access(_mem_write_tab_ptr_dummy == dummy_write_row ? "write" : "missing", addr, value);
+    emit_access(kind, addr, value);
+    heal_after_access();
 }
 
 static uint8_t read_dummy(int page, uint16_t addr)
 {
     uint8_t value = saved_read[current_row()][page](addr);
     emit_access("dummy-read", addr, value);
+    heal_after_access();
     return value;
 }
 
@@ -124,6 +149,7 @@ static void write_dummy(int page, uint16_t addr, uint8_t value)
 {
     saved_write[current_row()][page](addr, value);
     emit_access("dummy-write", addr, value);
+    heal_after_access();
 }
 
 /* One trampoline per page and kind; the page index is baked into each function. */
@@ -245,6 +271,10 @@ void __wrap_mem_initialize_memory(void)
     int entries = 0;
     int located;
     __real_mem_initialize_memory();
+    {
+        const char *mode = getenv("VICESHARP_FAST_PATH");
+        keep_fast_path = (mode != NULL && strcmp(mode, "keep") == 0);
+    }
     located = locate_rows();
     learn_watch_rows();
 #if VICE_SHARP_ROWS > 1
@@ -276,8 +306,10 @@ void __wrap_mem_mmu_translate(unsigned int addr, uint8_t **base, int *start, int
     __real_mem_mmu_translate(addr, base, start, limit);
     real_limit = *limit;
     real_base_nonnull = *base != NULL;
-    *base = NULL;
-    *limit = 0;
+    if (!keep_fast_path) {
+        *base = NULL;
+        *limit = 0;
+    }
     snprintf(detail, sizeof detail, "%d,%d,%d,%d", *limit, *base == NULL, real_limit, real_base_nonnull);
     vice_sharp_bus_sink("translate", detail);
 }

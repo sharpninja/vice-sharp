@@ -1,5 +1,8 @@
 /* Test fixture only. Drives the VICE-shaped double through the wrapped seams
  * and prints every observer event as "kind,detail". Not VICE. */
+#if !defined(_WIN32)
+#define _POSIX_C_SOURCE 200112L
+#endif
 #include <errno.h>
 #include <inttypes.h>
 #include <stdint.h>
@@ -94,6 +97,16 @@ int main(int argc, char **argv)
             double_alias_dummy();
         } else if (strcmp(op, "foreign") == 0 && arity == 0) {
             double_foreign();
+        } else if (strcmp(op, "keep") == 0 && arity == 0) {
+#if defined(_WIN32)
+            if (_putenv("VICESHARP_FAST_PATH=keep") != 0) {
+                return 2;
+            }
+#else
+            if (setenv("VICESHARP_FAST_PATH", "keep", 1) != 0) {
+                return 2;
+            }
+#endif
         } else if (strcmp(op, "clock") == 0 && arity == 1) {
             maincpu_clk = a;
         } else if (strcmp(op, "read") == 0 && arity == 1 && a <= 0xffff) {
