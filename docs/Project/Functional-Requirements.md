@@ -1,4 +1,4 @@
-# Functional Requirements (MCP Server)
+# Functional Requirements (QBrain.AI)
 
 ## FR-AIREVIEW-ROUTING-001 Auditable Astra xhigh AI review routing
 
@@ -21,10 +21,16 @@ Scope: layer-1+
 IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.
 Scope: layer-1+
 
-## FR-BACKFILL-MEDIA-001 Media devices (D64, tape) I/O functional parity
+## FR-BACKFILL-MEDIA-001 D64, tape and IEC media behavior matches immutable native VICE
 
-D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.
+Managed media behavior shall reproduce the pinned native VICE reference at the corresponding layer: D64 image-sector data/status/persistence, true-drive IEC and motor behavior, and machine-specific datasette timing/sense/record behavior. Image-buffer success, synthetic motor counters and historical test totals cannot substitute for real-emulator parity. Preserve the separate buffered and true-drive modes and all legacy evidence.
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] For the same pinned D64 fixtures and operation sequence, sector reads/writes, returned semantic status, error-map effects and persisted bytes match native VICE; cover valid sectors, geometry boundaries, malformed/truncated input, read-only input, read errors and failed writes without treating success-only BAM reads as complete coverage.
+- [ ] True-drive IEC line contributions, both ATN edges, enabled/disabled drive cases, contention, drive motor/rotation progression and DOS-mediated BAM-read bytes/status/effects must match pinned native VICE for identical initial conditions; direct image access cannot satisfy true-drive acceptance. FR-ARCH-TRUEDRIVE-1541-002 is an existing live record, but its zero-AC state is not acceptance evidence. Its exact true-drive AC expansion belongs to the separate unapproved drive proposal and must receive independent HV and explicit operator approval before drive implementation or satisfaction. This tape amendment does not approve that dependency or waive these media obligations.
+- [ ] Datasette motor startup, delayed stop/cancellation, pulse delivery, sense-line wiring and recording on writable media must satisfy the existing live FR-RUNTIME-TAPE-002 contract as amended only after explicit approval of this exact packet, for C64 and VIC-20. A metadata pulse read or in-memory recording count alone is insufficient. The earlier application of FR-RUNTIME-TAPE-002 does not approve the new text in this amendment.
+- [ ] Each accepted media scenario retains fixture/firmware/resource hashes, mode, initial state, clock domain, operation sequence, ordered observations and first mismatch. Reusing a host-cycle deadline as a drive/tape clock assertion or comparing different media modes is rejected.
+- [ ] All preceding assertions first pass with independent discriminating mocks and expected negative controls, then the same inputs/assertions pass with real providers and the full applicable suites. Missing, skipped, failing or mock-only evidence leaves the criterion unsatisfied.
 
 ## FR-BACKFILL-VIDEO-001 VIC-II visible-frame parity (RC window, DMA checkpoints, screen-RAM)
 
@@ -51,14 +57,39 @@ Scope: layer-1+
 
 ## FR-CFG-002 ROM and Romset Selection
 
+## FR-CFG-002: ROM and Romset Selection
+
+**ID:** FR-CFG-002
+**Title:** ROM and Romset Selection
+**Priority:** P0 -- Critical
+**Iteration:** 1
+
+### Description
+
 The emulator shall load machine ROM images and named romsets needed by the selected machine profile, validate them before use, and report missing or invalid ROMs without starting an invalid machine session.
 
-## Acceptance Criteria
-- Machine profiles declare required and optional ROM artifacts.
-- ROM files are validated for size and checksum when known.
-- Named romsets can be selected for a session.
-- Missing or invalid ROMs produce actionable diagnostics.
-- ROM selection does not require UI code to access emulator runtime internals.
+### Acceptance Criteria
+
+1. Machine profiles declare required and optional ROM artifacts.
+2. ROM files are validated for size and checksum when known.
+3. Named romsets can be selected for a session.
+4. Missing or invalid ROMs produce actionable diagnostics.
+5. ROM selection does not require UI code to access emulator runtime internals.
+6. Local desktop startup reuses a complete configured or development C64 ROM set; otherwise it acquires the default BASIC, KERNAL, and character ROMs from the built-in VICE GitHub URLs with pinned SHA256 verification.
+7. Acquired ROMs are cached in the current user's local application-data directory, with configured roots taking priority; a verified complete cache supports offline startup without system installation-directory writes.
+8. Acquisition failure or cancellation reports an actionable startup error instead of silently selecting the video-less minimal host. Remote-host connections and generic/headless runtime factories do not trigger local C64 acquisition.
+9. Automatic acquisition covers the default C64 core ROMs only; additional machine variants and drive DOS ROMs remain separately supplied resources.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: ROM files and romset files sections.
+
+### Traceability
+
+- **Interfaces:** `IArchitectureDescriptor`, `IRomProvider`, `HostControlService`
+- **Technical Requirements:** TR-LIB-001, TR-STATE-001
+- **Test Requirements:** TEST-CFG-001
+- **Test Suite:** `RomProviderTests`, `MachineProfileRomValidationTests`, desktop C64 ROM bootstrap and startup regression tests
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Machine profiles declare required and optional ROM artifacts.
@@ -66,6 +97,10 @@ Scope: layer-1+
 - [ ] Named romsets can be selected for a session.
 - [ ] Missing or invalid ROMs produce actionable diagnostics.
 - [ ] ROM selection does not require UI code to access emulator runtime internals.
+- [ ] Local desktop startup reuses a complete configured or development C64 ROM set; otherwise it acquires the default BASIC, KERNAL, and character ROMs from the built-in VICE GitHub URLs with pinned SHA256 verification.
+- [ ] Acquired ROMs are cached in the current user's local application-data directory, with configured roots taking priority; a verified complete cache supports offline startup without system installation-directory writes.
+- [ ] Acquisition failure or cancellation reports an actionable startup error instead of silently selecting the video-less minimal host. Remote-host connections and generic/headless runtime factories do not trigger local C64 acquisition.
+- [ ] Automatic acquisition covers the default C64 core ROMs only; additional machine variants and drive DOS ROMs remain separately supplied resources.
 
 ## FR-CFG-003 Palette Selection and Color Resource Handling
 
@@ -170,10 +205,10 @@ Scope: layer-1+
 Each captured tick snapshots the full internal state of every stateful chip (VIC, SID, CIA, PLA) for display in the debug screen.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] VIC, SID, CIA and PLA each implement IStatefulDevice
-- [x] Each chip's state is captured per tick with zero hot-path allocation
-- [x] Captured state decodes into named register/field values
-- [x] The debug screen shows each chip's decoded state at the selected tick
+- [ ] VIC, SID, CIA and PLA each implement IStatefulDevice
+- [ ] Each chip's state is captured per tick with zero hot-path allocation
+- [ ] Captured state decodes into named register/field values
+- [ ] The debug screen shows each chip's decoded state at the selected tick
 
 ## FR-CIA-001 CIA Timer A and Timer B with Cascade Mode
 
@@ -413,24 +448,24 @@ Scope: layer-1+
 
 ## FR-CPU-004 6510 I/O Port at Addresses $0000/$0001
 
-The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction register) and $0001 (data port) shall be emulated. This port controls the PLA memory banking configuration (LORAM, HIRAM, CHAREN bits), the cassette motor, and the cassette sense line. The data port shall exhibit the correct behavior with pull-up/pull-down resistors and the capacitive discharge timing that affects reads of output pins.
+The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction register) and $0001 (data port) shall be emulated. This port controls the PLA memory banking configuration (LORAM, HIRAM, CHAREN bits), the cassette motor, and the cassette sense line. The data port shall exhibit the correct behavior with pull-up/pull-down resistors and the capacitive discharge timing that affects reads of floating input pins.
 
 ## Acceptance Criteria
 - Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.
 - Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.
-- Bit 3 controls the cassette motor (active low).
+- On C64, the cassette motor output is active low from DDR-masked bit 5, !(DDR & DATA & 0x20), and the cassette write output is bit 3, (~DDR | DATA) & 0x08. Match pinned VICE's changed-effective-output detection for data and DDR writes, including input/output transitions and repeated writes. Do not exchange the motor and write bits.
 - Bit 4 reads the cassette switch sense (active low).
-- Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.
-- When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.
+- On the C64 board, reading $0001 with DDR bit 5 clear returns bit 5 clear; with DDR bit 5 set, its output readback follows pinned VICE's port data/DDR calculation. Bit 5 is the motor-control bit, not an unused pin. Exercise both data levels, both DDR directions, and direction changes; do not substitute SX-64 floating-pin behavior for C64 behavior.
+- Unused CPU-port pins reproduce the pinned VICE C64/SX-64 charge and decay behavior: bits 6 and 7 on both boards use a deadline of the current CPU clock plus 350000 cycles plus an inclusive random value from 0 through 70000; SX-64 bits 3, 4 and 5 use 1500000 plus an inclusive 0 through 300000. Writing a pin while configured as output, including a repeated identical data write, or changing it from output to input captures its data bit and sets its deadline. Other DDR transitions do not reset that deadline. Reads of $0001 clear active retained charge only when the deadline is strictly less than the current CPU clock, and substitute retained charge only for pins configured as input; reads of $0000 do not perform this discharge. Preserve native board selection, random-state consumption order, unsigned 64-bit clock arithmetic and reset behavior. Do not replace the executed behavior with a fixed 350-microsecond delay, an unused 8500 constant, or host-time expiration.
 - The `IMemoryMappedDevice` interface exposes the port to the address decoder.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Address $0000 is the Data Direction Register (DDR); bits set to 1 configure the corresponding $0001 bit as output.
 - [ ] Address $0001 bits 0-2 (LORAM, HIRAM, CHAREN) control PLA banking and are reflected immediately in the address space configuration.
-- [ ] Bit 3 controls the cassette motor (active low).
+- [ ] On C64, the cassette motor output is active low from DDR-masked bit 5, !(DDR & DATA & 0x20), and the cassette write output is bit 3, (~DDR | DATA) & 0x08. Match pinned VICE's changed-effective-output detection for data and DDR writes, including input/output transitions and repeated writes. Do not exchange the motor and write bits.
 - [ ] Bit 4 reads the cassette switch sense (active low).
-- [ ] Bit 5 is unused on C64 but reads as expected based on DDR/pull-up behavior.
-- [ ] When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.
+- [ ] On the C64 board, reading $0001 with DDR bit 5 clear returns bit 5 clear; with DDR bit 5 set, its output readback follows pinned VICE's port data/DDR calculation. Bit 5 is the motor-control bit, not an unused pin. Exercise both data levels, both DDR directions, and direction changes; do not substitute SX-64 floating-pin behavior for C64 behavior.
+- [ ] Unused CPU-port pins reproduce the pinned VICE C64/SX-64 charge and decay behavior: bits 6 and 7 on both boards use a deadline of the current CPU clock plus 350000 cycles plus an inclusive random value from 0 through 70000; SX-64 bits 3, 4 and 5 use 1500000 plus an inclusive 0 through 300000. Writing a pin while configured as output, including a repeated identical data write, or changing it from output to input captures its data bit and sets its deadline. Other DDR transitions do not reset that deadline. Reads of $0001 clear active retained charge only when the deadline is strictly less than the current CPU clock, and substitute retained charge only for pins configured as input; reads of $0000 do not perform this discharge. Preserve native board selection, random-state consumption order, unsigned 64-bit clock arithmetic and reset behavior. Do not replace the executed behavior with a fixed 350-microsecond delay, an unused 8500 constant, or host-time expiration.
 - [ ] The `IMemoryMappedDevice` interface exposes the port to the address decoder.
 
 ## FR-CPU-005 8502 2MHz Mode Support for C128
@@ -1283,17 +1318,40 @@ Scope: layer-1+
 
 ## FR-INP-006 VICE VKM Keymap Selection and Real-Time Keyboard Translation
 
+## FR-INP-006: VICE Keymap Selection and Translation
+
+**ID:** FR-INP-006
+**Title:** VICE VKM Keymap Selection and Real-Time Keyboard Translation
+**Priority:** P0 -- Critical
+**Iteration:** 1
+
+### Description
+
 The emulator shall use VICE keymap files to translate host keyboard events into machine-specific keyboard matrix state. Built-in maps and uploaded custom maps are selected per emulator session and applied by the host-owned machine keyboard input handler.
 
-## Acceptance Criteria
-- Built-in VICE keymaps are discoverable by machine and map style.
-- A selected keymap is retained per emulator session until changed or the session ends.
-- Custom keymaps can be uploaded by content and metadata without requiring shared file paths between UI and host.
-- The parser supports VICE keymap comments, `!CLEAR`, `!INCLUDE`, `!UNDEF`, modifier directives, row/column entries, and shift flags needed for SHIFT, C=, and CTRL behavior.
-- Includes resolve relative to the current keymap file or uploaded bundle context.
-- Invalid custom maps report diagnostics and do not replace the active map.
-- Real-time key down/up events update the C64 keyboard matrix through the selected map without constructing UI-local emulator devices.
-- Machine-specific keyboard translators can be registered for future non-C64 profiles.
+### Acceptance Criteria
+
+1. Built-in VICE keymaps are discoverable by machine and map style.
+2. A selected keymap is retained per emulator session until changed or the session ends.
+3. Custom keymaps can be uploaded by content and metadata without requiring shared file paths between UI and host.
+4. The parser supports VICE keymap comments, `!CLEAR`, `!INCLUDE`, `!UNDEF`, modifier directives, row/column entries, and shift flags needed for SHIFT, C=, and CTRL behavior.
+5. Includes resolve relative to the current keymap file or uploaded bundle context.
+6. Invalid custom maps report diagnostics and do not replace the active map.
+7. Real-time key down/up events update the C64 keyboard matrix through the selected map without constructing UI-local emulator devices.
+8. Machine-specific keyboard translators can be registered for future non-C64 profiles.
+9. Desktop installations include all vendored C64 VICE keymap files and discover them without an external VICE installation. Explicit VICE data roots and per-user files retain priority over packaged resources.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: keyboard emulation, keymap files, symbolic and positional mapping, keymap control commands, key mappings, special rows, and modifier flags.
+- `native/vice/vice/doc/html/images/keymaps.txt`: documented keymap coverage for C64, C128, PET, Plus/4, and CBM-II.
+
+### Traceability
+
+- **Interfaces:** `IKeyboardInputMap`, `IKeyboardInputMapSelection`, `IKeyboardMatrix`, `IMachineKeyboardInput`, `HostInputService`
+- **Related FRs:** FR-INP-001, FR-HOST-004, FR-UI-001
+- **Technical Requirement:** TR-INPUT-VKM-001
+- **Test Suite:** `C64VkmKeyboardTests`, `HostInputServiceTests`, `GrpcInputMappingTests`, `BundledKeyboardMapTests`, `tests/packaging/Verify-ArchPackage.ps1`
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Built-in VICE keymaps are discoverable by machine and map style.
@@ -1304,6 +1362,7 @@ Scope: layer-1+
 - [ ] Invalid custom maps report diagnostics and do not replace the active map.
 - [ ] Real-time key down/up events update the C64 keyboard matrix through the selected map without constructing UI-local emulator devices.
 - [ ] Machine-specific keyboard translators can be registered for future non-C64 profiles.
+- [ ] Desktop installations include all vendored C64 VICE keymap files and discover them without an external VICE installation. Explicit VICE data roots and per-user files retain priority over packaged resources.
 
 ## FR-INPROC-001 Kestrel-free in-process host path
 
@@ -1406,38 +1465,87 @@ Scope: layer-1+
 - [ ] Integer scaling options (1x, 2x, 3x, 4x) are available.
 - [ ] Palette selection (VICE default, Pepto, CCS64, Community Colors) is configurable.
 
-## FR-MED-002 Video Recording (MP4 via FFmpeg)
+## FR-MED-002 Video Recording
+
+## FR-MED-002: Video Recording
+
+**ID:** FR-MED-002
+**Title:** Video Recording (MP4 via FFmpeg)
+**Priority:** P1 -- Important
+**Iteration:** 2
+
+### Description
 
 The emulator shall record video output to MP4 (H.264) format by streaming raw frames to an external `ffmpeg` process (mirroring VICE's `ffmpegexedrv`; discovery via `PATH` or `VICESHARP_FFMPEG`, no libav P/Invoke bindings). Recording captures consecutive frames at the native frame rate (PAL: 50fps, NTSC: approximately 59.94fps) and encodes them in real-time.
 
-## Acceptance Criteria
-- Video is encoded to H.264 in an MP4 container.
-- Frame rate matches the emulated system (50fps PAL, 59.94fps NTSC).
-- Resolution options include native (403x284 PAL) and integer-scaled variants.
-- Recording can be started, paused, resumed, and stopped via `IMediaCapture`.
-- The encoding does not drop frames during real-time recording on the reference hardware (a modern desktop CPU).
-- Quality presets (low/medium/high) are configurable, mapping to CRF values.
-- The recording pipeline uses zero managed allocations per frame on the hot path.
+### Acceptance Criteria
+
+1. Video is encoded to H.264 in an MP4 container.
+2. Frame rate matches the emulated system (50fps PAL, 59.94fps NTSC).
+3. Resolution options include native (403x284 PAL) and integer-scaled variants.
+4. Recording can be started, paused, resumed, and stopped via `IMediaCapture`.
+5. The encoding does not drop frames during real-time recording on the reference hardware (a modern desktop CPU).
+6. Quality presets (low/medium/high) are configurable, mapping to CRF values.
+7. The recording pipeline uses zero managed allocations per frame on the hot path.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
+
+### Traceability
+
+- **Interfaces:** `IMediaCapture`, `IVideoEncoder`
+- **Test Suite:** `MediaServiceHostTests`, `CaptureServiceHostTests`, `RuntimeCaptureTests`
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Unique mode skips consecutive byte-identical frames
-- [x] Frame files are written off the emulation worker thread
+- [ ] Video is encoded to H.264 in an MP4 container.
+- [ ] Frame rate matches the emulated system (50fps PAL, 59.94fps NTSC).
+- [ ] Resolution options include native (403x284 PAL) and integer-scaled variants.
+- [ ] Recording can be started, paused, resumed, and stopped via `IMediaCapture`.
+- [ ] The encoding does not drop frames during real-time recording on the reference hardware (a modern desktop CPU).
+- [ ] Quality presets (low/medium/high) are configurable, mapping to CRF values.
+- [ ] The recording pipeline uses zero managed allocations per frame on the hot path.
 
-## FR-MED-003 Audio Recording (WAV/FLAC)
+## FR-MED-003 Audio Recording
+
+## FR-MED-003: Audio Recording
+
+**ID:** FR-MED-003
+**Title:** Audio Recording (WAV/FLAC)
+**Priority:** P1 -- Important
+**Iteration:** 2
+
+### Description
 
 The emulator shall record audio output to WAV (uncompressed PCM) or FLAC (lossless compressed) format. The recording captures the SID audio output at the configured sample rate.
 
-## Acceptance Criteria
-- WAV format: 16-bit PCM, mono or stereo, at configurable sample rates (44100, 48000, 96000 Hz).
-- FLAC format: lossless compression of the same PCM data.
-- Recording captures the mixed SID output including all voices, filter, and volume.
-- For dual-SID configurations, stereo recording captures left/right channels independently.
-- Recording can be started, paused, resumed, and stopped independently of video recording.
-- Audio samples are buffered to prevent gaps during recording.
-- The recording includes digi playback ($D418) output at full fidelity.
+### Acceptance Criteria
+
+1. WAV format: 16-bit PCM, mono or stereo, at configurable sample rates (44100, 48000, 96000 Hz).
+2. FLAC format: lossless compression of the same PCM data.
+3. Recording captures the mixed SID output including all voices, filter, and volume.
+4. For dual-SID configurations, stereo recording captures left/right channels independently.
+5. Recording can be started, paused, resumed, and stopped independently of video recording.
+6. Audio samples are buffered to prevent gaps during recording.
+7. The recording includes digi playback ($D418) output at full fidelity.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
+
+### Traceability
+
+- **Interfaces:** `IMediaCapture`, `IAudioEncoder`
+- **Test Suite:** `WavAudioRecorderTests`, `MediaServiceHostTests`, `CaptureServiceHostTests`
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Output parses as valid RIFF/WAVE with data-chunk size matching samples
+- [ ] WAV format: 16-bit PCM, mono or stereo, at configurable sample rates (44100, 48000, 96000 Hz).
+- [ ] FLAC format: lossless compression of the same PCM data.
+- [ ] Recording captures the mixed SID output including all voices, filter, and volume.
+- [ ] For dual-SID configurations, stereo recording captures left/right channels independently.
+- [ ] Recording can be started, paused, resumed, and stopped independently of video recording.
+- [ ] Audio samples are buffered to prevent gaps during recording.
+- [ ] The recording includes digi playback ($D418) output at full fidelity.
 
 ## FR-MED-004 Synchronized Audio/Video Capture
 
@@ -1774,10 +1882,10 @@ Scope: layer-1+
 The pacing strategy (Semaphore vs VICE) is selectable in settings, applied live by swapping the gate on the worker thread, and persisted.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Strategy is selectable in the Settings UI (Semaphore or VICE)
-- [x] Change applies live - the pump swaps the gate with no session restart
-- [x] Selection round-trips through the settings DTO and persists
-- [x] Unknown or null strategy defaults to Semaphore
+- [ ] Strategy is selectable in the Settings UI (Semaphore or VICE)
+- [ ] Change applies live - the pump swaps the gate with no session restart
+- [ ] Selection round-trips through the settings DTO and persists
+- [ ] Unknown or null strategy defaults to Semaphore
 
 ## FR-PERF-RUNFRAME-001 C64 PAL RunFrame Throughput
 
@@ -1791,11 +1899,11 @@ Managed C64 PAL emulation must execute `IMachine.RunFrame()` fast enough for a h
 - Public signatures for `IMachine`, `IVideoChip`, `IAudioChip`, `IBus`, `IKeyboardMatrix`, `ArchitectureBuilder`, and `C64MachineProfiles` remain unchanged.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Production C64 PAL machine is built through ArchitectureBuilder with real C64 ROMs; romless and minimal-host machines are not valid evidence. (evidence: tests/ViceSharp.Benchmarks/BenchmarkMachineFactory.cs; tests/ViceSharp.Benchmarks/C64PalRunFrameBenchmark.cs; BenchmarksSmokeTests.C64PalRunFrameBenchmark_UsesRealC64Pal passed)
-- [x] Release/net10.0 managed-only 60 warmup plus 600 measured frame run reports median <= 18.0 ms. (evidence: RunFramePerfProbe 60 600: median=1.575ms)
-- [x] The same measured run reports p95 <= 22.0 ms. (evidence: RunFramePerfProbe 60 600: p95=2.753ms)
-- [x] The measured RunFrame loop reports 0 bytes allocated on the current thread. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes; BenchmarkDotNet Allocated reported no managed allocation)
-- [x] Public signatures for IMachine, IVideoChip, IAudioChip, IBus, IKeyboardMatrix, ArchitectureBuilder, and C64MachineProfiles remain unchanged. (evidence: PR #3 diff only changes internal implementation plus benchmark/test/docs; no public interface signatures changed)
+- [ ] Production C64 PAL machine is built through ArchitectureBuilder with real C64 ROMs; romless and minimal-host machines are not valid evidence. (evidence: tests/ViceSharp.Benchmarks/BenchmarkMachineFactory.cs; tests/ViceSharp.Benchmarks/C64PalRunFrameBenchmark.cs; BenchmarksSmokeTests.C64PalRunFrameBenchmark_UsesRealC64Pal passed)
+- [ ] Release/net10.0 managed-only 60 warmup plus 600 measured frame run reports median <= 18.0 ms. (evidence: RunFramePerfProbe 60 600: median=1.575ms)
+- [ ] The same measured run reports p95 <= 22.0 ms. (evidence: RunFramePerfProbe 60 600: p95=2.753ms)
+- [ ] The measured RunFrame loop reports 0 bytes allocated on the current thread. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes; BenchmarkDotNet Allocated reported no managed allocation)
+- [ ] Public signatures for IMachine, IVideoChip, IAudioChip, IBus, IKeyboardMatrix, ArchitectureBuilder, and C64MachineProfiles remain unchanged. (evidence: PR #3 diff only changes internal implementation plus benchmark/test/docs; no public interface signatures changed)
 
 ## FR-PRF-001 Commodore 64 (Original NMOS) Machine Profile
 
@@ -1849,17 +1957,17 @@ The SX-64 is a portable C64 with a built-in 1541 disk drive and a 5" color monit
 
 ## Acceptance Criteria
 - KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).
-- No cassette port: tape-related I/O port bits behave differently (cassette sense always reads "no tape").
+- The SX-64 board has no connected cassette port. Match pinned VICE's board-specific PLA inputs and suppress forwarding of motor, write and sense-out changes to tapeport devices. CPU-visible reads of bits 3-5 must still follow the native data, DDR and retained floating-capacitor state; neither permanently-high nor permanently-low input values are a valid universal substitute.
 - Built-in 1541 drive: device 8 is always present.
-- The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.
+- For SX-64 CPU reads of $0001, each input-configured bit 3, 4 and 5 is replaced by its retained native data_set_bit value after native falloff processing. Reset clears those retained values. Output writes and output-to-input transitions seed the corresponding retained data bit, falloff flag and deadline as pinned VICE does. A flagged retained value clears on a read only when its stored deadline is strictly less than maincpu_clk: a charged input therefore remains charged at the exact deadline and clears on the first later read. Output-configured bits retain normal port readback. Match each bit independently, native RNG-dependent deadline selection, repeated writes, direction transitions, reset and read side effects; do not impose an always-high or always-zero sense bit.
 - All other hardware is identical to the C64 NMOS profile.
 - Selectable via `IMachineProfile.LoadProfile("sx64")`.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).
-- [ ] No cassette port: tape-related I/O port bits behave differently (cassette sense always reads "no tape").
+- [ ] The SX-64 board has no connected cassette port. Match pinned VICE's board-specific PLA inputs and suppress forwarding of motor, write and sense-out changes to tapeport devices. CPU-visible reads of bits 3-5 must still follow the native data, DDR and retained floating-capacitor state; neither permanently-high nor permanently-low input values are a valid universal substitute.
 - [ ] Built-in 1541 drive: device 8 is always present.
-- [ ] The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.
+- [ ] For SX-64 CPU reads of $0001, each input-configured bit 3, 4 and 5 is replaced by its retained native data_set_bit value after native falloff processing. Reset clears those retained values. Output writes and output-to-input transitions seed the corresponding retained data bit, falloff flag and deadline as pinned VICE does. A flagged retained value clears on a read only when its stored deadline is strictly less than maincpu_clk: a charged input therefore remains charged at the exact deadline and clears on the first later read. Output-configured bits retain normal port readback. Match each bit independently, native RNG-dependent deadline selection, repeated writes, direction transitions, reset and read side effects; do not impose an always-high or always-zero sense bit.
 - [ ] All other hardware is identical to the C64 NMOS profile.
 - [ ] Selectable via `IMachineProfile.LoadProfile("sx64")`.
 
@@ -1998,9 +2106,9 @@ Scope: layer-1+
 ViceSharp shall provide an internal synchronous topic-based Pub/Sub event bus for transient intra-frame device-to-device communication, including interrupts, NMI, bus availability, address-enable control, DMA, clock, and state notifications. The bus exposes typed publish and subscribe APIs, raw payload compatibility, deterministic registration-order delivery, handle-based unsubscription, frame reset behavior, and message pool integration.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Public IPubSub exposes typed Publish/Subscribe, raw payload compatibility, Unsubscribe by SubscriptionHandle, Flush, FrameReset, and SubscriptionCount. (evidence: src/ViceSharp.Abstractions/IPubSub.cs)
-- [x] Publish delivers synchronously to subscribers in registration order for each topic. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
-- [x] Message pool exhaustion, return, and frame reset behavior are covered by focused tests. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
+- [ ] Public IPubSub exposes typed Publish/Subscribe, raw payload compatibility, Unsubscribe by SubscriptionHandle, Flush, FrameReset, and SubscriptionCount. (evidence: src/ViceSharp.Abstractions/IPubSub.cs)
+- [ ] Publish delivers synchronously to subscribers in registration order for each topic. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
+- [ ] Message pool exhaustion, return, and frame reset behavior are covered by focused tests. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
 
 ## FR-REMOTECTRL-001 Live Avalonia visual-tree inspection over gRPC
 
@@ -2190,33 +2298,40 @@ Scope: layer-1+
 - [ ] `GetRomAsync` maps `DetailedRomSchema` (files/cover/summary/launchable) ->
 - [ ] `RomDetailViewModel` invokes add-to-collection ->
 
-## FR-ROMM-LAUNCH-001 Download, attach, boot
+## FR-ROMM-LAUNCH-001 Download, attach, and boot library media
 
-PLAN-ROMM-001. Selecting a game downloads it, attaches to the right slot, and boots on the supported Avalonia product path. TR-ROMM-SEC-001. Xbox/UWP launch acceptance is archived and outside product scope.
-AC-LAUNCH-01: DownloadAsync accepts one relative filename, contains it under cacheDir/{romId}, reuses only on expected-size match, streams to a temporary file, rejects overflow/truncation, and atomically publishes complete content with progress -> RomMGatewayDownloadTests.Streams_Reuses_Progress + RejectsFileNamesOutsideRomCache + TruncatedDownload_DoesNotPublishPartialCacheEntry.
-AC-LAUNCH-02: slot = SelectedSlot or MediaExtensionMap default from fs_name -> MediaExtensionMapTests.Extension_MapsSlot.
-AC-LAUNCH-03: .prg is not launchable and Attach is disabled -> MediaExtensionMapTests.Prg_NotLaunchable + LibraryBrowseViewModelTests.Prg_AttachDisabled.
-AC-LAUNCH-04: attach/attach+start invoke IGameLauncher with resolved slot + autostart flag -> LibraryBrowseViewModelTests.AttachStart_InvokesLauncher.
-AC-LAUNCH-05: Avalonia launcher delegates to DropAndStartFileAsync(autostart)/AttachAsync(attach-only) -> AvaloniaGameLauncherTests.DelegatesToShell.
-AC-LAUNCH-06: two-phase status (Downloading N% then Starting) -> LibraryBrowseViewModelTests.Launch_TwoPhaseStatus.
+## FR-ROMM-LAUNCH-001: Download, attach, and boot library media
 
-## Acceptance Criteria
-- `DownloadAsync` streams to `<cacheDir>/{romId}/{fs_name}`, reuses on size match, reports
-- slot = `SelectedSlot` or `MediaExtensionMap` default from `fs_name` ->
-- `.prg` is not launchable and Attach is disabled -> `MediaExtensionMapTests.Prg_NotLaunchable`
-- attach/attach+start invoke `IGameLauncher` with the resolved slot + autostart flag ->
-- Xbox launcher reads bytes -> `AttachMediaAsync` payload -> `AutostartDrive8Async`(disk)/
-- Avalonia launcher delegates to `DropAndStartFileAsync`(autostart)/`AttachAsync`
-- two-phase status ("Downloading N%" then "Starting") ->
+**ID:** FR-ROMM-LAUNCH-001
+**Title:** Download, attach, and boot library media
+**Priority:** P1 -- Important
+
+The library shall acquire selected media into the user cache and attach or start it through the host boundary. This record preserves the launch contract in `docs/plans/PLAN-ROMM-BDPv4.md` and clarifies supported-format gating from PR7.
+
+### Acceptance Criteria
+
+1. AC-LAUNCH-01: Downloads stream to `<cacheDir>/{romId}/{fs_name}`, reuse a complete size-matched cached file, and report progress.
+2. AC-LAUNCH-02: Attachment uses the selected slot or the extension mapping's default slot.
+3. AC-LAUNCH-03: Raw PRG and disk formats without a host parser (G64, D71, D81) remain browsable but are not launchable. Attach and Attach-and-Start are disabled and do not download or invoke the launcher. Extension matching is case-insensitive. Supported D64 and T64 behavior remains available.
+4. AC-LAUNCH-04: Attach and Attach-and-Start invoke `IGameLauncher` with the resolved slot and autostart flag.
+5. AC-LAUNCH-05: The Xbox launcher attaches media bytes and uses disk autostart or cartridge cold reset as appropriate.
+6. AC-LAUNCH-06: The Avalonia launcher delegates to the shell's attach or drop-and-start path.
+7. AC-LAUNCH-07: Status progresses through downloading and starting; failures remain visible and retryable.
+
+### Traceability
+
+- Technical requirements: TR-LIB-001, TR-ROMM-SEC-001.
+- Test requirement: TEST-ROMM-LAUNCH-001.
+- Tests: `MediaExtensionMapTests`, `LibraryBrowseViewModelTests`, `AvaloniaGameLauncherTests`, `XboxGameLauncherTests`, `RomMGatewayDownloadTests`.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] `DownloadAsync` streams to `<cacheDir>/{romId}/{fs_name}`, reuses on size match, reports
-- [ ] slot = `SelectedSlot` or `MediaExtensionMap` default from `fs_name` ->
-- [ ] `.prg` is not launchable and Attach is disabled -> `MediaExtensionMapTests.Prg_NotLaunchable`
-- [ ] attach/attach+start invoke `IGameLauncher` with the resolved slot + autostart flag ->
-- [ ] Xbox launcher reads bytes -> `AttachMediaAsync` payload -> `AutostartDrive8Async`(disk)/
-- [ ] Avalonia launcher delegates to `DropAndStartFileAsync`(autostart)/`AttachAsync`
-- [ ] two-phase status ("Downloading N%" then "Starting") ->
+- [ ] AC-LAUNCH-01: Downloads stream to `<cacheDir>/{romId}/{fs_name}`, reuse a complete size-matched cached file, and report progress.
+- [ ] AC-LAUNCH-02: Attachment uses the selected slot or the extension mapping's default slot.
+- [ ] AC-LAUNCH-03: Raw PRG and disk formats without a host parser (G64, D71, D81) remain browsable but are not launchable. Attach and Attach-and-Start are disabled and do not download or invoke the launcher. Extension matching is case-insensitive. Supported D64 and T64 behavior remains available.
+- [ ] AC-LAUNCH-04: Attach and Attach-and-Start invoke `IGameLauncher` with the resolved slot and autostart flag.
+- [ ] AC-LAUNCH-05: The Xbox launcher attaches media bytes and uses disk autostart or cartridge cold reset as appropriate.
+- [ ] AC-LAUNCH-06: The Avalonia launcher delegates to the shell's attach or drop-and-start path.
+- [ ] AC-LAUNCH-07: Status progresses through downloading and starting; failures remain visible and retryable.
 
 ## FR-ROMM-PKG-001 NuGet packaging of RomM libraries
 
@@ -2266,15 +2381,17 @@ Scope: layer-1+
 
 ## FR-RUNTIME-TAPE-002 Datasette motor ramp + sense line + record mode
 
-Datasette transport, tape-sense, motor timing, and recording must reproduce pinned immutable VICE behavior for the same selected machine, tape media state, control sequence, and emulated clock sequence. Machine-specific tape-sense and pulse wiring belong in machine adapters. Internal pulse-buffer success or compatibility with managed-only tests does not establish VICE parity.
+Datasette transport, tape sense, motor scheduling, machine wiring and recording shall reproduce pinned immutable VICE for identical machine, board, resource, media, control and clock state. Preserve separate motor input, native running state, scheduled alarm time and actual callback time. Machine wiring belongs in machine adapters. Native quirks are target behavior; managed pulse-buffer success is not parity.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Drive STOP, START, FORWARD, REWIND, and RECORD from a known STOP state with no image, read-only image, and writable image. Each accepted mode and tape-sense transition matches pinned VICE. No-image RECORD and read-only-image RECORD leave mode and sense unchanged; accepted RECORD with writable media asserts sense.
-- [ ] For identical accepted tape-sense transitions, C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6 match pinned VICE, including input/output direction masking. C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse events are tested separately and are not substituted for tape-sense input.
-- [ ] With an initially stopped motor and no pending datasette alarm, a motor-on transition schedules the startup read alarm at the current emulated clock plus 32000. The ordered read-side event trace immediately before, at, and after that deadline matches pinned VICE. A pre-existing pending alarm is preserved as VICE preserves it; metadata retrieval alone is not counted as a pulse event.
-- [ ] For a running motor, motor-off schedules stopping at current clock plus 32000 without stopping immediately. Motor-on before that stop executes cancels the pending stop without imposing a new startup ramp. Repeated motor-off does not extend an existing stop deadline. Ordered boundary events and restart after an executed stop match pinned VICE.
-- [ ] Recording writes occur only under the native combination of an attached image, accepted RECORD mode, running motor, and qualifying write-line transition. No image, read-only media that rejected RECORD, wrong mode, motor stopped, repeated levels, and nonqualifying transitions produce the same absence of tape writes as pinned VICE.
-- [ ] For identical accepted recording signal traces and media, emitted TAP bytes, elapsed-gap/remainder handling, first-write state, image-position updates, and failure/STOP side effects match pinned VICE. Cover short and long gap boundaries and partial or failed writes; an incremented managed pulse-buffer count alone does not satisfy this criterion.
+- [ ] From known STOP, cover STOP, START, FORWARD, REWIND and RECORD with absent, read-only and writable images. Match accepted mode and sense. Absent-image and read-only-image RECORD do not change mode or sense; accepted writable RECORD asserts sense when the datasette is enabled.
+- [ ] Match C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6, including DDR/output masking. Separately match C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse routing; sense is not an interrupt pulse.
+- [ ] A stopped motor with no pending alarm schedules the ordinary startup callback at current clock plus 32000; retain an existing alarm as VICE does. FORWARD/REWIND commands schedule their 1000-cycle alarm independently of motor-running state, including motor-on before and after that alarm dispatch. Compare ordered scheduled and actual events, not a pulse-duration getter. Also cover START while the motor is already running, with absent, read-only and writable media, with no pending alarm and with an existing pending alarm. The command reaches the start helper after resetting the gap: install t+32000 only when no alarm is pending, otherwise preserve the existing alarm; match attached-image seek, current-clock write-clock seeding and write-bit zeroing, including clock zero. Contrast START with running-motor FORWARD/REWIND, whose earlier t+1000 alarm survives the helper, and preserve any stop deadline that the command does not clear.
+- [ ] Motor-off on a running motor sets a stop deadline of current clock plus 32000 without immediate stopping or replacing an already pending alarm. Actual stopping occurs when a datasette callback observes the deadline reached. Cover callbacks before, at and beyond the deadline, active read rescheduling, STOP with a retained later alarm, repeated off preserving the deadline, and motor-on cancellation even after the deadline but before stop execution. A stopped motor starts again through the native pending-alarm rule. Explicitly include motor-on before the stop deadline and at the deadline before callback dispatch, preserving the already-running motor, pending alarm and write state while clearing the stop deadline; neither case starts a new ramp.
+- [ ] Recording eligibility follows attached image, accepted RECORD mode, the native running-motor flag and qualifying zero-to-nonzero write-line transition. The running flag is set immediately on motor-on and retained until the delayed-stop callback. Cover writes during startup and pending stop, no writes after executed stop, rejected RECORD, repeated/opposite edges, and retained write-line updates even while ineligible.
+- [ ] Match emitted TAP bytes, last-write clock/line, remainder, image position/size/dirty state, counters and failure/STOP effects for RECORD-before-motor and motor-before-RECORD, same/future-clock first edges, short gaps 0/6/7/8/2046/2047, long gaps at and above 24-bit boundaries, TAP v0/v1/v2 output paths, and first/partial/failed writes. Preserve the native first-gap and truncation behavior. Include the pinned stream-cursor versus logical-position command-order and buffer-boundary contract in FR-TAP-004 ac-04; retained buffered-read state is part of the initial condition.
+- [ ] Match machine motor/write outputs: C64 DDR-masked bit-5 active-low motor and bit-3 write; VIC-20 changed PCR raw bit-1 motor and effective VIA2 PB3 write including DDRB-induced edges. Cover SX-64 disconnection, repeated writes and input/output direction changes without substituting intended hardware behavior for pinned code.
+- [ ] Match enabled/disabled datasette sense/flux forwarding, tapeport device dispatch, attach/detach, resource-controlled CPU reset and retained state. Assert internal state separately from UI motor display. Preserve pending alarms, gap state and sense exactly as pinned VICE, including no universal tapeport-active suppression of every signal. Enumerate attachment with a new STOP-mode image while an old read alarm is pending; internal reset selects the new image mode, so do not automatically remove that alarm. Enumerate reset/attachment during delayed stop: motor_stop_clk clears while the native motor-running flag is retained, independently of UI motor-off display. Enumerate detach and no-image reset with previously retained START/FORWARD/REWIND notape_mode, including helper calls, scheduled alarms and transient sense before attachment clears it. Compare ordered transitions, not only final values. Pin DatasetteResetWithCPU, autostart reset handling and event-playback/network routing; exercise their alternate paths rather than assume every public control request reaches the internal command handler.
 
 ## FR-SETTINGS-TXN-001 Truthful transactional Settings state
 
@@ -2545,17 +2662,40 @@ Scope: layer-1+
 
 ## FR-SID-013 SID Audio Backend Wiring
 
+## FR-SID-013: SID Audio Backend Wiring
+
+**ID:** FR-SID-013
+**Title:** SID Audio Backend Wiring
+**Priority:** P1 -- Important
+**Iteration:** 2
+
+### Description
+
 The emulator shall wire SID sample production through the host audio backend without dropping, duplicating, or bypassing real-time audio buffers.
 
-## Acceptance Criteria
-- SID sample production is delivered to the selected `IAudioBackend` implementation.
-- Host audio backend writes preserve stream order and do not duplicate samples.
-- Backend tests prove pause, resume, mute, and disposal paths do not leave stale SID audio buffers active.
+### Acceptance Criteria
+
+1. SID sample production is delivered to the selected `IAudioBackend` implementation.
+2. Host audio backend writes preserve stream order and do not duplicate samples.
+3. Backend tests prove pause, resume, mute, and disposal paths do not leave stale SID audio buffers active.
+4. Interactive Linux desktop sessions select an available SDL2 output device, preserve bounded PCM queue order and master volume/mute, and retain the explicit audio-disable override. Headless and unit-test hosts do not open a real audio device by default.
+5. Missing libraries/devices and device failure do not terminate the emulator or leave it waiting indefinitely for audio capacity. An unavailable device stops acting as the emulator timing source.
+
+### Source References
+
+- `native/vice/vice/src/sound*.c`: VICE sound-device output and host audio buffer integration.
+
+### Traceability
+
+- **Interfaces:** `IAudioChip`, `IAudioBackend`
+- **Test Suite:** `SidAudioBackendTests`, `SidAudioWiringTests`, `LinuxSdlAudioBackendTests`, `ViceGateSoundRegulatorTests`
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] SID sample production is delivered to the selected `IAudioBackend` implementation.
 - [ ] Host audio backend writes preserve stream order and do not duplicate samples.
 - [ ] Backend tests prove pause, resume, mute, and disposal paths do not leave stale SID audio buffers active.
+- [ ] Interactive Linux desktop sessions select an available SDL2 output device, preserve bounded PCM queue order and master volume/mute, and retain the explicit audio-disable override. Headless and unit-test hosts do not open a real audio device by default.
+- [ ] Missing libraries/devices and device failure do not terminate the emulator or leave it waiting indefinitely for audio capacity. An unavailable device stops acting as the emulator timing source.
 
 ## FR-SID-014 VICE-Compatible Signed SID Voice Output and Demo Pacing
 
@@ -2578,43 +2718,63 @@ Scope: layer-1+
 The SID must tick at the phi2 master-clock rate so pitch, envelopes, noise and sync are correct (BUG-SIDAUDIO-001). It was registered as a slow device (ClockDivisor 16) while its accumulator advanced once per Tick, making everything 16x too slow.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] With voice freq 0x8000, after stepping the SystemClock 8192 master cycles OSC3 reads 0x10 (was 0x01 at the 16x-slow rate)
-- [x] Audio sample rate remains 44.1 kHz (self-corrects via ConfigureAudioClock at either divisor)
-- [x] ADSR, noise-LFSR and hard-sync run at the phi2 rate
+- [ ] With voice freq 0x8000, after stepping the SystemClock 8192 master cycles OSC3 reads 0x10 (was 0x01 at the 16x-slow rate)
+- [ ] Audio sample rate remains 44.1 kHz (self-corrects via ConfigureAudioClock at either divisor)
+- [ ] ADSR, noise-LFSR and hard-sync run at the phi2 rate
 
 ## FR-SIDEBARUI-001 Responsive sidebar layout with collapse expander
 
 The attach sidebar has a collapse expander on its inner edge (facing the video) that flips side with the panel anchor, and its button groups wrap to new rows when the panel is narrow.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] The collapse expander sits on the inner edge - Right when the panel is anchored Left, Left when anchored Right
-- [x] The expander toggles the sidebar pane and its chevron points toward the collapse direction
-- [x] Tab and action button groups wrap to new rows (WrapPanel) when the panel is narrow
+- [ ] The collapse expander sits on the inner edge - Right when the panel is anchored Left, Left when anchored Right
+- [ ] The expander toggles the sidebar pane and its chevron points toward the collapse direction
+- [ ] Tab and action button groups wrap to new rows (WrapPanel) when the panel is narrow
 
 ## FR-SNDREG-001 VICE gate sound back-pressure regulator
 
 When the SID is the audio timing source, the VICE pacing gate paces the worker to the audio device draining its sample buffer (regulator 1), taking precedence over vsync.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Buffer at or over the high-water mark => worker blocks (advances nothing)
-- [x] Buffer has room => worker advances a chunk
-- [x] Warp skips both sound and vsync (highest precedence)
-- [x] No active audio device => falls through to the vsync regulator
+- [ ] Buffer at or over the high-water mark => worker blocks (advances nothing)
+- [ ] Buffer has room => worker advances a chunk
+- [ ] Warp skips both sound and vsync (highest precedence)
+- [ ] No active audio device => falls through to the vsync regulator
 
-## FR-SNP-001 Save Complete Machine State to Snapshot
+## FR-SNP-001 Save Machine State
+
+## FR-SNP-001: Save Machine State
+
+**ID:** FR-SNP-001
+**Title:** Save Complete Machine State to Snapshot
+**Priority:** P0 -- Critical
+**Iteration:** 1
+
+### Description
 
 The emulator shall capture the complete machine state at any point during execution and serialize it to a snapshot file. The snapshot includes CPU registers, all RAM, all I/O chip registers and internal state, VIC-II raster state, SID oscillator/envelope state, CIA timer state, and peripheral state.
 
-## Acceptance Criteria
-- CPU state: all registers (A, X, Y, SP, PC, P), interrupt pending flags, and pipeline phase.
-- Memory: complete 64KB RAM contents, Color RAM (1KB nybbles), and any expansion RAM.
-- VIC-II: all 47 registers, raster position, sprite state (DMA, counters, data buffers), display state, badline state.
-- SID: all registers, oscillator phase accumulators, envelope state (phase, counter, rate), filter state, noise LFSR state.
-- CIA1 and CIA2: all registers, timer counters and latches, TOD clock state, shift register state, interrupt flags.
-- 6510 I/O port: DDR value, port value, capacitive charge state.
-- Peripherals: disk drive state (if true drive emulation), tape position, cartridge banking state.
-- Snapshot files use a versioned binary format with integrity checksums.
-- The `ISnapshotManager.Save()` method returns a snapshot handle or writes to a specified path.
+### Acceptance Criteria
+
+1. CPU state: all registers (A, X, Y, SP, PC, P), interrupt pending flags, and pipeline phase.
+2. Memory: complete 64KB RAM contents, Color RAM (1KB nybbles), and any expansion RAM.
+3. VIC-II: all 47 registers, raster position, sprite state (DMA, counters, data buffers), display state, badline state.
+4. SID: all registers, oscillator phase accumulators, envelope state (phase, counter, rate), filter state, noise LFSR state.
+5. CIA1 and CIA2: all registers, timer counters and latches, TOD clock state, shift register state, interrupt flags.
+6. 6510 I/O port: DDR value, port value, capacitive charge state.
+7. Peripherals: disk drive state (if true drive emulation), tape position, cartridge banking state.
+8. Snapshot files use a versioned binary format with integrity checksums.
+9. The `ISnapshotManager.Save()` method returns a snapshot handle or writes to a specified path.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: snapshot, history, recording, and state persistence behavior exposed by emulator commands.
+
+### Traceability
+
+- **Interfaces:** `ISnapshotManager`
+- **Boundary:** FR-HOST-005 exposes snapshot save commands and artifact metadata through the host service.
+- **Test Suite:** `SnapshotSaveTests`, `SnapshotCompletenessTests`, `SnapshotFormatTests`
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] CPU state: all registers (A, X, Y, SP, PC, P), interrupt pending flags, and pipeline phase.
@@ -2627,21 +2787,41 @@ Scope: layer-1+
 - [ ] Snapshot files use a versioned binary format with integrity checksums.
 - [ ] The `ISnapshotManager.Save()` method returns a snapshot handle or writes to a specified path.
 
-## FR-SNP-002 Load Machine State from Snapshot
+## FR-SNP-002 Load Machine State
+
+## FR-SNP-002: Load Machine State
+
+**ID:** FR-SNP-002
+**Title:** Load Machine State from Snapshot
+**Priority:** P0 -- Critical
+**Iteration:** 1
+
+### Description
 
 The emulator shall restore a complete machine state from a previously saved snapshot file. After loading, execution continues from exactly the point at which the snapshot was taken, with all devices in their saved state.
 
-## Acceptance Criteria
-- Loading a snapshot restores the exact CPU state (registers, flags, pipeline phase).
-- All 64KB of RAM plus Color RAM are restored byte-for-byte.
-- VIC-II state is restored including mid-raster position -- the first frame after load completes the line from the saved raster position.
-- SID state is restored including oscillator phase -- audio output continues seamlessly.
-- CIA state is restored including running timer values -- interrupt timing is preserved.
-- Peripheral state (drives, tape, cartridges) is restored.
-- Snapshot format version mismatches are detected and reported.
-- Invalid or corrupt snapshots are rejected with a descriptive error.
-- Loading a snapshot does not leak memory (previous state is fully released).
-- The `ISnapshotManager.Load()` method accepts a snapshot handle or file path.
+### Acceptance Criteria
+
+1. Loading a snapshot restores the exact CPU state (registers, flags, pipeline phase).
+2. All 64KB of RAM plus Color RAM are restored byte-for-byte.
+3. VIC-II state is restored including mid-raster position -- the first frame after load completes the line from the saved raster position.
+4. SID state is restored including oscillator phase -- audio output continues seamlessly.
+5. CIA state is restored including running timer values -- interrupt timing is preserved.
+6. Peripheral state (drives, tape, cartridges) is restored.
+7. Snapshot format version mismatches are detected and reported.
+8. Invalid or corrupt snapshots are rejected with a descriptive error.
+9. Loading a snapshot does not leak memory (previous state is fully released).
+10. The `ISnapshotManager.Load()` method accepts a snapshot handle or file path.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: snapshot, history, recording, and state persistence behavior exposed by emulator commands.
+
+### Traceability
+
+- **Interfaces:** `ISnapshotManager`
+- **Boundary:** FR-HOST-005 exposes snapshot load commands and validation errors through the host service.
+- **Test Suite:** `SnapshotLoadTests`, `SnapshotRoundtripTests`, `SnapshotVersionTests`, `CorruptSnapshotTests`
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Loading a snapshot restores the exact CPU state (registers, flags, pipeline phase).
@@ -2810,103 +2990,72 @@ Scope: layer-1+
 
 ## FR-TAP-001 Datasette Motor Control
 
-The Commodore Datasette tape drive motor is controlled by bit 3 of the 6510 I/O port ($0001). The motor is active-low (writing 0 turns the motor on). The motor has a spin-up delay before tape movement begins and a mechanical inertia effect.
-
-## Acceptance Criteria
-- Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.
-- The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.
-- The tape position advances only when the motor is running and spin-up is complete.
-- The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.
-- Motor state changes are reflected in the `ITapeUnit.MotorState` property.
-- Audio output from the tape (when connected to SID EXT IN) is modeled.
+Motor input, native running state, transport motion, public state exposure and tape audio shall follow pinned immutable VICE for the selected machine and resources. C64 motor control is DDR-masked CPU-port bit 5, not bit 3. Ordinary startup scheduling and actual delayed-stop callback execution are distinct from physical-drive approximations. Preserve the existing public MotorState obligation and tape-audio functionality.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.
-- [ ] The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.
-- [ ] The tape position advances only when the motor is running and spin-up is complete.
-- [ ] The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.
+- [ ] C64 CPU-port bit 5 controls active-low motor output as !((DDR & DATA) & 0x20); input direction drives motor-on. Bit 3 is tape write, not motor. VIC-20 and SX-64 behavior follows FR-RUNTIME-TAPE-002 ac-07.
+- [ ] Use the native emulated-clock schedule: ordinary start adds 32000 only if no alarm is pending; FORWARD/REWIND uses its 1000-cycle command alarm. Do not substitute an approximate real-hardware half-second timer.
+- [ ] Tape motion, read-pulse delivery and stopping match the ordered native transport/alarm trace, including late stop execution and pending-alarm cases. Do not conflate immediate native running-state assertion with first movement or apply a universal spin-up-complete gate to every operation.
+- [ ] PLAY/sense is not a prerequisite for asserting the native motor-running flag. Cover motor-on in STOP and RECORD, and distinguish transport mode/sense from motor control and running state.
 - [ ] Motor state changes are reflected in the `ITapeUnit.MotorState` property.
-- [ ] Audio output from the tape (when connected to SID EXT IN) is modeled.
+- [ ] Tape audio remains required. With identical sound-enabled/volume/sample-format/rate and tape halfwave/gap inputs, match pinned VICE datasette sound buffer and output samples, including disabled flush, buffer wrap, empty output and gap boundaries. Native datasette sound-chip output, not an assumed SID EXT IN route, is the acceptance target.
 
-## FR-TAP-002 TAP File Format Support (v0 and v1)
+## FR-TAP-002 TAP File Format Support (v0, v1 and v2 native behavior)
 
-The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengths as single bytes (with 0 indicating an overflow requiring 3 additional bytes). TAP v1 extends the overflow encoding. The emulator shall read and write both TAP format versions.
-
-## Acceptance Criteria
-- TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.
-- A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.
-- TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.
-- The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.
-- Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.
-- Writing to TAP format captures the pulse timing from emulated writes.
-- The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.
+Read/write TAP behavior shall match pinned VICE at the corresponding file/block decoder and live datasette layer. v0 zero does not consume a three-byte extension. v1/v2 extension, halfwave, header, clock and resource behavior must not be merged into a different invented format. Retain public mount/eject and machine-tag obligations.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.
-- [ ] A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.
-- [ ] TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.
-- [ ] The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.
+- [ ] For nonzero TAP bytes, preserve native pulse units and layer-specific conversion: file/block decoding uses pulse units while live datasette gaps use byte times eight before resource adjustments. Do not globally label every v0 byte a half-period.
+- [ ] A v0 zero consumes only that byte. The file/block decoder returns 256 pulse units; the live datasette uses DatasetteZeroGapDelay and its adjustments. Adjacent bytes remain separate pulses, not a 24-bit extension.
+- [ ] For v1/v2 zero, cover three-byte little-endian extensions, truncated extension and all-zero length at each native layer. File/block v2 combines two halfwaves; live behavior depends on selected machine tape behavior and retains its native direction/resource effects.
+- [ ] Header handling matches native short-read/magic rejection, stored version/system/video values, mismatch warning versus error behavior, declared data handling and clock fallback. Do not reject a mismatch that the corresponding native path only warns about. Test actual payload sizes 0, 1, 2 and 3 independently of declared header length; native tap_open rejects fewer than three actual bytes, and derives size from the physical file rather than the declared length. With at least three valid payload bytes, vary declared length below/equal/above actual length without incorrectly attributing a minimum-size rejection to a length mismatch. Cover every stored version byte 0 through 255 with otherwise valid headers; header acceptance is distinct from decoder outcome.
 - [ ] Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.
-- [ ] Writing to TAP format captures the pulse timing from emulated writes.
-- [ ] The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.
+- [ ] Writing to TAP preserves native recording eligibility, clocks, byte encoding, first-gap and failure effects from FR-RUNTIME-TAPE-002 ac-05/ac-06, including v0/v1/v2 output behavior and 24-bit truncation.
+- [ ] Header machine tags distinguish C64, VIC-20 and C16/Plus4 and use the native machine/video clock table. Tests pin selected machine separately from the media header and preserve native mismatch/fallback behavior.
+- [ ] Cover mount/eject, forward/reverse gap access and truncated media without treating file metadata decoding as a live pulse trace. Both layers require independent expected observations; missing native live evidence fails closed. For versions 3 through 255, a zero byte in the block decoder yields zero pulse units without consuming an extension; nonzero bytes remain ordinary pulse units. In regular C64/VIC-20 live tape behavior, a zero for any nonzero version takes the three-byte extension branch. Cover complete/all-zero/truncated extensions, following-byte alignment and EOF, with independent consumed-byte/file-position and timing assertions. Qualify by selected machine tape behavior: C16 live handling has only version-1 and version-2 branches here, so do not generalize the regular-machine unknown-version result to it. For block version 2, include missing/partial second halfwave and retain the distinction between physical stream consumption and pos_advance.
 
 ## FR-TAP-003 Cycle-Accurate Tape Read Timing
 
-Tape reading relies on the CIA1 Timer A or the FLAG pin to measure the time between pulses from the datasette. The Kernal tape routine uses Timer A in one-shot mode to measure pulse widths and classify them as short, medium, or long pulses for data decoding.
-
-## Acceptance Criteria
-- Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).
-- The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.
-- Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).
-- The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.
-- Tape reading at normal speed produces identical results to real hardware.
-- The timing accuracy supports both PAL and NTSC system clock rates.
+Tape read pulse delivery, timer/interrupt effects and data decoding shall match immutable VICE for the selected C64 or VIC-20, clock/resources, firmware and workload. File/block decoder thresholds and real machine signal timing are different observable layers; neither can substitute for the other.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Each pulse from the tape triggers the FLAG input on CIA1 (directly connected to the cassette read line).
-- [ ] The time between pulses is measured by CIA1 Timer A and/or by CIA1 FLAG interrupts.
-- [ ] Standard Commodore encoding uses three pulse widths: short (352 cycles TAP value $30), medium (512 cycles TAP value $42), and long (672 cycles TAP value $56).
-- [ ] The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.
-- [ ] Tape reading at normal speed produces identical results to real hardware.
-- [ ] The timing accuracy supports both PAL and NTSC system clock rates.
+- [ ] C64 read pulses reach CIA1 FLAG and VIC-20 read pulses reach VIA2 CA1 with the pinned native edge/state semantics. Tape sense remains a distinct input.
+- [ ] With identical pinned firmware and tape workload, timer/interrupt observations used to measure pulses match native VICE, including boundary and pending-interrupt state. A decoder return value is not timer/interrupt evidence.
+- [ ] Configured C64/VIC-20 file-decoder CBM pulse-unit ranges are inclusive 36-54 short, 55-73 middle and 74-100 long. Test endpoint and adjacent values after tap_init conversion. Keep live pulse clocks separate; do not pair inconsistent fixed cycle counts with TAP byte values.
+- [ ] Pinned standard Commodore header, data-block and checksum workloads produce the same decoded bytes/status and machine-visible load outcome as native VICE. Include malformed, truncated and checksum-error fixtures.
+- [ ] At normal speed, the same named tape workload produces the same ordered native and managed machine-visible pulse/state/output observations. Hardware assumptions or source inspection alone cannot replace the immutable native target.
+- [ ] Run PAL and NTSC selected-machine/resource profiles with separately pinned tape headers and clock domains. Preserve native differences and any lack of cross-standard rescaling; do not improve the native target.
 
 ## FR-TAP-004 Tape Write Support
 
-The emulator shall support writing data to tape images via the datasette write line. The write signal from the VIA/CIA generates pulses that are recorded to the TAP file with correct timing.
-
-## Acceptance Criteria
-- The tape write line output generates pulses whose timing is captured.
-- Written pulses are stored in TAP format with correct timing values.
-- The standard Commodore SAVE routine produces valid tape data.
-- Writes can be appended to existing TAP files or written to new files.
-- The record interlock (RECORD + PLAY buttons) must be engaged for writes.
+Write data to tape images using the selected machine native write-line path and accepted datasette RECORD state. C64 uses CPU-port bit 3; VIC-20 uses effective VIA2 PB3. Preserve native timing, image position, existing content, first-write quirks and write failures, not an in-memory pulse-count substitute.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] The tape write line output generates pulses whose timing is captured.
-- [ ] Written pulses are stored in TAP format with correct timing values.
-- [ ] The standard Commodore SAVE routine produces valid tape data.
-- [ ] Writes can be appended to existing TAP files or written to new files.
-- [ ] The record interlock (RECORD + PLAY buttons) must be engaged for writes.
+- [ ] Capture qualifying native write-line transitions from C64 CPU-port bit 3 and VIC-20 VIA2 PB3, including DDR-only changes, repeated/opposite edges and SX-64 disconnection.
+- [ ] Store the same bytes, gap/remainder, last-write state, file position/size/dirty state and counters as pinned VICE across short/long/24-bit boundaries and partial/failed output.
+- [ ] A standard Commodore SAVE workload with pinned firmware, writable tape, resources and initial state produces the same bytes/status and machine-visible effects as immutable VICE, and its corresponding native/managed load results match. Include failure and write-protected cases.
+- [ ] New-image, existing-image current-position and explicit end-position recordings preserve the same prefix/suffix and file-position/size effects as native VICE. Existing-file writes must not silently become unconditional append or truncate. Retain RECORD accepted while the motor already runs as an in-scope sequence, including after buffered reads; that command does not itself seek. Distinguish the actual C stream cursor from logical image position and compare the bytes and both positions that pinned native execution produces. Include RECORD-before-motor, motor-before-RECORD, read-then-RECORD, intervening START/seek, beginning/interior/end positions and buffer-refill boundaries. Pin the exact native binary, platform/C runtime, file mode, initial bytes and I/O prelude, and retain repeated native observations. Do not invent a platform-independent result, insert a compensating native seek, silently exclude an ordering or treat an unstable/unobservable result as a passing gate.
+- [ ] Writable-image RECORD acceptance is the native interlock; absent/read-only-image RECORD is ignored. Do not require an additional independent PlayPressed boolean once native RECORD mode is accepted. Motor-running and qualifying-edge conditions still apply.
 
 ## FR-TAP-005 Turbo Tape Loader Compatibility
 
 Many commercial C64 programs used turbo tape loaders that employ faster pulse encoding than the standard Commodore format. The emulator shall support turbo loaders by providing accurate tape read timing down to individual clock cycles.
 
 ## Acceptance Criteria
-- Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.
-- Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.
-- Custom pulse encoding schemes are supported through accurate pulse-level emulation.
-- The CIA FLAG input timing is accurate to 1 system clock cycle.
-- Half-wave and full-wave detection methods both work correctly.
-- Multi-speed loaders (that change pulse rates mid-load) are supported.
+- Turbo loaders using shorter pulses than the standard Commodore format, including the existing approximately-160-cycle workload obligation, function correctly with the same pinned C64 firmware, tape fixture, resources and initial state as native VICE. Do not impose 160 cycles as a parser minimum or normalize pulse widths to hardware estimates; cover representable values below, at and above 160 with separately asserted block-decoder units and native live scheduling/interrupt traces.
+- Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully. For each named C64 format, retain identified fixture and firmware hashes, resources, initial state, load entry/operation sequence, expected loaded bytes and machine-visible completion/failure observations. Native and managed results must both satisfy successful loading and match; two equal failures do not satisfy this criterion. A missing fixture, oracle capability or completion observation leaves the corresponding format unsatisfied, not waived.
+- Custom pulse encoding schemes are supported through accurate pulse-level emulation. Pin custom-stream bytes and their format-specific expected loading/output behavior independently of the managed implementation; compare ordered native and managed tape/interrupt/timer observations without converting the input into a recognized standard loader or normalizing its pulse widths. Include malformed/truncated and boundary fixtures with explicit expected outcomes.
+- For C64 tape workloads, reproduce the exact native ordered CIA1 FLAG invocation, interrupt/timer state and clock observations at the approved observation boundary, with pinned main-CPU clock, alarm scheduled/dispatch clocks and callback offset. Do not interpret the former one-system-clock wording as permission for a one-cycle divergence. Include same-clock ordering and pending interrupt state, with missing, extra, duplicated and shifted events rejected. VIC-20 VIA2 CA1 parity remains separately mandatory under FR-RUNTIME-TAPE-002 and FR-TAP-003; CIA FLAG terminology does not substitute for it.
+- Half-wave and full-wave loader detection workloads both work correctly against pinned native VICE. Keep file/block TAP-v2 pairing (including each truncated half) distinct from live playback, which follows selected-machine tape behavior rather than applying a universal two-to-one conversion. Preserve fixture-specific ordered pulses, direction/phase, timer and load outcomes under separately pinned media version/system/video tags and machine resources.
+- Multi-speed loaders that change pulse rates mid-load are supported. Use a single pinned workload with an explicit sequence of rate transitions and assert the whole load result plus ordered native-equivalent pulse, timer and interrupt observations across every transition; disconnected constant-speed subtests do not prove the mid-load behavior. Run each required PAL/NTSC profile with pinned headers and preserve native scaling or lack of scaling.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.
-- [ ] Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.
-- [ ] Custom pulse encoding schemes are supported through accurate pulse-level emulation.
-- [ ] The CIA FLAG input timing is accurate to 1 system clock cycle.
-- [ ] Half-wave and full-wave detection methods both work correctly.
-- [ ] Multi-speed loaders (that change pulse rates mid-load) are supported.
+- [ ] Turbo loaders using shorter pulses than the standard Commodore format, including the existing approximately-160-cycle workload obligation, function correctly with the same pinned C64 firmware, tape fixture, resources and initial state as native VICE. Do not impose 160 cycles as a parser minimum or normalize pulse widths to hardware estimates; cover representable values below, at and above 160 with separately asserted block-decoder units and native live scheduling/interrupt traces.
+- [ ] Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully. For each named C64 format, retain identified fixture and firmware hashes, resources, initial state, load entry/operation sequence, expected loaded bytes and machine-visible completion/failure observations. Native and managed results must both satisfy successful loading and match; two equal failures do not satisfy this criterion. A missing fixture, oracle capability or completion observation leaves the corresponding format unsatisfied, not waived.
+- [ ] Custom pulse encoding schemes are supported through accurate pulse-level emulation. Pin custom-stream bytes and their format-specific expected loading/output behavior independently of the managed implementation; compare ordered native and managed tape/interrupt/timer observations without converting the input into a recognized standard loader or normalizing its pulse widths. Include malformed/truncated and boundary fixtures with explicit expected outcomes.
+- [ ] For C64 tape workloads, reproduce the exact native ordered CIA1 FLAG invocation, interrupt/timer state and clock observations at the approved observation boundary, with pinned main-CPU clock, alarm scheduled/dispatch clocks and callback offset. Do not interpret the former one-system-clock wording as permission for a one-cycle divergence. Include same-clock ordering and pending interrupt state, with missing, extra, duplicated and shifted events rejected. VIC-20 VIA2 CA1 parity remains separately mandatory under FR-RUNTIME-TAPE-002 and FR-TAP-003; CIA FLAG terminology does not substitute for it.
+- [ ] Half-wave and full-wave loader detection workloads both work correctly against pinned native VICE. Keep file/block TAP-v2 pairing (including each truncated half) distinct from live playback, which follows selected-machine tape behavior rather than applying a universal two-to-one conversion. Preserve fixture-specific ordered pulses, direction/phase, timer and load outcomes under separately pinned media version/system/video tags and machine resources.
+- [ ] Multi-speed loaders that change pulse rates mid-load are supported. Use a single pinned workload with an explicit sequence of rate transitions and assert the whole load result plus ordered native-equivalent pulse, timer and interrupt observations across every transition; disconnected constant-speed subtests do not prove the mid-load behavior. Run each required PAL/NTSC profile with pinned headers and preserve native scaling or lack of scaling.
 
 ## FR-TESTGATE-001 S0 feasibility gate before production
 
@@ -2953,10 +3102,10 @@ Scope: layer-1+
 A History panel lists the last 100 executed CPU instructions; when paused, selecting a tick opens a debug screen with that tick's registers, reconstructed memory, and chip state.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] History panel lists the last 100 completed instructions, newest first
-- [x] Selecting a tick while paused shows that tick's CPU registers
-- [x] Memory dump is reconstructed as-of-tick (later ticks' write-deltas reverse-applied to current RAM)
-- [x] Inspection is only available while the emulator is paused
+- [ ] History panel lists the last 100 completed instructions, newest first
+- [ ] Selecting a tick while paused shows that tick's CPU registers
+- [ ] Memory dump is reconstructed as-of-tick (later ticks' write-deltas reverse-applied to current RAM)
+- [ ] Inspection is only available while the emulator is paused
 
 ## FR-UI-001 Dockable Host UI Control Client
 
@@ -3003,19 +3152,41 @@ Scope: layer-1+
 
 ## FR-UI-003 Collapsible Tabbed Emulator Sidebar
 
+## FR-UI-003: Collapsible Tabbed Emulator Sidebar
+
+**ID:** FR-UI-003
+**Title:** Collapsible Tabbed Emulator Sidebar
+**Priority:** P1 -- Important
+**Iteration:** 1
+
+### Description
+
 The desktop UI shall provide a collapsible sidebar with Peripherals, Settings, and Monitor tabs so routine emulator controls remain available without crowding the display surface.
 
-## Acceptance Criteria
-- A hamburger control collapses and expands the sidebar without stopping emulator input or rendering.
-- The Peripherals tab contains disk, tape, cartridge, recent media, readonly, and keyboard map controls.
-- The Settings tab contains limiter target, display scale/crop, and host/session settings controls.
-- The Monitor tab embeds the reusable monitor control.
-- Tab state remains synchronized with host status and survives sidebar collapse/expand.
+### Acceptance Criteria
+
+1. A hamburger control collapses and expands the sidebar without stopping emulator input or rendering.
+2. The Peripherals tab contains disk, tape, cartridge, recent media, readonly, and keyboard map controls.
+3. The Settings tab contains limiter target, display scale/crop, and host/session settings controls.
+4. The Monitor tab embeds the reusable monitor control.
+5. Tab state remains synchronized with host status and survives sidebar collapse/expand.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: menus, file selector, disk/tape images, settings/resources, keyboard settings, control port settings, and monitor settings.
+
+### Traceability
+
+- **Interfaces:** `UiHostClient`, `HostMediaService`, `HostInputService`, `HostControlService`
+- **Technical Requirements:** TR-UI-SHELL-001, TR-GRPC-BOUNDARY-001
+- **Test Suite:** `SidebarViewModelTests`, `AttachPanelViewModelTests`, `SettingsPanelViewModelTests`
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] The peripherals tab exposes drive attachment state and media commands for configured drives.
-- [ ] Drive entries expose IEC active/idle state from the same host telemetry source as the status bar.
-- [ ] Drive IEC activity returns idle in the peripherals tab after bus activity settles.
+- [ ] A hamburger control collapses and expands the sidebar without stopping emulator input or rendering.
+- [ ] The Peripherals tab contains disk, tape, cartridge, recent media, readonly, and keyboard map controls.
+- [ ] The Settings tab contains limiter target, display scale/crop, and host/session settings controls.
+- [ ] The Monitor tab embeds the reusable monitor control.
+- [ ] Tab state remains synchronized with host status and survives sidebar collapse/expand.
 
 ## FR-UI-004 Docked and Pop-Out Monitor Control
 
@@ -3459,23 +3630,38 @@ The VIC-20 display is driven by the MOS 6560 (NTSC) or MOS 6561 (PAL) VIC-I chip
 - Full character/bitmap/color rendering and on-chip audio are delivered after the stub gate.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] READY boot identical canvas width/height (PAL 448x284; NTSC normal) (evidence: Vic20PixelLockstep geometry asserts)
-- [x] Index SequenceEqual READY idle PAL one full frame managed vs xvic (evidence: Index_ReadyPal_SequenceEqual)
-- [x] Index SequenceEqual READY idle NTSC one full frame (evidence: Index_ReadyNtsc_SequenceEqual)
-- [x] Index SequenceEqual busy screen PAL (evidence: Index_BusyPal_SequenceEqual)
-- [x] BGRA SequenceEqual READY PAL, READY NTSC, and busy PAL vs xvic capture_visible_frame after canvas-palette align (evidence: Bgra_ReadyPal/Ntsc/BusyPal_SequenceEqual)
-- [x] Capture not sentinel/all-black after READY; BGRA alpha 0xFF (NTSC unpainted clamp rows opaque black) (evidence: Vic20PixelLockstep alpha asserts)
+- [ ] READY boot identical canvas width/height (PAL 448x284; NTSC normal) (evidence: Vic20PixelLockstep geometry asserts)
+- [ ] Index SequenceEqual READY idle PAL one full frame managed vs xvic (evidence: Index_ReadyPal_SequenceEqual)
+- [ ] Index SequenceEqual READY idle NTSC one full frame (evidence: Index_ReadyNtsc_SequenceEqual)
+- [ ] Index SequenceEqual busy screen PAL (evidence: Index_BusyPal_SequenceEqual)
+- [ ] BGRA SequenceEqual READY PAL, READY NTSC, and busy PAL vs xvic capture_visible_frame after canvas-palette align (evidence: Bgra_ReadyPal/Ntsc/BusyPal_SequenceEqual)
+- [ ] Capture not sentinel/all-black after READY; BGRA alpha 0xFF (NTSC unpainted clamp rows opaque black) (evidence: Vic20PixelLockstep alpha asserts)
 
-## FR-VIC20-002 VIC-20 base memory map and RAM expansions
+## FR-VIC20-002 VIC-20 memory map and expansions
+
+## FR-VIC20-002: VIC-20 memory map and expansions
+
+**ID:** FR-VIC20-002
+**Title:** VIC-20 base memory map and RAM expansions
+**Priority:** P0 -- Critical
+**Iteration:** 2
+
+### Description
 
 Unexpanded VIC-20 has 5KB base RAM (1KB system at $0000-$03FF, 4KB user at $1000-$1FFF), character ROM at $8000, I/O at $9000, color RAM at $9400, BASIC at $C000, KERNAL at $E000. Expansions (3K/8K/16K/24K/32K) map into BLK regions.
 
-## Acceptance Criteria
-- After reset with official ROMs, BASIC is readable at $C000 and KERNAL at $E000.
-- Character ROM is readable at $8000.
-- Base RAM regions accept read/write at $0000-$03FF and $1000-$1FFF.
-- Expansion configurations are selectable via profile/resources (later slice).
-- Open-bus and I/O window rules match VICE for validated address ranges.
+### Acceptance Criteria
+
+1. After reset with official ROMs, BASIC is readable at $C000 and KERNAL at $E000.
+2. Character ROM is readable at $8000.
+3. Base RAM regions accept read/write at $0000-$03FF and $1000-$1FFF.
+4. Expansion configurations are selectable via profile/resources (later slice).
+5. Open-bus and I/O window rules match VICE for validated address ranges.
+
+### Traceability
+
+- **Interfaces:** `IBus`, `IArchitectureDescriptor`
+- **Test Suite:** `Vic20SkeletonTests`, later `Vic20MemoryExpansionTests`
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] After reset with official ROMs, BASIC is readable at $C000 and KERNAL at $E000.
@@ -3660,11 +3846,11 @@ desktop heads. ShareAlike obligations apply to derivative branding that includes
 the mark. This requirement is separate from FR-XBOXGPL-006 (GPL/VICE license payload).
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Branding assets use the Wikimedia Commons Commodore C= logo.svg (or a direct rasterization thereof), not an unattributed third-party redraw. (evidence: docs/xbox/store-screenshots/Commodore_C_logo.svg; docs/xbox/store-screenshots/LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt)
-- [x] THIRD_PARTY_NOTICES.md names the file, author Alien426, CC BY-SA 4.0, and the commons URL. (evidence: THIRD_PARTY_NOTICES.md; tests/ViceSharp.TestHarness/Xbox/XboxGplComplianceTests.cs)
-- [x] Every NuGet package packs THIRD_PARTY_NOTICES.md at package root via Directory.Build.props. (evidence: Directory.Build.props)
-- [x] Root README and per-package README files include CC BY-SA 4.0 C= logo attribution. (evidence: README.md; src/**/README.md)
-- [x] About surfaces expose LogoAttributionText (or equivalent) with CC BY-SA 4.0, Alien426, and commons URL for Xbox and Avalonia. (evidence: src/ViceSharp.Xbox.ViewModels/AboutInfo.cs; AboutPage.xaml; MainWindow.axaml.cs OnMenuAbout; AboutViewModelTests)
+- [ ] Branding assets use the Wikimedia Commons Commodore C= logo.svg (or a direct rasterization thereof), not an unattributed third-party redraw. (evidence: docs/xbox/store-screenshots/Commodore_C_logo.svg; docs/xbox/store-screenshots/LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt)
+- [ ] THIRD_PARTY_NOTICES.md names the file, author Alien426, CC BY-SA 4.0, and the commons URL. (evidence: THIRD_PARTY_NOTICES.md; tests/ViceSharp.TestHarness/Xbox/XboxGplComplianceTests.cs)
+- [ ] Every NuGet package packs THIRD_PARTY_NOTICES.md at package root via Directory.Build.props. (evidence: Directory.Build.props)
+- [ ] Root README and per-package README files include CC BY-SA 4.0 C= logo attribution. (evidence: README.md; src/**/README.md)
+- [ ] About surfaces expose LogoAttributionText (or equivalent) with CC BY-SA 4.0, Alien426, and commons URL for Xbox and Avalonia. (evidence: src/ViceSharp.Xbox.ViewModels/AboutInfo.cs; AboutPage.xaml; MainWindow.axaml.cs OnMenuAbout; AboutViewModelTests)
 
 ## FR-XBOXPKG-001 Head csproj references only core + Host.InProcess
 

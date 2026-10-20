@@ -1,0 +1,432 @@
+{
+  "at": "2026-10-19T19:19:23",
+  "base": "9221488",
+  "pluginRoot": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.121.0",
+  "export": "{\"success\":true,\"content\":\"\",\"contentType\":\"application/json\",\"outputRoot\":\"F:\\\\GitHub\\\\vice-sharp\\\\docs\\\\Project\",\"files\":[{\"relativePath\":\"Functional-Requirements.md\",\"fullPath\":\"F:\\\\GitHub\\\\vice-sharp\\\\docs\\\\Project\\\\Functional-Requirements.md\",\"contentType\":\"text/markdown\",\"lastModifiedUtc\":{\"dateTime\":\"2026-10-20T00:19:22.1436785\",\"utcDateTime\":\"2026-10-20T00:19:22.1436785Z\",\"localDateTime\":\"2026-10-19T19:19:22.1436785-05:00\",\"date\":\"2026-10-20T00:00:00\",\"day\":20,\"dayOfWeek\":\"Tuesday\",\"dayOfYear\":293,\"hour\":0,\"millisecond\":143,\"microsecond\":678,\"nanosecond\":500,\"minute\":19,\"month\":10,\"offset\":\"00:00:00\",\"totalOffsetMinutes\":0,\"second\":22,\"ticks\":639280523621436785,\"utcTicks\":639280523621436785,\"timeOfDay\":\"00:19:22.1436785\",\"year\":2026}},{\"relativePath\":\"Technical-Requirements.md\",\"fullPath\":\"F:\\\\GitHub\\\\vice-sharp\\\\docs\\\\Project\\\\Technical-Requirements.md\",\"contentType\":\"text/markdown\",\"lastModifiedUtc\":{\"dateTime\":\"2026-10-20T00:19:22.1436785\",\"utcDateTime\":\"2026-10-20T00:19:22.1436785Z\",\"localDateTime\":\"2026-10-19T19:19:22.1436785-05:00\",\"date\":\"2026-10-20T00:00:00\",\"day\":20,\"dayOfWeek\":\"Tuesday\",\"dayOfYear\":293,\"hour\":0,\"millisecond\":143,\"microsecond\":678,\"nanosecond\":500,\"minute\":19,\"month\":10,\"offset\":\"00:00:00\",\"totalOffsetMinutes\":0,\"second\":22,\"ticks\":639280523621436785,\"utcTicks\":639280523621436785,\"timeOfDay\":\"00:19:22.1436785\",\"year\":2026}},{\"relativePath\":\"Testing-Requirements.md\",\"fullPath\":\"F:\\\\GitHub\\\\vice-sharp\\\\docs\\\\Project\\\\Testing-Requirements.md\",\"contentType\":\"text/markdown\",\"lastModifiedUtc\":{\"dateTime\":\"2026-10-20T00:19:22.1436785\",\"utcDateTime\":\"2026-10-20T00:19:22.1436785Z\",\"localDateTime\":\"2026-10-19T19:19:22.1436785-05:00\",\"date\":\"2026-10-20T00:00:00\",\"day\":20,\"dayOfWeek\":\"Tuesday\",\"dayOfYear\":293,\"hour\":0,\"millisecond\":143,\"microsecond\":678,\"nanosecond\":500,\"minute\":19,\"month\":10,\"offset\":\"00:00:00\",\"totalOffsetMinutes\":0,\"second\":22,\"ticks\":639280523621436785,\"utcTicks\":639280523621436785,\"timeOfDay\":\"00:19:22.1436785\",\"year\":2026}},{\"relativePath\":\"TR-per-FR-Mapping.md\",\"fullPath\":\"F:\\\\GitHub\\\\vice-sharp\\\\docs\\\\Project\\\\TR-per-FR-Mapping.md\",\"contentType\":\"text/markdown\",\"lastModifiedUtc\":{\"dateTime\":\"2026-10-20T00:19:22.1436785\",\"utcDateTime\":\"2026-10-20T00:19:22.1436785Z\",\"localDateTime\":\"2026-10-19T19:19:22.1436785-05:00\",\"date\":\"2026-10-20T00:00:00\",\"day\":20,\"dayOfWeek\":\"Tuesday\",\"dayOfYear\":293,\"hour\":0,\"millisecond\":143,\"microsecond\":678,\"nanosecond\":500,\"minute\":19,\"month\":10,\"offset\":\"00:00:00\",\"totalOffsetMinutes\":0,\"second\":22,\"ticks\":639280523621436785,\"utcTicks\":639280523621436785,\"timeOfDay\":\"00:19:22.1436785\",\"year\":2026}},{\"relativePath\":\"Requirements-Matrix.md\",\"fullPath\":\"F:\\\\GitHub\\\\vice-sharp\\\\docs\\\\Project\\\\Requirements-Matrix.md\",\"contentType\":\"text/markdown\",\"lastModifiedUtc\":{\"dateTime\":\"2026-10-20T00:19:22.1436785\",\"utcDateTime\":\"2026-10-20T00:19:22.1436785Z\",\"localDateTime\":\"2026-10-19T19:19:22.1436785-05:00\",\"date\":\"2026-10-20T00:00:00\",\"day\":20,\"dayOfWeek\":\"Tuesday\",\"dayOfYear\":293,\"hour\":0,\"millisecond\":143,\"microsecond\":678,\"nanosecond\":500,\"minute\":19,\"month\":10,\"offset\":\"00:00:00\",\"totalOffsetMinutes\":0,\"second\":22,\"ticks\":639280523621436785,\"utcTicks\":639280523621436785,\"timeOfDay\":\"00:19:22.1436785\",\"year\":2026}}],\"format\":\"markdown\",\"docType\":\"all\",\"generatedAt\":\"2026-10-19T19:19:22.1436785-05:00\"}",
+  "todaysIds": 80,
+  "files": [
+    {
+      "File": "Functional-Requirements.md",
+      "Sha256": "8BB4C803F801685D387E337F1D3E4DDC6C682C0F47573B11D42DFD483A92E7DD",
+      "Bytes": 324935,
+      "SameAsBeforeRegen": true,
+      "SectionIdsOld": 235,
+      "SectionIdsNew": 235,
+      "Changed": [
+        {
+          "Id": "FR-BACKFILL-MEDIA-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-CFG-002",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-CHIPSTATE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-CPU-004",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-INP-006",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-MED-002",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-MED-003",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-PACESEL-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-PUBSUB-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-ROMM-LAUNCH-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-RUNTIME-TAPE-002",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-SID-013",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-SIDAUDIO-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-SIDEBARUI-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-SNDREG-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-SNP-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-SNP-002",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-TAP-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-TAP-002",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-TAP-003",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-TAP-004",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-TICKHIST-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "FR-UI-003",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-VIC20-002",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "FR-XBOXGPL-007",
+          "Change": "changed",
+          "Today": true
+        }
+      ],
+      "DuplicateHeadings": [
+        {
+          "Id": "FR-CFG-002",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-INP-006",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-MED-002",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-MED-003",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-ROMM-LAUNCH-001",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-SID-013",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-SNP-001",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-SNP-002",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-UI-003",
+          "ExtraHeadings": 1
+        },
+        {
+          "Id": "FR-VIC20-002",
+          "ExtraHeadings": 1
+        }
+      ]
+    },
+    {
+      "File": "Requirements-Matrix.md",
+      "Sha256": "32AD295177E49B575D963F9D354A7B65E85167EA91B9B3E235CCD1F697EC769B",
+      "Bytes": 31552,
+      "SameAsBeforeRegen": true,
+      "SectionIdsOld": 0,
+      "SectionIdsNew": 0,
+      "Changed": [],
+      "DuplicateHeadings": []
+    },
+    {
+      "File": "Technical-Requirements.md",
+      "Sha256": "5736D907906B23760F465F1048C17F44A7B17039B39566FA77294294109E79E8",
+      "Bytes": 167001,
+      "SameAsBeforeRegen": true,
+      "SectionIdsOld": 139,
+      "SectionIdsNew": 139,
+      "Changed": [
+        {
+          "Id": "TR-BUILD-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-CHIPSTATE-CAPTURE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-CORE-CYCLE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-CORE-DET-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-DEPS-202607-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-DET-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-DRV-EDGE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-HOST-DIAG-002",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-HOST-DIAG-003",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-IEC-EDGE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-INPUT-VKM-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-LIB-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-MEDIA-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-MVVM-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-PACESEL-STRAT-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-PERF-ALLOC-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-PERF-AOT-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-PLAT-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-PUBSUB-PERF-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-ROMM-SEC-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-SID-EDGE-004",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-SID-ORACLE-002",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-SID-RESAMPLE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-SIDAUDIO-CLOCK-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-SIDEBARUI-LAYOUT-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-SNDREG-GATE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-STATE-001",
+          "Change": "changed",
+          "Today": false
+        },
+        {
+          "Id": "TR-TAP-EDGE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-TAPE-EDGE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-TICKHIST-CAPTURE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-TICKHIST-PERF-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-TICKHIST-RPC-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-TICKHIST-UI-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-VIC-EDGE-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-VIC-EDGE-002",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-VIC-EDGE-003",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-VIC-EDGE-004",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-VIC-EDGE-005",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-VIC-EDGE-006",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-VIC20-PIXEL-001",
+          "Change": "changed",
+          "Today": true
+        },
+        {
+          "Id": "TR-XBOXGPL-BRAND-001",
+          "Change": "changed",
+          "Today": true
+        }
+      ],
+      "DuplicateHeadings": []
+    },
+    {
+      "File": "Testing-Requirements.md",
+      "Sha256": "66E9F655EB33DD8AFF9A021D1423A7196D021011F2A0EBA972011DA143A9C0E6",
+      "Bytes": 95876,
+      "SameAsBeforeRegen": true,
+      "SectionIdsOld": 0,
+      "SectionIdsNew": 0,
+      "Changed": [],
+      "DuplicateHeadings": []
+    },
+    {
+      "File": "TR-per-FR-Mapping.md",
+      "Sha256": "6F2F9C60EAC53108CF35D0C30C926D940BB0EA8FB50F177199283EB39C872EDC",
+      "Bytes": 18619,
+      "SameAsBeforeRegen": true,
+      "SectionIdsOld": 0,
+      "SectionIdsNew": 0,
+      "Changed": [],
+      "DuplicateHeadings": []
+    }
+  ]
+}

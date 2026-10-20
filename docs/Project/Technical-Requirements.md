@@ -1,4 +1,4 @@
-# Technical Requirements (MCP Server)
+# Technical Requirements (QBrain.AI)
 
 ## TR-AIREVIEW-ROUTING-001
 
@@ -35,11 +35,11 @@ Scope: layer-1+
 - The PayloadArena reset occurs exactly once per frame and completes in under 100ns.
 - All event/message payloads in the pub/sub system are value types (per TR-PUBSUB-001).
 - No `new` keyword appears in hot-path code paths except for stack-allocated `Span<T>` or `stackalloc`.
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes)
-- [x] BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark. (evidence: BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation)
+- [ ] The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes)
+- [ ] BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark. (evidence: BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation)
 
 ## TR-AOT-001
 
@@ -70,19 +70,130 @@ Scope: layer-1+
 
 ## TR-BUILD-001
 
-**Nuke Build System with GitHub origin as Source of Truth** — ViceSharp shall use the Nuke build system for all build, test, package, and publish operations. The build definition is a C# project (`build/_build.csproj`) that defines targets as code. GitHub `origin` (`https://github.com/sharpninja/vice-sharp.git`) is the git source of truth. Azure DevOps is retired and is not used. Historical `azure-pipelines.ci.yml` and `azure-pipelines.release.yml` files may remain in the tree; they are not the live git or wiki authority.
-**Status:** pending
+**Nuke Build System with GitHub origin as Source of Truth** — ## TR-BUILD-001: Nuke Build with GitHub as the git source of truth
+
+**ID:** TR-BUILD-001
+**Title:** Nuke Build System with GitHub origin as Source of Truth
+**Priority:** P0 -- Critical
+**Category:** Build / CI/CD
+
+### Description
+
+ViceSharp shall use the Nuke build system for all build, test, package, and publish operations. The build definition is a C# project (`build/_build.csproj`) that defines targets as code. GitHub `origin` (`https://github.com/sharpninja/vice-sharp.git`) is the git source of truth. Azure DevOps is retired and is not used. Historical `azure-pipelines.ci.yml` and `azure-pipelines.release.yml` files may remain in the tree; they are not the live git or wiki authority.
+
+### Rationale
+
+Nuke provides a strongly-typed, IDE-debuggable build system written in C#, matching the project language. GitHub is the deployment and collaboration remote. Local Nuke targets (`PublishNuget`, `PublishMsi`, `PublishGitHubRelease`, `PublishWiki`) are the supported publish path.
+
+### Technical Specification
+
+1. **Nuke Build Project:**
+   - The `_build` project (`build/_build.csproj`) is a .NET console application using the Nuke framework.
+   - Build targets are: `Clean`, `Restore`, `Compile`, `GitCommit`, `Test`, `CiTest`, `BuildTest`, `DeterminismTest`, `ParityTest`, `RomFetch`, `PackNuget`, `Pack`, `PackYay`, `DeployUser`, `DeployYay`, `PublishNuget`, `RunConsole`, `RunAvalonia`, `PublishWiki`, `PublishMsi`, `InstallMsi`, `PublishWinget`.
+   - Target dependencies form a DAG (directed acyclic graph) with correct ordering.
+   - The build can be executed locally via `build.ps1` (Windows), `build.sh` (Linux/macOS), or the `nuke` CLI.
+
+2. **Git remote:**
+   - `origin` is GitHub `sharpninja/vice-sharp`. Push and PR target `origin` / `main`.
+   - Azure DevOps git, wiki, and pipelines are retired and are not used.
+
+3. **CI and publication:**
+   - Supported gates are local or operator-run Nuke targets (`Compile`, `Test`, `CiTest`, `DeterminismTest`, `PublishNuget`, `PublishMsi`, `PublishGitHubRelease`, `PublishWiki`).
+   - `.github/` currently holds `FUNDING.yml` and `copilot-instructions.md`. There is no `.github/workflows` tree. A GitHub Actions workflow is possible future work, not a live requirement.
+   - Historical Azure Pipelines YAML may remain in the repo. Do not treat those files as an active Azure service.
+
+4. **Build Targets:**
+   - `Clean`: Removes all `bin`/`obj`/`artifacts` directories.
+   - `Restore`: Runs `dotnet restore`.
+   - `Compile`: Builds the solution with TreatWarningsAsErrors.
+   - `Test`: Runs tests with filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration`.
+   - `CiTest`: Runs the same category filter and stages hash-pinned CI ROMs (`EnsureCiRomRoot`).
+   - `BuildTest`: Runs the Nuke build tests in `build.tests/ViceSharp.Build.Tests.csproj` (outside `ViceSharp.slnx`, so `Test` and `CiTest` never run them) and writes a TRX under `TestResults/build-tests/<yyyyMMddTHHmmss>/`. Host-specific cases are excluded by host filter (`Host!=Linux` on non-Linux hosts), never skipped. Fails when zero tests are selected or any selected test does not pass.
+   - `DeterminismTest`: Runs only `Category=Determinism` (bit-exact replay checks).
+   - `ParityTest`: Runs the lockstep/parity gates against VICE `x64sc`.
+   - `RomFetch`: Fetches ROM data for local runs.
+   - `PackNuget` / `Pack`: Packs the `ViceSharp.Core` bundle (Abstractions, Chips, RomFetch, Core, Architectures in one package) plus 12 individual packages (SourceGen, Protocol, Monitor, Launcher, AdhocHelper, Host, Avalonia, Console, Host.MacOS/Android/iOS/Xbox); `ViceSharp.Console` and `ViceSharp.Avalonia` are dotnet tools. Package contents are verified before success.
+   - `PublishNuget`: Publishes the 13 v-tagged release packages to nuget.org.
+   - `RunConsole` / `RunAvalonia`: Launch the CLI shell / desktop UI.
+   - `PublishWiki`: Regenerates requirements wiki exports.
+   - `PublishMsi` / `InstallMsi` / `PublishWinget`: Package and install the Avalonia desktop app (WiX MSI, winget manifest).
+   - `PackYay`: Creates a local Arch Linux package for the current `x86_64` or `aarch64` host using `makepkg`, run as a regular user. Always publishes the Avalonia project as optimized Release and self-contained, without a full-solution restore dependency. Requires `base-devel`/`makepkg`, the package's native dependencies, and a build SDK compatible with `global.json`. The installed application does not require a system .NET SDK or runtime.
+   - `PackYay` outputs `PKGBUILD`, `.SRCINFO`, a SHA256-pinned `vicesharp-<version>-<arch>.tar.gz` payload, and `vicesharp-<version>-1-<arch>.pkg.tar.zst` beneath `artifacts/yay/<version>/<arch>/`. The package includes the desktop application, `vicesharp` launcher, desktop menu entry, icon, and license notices. ROM images are not bundled; missing default C64 firmware is acquired at desktop startup.
+   - `PackYay` performs no package installation or AUR publication. Users may install the archive with `yay -U <package-path>` or build and install the generated recipe with `yay -Bi <recipe-directory>`.
+   - `DeployUser`: Publishes a self-contained Release Linux desktop build and installs a new retained release below `$XDG_DATA_HOME/vicesharp/releases` (default `~/.local/share/vicesharp/releases`). It creates `~/.local/bin/vicesharp`, a user desktop entry and icon, then atomically switches the `current` release link. It runs as the normal user and invokes no package manager, sudo, system installation, or AUR publication.
+   - `DeployUser` requires an absolute data directory within the user's home, rejects root execution and unsafe symlink or unmanaged destinations, and validates the executable payload before activation. It preserves existing `ViceSharp` settings, firmware and RomM caches, retains earlier releases, and restores entrypoints if activation fails. The installed system package, if present, is not modified.
+   - `DeployYay`: Compatibility alias depending only on `DeployUser`. Existing deployment commands now use user space; `PackYay` remains the separate package-only target.
+
+5. **Versioning:**
+   - Version is derived from Git history via GitVersion (`GitVersion.yml`); `next-version` pins the major.minor base and the commit height auto-increments the build field.
+   - The MSI/winget ProductVersion is `{Major}.{Minor}.{CommitsSinceVersionSource}`.
+   - A `vX.Y.Z` release tag on HEAD overrides the pack version so published package versions equal the tag (e.g. `v1.0.2`, released 2026-07-08).
+   - `PackYay`, `DeployUser` and `DeployYay` honor the shared `--package-version-override` parameter; otherwise they use the release tag on HEAD or the GitVersion-derived default. The Arch package release is `1`. Each user deployment gets a unique release directory, including same-version rebuilds.
+   - The default branch is `main`; day-to-day work happens on `main` and feature branches.
+
+### Acceptance Criteria
+
+1. `./build.ps1 Compile` (or `nuke Compile`) succeeds locally.
+2. `nuke Test` and `nuke CiTest` run the test suite with the documented category filters and report results in a structured format (TRX).
+3. `nuke CiTest` (or `./build.ps1 CiTest`) runs the documented category filter locally. Historical Azure `VICE-Sharp-CI` numbers are not a live gate.
+4. A `v*` tag plus Nuke `PublishNuget` / `PublishGitHubRelease` packs and publishes packages versioned exactly to the tag. There is no live Azure release pipeline.
+5. NuGet packages are versioned correctly: the release tag version wins on tagged HEADs, GitVersion-derived versions apply otherwise.
+6. Build failures produce clear, actionable error messages with the failing target and step identified.
+7. On an Arch Linux `x86_64` or `aarch64` host, `./build.sh PackYay` or `./build.ps1 PackYay` produces the documented local artifacts for that architecture and version. It always packages an optimized Release self-contained Avalonia application, independently of the local default build configuration, and does not restore the whole solution.
+8. The Arch package's metadata declares native runtime dependencies and its payload includes an executable launcher, application binaries, desktop entry, icon, and license notices. The generated recipe verifies the payload's SHA256 checksum, and packaging preserves executable permissions and managed/native application files.
+9. `PackYay` leaves package installation and AUR publication to separate explicit actions. Building the package does not require root; the installed app runs without a system .NET SDK or runtime.
+10. `./build.sh DeployUser --package-version-override 1.3.3` (or the PowerShell equivalent or `DeployYay` compatibility alias) installs only within the current user's home. It requires no elevation or package manager, retains previous releases and user data, forwards launcher arguments correctly, and leaves an existing system installation unchanged.
+11. A failed update cannot activate an incomplete or non-executable payload. Previous entrypoints and the selected release remain usable after a pre-activation failure. Unsafe paths and unmanaged destinations fail with actionable errors instead of being overwritten.
+12. Tests of Nuke build code live in `build.tests/ViceSharp.Build.Tests.csproj` beside `build/`, outside `ViceSharp.slnx`, and run through `nuke BuildTest`. No product test project compiles or tests files from `build/`. `BuildTest` fails when it selects zero tests or any selected test does not pass, and host-specific cases are excluded by host filter, never skipped.
+
+### Verification Method
+
+- Local build execution on developer machines.
+- Operator-run Nuke logs reviewed for completeness and timing. Historical Azure pipeline logs are not a live gate.
+- Version string inspection on built packages (PackNuget verifies package contents and nuspec dependencies before declaring success).
+- Arch packaging: retain the `PackYay` command and output, then run `pwsh ./tests/packaging/Verify-ArchPackage.ps1 -PackagePath <path-to-vicesharp.pkg.tar.zst>` to verify the generated package and recipe. Run `git diff --check` for the implementation/documentation slice.
+- User-local deployment: run `pwsh ./tests/packaging/Verify-DeployYay.ps1`. It tests synthetic payload installation, special-character paths, actual launcher and desktop execution, retained releases, invalid destinations and failed-update recovery, then checks the compiled Nuke graph for `DeployYay -> DeployUser`. It performs no real installation. For a real deployment, retain the Nuke log, verify the running executable is in the selected user release, and compare the existing system-package file hashes before and after.
+- `./build.sh BuildTest` / `./build.ps1 BuildTest` TRX on each host, with the host-excluded count.
+
+### Related TRs
+
+- TR-PLAT-001 (Platform support; operator-run Nuke on Windows)
+
+### Design Decisions
+
+- Nuke is preferred over MSBuild-only or FAKE because it provides C# build logic that is debuggable in the IDE.
+- GitHub `origin` is the git source of truth. Azure DevOps is retired and is not used.
+- Packages publish to nuget.org via Nuke `PublishNuget`. Historical Azure pipeline YAML may remain in the tree.
+- GitHub `origin` remains the source of truth; no GitHub Actions CI exists (potential future work for community PR validation).
+- The `_build` project uses the same .NET SDK version as the main solution (specified in `global.json`).
+- `PackYay` publishes only the Avalonia project graph and bundles the .NET runtime so creating and running an Arch desktop package does not depend on unrelated platform workloads or the distribution's available .NET runtime version. A generated local `PKGBUILD` keeps the package rebuildable with `makepkg`/yay without publishing to AUR.
+- The operator requires installation to touch only user space. `DeployUser` publishes directly to retained user releases; `DeployYay` is a compatibility alias so an older command cannot request sudo. `PackYay` stays separate for explicit package construction. Reading system runtimes and tools does not grant the installer permission to change system files.
+- The 2026-10-15 packaging and user-local deployment extensions are recorded here locally because the workspace MCP marker/session route is unavailable. Registration readback succeeds, but server configuration projection was denied access to `/opt/mcpserver/app/appsettings.yaml`; reconciliation and generated requirement export remain pending. Generated requirement exports are not edited manually.
+**Status:** in_progress
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] `./build.ps1 Compile` (or `nuke Compile`) succeeds locally.
+- [ ] `nuke Test` and `nuke CiTest` run the test suite with the documented category filters and report results in a structured format (TRX).
+- [ ] `nuke CiTest` (or `./build.ps1 CiTest`) runs the documented category filter locally. Historical Azure `VICE-Sharp-CI` numbers are not a live gate.
+- [ ] A `v*` tag plus Nuke `PublishNuget` / `PublishGitHubRelease` packs and publishes packages versioned exactly to the tag. There is no live Azure release pipeline.
+- [ ] NuGet packages are versioned correctly: the release tag version wins on tagged HEADs, GitVersion-derived versions apply otherwise.
+- [ ] Build failures produce clear, actionable error messages with the failing target and step identified.
+- [ ] On an Arch Linux `x86_64` or `aarch64` host, `./build.sh PackYay` or `./build.ps1 PackYay` produces the documented local artifacts for that architecture and version. It always packages an optimized Release self-contained Avalonia application, independently of the local default build configuration, and does not restore the whole solution.
+- [ ] The Arch package's metadata declares native runtime dependencies and its payload includes an executable launcher, application binaries, desktop entry, icon, and license notices. The generated recipe verifies the payload's SHA256 checksum, and packaging preserves executable permissions and managed/native application files.
+- [ ] `PackYay` leaves package installation and AUR publication to separate explicit actions. Building the package does not require root; the installed app runs without a system .NET SDK or runtime.
+- [ ] `./build.sh DeployUser --package-version-override 1.3.3` (or the PowerShell equivalent or `DeployYay` compatibility alias) installs only within the current user's home. It requires no elevation or package manager, retains previous releases and user data, forwards launcher arguments correctly, and leaves an existing system installation unchanged.
+- [ ] A failed update cannot activate an incomplete or non-executable payload. Previous entrypoints and the selected release remain usable after a pre-activation failure. Unsafe paths and unmanaged destinations fail with actionable errors instead of being overwritten.
+- [ ] Tests of Nuke build code live in `build.tests/ViceSharp.Build.Tests.csproj` beside `build/`, outside `ViceSharp.slnx`, and run through `nuke BuildTest`. No product test project compiles or tests files from `build/`. `BuildTest` fails when it selects zero tests or any selected test does not pass, and host-specific cases are excluded by host filter, never skipped.
 
 ## TR-CHIPSTATE-CAPTURE-001
 
 **IStatefulDevice per-tick chip capture** — IStatefulDevice (StateName, StateSize, CaptureState(Span), DecodeState) is implemented by VIC/SID/CIA/PLA. The recorder preallocates per-slot buffers (zero-alloc capture) and deep-copies on Snapshot; the pump registers Machine.Devices.All.OfType<IStatefulDevice>() before subscribing and the host decodes in the same order.
 **Covered by:** FR: FR-CHIPSTATE-001; TEST: TEST-CHIPSTATE-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] A captured tick carries each device's StateSize bytes; capture allocates nothing on the hot path
-- [x] Snapshot deep-copies chip state so ring reuse cannot corrupt an earlier snapshot
+- [ ] A captured tick carries each device's StateSize bytes; capture allocates nothing on the hot path
+- [ ] Snapshot deep-copies chip state so ring reuse cannot corrupt an earlier snapshot
 
 ## TR-COMPLETION-MANIFEST-001
 
@@ -115,21 +226,21 @@ Scope: layer-1+
 
 **Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior** — Managed C64 PAL execution must preserve C64 bus, CPU, and VIC-II ordering semantics while optimizing RunFrame so performance changes do not alter cycle-observable behavior.
 **Covered by:** FR: FR-PERF-RUNFRAME-001; TEST: TEST-PERF-RUNFRAME-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Lockstep and checkpoint suites continue to pass after RunFrame performance optimizations. (evidence: dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Lockstep|FullyQualifiedName~Checkpoint => 333 passed, 0 failed, 0 skipped)
-- [x] Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID tests pass with no failed or skipped tests. (evidence: focused gate => 182 passed, 0 failed, 0 skipped)
+- [ ] Lockstep and checkpoint suites continue to pass after RunFrame performance optimizations. (evidence: dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Lockstep|FullyQualifiedName~Checkpoint => 333 passed, 0 failed, 0 skipped)
+- [ ] Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID tests pass with no failed or skipped tests. (evidence: focused gate => 182 passed, 0 failed, 0 skipped)
 
 ## TR-CORE-DET-001
 
 **Bit-Exact Reproducibility Given Same Initial State and Inputs** — Given the same initial emulator state, ROM set, mounted media, inputs, and timing model, managed C64 PAL execution must produce deterministic CPU, bus, video, audio, interrupt, and memory-observable results.
 **Covered by:** FR: FR-PERF-RUNFRAME-001; TEST: TEST-PERF-RUNFRAME-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Lockstep and checkpoint suites continue to pass after performance optimizations. (evidence: lockstep/checkpoint gate => 333 passed, 0 failed, 0 skipped)
-- [x] Optimizations do not change public observable machine state signatures or behavior contracts. (evidence: PR #3 keeps public API signatures stable and correctness gates green)
+- [ ] Lockstep and checkpoint suites continue to pass after performance optimizations. (evidence: lockstep/checkpoint gate => 333 passed, 0 failed, 0 skipped)
+- [ ] Optimizations do not change public observable machine state signatures or behavior contracts. (evidence: PR #3 keeps public API signatures stable and correctness gates green)
 
 ## TR-CPU-TICK-001
 
@@ -160,7 +271,7 @@ Scope: layer-1+
 - The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).
 - The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.
 - Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.
-**Covered by:** FR: FR-BACKFILL-VIDEO-001, FR-CIA-001, FR-CIA-002, FR-CIA-003, FR-CIA-004, FR-CIA-005, FR-CIA-006, FR-CIA-007, FR-CPU-001, FR-CPU-002, FR-CPU-003, FR-CPU-004, FR-CPU-005, FR-CRT-001, FR-CRT-002, FR-CRT-003, FR-CRT-004, FR-CRT-005, FR-DRV-001, FR-DRV-002, FR-DRV-003, FR-DRV-004, FR-DRV-005, FR-DRV-006, FR-INP-001, FR-INP-002, FR-INP-003, FR-INP-004, FR-INP-005, FR-INP-006, FR-MEM-001, FR-MEM-002, FR-MEM-003, FR-MEM-004, FR-MEM-005, FR-MEM-006, FR-TAP-001, FR-TAP-002, FR-TAP-003, FR-TAP-004, FR-TAP-005, FR-VIA-001, FR-VIA-002, FR-VIA-003, FR-VIA-004, FR-VIA-005, FR-VIC-001, FR-VIC-002, FR-VIC-003, FR-VIC-004, FR-VIC-005, FR-VIC-006, FR-VIC-007, FR-VIC-008, FR-VIC-009, FR-VIC-010, FR-VIC20-003, FR-VIC20-004; TEST: TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001, TEST-CIA-001, TEST-X64SC-LOCKSTEP-001, TEST-CPU-001, TEST-CRT-001, TEST-DRV-001, TEST-INPUT-001, TEST-MEM-001, TEST-TAP-001, TEST-VIA-001, TEST-VIC-001, TEST-VIC20-001
+**Covered by:** FR: FR-BACKFILL-VIDEO-001, FR-CIA-001, FR-CIA-002, FR-CIA-003, FR-CIA-004, FR-CIA-005, FR-CIA-006, FR-CIA-007, FR-CPU-001, FR-CPU-002, FR-CPU-003, FR-CPU-004, FR-CPU-005, FR-CRT-001, FR-CRT-002, FR-CRT-003, FR-CRT-004, FR-CRT-005, FR-DRV-001, FR-DRV-002, FR-DRV-003, FR-DRV-004, FR-DRV-005, FR-DRV-006, FR-INP-001, FR-INP-002, FR-INP-003, FR-INP-004, FR-INP-005, FR-INP-006, FR-MEM-001, FR-MEM-002, FR-MEM-003, FR-MEM-004, FR-MEM-005, FR-MEM-006, FR-TAP-001, FR-TAP-002, FR-TAP-003, FR-TAP-004, FR-TAP-005, FR-VIA-001, FR-VIA-002, FR-VIA-003, FR-VIA-004, FR-VIA-005, FR-VIC-001, FR-VIC-002, FR-VIC-003, FR-VIC-004, FR-VIC-005, FR-VIC-006, FR-VIC-007, FR-VIC-008, FR-VIC-009, FR-VIC-010, FR-VIC20-003, FR-VIC20-004; TEST: TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001, TEST-CIA-001, TEST-X64SC-LOCKSTEP-001, TEST-CPU-001, TEST-CRT-001, TEST-DRV-001, TEST-INPUT-001, TEST-MEM-001, TEST-TAP-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001, TEST-VIA-001, TEST-VIC-001, TEST-VIC20-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -176,32 +287,82 @@ Scope: layer-1+
 
 **Dependency currency policy (2026-07 upgrade wave)** — Every NuGet dependency tracks the highest STABLE version mutually compatible with net10.0 and all other dependencies; Directory.Packages.props (CPM) is the single version source for all projects including tests/ViceSharp.AiReview.Tests; all packages resolve from nuget.org when published there (vendored nuget-local feed retires once SharpNinja.aiUnit and SharpNinja.Avalonia.RemoteControl.* map to nuget.org). Prereleases excluded. Locked targets and ceiling evidence recorded in the approved 2026-07-08 upgrade plan.
 **Covered by:** FR: FR-NATIVERESIDUE-001; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-DEPS-202607-001, TEST-NATIVERESIDUE-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-DET-001
 
-**Bit-Exact Reproducibility Given Same Initial State and Inputs** — Given the same initial machine state (snapshot) and the same sequence of input events (keyboard, joystick, timing), the emulator shall produce bit-exact identical output (video frames, audio samples, final machine state) across all runs, all platforms, and supported compilation modes (Debug and Release).
+**Bit-Exact Reproducibility** — ## TR-DET-001: Bit-Exact Reproducibility
 
-## Acceptance Criteria
-- A "replay determinism" test loads a snapshot, replays 10 million cycles of recorded input, and compares the final state hash: the hash must be identical across 100 consecutive runs.
-- The same test produces identical hashes on Windows x64, Linux x64, macOS ARM64, and Linux ARM64.
-- The same test produces identical hashes for Debug and Release builds.
-- Video frame checksums (CRC32 of raw pixel data) match for every frame between two runs of the same replay.
-- Audio sample checksums match for every audio buffer between two runs of the same replay.
-- Determinism is verified mechanically by the `Category=Determinism` bit-exact replay suites (run by the Nuke `DeterminismTest` target, e.g. `SidDeterminismTests`) plus the cycle-exact lockstep comparison gates against VICE `x64sc` and VSF baselines (Nuke `ParityTest` target).
-**Covered by:** FR: FR-CFG-003, FR-CFG-005, FR-CFG-007, FR-PRF-001, FR-PRF-002, FR-PRF-003, FR-PRF-004, FR-PRF-005, FR-PRF-006, FR-PRF-007, FR-PRF-008; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-UIDROP-002, TEST-PRF-001
-**Status:** completed
+**ID:** TR-DET-001
+**Title:** Bit-Exact Reproducibility Given Same Initial State and Inputs
+**Priority:** P0 -- Critical
+**Category:** Correctness
+
+### Description
+
+Given the same initial machine state (snapshot) and the same sequence of input events (keyboard, joystick, timing), the emulator shall produce bit-exact identical output (video frames, audio samples, final machine state) across all runs, all platforms, and supported compilation modes (Debug and Release).
+
+### Rationale
+
+Determinism is a foundational requirement for: (1) snapshot-based replay (FR-SNP-003), (2) automated testing against reference outputs, (3) TAS (tool-assisted speedrun) support, (4) networked multiplayer synchronization (future), and (5) bug reproduction.
+
+### Technical Specification
+
+1. **No Floating-Point in Emulation Core:** The emulation core (CPU, VIC-II, CIA, SID oscillator/envelope) shall use only integer arithmetic. Floating-point is permitted only in the audio output resampling stage (post-SID, not part of the emulated state).
+2. **No Uninitialized State:** All state variables are explicitly initialized. RAM initialization follows the known C64 power-on pattern (alternating $00/$FF blocks).
+3. **No Random Number Generation:** The emulation core does not use `System.Random` or any PRNG. All "random" behavior comes from the emulated hardware state (e.g., SID noise LFSR, uninitialized RAM patterns).
+4. **Deterministic Tick Order:** Devices are ticked in a fixed, documented order within each clock phase. The order does not change based on runtime conditions.
+5. **No Thread-Dependent State:** The emulation core runs on a single thread. There are no data races, lock-dependent ordering, or thread-pool scheduling dependencies.
+6. **Platform-Independent Arithmetic:** All integer operations produce identical results on x86, x64, and ARM64. No reliance on platform-specific overflow behavior beyond what C# guarantees.
+
+### Acceptance Criteria
+
+1. A "replay determinism" test loads a snapshot, replays 10 million cycles of recorded input, and compares the final state hash: the hash must be identical across 100 consecutive runs.
+2. The same test produces identical hashes on Windows x64, Linux x64, macOS ARM64, and Linux ARM64.
+3. The same test produces identical hashes for Debug and Release builds.
+4. Video frame checksums (CRC32 of raw pixel data) match for every frame between two runs of the same replay.
+5. Audio sample checksums match for every audio buffer between two runs of the same replay.
+6. Determinism is verified mechanically by the `Category=Determinism` bit-exact replay suites (run by the Nuke `DeterminismTest` target, e.g. `SidDeterminismTests`) plus the cycle-exact lockstep comparison gates against VICE `x64sc` and VSF baselines (Nuke `ParityTest` target).
+
+### Verification Method
+
+- `Category=Determinism` replay suites executed by the Nuke `DeterminismTest` target (bit-exact replay checks).
+- Lockstep comparison gates against VICE `x64sc` and `.vsf` snapshot baselines (Nuke `ParityTest` target).
+- Replay regression tests that compare frame/audio checksums against golden reference files.
+
+### Related FRs
+
+- FR-SNP-003 (Deterministic replay depends on this TR)
+- FR-SNP-001 / FR-SNP-002 (Snapshot save/load must be complete for determinism)
+
+### Related TRs
+
+- TR-CYCLE-001 (Cycle accuracy ensures the tick order matches hardware)
+- TR-SIMD-001 (SIMD and scalar paths must produce identical results)
+- TR-STATE-001 (ACID state transactions ensure consistent snapshots)
+
+### Design Decisions
+
+- SID filter computation uses fixed-point arithmetic (Q16.16) in the emulation core; float conversion happens only at the audio output boundary.
+- The frame buffer stores raw pixel indices (palette indices), not RGB values, until the output stage.
+- RAM initialization pattern is configurable but defaults to the documented C64 power-on pattern for deterministic cold starts.
+**Covered by:** FR: FR-CFG-003, FR-CFG-005, FR-CFG-007, FR-PRF-001, FR-PRF-002, FR-PRF-003, FR-PRF-004, FR-PRF-005, FR-PRF-006, FR-PRF-007, FR-PRF-008, FR-SNP-001, FR-SNP-002; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-UIDROP-002, TEST-PRF-001, TEST-SNP-001
+**Status:** in_progress
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Lockstep and checkpoint suites continue to pass after performance optimizations. (evidence: dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Lockstep|FullyQualifiedName~Checkpoint => 333 passed, 0 failed, 0 skipped)
-- [x] Optimizations do not change public observable machine state signatures or behavior contracts. (evidence: PR #3 keeps public API signatures stable and lockstep/checkpoint evidence green)
+- [ ] A "replay determinism" test loads a snapshot, replays 10 million cycles of recorded input, and compares the final state hash: the hash must be identical across 100 consecutive runs.
+- [ ] The same test produces identical hashes on Windows x64, Linux x64, macOS ARM64, and Linux ARM64.
+- [ ] The same test produces identical hashes for Debug and Release builds.
+- [ ] Video frame checksums (CRC32 of raw pixel data) match for every frame between two runs of the same replay.
+- [ ] Audio sample checksums match for every audio buffer between two runs of the same replay.
+- [ ] Determinism is verified mechanically by the `Category=Determinism` bit-exact replay suites (run by the Nuke `DeterminismTest` target, e.g. `SidDeterminismTests`) plus the cycle-exact lockstep comparison gates against VICE `x64sc` and VSF baselines (Nuke `ParityTest` target).
 
 ## TR-DRV-EDGE-001
 
 **1541 drive motor 300,000-cycle ramp before rotation** — IecDrive.Tick() enforces 300,000-cycle motor ramp-up (300ms at 1MHz drive clock) before MotorRotationCycles advances. Motor off resets ramp. VICE drive/drive.c.
 **Covered by:** FR: FR-ARCH-TRUEDRIVE-1541-002, FR-BACKFILL-MEDIA-001, FR-D71-001, FR-D81-001, FR-DRV1540-001, FR-DRV1541II-001, FR-DRVMODEL-001, FR-DRVMODEL-002, FR-VIC20-006; TEST: TEST-DRV-MOTOR-001, TEST-IEC-TIMING-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001, TEST-DRV1571-LOCKSTEP-001, TEST-DRV1581-LOCKSTEP-001, TEST-DRV1540-LOCKSTEP-001, TEST-DRV1541II-LOCKSTEP-001, TEST-DRV-TYPE-001, TEST-VIC20-001
-**Status:** closed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-DRV-FDD-001
@@ -278,7 +439,7 @@ The in-process Avalonia renderer is the local rendering exception: a host-owned 
 - Streaming tests verify that client disconnects, slow frame consumers, and reconnects do not mutate emulator state.
 - Release validation includes the host and at least one reference UI client.
 - An in-process Avalonia rendering test can bind the host-owned render surface to a local frame source without introducing `ViceSharp.Core` or runtime-internal references into ViewModels.
-**Covered by:** FR: FR-CFG-001, FR-CFG-004, FR-CFG-005, FR-CFG-006, FR-CFG-008, FR-HOST-001, FR-HOST-002, FR-HOST-003, FR-HOST-004, FR-HOST-005, FR-HOST-006, FR-UI-001, FR-UI-002, FR-UI-003, FR-UI-004, FR-UIDROP-002; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-UIDROP-002, TEST-GRPC-001, TEST-DRV-001, TEST-UI-001, TEST-UI-DIAG-001
+**Covered by:** FR: FR-CFG-001, FR-CFG-004, FR-CFG-005, FR-CFG-006, FR-CFG-008, FR-HOST-001, FR-HOST-002, FR-HOST-003, FR-HOST-004, FR-HOST-005, FR-HOST-006, FR-UI-001, FR-UI-002, FR-UI-003, FR-UI-004, FR-UIDROP-002; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-UIDROP-002, TEST-GRPC-001, TEST-DRV-001, TEST-UI-001, TEST-UI-DIAG-001, TEST-UISET-001
 **Status:** in_progress
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -296,14 +457,14 @@ Scope: layer-1+
 ## TR-HOST-DIAG-002
 
 **Current UI Session Tracking Bridge** — The desktop UI and host diagnostics state shall keep the current UI-bound session id synchronized so external diagnostics tools can attach to the same session that the visible app is using.
-**Covered by:** FR: FR-HOST-DIAG-001, FR-UI-001, FR-UI-002, FR-UI-003, FR-UI-004; TEST: TEST-CLI-LAUNCHER-001, TEST-GRPC-001, TEST-HOST-001, TEST-HOST-DIAG-001, TEST-UI-DIAG-001, TEST-X64SC-LOCKSTEP-001, TEST-UI-001
+**Covered by:** FR: FR-HOST-DIAG-001, FR-UI-001, FR-UI-002, FR-UI-003, FR-UI-004; TEST: TEST-CLI-LAUNCHER-001, TEST-GRPC-001, TEST-HOST-001, TEST-HOST-DIAG-001, TEST-UI-DIAG-001, TEST-X64SC-LOCKSTEP-001, TEST-UI-001, TEST-UISET-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-HOST-DIAG-003
 
 **Debug Attach File Lifecycle** — The desktop app shall publish deterministic local attach metadata at `%LOCALAPPDATA%\ViceSharp\debug-attach.json` for the running in-process host.
-**Covered by:** FR: FR-HOST-DIAG-001, FR-UI-001, FR-UI-002, FR-UI-003, FR-UI-004; TEST: TEST-CLI-LAUNCHER-001, TEST-GRPC-001, TEST-HOST-001, TEST-HOST-DIAG-001, TEST-UI-DIAG-001, TEST-X64SC-LOCKSTEP-001, TEST-UI-001
+**Covered by:** FR: FR-HOST-DIAG-001, FR-UI-001, FR-UI-002, FR-UI-003, FR-UI-004; TEST: TEST-CLI-LAUNCHER-001, TEST-GRPC-001, TEST-HOST-001, TEST-HOST-DIAG-001, TEST-UI-DIAG-001, TEST-X64SC-LOCKSTEP-001, TEST-UI-001, TEST-UISET-001
 **Status:** pending
 Scope: layer-1+
 
@@ -358,8 +519,8 @@ Scope: layer-1+
 ## TR-IEC-EDGE-001
 
 **IEC bus ATN-response within 985-cycle spec window** — IecBus.Tick() asserts CLK and DATA low within 985 cycles (Tat=1ms at PAL 985,248Hz) of ATN falling edge. Releases both on ATN rising edge. VICE iecbus/iecbus.c:247-266.
-**Covered by:** FR: FR-ARCH-TRUEDRIVE-1541-002; TEST: TEST-DRV-MOTOR-001, TEST-IEC-TIMING-001
-**Status:** closed
+**Covered by:** FR: FR-ARCH-TRUEDRIVE-1541-002, FR-BACKFILL-MEDIA-001; TEST: TEST-DRV-MOTOR-001, TEST-IEC-TIMING-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001
+**Status:** pending
 Scope: layer-1+
 
 ## TR-IECELEC-001
@@ -417,15 +578,54 @@ Scope: layer-1+
 
 ## TR-INPUT-VKM-001
 
-**VICE VKM Parser and Selected Map Resolver** — ViceSharp machine keyboard input shall resolve normalized host key events through a selected machine-specific VICE keymap before updating keyboard matrix state.
+**VICE VKM Parser and Selected Map Resolver** — ## TR-INPUT-VKM-001: VICE VKM Parser and Selected Map Resolver
 
-## Acceptance Criteria
-- Built-in and custom VKM maps produce deterministic key-to-matrix mappings.
-- Invalid maps return diagnostics without replacing the selected map.
-- Host input service tests prove selected map entries affect C64 keyboard matrix state.
-- The parser and resolver are usable without Avalonia dependencies.
+**ID:** TR-INPUT-VKM-001
+**Title:** VICE VKM Parser and Selected Map Resolver
+**Priority:** P0 -- Critical
+**Category:** Input
+
+### Description
+
+ViceSharp machine keyboard input shall resolve normalized host key events through a selected machine-specific VICE keymap before updating keyboard matrix state.
+
+### Technical Specification
+
+1. Keyboard map parsing is host-owned and session-scoped.
+2. C64 support parses VICE VKM comments, `!CLEAR`, `!INCLUDE`, `!UNDEF`, modifier directives, row/column entries, and shift flags.
+3. Custom uploaded keymaps are validated before becoming active.
+4. The machine keyboard translator is abstracted so other machine profiles can provide different matrix/key handling.
+5. Real-time key state changes update CIA keyboard matrix lines through machine input abstractions, not UI runtime references.
+6. The desktop publishes the shared vendored C64 keymaps under `data/C64`. The data resolver searches this application-relative directory after configured VICE roots and the per-user ROM cache.
+
+### Acceptance Criteria
+
+1. Built-in and custom VKM maps produce deterministic key-to-matrix mappings.
+2. Invalid maps return diagnostics without replacing the selected map.
+3. Host input service tests prove selected map entries affect C64 keyboard matrix state.
+4. The parser and resolver are usable without Avalonia dependencies.
+
+### Verification Method
+
+- VKM parser unit tests with VICE C64 maps.
+- Input integration tests against C64 keyboard matrix/CIA behavior.
+- gRPC input service tests for selected-map behavior.
+- `BundledKeyboardMapTests` for application-relative discovery and `tests/packaging/Verify-ArchPackage.ps1` for complete, unmodified VKM payloads in the Linux installation archive.
+
+### Architecture Sources
+
+- `docs/Architecture.md`: host/UI boundary, input boundary, and library-first assembly rules.
+- `src/ViceSharp.Abstractions`: keyboard map and machine keyboard abstractions.
+- `src/ViceSharp.Core/Input`: C64 VKM parser and keyboard matrix implementation (moved from ViceSharp.Chips during ARCH-CHIPGLUE-001).
+- `src/ViceSharp.Host`: host input service.
+
+### Related FRs
+
+- FR-INP-001
+- FR-INP-006
+- FR-HOST-004
 **Covered by:** FR: FR-INP-006; TEST: TEST-INPUT-001, TEST-X64SC-LOCKSTEP-001
-**Status:** pending
+**Status:** in_progress
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Built-in and custom VKM maps produce deterministic key-to-matrix mappings.
@@ -442,10 +642,82 @@ Scope: layer-1+
 
 ## TR-LIB-001
 
-**Emulator Core as a Reusable Library with UI Shells as Thin Consumers** — The ViceSharp emulator core shall be packaged as a standalone .NET library (NuGet package) with no dependencies on any UI framework, windowing system, or platform-specific API. UI applications (desktop, web, headless test harness, embedded) consume the library and provide their own rendering, audio output, and input handling through well-defined abstractions.
-**Covered by:** FR: FR-CFG-002, FR-CFG-006, FR-MON-001, FR-MON-002, FR-MON-003, FR-MON-004, FR-MON-005, FR-MON-006; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-MON-001
-**Status:** pending
+**Emulator Core as a Reusable Library with UI Shells as Thin Consumers** — ## TR-LIB-001: Emulator as Library, UI Shells as Thin Consumers
+
+**ID:** TR-LIB-001
+**Title:** Emulator Core as a Reusable Library with UI Shells as Thin Consumers
+**Priority:** P0 -- Critical
+**Category:** Architecture
+
+### Description
+
+The ViceSharp emulator core shall be packaged as a standalone .NET library (NuGet package) with no dependencies on any UI framework, windowing system, or platform-specific API. UI applications (desktop, web, headless test harness, embedded) consume the library and provide their own rendering, audio output, and input handling through well-defined abstractions.
+
+### Rationale
+
+A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazor, headless), (2) embedding in other applications (game development tools, music production, testing harnesses), (3) clean separation of concerns, (4) independent versioning of core vs. UI, and (5) automated testing without any UI dependency.
+
+### Technical Specification
+
+1. **Core Library Assembly:** `ViceSharp.Core` contains the complete emulation engine with zero UI dependencies.
+2. **Abstractions Assembly:** `ViceSharp.Abstractions` defines all interfaces and value types shared between core and consumers. The core depends on Abstractions; consumers depend on Abstractions.
+3. **No UI Framework References:** The core library shall not reference `System.Windows`, `Avalonia`, `Microsoft.Maui`, `System.Drawing`, or any UI framework assembly.
+4. **No Threading Assumptions:** The core library does not create threads. The host application controls the emulation thread and timing.
+5. **Frame-Based API:**
+   - `IMachine.RunFrame()` advances the emulation by one video frame (all cycles for one frame); frame and audio data flow through the host-provided sinks/buffers.
+   - `IMachine.StepInstruction()` advances by one CPU instruction (for debugging).
+   - `IMachine.GetState()` returns the full machine state snapshot; `IMachine.Reset()` restores the power-on state.
+6. **Output Buffers:**
+   - Video: The core writes to a pre-allocated pixel buffer (`Span<byte>` or `Memory<byte>`) provided by the host.
+   - Audio: The core writes to a pre-allocated sample buffer provided by the host.
+   - The core does not perform any rendering, blitting, or audio playback.
+7. **Input Injection:**
+   - The host injects input events via `IKeyboardMatrix`, `IJoystickPort`, `IMousePort`.
+   - Events are queued and consumed at the correct emulation time.
+8. **Host Boundary:**
+   - Out-of-process UI shells communicate with `ViceSharp.Host` through TR-GRPC-BOUNDARY-001.
+   - The core remains embeddable and does not know whether its host is local, headless, or serving a UI client.
+
+### Acceptance Criteria
+
+1. `ViceSharp.Core` compiles with zero references to any UI framework (verified by dependency analysis).
+2. `ViceSharp.Core` can be consumed from a headless console application that runs the emulation and writes frame checksums to stdout.
+3. `ViceSharp.Core` can be consumed from a unit test project that validates emulation behavior without any display or audio.
+4. The `IMachine` API is sufficient to build a complete UI (demonstrated by at least one working UI shell).
+5. The core library NuGet package size is under 5MB (excluding ROMs and test data).
+6. The core library has zero transitive dependencies beyond the .NET BCL and `ViceSharp.Abstractions`.
+7. A gRPC-hosted UI scenario can run without adding UI or transport dependencies to `ViceSharp.Core`.
+
+### Verification Method
+
+- Dependency analysis tool (e.g., `dotnet list package --include-transitive`) verifying no UI framework dependencies.
+- Headless test harness in the CI pipeline that exercises the full emulation API without a UI.
+- NuGet package size check in the build pipeline.
+
+### Related TRs
+
+- TR-PLAT-001 (Platform-agnostic core enables cross-platform UI shells)
+- TR-MVVM-001 (UI shells use MVVM pattern on top of the library)
+- TR-GRPC-BOUNDARY-001 (Host/UI process boundary preserves core library ownership)
+
+### Design Decisions
+
+- The core library does not implement a "run loop" -- the host application calls `RunFrame()` at the appropriate cadence (vsync, timer, or free-running).
+- The core library exposes synchronous APIs only; the host is responsible for threading and async patterns.
+- ROM images are not bundled with the library; the host provides ROM data via `IRomProvider.LoadRom(romName, architecture)`, with `IRomSet` validating per-architecture completeness.
+- FR-CFG-002 desktop C64 acquisition belongs to the host composition layer and is explicitly enabled by local desktop startup. It reuses complete local sets before downloading the three default core ROMs through the built-in SHA256-pinned GitHub catalog into a per-user cache. Configured roots precede that cache, failures remain actionable, and generic runtime factories, headless hosts, and remote-host connections retain their existing local provisioning behavior. Verification: TEST-CFG-001.
+- `ViceSharp.Host` may expose the core through gRPC, but that transport remains outside the core library.
+**Covered by:** FR: FR-CFG-002, FR-CFG-006, FR-MON-001, FR-MON-002, FR-MON-003, FR-MON-004, FR-MON-005, FR-MON-006, FR-ROMM-LAUNCH-001; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-MON-001, TEST-REMOTE-INTEGRATION-001, TEST-ROMM-LAUNCH-001, TEST-ROMM-SEC-001
+**Status:** in_progress
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] `ViceSharp.Core` compiles with zero references to any UI framework (verified by dependency analysis).
+- [ ] `ViceSharp.Core` can be consumed from a headless console application that runs the emulation and writes frame checksums to stdout.
+- [ ] `ViceSharp.Core` can be consumed from a unit test project that validates emulation behavior without any display or audio.
+- [ ] The `IMachine` API is sufficient to build a complete UI (demonstrated by at least one working UI shell).
+- [ ] The core library NuGet package size is under 5MB (excluding ROMs and test data).
+- [ ] The core library has zero transitive dependencies beyond the .NET BCL and `ViceSharp.Abstractions`.
+- [ ] A gRPC-hosted UI scenario can run without adding UI or transport dependencies to `ViceSharp.Core`.
 
 ## TR-LOCKSTEP-VSF-001
 
@@ -477,10 +749,86 @@ Scope: layer-1+
 
 ## TR-MEDIA-001
 
-**External FFmpeg Process Integration with Multiple Format Support** — Muxed video+audio encoding shall use an external `ffmpeg` executable driven as a child process, mirroring VICE's `ffmpegexedrv`. ViceSharp links no FFmpeg libraries and performs no P/Invoke into libav*; the emulator streams raw frames and PCM to the ffmpeg process, and ffmpeg performs all codec and container work. Audio-only (WAV) and image/frame-sequence capture are implemented with managed encoders and do not require ffmpeg.
+**External FFmpeg Process, Multiple Format Support** — ## TR-MEDIA-001: External FFmpeg Process, Multiple Format Support
+
+**ID:** TR-MEDIA-001
+**Title:** External FFmpeg Process Integration with Multiple Format Support
+**Priority:** P1 -- Important
+**Category:** Integration
+
+### Description
+
+Muxed video+audio encoding shall use an external `ffmpeg` executable driven as a child process, mirroring VICE's `ffmpegexedrv`. ViceSharp links no FFmpeg libraries and performs no P/Invoke into libav*; the emulator streams raw frames and PCM to the ffmpeg process, and ffmpeg performs all codec and container work. Audio-only (WAV) and image/frame-sequence capture are implemented with managed encoders and do not require ffmpeg.
+
+### Rationale
+
+Shelling out to the ffmpeg executable keeps ViceSharp free of native library bindings, version-specific libav API coupling, and platform-specific binary distribution while still supporting the industry-standard codecs and containers (H.264, MP4, MKV, AVI). It exactly mirrors the mechanism of VICE's `ffmpegexedrv`, keeping capture behavior comparable between ViceSharp and VICE.
+
+### Technical Specification
+
+1. **Process Integration (`src/ViceSharp.Core/Media`):**
+   - `FfmpegLocator` resolves the ffmpeg executable: the `VICESHARP_FFMPEG` environment variable (full path override) first, then each directory on `PATH`.
+   - `FfmpegVideoRecorder` records video and audio into a single muxed container by launching ffmpeg as a child process and streaming raw BGRA frames plus int16 PCM over two loopback TCP sockets (video + optional audio).
+   - `FfmpegVideoEncoding` defines the format table, mirroring VICE `ffmpegexedrv` choices: mp4 (libx264 + aac, yuv420p), mkv (matroska, libx264 + aac, yuv420p), avi (mpeg4 + libmp3lame).
+   - Stopping capture closes both sockets so ffmpeg finalizes the file (`-shortest`) and the process exit is awaited.
+
+2. **Hot-Path Safety:**
+   - Both feeds arrive on the single emulation worker thread; socket writes are moved off the worker by `BackgroundByteWriter` (the worker only copies and enqueues).
+   - Video queue depth is bounded: if ffmpeg stops draining, overflow frames are dropped and counted so the emulator stays responsive; emulator audio preserves order.
+
+3. **Graceful Degradation:**
+   - When ffmpeg cannot be located, the capture surface advertises no muxed video formats and requests to start mp4/mkv/avi capture are rejected gracefully (per FR-MED-005).
+   - WAV audio recording (`WavAudioRecorder`, managed RIFF/WAVE 16-bit PCM writer) and BMP frame-sequence capture (`FrameSequenceCapture`) remain available without ffmpeg.
+
+4. **Supported Formats:**
+   - Muxed video (requires external ffmpeg): MP4 (H.264/libx264 + AAC), MKV (libx264 + AAC), AVI (mpeg4 + MP3/libmp3lame).
+   - Audio (managed, no ffmpeg): WAV (uncompressed 16-bit PCM).
+   - Images/frames (managed, no ffmpeg): screenshots and per-frame BMP sequences.
+
+5. **Capture Routing:**
+   - One gRPC `CaptureService` routes to recorders in `ViceSharp.Core.Media`; frames tee from `EmulatorRuntimeSession.CommitFrame` and audio from `CaptureAudioTap` in the SID path.
+   - The audio tap installs only when a real audio device exists, so headless/test hosts stay timing-clean and silent.
+
+### Acceptance Criteria
+
+1. With ffmpeg present (PATH or `VICESHARP_FFMPEG`), video recording to H.264/MP4 produces valid output (playable by VLC and browser HTML5 video).
+2. Audio recording to WAV produces valid output (RIFF/WAVE header parses; playable by standard audio players) without requiring ffmpeg.
+3. Synchronized A/V recording produces an MP4 with correct A/V sync (per FR-MED-004).
+4. When ffmpeg is absent, muxed video formats are not advertised and capture start requests fail gracefully with a structured error; WAV and frame-sequence capture still work.
+5. Video recording never blocks the emulation worker thread: a stalled ffmpeg consumer results in counted dropped frames, not emulator stalls.
+6. The ffmpeg child process is fully reaped on stop (no orphaned processes, output file finalized).
+
+### Verification Method
+
+- `MediaServiceHostTests`, `CaptureServiceHostTests`, and `RuntimeCaptureTests` exercise the capture service surface, format advertisement, and graceful degradation.
+- `WavAudioRecorderTests` validates the managed WAV writer output.
+- `FrameSequenceCaptureTests` validates BMP frame-sequence capture.
+- Media file validation using ffprobe/manual playback to verify codec, container, and sync on recorded artifacts.
+
+### Related FRs
+
+- FR-MED-001 through FR-MED-005 (all media capture features)
+
+### Related TRs
+
+- TR-ALLOC-001 (Frame handoff copies into pre-allocated buffers; socket writes stay off the emulation worker)
+- TR-PLAT-001 (ffmpeg executable discovery works per-platform via PATH conventions)
+
+### Design Decisions
+
+- The external-process design supersedes the earlier P/Invoke libav binding spec (original DD-MEDIA-001); no `ViceSharp.Media.FFmpeg` assembly exists and none is planned.
+- The media encoding pipeline runs off the emulation hot path: the worker copies and enqueues; background writers own the socket I/O.
+- ffmpeg is an optional runtime dependency, never a build dependency; capture features degrade gracefully when it is missing.
 **Covered by:** FR: FR-MED-001, FR-MED-002, FR-MED-003, FR-MED-004, FR-MED-005; TEST: TEST-MED-001, TEST-MED-002, TEST-MED-003, TEST-MED-004
-**Status:** pending
+**Status:** in_progress
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] With ffmpeg present (PATH or `VICESHARP_FFMPEG`), video recording to H.264/MP4 produces valid output (playable by VLC and browser HTML5 video).
+- [ ] Audio recording to WAV produces valid output (RIFF/WAVE header parses; playable by standard audio players) without requiring ffmpeg.
+- [ ] Synchronized A/V recording produces an MP4 with correct A/V sync (per FR-MED-004).
+- [ ] When ffmpeg is absent, muxed video formats are not advertised and capture start requests fail gracefully with a structured error; WAV and frame-sequence capture still work.
+- [ ] Video recording never blocks the emulation worker thread: a stalled ffmpeg consumer results in counted dropped frames, not emulator stalls.
+- [ ] The ffmpeg child process is fully reaped on stop (no orphaned processes, output file finalized).
 
 ## TR-MED-SOUND-001
 
@@ -498,19 +846,83 @@ Scope: layer-1+
 
 ## TR-MVVM-001
 
-**Strict MVVM Separation -- ViewModels Reference Abstractions Only, Views Contain Zero Logic** — All UI shells shall follow a strict Model-View-ViewModel (MVVM) pattern. ViewModels shall depend only on `ViceSharp.Abstractions` (never on `ViceSharp.Core` directly or any UI framework). Views shall contain zero business logic -- they bind to ViewModel properties and commands exclusively. This ensures that ViewModels are testable without a UI framework and that the UI layer is trivially replaceable.
+**ViewModels Reference Only Abstractions, Views Contain Zero Logic** — ## TR-MVVM-001: ViewModels Reference Only Abstractions, Views Contain Zero Logic
 
-## Acceptance Criteria
-- The `ViceSharp.Avalonia` project references `ViceSharp.Protocol` and `ViceSharp.Host` but no runtime projects (Core, Chips, Architectures, RomFetch), verified by `AvaloniaBoundaryTests.AvaloniaProject_ReferencesProtocolAndHostCompositionButNotRuntimeProjects`.
-- Avalonia source (including all ViewModels) contains no references to runtime internals (`ViceSharp.Core`, `ViceSharp.Chips`, `ViceSharp.Architectures`, `ViceSharp.RomFetch`, `IMachine`, `IVideoChip`, `ArchitectureBuilder`), verified by `AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals`.
-- All ViewModel public properties and commands are exercised by unit tests that do not require a UI framework.
-- View code-behind files contain fewer than 20 lines of code each (excluding auto-generated code).
-- Source-level boundary tests (`AvaloniaBoundaryTests`) enforce the dependency rules and fail the test gate on violations.
-- Swapping the UI framework (e.g., replacing Avalonia views with MAUI views) requires changes only in the View layer.
-- A remote host UI can be tested with mocked host client facades and without starting `ViceSharp.Core`.
-- The local Avalonia render surface can be tested as a host/composition concern without adding core, chip, or architecture references to ViewModels.
-**Covered by:** FR: FR-ROMM-AVUI-001, FR-UI-001, FR-UIDROP-002; TEST: TEST-ROMM-AVUI-001, TEST-GRPC-001, TEST-UI-001, TEST-UI-DIAG-001, TEST-UIDROP-002
-**Status:** pending
+**ID:** TR-MVVM-001
+**Title:** Strict MVVM Separation -- ViewModels Reference Abstractions Only, Views Contain Zero Logic
+**Priority:** P1 -- Important
+**Category:** Architecture
+
+### Description
+
+All UI shells shall follow a strict Model-View-ViewModel (MVVM) pattern. ViewModels shall depend only on `ViceSharp.Abstractions` (never on `ViceSharp.Core` directly or any UI framework). Views shall contain zero business logic -- they bind to ViewModel properties and commands exclusively. This ensures that ViewModels are testable without a UI framework and that the UI layer is trivially replaceable.
+
+### Rationale
+
+Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI controls, (2) swapping UI frameworks (Avalonia to MAUI) by replacing only the View layer, (3) headless operation using ViewModels directly, and (4) clean dependency graph enforcement.
+
+### Technical Specification
+
+1. **ViewModel Layer:**
+   - ViewModels live in the `ViewModels` folder of the `ViceSharp.Avalonia` assembly (`src/ViceSharp.Avalonia/ViewModels`); they use only `ViceSharp.Abstractions` types, host client facades, and standard .NET libraries, never runtime internals.
+   - ViewModels expose observable properties (implementing `INotifyPropertyChanged`) and commands (implementing `ICommand` or equivalent).
+   - ViewModels receive emulator services via constructor injection of abstraction interfaces.
+   - ViewModels do not reference any UI framework types (`Avalonia.Controls`, `Microsoft.Maui.Controls`, etc.).
+
+2. **View Layer:**
+   - Views are XAML/markup files with code-behind that contains only: DataContext assignment, platform-specific initialization (e.g., render surface setup), and direct event-to-command wiring where data binding is insufficient.
+   - Views do not contain conditional logic, string formatting, arithmetic, or state management.
+   - All value conversions use `IValueConverter` implementations, not code-behind logic.
+
+3. **Model Layer:**
+   - The "Model" is the `ViceSharp.Core` emulation engine, accessed exclusively through `ViceSharp.Abstractions` interfaces.
+   - ViewModels never instantiate core types directly; they receive them from the DI container.
+
+4. **Dependency Rules (strict, enforced by source-level boundary tests):**
+   - `ViceSharp.Abstractions` -> (no dependencies)
+   - `ViceSharp.Core` -> `ViceSharp.Abstractions`
+   - `ViceSharp.Avalonia` -> `ViceSharp.Protocol`, `ViceSharp.Host` (composition), `ViceSharp.Abstractions`, Avalonia
+   - `ViceSharp.Avalonia` does NOT reference `ViceSharp.Core`, `ViceSharp.Chips`, `ViceSharp.Architectures`, or `ViceSharp.RomFetch` (only the host/composition root touches concrete runtime projects)
+   - Enforcement is by `AvaloniaBoundaryTests` (TR-MVVM-001 citations): project-reference checks on the `.csproj` plus forbidden-identifier scans over all Avalonia source, rather than a separate-assembly compile check.
+
+5. **Remote Host Client:**
+   - ViewModels consume abstraction-level host client facades for TR-GRPC-BOUNDARY-001 scenarios.
+   - Generated gRPC clients and transport concerns stay in infrastructure adapters or the composition root.
+   - ViewModels expose UI state and commands without mutating emulator core objects directly.
+   - In-process Avalonia frame presentation may use a host-owned direct render surface, but ViewModels do not reference that local emulator/frame source or any runtime internals.
+
+### Acceptance Criteria
+
+1. The `ViceSharp.Avalonia` project references `ViceSharp.Protocol` and `ViceSharp.Host` but no runtime projects (Core, Chips, Architectures, RomFetch), verified by `AvaloniaBoundaryTests.AvaloniaProject_ReferencesProtocolAndHostCompositionButNotRuntimeProjects`.
+2. Avalonia source (including all ViewModels) contains no references to runtime internals (`ViceSharp.Core`, `ViceSharp.Chips`, `ViceSharp.Architectures`, `ViceSharp.RomFetch`, `IMachine`, `IVideoChip`, `ArchitectureBuilder`), verified by `AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals`.
+3. All ViewModel public properties and commands are exercised by unit tests that do not require a UI framework.
+4. View code-behind files contain fewer than 20 lines of code each (excluding auto-generated code).
+5. Source-level boundary tests (`AvaloniaBoundaryTests`) enforce the dependency rules and fail the test gate on violations.
+6. Swapping the UI framework (e.g., replacing Avalonia views with MAUI views) requires changes only in the View layer.
+7. A remote host UI can be tested with mocked host client facades and without starting `ViceSharp.Core`.
+8. The local Avalonia render surface can be tested as a host/composition concern without adding core, chip, or architecture references to ViewModels.
+
+### Verification Method
+
+- `AvaloniaBoundaryTests` in the test suite validates project references and forbidden source identifiers.
+- Line-count check on View code-behind files.
+- ViewModel unit test coverage report (target: >90% of ViewModel methods covered).
+- Dependency analysis output in the build log.
+
+### Related TRs
+
+- TR-LIB-001 (Library-first design provides the Model layer)
+- TR-PLAT-001 (MVVM enables per-platform View implementations)
+- TR-GRPC-BOUNDARY-001 (UI control clients consume the host through generated contracts and adapters; local rendering remains host-owned)
+
+### Design Decisions
+
+- The host/composition root (`ViceSharp.Host`) is the only place where concrete core types and the ViewModel-facing abstractions meet; the Avalonia shell consumes the host surface, not core assemblies.
+- A lightweight in-repo `ObservableObject` base (`src/ViceSharp.Avalonia/ViewModels/ObservableObject.cs`) provides the `INotifyPropertyChanged` infrastructure; no external MVVM framework dependency.
+- The ViewModel for the main emulator display exposes display state and commands through abstractions only. The in-process Avalonia render surface may bind directly to a local frame source, but that binding is owned by the host/composition layer rather than the ViewModel.
+- gRPC generated clients are adapted behind ViewModel-facing interfaces so transport code does not leak into ViewModels.
+**Covered by:** FR: FR-ROMM-AVUI-001, FR-UI-001, FR-UI-003, FR-UIDROP-002, FR-VIC20-002; TEST: TEST-ROMM-AVUI-001, TEST-GRPC-001, TEST-UI-001, TEST-UI-DIAG-001, TEST-UISET-001, TEST-UIDROP-002, TEST-BASELINE-CORRECTNESS-001, TEST-UISET-002
+**Status:** in_progress
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] The `ViceSharp.Avalonia` project references `ViceSharp.Protocol` and `ViceSharp.Host` but no runtime projects (Core, Chips, Architectures, RomFetch), verified by `AvaloniaBoundaryTests.AvaloniaProject_ReferencesProtocolAndHostCompositionButNotRuntimeProjects`.
@@ -550,38 +962,111 @@ Scope: layer-1+
 
 **Live-switchable pacing strategy plumbing** — EmulationGateStrategies provides canonical ids + gate factory. EmulationPumpService.SetStrategy swaps the gate on the worker thread (no restart). LimiterSettingsDto.PacingStrategy flows through proto/gRPC, SettingsServiceHost applies it live to the pump and round-trips it, and the UI exposes a dropdown.
 **Covered by:** FR: FR-PACESEL-001; TEST: TEST-PACESEL-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] EmulationGateStrategies.CreateGate/Normalize/DisplayName map ids to gates, defaulting to Semaphore
-- [x] SetStrategy swaps the gate live; SettingsServiceHost applies and round-trips PacingStrategy
+- [ ] EmulationGateStrategies.CreateGate/Normalize/DisplayName map ids to gates, defaulting to Semaphore
+- [ ] SetStrategy swaps the gate live; SettingsServiceHost applies and round-trips PacingStrategy
 
 ## TR-PERF-ALLOC-001
 
 **Zero Managed Allocations Per RunFrame Hot Path** — Sustained managed C64 PAL RunFrame execution must avoid per-frame managed allocations so 50 Hz operation does not create GC pressure.
 **Covered by:** FR: FR-PERF-RUNFRAME-001; TEST: TEST-PERF-RUNFRAME-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes)
-- [x] BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark. (evidence: BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation)
+- [ ] The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes)
+- [ ] BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark. (evidence: BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation)
 
 ## TR-PERF-AOT-001
 
 **NativeAOT-Compatible RunFrame Hot Path** — RunFrame hot-path implementation must remain compatible with NativeAOT constraints: no new reflection, expression trees, dynamic code generation, or LINQ allocations on the hot call graph.
 **Covered by:** FR: FR-PERF-RUNFRAME-001; TEST: TEST-PERF-RUNFRAME-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Performance optimizations introduce no reflection, expression trees, or dynamic code generation in the RunFrame call graph. (evidence: Code review of PR #3 optimized BasicBus and VideoRenderer with direct/static paths only)
-- [x] Performance optimizations avoid LINQ and closure allocation in the measured RunFrame hot path. (evidence: PR #3 uses loops and span fills in hot path; RunFramePerfProbe reports allocated=0 bytes)
+- [ ] Performance optimizations introduce no reflection, expression trees, or dynamic code generation in the RunFrame call graph. (evidence: Code review of PR #3 optimized BasicBus and VideoRenderer with direct/static paths only)
+- [ ] Performance optimizations avoid LINQ and closure allocation in the measured RunFrame hot path. (evidence: PR #3 uses loops and span fills in hot path; RunFramePerfProbe reports allocated=0 bytes)
 
 ## TR-PLAT-001
 
-**Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64** — ViceSharp shall run on Windows, Linux, and macOS on both x64 and ARM64 architectures. The emulation core library shall be platform-agnostic. Platform-specific code (audio output, input handling, window management) shall be isolated behind abstractions with per-platform implementations.
-**Covered by:** FR: FR-CFG-006; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001
-**Status:** pending
+**Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64** — ## TR-PLAT-001: Windows/Linux/macOS, x64/ARM64, .NET 10
+
+**ID:** TR-PLAT-001
+**Title:** Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64
+**Priority:** P0 -- Critical
+**Category:** Portability
+
+### Description
+
+ViceSharp shall run on Windows, Linux, and macOS on both x64 and ARM64 architectures. The emulation core library shall be platform-agnostic. Platform-specific code (audio output, input handling, window management) shall be isolated behind abstractions with per-platform implementations.
+
+### Rationale
+
+The Commodore 64 community spans all major desktop platforms. A library-first design (TR-LIB-001) naturally supports multiple platforms, but platform-specific I/O (audio, video display, input) requires explicit abstraction.
+
+### Technical Specification
+
+1. **Target Framework:** .NET 10 (net10.0). No platform-specific TFMs in the core library.
+2. **Runtime Identifiers:** The following RIDs are first-class targets:
+   - `win-x64`, `win-arm64`
+   - `linux-x64`, `linux-arm64`
+   - `osx-x64`, `osx-arm64`
+3. **Platform Abstraction Layer:**
+   - `IAudioBackend`: Platform-specific audio output (WinMM on Windows and SDL2 on Linux). A macOS live-output backend remains pending.
+   - `IVideoOutput`: Platform-specific window/surface management.
+   - `IInputSource`: Platform-specific input device enumeration and event handling.
+4. **Native Dependency Discovery:**
+   - Linux desktop audio uses the SDL2 ABI (`libSDL2-2.0.so.0`) behind `IAudioBackend`, with 44.1 kHz mono PCM16 and bounded device-queue back-pressure. `AudioBackendFactory` preserves the explicit `VICESHARP_AUDIO` opt-in for headless hosts and returns no backend when initialization fails. Device failure releases pending writes and falls back to non-audio pacing. This Linux implementation does not establish macOS live-audio support.
+   - The external `ffmpeg` executable is discovered per-platform via `PATH` or `VICESHARP_FFMPEG` (no native library loading; see TR-MEDIA-001).
+   - SIMD capability detection uses `System.Runtime.Intrinsics` which is platform-aware.
+5. **File System:**
+   - All file paths use `Path.Combine()` and forward slashes internally.
+   - No hardcoded path separators or drive letters.
+6. **Endianness:**
+   - The emulation core is little-endian (matching x86/ARM in LE mode); all platforms use little-endian.
+
+### Acceptance Criteria
+
+1. The emulation core library (`ViceSharp.Core`) compiles and runs on all 6 target RIDs without conditional compilation (`#if`).
+2. Build and test validation uses the operator-run Nuke gates defined by TR-BUILD-001, with retained evidence for each tested platform. GitHub `origin` is the source of truth; Azure DevOps is retired. Automated multi-OS CI remains future work.
+3. Release publish succeeds on all supported target RIDs.
+4. Audio output plays correctly on all three OS platforms (verified by manual testing and automated A/V sync tests).
+5. Input devices (keyboard, gamepad) are recognized on all platforms.
+6. The Lorenz test suite passes on all platforms (same pass rate).
+7. No `PlatformNotSupportedException` is thrown during normal operation on any supported platform.
+8. Linux audio tests use an injected device to verify PCM order, gain/mute, queue capacity, lifecycle interruption and failure without playing sound. A separate local smoke check verifies the actual installed library/device path. User-local installation never installs native system packages.
+
+### Verification Method
+
+- Operator-run Nuke build/test gates from the GitHub-backed repository, with exact commands, platform details, logs and pass/fail/skip counts. Historical Azure pipeline files are not active validation; no multi-platform CI coverage is claimed.
+- Cross-platform integration tests running a subset of the Lorenz test suite.
+- Release publish smoke test on each target RID.
+
+### Related TRs
+
+- TR-SIMD-001 (SIMD support differs between x64 SSE/AVX and ARM64 NEON)
+- TR-LIB-001 (Core library is platform-agnostic)
+- TR-MEDIA-001 (external ffmpeg executable discovery is per-platform)
+
+### Design Decisions
+
+- The core library targets `net10.0` without any `-windows`, `-linux`, or `-macos` suffix.
+- Desktop audio implementations live in `ViceSharp.Host.InProcess` behind the shared `IAudioBackend` abstraction.
+- `AudioBackendFactory` selects the Windows or Linux audio implementation at runtime when audio is enabled; unavailable Linux output falls back to silent emulation.
+- ARM64 Windows (Surface Pro X, Snapdragon laptops) is a supported target from the start.
+**Covered by:** FR: FR-CFG-006, FR-SID-013; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-SID-001, TEST-SID-002
+**Status:** in_progress
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The emulation core library (`ViceSharp.Core`) compiles and runs on all 6 target RIDs without conditional compilation (`#if`).
+- [ ] Build and test validation uses the operator-run Nuke gates defined by TR-BUILD-001, with retained evidence for each tested platform. GitHub `origin` is the source of truth; Azure DevOps is retired. Automated multi-OS CI remains future work.
+- [ ] Release publish succeeds on all supported target RIDs.
+- [ ] Audio output plays correctly on all three OS platforms (verified by manual testing and automated A/V sync tests).
+- [ ] Input devices (keyboard, gamepad) are recognized on all platforms.
+- [ ] The Lorenz test suite passes on all platforms (same pass rate).
+- [ ] No `PlatformNotSupportedException` is thrown during normal operation on any supported platform.
+- [ ] Linux audio tests use an injected device to verify PCM order, gain/mute, queue capacity, lifecycle interruption and failure without playing sound. A separate local smoke check verifies the actual installed library/device path. User-local installation never installs native system packages.
 
 ## TR-PUBSUB-001
 
@@ -593,16 +1078,16 @@ Scope: layer-1+
 
 **High-Performance Zero-Allocation Pub/Sub** — ViceSharp shall implement the internal Pub/Sub interconnect with fixed-capacity message storage, 64-byte inline payloads, a MessageKind discriminant, preallocated subscriber route arrays, synchronous publish/delivery, no boxing, and zero managed heap allocation on the steady-state hot path.
 **Covered by:** FR: FR-PUBSUB-001; TEST: TEST-PUBSUB-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Publishing one million typed messages to one subscriber is below 50ns per publish operation. (evidence: dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000 => publish-one=43.78ns)
-- [x] Publishing one million typed messages to three subscribers is below 100ns per publish/delivery operation. (evidence: dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000 => publish-three=58.14ns)
-- [x] Message pool rent/return is below 20ns and uses fixed-capacity slot handles. (evidence: src/ViceSharp.Core/LockFreePubSub.cs; PubSubPerfProbe => pool-rent-return=16.80ns)
-- [x] PayloadArena allocation is below 10ns and supports frame reset semantics. (evidence: src/ViceSharp.Core/LockFreePubSub.cs; PubSubPerfProbe => arena-alloc=3.20ns)
-- [x] The typed publish hot path performs zero managed allocations after warmup. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs Publish_TypedPayload_HotPathDoesNotAllocate; PubSubPerfProbe => allocated=0 bytes)
-- [x] Default message pool capacity is 8192 slots and does not resize during emulation. (evidence: src/ViceSharp.Core/LockFreePubSub.cs DefaultMessageCapacity = 8192 and LockFreeMessagePool(capacity = 8192))
-- [x] Delivery order is deterministic in registration order and preserved when subscriber route arrays grow. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs Publish_DeliversSubscribersInRegistrationOrder and Subscribe_WhenRouteSubscriberArrayGrows_PreservesDeliveryOrder)
+- [ ] Publishing one million typed messages to one subscriber is below 50ns per publish operation. (evidence: dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000 => publish-one=43.78ns)
+- [ ] Publishing one million typed messages to three subscribers is below 100ns per publish/delivery operation. (evidence: dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000 => publish-three=58.14ns)
+- [ ] Message pool rent/return is below 20ns and uses fixed-capacity slot handles. (evidence: src/ViceSharp.Core/LockFreePubSub.cs; PubSubPerfProbe => pool-rent-return=16.80ns)
+- [ ] PayloadArena allocation is below 10ns and supports frame reset semantics. (evidence: src/ViceSharp.Core/LockFreePubSub.cs; PubSubPerfProbe => arena-alloc=3.20ns)
+- [ ] The typed publish hot path performs zero managed allocations after warmup. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs Publish_TypedPayload_HotPathDoesNotAllocate; PubSubPerfProbe => allocated=0 bytes)
+- [ ] Default message pool capacity is 8192 slots and does not resize during emulation. (evidence: src/ViceSharp.Core/LockFreePubSub.cs DefaultMessageCapacity = 8192 and LockFreeMessagePool(capacity = 8192))
+- [ ] Delivery order is deterministic in registration order and preserved when subscriber route arrays grow. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs Publish_DeliversSubscribersInRegistrationOrder and Subscribe_WhenRouteSubscriberArrayGrows_PreservesDeliveryOrder)
 
 ## TR-QA-TESTSILENCE-001
 
@@ -670,7 +1155,7 @@ Authenticated preflight requires access and at least one downloadable launchable
 - **ac-02**: Provision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service.
 - **ac-03**: Fixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests.
 - **ac-04**: Authenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests.
-**Covered by:** FR: FR-COMPLETION-001, FR-CSDB-001, FR-ROMM-BROWSE-001, FR-ROMM-COLLECT-001, FR-ROMM-CONN-001, FR-ROMM-LAUNCH-001; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-COMPLETION-001, TEST-REMOTE-INTEGRATION-001, TEST-UI-COREBOUNDARY-001, TEST-ROMM-SEC-001
+**Covered by:** FR: FR-COMPLETION-001, FR-CSDB-001, FR-ROMM-BROWSE-001, FR-ROMM-COLLECT-001, FR-ROMM-CONN-001, FR-ROMM-LAUNCH-001; TEST: TEST-BASELINE-CORRECTNESS-001, TEST-COMPLETION-001, TEST-REMOTE-INTEGRATION-001, TEST-UI-COREBOUNDARY-001, TEST-ROMM-SEC-001, TEST-ROMM-LAUNCH-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -708,10 +1193,35 @@ Scope: layer-1+
 
 ## TR-ROMM-SEC-001
 
-**Keep RomM bearer tokens and downloaded content inside trusted boundaries** — Public covers use an anonymous client; bearer auth is restricted to server-relative RomM cover paths. ROM filenames and resolved cache destinations are contained, downloaded through a temporary file, expected-size validated, and atomically published. Windows file-backed tokens use current-user DPAPI with atomic legacy-plaintext migration; unsupported operating systems fail closed.
-**Covered by:** FR: FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001; TEST: TEST-REMOTE-INTEGRATION-001, TEST-ROMM-SEC-001
-**Status:** pending
+**Keep RomM bearer tokens and downloaded content inside trusted boundaries** — ## TR-ROMM-SEC-001: Credential, origin, and download-boundary protection
+
+**ID:** TR-ROMM-SEC-001
+**Title:** Keep RomM bearer tokens and downloaded content inside trusted boundaries
+**Last Updated:** 2026-10-15
+**Status:** Implemented on Windows and Linux desktop paths
+
+The RomM adapter must:
+
+1. Fetch public absolute cover URLs with an anonymous client.
+2. Send bearer authentication only for server-relative cover paths resolved under the configured RomM base address; reject absolute authenticated-path inputs.
+3. Accept only one relative ROM filename, contain the resolved destination under the per-ROM cache directory, stream into a temporary file, validate the expected byte count, and atomically publish a complete cache entry.
+4. Protect file-backed tokens on Windows with current-user DPAPI, atomically persist the protected record, and immediately migrate a legacy plaintext record after successful load.
+5. Fail closed on unsupported operating systems instead of silently persisting plaintext credentials.
+6. On Linux, use the current user's Secret Service keyring through `secret-tool`, passing credentials only through standard input. Persist only connection metadata and a random keyring reference in an atomic, owner-readable/writable file. Migrate legacy plaintext only after keyring storage succeeds.
+7. Preserve the previous Linux connection if replacement metadata cannot be committed. Reject unavailable, locked, missing, or timed-out keyring operations with an actionable message that does not contain command output or credential values. Cleanup failure after a successful replacement must not invalidate the new connection.
+
+**Related FRs:** FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001
+**Verification:** TEST-ROMM-SEC-001
+**Covered by:** FR: FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001; TEST: TEST-REMOTE-INTEGRATION-001, TEST-ROMM-SEC-001, TEST-ROMM-LAUNCH-001
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Fetch public absolute cover URLs with an anonymous client.
+- [ ] Send bearer authentication only for server-relative cover paths resolved under the configured RomM base address; reject absolute authenticated-path inputs.
+- [ ] Accept only one relative ROM filename, contain the resolved destination under the per-ROM cache directory, stream into a temporary file, validate the expected byte count, and atomically publish a complete cache entry.
+- [ ] Protect file-backed tokens on Windows with current-user DPAPI, atomically persist the protected record, and immediately migrate a legacy plaintext record after successful load.
+- [ ] Fail closed on unsupported operating systems instead of silently persisting plaintext credentials.
+- [ ] On Linux, use the current user's Secret Service keyring through `secret-tool`, passing credentials only through standard input. Persist only connection metadata and a random keyring reference in an atomic, owner-readable/writable file. Migrate legacy plaintext only after keyring storage succeeds.
+- [ ] Preserve the previous Linux connection if replacement metadata cannot be committed. Reject unavailable, locked, missing, or timed-out keyring operations with an actionable message that does not contain command output or credential values. Cleanup failure after a successful replacement must not invalidate the new connection.
 
 ## TR-ROMM-THREAD-001
 
@@ -756,11 +1266,11 @@ Scope: layer-1+
 
 **SID ticks once per phi2 cycle** — Sid6581.ClockDivisor is 1 so the SystemClock ticks the SID every master cycle; the 24-bit accumulator advances by Frequency per tick and the ADSR rate tables are resid phi2-cycle values. ConfigureAudioClock divides by ClockDivisor so the 44.1 kHz sample rate self-corrects.
 **Covered by:** FR: FR-SIDAUDIO-001; TEST: TEST-SIDAUDIO-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Sid6581.ClockDivisor returns 1
-- [x] Direct-Tick SID tests are divisor-independent; only SystemClock-driven calibration changed
+- [ ] Sid6581.ClockDivisor returns 1
+- [ ] Direct-Tick SID tests are divisor-independent; only SystemClock-driven calibration changed
 
 ## TR-SIDEBARUI-LAYOUT-001
 
@@ -769,26 +1279,26 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] CollapseExpanderDock is Dock.Right when DockSide is Left and Dock.Left when DockSide is Right
-- [x] Changing DockSide raises PropertyChanged for CollapseExpanderDock and CollapseGlyph
+- [ ] CollapseExpanderDock is Dock.Right when DockSide is Left and Dock.Left when DockSide is Right
+- [ ] Changing DockSide raises PropertyChanged for CollapseExpanderDock and CollapseGlyph
 
 ## TR-SID-EDGE-004
 
 **reSID waveform DAC centering and normalized mix scale** — Sid6581 and Sid8580 subtract the model-specific waveform zero level before ADSR envelope application, preserve no-waveform silence relative to the D418 baseline, and normalize mixed output before host audio submission.
 **Covered by:** FR: FR-SID-001, FR-SID-002, FR-SID-003, FR-SID-004, FR-SID-005, FR-SID-006, FR-SID-007, FR-SID-008, FR-SID-009, FR-SID-010, FR-SID-011, FR-SID-012, FR-SID-013, FR-SID-014; TEST: TEST-SID-001, TEST-SID-002, TEST-X64SC-LOCKSTEP-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-SID-ORACLE-002
 
 **SID exact-oracle sampling method + buffered clock exports** — Two shim exports added for SID parity beyond the single-cycle oracle: vice_sid_exact_set_sampling(machine, method, sampleFreq, passFreq, filterScale) reconfigures the private reSID engine sampling method (0=FAST 1=INTERPOLATE 2=RESAMPLE 3=RESAMPLE_FASTMEM; clock_freq fixed 985248.0 PAL) so the 8580 SAMPLE_FAST write pipeline is observable; vice_sid_exact_clock_buffered(machine, cycles, buffer, len, out remaining) drives reSID SID::clock(delta_t, buf, n) for the S13 fixed-point resampler FIR parity. Implemented as resid_shim_set_sampling / resid_shim_clock_buffered in native/vice/vice/src/sid/resid.cc, wrapped in native/vice-shim.c under g_state_lock + is_active_machine, declared in vice-shim.h, bound via ViceNative LibraryImport + ViceNativeBridge. 8580 lockstep uses the c64c machine selector (SidModel 1 = MOS8580). reSID filter dither is zeroed in the shim for bit-exact comparability. Build: resid.o archives into src/sid/libsid.a; delete both before rebuilding. Landed by commit 93aef16 (dll SHA256 b743c666).
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-SID-RESAMPLE-001
 
 **SID fixed-point sampling engine port (fast/interpolate/Kaiser-FIR resample)** — PLAN-VICEPARITY-001 S13 ports reSID's sampling engine (sid.cc:542-1038, sid.h:140-179) into src/ViceSharp.Chips/Audio/Sid6581.Sampling.cs. Constants FirN=125, FirRes=285, FirShift=15, RingSize=1<<14, FixpShift=16. SetSamplingParameters is a statement-for-statement port of set_sampling_parameters: the resampling constraint checks, cycles_per_sample = (int)(clock/sample*(1<<16)+0.5) 16.16 fixed point, the mirrored ring short[RingSize*2], the Kaiser-windowed sinc FIR table (I0 Bessel, beta=0.1102*(A-8.7), the only legitimate float stage, rounded to short round-half-away-from-zero). ClockBuffered mirrors SID::clock(delta_t, buf, n): clock_fast, clock_interpolate, clock_resample. It calls the managed single-cycle Tick() where reSID calls clock() and reads CycleExternalFilterOutput where reSID calls output(), so the emitted short stream is bit-exact vs the oracle. RESAMPLE_FASTMEM deliberately NOT ported. All buffers preallocated; zero per-sample allocation. Verified by OUTPUT-08..13 vs SidExactClockBuffered (TR-SID-ORACLE-002) on both 6581 (c64) and 8580 (c64c). Slice LW (commit 4924b94) COMPLETED the live-audio wiring: the live path now drives this SAMPLE_RESAMPLE engine one cycle per Tick (EmitLiveResampleTick), Resample-always (VICE x64sc default), bit-exact vs the buffered pull and zero-allocation; SetRelativeSpeed scales the 16.16 cadence only (warp = pitch, synthesis untouched). Benchmark SidSamplingBenchmarks: live tail ~0.30x real-time (100% speed holds). Post-review fix 9b00899 handles the zero-cycle-window underflow below ~4.5% warp. PLAN-VICEPARITY-001 CLOSED 466/466.
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-SIMD-001
@@ -809,18 +1319,100 @@ Scope: layer-1+
 
 **Sound back-pressure regulator in ViceEmulationGate** — IAudioChip exposes QueuedSampleCount and IsAudioTimingSource (Sid6581 overrides). ViceEmulationGate.EvaluateSound decides NotTimingSource/Advance/BackPressure; Tick applies warp->sound->vsync precedence and reports LastRegulator; HighWaterSamples is about 46 ms.
 **Covered by:** FR: FR-SNDREG-001; TEST: TEST-SNDREG-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] EvaluateSound returns BackPressure at or over high-water, Advance below, NotTimingSource when inactive
-- [x] Gate Tick selects Sound/Vsync/Warp and exposes it via LastRegulator
+- [ ] EvaluateSound returns BackPressure at or over high-water, Advance below, NotTimingSource when inactive
+- [ ] Gate Tick selects Sound/Vsync/Warp and exposes it via LastRegulator
 
 ## TR-STATE-001
 
-**Mutation Queue with ACID State Transactions and Configurable State Window** — All mutations to emulated machine state shall be performed through a mutation queue that provides ACID-like transaction semantics. State changes within a single emulation step (one clock cycle or one instruction) are grouped into a transaction that is either fully applied or fully rolled back. A configurable state window maintains a ring buffer of recent states to support rewind, debugging, and snapshot operations.
+**Mutation Queue, ACID State Transactions, Configurable State Window** — ## TR-STATE-001: Mutation Queue, ACID State Transactions, Configurable State Window
+
+**ID:** TR-STATE-001
+**Title:** Mutation Queue with ACID State Transactions and Configurable State Window
+**Priority:** P0 -- Critical
+**Category:** Reliability / Architecture
+
+> **Implementation-status note (2026-07-08):** The implemented mechanism is `IMutationQueue` (double-buffered: worker writes the active buffer, consumers read the committed buffer) plus `ISnapshot`/`ISnapshotStore` for durable state, with the tick-history capture (TR-TICKHIST-*, last-100-ticks write-delta recording) providing the rewind/debug window. No `IStateManager` or `TransactionGranularity` API exists; the delta/keyframe state-window ring buffer described below is an original design sketch that remains unimplemented.
+
+### Description
+
+All mutations to emulated machine state shall be performed through a mutation queue that provides ACID-like transaction semantics. State changes within a single emulation step (one clock cycle or one instruction) are grouped into a transaction that is either fully applied or fully rolled back. A configurable state window maintains a ring buffer of recent states to support rewind, debugging, and snapshot operations.
+
+### Rationale
+
+ACID transactions ensure that a snapshot taken at any point captures a consistent state (not a half-updated state where the CPU has executed but the VIC-II has not yet ticked). The mutation queue also enables: state diffing for snapshot comparison, undo/rewind for debugging, and event sourcing for replay.
+
+### Technical Specification
+
+1. **Mutation Queue:**
+   - All state-modifying operations enqueue a `StateMutation` record (target device, field offset, old value, new value).
+   - Mutations are value types (structs) to avoid allocation (per TR-ALLOC-001).
+   - The queue is drained and applied atomically at the end of each tick.
+
+2. **ACID Properties:**
+   - **Atomicity:** All mutations within a transaction (one tick) are applied together or not at all.
+   - **Consistency:** After each transaction, all device states are internally consistent and cross-device invariants hold.
+   - **Isolation:** The UI thread (reading state for display) sees only committed state, never in-progress mutations.
+   - **Durability:** Committed state can be persisted to a snapshot at any transaction boundary.
+
+3. **State Window:**
+   - A configurable ring buffer holds the last N committed states (default: 60 frames worth, approximately 1.2 seconds at PAL rate).
+   - Each entry in the ring buffer is a delta (diff from the previous state) to minimize memory usage.
+   - Full state can be reconstructed by applying deltas forward from the nearest keyframe.
+   - Keyframes (full state snapshots) are inserted at configurable intervals (default: every 30 frames).
+
+4. **Transaction Boundary:**
+   - For instruction-level accuracy: one transaction per instruction.
+   - For cycle-level accuracy: one transaction per half-cycle (per TR-CYCLE-001).
+   - Granularity is fixed by the machine's tick loop; a configurable granularity API (the sketched `IStateManager.TransactionGranularity`) was never implemented.
+
+### Acceptance Criteria
+
+1. A snapshot taken at any transaction boundary produces a state from which emulation can resume and produce deterministic output (per TR-DET-001).
+2. Rolling back a transaction restores the exact previous state (verified by state hash comparison).
+3. The state window supports rewind of at least 60 frames (1.2 seconds) without performance degradation.
+4. Reconstructing full state from deltas produces a byte-identical result to the original full state.
+5. The mutation queue processes at least 1 million mutations per second without exceeding the per-frame time budget.
+6. UI reads of emulation state never observe a partially-committed transaction.
+7. The state window memory footprint is bounded: delta entries average under 256 bytes per frame; keyframe entries are under 128KB.
+
+### Verification Method
+
+- Snapshot round-trip tests: save at arbitrary points, load, compare state hashes.
+- Rewind tests: advance N frames, rewind N frames, advance again, verify identical state.
+- Concurrency tests: UI thread reads state while emulation thread commits transactions, verify no torn reads.
+- Memory benchmarks for state window under sustained operation.
+
+### Related FRs
+
+- FR-SNP-001 / FR-SNP-002 (Snapshot save/load relies on consistent state)
+- FR-SNP-003 (Replay relies on deterministic state transitions)
+- FR-SNP-004 (Snapshot diffing uses the mutation log)
+
+### Related TRs
+
+- TR-ALLOC-001 (Mutations are value types, no allocation)
+- TR-DET-001 (Transaction ordering ensures determinism)
+- TR-PUBSUB-001 (State change events flow through the pub/sub system)
+
+### Design Decisions
+
+- The mutation queue is a pre-allocated ring buffer of `StateMutation` structs, not a `List<T>`.
+- Delta compression uses XOR encoding: the delta is the XOR of the old and new state bytes, yielding zero bytes for unchanged data which compress well.
+- The UI accesses state through a "published snapshot" -- a copy-on-write reference that is updated atomically at frame boundaries.
 **Covered by:** FR: FR-CFG-001, FR-CFG-002, FR-CFG-007, FR-SNP-001, FR-SNP-002, FR-SNP-003, FR-SNP-004; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-SNP-001
-**Status:** pending
+**Status:** in_progress
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A snapshot taken at any transaction boundary produces a state from which emulation can resume and produce deterministic output (per TR-DET-001).
+- [ ] Rolling back a transaction restores the exact previous state (verified by state hash comparison).
+- [ ] The state window supports rewind of at least 60 frames (1.2 seconds) without performance degradation.
+- [ ] Reconstructing full state from deltas produces a byte-identical result to the original full state.
+- [ ] The mutation queue processes at least 1 million mutations per second without exceeding the per-frame time budget.
+- [ ] UI reads of emulation state never observe a partially-committed transaction.
+- [ ] The state window memory footprint is bounded: delta entries average under 256 bytes per frame; keyframe entries are under 128KB.
 
 ## TR-SYSBTN-001
 
@@ -893,27 +1485,32 @@ Scope: layer-1+
 
 ## TR-TAP-EDGE-001
 
-**Datasette sense line and record mode** — Model accepted VICE transport state and image eligibility before deriving tape sense or recording eligibility. Preserve the distinction between device sense state, each machine input port, and tape read-pulse interrupt wiring. Recording consumes ordered clocked write-line transitions and retains the native gap, image-position, and write-failure behavior through the managed adapter.
-**Covered by:** FR: FR-BACKFILL-MEDIA-001, FR-RUNTIME-TAPE-002; TEST: TEST-DRV-MOTOR-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001
+**TAP decoding, datasette sense and recording edge parity** — This existing ID retains both historical obligations: TAP version/long-pulse/clock/CBM/TurboTape decoding and datasette transport/sense/recording. Keep the file/block decoder distinct from the clocked datasette read path. Use one reconciled canonical contract; do not retire either meaning or remove its FR/TEST mappings.
+**Covered by:** FR: FR-BACKFILL-MEDIA-001, FR-RUNTIME-TAPE-002, FR-TAP-001, FR-TAP-002, FR-TAP-003, FR-TAP-004, FR-TAP-005; TEST: TEST-DRV-MOTOR-001, TEST-IEC-TIMING-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001, TEST-TAP-001, TEST-X64SC-LOCKSTEP-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Use the FR-RUNTIME-TAPE-002 ac-01 media/control matrix to assert accepted mode, sense state, and unchanged state for ignored RECORD commands; do not treat an unconstrained RecordPressed flag as proof that RECORD was accepted.
-- [ ] Use FR-RUNTIME-TAPE-002 ac-02 observations to assert the C64 CPU-port and VIC-20 VIA1 input bits for both data-direction settings; separately assert pulse routing to C64 CIA1 FLAG and VIC-20 VIA2 CA1.
-- [ ] Use the same recording eligibility traces as FR-RUNTIME-TAPE-002 ac-05. Assert emitted writes and absence of writes as well as updated last-write-line state, including input transitions while recording is ineligible.
-- [ ] Use the same recording byte/error traces as FR-RUNTIME-TAPE-002 ac-06. Preserve the pinned native first-write handling and encoded gap behavior, including known native quirks, without patching VICE or replacing expected values with managed output.
+- [ ] Apply FR-RUNTIME-TAPE-002 ac-01 media/control matrix to accepted transport state and sense. Ignored RECORD is not a RecordPressed success. Include enabled-state gating and unchanged observations.
+- [ ] Apply FR-RUNTIME-TAPE-002 ac-02 and ac-07 to separate machine sense inputs, read-pulse interrupt inputs and motor/write outputs, including direction registers, raw VIC-20 PCR behavior and SX-64.
+- [ ] Apply FR-RUNTIME-TAPE-002 ac-05 to ordered recording eligibility and write edges; assert output absence as well as writes and retained line state. Native running state is distinct from control input and completed startup delay.
+- [ ] Apply FR-RUNTIME-TAPE-002 ac-06 to exact recording bytes and side effects, including both RECORD/motor orderings, first-edge clock handling, 24-bit truncation and failed/partial writes.
+- [ ] Retain legacy TAP v0/v1/v2 decoding, long-pulse, header and clock-selection coverage. v0 zero consumes no extension. The file/block decoder uses its native pulse units and v2 halfwave combination; the live datasette path uses its own zero-gap resources, direction, machine-specific halfwave handling, wobble and azimuth state. Cover truncated extensions and warning-versus-rejection outcomes without merging these paths. Include all version-byte values and independent physical/declared-size cases from FR-TAP-002 ac-04/ac-08. Use the explicit hidden-state/resource fixture contract in TEST-TAP-001 ac-06; an ordinary reset is not a fresh process.
+- [ ] Retain legacy CBM and TurboTape pilot/header detection with boundary fixtures against pinned tap.c. C64 and VIC-20 configured CBM pulse-unit ranges are inclusive 36-54, 55-73 and 74-100 after tap_init; TurboTape uses its own ranges and pilot/header control flow. Test each endpoint, adjacent outside value, missing/truncated pilot/header and malformed stream; do not replace loader behavior with a count of parsed pulses.
 
 ## TR-TAPE-EDGE-001
 
-**Datasette motor 32,000-cycle ramp before pulse delivery** — Represent datasette startup and delayed motor-stop state in emulated-clock units, preserving pinned VICE alarm scheduling and event order. Preserve pending alarms, cancel a pending stop when motor is re-enabled before the stop executes, and distinguish motor control input from the running-motor state. The observable timing contract must not depend on whether a particular managed Tick method has already been called.
-**Covered by:** FR: FR-BACKFILL-MEDIA-001, FR-RUNTIME-TAPE-002; TEST: TEST-DRV-MOTOR-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001
+**Datasette timing and tapeport peripheral line parity** — This existing ID retains both historical obligations: datasette startup/delayed-stop/fast-wind timing and tapeport sense/motor/RTC/dongle semantics. Model scheduling in the emulated clock domain and preserve the selected native device behavior. A datasette is not the only possible source of tape sense.
+**Covered by:** FR: FR-BACKFILL-MEDIA-001, FR-RUNTIME-TAPE-002, FR-TAP-001, FR-TAP-004; TEST: TEST-DRV-MOTOR-001, TEST-IEC-TIMING-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001, TEST-TAP-001, TEST-X64SC-LOCKSTEP-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Assert the native startup schedule at t+32000 from a stopped motor with no pending alarm, and assert that a pending alarm is not overwritten by the start helper.
-- [ ] Assert motor-off at t on a running motor retains running state before the stop executes at t+32000, and that repeated motor-off preserves the first deadline.
-- [ ] Assert motor-on before pending stop execution clears the stop deadline and preserves running state without another startup delay; assert motor-on after an executed stop schedules a new native startup alarm.
-- [ ] Compare ordered pulse and motor-state traces at deadline-1, deadline, and deadline+1 using fixed clock/control/alarm order. Do not use a first-Tick bypass or an unconditional off/on ramp reset as a substitute for native behavior.
+- [ ] Assert stopped-motor ordinary startup at t+32000 with no pending alarm and preservation of an existing pending alarm. Observe callback dispatch separately from scheduled time; no first-Tick bypass. Exercise the separate command-entry path: START on an already-running motor invokes the start helper with and without media, schedules t+32000 only without a pending alarm, and preserves a pending alarm while still performing the native seek and write-state initialization. Distinguish command START from motor-line re-enable, and preserve the t+1000 alarm already installed by FORWARD/REWIND before their helper call.
+- [ ] Assert motor-off sets t+32000 stop deadline, retains a pending alarm and running state until a callback executes at or after that deadline, and repeated motor-off does not extend it. Include no-pending exact-deadline stop, retained late read/STOP alarms and a before-deadline callback rescheduling beyond the deadline.
+- [ ] Assert motor-on cancels a stop not yet executed, including after the nominal deadline but before a late callback, without imposing a new startup delay on an already-running motor. After an executed stop, obey the ordinary start helper and its pending-alarm preservation. Include cancellation before the deadline and same-clock cancellation before callback dispatch as separate cases from cancellation after the deadline; for an already-running motor, preserve the existing alarm and write state and clear only the stop deadline in this path.
+- [ ] Compare complete ordered control, alarm, running-state and pulse traces at deadline-1/deadline/deadline+1 and at actual callback boundaries. Pin same-clock ordering, callback offset, tape resources and effective gap; reject missing, extra, duplicate, reordered or synthesized events.
+- [ ] FORWARD and REWIND schedule a 1000-cycle alarm after the mode assignment, with absent or attached media and motor on or off. Cover replacement of a pending read alarm and motor-on before/after the fast callback; preserve the executed native behavior rather than the helper comment intent.
+- [ ] Retain legacy sense-dongle and CP Clock F83 semantics. Dongle enable and power-up assert sense, while its disable callback does not itself clear sense. RTC motor input drives inverted SDA, write input drives normalized SCL, and sense is asserted only when RTC data is high and motor-state is false. Cover repeated calls, all truth-table inputs and selected-device lifecycle without synthesizing datasette PLAY.
+- [ ] Apply FR-RUNTIME-TAPE-002 ac-08 to per-call-site device enable gating, tapeport dispatch, attachment and reset. Assert internal motor state independently of the UI reset indication and pin reset resources. The lifecycle matrix must include every retained-mode, pending-alarm, cancelled-stop/running-state and dispatch-routing case explicitly listed by FR-RUNTIME-TAPE-002 ac-08, including transient intermediate observations.
 
 ## TR-TESTGATE-001
 
@@ -940,42 +1537,42 @@ Scope: layer-1+
 
 **Write-delta capture and reconstruction** — BasicBus publishes MemoryWriteEvent (pre-write byte, gated on a live subscriber); the CPU publishes instruction-completed events; one LockFreePubSub per machine is wired in ArchitectureBuilder and exposed via IMachine.PubSub. TickHistoryRecorder keeps a 100-deep ring bundling write-deltas per instruction; reconstruction reverse-applies later ticks' writes to the current paused RAM.
 **Covered by:** FR: FR-TICKHIST-001; TEST: TEST-TICKHIST-001, TEST-TICKHIST-002
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Bus publishes MemoryWriteEvent with the pre-write byte only when subscribed
-- [x] Recorder ring is bounded to 100 and reconstruction recovers as-of-tick RAM
+- [ ] Bus publishes MemoryWriteEvent with the pre-write byte only when subscribed
+- [ ] Recorder ring is bounded to 100 and reconstruction recovers as-of-tick RAM
 
 ## TR-TICKHIST-PERF-001
 
 **Tick-history capture is opt-in (zero default overhead)** — The time-travel recorder must stay unsubscribed by default so per-instruction chip-state capture and per-write delta recording impose zero overhead; it is armed only when the History panel reads the trace.
 **Covered by:** FR: FR-TICKHIST-001; TEST: TEST-TICKHIST-001, TEST-TICKHIST-002
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] With recording disabled (default) advancing the emulation pump does not subscribe the recorder and tick history stays empty.
-- [x] Reading the tick history via GetTickHistory arms recording so subsequent emulation captures.
-- [x] BasicBus publishes MemoryWriteEvent only when SubscriptionCount is greater than zero so the default path has zero per-write cost.
+- [ ] With recording disabled (default) advancing the emulation pump does not subscribe the recorder and tick history stays empty.
+- [ ] Reading the tick history via GetTickHistory arms recording so subsequent emulation captures.
+- [ ] BasicBus publishes MemoryWriteEvent only when SubscriptionCount is greater than zero so the default path has zero per-write cost.
 
 ## TR-TICKHIST-RPC-001
 
 **Tick-history monitor RPCs** — IMonitorService gains GetTickHistory, ReadMemoryAtTick (reconstructed) and GetChipStateAtTick, with proto/gRPC messages and mappers. IHostProtocolClient surfaces ReadRegisters/ReadMemory/Disassemble plus the three new calls.
 **Covered by:** FR: FR-TICKHIST-001; TEST: TEST-TICKHIST-001, TEST-TICKHIST-002
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] GetTickHistory returns index-ordered ticks; ReadMemoryAtTick at the newest tick equals current memory
-- [x] Out-of-range tick index returns InvalidArgument
+- [ ] GetTickHistory returns index-ordered ticks; ReadMemoryAtTick at the newest tick equals current memory
+- [ ] Out-of-range tick index returns InvalidArgument
 
 ## TR-TICKHIST-UI-001
 
 **History tab and debug screen** — SidebarTab.History hosts TickHistoryView bound to TickHistoryViewModel; IsPaused is fed via AttachPanelViewModel.ApplyStatus. Selecting a tick while paused shows registers, each chip's decoded state, and a reconstructed scrolling hex dump.
 **Covered by:** FR: FR-TICKHIST-001; TEST: TEST-TICKHIST-001, TEST-TICKHIST-002
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Refresh lists ticks newest-first; inspect while paused opens the debug screen
-- [x] Inspect while running does not open the debug screen
+- [ ] Refresh lists ticks newest-first; inspect while paused opens the debug screen
+- [ ] Inspect while running does not open the debug screen
 
 ## TR-UIAXAML-001
 
@@ -1032,7 +1629,7 @@ Scope: layer-1+
 - Boundary tests fail if Avalonia ViewModels reference `ViceSharp.Core`, `ViceSharp.Chips`, or concrete architecture/device types.
 - ViewModel tests cover sidebar collapse, tab switching, attach state, settings state, VKM selection, status bar state, and monitor pop-out state.
 - UI startup succeeds while disconnected or while the in-process host is starting.
-**Covered by:** FR: FR-CFG-004, FR-UI-002, FR-UI-003, FR-UI-004, FR-UIFLYOUT-001, FR-UIMENUBAR-001, FR-UIPERIPHERAL-001, FR-UISETTINGS-001; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-GRPC-001, TEST-UI-001, TEST-UI-DIAG-001, TEST-UIFLYOUT-001, TEST-UIMENUBAR-001, TEST-UIPERIPHERAL-001, TEST-UI-COREBOUNDARY-001, TEST-UISET-001, TEST-UISET-002
+**Covered by:** FR: FR-CFG-004, FR-UI-002, FR-UI-003, FR-UI-004, FR-UIFLYOUT-001, FR-UIMENUBAR-001, FR-UIPERIPHERAL-001, FR-UISETTINGS-001; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001, TEST-GRPC-001, TEST-UI-001, TEST-UI-DIAG-001, TEST-UISET-001, TEST-UIFLYOUT-001, TEST-UIMENUBAR-001, TEST-UIPERIPHERAL-001, TEST-UI-COREBOUNDARY-001, TEST-UISET-002
 **Status:** in_progress
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -1054,9 +1651,9 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Managed index and BGRA buffers match xvic canvas geometry (evidence: Vic20PixelLockstep geometry)
-- [x] Compare sync point defined and used by all pixel tests (evidence: TryCaptureVisibleFrame + FrameBuffer SequenceEqual)
-- [x] Index compare is Exact-scoped for READY PAL/NTSC/busy; BGRA SequenceEqual is Exact-scoped for the same named captures after canvas palette match (evidence: six isolated Vic20PixelLockstep facts)
+- [ ] Managed index and BGRA buffers match xvic canvas geometry (evidence: Vic20PixelLockstep geometry)
+- [ ] Compare sync point defined and used by all pixel tests (evidence: TryCaptureVisibleFrame + FrameBuffer SequenceEqual)
+- [ ] Index compare is Exact-scoped for READY PAL/NTSC/busy; BGRA SequenceEqual is Exact-scoped for the same named captures after canvas palette match (evidence: six isolated Vic20PixelLockstep facts)
 
 ## TR-VIC20-SOUND-001
 
@@ -1069,42 +1666,42 @@ Scope: layer-1+
 
 **VIC-II native screen-RAM visible-frame checkpoint** — Native VICE screen RAM (-) survives one full PAL frame (19,656 cycles) unchanged. VIC-II c-access DMA is read-only. VICE vicii-fetch.c:135-166.
 **Covered by:** FR: FR-BACKFILL-VIDEO-001; TEST: TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001
-**Status:** closed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-VIC-EDGE-002
 
 **VIC-II PAL raster position frame-periodic** — Managed PAL VIC-II raster (rasterLine, rasterX) returns to identical position after exactly one frame (312x63=19,656 cycles). VICE vicii-cycle.c:576-598.
 **Covered by:** FR: FR-BACKFILL-VIDEO-001, FR-VIC-001; TEST: TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001, TEST-VIC-001, TEST-X64SC-LOCKSTEP-001
-**Status:** closed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-VIC-EDGE-003
 
 **VIC-II RC window state machine cycle-accurate** — VIC-II row counter (RC) and video counter (VC) state machine matches VICE viciisc/vicii-cycle.c:541-563. VC update at RasterX=13: vc=vcBase, vmli=0, bad line sets rc=0. RC update at RasterX=57: rc==7 sets idle; if not idle or bad line, rc=(rc+1)&7.
 **Covered by:** FR: FR-BACKFILL-VIDEO-001, FR-VIC-008; TEST: TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001, TEST-VIC-001, TEST-X64SC-LOCKSTEP-001
-**Status:** closed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-VIC-EDGE-004
 
 **VIC-II non-PAL sprite DMA window native checkpoint** — All 5 non-PAL VIC-II models (Mos6567, Mos8562, Mos6567R56A, Mos6572, Mos8565) fire sprite-3 DMA near line 0x50. Managed IsCpuCycleStolen true at (SpriteY+1, rasterX 0). VICE vicii-chip-model.c:272-403/437-566.
 **Covered by:** FR: FR-BACKFILL-VIDEO-001; TEST: TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001
-**Status:** closed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-VIC-EDGE-005
 
 **VIC-II c-access DMA read-only semantics** — VIC-II matrix DMA c-access reads screen RAM without write side-effects. Screen RAM bytes written before a frame remain unchanged after. VICE vicii-fetch.c:135-166.
 **Covered by:** FR: FR-BACKFILL-VIDEO-001; TEST: TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001
-**Status:** closed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-VIC-EDGE-006
 
 **VIC-II screen RAM immediate read-back** — ViceNativeBridge ReadMemory/WriteMemory roundtrip for - returns written value in zero elapsed cycles. VICE c-access is read-only.
 **Covered by:** FR: FR-BACKFILL-VIDEO-001; TEST: TEST-VIC-CHECKPOINT-001, TEST-VIC-RC-001
-**Status:** closed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-VICE-ORACLE-001
@@ -1194,7 +1791,7 @@ centralized in THIRD_PARTY_NOTICES.md and AboutInfo.LogoAttributionText /
 LogoSourceUrl / LogoLicenseUrl, packed into NuGet via Directory.Build.props,
 mirrored in package README files, and bound on Xbox AboutPage and Avalonia About.
 **Covered by:** FR: FR-XBOXGPL-007; TEST: TEST-XBOXGPL-002
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 
 ## TR-XBOXPKG-002
