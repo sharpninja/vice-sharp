@@ -25,6 +25,7 @@ extern void double_rewrite_read_page(int page);
 extern int double_rewrite_row_read_page(int config, int page);
 extern int double_bank(int config);
 extern void double_alias_dummy(void);
+extern void double_foreign(void);
 extern void vice_sharp_bus_cycle(uint64_t clock);
 
 void vice_sharp_observe_clock(uint64_t clock)
@@ -91,6 +92,8 @@ int main(int argc, char **argv)
             vic_cycle();
         } else if (strcmp(op, "alias") == 0 && arity == 0) {
             double_alias_dummy();
+        } else if (strcmp(op, "foreign") == 0 && arity == 0) {
+            double_foreign();
         } else if (strcmp(op, "clock") == 0 && arity == 1) {
             maincpu_clk = a;
         } else if (strcmp(op, "read") == 0 && arity == 1 && a <= 0xffff) {

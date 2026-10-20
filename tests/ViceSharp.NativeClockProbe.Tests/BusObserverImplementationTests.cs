@@ -23,6 +23,8 @@ public sealed class BusObserverImplementationTests
     [InlineData("rewrite-outside-init")]
     [InlineData("dummy-alias")]
     [InlineData("watch-toggle")]
+    [InlineData("watch-flag1-after-rebuild")]
+    [InlineData("foreign-row")]
     public void Compiled_observer_satisfies_identical_mock_proven_contract(string name) =>
         AssertProbe(new CompiledBusProbe(Fixture), name);
 }

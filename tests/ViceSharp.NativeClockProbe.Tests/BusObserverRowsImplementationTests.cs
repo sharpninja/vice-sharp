@@ -21,6 +21,8 @@ public sealed class BusObserverRowsImplementationTests
     [InlineData("rewrite-outside-init")]
     [InlineData("dummy-alias")]
     [InlineData("watch-toggle")]
+    [InlineData("watch-flag1-after-rebuild")]
+    [InlineData("foreign-row")]
     [InlineData("bank-switch")]
     [InlineData("rewrite-noncurrent-row")]
     [InlineData("bank-then-rebuild")]

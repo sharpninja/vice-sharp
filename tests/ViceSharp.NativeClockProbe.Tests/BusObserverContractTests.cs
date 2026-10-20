@@ -75,20 +75,36 @@ public sealed class BusObserverContractTests
             [InitOk, InitPatch,
              new("access", "missing,256,165,0"), new("repatch", "0,1"), new("cycle", "0"),
              new("access", "read,256,165,0"), new("cycle", "0")]),
+        // The monitor's toggle is wrapped: the watch rows are learned from it, the dummy pointers are
+        // re-pointed at once, and a real pointer on a delegating watch row is not foreign.
         "watch-toggle" => new(
             [new("init"), new("toggle", 1), new("read", 0x0100), new("cycle"),
              new("toggle", 0), new("read", 0x0100), new("cycle"), new("read", 0x0100), new("cycle")],
             [InitOk, InitPatch,
-             new("access", "missing,256,165,0"), new("foreign", "read"), new("foreign", "write"), new("repatch", "0,1"), new("cycle", "0"),
-             new("access", "missing,256,165,0"), new("repatch", "0,1"), new("cycle", "0"),
+             new("watch", "1"), new("access", "read,256,165,0"), new("cycle", "0"),
+             new("watch", "0"), new("access", "read,256,165,0"), new("cycle", "0"),
              new("access", "read,256,165,0"), new("cycle", "0")]),
+        // A rebuild while the watch flag is 1 ends with an intra-object toggle (vic20mem.c 523) the wrap
+        // cannot see; the watch rows are learned from the pointers after the real rebuild instead.
+        "watch-flag1-after-rebuild" => new(
+            [new("init"), new("toggle", 1), new("init"), new("read", 0x0100), new("cycle"), new("read", 0x0100), new("cycle")],
+            [InitOk, InitPatch, new("watch", "1"), InitOk, InitPatch,
+             new("access", "read,256,165,0"), new("cycle", "0"),
+             new("access", "read,256,165,0"), new("cycle", "0")]),
+        // A live row that is neither a known row nor the watch row is still foreign, every cycle.
+        "foreign-row" => new(
+            [new("init"), new("foreign"), new("read", 0x0100), new("cycle"), new("cycle")],
+            [InitOk, InitPatch,
+             new("foreign", "read"), new("foreign", "write"), new("cycle", "0"),
+             new("foreign", "read"), new("foreign", "write"), new("cycle", "0")]),
         _ => throw new ArgumentOutOfRangeException(nameof(name))
     };
 
     public static readonly string[] FixtureNames =
     [
         "empty", "init-only", "read", "fetch", "write-and-dummy", "translate",
-        "rebuild-at-runtime", "rewrite-outside-init", "dummy-alias", "watch-toggle"
+        "rebuild-at-runtime", "rewrite-outside-init", "dummy-alias", "watch-toggle",
+        "watch-flag1-after-rebuild", "foreign-row"
     ];
 
     /// <summary>Exact event order proves capture, fail-closed rescan, re-patch timing and preserved input.</summary>
@@ -110,7 +126,7 @@ public sealed class BusObserverContractTests
         foreach (var name in FixtureNames) Assert.NotNull(GetFixture(name));
         Assert.Throws<ArgumentOutOfRangeException>(() => GetFixture("no-such-fixture"));
         var kinds = FixtureNames.SelectMany(n => GetFixture(n).Expected).Select(e => e.Kind).Distinct().Order().ToArray();
-        Assert.Equal(["access", "cycle", "foreign", "init", "missing", "repatch", "translate"], kinds);
+        Assert.Equal(["access", "cycle", "foreign", "init", "missing", "repatch", "translate", "watch"], kinds);
     }
 
     [Theory]
@@ -124,6 +140,8 @@ public sealed class BusObserverContractTests
     [InlineData("rewrite-outside-init")]
     [InlineData("dummy-alias")]
     [InlineData("watch-toggle")]
+    [InlineData("watch-flag1-after-rebuild")]
+    [InlineData("foreign-row")]
     public void Correct_mock_passes_and_every_wrong_mock_is_rejected(string name)
     {
         var fixture = GetFixture(name);
@@ -197,6 +215,10 @@ public sealed class BusObserverContractTests
         // Trampolines present during the real rebuild would be reported by the double as a nonzero init count.
         RejectVariant("rebuild-at-runtime", e => e.Select((x, i) => i == 4 ? x with { Detail = "514" } : x).ToArray());
         // A foreign live row must be reported every cycle it is live.
-        RejectVariant("watch-toggle", e => e.Where(x => x.Kind != "foreign").ToArray());
+        RejectVariant("foreign-row", e => e.Where(x => x.Kind != "foreign").ToArray());
+        RejectVariant("foreign-row", e => e.Take(5).ToArray());
+        // A delegating watch row is not foreign, after a toggle or after a rebuild under flag 1.
+        RejectVariant("watch-toggle", e => [.. e.Take(4), new("foreign", "read"), new("foreign", "write"), .. e.Skip(4)]);
+        RejectVariant("watch-flag1-after-rebuild", e => [.. e.Take(6), new("foreign", "read"), .. e.Skip(6)]);
     }
 }

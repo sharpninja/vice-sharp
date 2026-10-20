@@ -11,20 +11,20 @@ namespace ViceSharp.NativeClockProbe.Tests;
 /// </summary>
 internal sealed class CompiledBusProbe : IBusObserverProbe
 {
-    private static readonly string[] Kinds = ["init", "layout", "repatch", "access", "translate", "missing", "foreign", "cycle"];
+    private static readonly string[] Kinds = ["init", "layout", "repatch", "access", "translate", "missing", "foreign", "watch", "cycle"];
     private readonly CompiledCFixture fixture;
 
     internal CompiledBusProbe(CompiledCFixture fixture) => this.fixture = fixture;
 
     internal static CompiledCFixture Build(string name, params string[] extraArguments) => new(name,
         ["bus-driver.c", "native-bus-double.c", "clock-observer.c", "bus-observer.c"],
-        [.. extraArguments, "-Wl,--wrap=vic_cycle", "-Wl,--wrap=mem_initialize_memory", "-Wl,--wrap=mem_mmu_translate"]);
+        [.. extraArguments, "-Wl,--wrap=vic_cycle", "-Wl,--wrap=mem_initialize_memory", "-Wl,--wrap=mem_mmu_translate", "-Wl,--wrap=mem_toggle_watchpoints"]);
 
     public TraceResult Run(BusStep[] steps)
     {
         var arguments = steps.Select(step => step.Op switch
         {
-            "init" or "cycle" or "alias" => step.Op,
+            "init" or "cycle" or "alias" or "foreign" => step.Op,
             "clock" or "read" or "dread" or "translate" or "rewrite" or "toggle" or "bank" =>
                 step.Op + ":" + step.A.ToString(CultureInfo.InvariantCulture),
             "write" or "dwrite" or "rewriterow" =>

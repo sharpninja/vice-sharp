@@ -171,3 +171,18 @@ void double_alias_dummy(void)
     _mem_read_tab_ptr_dummy = mem_read_tab[mem_config];
     _mem_write_tab_ptr_dummy = mem_write_tab[mem_config];
 }
+
+/* A live row that is neither a configuration row nor the watch row. */
+static read_func_ptr_t foreign_read[PAGES];
+static store_func_ptr_t foreign_write[PAGES];
+
+void double_foreign(void)
+{
+    int page;
+    for (page = 0; page < PAGES; page++) {
+        foreign_read[page] = stock_read;
+        foreign_write[page] = stock_store;
+    }
+    _mem_read_tab_ptr = foreign_read;
+    _mem_write_tab_ptr = foreign_write;
+}

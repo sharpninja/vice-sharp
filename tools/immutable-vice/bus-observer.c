@@ -1,9 +1,10 @@
 /* External link wrapper only. Never copy into the immutable VICE source tree.
  * PLAN-OBSERVER-001 slices S1 and S1b (Phase C step 3, option B, handoff D14).
  * FR-VICE-001 AC4; TR-VICE-ORACLE-001 AC3/AC5; TEST-VICE-001 AC4.
- * Link with --wrap=mem_initialize_memory and --wrap=mem_mmu_translate beside the
- * existing --wrap=vic_cycle hook (clock-observer.c), whose vice_sharp_observe_clock
- * adapter must call vice_sharp_bus_cycle ahead of the gate record. Compile with
+ * Link with --wrap=mem_initialize_memory, --wrap=mem_mmu_translate and
+ * --wrap=mem_toggle_watchpoints beside the existing --wrap=vic_cycle hook
+ * (clock-observer.c), whose vice_sharp_observe_clock adapter must call
+ * vice_sharp_bus_cycle ahead of the gate record. Compile with
  * -DVICE_SHARP_ROWS=32 for x64sc (NUM_CONFIGS, c64memsc.c 83); leave it undefined for xvic.
  * Pinned upstream cc67418cba58e71d8e70fd353e9de47199ad2075:
  *  - The four table pointers are global (vic20mem.c 99 to 102; c64memsc.c 102 to 105)
@@ -53,6 +54,7 @@ extern read_func_ptr_t *_mem_read_tab_ptr_dummy;
 extern store_func_ptr_t *_mem_write_tab_ptr_dummy;
 extern void __real_mem_initialize_memory(void);
 extern void __real_mem_mmu_translate(unsigned int addr, uint8_t **base, int *start, int *limit);
+extern void __real_mem_toggle_watchpoints(int flag, void *context);
 extern void vice_sharp_bus_sink(const char *kind, const char *detail);
 #if VICE_SHARP_ROWS > 1
 extern int mem_get_current_bank_config(void);
@@ -65,7 +67,21 @@ static read_func_ptr_t *known_read_rows[VICE_SHARP_ROWS];
 static store_func_ptr_t *known_write_rows[VICE_SHARP_ROWS];
 static read_func_ptr_t dummy_read_row[VICE_SHARP_PAGES];
 static store_func_ptr_t dummy_write_row[VICE_SHARP_PAGES];
+/* The monitor's single static watch row per table (vic20mem.c 536 to 556; c64memsc.c
+ * 166 to 192), learned from the pointers VICE has already set, never by toggling. */
+static read_func_ptr_t *watch_read_row;
+static store_func_ptr_t *watch_write_row;
 static int initialized;
+
+/* After the real rebuild or toggle, watch flag 1 leaves the real pointers on the watch
+ * rows and the dummy pointers on the data rows; that difference identifies the watch rows. */
+static void learn_watch_rows(void)
+{
+    if (_mem_read_tab_ptr != _mem_read_tab_ptr_dummy) {
+        watch_read_row = _mem_read_tab_ptr;
+        watch_write_row = _mem_write_tab_ptr;
+    }
+}
 
 static int current_row(void)
 {
@@ -230,6 +246,7 @@ void __wrap_mem_initialize_memory(void)
     int located;
     __real_mem_initialize_memory();
     located = locate_rows();
+    learn_watch_rows();
 #if VICE_SHARP_ROWS > 1
     {
         char detail[16];
@@ -265,6 +282,25 @@ void __wrap_mem_mmu_translate(unsigned int addr, uint8_t **base, int *start, int
     vice_sharp_bus_sink("translate", detail);
 }
 
+/* The monitor reaches the toggle through maincpu_monitor_interface->toggle_watchpoints_func,
+ * assigned in maincpu.c 395 (a cross-object reference, so --wrap redirects it); the one
+ * intra-object call at the end of the rebuild (vic20mem.c 523) is covered by learn_watch_rows
+ * in __wrap_mem_initialize_memory. Flag 2 puts the dummy pointers on the watch rows too, so
+ * the wrapper re-points them at once; flag 0 restores the data rows (re-pointed likewise). */
+void __wrap_mem_toggle_watchpoints(int flag, void *context)
+{
+    char detail[16];
+    __real_mem_toggle_watchpoints(flag, context);
+    if (flag != 0) {
+        learn_watch_rows();
+    }
+    if (initialized) {
+        (void)repoint_dummy();
+    }
+    snprintf(detail, sizeof detail, "%d", flag);
+    vice_sharp_bus_sink("watch", detail);
+}
+
 void vice_sharp_bus_cycle(uint64_t clock)
 {
     char detail[32];
@@ -277,10 +313,12 @@ void vice_sharp_bus_cycle(uint64_t clock)
             vice_sharp_bus_sink("foreign", "read");
             vice_sharp_bus_sink("foreign", "write");
         } else {
-            if (_mem_read_tab_ptr != known_read_rows[row]) {
+            if (_mem_read_tab_ptr != known_read_rows[row]
+                && (watch_read_row == NULL || _mem_read_tab_ptr != watch_read_row)) {
                 vice_sharp_bus_sink("foreign", "read");
             }
-            if (_mem_write_tab_ptr != known_write_rows[row]) {
+            if (_mem_write_tab_ptr != known_write_rows[row]
+                && (watch_write_row == NULL || _mem_write_tab_ptr != watch_write_row)) {
                 vice_sharp_bus_sink("foreign", "write");
             }
             for (page = 0; page < VICE_SHARP_PAGES; page++) {
