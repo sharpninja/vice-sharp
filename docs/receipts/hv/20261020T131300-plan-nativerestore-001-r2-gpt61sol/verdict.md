@@ -1,0 +1,189 @@
+2026-10-20T13:39:13.839-05:00 - DISAGREE: PLAN-NATIVERESTORE-001 revision 2 before execution.
+
+Accuracy 92%; completeness 84%. PASS 18, FAIL 6, UNKNOWN 2, ADD-AC 4. Phase D is not approved by this review.
+
+Accuracy 92: the corrected native baseline, preservation rules, caller retirement and approved gate amendments are well supported, but consumer completeness, exhaustive hunk claims and documentation validation remain inaccurate. Completeness 84: unsafe H5 dependency, incomplete real VSF obligations, missing observable outcomes and unavailable primary audit/store evidence prevent execution readiness. These are holistic judgments, not test pass rates; neither score reaches 98.
+
+Reviewer: Codex, gpt-6.1-sol, max. Reviewer IDs: Codex-20261020T181838Z-hv-nativerestore-r2 / req-20261020T181838Z-hv-nativerestore-r2. Parent: ClaudeCode-20261020T015046Z-plugin-session / req-20261020T172116Z-prompt-6c6d. The reviewer IDs are not proof of a primary turn.
+
+Request: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/request.jsonl. Response: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/response.jsonl. Structured verdict: verdict.json. Persistence receipt: verdict.persistence.json.
+
+Class 1, plan review only. All 26 input hashes/lengths match. Requested commit 4c5cb166; initial observed develop HEAD 7f931d62bedc0f2ffce98b6db27495f29cf9d8ec; final observed HEAD 8295696de8369c589e1e79ac326721d773d54f3b. Additional committed material is review packaging, handoff and Windows trace receipts, with no subject-pin drift. The profile was read in full. No marker or API-key file was read. No native/full-solution build, managed test run, nested reviewer, native mutation, commit or push was performed. Historical test results remain attributed to their receipts.
+
+P01 PASS [info]: All 26 input pins. Source: input-pins.json, All 26 input pins.
+Evidence: All 26 SHA256 and length pairs matched before analysis; the subject hash is 9AE793C5DE8C20FD8C5CC5B567F5C6E1D07FC9AC8EEB59C379E79CDF612038D2. Six materialized source files also match their pinned Git blobs. See pin-verification.json and source-pin-verification.json.
+Assessment: The revised artifact and source being reviewed are identified independently of round 1.
+Required action / acceptance outcome: Retain the pins; disclose the separate checkout-commit drift recorded in this verdict.
+
+P02 PASS [info]: Native starting state. Source: docs/plans/PLAN-NATIVERESTORE-001.md:7.
+Evidence: Live git records gitlink and native HEAD cc67418cba58e71d8e70fd353e9de47199ad2075, 8 modified tracked files, 222 insertions, 8 deletions, an empty native staged diff, and 155 untracked paths. state-before.json retains hashes and lengths for those 163 paths.
+Assessment: The native SHA, tracked paths and diff totals agree with live state.
+Required action / acceptance outcome: Repeat the same measurements independently on both hosts at D0.
+
+P03 PASS [info]: R1 B and R4. Source: docs/plans/PLAN-NATIVERESTORE-001.md:38.
+Evidence: R1 B, D4 and Exit explicitly retain the classified untracked inventory and change only .gitmodules ignore=dirty to ignore=untracked. The current .gitmodules still has ignore=dirty; implementation has not occurred.
+Assessment: The authorized exit permits the submodule itself to list untracked paths while the superproject reports no submodule dirt. It does not require deletion or info/exclude.
+Required action / acceptance outcome: Keep the amended tracked-clean plus inventory-equality gate.
+
+P04 PASS [info]: Plan review, D3 and the implementation hold. Source: docs/plans/PLAN-NATIVERESTORE-001.md:3.
+Evidence: The 12:21 operator ruling authorizes plan review. D-pre requires an HV AGREE receipt and an explicit implementation release; section 5 keeps acceptance/status changes pending until step 12.
+Assessment: Plan HV and postponed implementation HV are distinct. This review grants no execution release.
+Required action / acceptance outcome: Keep the explicit release and final done-state boundary.
+
+P05 PASS [info]: D-pre installation receipts. Source: docs/plans/PLAN-NATIVERESTORE-001.md:62.
+Evidence: Linux install README lines 13-24 and Windows install README lines 7-25 both identify Nuke installs of 1.3.111 from 2c8d60284229b9fedc2d50f840153b9e8d8cbcbf, with binary hashes. Windows used InstallMsi, which ran PublishMsi. Both original receipts were read in this round.
+Assessment: The recorded installs satisfy the documented Nuke route. This is receipt verification, not a new inspection or GUI launch on either host.
+Required action / acceptance outcome: At entry, record the accepted installed commit/version and operator release as A02 requires.
+
+P06 PASS [info]: Bounded Phase C evidence. Source: docs/plans/PLAN-NATIVERESTORE-001.md:13.
+Evidence: The builder confines work/build/bin output to artifacts/immutable-vice. Linux S2b/S4 receipts and the now available Windows S3/S4c README record both observer builds and 100k/1M/4M equivalence evidence. Windows 4M is newly recorded as completed at 13:26, whereas the pinned handoff still records its earlier deferral.
+Assessment: These receipts support external build, bus observation and bounded reset-workload equivalence. They do not establish a replacement DLL ABI, native VSF resume or managed parity.
+Required action / acceptance outcome: Preserve these limits and refresh the D-pre trace matrix from the actual receipts.
+
+P07 PASS [info]: Preservation and narrow restore authority. Source: docs/plans/PLAN-NATIVERESTORE-001.md:63.
+Evidence: D0 copies tracked modifications and injected source; D4 requires a committed preservation receipt and explicit per-path checkout, prohibits reset/clean, and retains every untracked file. The Oct 4 header hashes to 5450FDA8CFEDB8A22BADA8CD04EE75FF830C48796592FF9EC0141E899D846259; its inventory has 2,527 paths.
+Assessment: Copy/hash/retain and operator-approved legacy-builder retirement remain compatible. Restoring a tracked path is authorized only inside the approved D4 execution.
+Required action / acceptance outcome: Retain originals and both host receipts; do not infer deletion or automatic patch-reapply authority.
+
+F01 PASS [medium]: Corrected untracked count. Source: docs/plans/PLAN-NATIVERESTORE-001.md:8.
+Evidence: The plan now states 155 untracked and 163 total porcelain entries, matching git -C native/vice status --porcelain=v1 -uall. D0 explicitly inventories hidden and ordinary paths.
+Assessment: The round 1 count defect is corrected.
+Required action / acceptance outcome: Use complete per-host -uall enumeration during execution.
+
+F02 PASS [high]: Windows harness caller retirement. Source: docs/plans/PLAN-NATIVERESTORE-001.md:65.
+Evidence: The live harness csproj still defines ViceNativeProject at line 10 and invokes BuildNative at line 72. D2 now explicitly removes both, then retires Vice.Native.proj and the three legacy builders, and requires both-host build-log evidence that the retired native path did not run.
+Assessment: The previously omitted executable caller now has a concrete disposition.
+Required action / acceptance outcome: Limit the no-reference check to active executable/build references; historical receipts may retain names.
+
+F03 FAIL [high]: R6 consumer inventory and gate denominator. Source: docs/plans/PLAN-NATIVERESTORE-001.md:45.
+Evidence: The stated token grep does yield 43 files, 5 with Category and 38 without, but it is neither complete nor semantic. SnapshotResumeSpikeTests.cs:47-108 uses plain Fact plus ViceNative and is outside the 43. Vic20NativeLockstepTests.cs:18-46 is also outside it and uses ViceNative.CreateInstance plus XvicOraclePrerequisites. Conversely XAudio2AudioMathTests.cs:26-29 matches only documentation saying no ViceFact, and XboxTestConventionTests.cs:159-173 contains sample strings. The proposed check covers zero ViceFact/ViceTheory methods and zero vice_x64 loads, not all direct/indirect users or vice_xvic.
+Assessment: Literal tagging of the 43 files can exclude managed tests while leaving real native consumers selected. Linux skips/failures and Windows dirty-DLL execution can therefore survive the planned inventory pass.
+Required action / acceptance outcome: D0/D2 must enumerate actual test methods and transitive fixtures/providers using ViceNative, ViceNativeXvic, bridge APIs and native instances; exclude only authorized shim-bound cases, record every Phase E/F owner, and prove selection and absence of both DLL loads with missed-plain-Fact and string-only negative controls.
+
+F04 FAIL [high]: H1-H11 classification accuracy. Source: docs/plans/PLAN-NATIVERESTORE-001.md:24.
+Evidence: The Oct 4 patch has 20 hunks in 12 files (patch-hunks.json). Its mainviccpu.c hunk at patch line 230 installs host-register bootstrap, but H7 describes hosted CLK_INC as H1/H2 and does not classify that H3-like resume behavior. Pinned drive-snapshot.c:135-162 creates every DRIVE module before testing TDE; H5 incorrectly says a no-drive unit is omitted. has_tde is payload byte 0, not a module-header field. Section 2 also says only H5/H9 are behavior corrections despite H6 being one, and H9 says no Phase D-G workload compares VIC sound despite handoff Phase F item 6 and existing Vic20SoundLockstep native audio cases. The 1,432 historical dependency files are .Po, not .po.
+Assessment: The added classification correctly identifies several old omissions, but its exhaustive and reachability claims are still inaccurate.
+Required action / acceptance outcome: Map all 20 hunks explicitly, including xvic bootstrap; correct writer/reader and payload facts, the three-correction count, extension spelling and Phase F audio ownership. Keep R7 rejection; preserve existing obligations and block required-uncovered behavior.
+
+F05 FAIL [high]: R8 and complete VSF Slice 1 semantics. Source: docs/plans/PLAN-NATIVERESTORE-001.md:68.
+Evidence: PLAN-VSFLOCKSTEP-001:325-350 requires both-machine prerequisites, fixture provisioning and deterministic regeneration, the deterministic-module manifest, v1.2/v1.3 native resume, v1.4 native round-trip and the cumulative NativeSnapshotCompatibilityTest target. TR-VSFLOCKSTEP-RESUME-001 AC1:77 requires those real resumes/round-trip; the adapter at X64ScSnapshotCompatibility.cs:28-30 explicitly disclaims native proof. D1 names test families and a future amendment, D2 replaces commands, and D5 concretely specifies only an x64sc autostart clock/PC test. It does not allocate the native writer/round-trip, xvic fixture generation, manifest/cumulative-target execution or the deferred S5 register comparison to concrete observer-capable steps. The new test also does not state how normalized v1.2/v1.3 bytes reach the unmodified reader.
+Assessment: Changing libraries to observer executables changes the interface, not the existing acceptance obligations. Clock/PC agreement alone cannot replace real complete resume and round-trip evidence or the promised register cross-check.
+Required action / acceptance outcome: Before execution, finish the approved Slice 1 amendment with an obligation-to-step/test/immutable-command/evidence map for both machines. Specify normalization input, native snapshot writing, real v1.2/v1.3/v1.4 evidence, fixtures, manifest, cumulative gate and the retained register obligation, or obtain an explicit scoped requirement/scheduling amendment.
+
+F06 PASS [high]: R9 known-red exception. Source: docs/plans/PLAN-NATIVERESTORE-001.md:48.
+Evidence: The diagnostic README:14-35 and its focused command name 20 failures (4 CPU/NMI and 16 visible-PC). Build.cs:97-112 selects these uncategorized classes. R9, D2, D5 and Exit now require exactly that named failure set, no additional failures and no skips; they do not filter the 20 out.
+Assessment: The explicit operator-approved exception removes the Phase D/Phase E green-gate cycle. It is a baseline exception, not a passing full-suite claim.
+Required action / acceptance outcome: Keep identity-based set comparison at both runs; any improvement, replacement failure or extra failure changes the authorized set and requires disposition.
+
+F07 PASS [high]: Pre-overwrite and resume rules. Source: docs/plans/PLAN-NATIVERESTORE-001.md:67.
+Evidence: D4 now checks a clean index and each live hash against the preserved or already-restored version before overwrite; unexpected state stops. It checks cached and working diffs, rehashes copies, distinguishes restored/untouched/unexpected paths, and names changed-live, staged, partial, missing and corrupt receipt Pester cases.
+Assessment: This resolves the unsafe overwrite and undefined partial-run outcomes identified in round 1 at plan level.
+Required action / acceptance outcome: Implement the same contract against the native repository on both hosts; A04 strengthens the pinned-identity and worktree-byte controls.
+
+F08 PASS [high]: Hash/length inventory bracket. Source: docs/plans/PLAN-NATIVERESTORE-001.md:63.
+Evidence: D0 now hashes and records lengths for every untracked path and modified tracked file. D2, D4, D5 and Exit require path/content equality, with a mock negative control for overwriting an existing untracked path. D4 separately accounts for the authorized tracked restore.
+Assessment: An existing-path content change can no longer hide behind an unchanged porcelain path list.
+Required action / acceptance outcome: Retain both-host inventories and compare the appropriate pre-build or post-restore baseline, including additions and removals.
+
+F09 PASS [medium]: Pester, analyzer and WhatIf ownership. Source: docs/plans/PLAN-NATIVERESTORE-001.md:60.
+Evidence: The live builder:26 and equivalence runner:20 still lack SupportsShouldProcess and create directories at lines 52 and 41 respectively. D1 now explicitly owns the change, mock-first Pester dry-run tests proving no files/directories, analyzer zero findings and dry runs before real execution. Installed review tools report Pester 5.9.1 and PSScriptAnalyzer 1.25.0.
+Assessment: The defect is now an implementation prerequisite rather than an assumed existing capability. An approved native toolchain shell does not itself violate PowerShell-only orchestration.
+Required action / acceptance outcome: Apply the stated mock gate to all observable side effects, then bind the same cases to both host implementations.
+
+F10 FAIL [medium]: Comparator XMLDoc enforcement and AC4 evidence scope. Source: docs/plans/PLAN-NATIVERESTORE-001.md:68.
+Evidence: D5 restores REAL-C64-PHI2-AEC-001 and the XMLDoc item, but says the latter is enforced by XmlDocsConventionTests. That test scans attributed test methods only (XmlDocsConventionTests.cs:38-40,56-74); LockstepValidator is an ordinary class with a class summary at lines 15-18, so it is not checked. Its implementation remains IViceNative/register/CIA based; the observer-field comparator is explicitly Phase E item 1. TR-CYCLE-001:25,44 concerns the managed core; a native-only trace assertion is supporting reference evidence, not full managed AC4 satisfaction.
+Assessment: The missing exit items are restored, but the proposed documentation validator cannot enforce the claim and the documentation must not describe future behavior as implemented.
+Required action / acceptance outcome: Use verification that actually covers the comparator documentation, or remove the false enforcement claim. Describe current behavior and the future half-cycle contract accurately. Keep the real trace gate and leave managed AC4 pending until its managed evidence exists.
+
+F11 PASS [medium]: Blast radius and reference-update ownership. Source: docs/plans/PLAN-NATIVERESTORE-001.md:74.
+Evidence: The edit inventory now lists the actual csproj caller, Vice.Native.proj, one PowerShell builder and two shell launchers for retirement, the observer scripts and new preservation/restore scripts, and no exclude file/script. D1 owns the TR-VSFLOCKSTEP-RESUME-001 AC2 builder-reference update through the wrapper; D1/D2 own the Slice 1 amendment and validation-command replacement.
+Assessment: The contradictory R1 A inventory is gone. An AC2 builder-name substitution can preserve its clean-materialization and external-wrapper semantics; it does not resolve AC1 coverage under F05.
+Required action / acceptance outcome: Complete canonical/generated reference propagation and the repository traceability audit through the supported paths when implementing the reference update; report existing traceability debt separately.
+
+R01 PASS [high]: Round 2 credential handling. Source: response.jsonl, Round 2 credential handling.
+Evidence: No marker, API-key file or raw round 1 response was read, copied or printed in this round. The supported wrapper alone accessed its marker internally; wrapper output was captured and checked before display. Review inputs were the redacted verdict documents, not the credential-bearing round 1 stream.
+Assessment: The round 1 credential-read failure was not repeated. This does not retroactively erase the prior exposure or claim credential rotation.
+Required action / acceptance outcome: Preserve the no-marker-read rule and keep the old raw stream private.
+
+U01 UNKNOWN [high]: Primary reviewer persistence and completion. Source: logging-attempts.jsonl, Primary reviewer persistence and completion.
+Evidence: Supported Status succeeded, then bootstrap/beginTurn failed: MCP_UNTRUSTED: marker refresh failed before REPL request: MCP_UNTRUSTED: Health check failed - Permission denied. One supported workflow.triage.report attempt failed identically. A supported queryHistory also failed. openSession explicitly returned persisted:false; beginTurn returned rejected/persisted:false. Local identity and full-content fallback records are not server receipts.
+Assessment: The complete primary turn, full-content primary readback and completed-state history proof remain unavailable. The operator authorized a fallback, not an assertion that primary persistence succeeded.
+Required action / acceptance outcome: Keep this verdict queued only and acceptance blocked unless the operator explicitly waives primary persistence. A later authorized recovery must persist/read back the entire verdict and prove completed state; do not repair trust, replay historical queues or cancel old turns here.
+
+U02 UNKNOWN [medium]: Effective requirements and PLAN-VICEORACLE-001 tasks. Source: docs/plans/PLAN-NATIVERESTORE-001.md:63.
+Evidence: Canonical FR-VICE-001 -> TR-VICE-ORACLE-001 -> TEST-VICE-001 documents, TR-VSFLOCKSTEP-RESUME-001 AC1/AC2 and TR-CYCLE-001 AC4 were read directly. D0 now explicitly requires effective mappings and TODO task 4/5 readback. The primary trust failure prevents attesting current store layers, mappings and task statuses.
+Assessment: The plan now owns the missing readback, but a future instruction is not current store evidence.
+Required action / acceptance outcome: Before implementation depends on these records, use the supported wrappers to retain exact effective mappings and both task states. Do not infer store completion from projections.
+
+A01 PASS [medium]: DeltaComparison_ClassifiesEveryCurrentHunk. Source: docs/plans/PLAN-NATIVERESTORE-001.md:63.
+Evidence: D0 now preserves and maps every current hunk, accepts explained host/context differences as listed dispositions, blocks unclassified or required-uncovered behavior, and names missing-hunk/wrong-host negative controls.
+Assessment: A different LEGION2 delta no longer implicitly means failure or permission to overwrite an unclassified change. The classification accuracy defect remains F04.
+Required action / acceptance outcome: Apply this outcome to the fresh host delta, not a presumed byte-identical Oct 4 patch.
+
+A02 PASS [medium]: EntryEvidence_BindsBothHostsAndExplicitRelease. Source: docs/plans/PLAN-NATIVERESTORE-001.md:62.
+Evidence: D-pre/D0 require both installed commit/version pairs, the Windows trace matrix including any explicit deferral and owner, this plan AGREE receipt, and the operator instruction releasing implementation. D0 does not run until all are present.
+Assessment: Receipt arrival or plan approval alone cannot lift the explicit implementation hold.
+Required action / acceptance outcome: Use the new Windows 4M result in the entry matrix; retain the explicit release requirement.
+
+A03 PASS [medium]: PostRestoreFailure_StopsWithPreservedEvidence. Source: docs/plans/PLAN-NATIVERESTORE-001.md:67.
+Evidence: D4 now states that failure after the first host or both hosts stops before Phase E, retains originals and receipts, reports each host/path state and leaves restored source pinned. Automatic patch reapply and untracked deletion are forbidden; the two failure positions are named test cases.
+Assessment: Rollback evidence and permission to modify the oracle are correctly separated.
+Required action / acceptance outcome: Keep this safe stopped state; any later recovery mutation needs scoped operator authority.
+
+N01 FAIL [high]: Reachable H5 fixture and Phase D/Phase E dependency. Source: docs/plans/PLAN-NATIVERESTORE-001.md:24.
+Evidence: Independent byte inspection of ready-c64sc-truedrive.vsf (SHA256 5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19) finds MAINCPU 1.2, clock 109163946, PC 22377, and DRIVE8 2.0 at offset 66204, inclusive length 24, payload has_tde=0/has_drives=1. Pinned drive-snapshot.c:317-319 leaves clock arrays uninitialized, reads them only at 368-419, then copies them for every non-NONE configured unit at 540-550. Even missing modules take the has_tde=0 continue path at 333-339. H5 schedules fail-closed adapter rejection only in Phase E, while D5 and AC1 require real resume of the supplied fixture before Phase E starts.
+Assessment: The conditional branch is already reachable in an approved input. Merely naming a later rejection neither makes the earlier load safe nor preserves the mandatory resume AC. Module-header scanning alone cannot establish the TDE or configured-drive preconditions.
+Required action / acceptance outcome: D0 must report this concrete fixture and stop required-uncovered execution before D4/D5. Specify a safe, approved external disposition and prerequisite order before any affected native load; cover TDE-off and missing modules plus configured unit types. If the disposition rejects a required fixture, resolve the existing resume requirement explicitly rather than silently dropping it. Keep the native hunk rejected under R7.
+
+N02 ADD-AC [medium]: D5: SnapshotResume_SelectsUniqueSuccessfulLoadBoundary. Source: docs/plans/PLAN-NATIVERESTORE-001.md:68.
+Evidence: Pinned autostart.c:1552-1575 opens the snapshot then reboots and waits for the deferred load trap (1266-1274); initial/random autostart delay is at 1528-1537. mainc64cpu.c:947-981 restores clock/registers; 6510dtvcore.c:408-428 imports them after the trap and handles reset. c64cpusc.c:139-146 loads PC then increments clock before the hook, and LOAD can first steal cycles through mainc64cpu.c:359-362. c64-snapshot.c:146-153 resets on read failure. VICE_OBS exposes read/write/dummy, not an opcode-fetch tag.
+Assessment: clk+1 is a sound narrow expectation after a successful, suitably constrained load; it is not a universal unique load-success locator or complete register proof. The plan does not define outcomes for no discontinuity, a colliding clock, an unrelated reset, a later-module load failure, or an idle/stolen first gate.
+Required action / acceptance outcome: Add the named D5 AC: bind the unique observed resume boundary and load outcome to the exact normalized fixture; state the valid fixture/state preconditions and first observable fetch rule. Accept the constrained positive case and reject ambiguous/absent boundaries, wrong clk/PC, unrelated reset, later-module failure and missing prerequisites using independent mocks before the same real observer cases. Do not infer successful complete resume from two matching fields.
+
+A04 ADD-AC [medium]: D4: Restore_RejectsWrongPinnedIdentityAndResumesCheckoutBytes. Source: docs/plans/PLAN-NATIVERESTORE-001.md:67.
+Evidence: D4 now protects hashes and staged state but describes already-restored bytes as the index version and checks gitlink/checked-out equality at the end. Execution spans two repositories and Windows/Linux working-tree representations.
+Assessment: An explicit pre-overwrite pin/root outcome and checkout-byte comparison make the existing safety contract unambiguous without changing its restoration mechanism.
+Required action / acceptance outcome: Add this D4 AC: a wrong repository, changed recorded/native/gitlink identity or wrong-host receipt stops before the first overwrite; an interrupted run recognizes the exact working-tree bytes produced by checkout on each host, including the configured line-ending conversion. Prove both-host positive resume and these negative controls.
+
+A05 ADD-AC [medium]: D2/D5: KnownRedGate_RequiresCompleteExecutionAndStableDiscovery. Source: docs/plans/PLAN-NATIVERESTORE-001.md:65.
+Evidence: R9 defines exact failure-set identity at D2 and D5. The plan does not explicitly bind that comparison to discovered versus executed selected cases, terminal execution state and a normal Nuke nonzero exit caused only by those failures.
+Assessment: An exact 20-name failure set alone must not mask a crashed, partially executed or changed test denominator. This adds an observable gate outcome; it does not revoke the approved known-red exception.
+Required action / acceptance outcome: Add this D2/D5 AC: retain selected case IDs and terminal TRX/results for every project; all selected cases execute, skipped/aborted/not-executed are zero, and the only nonzero result is the exact R9 set. Reject an equal-sized swapped set, missing project, discovery drift and partial/aborted run; report an intentional R6 denominator change separately.
+
+A06 ADD-AC [medium]: D1/D5: ObserverBuild_RepeatAllRetainsUsableLinkEvidence. Source: docs/plans/PLAN-NATIVERESTORE-001.md:68.
+Evidence: D5 requires all six builder stages on existing build trees. The builder advertises idempotent stages at line 7, but Make:220-231 extracts link lines only from the current make stdout, writes that mapping to stock-link-lines.json, then throws if no link line was emitted. A successful up-to-date make can emit none.
+Assessment: The required rerun has no stated successful outcome for an already-built tree. This is a static inference from the existing code; no prohibited build was run.
+Required action / acceptance outcome: Add a D1-owned mock-first AC and real D5 rerun: repeating All after a successful build either produces verified usable link evidence and completes, or stops with an explicit safe prerequisite before replacing required prior evidence. Cover up-to-date stdout and interrupted stage resume; retain original outputs until an authorized disposition.
+
+R02 FAIL [medium]: Reviewer progress timestamp contract. Source: response.jsonl, Reviewer progress timestamp contract.
+Evidence: My first commentary emitted timestampLocal 2026-10-20T00:00:00 without measuring it. I disclosed that it was a placeholder, then measured local time through PowerShell and used measured sortable timestamps in subsequent progress reports. Some progress intervals also exceeded the requested working communication cadence.
+Assessment: The first progress object violated the explicit never-estimated timestamp criterion. Later correction cannot make that earlier timestamp measured. This is my review-process defect, not an implementer plan defect.
+Required action / acceptance outcome: Retain the disclosed deviation. Future review launch/bootstrap must measure the first timestamp before emitting the first progress object and maintain live progress during drafting as well as source inspection.
+
+FR-VICE-001 -> TR-VICE-ORACLE-001 -> TEST-VICE-001: D0/D4 identity and dirty-state checks; D1/D2/D5 outside-tree build and unchanged-source evidence. TEST-VICE-001 AC1/AC2 remain acceptance obligations; status stays pending until step 12.
+TR-VSFLOCKSTEP-RESUME-001 AC1: F05/N01 prevent claiming complete real resume and v1.4 round-trip coverage. AC2: D1 owns the builder reference with clean out-of-tree and external-wrapper semantics preserved; F11 passes at plan level.
+TR-CYCLE-001 AC4: D5 restores a real native PHI2/AEC reference test under approved A2; it is supporting evidence. Managed bus gating and the full-field comparator remain Phase E work; F10 requires honest docs and valid verification.
+PLAN-VICEORACLE-001 tasks 4/5: D0 owns supported current-state readback and final status changes remain subject to step 12. U02: effective mappings and current task states are not attested by this untrusted reviewer plugin.
+
+20 patch hunks / 12 tracked files: c64cpusc include+CLK_INC -> H1; mainc64cpu include+stolen-cycle loop -> H2; mainc64cpu bootstrap -> H3; mainc64cpu legacy read -> H4.
+drive-snapshot initialization -> H5; drivecpu and drivecpu65c02 reset residue -> H6; mainviccpu include plus vic20cpu include/CLK_INC -> H7. mainviccpu bootstrap is the uncovered H3-like behavior under F04.
+filter8580new.h, sid.h and resid.cc observation/control APIs -> H8; two VIC sound guard/clamp hunks -> H9; sound exports and header -> H10. Injected header/config are H11 outside the tracked patch. All are retained as evidence; R7 still rejects H5/H6/H9 from the oracle.
+
+Interruption mid-revert: F07/A03 PASS at plan level; completed versus untouched paths are classified and unexpected bytes stop; A04 adds pin/root and Windows checkout-byte controls.
+Staged drift: F07 PASS; clean native index is required before every overwrite and at exit.
+Different LEGION2 delta: A01 PASS; preserve/map every hunk, accept explained context differences only with disposition, block unclassified or required-uncovered changes. F04 remains an accuracy gap in the reference classification.
+TDE-off DRIVE module: N01 FAIL; the required supplied fixture already has DRIVE8 TDE=0. A later Phase E rejection cannot supply earlier D5 safe resume. Missing modules also require configured-drive analysis.
+Consumer missed by grep: F03 FAIL; plain Fact direct/native-instance users and xvic escape the 43-file list; string-only managed tests are false positives.
+Build overwrites existing untracked bytes: F08 PASS; path/hash/length comparison and the planned overwrite negative control reject it.
+Submodule own dirty status under R1 B: P03 PASS; exact retained untracked inventory is intentional, tracked diffs are empty and the superproject reports clean.
+Known-red set changes D2 to D5: F06 PASS; equality by case identity rejects substitutions and improvements as well as extra failures. A05 adds complete execution/discovery proof.
+Resume, reset or malformed snapshot boundary: N02 ADD-AC; prove a unique successful load and constrained first-fetch behavior rather than equating every clock jump with successful complete resume.
+D5 failure after one or both hosts: A03 PASS; stop before Phase E with receipts and originals retained and restored source pinned; no automatic old-patch reapply.
+Repeat All in an existing build tree: A06 ADD-AC; successful up-to-date make output can lack the link line the current stage requires.
+Rules chained: R9 resolves the old green-gate phase cycle; explicit plan-review authority resolves D3 timing. H5 versus D5 resume is still a substantive dependency failure; primary audit versus AGREE remains blocked under U01.
+
+R02: the first progress timestamp was an unmeasured placeholder, immediately disclosed; subsequent timestamps were measured. Some progress intervals exceeded the working cadence.
+Initial skill/profile reads and analyzer bootstrap used inline PowerShell before file-based helpers were established. Supported MCP calls thereafter used the analyzed file helper. No Bash, Python or Node command ran.
+The supported begin wrapper reported a recovery path under .mcpServer despite the receipt-local cache override. That wrapper side effect is disclosed; no marker, hooks, settings, environment or historical queue was repaired or replayed.
+
+Persistence: QUEUED ONLY after genuine primary and supported triage failures. The complete prose and JSON are retained and hash-verified in this receipt through the authorized local failsafe. No primary full-content readback or completed-state history proof exists; verdict.persistence.json records the attempted wrapper completion/history and the local readback hashes. No repair, historical replay or cancellation was performed. Both scores are below 98, independently requiring DISAGREE.

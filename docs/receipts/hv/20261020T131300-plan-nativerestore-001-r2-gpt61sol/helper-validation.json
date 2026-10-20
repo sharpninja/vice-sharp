@@ -1,0 +1,93 @@
+{
+  "timestampLocal": "2026-10-20T13:42:53",
+  "helpers": [
+    {
+      "path": "Read-ReviewInput.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Review-Probe.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Invoke-ReviewLogging.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Search-ReviewInput.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Inspect-ReviewState.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Save-ReviewAudit.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Inspect-VsfFixtures.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Inspect-PlanClaims.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Verify-ReviewBoundary.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Write-ReviewVerdict.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Save-CompleteReview.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    },
+    {
+      "path": "Test-ReviewArtifacts.ps1",
+      "parserErrorCount": 0,
+      "analyzerFindingCount": 0,
+      "diagnostics": []
+    }
+  ],
+  "analyzerVersion": "1.25.0",
+  "pesterVersion": "5.9.1",
+  "findingCounts": {
+    "FAIL": 6,
+    "UNKNOWN": 2,
+    "PASS": 18,
+    "ADD-AC": 4
+  },
+  "round1Ids": 24,
+  "round1IdsCovered": 24,
+  "missingIds": [],
+  "duplicateIds": null,
+  "missingRequiredFields": [],
+  "jsonCountsMatch": true,
+  "overallThresholdConsistent": true,
+  "scope": "Review artifact checks only. No product tests or native compilation."
+}

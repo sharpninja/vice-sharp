@@ -1,0 +1,44 @@
+[
+  {
+    "path": "vice/src/autostart.c",
+    "expectedGitBlob": "92ef3a22368fb23a40e72615e67ed60a2b742867",
+    "actualGitBlob": "92ef3a22368fb23a40e72615e67ed60a2b742867",
+    "match": true,
+    "sha256": "BA20012085D953B9E81AEB9E9EAFAB0BDB4A88123D7776FE1937C479D0CAF716"
+  },
+  {
+    "path": "vice/src/mainc64cpu.c",
+    "expectedGitBlob": "357b27452bd75c59b98edf6327f56752849a0db9",
+    "actualGitBlob": "357b27452bd75c59b98edf6327f56752849a0db9",
+    "match": true,
+    "sha256": "2B96DD04A1EAF30F19C3CC5940EC433AC4C454F1A45681F0A04AD0C98F3A7F3B"
+  },
+  {
+    "path": "vice/src/c64/c64cpusc.c",
+    "expectedGitBlob": "5971a3c9d3f2369e35ade1e99396a68624b10c23",
+    "actualGitBlob": "5971a3c9d3f2369e35ade1e99396a68624b10c23",
+    "match": true,
+    "sha256": "14E00FE7ABAB8F2161173FDD176404DC5BAC0EE282166AD29F0C59BCE1206FD0"
+  },
+  {
+    "path": "vice/src/drive/drive-snapshot.c",
+    "expectedGitBlob": "7417f7e60b0d2ba7d4eb58e80c762c2fd8fcb79d",
+    "actualGitBlob": "7417f7e60b0d2ba7d4eb58e80c762c2fd8fcb79d",
+    "match": true,
+    "sha256": "1904CF494AAE10898F3586A6929A9C9910E0DA432B20E6A064D10C644AC184E6"
+  },
+  {
+    "path": "vice/src/6510dtvcore.c",
+    "expectedGitBlob": "d00e6ba2083ceeef17c85b1a324328547b6fc942",
+    "actualGitBlob": "d00e6ba2083ceeef17c85b1a324328547b6fc942",
+    "match": true,
+    "sha256": "40B9EEA851DDB2853ABF04C91AE16117A4A92789B18A5C2AE627EC90F9A454F8"
+  },
+  {
+    "path": "vice/src/c64/c64-snapshot.c",
+    "expectedGitBlob": "9a40c3b207edee4d0c6d47bfe5fc11cee424e320",
+    "actualGitBlob": "9a40c3b207edee4d0c6d47bfe5fc11cee424e320",
+    "match": true,
+    "sha256": "22F09184364E2E7BF23E8CD68395814F1B6BFA81F16885A58D3369A672DFF1B1"
+  }
+]
