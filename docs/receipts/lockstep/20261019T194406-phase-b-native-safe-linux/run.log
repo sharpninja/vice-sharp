@@ -1,0 +1,15 @@
+2026-10-19T19:44:07 host: LAB-OMARCHY; user: sharpninja; dotnet: /home/sharpninja/.local/bin/dotnet; dotnet --version: 10.0.402
+2026-10-19T19:44:07 HEAD: b660bee9ffa5f80a2c45caa29cde8b62b5751529
+2026-10-19T19:44:07 branch: develop
+2026-10-19T19:44:07 gitlink: cc67418cba58e71d8e70fd353e9de47199ad2075
+2026-10-19T19:44:07 working tree entries: 1
+2026-10-19T19:44:07 native-inventory-before.txt: 163 entries (8 tracked changes, 155 untracked), sha256 A31D0C086A9A36D1
+2026-10-19T19:44:07 dotnet test /home/sharpninja/github/vice-sharp/tests/ViceSharp.OracleContract.Tests/ViceSharp.OracleContract.Tests.csproj -c Release --nologo --logger trx;LogFileName=OracleContract.trx --results-directory /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T194406-phase-b-native-safe-linux
+2026-10-19T19:44:12 ViceSharp.OracleContract.Tests: exit 0, total 89, passed 89, failed 0, skipped 0
+2026-10-19T19:44:12 dotnet test /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj -c Release --nologo --logger trx;LogFileName=VsfCompatibility.trx --results-directory /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T194406-phase-b-native-safe-linux
+2026-10-19T19:44:19 ViceSharp.VsfCompatibility.Tests: exit 0, total 199, passed 199, failed 0, skipped 0
+2026-10-19T19:44:19 dotnet test /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj -c Release --nologo --logger trx;LogFileName=NativeClockProbe.trx --results-directory /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T194406-phase-b-native-safe-linux
+2026-10-19T19:44:22 ViceSharp.NativeClockProbe.Tests: exit 0, total 69, passed 69, failed 0, skipped 0
+2026-10-19T19:44:22 native-inventory-after.txt: 163 entries (8 tracked changes, 155 untracked), sha256 A31D0C086A9A36D1
+2026-10-19T19:44:22 native inventory unchanged: True
+2026-10-19T19:44:22 receipt: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T194406-phase-b-native-safe-linux
