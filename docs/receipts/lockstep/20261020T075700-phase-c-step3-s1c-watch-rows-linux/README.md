@@ -6,7 +6,7 @@ Follows S1b (`6197252`, receipt `20261020T075200-phase-c-step3-s1b-rows-linux/`)
 
 - For any nonzero flag the real pointers go to the single static watch row per table (`vic20mem.c` 536 to 556; `c64memsc.c` 166 to 192); flag 1 leaves the dummy pointers on the data rows, flag 2 moves them to the watch rows too. One watch row per table on both machines, so once learned it stays valid.
 - The rebuild ends with an intra-object toggle (`vic20mem.c` 523), invisible to `--wrap`.
-- The monitor reaches the toggle through `maincpu_monitor_interface->toggle_watchpoints_func`, assigned at `maincpu.c` 395 (read here); LEGION2 also cites `mainc64cpu.c` 622 for x64sc, which I did not find by grep in `c64/mainc64cpu.c` and leave to LEGION2's receipt.
+- The monitor reaches the toggle through `maincpu_monitor_interface->toggle_watchpoints_func`, assigned at `maincpu.c` 395 (read here) for xvic; for x64sc, `src/c64/c64cpusc.c` 217 includes `src/mainc64cpu.c`, whose line 622 assigns `toggle_watchpoints_func` (object `c64cpusc.o`, the toggle defined in `c64memsc.o`), so the reference is cross-object there too (LEGION2 08:01, correcting my earlier grep of the wrong path `c64/mainc64cpu.c`).
 
 ## BDP order
 
