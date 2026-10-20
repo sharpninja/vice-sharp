@@ -1,0 +1,61 @@
+{
+  "copiedAt": "2026-10-19T19:40:51",
+  "sourceRoot": "/home/sharpninja/codex-dispatch/step3-reconcile-20261019",
+  "files": [
+    {
+      "path": "compare-legion2-vs-omarchy.json",
+      "sha256": "1A22F26F2A35354609BE7E2FA4420120FBCBBE1171FC3DD9A4D939C7ED558704",
+      "bytes": 93175
+    },
+    {
+      "path": "compare-legion2-vs-omarchy-after.json",
+      "sha256": "68C65A01AA26C0E214F34601C53DEF3AA0A11EBA1A73016046C176C26012540C",
+      "bytes": 5863
+    },
+    {
+      "path": "omarchy-export/summary.json",
+      "sha256": "E0CEFE48822DD27E6E8F4B5319287CDFCD61DB85E61F3CB150B4D04E73FE4299",
+      "bytes": 40173
+    },
+    {
+      "path": "omarchy-export-after/summary.json",
+      "sha256": "3D15A25A66836DC76180DBC4B35A54299646BF46F4ED32C9FBECC3D2C63C8D72",
+      "bytes": 40179
+    },
+    {
+      "path": "legion2-export/summary.json",
+      "sha256": "0FC0D580600765CE060E4296E7BD6EE5160B199416745EBA3996EA3B3422BD79",
+      "bytes": 46328
+    },
+    {
+      "path": "fr-heading-mirror-whatif/step3-reconciliation-proof.json",
+      "sha256": "7596DAF3C878216041DFD8D3C70673DA757135B722D661C39ED2E37860435377",
+      "bytes": 1914
+    },
+    {
+      "path": "fr-heading-mirror-apply/step3-reconciliation-proof.json",
+      "sha256": "D3EBDC246D769410D76D335A830F66F813DDF42CB246C01143036BC470570D40",
+      "bytes": 1914
+    },
+    {
+      "path": "fr-heading-mirror-apply/001-list-fr-before.params.yaml",
+      "sha256": "CA3D163BAB055381827226140568F3BEF7EAAC187CEBD76878E0B63E9E442356",
+      "bytes": 3
+    },
+    {
+      "path": "fr-heading-mirror-apply/002-update-fr-descriptions.params.yaml",
+      "sha256": "BC32FA770B1FD5C2F34573640AA91F18AE5092FA95FF8E2CB64484DAB214660E",
+      "bytes": 16733
+    },
+    {
+      "path": "fr-heading-mirror-apply/002-update-fr-descriptions.response.yaml",
+      "sha256": "6067B44FBC3956A84D6BC57B31FC3FAC5463BDAE797EC5D56AB21BF2E8050D73",
+      "bytes": 37225
+    },
+    {
+      "path": "fr-heading-mirror-apply/003-list-fr-after.params.yaml",
+      "sha256": "CA3D163BAB055381827226140568F3BEF7EAAC187CEBD76878E0B63E9E442356",
+      "bytes": 3
+    }
+  ]
+}

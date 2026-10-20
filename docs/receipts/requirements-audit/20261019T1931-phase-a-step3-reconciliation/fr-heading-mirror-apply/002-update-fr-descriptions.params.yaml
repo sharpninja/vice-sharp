@@ -1,0 +1,292 @@
+records:
+  - id: FR-CFG-002
+    description: |-
+      **ID:** FR-CFG-002
+      **Title:** ROM and Romset Selection
+      **Priority:** P0 -- Critical
+      **Iteration:** 1
+
+      ### Description
+
+      The emulator shall load machine ROM images and named romsets needed by the selected machine profile, validate them before use, and report missing or invalid ROMs without starting an invalid machine session.
+
+      ### Acceptance Criteria
+
+      1. Machine profiles declare required and optional ROM artifacts.
+      2. ROM files are validated for size and checksum when known.
+      3. Named romsets can be selected for a session.
+      4. Missing or invalid ROMs produce actionable diagnostics.
+      5. ROM selection does not require UI code to access emulator runtime internals.
+      6. Local desktop startup reuses a complete configured or development C64 ROM set; otherwise it acquires the default BASIC, KERNAL, and character ROMs from the built-in VICE GitHub URLs with pinned SHA256 verification.
+      7. Acquired ROMs are cached in the current user's local application-data directory, with configured roots taking priority; a verified complete cache supports offline startup without system installation-directory writes.
+      8. Acquisition failure or cancellation reports an actionable startup error instead of silently selecting the video-less minimal host. Remote-host connections and generic/headless runtime factories do not trigger local C64 acquisition.
+      9. Automatic acquisition covers the default C64 core ROMs only; additional machine variants and drive DOS ROMs remain separately supplied resources.
+
+      ### Source References
+
+      - `native/vice/vice/doc/vice.texi`: ROM files and romset files sections.
+
+      ### Traceability
+
+      - **Interfaces:** `IArchitectureDescriptor`, `IRomProvider`, `HostControlService`
+      - **Technical Requirements:** TR-LIB-001, TR-STATE-001
+      - **Test Requirements:** TEST-CFG-001
+      - **Test Suite:** `RomProviderTests`, `MachineProfileRomValidationTests`, desktop C64 ROM bootstrap and startup regression tests
+  - id: FR-INP-006
+    description: |-
+      **ID:** FR-INP-006
+      **Title:** VICE VKM Keymap Selection and Real-Time Keyboard Translation
+      **Priority:** P0 -- Critical
+      **Iteration:** 1
+
+      ### Description
+
+      The emulator shall use VICE keymap files to translate host keyboard events into machine-specific keyboard matrix state. Built-in maps and uploaded custom maps are selected per emulator session and applied by the host-owned machine keyboard input handler.
+
+      ### Acceptance Criteria
+
+      1. Built-in VICE keymaps are discoverable by machine and map style.
+      2. A selected keymap is retained per emulator session until changed or the session ends.
+      3. Custom keymaps can be uploaded by content and metadata without requiring shared file paths between UI and host.
+      4. The parser supports VICE keymap comments, `!CLEAR`, `!INCLUDE`, `!UNDEF`, modifier directives, row/column entries, and shift flags needed for SHIFT, C=, and CTRL behavior.
+      5. Includes resolve relative to the current keymap file or uploaded bundle context.
+      6. Invalid custom maps report diagnostics and do not replace the active map.
+      7. Real-time key down/up events update the C64 keyboard matrix through the selected map without constructing UI-local emulator devices.
+      8. Machine-specific keyboard translators can be registered for future non-C64 profiles.
+      9. Desktop installations include all vendored C64 VICE keymap files and discover them without an external VICE installation. Explicit VICE data roots and per-user files retain priority over packaged resources.
+
+      ### Source References
+
+      - `native/vice/vice/doc/vice.texi`: keyboard emulation, keymap files, symbolic and positional mapping, keymap control commands, key mappings, special rows, and modifier flags.
+      - `native/vice/vice/doc/html/images/keymaps.txt`: documented keymap coverage for C64, C128, PET, Plus/4, and CBM-II.
+
+      ### Traceability
+
+      - **Interfaces:** `IKeyboardInputMap`, `IKeyboardInputMapSelection`, `IKeyboardMatrix`, `IMachineKeyboardInput`, `HostInputService`
+      - **Related FRs:** FR-INP-001, FR-HOST-004, FR-UI-001
+      - **Technical Requirement:** TR-INPUT-VKM-001
+      - **Test Suite:** `C64VkmKeyboardTests`, `HostInputServiceTests`, `GrpcInputMappingTests`, `BundledKeyboardMapTests`, `tests/packaging/Verify-ArchPackage.ps1`
+  - id: FR-MED-002
+    description: |-
+      **ID:** FR-MED-002
+      **Title:** Video Recording (MP4 via FFmpeg)
+      **Priority:** P1 -- Important
+      **Iteration:** 2
+
+      ### Description
+
+      The emulator shall record video output to MP4 (H.264) format by streaming raw frames to an external `ffmpeg` process (mirroring VICE's `ffmpegexedrv`; discovery via `PATH` or `VICESHARP_FFMPEG`, no libav P/Invoke bindings). Recording captures consecutive frames at the native frame rate (PAL: 50fps, NTSC: approximately 59.94fps) and encodes them in real-time.
+
+      ### Acceptance Criteria
+
+      1. Video is encoded to H.264 in an MP4 container.
+      2. Frame rate matches the emulated system (50fps PAL, 59.94fps NTSC).
+      3. Resolution options include native (403x284 PAL) and integer-scaled variants.
+      4. Recording can be started, paused, resumed, and stopped via `IMediaCapture`.
+      5. The encoding does not drop frames during real-time recording on the reference hardware (a modern desktop CPU).
+      6. Quality presets (low/medium/high) are configurable, mapping to CRF values.
+      7. The recording pipeline uses zero managed allocations per frame on the hot path.
+
+      ### Source References
+
+      - `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
+
+      ### Traceability
+
+      - **Interfaces:** `IMediaCapture`, `IVideoEncoder`
+      - **Test Suite:** `MediaServiceHostTests`, `CaptureServiceHostTests`, `RuntimeCaptureTests`
+  - id: FR-MED-003
+    description: |-
+      **ID:** FR-MED-003
+      **Title:** Audio Recording (WAV/FLAC)
+      **Priority:** P1 -- Important
+      **Iteration:** 2
+
+      ### Description
+
+      The emulator shall record audio output to WAV (uncompressed PCM) or FLAC (lossless compressed) format. The recording captures the SID audio output at the configured sample rate.
+
+      ### Acceptance Criteria
+
+      1. WAV format: 16-bit PCM, mono or stereo, at configurable sample rates (44100, 48000, 96000 Hz).
+      2. FLAC format: lossless compression of the same PCM data.
+      3. Recording captures the mixed SID output including all voices, filter, and volume.
+      4. For dual-SID configurations, stereo recording captures left/right channels independently.
+      5. Recording can be started, paused, resumed, and stopped independently of video recording.
+      6. Audio samples are buffered to prevent gaps during recording.
+      7. The recording includes digi playback ($D418) output at full fidelity.
+
+      ### Source References
+
+      - `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
+
+      ### Traceability
+
+      - **Interfaces:** `IMediaCapture`, `IAudioEncoder`
+      - **Test Suite:** `WavAudioRecorderTests`, `MediaServiceHostTests`, `CaptureServiceHostTests`
+  - id: FR-ROMM-LAUNCH-001
+    description: |-
+      **ID:** FR-ROMM-LAUNCH-001
+      **Title:** Download, attach, and boot library media
+      **Priority:** P1 -- Important
+
+      The library shall acquire selected media into the user cache and attach or start it through the host boundary. This record preserves the launch contract in `docs/plans/PLAN-ROMM-BDPv4.md` and clarifies supported-format gating from PR7.
+
+      ### Acceptance Criteria
+
+      1. AC-LAUNCH-01: Downloads stream to `<cacheDir>/{romId}/{fs_name}`, reuse a complete size-matched cached file, and report progress.
+      2. AC-LAUNCH-02: Attachment uses the selected slot or the extension mapping's default slot.
+      3. AC-LAUNCH-03: Raw PRG and disk formats without a host parser (G64, D71, D81) remain browsable but are not launchable. Attach and Attach-and-Start are disabled and do not download or invoke the launcher. Extension matching is case-insensitive. Supported D64 and T64 behavior remains available.
+      4. AC-LAUNCH-04: Attach and Attach-and-Start invoke `IGameLauncher` with the resolved slot and autostart flag.
+      5. AC-LAUNCH-05: The Xbox launcher attaches media bytes and uses disk autostart or cartridge cold reset as appropriate.
+      6. AC-LAUNCH-06: The Avalonia launcher delegates to the shell's attach or drop-and-start path.
+      7. AC-LAUNCH-07: Status progresses through downloading and starting; failures remain visible and retryable.
+
+      ### Traceability
+
+      - Technical requirements: TR-LIB-001, TR-ROMM-SEC-001.
+      - Test requirement: TEST-ROMM-LAUNCH-001.
+      - Tests: `MediaExtensionMapTests`, `LibraryBrowseViewModelTests`, `AvaloniaGameLauncherTests`, `XboxGameLauncherTests`, `RomMGatewayDownloadTests`.
+  - id: FR-SID-013
+    description: |-
+      **ID:** FR-SID-013
+      **Title:** SID Audio Backend Wiring
+      **Priority:** P1 -- Important
+      **Iteration:** 2
+
+      ### Description
+
+      The emulator shall wire SID sample production through the host audio backend without dropping, duplicating, or bypassing real-time audio buffers.
+
+      ### Acceptance Criteria
+
+      1. SID sample production is delivered to the selected `IAudioBackend` implementation.
+      2. Host audio backend writes preserve stream order and do not duplicate samples.
+      3. Backend tests prove pause, resume, mute, and disposal paths do not leave stale SID audio buffers active.
+      4. Interactive Linux desktop sessions select an available SDL2 output device, preserve bounded PCM queue order and master volume/mute, and retain the explicit audio-disable override. Headless and unit-test hosts do not open a real audio device by default.
+      5. Missing libraries/devices and device failure do not terminate the emulator or leave it waiting indefinitely for audio capacity. An unavailable device stops acting as the emulator timing source.
+
+      ### Source References
+
+      - `native/vice/vice/src/sound*.c`: VICE sound-device output and host audio buffer integration.
+
+      ### Traceability
+
+      - **Interfaces:** `IAudioChip`, `IAudioBackend`
+      - **Test Suite:** `SidAudioBackendTests`, `SidAudioWiringTests`, `LinuxSdlAudioBackendTests`, `ViceGateSoundRegulatorTests`
+  - id: FR-SNP-001
+    description: |-
+      **ID:** FR-SNP-001
+      **Title:** Save Complete Machine State to Snapshot
+      **Priority:** P0 -- Critical
+      **Iteration:** 1
+
+      ### Description
+
+      The emulator shall capture the complete machine state at any point during execution and serialize it to a snapshot file. The snapshot includes CPU registers, all RAM, all I/O chip registers and internal state, VIC-II raster state, SID oscillator/envelope state, CIA timer state, and peripheral state.
+
+      ### Acceptance Criteria
+
+      1. CPU state: all registers (A, X, Y, SP, PC, P), interrupt pending flags, and pipeline phase.
+      2. Memory: complete 64KB RAM contents, Color RAM (1KB nybbles), and any expansion RAM.
+      3. VIC-II: all 47 registers, raster position, sprite state (DMA, counters, data buffers), display state, badline state.
+      4. SID: all registers, oscillator phase accumulators, envelope state (phase, counter, rate), filter state, noise LFSR state.
+      5. CIA1 and CIA2: all registers, timer counters and latches, TOD clock state, shift register state, interrupt flags.
+      6. 6510 I/O port: DDR value, port value, capacitive charge state.
+      7. Peripherals: disk drive state (if true drive emulation), tape position, cartridge banking state.
+      8. Snapshot files use a versioned binary format with integrity checksums.
+      9. The `ISnapshotManager.Save()` method returns a snapshot handle or writes to a specified path.
+
+      ### Source References
+
+      - `native/vice/vice/doc/vice.texi`: snapshot, history, recording, and state persistence behavior exposed by emulator commands.
+
+      ### Traceability
+
+      - **Interfaces:** `ISnapshotManager`
+      - **Boundary:** FR-HOST-005 exposes snapshot save commands and artifact metadata through the host service.
+      - **Test Suite:** `SnapshotSaveTests`, `SnapshotCompletenessTests`, `SnapshotFormatTests`
+  - id: FR-SNP-002
+    description: |-
+      **ID:** FR-SNP-002
+      **Title:** Load Machine State from Snapshot
+      **Priority:** P0 -- Critical
+      **Iteration:** 1
+
+      ### Description
+
+      The emulator shall restore a complete machine state from a previously saved snapshot file. After loading, execution continues from exactly the point at which the snapshot was taken, with all devices in their saved state.
+
+      ### Acceptance Criteria
+
+      1. Loading a snapshot restores the exact CPU state (registers, flags, pipeline phase).
+      2. All 64KB of RAM plus Color RAM are restored byte-for-byte.
+      3. VIC-II state is restored including mid-raster position -- the first frame after load completes the line from the saved raster position.
+      4. SID state is restored including oscillator phase -- audio output continues seamlessly.
+      5. CIA state is restored including running timer values -- interrupt timing is preserved.
+      6. Peripheral state (drives, tape, cartridges) is restored.
+      7. Snapshot format version mismatches are detected and reported.
+      8. Invalid or corrupt snapshots are rejected with a descriptive error.
+      9. Loading a snapshot does not leak memory (previous state is fully released).
+      10. The `ISnapshotManager.Load()` method accepts a snapshot handle or file path.
+
+      ### Source References
+
+      - `native/vice/vice/doc/vice.texi`: snapshot, history, recording, and state persistence behavior exposed by emulator commands.
+
+      ### Traceability
+
+      - **Interfaces:** `ISnapshotManager`
+      - **Boundary:** FR-HOST-005 exposes snapshot load commands and validation errors through the host service.
+      - **Test Suite:** `SnapshotLoadTests`, `SnapshotRoundtripTests`, `SnapshotVersionTests`, `CorruptSnapshotTests`
+  - id: FR-UI-003
+    description: |-
+      **ID:** FR-UI-003
+      **Title:** Collapsible Tabbed Emulator Sidebar
+      **Priority:** P1 -- Important
+      **Iteration:** 1
+
+      ### Description
+
+      The desktop UI shall provide a collapsible sidebar with Peripherals, Settings, and Monitor tabs so routine emulator controls remain available without crowding the display surface.
+
+      ### Acceptance Criteria
+
+      1. A hamburger control collapses and expands the sidebar without stopping emulator input or rendering.
+      2. The Peripherals tab contains disk, tape, cartridge, recent media, readonly, and keyboard map controls.
+      3. The Settings tab contains limiter target, display scale/crop, and host/session settings controls.
+      4. The Monitor tab embeds the reusable monitor control.
+      5. Tab state remains synchronized with host status and survives sidebar collapse/expand.
+
+      ### Source References
+
+      - `native/vice/vice/doc/vice.texi`: menus, file selector, disk/tape images, settings/resources, keyboard settings, control port settings, and monitor settings.
+
+      ### Traceability
+
+      - **Interfaces:** `UiHostClient`, `HostMediaService`, `HostInputService`, `HostControlService`
+      - **Technical Requirements:** TR-UI-SHELL-001, TR-GRPC-BOUNDARY-001
+      - **Test Suite:** `SidebarViewModelTests`, `AttachPanelViewModelTests`, `SettingsPanelViewModelTests`
+  - id: FR-VIC20-002
+    description: |-
+      **ID:** FR-VIC20-002
+      **Title:** VIC-20 base memory map and RAM expansions
+      **Priority:** P0 -- Critical
+      **Iteration:** 2
+
+      ### Description
+
+      Unexpanded VIC-20 has 5KB base RAM (1KB system at $0000-$03FF, 4KB user at $1000-$1FFF), character ROM at $8000, I/O at $9000, color RAM at $9400, BASIC at $C000, KERNAL at $E000. Expansions (3K/8K/16K/24K/32K) map into BLK regions.
+
+      ### Acceptance Criteria
+
+      1. After reset with official ROMs, BASIC is readable at $C000 and KERNAL at $E000.
+      2. Character ROM is readable at $8000.
+      3. Base RAM regions accept read/write at $0000-$03FF and $1000-$1FFF.
+      4. Expansion configurations are selectable via profile/resources (later slice).
+      5. Open-bus and I/O window rules match VICE for validated address ranges.
+
+      ### Traceability
+
+      - **Interfaces:** `IBus`, `IArchitectureDescriptor`
+      - **Test Suite:** `Vic20SkeletonTests`, later `Vic20MemoryExpansionTests`
