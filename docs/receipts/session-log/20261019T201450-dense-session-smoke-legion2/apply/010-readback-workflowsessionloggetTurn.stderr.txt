@@ -1,0 +1,7 @@
+[31;1mException: [0mC:\Users\kingd\.claude\plugins\cache\mcpserver-local\mcpserver\1.121.0\lib\Invoke-McpPlugin.ps1:315[0m
+[31;1m[0m[36;1mLine |[0m
+[31;1m[0m[36;1m[36;1m 315 | [0m         [36;1mthrow $msg[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m         ~~~~~~~~~~[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mPlugin command failed with exit code 1. type: error payload:   requestId: req-20261020T011538Z-32f4   code: schema_validation_failed   message: YAML request[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m[31;1m[36;1m     | [31;1mfailed schema validation.   retryable: false   details:     methodName: workflow.sessionlog.getTurn     errors:     - No YAML schema is registered for method[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m     | [31;1m'workflow.sessionlog.getTurn'.  ---[0m

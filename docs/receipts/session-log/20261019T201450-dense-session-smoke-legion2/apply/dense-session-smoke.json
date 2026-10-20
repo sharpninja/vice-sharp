@@ -1,0 +1,122 @@
+{
+  "measuredAt": "2026-10-19T20:15:39",
+  "machine": "PAYTON-LEGION2",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "pluginScript": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.121.0\\lib\\Invoke-McpPlugin.ps1",
+  "markerVersionFields": {
+    "agent_plugins.agents.Copilot.plugin_version": "1.118.0",
+    "agent_plugins.agents.Codex.plugin_version": "1.118.0",
+    "agent_plugins.agents.Grok.plugin_version": "1.118.0",
+    "agent_plugins.agents.Claude.plugin_version": "1.118.0",
+    "agent_plugins.agents.Cline.plugin_version": "1.118.0"
+  },
+  "agent": "ClaudeCode",
+  "sessionId": "ClaudeCode-20260630T233948Z-plugin-session",
+  "requestId": "req-20261020T011509Z-dense-smoke",
+  "marker": "dense-smoke-marker-20261019T201504",
+  "turnCountBefore": 68,
+  "turnCountAfter": 69,
+  "calls": [
+    {
+      "name": "history-before",
+      "method": "workflow.sessionlog.queryHistory",
+      "startedAt": "2026-10-19T20:15:04",
+      "elapsedMs": 3082,
+      "exitCode": 0,
+      "type": "result"
+    },
+    {
+      "name": "begin",
+      "method": "workflow.sessionlog.beginTurn",
+      "startedAt": "2026-10-19T20:15:09",
+      "elapsedMs": 3287,
+      "exitCode": 0,
+      "type": "result"
+    },
+    {
+      "name": "appendDialog",
+      "method": "workflow.sessionlog.appendDialog",
+      "startedAt": "2026-10-19T20:15:12",
+      "elapsedMs": 2649,
+      "exitCode": 0,
+      "type": "result"
+    },
+    {
+      "name": "appendActions",
+      "method": "workflow.sessionlog.appendActions",
+      "startedAt": "2026-10-19T20:15:15",
+      "elapsedMs": 3389,
+      "exitCode": 0,
+      "type": "result"
+    },
+    {
+      "name": "updateTurn",
+      "method": "workflow.sessionlog.updateTurn",
+      "startedAt": "2026-10-19T20:15:18",
+      "elapsedMs": 3270,
+      "exitCode": 0,
+      "type": "result"
+    },
+    {
+      "name": "complete",
+      "method": "workflow.sessionlog.completeTurn",
+      "startedAt": "2026-10-19T20:15:21",
+      "elapsedMs": 6403,
+      "exitCode": 0,
+      "type": "result"
+    },
+    {
+      "name": "history-after",
+      "method": "workflow.sessionlog.queryHistory",
+      "startedAt": "2026-10-19T20:15:28",
+      "elapsedMs": 2828,
+      "exitCode": 0,
+      "type": "result"
+    },
+    {
+      "name": "readback-clientSessionLogGetTurnAsync",
+      "method": "client.SessionLog.GetTurnAsync",
+      "startedAt": "2026-10-19T20:15:32",
+      "elapsedMs": 2158,
+      "exitCode": 1,
+      "type": "error",
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Unknown method: GetTurnAsync on client: SessionLogClient. Valid methods: AppendDialogAsync, BeginTurnAsync, ClearTurnSectionAsync, CompleteTurnAsync, DeleteSessionAsync, DeleteTurnAsync, DeleteTurnItemAsync, FailTurnAsync, IngestTranscriptPathAsync, IngestTranscriptUploadAsync, OpenSessionAsync, PatchTurnAsync, QueryAsync, RepairWorkspaceStampsAsync, ReplaceTurnAsync, ReplaceTurnSectionAsync, SetSessionTitleAsync, SetTurnTitleAsync, SubmitAsync, UpsertTurnAsync"
+    },
+    {
+      "name": "readback-clientSessionLogGetTurnDetailAsync",
+      "method": "client.SessionLog.GetTurnDetailAsync",
+      "startedAt": "2026-10-19T20:15:35",
+      "elapsedMs": 2112,
+      "exitCode": 1,
+      "type": "error",
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Unknown method: GetTurnDetailAsync on client: SessionLogClient. Valid methods: AppendDialogAsync, BeginTurnAsync, ClearTurnSectionAsync, CompleteTurnAsync, DeleteSessionAsync, DeleteTurnAsync, DeleteTurnItemAsync, FailTurnAsync, IngestTranscriptPathAsync, IngestTranscriptUploadAsync, OpenSessionAsync, PatchTurnAsync, QueryAsync, RepairWorkspaceStampsAsync, ReplaceTurnAsync, ReplaceTurnSectionAsync, SetSessionTitleAsync, SetTurnTitleAsync, SubmitAsync, UpsertTurnAsync"
+    },
+    {
+      "name": "readback-workflowsessionloggetTurn",
+      "method": "workflow.sessionlog.getTurn",
+      "startedAt": "2026-10-19T20:15:37",
+      "elapsedMs": 2120,
+      "exitCode": 1,
+      "type": "error",
+      "errorCode": "schema_validation_failed",
+      "errorMessage": "YAML request failed schema validation."
+    }
+  ],
+  "turnReadback": {
+    "method": null,
+    "found": false,
+    "status": null,
+    "dialog": -1,
+    "actions": -1,
+    "response": null
+  },
+  "beginUnderFiveSeconds": true,
+  "completeUnderFiveSeconds": false,
+  "sessionLevelReadbackMatches": true,
+  "turnLevelReadbackMatches": false,
+  "passed": false,
+  "codeChange": false,
+  "limitation": "no turn-level read method answered through the wrapper; readback is session-level (turn count plus one) only"
+}

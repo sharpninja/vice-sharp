@@ -1,0 +1,10 @@
+[31;1mException: [0mC:\Users\kingd\.claude\plugins\cache\mcpserver-local\mcpserver\1.121.0\lib\Invoke-McpPlugin.ps1:315[0m
+[31;1m[0m[36;1mLine |[0m
+[31;1m[0m[36;1m[36;1m 315 | [0m         [36;1mthrow $msg[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m         ~~~~~~~~~~[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mPlugin command failed with exit code 1. type: error payload:   requestId: req-20261020T011536Z-13b5   code: method_invocation_error   message: 'Unknown[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m[31;1m[36;1m     | [31;1mmethod: GetTurnDetailAsync on client: SessionLogClient. Valid methods: AppendDialogAsync, BeginTurnAsync, ClearTurnSectionAsync, CompleteTurnAsync,[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m     | [31;1mDeleteSessionAsync, DeleteTurnAsync, DeleteTurnItemAsync, FailTurnAsync, IngestTranscriptPathAsync, IngestTranscriptUploadAsync, OpenSessionAsync,[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m     | [31;1mPatchTurnAsync, QueryAsync, RepairWorkspaceStampsAsync, ReplaceTurnAsync, ReplaceTurnSectionAsync, SetSessionTitleAsync, SetTurnTitleAsync, SubmitAsync,[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m     | [31;1mUpsertTurnAsync'   retryable: false   details:     clientName: SessionLog     methodName: GetTurnDetailAsync     exceptionType:[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m[31;1m[36;1m     | [31;1mSystem.InvalidOperationException  ---[0m
