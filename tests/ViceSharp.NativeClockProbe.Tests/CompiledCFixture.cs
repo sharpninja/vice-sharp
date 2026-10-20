@@ -29,6 +29,12 @@ internal sealed class CompiledCFixture
         });
     }
 
+    /// <summary>Compiled fixture path (compiles on first use); for callers that drive stdin themselves.</summary>
+    internal string ExecutablePath => executable.Value;
+
+    /// <summary>Evidence folder holding the compiler and run logs.</summary>
+    internal string EvidenceDirectory => directory;
+
     internal (int ExitCode, string Output, string Error) Run(string[] arguments) =>
         Execute(executable.Value, arguments, "run-" + Guid.NewGuid().ToString("N"));
 

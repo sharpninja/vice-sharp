@@ -1,0 +1,15 @@
+2026-10-19T20:06:27 dotnet: C:\Program Files\dotnet\dotnet.exe
+2026-10-19T20:06:27 dotnet --version: 10.0.402
+2026-10-19T20:06:27 HEAD: 5bf6e2f7280c904a9a62d72446f5ee867c919e1f
+2026-10-19T20:06:27 branch: develop
+2026-10-19T20:06:27 gitlink: cc67418cba58e71d8e70fd353e9de47199ad2075
+2026-10-19T20:06:27 native-inventory-before.txt: 2539 entries (12 tracked changes, 2527 untracked), sha256 C7848A24867CD60C
+2026-10-19T20:06:27 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\ViceSharp.OracleContract.Tests.csproj -c Release --nologo --logger trx;LogFileName=OracleContract.trx --results-directory F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T200626-phase-c-step2-windows
+2026-10-19T20:06:30 ViceSharp.OracleContract.Tests: exit 0, total 143, passed 143, failed 0, skipped 0
+2026-10-19T20:06:30 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\ViceSharp.VsfCompatibility.Tests.csproj -c Release --nologo --logger trx;LogFileName=VsfCompatibility.trx --results-directory F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T200626-phase-c-step2-windows
+2026-10-19T20:06:35 ViceSharp.VsfCompatibility.Tests: exit 0, total 199, passed 199, failed 0, skipped 0
+2026-10-19T20:06:35 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\ViceSharp.NativeClockProbe.Tests.csproj -c Release --nologo --logger trx;LogFileName=NativeClockProbe.trx --results-directory F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T200626-phase-c-step2-windows
+2026-10-19T20:06:38 ViceSharp.NativeClockProbe.Tests: exit 0, total 153, passed 153, failed 0, skipped 0
+2026-10-19T20:06:38 native-inventory-after.txt: 2539 entries (12 tracked changes, 2527 untracked), sha256 C7848A24867CD60C
+2026-10-19T20:06:38 native inventory unchanged: True
+2026-10-19T20:06:38 receipt: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T200626-phase-c-step2-windows
