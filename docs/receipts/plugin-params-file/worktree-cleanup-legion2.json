@@ -1,0 +1,243 @@
+{
+  "at": "2026-10-19T16:51:05",
+  "worktrees": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\core-baseline-A-f66c39f9",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "f66c39f9",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\core-baseline-B-f50cf525",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "f50cf525",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\plugin-params-file-20261019",
+      "existed": true,
+      "branch": "fix/plugin-params-file-20261019",
+      "head": "8768de8a",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "ed3586c0",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "3082d83e",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "90301034",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "837302ac",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "1778d35e",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "2739f5d4",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-cline-v2-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "ee63577a",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-cline-v2-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "78dc4e8b",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "88215e67",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "e0c80525",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "455590f0",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "da6a00a2",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-opencode-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "0dddfa4f",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-opencode-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "3280b140",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-grok-bot-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "821880da",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-grok-bot-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "64fe6402",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-claude-cowork-plugin\\.worktrees\\params-file-20261019",
+      "existed": true,
+      "branch": "fix/params-file-20261019",
+      "head": "937bcad2",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-claude-cowork-plugin\\.worktrees\\base-20261019",
+      "existed": true,
+      "branch": "HEAD",
+      "head": "8e7bebab",
+      "tracked": 0,
+      "untracked": 0,
+      "ignored": 0,
+      "unpushed": 0,
+      "result": "removed"
+    }
+  ],
+  "probe": {
+    "path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\mcpcore-probe-f66c39f9",
+    "exists": true,
+    "isGit": true,
+    "files": 10477,
+    "result": "removed (registered McpServer worktree, detached f66c39f9 on origin, 0 tracked/untracked/ignored)"
+  }
+}
