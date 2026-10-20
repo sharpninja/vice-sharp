@@ -1,0 +1,135 @@
+{
+  "timestampLocal": "2026-10-20T14:53:32",
+  "runId": "a72fe0ad7523400593484841bbd64a2c",
+  "sessionId": "Codex-20261020T192001Z-plugin-session",
+  "requestId": "req-20261020T192008Z-hv-nativerestore-r3b",
+  "chunkSize": 4500,
+  "files": [
+    {
+      "name": "verdict.md",
+      "sha256": "3F00DB903CED90B6695A28DEB4EF3966E6883EA7FC8BE6D881026057545AC57F",
+      "characters": 33521,
+      "chunkCount": 8
+    },
+    {
+      "name": "verdict.json",
+      "sha256": "A4FE582906E03ACEBE7166A9A8504A82B01FD5430916711C3A13BCDAAF24BB40",
+      "characters": 33344,
+      "chunkCount": 8
+    }
+  ],
+  "confirmedChunks": [
+    {
+      "name": "verdict.md",
+      "index": 1,
+      "sha256": "2C9D17BF1787DD8A486F4DFECFDF96132AB6903197995A118154F4836A2BE0A0",
+      "receipt": "content-verdict-md-001.txt",
+      "timestampLocal": "2026-10-20T14:53:35"
+    },
+    {
+      "name": "verdict.md",
+      "index": 2,
+      "sha256": "284B66CDED2628208DBF0EC7F18CCC7647F7432BBB29EE19CEA18D854295F1E2",
+      "receipt": "content-verdict-md-002.txt",
+      "timestampLocal": "2026-10-20T14:53:39"
+    },
+    {
+      "name": "verdict.md",
+      "index": 3,
+      "sha256": "79953B7275170F57DB5A4904DB156DCADF5D35F0F65DC3145DC62BCF53876443",
+      "receipt": "content-verdict-md-003.txt",
+      "timestampLocal": "2026-10-20T14:53:42"
+    },
+    {
+      "name": "verdict.md",
+      "index": 4,
+      "sha256": "C91A35D201A25A69F0A0D311399546FA42ECF5AD8F4061C91FBD27FCD1737569",
+      "receipt": "content-verdict-md-004.txt",
+      "timestampLocal": "2026-10-20T14:53:45"
+    },
+    {
+      "name": "verdict.md",
+      "index": 5,
+      "sha256": "2C4A2773AE2FDE9D47A11E821DC58592248F605F9867578D0910762D601394B0",
+      "receipt": "content-verdict-md-005.txt",
+      "timestampLocal": "2026-10-20T14:53:48"
+    },
+    {
+      "name": "verdict.md",
+      "index": 6,
+      "sha256": "AB8857E19A1067F65982B367EC3F230DB36E9C22AE255323937A7CB75FE977CB",
+      "receipt": "content-verdict-md-006.txt",
+      "timestampLocal": "2026-10-20T14:53:51"
+    },
+    {
+      "name": "verdict.md",
+      "index": 7,
+      "sha256": "AE62004BA52B602F52119B84D402E03D037F97C02E64553316605B74616A4262",
+      "receipt": "content-verdict-md-007.txt",
+      "timestampLocal": "2026-10-20T14:53:55"
+    },
+    {
+      "name": "verdict.md",
+      "index": 8,
+      "sha256": "B1C81696D1AEB322553D31629C726EBA51D33F35F416C722AD3B15307C336CF6",
+      "receipt": "content-verdict-md-008.txt",
+      "timestampLocal": "2026-10-20T14:53:58"
+    },
+    {
+      "name": "verdict.json",
+      "index": 1,
+      "sha256": "30B2BA3D862AA6C006440282AEF001842F1F35AEF632196CED78B0A0B8E03DAC",
+      "receipt": "content-verdict-json-001.txt",
+      "timestampLocal": "2026-10-20T14:54:01"
+    },
+    {
+      "name": "verdict.json",
+      "index": 2,
+      "sha256": "25F75200FFC987D7AAC5625B525AB3BAD15A9DB1F6BB35F5B00A1C2AC0548B01",
+      "receipt": "content-verdict-json-002.txt",
+      "timestampLocal": "2026-10-20T14:54:04"
+    },
+    {
+      "name": "verdict.json",
+      "index": 3,
+      "sha256": "891EA124023D71320384AF0275D6403672999011AB77A07C9CEB8C68591FF201",
+      "receipt": "content-verdict-json-003.txt",
+      "timestampLocal": "2026-10-20T14:54:07"
+    },
+    {
+      "name": "verdict.json",
+      "index": 4,
+      "sha256": "2D14675468CB68AA56DD39817397D61993489B503148909680ED6161FE03D8B9",
+      "receipt": "content-verdict-json-004.txt",
+      "timestampLocal": "2026-10-20T14:54:10"
+    },
+    {
+      "name": "verdict.json",
+      "index": 5,
+      "sha256": "560EC4F9C36B2646A925181181277A1C28C4D944BBB0565B7C883680AD3F1300",
+      "receipt": "content-verdict-json-005.txt",
+      "timestampLocal": "2026-10-20T14:54:13"
+    },
+    {
+      "name": "verdict.json",
+      "index": 6,
+      "sha256": "29206D58353ECB58AD75B5BDA8D8C5B7606506D94402851381D6BE58B5CC8E59",
+      "receipt": "content-verdict-json-006.txt",
+      "timestampLocal": "2026-10-20T14:54:17"
+    },
+    {
+      "name": "verdict.json",
+      "index": 7,
+      "sha256": "D842CC79CC0925D01F2DE2B1AB64DD2A4CB5D39A3F4F6B8B709C2C7D00425F33",
+      "receipt": "content-verdict-json-007.txt",
+      "timestampLocal": "2026-10-20T14:54:20"
+    },
+    {
+      "name": "verdict.json",
+      "index": 8,
+      "sha256": "1D125797B052DB175E57EFB21FE64E98B48DB634A2F468FD9D4AC1A8FFF69E03",
+      "receipt": "content-verdict-json-008.txt",
+      "timestampLocal": "2026-10-20T14:54:23"
+    }
+  ]
+}

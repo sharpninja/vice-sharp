@@ -1,0 +1,15 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "result": {
+        "items": [],
+        "offset": 0,
+        "limit": 10,
+        "totalCount": 0
+      },
+      "requestId": "req-20261020T193942Z-dde4"
+    }
+  },
+  null
+]

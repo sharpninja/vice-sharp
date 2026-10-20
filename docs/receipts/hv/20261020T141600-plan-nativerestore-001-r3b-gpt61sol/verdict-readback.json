@@ -1,0 +1,37 @@
+{
+  "timestampLocal": "2026-10-20T14:54:53",
+  "reviewerSessionId": "Codex-20261020T192001Z-plugin-session",
+  "reviewerRequestId": "req-20261020T192008Z-hv-nativerestore-r3b",
+  "mode": "primary",
+  "persisted": true,
+  "queued": false,
+  "allExact": true,
+  "contents": [
+    {
+      "name": "verdict.md",
+      "expectedChunks": 8,
+      "readChunks": 8,
+      "sourceSha256": "3F00DB903CED90B6695A28DEB4EF3966E6883EA7FC8BE6D881026057545AC57F",
+      "readbackSha256": "3F00DB903CED90B6695A28DEB4EF3966E6883EA7FC8BE6D881026057545AC57F",
+      "exactMatch": true,
+      "normalizedMatch": true,
+      "normalization": "none; exact UTF-8 bytes including LF",
+      "sourceCharacters": 33521,
+      "readbackCharacters": 33521
+    },
+    {
+      "name": "verdict.json",
+      "expectedChunks": 8,
+      "readChunks": 8,
+      "sourceSha256": "A4FE582906E03ACEBE7166A9A8504A82B01FD5430916711C3A13BCDAAF24BB40",
+      "readbackSha256": "A4FE582906E03ACEBE7166A9A8504A82B01FD5430916711C3A13BCDAAF24BB40",
+      "exactMatch": true,
+      "normalizedMatch": true,
+      "normalization": "none; exact UTF-8 bytes including LF",
+      "sourceCharacters": 33344,
+      "readbackCharacters": 33344
+    }
+  ],
+  "turnStatus": "in_progress",
+  "fullReadbackReceipt": "verdict-precomplete-full-readback.txt"
+}

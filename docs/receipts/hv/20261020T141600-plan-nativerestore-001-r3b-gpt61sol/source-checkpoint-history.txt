@@ -1,0 +1,133 @@
+type: result
+payload:
+  requestId: req-20261020T192937Z-9ae8
+  result:
+  - agent: Codex
+    sessionId: Codex-20261020T192001Z-plugin-session
+    title: Hostile review of native restoration revision 3
+    model: codex
+    started:
+      dateTime: 2026-10-20T19:20:45.0000000
+      utcDateTime: 2026-10-20T19:20:45.0000000Z
+      localDateTime: 2026-10-20T14:20:45.0000000-05:00
+      date: 2026-10-20T00:00:00.0000000
+      day: 20
+      dayOfWeek: Tuesday
+      dayOfYear: 293
+      hour: 19
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 20
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 45
+      ticks: 639281208450000000
+      utcTicks: 639281208450000000
+      timeOfDay: 19:20:45
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-10-20T19:29:33.0000000
+      utcDateTime: 2026-10-20T19:29:33.0000000Z
+      localDateTime: 2026-10-20T14:29:33.0000000-05:00
+      date: 2026-10-20T00:00:00.0000000
+      day: 20
+      dayOfWeek: Tuesday
+      dayOfYear: 293
+      hour: 19
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 29
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 33
+      ticks: 639281213730000000
+      utcTicks: 639281213730000000
+      timeOfDay: 19:29:33
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - PLAN-NATIVERESTORE-001
+    - hostile-validation
+    - revision-3
+    - round-3b
+    - parentSessionId=ClaudeCode-20261020T015046Z-plugin-session
+    - parentRequestId=req-20261020T172116Z-prompt-6c6d
+    filesModifiedCount: 1
+  - agent: Codex
+    sessionId: Codex-20261016T001440Z-plugin-session
+    title: create pr to merge main to develop on origin. Continuing pre
+    model: codex
+    started:
+      dateTime: 2026-10-16T00:15:44.0000000
+      utcDateTime: 2026-10-16T00:15:44.0000000Z
+      localDateTime: 2026-10-15T19:15:44.0000000-05:00
+      date: 2026-10-16T00:00:00.0000000
+      day: 16
+      dayOfWeek: Friday
+      dayOfYear: 289
+      hour: 0
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 15
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 44
+      ticks: 639277065440000000
+      utcTicks: 639277065440000000
+      timeOfDay: 00:15:44
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-10-16T15:26:40.0000000
+      utcDateTime: 2026-10-16T15:26:40.0000000Z
+      localDateTime: 2026-10-16T10:26:40.0000000-05:00
+      date: 2026-10-16T00:00:00.0000000
+      day: 16
+      dayOfWeek: Friday
+      dayOfYear: 289
+      hour: 15
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 26
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 40
+      ticks: 639277612000000000
+      utcTicks: 639277612000000000
+      timeOfDay: 15:26:40
+      year: 2026
+    status: in_progress
+    turnCount: 15
+    tags:
+    - wrap-up
+    - linux
+    - audio
+    - romm
+    - workspace-recovery
+    - pr-status
+    - read-only
+    - pr7
+    - branch-transition
+    - no-ci
+    - user-direction
+    - review-remediation
+    - merge
+    - develop
+    - subagent
+    - branch-indicator
+    - parent-session:Codex-20261016T001440Z-plugin-session
+    - parent-request:req-20261016T143537Z-prompt-f65c
+    - background-agent
+    filesModifiedCount: 40
+  deprecated: true
+
+---
+

@@ -1,0 +1,11 @@
+{
+  "requestId": "req-20261020T192008Z-hv-nativerestore-r3b",
+  "dialogItems": [
+    {
+      "timestamp": "2026-10-20T14:53:55",
+      "role": "model",
+      "category": "review_verdict",
+      "content": "HV_FULL_CONTENT|a72fe0ad7523400593484841bbd64a2c|verdict.md|8|8\nmed TDE/counts and resource effects have N05 outcomes. Moncommands that never play must block fixture generation, not trigger an improvised workaround; reset-time dumping still fails the fixed-checkpoint obligation under F05. Make with no link line reuses verified evidence or stops before replacement under A06. Helper-only shim reachability is required by R6 and strengthened by N06. A changed known-red set, even if improved or the same size, fails A05 equality. Interrupted Windows restore with autocrlf must recognize actual checkout bytes under A04, retain originals and reject unexpected bytes; a post-restore failure stops with pinned source under A03.\n\nChained dependency audit: D-pre explicit release remains intact. D0 preservation precedes D4 and cannot be skipped. R10 moves the original three-clock prerequisite before D5, but broader safety needs N03 resolution. D2/D5 exact-20 selection conflicts with the existing managed comparator fixture whose implementation is in Phase E (F06). Slice 1 required fixture/manifest/target obligations cannot be discharged by the current D5 map (F05). R11 can observe fresh CPU boundary registers without native source edits, but complete-load success is a separate obligation (N02). H6 reset behavior remains Phase E and H9 sound behavior remains Phase F; no rejected native correction is restored to the oracle.\n\nPersistence: primary supported-plugin operation is available. The complete prose and complete JSON are stored in this reviewer turn, retrieved through client.SessionLog.QueryAsync, reconstructed and hash-compared. verdict.persistence.json contains the measured write/read results, any LF/CRLF normalization, the exact own IDs and completed-state history proof. Existing queued records were not replayed, canceled or treated as persisted. The wrapper reports generic model codex in its session header; the exact model/effort are launch-pinned and recorded explicitly in the verdict and turn content. No hooks, settings or environment repair was performed.\n"
+    }
+  ]
+}

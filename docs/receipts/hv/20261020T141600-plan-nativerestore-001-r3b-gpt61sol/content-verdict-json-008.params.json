@@ -1,0 +1,11 @@
+{
+  "requestId": "req-20261020T192008Z-hv-nativerestore-r3b",
+  "dialogItems": [
+    {
+      "timestamp": "2026-10-20T14:54:20",
+      "role": "model",
+      "category": "review_verdict",
+      "content": "HV_FULL_CONTENT|a72fe0ad7523400593484841bbd64a2c|verdict.json|8|8\nosts; include restored clocks above the initial launch budget.\"\n    }\n  ],\n  \"reviewerAgent\": \"Codex\",\n  \"reviewerModel\": \"gpt-6.1-sol\",\n  \"reviewerEffort\": \"max\",\n  \"reviewerSessionId\": \"Codex-20261020T192001Z-plugin-session\",\n  \"reviewerRequestId\": \"req-20261020T192008Z-hv-nativerestore-r3b\",\n  \"parentSessionId\": \"ClaudeCode-20261020T015046Z-plugin-session\",\n  \"parentRequestId\": \"req-20261020T172116Z-prompt-6c6d\",\n  \"requestPath\": \"/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/request.jsonl\",\n  \"responsePath\": \"/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/response.jsonl\",\n  \"classification\": \"Class 1, independent pre-execution plan review\",\n  \"subjectRevision\": 3,\n  \"timestampLocal\": \"2026-10-20T14:49:53\",\n  \"accuracyRationale\": \"94: Counts, hunk classification, restore safeguards and the cross-object register seam are supported. The complete-obligation claim, resolver-logging assumption, exact-known-red assumption and later-module failure claim remain inaccurate.\",\n  \"completenessRationale\": \"89: Missing preserved Slice 1 details, the D2/Phase E comparator dependency, the original XMLDoc/task obligation, incomplete resume boundary and unproved whole-reader safety still prevent execution readiness. Scores are holistic judgments, not ratios of finding counts.\",\n  \"inputPinCount\": 33,\n  \"inputPinDriftCount\": 0,\n  \"observedBranch\": \"develop\",\n  \"observedInitialHead\": \"e863efdf523449114535ff9ca76f0da295b9a5a3\",\n  \"nativeCommit\": \"cc67418cba58e71d8e70fd353e9de47199ad2075\",\n  \"evidenceScope\": \"Read-only repository/source inspection and supported primary MCP reads/writes for this review. No managed/native tests, full-solution/native build, nested reviewer, native restoration, commit or push was run.\"\n}\n"
+    }
+  ]
+}

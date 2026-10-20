@@ -1,0 +1,102 @@
+[
+  {
+    "file": "vice/src/c64/c64cpusc.c",
+    "patchLine": 5,
+    "header": "@@ -32,6 +32,10 @@"
+  },
+  {
+    "file": "vice/src/c64/c64cpusc.c",
+    "patchLine": 16,
+    "header": "@@ -44,11 +48,32 @@ CLOCK maincpu_clk_limit = 0L;"
+  },
+  {
+    "file": "vice/src/drive/drive-snapshot.c",
+    "patchLine": 53,
+    "header": "@@ -314,9 +314,13 @@ int drive_snapshot_read_module(snapshot_t *s)"
+  },
+  {
+    "file": "vice/src/drive/drivecpu.c",
+    "patchLine": 74,
+    "header": "@@ -188,6 +188,10 @@ void drivecpu_reset_clk(diskunit_context_t *drv)"
+  },
+  {
+    "file": "vice/src/drive/drivecpu65c02.c",
+    "patchLine": 89,
+    "header": "@@ -170,6 +170,10 @@ void drivecpu65c02_reset_clk(diskunit_context_t *drv)"
+  },
+  {
+    "file": "vice/src/mainc64cpu.c",
+    "patchLine": 104,
+    "header": "@@ -56,6 +56,10 @@"
+  },
+  {
+    "file": "vice/src/mainc64cpu.c",
+    "patchLine": 115,
+    "header": "@@ -196,7 +200,24 @@ inline static void check_ba(void)"
+  },
+  {
+    "file": "vice/src/mainc64cpu.c",
+    "patchLine": 140,
+    "header": "@@ -752,7 +773,37 @@ void maincpu_mainloop(void)"
+  },
+  {
+    "file": "vice/src/mainc64cpu.c",
+    "patchLine": 178,
+    "header": "@@ -951,11 +1002,31 @@ int maincpu_snapshot_read_module(snapshot_t *s)"
+  },
+  {
+    "file": "vice/src/mainviccpu.c",
+    "patchLine": 219,
+    "header": "@@ -47,6 +47,10 @@"
+  },
+  {
+    "file": "vice/src/mainviccpu.c",
+    "patchLine": 230,
+    "header": "@@ -579,7 +583,35 @@ void maincpu_mainloop(void)"
+  },
+  {
+    "file": "vice/src/resid/filter8580new.h",
+    "patchLine": 270,
+    "header": "@@ -551,6 +551,16 @@ public:"
+  },
+  {
+    "file": "vice/src/resid/sid.h",
+    "patchLine": 291,
+    "header": "@@ -61,6 +61,10 @@ public:"
+  },
+  {
+    "file": "vice/src/sid/resid.cc",
+    "patchLine": 306,
+    "header": "@@ -449,4 +449,113 @@ sid_engine_t resid_hooks ="
+  },
+  {
+    "file": "vice/src/vic20/vic20cpu.c",
+    "patchLine": 424,
+    "header": "@@ -31,6 +31,10 @@"
+  },
+  {
+    "file": "vice/src/vic20/vic20cpu.c",
+    "patchLine": 435,
+    "header": "@@ -40,7 +44,26 @@ CLOCK maincpu_clk_limit = 0L;"
+  },
+  {
+    "file": "vice/src/vic20/vic20sound.c",
+    "patchLine": 466,
+    "header": "@@ -306,7 +306,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, float *pbuf, int"
+  },
+  {
+    "file": "vice/src/vic20/vic20sound.c",
+    "patchLine": 487,
+    "header": "@@ -338,7 +350,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, int16_t *pbuf, in"
+  },
+  {
+    "file": "vice/src/vic20/vic20sound.c",
+    "patchLine": 508,
+    "header": "@@ -578,3 +602,77 @@ void sound_machine_enable(int enable)"
+  },
+  {
+    "file": "vice/src/vic20/vic20sound.h",
+    "patchLine": 590,
+    "header": "@@ -36,4 +36,9 @@ void vic_sound_reset(sound_t *psid, CLOCK cpu_clk);"
+  }
+]

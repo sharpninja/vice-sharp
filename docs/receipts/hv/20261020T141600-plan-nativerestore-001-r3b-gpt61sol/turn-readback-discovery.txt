@@ -1,0 +1,11 @@
+type: result
+payload:
+  requestId: req-20261020T193942Z-dde4
+  result:
+    totalCount: 0
+    limit: 10
+    offset: 0
+    items: []
+
+---
+
