@@ -17,6 +17,8 @@
     <None Include="../../tools/immutable-vice/bus-observer.c" Link="Fixtures/bus-observer.c" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tools/immutable-vice/bus-adapter.c" Link="Fixtures/bus-adapter.c" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tools/immutable-vice/clock-observer-x64sc.c" Link="Fixtures/clock-observer-x64sc.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/obs-emitter.c" Link="Fixtures/obs-emitter.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/obs-emitter.h" Link="Fixtures/obs-emitter.h" CopyToOutputDirectory="PreserveNewest" />
     <None Update="Fixtures/*.h" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
