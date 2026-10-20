@@ -59,6 +59,17 @@ function ConvertTo-ShellPath {
     return ([IO.Path]::GetFullPath($Path) -replace '\\', '/')
 }
 
+# Paths handed to the autotools scripts must be MSYS POSIX form (/f/GitHub/...): the generated configure splits
+# its aux-dir candidates on ":" (configure 3490 and 3500 to 3502 under IFS=$PATH_SEPARATOR) and the generated
+# Makefiles carry srcdir and VPATH, so a drive colon breaks both (LEGION2 finding 2026-10-20T10:13). Forward
+# slashes throughout, per the lab rule; gcc arguments keep the C:/ form, which native gcc understands.
+function ConvertTo-PosixPath {
+    param([Parameter(Mandatory)][string] $Path)
+    $forward = ConvertTo-ShellPath $Path
+    if ($IsWindows -and $forward -match '^([A-Za-z]):/(.*)$') { return ('/{0}/{1}' -f $Matches[1].ToLowerInvariant(), $Matches[2]) }
+    return $forward
+}
+
 function Get-TreeHashList {
     param([Parameter(Mandatory)][string] $Root)
     $prefix = (Resolve-Path -LiteralPath $Root).Path.TrimEnd('/', '\') + [IO.Path]::DirectorySeparatorChar
@@ -181,7 +192,9 @@ function Step-Configure {
         '--without-flac', '--without-vorbis', '--without-mpg123', '--without-gif', '--without-lame',
         '--disable-ethernet', '--disable-realdevice', '--disable-x64', '--disable-x64-image'
     )
-    $command = ('"{0}" {1}' -f (ConvertTo-ShellPath (Join-Path $work 'configure')), ($flags -join ' '))
+    $configurePath = ConvertTo-PosixPath (Join-Path $work 'configure')
+    if ($configurePath.Contains(':')) { throw "configure path must not contain a drive colon (autotools split on it): $configurePath" }
+    $command = ('"{0}" {1}' -f $configurePath, ($flags -join ' '))
     $r = Invoke-Native -Command $command -WorkingDirectory $build -LogPath $log
     Write-Receipt -Name 'configure' -Object ([pscustomobject]@{ Stage = 'Configure'; ExitCode = $r.ExitCode; Command = $command; Log = $log }) | Out-Null
     if ($r.ExitCode -ne 0) { throw "configure failed (exit $($r.ExitCode)); see $log" }
