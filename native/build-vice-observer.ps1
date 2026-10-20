@@ -52,12 +52,11 @@ $wrappers = Join-Path $RepoRoot 'tools/immutable-vice'
 foreach ($dir in @($build, $bin, $receipts)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
 if (-not (Test-Path -LiteralPath $source)) { throw "Materialization source missing: $source" }
 
+# Lab rule (Payton 2026-10-20T08:19): forward slashes on Windows for every path handed to the shell (C:/...).
 function ConvertTo-ShellPath {
     param([Parameter(Mandatory)][string] $Path)
     if (-not $IsWindows) { return $Path }
-    $full = [IO.Path]::GetFullPath($Path)
-    if ($full -match '^([A-Za-z]):\\(.*)$') { return ('/{0}/{1}' -f $Matches[1].ToLowerInvariant(), ($Matches[2] -replace '\\', '/')) }
-    return ($full -replace '\\', '/')
+    return ([IO.Path]::GetFullPath($Path) -replace '\\', '/')
 }
 
 function Get-TreeHashList {

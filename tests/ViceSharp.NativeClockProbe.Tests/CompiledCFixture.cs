@@ -23,9 +23,10 @@ internal sealed class CompiledCFixture
     {
         if (!isWindows)
             return new(linuxCompiler, compilerArguments, new Dictionary<string, string>(), linuxCompiler);
+        // Lab rule (Payton 2026-10-20T08:19): forward slashes on Windows, for the shell path and every path argument.
         const string script = "printf 'resolved compiler: %s\\nMSYSTEM=%s\\n' \"$(command -v gcc)\" \"$MSYSTEM\"; exec gcc \"$@\"";
-        return new(msysRoot.TrimEnd('\\', '/') + @"\usr\bin\bash.exe",
-            ["-lc", script, "bash", .. compilerArguments],
+        return new(msysRoot.Replace('\\', '/').TrimEnd('/') + "/usr/bin/bash.exe",
+            ["-lc", script, "bash", .. compilerArguments.Select(a => a.Replace('\\', '/'))],
             new Dictionary<string, string> { ["MSYSTEM"] = "MINGW64", ["CHERE_INVOKING"] = "1", ["MSYS2_PATH_TYPE"] = "minimal" },
             "MSYS2 MINGW64 gcc");
     }

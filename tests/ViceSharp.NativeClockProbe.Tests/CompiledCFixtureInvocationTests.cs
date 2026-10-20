@@ -14,13 +14,15 @@ public sealed class CompiledCFixtureInvocationTests
     public void Windows_compiles_inside_the_msys2_mingw64_login_shell_and_passes_arguments_unchanged()
     {
         var inv = CompiledCFixture.BuildCompileInvocation(isWindows: true, msysRoot: @"C:\msys64", linuxCompiler: "/usr/bin/gcc", Arguments);
-        Assert.Equal(@"C:\msys64\usr\bin\bash.exe", inv.FileName);
+        // Lab rule (Payton 2026-10-20T08:19): forward slashes on Windows, for the shell path and every path argument.
+        Assert.Equal("C:/msys64/usr/bin/bash.exe", inv.FileName);
         Assert.Equal("-lc", inv.ArgumentList[0]);
         Assert.Contains("command -v gcc", inv.ArgumentList[1]);
         Assert.Contains("MSYSTEM", inv.ArgumentList[1]);
         Assert.EndsWith("exec gcc \"$@\"", inv.ArgumentList[1]);
         Assert.Equal("bash", inv.ArgumentList[2]);
-        Assert.Equal(Arguments, inv.ArgumentList.Skip(3));
+        Assert.Equal(["-std=c11", "-Wall", "-c", "C:/work/a b/x.c", "-o", "C:/work/a b/x.o"], inv.ArgumentList.Skip(3));
+        Assert.DoesNotContain(inv.ArgumentList.Skip(3), a => a.Contains('\\'));
         Assert.Equal("MINGW64", inv.Environment["MSYSTEM"]);
         Assert.Equal("1", inv.Environment["CHERE_INVOKING"]);
         Assert.Equal("MSYS2 MINGW64 gcc", inv.Description);
@@ -41,6 +43,7 @@ public sealed class CompiledCFixtureInvocationTests
     {
         var inv = CompiledCFixture.BuildCompileInvocation(isWindows: true, msysRoot: @"C:\msys64", linuxCompiler: "/usr/bin/gcc", Arguments);
         Assert.NotEqual(@"C:\msys64\mingw64\bin\gcc.exe", inv.FileName);
+        Assert.NotEqual(@"C:\msys64\usr\bin\bash.exe", inv.FileName);
         Assert.DoesNotContain(inv.ArgumentList, a => a.Contains("mingw64/bin/gcc", StringComparison.Ordinal));
         Assert.NotEqual("-c", inv.ArgumentList[0]);
     }
