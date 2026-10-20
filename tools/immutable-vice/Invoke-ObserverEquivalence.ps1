@@ -63,6 +63,9 @@ function Invoke-Run {
     $psi.RedirectStandardOutput = $true
     $psi.RedirectStandardError = $true
     if ($Keep) { $psi.Environment['VICESHARP_FAST_PATH'] = 'keep' } else { $psi.Environment.Remove('VICESHARP_FAST_PATH') | Out-Null }
+    # S4b: the adapter composes VICE_OBS lines by default and prints the raw per-access line only on request;
+    # the per-cycle comparison below works on the raw lines, so request them.
+    $psi.Environment['VICESHARP_BUS_RAW'] = '1'
     $p = [System.Diagnostics.Process]::Start($psi)
     $outFile = [IO.File]::Create($stdoutPath)
     $errFile = [IO.File]::Create($stderrPath)
@@ -91,6 +94,8 @@ function Invoke-Run {
         MissingOrForeign = @($stderrLines | Where-Object { $_.StartsWith('VICE_BUS,missing,') -or $_.StartsWith('VICE_BUS,foreign,') }).Count
         TranslateLines = @($stderrLines | Where-Object { $_.StartsWith('VICE_BUS,translate,') }).Count
         RepatchLines = @($stderrLines | Where-Object { $_.StartsWith('VICE_BUS,repatch,') }).Count
+        ExtraLines = @($stderrLines | Where-Object { $_.StartsWith('VICE_BUS,extra,') }).Count
+        ObsLines = @($stderrLines | Where-Object { $_.StartsWith('VICE_OBS,') }).Count
         StopLines = @($stderrLines | Where-Object { $_.Contains('_STOP,') }).Count
     }
 }
@@ -145,7 +150,9 @@ foreach ($m in $machines) {
         $w = Invoke-Run -Label 'withheld' -Executable $observer -MachineName $m -CycleCount $n -Gated $true -Keep $false
         $k = Invoke-Run -Label 'keep' -Executable $observer -MachineName $m -CycleCount $n -Gated $true -Keep $true
         $results += @($s, $w, $k)
-        foreach ($r in @($s, $w, $k)) { Write-Output ("{0,-9} exit {1} gate {2} access {3} missingKind {4} missing/foreign {5} translate {6} stop {7} png {8}" -f $r.Label, $r.ExitCode, $r.GateLines, $r.AccessLines, $r.AccessMissingKind, $r.MissingOrForeign, $r.TranslateLines, $r.StopLines, $r.ScreenshotSha256) }
+        foreach ($r in @($s, $w, $k)) { Write-Output ("{0,-9} exit {1} gate {2} access {3} missingKind {4} missing/foreign {5} translate {6} stop {7} obs {8} extra {9} png {10}" -f $r.Label, $r.ExitCode, $r.GateLines, $r.AccessLines, $r.AccessMissingKind, $r.MissingOrForeign, $r.TranslateLines, $r.StopLines, $r.ObsLines, $r.ExtraLines, $r.ScreenshotSha256) }
+        # S4b: two VICE_OBS lines per observed cycle in every gated run.
+        foreach ($r in @($w, $k)) { if ($r.ObsLines -ne 2 * $r.GateLines) { $findings += "$m/$n $($r.Label) VICE_OBS lines $($r.ObsLines) are not twice the gate lines $($r.GateLines)" } }
         if (-not $s.ScreenshotSha256 -or $s.ScreenshotSha256 -ne $w.ScreenshotSha256 -or $s.ScreenshotSha256 -ne $k.ScreenshotSha256) { $findings += "$m/$n screenshot differs across stock, withheld, keep" }
         if ($w.GateLines -ne $k.GateLines) { $findings += "$m/$n gate line counts differ: withheld $($w.GateLines) keep $($k.GateLines)" }
         $c = Compare-GatedRunPair -WithheldStderr (Join-Path $OutDir ("{0}-{1}-withheld.stderr" -f $m, $n)) -KeepStderr (Join-Path $OutDir ("{0}-{1}-keep.stderr" -f $m, $n))
@@ -159,11 +166,30 @@ foreach ($m in $machines) {
         if ($s.ExitCode -ne 1 -or $w.ExitCode -ne 1 -or $k.ExitCode -ne 1) { $findings += "$m/$n exit codes not the cycle-limit exit (1): stock $($s.ExitCode) withheld $($w.ExitCode) keep $($k.ExitCode)" }
     }
 }
+# S4c: validate every gated trace with the real step 1 decoder (ObservationTraceValidationTests reads
+# VICESHARP_OBS_TRACE_DIR, writes <trace>.obs-validation.json beside each file, fails on any malformed or
+# framing fault, any missing field other than idle PHI2 data, or any half-cycle sequence fault).
+$validationLog = Join-Path $OutDir 'obs-validation.log'
+# Only the gated traces carry VICE_OBS lines; the stock run has no observer.
+$gatedTraces = @($results | Where-Object { $_.Label -ne 'stock' } | ForEach-Object { Join-Path $OutDir ("{0}-{1}-{2}.stderr" -f $_.Machine, $_.Cycles, $_.Label) })
+$env:VICESHARP_OBS_TRACE_FILES = ($gatedTraces -join ';')
+$testProject = Join-Path $RepoRoot 'tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj'
+# Native stderr lines become error records under 2>&1; they must not terminate the script under Stop.
+$previousPreference = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
+& dotnet test $testProject -c Release --filter 'FullyQualifiedName~ObservationTraceValidationTests' 2>&1 | ForEach-Object { "$_" } | Set-Content -LiteralPath $validationLog -Encoding utf8
+$validationExit = $LASTEXITCODE
+$ErrorActionPreference = $previousPreference
+Remove-Item Env:VICESHARP_OBS_TRACE_FILES -ErrorAction SilentlyContinue
+$validationSummary = @(Get-Content -LiteralPath $validationLog | Where-Object { $_ -match 'Passed!|Failed!' })
+Write-Output ("obs validation: exit {0}; {1}" -f $validationExit, ($validationSummary -join ' '))
+if ($validationExit -ne 0) { $findings += "VICE_OBS trace validation failed (exit $validationExit); see $validationLog" }
 $summary = [pscustomobject]@{
     Host = $hostTag; Sha = $Sha; DataDirectory = $data; Machines = $machines; Cycles = $Cycles
     StockBinaries = @($machines | ForEach-Object { [pscustomobject]@{ Machine = $_; Sha256 = Get-Sha256 (Join-Path $buildSrc ($_ + $exeExt)) } })
     ObserverBinaries = @($machines | ForEach-Object { [pscustomobject]@{ Machine = $_; Sha256 = Get-Sha256 (Join-Path $bin ("{0}-observer{1}" -f $_, $exeExt)) } })
-    Runs = $results; Comparisons = $comparisons; Findings = $findings; Equivalent = ($findings.Count -eq 0)
+    Runs = $results; Comparisons = $comparisons; ObsValidationExit = $validationExit; ObsValidationLog = $validationLog
+    Findings = $findings; Equivalent = ($findings.Count -eq 0)
 }
 $summaryPath = Join-Path $OutDir 'equivalence.json'
 $summary | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $summaryPath -Encoding utf8

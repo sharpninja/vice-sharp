@@ -8,7 +8,8 @@ namespace ViceSharp.NativeClockProbe.Tests;
 /// step 1 decoder. Every VICE_OBS line must decode; the only tolerated error is Missing:Data on a PHI2 idle
 /// record, which is the emitter's fail-closed report for a cycle without a CPU access (a stolen cycle or VICE's
 /// own non-cycle reset reads) and is counted, never hidden. Half-cycle indices must be consecutive from 0
-/// alternating PHI1, PHI2, and PHI1 must always be idle. With VICESHARP_OBS_TRACE_DIR set, every *.stderr
+/// alternating PHI1, PHI2, and PHI1 must always be idle. With VICESHARP_OBS_TRACE_FILES (semicolon-separated gated
+/// traces, the runner's route) or VICESHARP_OBS_TRACE_DIR set, every named or *.stderr
 /// file there is validated and a summary JSON is written beside it; without it, an embedded sample keeps the
 /// case executable (never skipped). FR-VICE-001 AC4, TR-VICE-ORACLE-001 AC3/AC5, TEST-VICE-001 AC4.
 /// </summary>
@@ -106,6 +107,14 @@ public sealed class ObservationTraceValidationTests
     {
         get
         {
+            // An explicit file list first (the runner names the gated traces; a stock run has no observer and
+            // therefore no VICE_OBS lines), then a directory, then the embedded sample.
+            var list = Environment.GetEnvironmentVariable("VICESHARP_OBS_TRACE_FILES");
+            if (!string.IsNullOrEmpty(list))
+            {
+                var named = list.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Where(File.Exists).ToArray();
+                if (named.Length > 0) return named.Select(f => new object[] { f });
+            }
             var dir = Environment.GetEnvironmentVariable("VICESHARP_OBS_TRACE_DIR");
             if (!string.IsNullOrEmpty(dir) && Directory.Exists(dir))
             {
