@@ -1,0 +1,8 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.OracleContract.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.OracleContract.Tests/bin/Release/net10.0/ViceSharp.OracleContract.Tests.dll
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.OracleContract.Tests/bin/Release/net10.0/ViceSharp.OracleContract.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T201029-phase-c-step2-native-safe-linux/OracleContract.trx
+
+Passed!  - Failed:     0, Passed:   143, Skipped:     0, Total:   143, Duration: 307 ms - ViceSharp.OracleContract.Tests.dll (net10.0)

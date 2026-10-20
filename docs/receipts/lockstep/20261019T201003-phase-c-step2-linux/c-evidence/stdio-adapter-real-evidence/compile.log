@@ -1,0 +1,8 @@
+2026-10-19T20:10:54.4519191-05:00
+Executable: /usr/bin/gcc
+Arguments: -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/stdio-real-driver.c | /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/gate-observer.c | /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/clock-gate.c | -o | /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/stdio-adapter-real
+ExitCode: 0
+TimedOut: False
+STDOUT:
+
+STDERR:
