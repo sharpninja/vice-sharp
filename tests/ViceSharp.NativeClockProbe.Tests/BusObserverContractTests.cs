@@ -60,7 +60,7 @@ public sealed class BusObserverContractTests
              new("access", "dummy-write,257,66,0"), new("cycle", "0")]),
         "translate" => new(
             [new("init"), new("translate", 0x1234)],
-            [InitOk, InitPatch, new("translate", "0,0")]),
+            [InitOk, InitPatch, new("translate", "0,1,8189,1")]),
         "rebuild-at-runtime" => new(
             [new("init"), new("read", 0x0100), new("cycle"), new("init"), new("read", 0x0100), new("cycle")],
             [InitOk, InitPatch, new("access", "read,256,165,0"), new("cycle", "0"),
@@ -185,9 +185,11 @@ public sealed class BusObserverContractTests
             Assert.ThrowsAny<XunitException>(() => AssertProbe(lenient, name));
         }
 
-        // Translate must withhold the fast path: a nonzero limit or a non-null base is wrong.
-        RejectVariant("translate", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "8189,1" } : x).ToArray());
-        RejectVariant("translate", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "0,1" } : x).ToArray());
+        // Translate must withhold the fast path (limit 0, base nulled) and report what the real call returned
+        // (limit 8189, non-null base): a nonzero limit, a base left non-null, or a fabricated real result is wrong.
+        RejectVariant("translate", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "8189,1,8189,1" } : x).ToArray());
+        RejectVariant("translate", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "0,0,8189,1" } : x).ToArray());
+        RejectVariant("translate", e => e.Select(x => x.Kind == "translate" ? x with { Detail = "0,1,0,0" } : x).ToArray());
         // An untraced access must surface as missing, not be silently dropped.
         RejectVariant("rewrite-outside-init", e => e.Where(x => x.Kind != "missing").ToArray());
         // An aliased dummy pointer must not be reported as a plain read.

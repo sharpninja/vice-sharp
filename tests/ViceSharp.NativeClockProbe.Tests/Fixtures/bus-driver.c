@@ -22,6 +22,8 @@ extern void mem_mmu_translate(unsigned int addr, uint8_t **base, int *start, int
 extern void mem_toggle_watchpoints(int flag, void *context);
 extern void vic_cycle(void);
 extern void double_rewrite_read_page(int page);
+extern int double_rewrite_row_read_page(int config, int page);
+extern int double_bank(int config);
 extern void double_alias_dummy(void);
 extern void vice_sharp_bus_cycle(uint64_t clock);
 
@@ -105,6 +107,14 @@ int main(int argc, char **argv)
             double_rewrite_read_page((int)a);
         } else if (strcmp(op, "toggle") == 0 && arity == 1 && a <= 2) {
             mem_toggle_watchpoints((int)a, NULL);
+        } else if (strcmp(op, "bank") == 0 && arity == 1 && a <= 0xff) {
+            if (double_bank((int)a) != 0) {
+                return 2;
+            }
+        } else if (strcmp(op, "rewriterow") == 0 && arity == 2 && a <= 0xff && b <= 0x100) {
+            if (double_rewrite_row_read_page((int)a, (int)b) != 0) {
+                return 2;
+            }
         } else {
             return 2;
         }
