@@ -161,7 +161,7 @@ Round 5 (receipt `20261020T163300-plan-nativerestore-001-r5-gpt61sol/`):
 - N16 (audit interval before discovery; attribute construction queries `ViceNative`): D2 detector paragraph.
 - N17 (seam-level zero incremental allocation test): D2 detector paragraph.
 - N18 (CPU-clock versus half-cycle conversion, odd window, prelude budget): D5 budget and window paragraph.
-- N19 (other `EXPORT_REGISTERS` sites): section 1 trap fact narrowed. Round 6: FAIL again because R11's sentence still carried the exclusive list. Round 7: FAIL again because R12 still said the core exports a correct register file only at an instruction boundary (BRK exports after the opcode fetch); revision 8 states only the narrow checkpoint claim (the trap seam at the boundary whose copied pending mask includes it, acceptance by the actual write clock) in section 1, R11 and R12, and makes no claim about where else the core exports.
+- N19 (other `EXPORT_REGISTERS` sites): section 1 trap fact narrowed. Round 6: FAIL again because R11's sentence still carried the exclusive list. Round 7: FAIL again because R12 still carried an exclusivity sentence about where the core exports registers (BRK, for one, exports after the opcode fetch); revision 8 states only the narrow checkpoint claim (the trap seam at the boundary whose copied pending mask includes it, acceptance by the actual write clock) in section 1, R11 and R12, and makes no claim about where else the core exports.
 
 Round 6 (receipt `20261020T172500-plan-nativerestore-001-r6-gpt61sol/`):
 
