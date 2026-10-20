@@ -1,0 +1,155 @@
+{
+  "timestampLocal": "2026-10-20T17:12:03",
+  "sessionId": "Codex-20261020T213608Z-plugin-session",
+  "requestId": "req-20261020T213610Z-nativerestore-r5",
+  "status": "in_progress",
+  "files": [
+    {
+      "name": "verdict.md",
+      "chunks": [
+        {
+          "index": 1,
+          "chars": 6000,
+          "rawSha256": "A2548BD5DF64AFD43B2D211B784196C00A7345AC4AAD6C904AA95E26BAD43431",
+          "lfSha256": "A2548BD5DF64AFD43B2D211B784196C00A7345AC4AAD6C904AA95E26BAD43431",
+          "normalizedMatches": true
+        },
+        {
+          "index": 2,
+          "chars": 6000,
+          "rawSha256": "A910E86B8A7AA456EC70AC2B65F97BB5B6771F700B981F5258FD598AE676AA8B",
+          "lfSha256": "A910E86B8A7AA456EC70AC2B65F97BB5B6771F700B981F5258FD598AE676AA8B",
+          "normalizedMatches": true
+        },
+        {
+          "index": 3,
+          "chars": 6000,
+          "rawSha256": "5409F1C2340068A987C24E1A86DDFDC6C84A0A3860D1A4ED3C3D8557CAB68E88",
+          "lfSha256": "5409F1C2340068A987C24E1A86DDFDC6C84A0A3860D1A4ED3C3D8557CAB68E88",
+          "normalizedMatches": true
+        },
+        {
+          "index": 4,
+          "chars": 6000,
+          "rawSha256": "5FBB167189A761D2B3A961BD450BD5D6B34629A1B3F0CB732183B7AD02BBFAC7",
+          "lfSha256": "5FBB167189A761D2B3A961BD450BD5D6B34629A1B3F0CB732183B7AD02BBFAC7",
+          "normalizedMatches": true
+        },
+        {
+          "index": 5,
+          "chars": 6000,
+          "rawSha256": "106AED0F375BBE420DAD3C993013ACA6006B499B89B0FAE9E54AAA8D27E1C191",
+          "lfSha256": "106AED0F375BBE420DAD3C993013ACA6006B499B89B0FAE9E54AAA8D27E1C191",
+          "normalizedMatches": true
+        },
+        {
+          "index": 6,
+          "chars": 6000,
+          "rawSha256": "E132B95A90DFBB93C945AA9CD53F03F948526BDB88A3C8073C653A6FAB7FCFD3",
+          "lfSha256": "E132B95A90DFBB93C945AA9CD53F03F948526BDB88A3C8073C653A6FAB7FCFD3",
+          "normalizedMatches": true
+        },
+        {
+          "index": 7,
+          "chars": 6000,
+          "rawSha256": "7019FC299ECD9503898504FD9667345CAFFFD457F4A0734AD87237E2C8ED49E2",
+          "lfSha256": "7019FC299ECD9503898504FD9667345CAFFFD457F4A0734AD87237E2C8ED49E2",
+          "normalizedMatches": true
+        },
+        {
+          "index": 8,
+          "chars": 3009,
+          "rawSha256": "9F5A139DB9E111CB1062BA95462BC0B204A5736AF1CC959B444FED3C69C7D0F4",
+          "lfSha256": "9F5A139DB9E111CB1062BA95462BC0B204A5736AF1CC959B444FED3C69C7D0F4",
+          "normalizedMatches": true
+        }
+      ],
+      "sourceBytes": 45009,
+      "readbackBytes": 45009,
+      "sourceSha256": "F84C4F7D75F88163F7800EFA23955EF824D05265E0B8DC288296B744CAB437B3",
+      "readbackSha256": "F84C4F7D75F88163F7800EFA23955EF824D05265E0B8DC288296B744CAB437B3",
+      "rawBytesMatch": true,
+      "sourceLfSha256": "F84C4F7D75F88163F7800EFA23955EF824D05265E0B8DC288296B744CAB437B3",
+      "readbackLfSha256": "F84C4F7D75F88163F7800EFA23955EF824D05265E0B8DC288296B744CAB437B3",
+      "normalizedMatches": true,
+      "normalization": "none"
+    },
+    {
+      "name": "verdict.json",
+      "chunks": [
+        {
+          "index": 1,
+          "chars": 6000,
+          "rawSha256": "554FE7E68A2F3FB50CF41E68B1983383DC9F45289526CA1C7F926D25CA86CBBA",
+          "lfSha256": "554FE7E68A2F3FB50CF41E68B1983383DC9F45289526CA1C7F926D25CA86CBBA",
+          "normalizedMatches": true
+        },
+        {
+          "index": 2,
+          "chars": 6000,
+          "rawSha256": "C3571917FC55D77AB8489C1730CC3EB7DBBE3C36B01C01FE0204FE1FE8C83379",
+          "lfSha256": "C3571917FC55D77AB8489C1730CC3EB7DBBE3C36B01C01FE0204FE1FE8C83379",
+          "normalizedMatches": true
+        },
+        {
+          "index": 3,
+          "chars": 6000,
+          "rawSha256": "E39AEA0016FC62BF44D3002B3A87F00A26D9EA669D3DC12EDA0953AF2F3524A8",
+          "lfSha256": "E39AEA0016FC62BF44D3002B3A87F00A26D9EA669D3DC12EDA0953AF2F3524A8",
+          "normalizedMatches": true
+        },
+        {
+          "index": 4,
+          "chars": 6000,
+          "rawSha256": "F203D182C331268FBB90C327692BA624585AFF9A664FF3AEEC3FFF6F46235003",
+          "lfSha256": "F203D182C331268FBB90C327692BA624585AFF9A664FF3AEEC3FFF6F46235003",
+          "normalizedMatches": true
+        },
+        {
+          "index": 5,
+          "chars": 6000,
+          "rawSha256": "1EDEE6A3C83BFD2537A6CB0BE4821E41A6DA04E1003ED6EA2B93DDBDC7AA8914",
+          "lfSha256": "1EDEE6A3C83BFD2537A6CB0BE4821E41A6DA04E1003ED6EA2B93DDBDC7AA8914",
+          "normalizedMatches": true
+        },
+        {
+          "index": 6,
+          "chars": 6000,
+          "rawSha256": "B10DE1CCEC66A320B7BC8DA0BCADF0F1B57A06604EAF49CCDD1059F9761CDCA6",
+          "lfSha256": "B10DE1CCEC66A320B7BC8DA0BCADF0F1B57A06604EAF49CCDD1059F9761CDCA6",
+          "normalizedMatches": true
+        },
+        {
+          "index": 7,
+          "chars": 6000,
+          "rawSha256": "F3B512EC9F94BE6DA74C5372424C401D5346F411348B1C8E40D8E85CFB80F4BD",
+          "lfSha256": "F3B512EC9F94BE6DA74C5372424C401D5346F411348B1C8E40D8E85CFB80F4BD",
+          "normalizedMatches": true
+        },
+        {
+          "index": 8,
+          "chars": 6000,
+          "rawSha256": "10E8E407B903B40A25B82363B64A2A995A1565E93CB5DE896A0F73C94E48AABD",
+          "lfSha256": "10E8E407B903B40A25B82363B64A2A995A1565E93CB5DE896A0F73C94E48AABD",
+          "normalizedMatches": true
+        },
+        {
+          "index": 9,
+          "chars": 5338,
+          "rawSha256": "51AEEF82D77F429456AF65E5879C5CEE4223E88CEDB5C531155D0E7D6E2778D2",
+          "lfSha256": "51AEEF82D77F429456AF65E5879C5CEE4223E88CEDB5C531155D0E7D6E2778D2",
+          "normalizedMatches": true
+        }
+      ],
+      "sourceBytes": 53338,
+      "readbackBytes": 53338,
+      "sourceSha256": "9B4A31FD2D0D283151CD75C51412FE6113D73FE994EFCC8E3C4BFFE9BBEF5048",
+      "readbackSha256": "9B4A31FD2D0D283151CD75C51412FE6113D73FE994EFCC8E3C4BFFE9BBEF5048",
+      "rawBytesMatch": true,
+      "sourceLfSha256": "9B4A31FD2D0D283151CD75C51412FE6113D73FE994EFCC8E3C4BFFE9BBEF5048",
+      "readbackLfSha256": "9B4A31FD2D0D283151CD75C51412FE6113D73FE994EFCC8E3C4BFFE9BBEF5048",
+      "normalizedMatches": true,
+      "normalization": "none"
+    }
+  ]
+}

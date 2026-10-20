@@ -1,0 +1,57 @@
+{
+  "timestampLocal": "2026-10-20T17:14:38",
+  "artifactVerification": "PASS: saved review artifacts only; subject plan remains DISAGREE",
+  "checks": {
+    "all41Round4IdsExactlyOnce": true,
+    "all35Round3bRevision4Dispositions": true,
+    "findings47Unique": true,
+    "pass40Fail3Unknown0AddAc4": true,
+    "exactCompleteContent": true,
+    "primaryCompletedExactTurn": true,
+    "pins37StillMatch": true,
+    "pinnedSources23Match": true,
+    "native163ContentUnchanged": true,
+    "outsideReceiptStatusUnchanged": true,
+    "diffWhitespaceClean": true,
+    "scriptsParseAndAnalyzeClean": true,
+    "stopGateNoBlock": true,
+    "disagreeAndScoresPreserved": true
+  },
+  "failedChecks": [],
+  "exactContent": [
+    {
+      "name": "verdict.md",
+      "localSha256": "F84C4F7D75F88163F7800EFA23955EF824D05265E0B8DC288296B744CAB437B3",
+      "readbackSha256": "F84C4F7D75F88163F7800EFA23955EF824D05265E0B8DC288296B744CAB437B3",
+      "exact": true
+    },
+    {
+      "name": "verdict.json",
+      "localSha256": "9B4A31FD2D0D283151CD75C51412FE6113D73FE994EFCC8E3C4BFFE9BBEF5048",
+      "readbackSha256": "9B4A31FD2D0D283151CD75C51412FE6113D73FE994EFCC8E3C4BFFE9BBEF5048",
+      "exact": true
+    }
+  ],
+  "stopGateOutput": "{}",
+  "stopGateInterpretation": "Supported plugin-hook.ps1 Close-PluginTurnIfNeeded line 1262 emits the empty object on its nonblocking path. No fictional status:passed field is claimed.",
+  "semanticHarnessCandidatesUsingPlanUnescapedDotPattern": 56,
+  "reviewerSessionId": "Codex-20261020T213608Z-plugin-session",
+  "reviewerRequestId": "req-20261020T213610Z-nativerestore-r5",
+  "fullFailList": [
+    {
+      "id": "N12",
+      "severity": "high",
+      "section": "Synthetic v1.3 labeling does not allocate the external v1.3 acceptance input"
+    },
+    {
+      "id": "N14",
+      "severity": "high",
+      "section": "The R12 blocked branch contradicts D5 and A05"
+    },
+    {
+      "id": "N19",
+      "severity": "low",
+      "section": "The register-export exclusivity statement is false"
+    }
+  ]
+}

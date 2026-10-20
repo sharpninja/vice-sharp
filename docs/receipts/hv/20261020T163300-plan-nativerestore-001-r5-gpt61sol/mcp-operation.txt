@@ -1,0 +1,113 @@
+type: result
+payload:
+  requestId: req-20261020T213608Z-c116
+  result:
+    initialized: true
+  deprecated: true
+
+---
+type: result
+payload:
+  result:
+    code: unchanged
+    retryable: false
+    persisted: false
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.openSession
+    agent: Codex
+    sessionId: Codex-20261020T213608Z-plugin-session
+    requestId: ""
+    failsafePath: ""
+    message: workflow.sessionlog.openSession completed without a remote persistence receipt.
+    childStderr: ""
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.beginTurn
+    agent: Codex
+    sessionId: Codex-20261020T213608Z-plugin-session
+    requestId: req-20261020T213610Z-nativerestore-r5
+    failsafePath: ""
+    message: Session log persist confirmed a durable write for request 'req-20261020T213610Z-nativerestore-r5'.
+    childStderr: ""
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.updateTurn
+    agent: Codex
+    sessionId: Codex-20261020T213608Z-plugin-session
+    requestId: req-20261020T213610Z-nativerestore-r5
+    failsafePath: ""
+    message: Session log persist confirmed a durable write for request 'req-20261020T213610Z-nativerestore-r5'.
+    childStderr: ""
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.appendDialog
+    agent: Codex
+    sessionId: Codex-20261020T213608Z-plugin-session
+    requestId: req-20261020T213610Z-nativerestore-r5
+    failsafePath: ""
+    message: appendDialog persisted requestId=req-20261020T213610Z-nativerestore-r5
+    childStderr: ""
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.appendActions
+    agent: Codex
+    sessionId: Codex-20261020T213608Z-plugin-session
+    requestId: req-20261020T213610Z-nativerestore-r5
+    failsafePath: ""
+    message: Session log persist confirmed a durable write for request 'req-20261020T213610Z-nativerestore-r5'.
+    childStderr: ""
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.appendDialog
+    agent: Codex
+    sessionId: Codex-20261020T213608Z-plugin-session
+    requestId: req-20261020T213610Z-nativerestore-r5
+    failsafePath: ""
+    message: appendDialog persisted requestId=req-20261020T213610Z-nativerestore-r5
+    childStderr: ""
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.appendActions
+    agent: Codex
+    sessionId: Codex-20261020T213608Z-plugin-session
+    requestId: req-20261020T213610Z-nativerestore-r5
+    failsafePath: ""
+    message: Session log persist confirmed a durable write for request 'req-20261020T213610Z-nativerestore-r5'.
+    childStderr: ""

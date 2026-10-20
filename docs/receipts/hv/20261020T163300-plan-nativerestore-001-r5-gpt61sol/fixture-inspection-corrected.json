@@ -1,0 +1,258 @@
+{
+  "bytes": 190854,
+  "magic": "VICE Snapshot File\u001a",
+  "modules": [
+    {
+      "name": "MAINCPU",
+      "version": "1.2",
+      "offset": 58,
+      "size": 113,
+      "payloadFirstTwo": [
+        170,
+        181
+      ],
+      "clock": 109163946,
+      "registerBytes": [
+        194,
+        2,
+        0,
+        250,
+        105,
+        87,
+        160
+      ],
+      "pc": 22377,
+      "status": 160
+    },
+    {
+      "name": "C64MEM",
+      "version": "0.1",
+      "offset": 171,
+      "size": 65577,
+      "payloadFirstTwo": [
+        231,
+        47
+      ]
+    },
+    {
+      "name": "C64CART",
+      "version": "0.1",
+      "offset": 65748,
+      "size": 23,
+      "payloadFirstTwo": [
+        0,
+        67
+      ]
+    },
+    {
+      "name": "CIA1",
+      "version": "2.5",
+      "offset": 65771,
+      "size": 99,
+      "payloadFirstTwo": [
+        241,
+        0
+      ]
+    },
+    {
+      "name": "CIA2",
+      "version": "2.5",
+      "offset": 65870,
+      "size": 99,
+      "payloadFirstTwo": [
+        151,
+        0
+      ]
+    },
+    {
+      "name": "SID",
+      "version": "1.5",
+      "offset": 65969,
+      "size": 58,
+      "payloadFirstTwo": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "SIDEXTENDED",
+      "version": "1.4",
+      "offset": 66027,
+      "size": 155,
+      "payloadFirstTwo": [
+        57,
+        53
+      ]
+    },
+    {
+      "name": "VDRIVEIMAGE8",
+      "version": "2.0",
+      "offset": 66182,
+      "size": 22,
+      "payloadFirstTwo": [
+        68,
+        82
+      ]
+    },
+    {
+      "name": "DRIVE8",
+      "version": "2.0",
+      "offset": 66204,
+      "size": 24,
+      "payloadFirstTwo": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "DRIVE9",
+      "version": "2.0",
+      "offset": 66228,
+      "size": 167,
+      "payloadFirstTwo": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "DRIVE10",
+      "version": "2.0",
+      "offset": 66395,
+      "size": 167,
+      "payloadFirstTwo": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "DRIVE11",
+      "version": "2.0",
+      "offset": 66562,
+      "size": 167,
+      "payloadFirstTwo": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "FSDRIVE",
+      "version": "0.0",
+      "offset": 66729,
+      "size": 280,
+      "payloadFirstTwo": [
+        42,
+        0
+      ]
+    },
+    {
+      "name": "VIC-II",
+      "version": "1.3",
+      "offset": 67009,
+      "size": 123437,
+      "payloadFirstTwo": [
+        1,
+        232
+      ]
+    },
+    {
+      "name": "GLUE",
+      "version": "1.0",
+      "offset": 190446,
+      "size": 25,
+      "payloadFirstTwo": [
+        1,
+        0
+      ]
+    },
+    {
+      "name": "C64MEMHACKS",
+      "version": "0.0",
+      "offset": 190471,
+      "size": 23,
+      "payloadFirstTwo": [
+        0,
+        84
+      ]
+    },
+    {
+      "name": "TAPEPORT",
+      "version": "1.0",
+      "offset": 190494,
+      "size": 24,
+      "payloadFirstTwo": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "DATASETTE",
+      "version": "1.5",
+      "offset": 190518,
+      "size": 100,
+      "payloadFirstTwo": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "KEYBOARD",
+      "version": "1.1",
+      "offset": 190618,
+      "size": 118,
+      "payloadFirstTwo": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "JOYPORT0",
+      "version": "0.0",
+      "offset": 190736,
+      "size": 23,
+      "payloadFirstTwo": [
+        1,
+        74
+      ]
+    },
+    {
+      "name": "JOYSTICK0",
+      "version": "1.2",
+      "offset": 190759,
+      "size": 24,
+      "payloadFirstTwo": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "JOYPORT1",
+      "version": "0.0",
+      "offset": 190783,
+      "size": 23,
+      "payloadFirstTwo": [
+        1,
+        74
+      ]
+    },
+    {
+      "name": "JOYSTICK1",
+      "version": "1.2",
+      "offset": 190806,
+      "size": 24,
+      "payloadFirstTwo": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "USERPORT",
+      "version": "1.0",
+      "offset": 190830,
+      "size": 24,
+      "payloadFirstTwo": [
+        1,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "entryCount": 2527,
+  "extensionCounts": [
+    {
+      "count": 121,
+      "extension": ""
+    },
+    {
+      "count": 6,
+      "extension": ".0"
+    },
+    {
+      "count": 6,
+      "extension": ".1"
+    },
+    {
+      "count": 6,
+      "extension": ".2"
+    },
+    {
+      "count": 2,
+      "extension": ".3"
+    },
+    {
+      "count": 59,
+      "extension": ".a"
+    },
+    {
+      "count": 2,
+      "extension": ".c"
+    },
+    {
+      "count": 2,
+      "extension": ".exe"
+    },
+    {
+      "count": 17,
+      "extension": ".h"
+    },
+    {
+      "count": 107,
+      "extension": ".in"
+    },
+    {
+      "count": 3,
+      "extension": ".log"
+    },
+    {
+      "count": 3,
+      "extension": ".m4"
+    },
+    {
+      "count": 745,
+      "extension": ".o"
+    },
+    {
+      "count": 1,
+      "extension": ".o65"
+    },
+    {
+      "count": 10,
+      "extension": ".out"
+    },
+    {
+      "count": 1432,
+      "extension": ".Po"
+    },
+    {
+      "count": 1,
+      "extension": ".sh"
+    },
+    {
+      "count": 3,
+      "extension": ".status"
+    },
+    {
+      "count": 1,
+      "extension": ".vice-shim-configure-flags"
+    }
+  ],
+  "injectedPaths": [
+    "vice/src/.vice-shim-configure-flags",
+    "vice/src/vice-shim-runtime.h"
+  ],
+  "hunkCount": 20,
+  "hunks": [
+    {
+      "header": "@@ -32,6 +32,10 @@",
+      "line": 5
+    },
+    {
+      "header": "@@ -44,11 +48,32 @@ CLOCK maincpu_clk_limit = 0L;",
+      "line": 16
+    },
+    {
+      "header": "@@ -314,9 +314,13 @@ int drive_snapshot_read_module(snapshot_t *s)",
+      "line": 53
+    },
+    {
+      "header": "@@ -188,6 +188,10 @@ void drivecpu_reset_clk(diskunit_context_t *drv)",
+      "line": 74
+    },
+    {
+      "header": "@@ -170,6 +170,10 @@ void drivecpu65c02_reset_clk(diskunit_context_t *drv)",
+      "line": 89
+    },
+    {
+      "header": "@@ -56,6 +56,10 @@",
+      "line": 104
+    },
+    {
+      "header": "@@ -196,7 +200,24 @@ inline static void check_ba(void)",
+      "line": 115
+    },
+    {
+      "header": "@@ -752,7 +773,37 @@ void maincpu_mainloop(void)",
+      "line": 140
+    },
+    {
+      "header": "@@ -951,11 +1002,31 @@ int maincpu_snapshot_read_module(snapshot_t *s)",
+      "line": 178
+    },
+    {
+      "header": "@@ -47,6 +47,10 @@",
+      "line": 219
+    },
+    {
+      "header": "@@ -579,7 +583,35 @@ void maincpu_mainloop(void)",
+      "line": 230
+    },
+    {
+      "header": "@@ -551,6 +551,16 @@ public:",
+      "line": 270
+    },
+    {
+      "header": "@@ -61,6 +61,10 @@ public:",
+      "line": 291
+    },
+    {
+      "header": "@@ -449,4 +449,113 @@ sid_engine_t resid_hooks =",
+      "line": 306
+    },
+    {
+      "header": "@@ -31,6 +31,10 @@",
+      "line": 424
+    },
+    {
+      "header": "@@ -40,7 +44,26 @@ CLOCK maincpu_clk_limit = 0L;",
+      "line": 435
+    },
+    {
+      "header": "@@ -306,7 +306,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, float *pbuf, int",
+      "line": 466
+    },
+    {
+      "header": "@@ -338,7 +350,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, int16_t *pbuf, in",
+      "line": 487
+    },
+    {
+      "header": "@@ -578,3 +602,77 @@ void sound_machine_enable(int enable)",
+      "line": 508
+    },
+    {
+      "header": "@@ -36,4 +36,9 @@ void vic_sound_reset(sound_t *psid, CLOCK cpu_clk);",
+      "line": 590
+    }
+  ]
+}

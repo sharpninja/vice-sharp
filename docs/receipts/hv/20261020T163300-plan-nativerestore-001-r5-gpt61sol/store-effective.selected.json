@@ -1,0 +1,279 @@
+[
+  {
+    "priority": "critical",
+    "scopeStartLayerKey": "layer-1",
+    "id": "FR-SNP-005",
+    "title": "Native VICE Snapshot Interoperability",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "text": "ViceSharp loads native VICE .vsf snapshots produced by x64sc and xvic for supported C64 and VIC-20 configurations without translating them to a ViceSharp-only snapshot format first.",
+        "id": "ac-01"
+      },
+      {
+        "isSatisfied": false,
+        "text": "After native .vsf load, managed CPU, RAM, video-chip, CIA/VIA, SID/VIC audio, machine timing, cartridge, tape, and drive state represented by the snapshot matches the corresponding VICE resumed state at the same checkpoint.",
+        "id": "ac-02"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Starting from the same native .vsf checkpoint, ViceSharp and the corresponding VICE engine remain in checkpoint and cycle lockstep for at least 100000 cycles with zero CPU, bus, video, timer, interrupt, and mapped-memory divergences.",
+        "id": "ac-03"
+      },
+      {
+        "isSatisfied": false,
+        "text": "ViceSharp writes native VICE .vsf snapshots for supported x64sc and xvic machines that the corresponding VICE engine loads successfully and resumes with matching state.",
+        "id": "ac-04"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Native VICE to ViceSharp to native VICE and ViceSharp to native VICE to ViceSharp round trips preserve every supported snapshot module and deterministic continuation behavior.",
+        "id": "ac-05"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Wrong machine identity, unsupported container or mandatory-module version, a manifest-invalid mandatory module set, truncated header or module framing, invalid or oversized lengths, trailing bytes, and byte corruption that violates envelope invariants or makes native VICE reject the snapshot are rejected before externally visible machine-state mutation with a descriptive compatibility error. VSF has no general payload checksum, so arbitrary payload bit flips not rejected by structural validation or native VICE are not falsely claimed detectable.",
+        "id": "ac-06"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Acceptance tests provision or generate their required native shim and .vsf fixtures; absence of the shim or fixture is a gate failure, never a skipped passing result.",
+        "id": "ac-07"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Every normal supported public and Avalonia win-x64 desktop snapshot entry point, including CaptureSnapshot, .vsf file save/load, quick save/load, and ten named slots, uses native VICE .vsf as the canonical default without an opt-in selector. A host without the packaged native runtime returns unavailable and never falls back to a proprietary format; UWP/Xbox implementation remains out of active scope without retiring its historical requirements.",
+        "id": "ac-08"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Existing vice-sharp.machine-snapshot.v2 and vice-sharp.runtime-snapshot.v1 payloads are accepted only by an explicit ImportLegacySnapshot operation and RPC that restores them once; no normal snapshot capture or save emits them, and replay payloads remain outside the snapshot API.",
+        "id": "ac-09"
+      }
+    ],
+    "notes": "Operator correction 2026-10-03: Native VICE VSF support has been the actual ViceSharp snapshot-format requirement since day one and must not be treated as secondary or opt-in. This preserves and completes the existing managed VSF resume bridge and does not replace or retire FR-VSFLOCKSTEP-001.",
+    "body": "For supported x64sc C64 and xvic VIC-20 systems, native VICE .vsf is the canonical ViceSharp snapshot format. All normal supported public and Avalonia desktop capture, save, restore, file, quick-slot, and named-slot paths must read or write native VICE snapshots through the existing managed state-transfer bridge. Proprietary ViceSharp runtime and replay payloads are not peer snapshot formats and may only remain behind an explicit legacy migration boundary.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp"
+  },
+  {
+    "priority": "critical",
+    "scopeStartLayerKey": "layer-1",
+    "id": "FR-VICE-001",
+    "title": "Immutable native VICE behavioral target",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "text": "Every parity or lockstep acceptance run identifies the pinned native/vice commit and proves no tracked native/vice file differs from that commit before or after the run.",
+        "id": "ac-01"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Emulator-behavior corrections are made in managed ViceSharp; native integration code may wrap or observe VICE only from outside native/vice and may not alter target source or behavior.",
+        "id": "ac-02"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Oracle binaries used as acceptance evidence are built from the pinned unmodified VICE target; evidence from a patched or behavior-modified VICE build is rejected.",
+        "id": "ac-03"
+      },
+      {
+        "isSatisfied": false,
+        "text": "When an external wrapper cannot obtain a required observation from immutable VICE, the parity gate fails closed and reports the missing observation instead of inferring data or changing VICE.",
+        "id": "ac-04"
+      }
+    ],
+    "notes": "Operator directive 2026-10-03: VICE native is the immutable target. Wrappers are allowed; modifying VICE is forbidden.",
+    "body": "ViceSharp shall conform managed emulator behavior to a pinned, unmodified native VICE revision. Native VICE source and oracle behavior shall never be changed to make ViceSharp pass; observation and control integrations must be implemented as wrappers outside native/vice.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp"
+  },
+  {
+    "priority": "high",
+    "scopeStartLayerKey": "layer-1",
+    "id": "TR-CYCLE-001",
+    "title": "Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "text": "All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.",
+        "id": "ac-01"
+      },
+      {
+        "isSatisfied": false,
+        "text": "The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle.",
+        "id": "ac-02"
+      },
+      {
+        "isSatisfied": false,
+        "text": "CIA timer countdown occurs at the correct bus phase (PHI2 falling edge).",
+        "id": "ac-03"
+      },
+      {
+        "isSatisfied": false,
+        "text": "CPU memory accesses occur only during PHI2 when AEC is asserted.",
+        "id": "ac-04"
+      },
+      {
+        "isSatisfied": false,
+        "text": "The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).",
+        "id": "ac-05"
+      },
+      {
+        "isSatisfied": false,
+        "text": "The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.",
+        "id": "ac-06"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.",
+        "id": "ac-07"
+      }
+    ],
+    "body": "The emulation core shall operate at sub-cycle granularity, modeling the two phases of the system clock (PHI1 and PHI2) and the bus ownership arbitration between the CPU and VIC-II. This level of accuracy is required to correctly emulate cycle-exact tricks used by C64 demos and games. The reference implementation for correctness is VICE x64sc (the cycle-exact VICE variant).\n\n## Acceptance Criteria\n- All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.\n- The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle.\n- CIA timer countdown occurs at the correct bus phase (PHI2 falling edge).\n- CPU memory accesses occur only during PHI2 when AEC is asserted.\n- The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).\n- The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.\n- Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp"
+  },
+  {
+    "priority": "critical",
+    "scopeStartLayerKey": "layer-1",
+    "id": "TR-VICE-ORACLE-001",
+    "title": "Read-only native VICE oracle boundary",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "text": "The native oracle preflight fails before validation when any tracked file under native/vice differs from the pinned gitlink commit.",
+        "id": "ac-01"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Wrapper builds and tests do not edit, generate source into, or apply patches to tracked native/vice paths.",
+        "id": "ac-02"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Required CPU bus events, timing, snapshots, and lifecycle observations come from real immutable VICE execution through external wrapper mechanisms; PeekBus, PC-derived values, and fabricated events are forbidden.",
+        "id": "ac-03"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Each oracle receipt records the native/vice commit, wrapper version or hash, clean-target proof, command, and zero-failure/zero-skip result for the claimed scope.",
+        "id": "ac-04"
+      },
+      {
+        "isSatisfied": false,
+        "text": "A missing wrapper capability is an explicit blocker and cannot be remediated by modifying native/vice.",
+        "id": "ac-05"
+      }
+    ],
+    "notes": "No patch application or direct source edit under native/vice is permitted.",
+    "body": "The native/vice gitlink is a read-only behavioral oracle. All stepping, tracing, snapshot, bus-event, and lifecycle integration must be implemented by external wrappers, launchers, link-time interposition, or public VICE interfaces that leave the pinned target source and semantics unchanged.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp"
+  },
+  {
+    "priority": "high",
+    "scopeStartLayerKey": "layer-1",
+    "id": "TR-VSFLOCKSTEP-RESUME-001",
+    "title": "Backward-compatible snapshot module read and VIC-II model alignment",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "text": "An external compatibility adapter outside `native/vice` loads a validated `MAINCPU` v1.2 module by inserting the absent v1.3 `ane_log_level` and `lxa_log_level` fields and absent v1.4 `maincpu_jammed` field with the pinned immutable VICE defaults before `maincpu_ba_low_flags`, updates the inclusive module length, preserves every following byte and module, handles v1.3 by inserting only `maincpu_jammed`, and passes current v1.4 through byte-for-byte. Malformed or unsupported layouts fail closed. External v1.2 and v1.3 fixtures plus a current v1.4 native round-trip prove resume behavior with zero failed, zero skipped, and zero aborted prerequisites.",
+        "id": "tr-vsflockstep-resume-001-ac-1"
+      },
+      {
+        "isSatisfied": false,
+        "text": "native/build-vice-shim.ps1 materializes the pinned VICE commit into a separate initially clean source root outside native/vice, follows the pinned VICE Team build instructions there (including required in-source build generation, explicitly approved 2026-10-08), and links only external wrapper translation units stored outside the submodule. Pre-build and post-build commit, tracked status and a complete inventory of original upstream source bytes must match exactly. Record all generated/build files separately with paths, hashes and producing commands; those artifacts are permitted only in the separate materialization/output roots and may not replace or modify original upstream source files. Any patch application, generated file or source mutation under native/vice fails the build. native/patches/vice-shim-runtime.patch is diagnostic legacy evidence only and is never applied.",
+        "id": "tr-vsflockstep-resume-001-ac-2"
+      }
+    ],
+    "body": "An external compatibility adapter outside `native/vice` shall normalize legacy x64sc `MAINCPU` v1.2 and v1.3 modules for the pinned, unmodified VICE reader while current v1.4 modules remain byte-identical. The wrapper shall align the VIC-II model before `machine_read_snapshot` and normalize wrapper-reported `snapshot_last_error` after a successful read. No part of this compatibility path may edit, patch, generate into, or behaviorally change `native/vice`.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp"
+  },
+  {
+    "priority": "critical",
+    "scopeStartLayerKey": "layer-1",
+    "id": "TEST-SNP-002",
+    "title": "Native VICE Snapshot Compatibility Gates",
+    "status": "pending",
+    "condition": "Prove native VICE .vsf as the canonical ViceSharp snapshot format using the existing managed resume bridge after productionization and completion: default public and desktop snapshot paths, native x64sc/xvic read and write, complete managed state transfer, bidirectional round trips, 100000-cycle lockstep, transactionality, corruption handling, and mandatory non-skipped prerequisites.",
+    "notes": "No skipped test counts as proof. UWP/Xbox are outside this target scope. Proprietary snapshot payloads are not accepted as peer or default snapshot formats.",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "text": "Load mandatory x64sc and xvic .vsf fixtures through the managed production path and compare every supported module field with the native VICE oracle.",
+        "id": "ac-01"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Save C64 and VIC-20 state from ViceSharp as .vsf, load the files in x64sc and xvic, and prove matching represented state.",
+        "id": "ac-02"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Run VICE-to-ViceSharp-to-VICE and ViceSharp-to-VICE-to-ViceSharp round trips and prove all supported module fields survive.",
+        "id": "ac-03"
+      },
+      {
+        "isSatisfied": false,
+        "text": "From each restored C64 and VIC-20 checkpoint, run at least 100000 cycles in lockstep and fail at the first CPU, bus, video, timer, interrupt, or mapped-memory divergence.",
+        "id": "ac-04"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Accept pinned-reader-compatible 58-byte current and 37-byte legacy VICE headers; walk 22-byte module headers with little-endian inclusive total lengths to exact EOF; reject wrong machine, unsupported versions, invalid/missing/duplicate mandatory modules, truncated framing, invalid or overflowing lengths, trailing bytes, and corruption rejected by structure or native VICE without visible mutation. Do not claim arbitrary bit-flip detection because VSF has no general checksum.",
+        "id": "ac-05"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Treat both shims, the pinned VICE commit, exact MSYS2 MINGW64 tool paths, exact ROM-hash allowlist, and fixture/state-transfer manifests as mandatory prerequisites. Missing or stale prerequisites fail Category=NativeViceSnapshot with zero skipped tests.",
+        "id": "ac-06"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Verify CaptureSnapshot, Avalonia .vsf file save/load, quick save/load, and ten named slots use native VSF by default; unsupported hosts return unavailable without fallback. Only generated protobuf ImportLegacySnapshot accepts the two proprietary formats, normal restore rejects them, and no capture emits them. UWP/Xbox implementation is not changed or claimed complete.",
+        "id": "ac-07"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Build and inspect the local win-x64 publish and MSI for both shims, the recursively verified loose PE closure staged after publish and before WiX, VICE license/source-offer files, and no ROMs; install locally and pass default C64/VIC-20 native-VSF capture/restore smoke from the installed app.",
+        "id": "ac-08"
+      }
+    ],
+    "workspaceId": "/home/sharpninja/github/vice-sharp"
+  },
+  {
+    "priority": "critical",
+    "scopeStartLayerKey": "layer-1",
+    "id": "TEST-VICE-001",
+    "title": "Immutable native VICE oracle integrity gates",
+    "status": "pending",
+    "condition": "Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable.",
+    "notes": "Covers FR-VICE-001 and TR-VICE-ORACLE-001.",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "text": "A clean-target preflight passes for the pinned native/vice commit and a simulated dirty-target fixture is rejected before parity execution.",
+        "id": "ac-01"
+      },
+      {
+        "isSatisfied": false,
+        "text": "The wrapper integration test proves no tracked native/vice file changes across build and execution.",
+        "id": "ac-02"
+      },
+      {
+        "isSatisfied": false,
+        "text": "Oracle receipts prove native commit identity, clean tracked source, wrapper provenance, exact commands, and failed 0 skipped 0 for the claimed gate.",
+        "id": "ac-03"
+      },
+      {
+        "isSatisfied": false,
+        "text": "When a required real bus or timing observation is unavailable, the test fails at that first missing observation and does not substitute PeekBus, PC inference, fabricated data, or a modified native build.",
+        "id": "ac-04"
+      }
+    ],
+    "workspaceId": "/home/sharpninja/github/vice-sharp"
+  }
+]
