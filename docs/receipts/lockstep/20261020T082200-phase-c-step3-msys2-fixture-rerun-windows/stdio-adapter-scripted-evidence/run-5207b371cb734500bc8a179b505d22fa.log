@@ -1,0 +1,17 @@
+2026-10-20T08:22:21.5210985-05:00
+Toolchain: F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\stdio-adapter-scripted-evidence\stdio-adapter-scripted.exe
+Executable: F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\stdio-adapter-scripted-evidence\stdio-adapter-scripted.exe
+Arguments: 7 | 12 | 0 | 67 | 0 | 18 | 0
+Environment: 
+ExitCode: 0
+TimedOut: False
+STDOUT:
+EV fprintf stderr 564943455F474154452C370A
+EV fflush stderr -
+EV fgetc stdin -
+EV fprintf stderr 564943455F474154455F53544F502C36380A
+EV fflush stderr -
+EV _Exit process 3638
+END exit 68
+
+STDERR:
