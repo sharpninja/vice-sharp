@@ -1,0 +1,12 @@
+2026-10-20T08:24:09.4969396-05:00
+Toolchain: MSYS2 MINGW64 gcc
+Executable: C:/msys64/usr/bin/bash.exe
+Arguments: -lc | printf 'resolved compiler: %s\nMSYSTEM=%s\n' "$(command -v gcc)" "$MSYSTEM"; exec gcc "$@" | bash | -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/gate-driver.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/clock-gate.c | -o | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/clock-gate-evidence/clock-gate.exe
+Environment: MSYSTEM=MINGW64 CHERE_INVOKING=1 MSYS2_PATH_TYPE=minimal
+ExitCode: 0
+TimedOut: False
+STDOUT:
+resolved compiler: /mingw64/bin/gcc
+MSYSTEM=MINGW64
+
+STDERR:
