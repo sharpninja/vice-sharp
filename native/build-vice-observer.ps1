@@ -210,8 +210,12 @@ function Step-Make {
     $targets = Get-TargetList
     $programs = @($targets | ForEach-Object { $_ + $exeExt })
     # The per-program targets do not depend on the bundled libraries under src/lib (liblinenoiseng.a is
-    # only built by the lib subdirectory recursion), so build src/lib first, then the programs.
-    $command = ('make -C src/lib -j{0} V=1 && make -C src -j{0} V=1 {1}' -f $script:jobCount, ($programs -join ' '))
+    # only built by the lib subdirectory recursion), so build src/lib first. Two library recipes recurse
+    # ("all") over other libraries' directories: archdep_lib (arch/shared) over hwsiddrv, mididrv, socketdrv
+    # and sounddrv, and core_lib (core) over rtc; under -j the program build enters those directories twice
+    # and the second make's ".Tpo to .Po" move fails (LEGION2 finding 2026-10-20T10:21, soundwmm.o). Build
+    # those two parents before the programs so their archives exist and the recipes do not recurse again.
+    $command = ('make -C src/lib -j{0} V=1 && make -C src/arch/shared -j{0} V=1 && make -C src/core -j{0} V=1 && make -C src -j{0} V=1 {1}' -f $script:jobCount, ($programs -join ' '))
     $r = Invoke-Native -Command $command -WorkingDirectory $build -LogPath $log
     $lines = ($r.Stdout -split "`n")
     $linkLines = @{}
