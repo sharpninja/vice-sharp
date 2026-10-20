@@ -1,0 +1,98 @@
+{
+  "Host": "windows",
+  "Sha": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "DataDirectory": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\work-windows\\vice\\data",
+  "Machines": "x64sc",
+  "Cycles": [
+    4000000
+  ],
+  "StockBinaries": [
+    {
+      "Machine": "x64sc",
+      "Sha256": "94D9DE06B0B1F8B68F56DC70726D5C3FD71723D3F4F1EE6E64134E0CFC654AE1"
+    }
+  ],
+  "ObserverBinaries": [
+    {
+      "Machine": "x64sc",
+      "Sha256": "BADAEA41E07C1D71A803A04B230DB9E965202E973087BCF01F708461318B533C"
+    }
+  ],
+  "Runs": [
+    {
+      "Label": "stock",
+      "Machine": "x64sc",
+      "Cycles": 4000000,
+      "Executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\build-windows\\src\\x64sc.exe",
+      "ExitCode": 1,
+      "ScreenshotSha256": "308BEE06176ECBB5CFAE3B6C52760BBB5A831C017A60A7EC69FFFFEAA5A5779F",
+      "StdoutSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "StderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "GateLines": 0,
+      "AccessLines": 0,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 0,
+      "RepatchLines": 0,
+      "ExtraLines": 0,
+      "ObsLines": 0,
+      "StopLines": 0
+    },
+    {
+      "Label": "withheld",
+      "Machine": "x64sc",
+      "Cycles": 4000000,
+      "Executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\bin-windows\\x64sc-observer.exe",
+      "ExitCode": 1,
+      "ScreenshotSha256": "308BEE06176ECBB5CFAE3B6C52760BBB5A831C017A60A7EC69FFFFEAA5A5779F",
+      "StdoutSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "StderrSha256": "1FD0C03FADEA1CBBC22A4BC9CFA61BBD6BC3928155EF09C92E4A7CECFE979284",
+      "GateLines": 3999998,
+      "AccessLines": 3891785,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 187068,
+      "RepatchLines": 5,
+      "ExtraLines": 2,
+      "ObsLines": 7999996,
+      "StopLines": 0
+    },
+    {
+      "Label": "keep",
+      "Machine": "x64sc",
+      "Cycles": 4000000,
+      "Executable": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\bin-windows\\x64sc-observer.exe",
+      "ExitCode": 1,
+      "ScreenshotSha256": "308BEE06176ECBB5CFAE3B6C52760BBB5A831C017A60A7EC69FFFFEAA5A5779F",
+      "StdoutSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "StderrSha256": "0F1EA703CBEEA615DE5D80715346B7856E53BDE851EAD28B5144C57591F3D7A0",
+      "GateLines": 3999998,
+      "AccessLines": 1479503,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 204,
+      "RepatchLines": 5,
+      "ExtraLines": 1,
+      "ObsLines": 7999996,
+      "StopLines": 0
+    }
+  ],
+  "Comparisons": [
+    {
+      "Machine": "x64sc",
+      "Cycles": 4000000,
+      "Comparison": {
+        "KeepAccessLines": 1479503,
+        "KeepLinesAbsentFromWithheld": 0,
+        "FirstAbsentLine": null,
+        "GateSequencesIdentical": true,
+        "WithheldClockGaps": 0,
+        "WithheldClockResets": 0
+      }
+    }
+  ],
+  "ObsValidationExit": 0,
+  "ObsValidationLog": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\equivalence-windows\\20261020T121500-4m-x64sc\\obs-validation.log",
+  "Findings": [],
+  "Equivalent": true
+}

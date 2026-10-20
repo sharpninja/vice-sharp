@@ -1,0 +1,14 @@
+{
+  "File": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\equivalence-windows\\20261020T121500-4m-x64sc\\x64sc-4000000-withheld.stderr",
+  "ObsLines": 7999996,
+  "Records": 7891781,
+  "Phi1": 3999998,
+  "Phi2": 3891783,
+  "IdlePhi2MissingData": 108215,
+  "OtherErrors": 0,
+  "FirstOtherError": null,
+  "SequenceFaults": 0,
+  "FirstSequenceFault": null,
+  "Stolen": 216430,
+  "MaxHalfCycle": 7999995
+}
