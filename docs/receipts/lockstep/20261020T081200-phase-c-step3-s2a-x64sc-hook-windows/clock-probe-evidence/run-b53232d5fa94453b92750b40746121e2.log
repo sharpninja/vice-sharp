@@ -1,0 +1,14 @@
+2026-10-19T19:59:51.6537721-05:00
+Executable: F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-probe-evidence\clock-probe.exe
+Arguments: 9 | 3 | 2 | 5
+ExitCode: 0
+TimedOut: False
+STDOUT:
+real,9
+observe,3
+end,3
+real,2
+observe,5
+end,5
+
+STDERR:
