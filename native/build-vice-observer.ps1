@@ -298,9 +298,18 @@ function Step-Inventory {
     # the operator's disposition (a plugin hook writing session state into a drifted working directory is the
     # known cause, not the build); they are a finding, not a pass, and are never deleted here.
     $unchanged = ($changed.Count -eq 0 -and $removed.Count -eq 0)
-    Write-Receipt -Name 'inventory' -Object ([pscustomobject]@{ Stage = 'Inventory'; Before = $beforeMap.Count; After = $afterList.Count; OriginalFilesUnchanged = $unchanged; Changed = $changed; Removed = $removed; Added = $added }) | Out-Null
+    # Added files already reported by an earlier Inventory run (for example PAYTON-LEGION2's pre-existing in-place
+    # build products, 2,815 files identical to its Oct 19 generated set) are kept in inventory-known-added.txt so
+    # the finding names only files new since the last run (LEGION2 suggestion 2026-10-20T10:24).
+    $knownPath = Join-Path $receipts 'inventory-known-added.txt'
+    $known = @()
+    if (Test-Path -LiteralPath $knownPath) { $known = @(Get-Content -LiteralPath $knownPath | Where-Object { $_ }) }
+    $newAdded = @($added | Where-Object { $known -notcontains $_ })
+    Set-Content -LiteralPath $knownPath -Value ($added -join "`n") -Encoding utf8
+    Write-Receipt -Name 'inventory' -Object ([pscustomobject]@{ Stage = 'Inventory'; Before = $beforeMap.Count; After = $afterList.Count; OriginalFilesUnchanged = $unchanged; Changed = $changed; Removed = $removed; AddedTotal = $added.Count; AddedNewSinceLastRun = $newAdded; KnownAddedList = $knownPath }) | Out-Null
     if (-not $unchanged) { throw ('Materialization source changed during the build ({0} changed, {1} removed); this is a finding, not a pass.' -f $changed.Count, $removed.Count) }
-    if ($added.Count) { Write-Output ('FINDING: {0} file(s) added to the materialization, left for disposition: {1}' -f $added.Count, ($added -join ', ')) }
+    if ($newAdded.Count) { Write-Output ('FINDING: {0} file(s) newly added to the materialization since the last Inventory, left for disposition: {1}' -f $newAdded.Count, ($newAdded -join ', ')) }
+    elseif ($added.Count) { Write-Output ('{0} previously reported added file(s) still present (see {1}); none new' -f $added.Count, $knownPath) }
     Write-Output ("original materialization files unchanged: {0}" -f $beforeMap.Count)
 }
 
