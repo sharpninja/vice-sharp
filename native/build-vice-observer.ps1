@@ -206,7 +206,9 @@ function Step-Link {
             if ($cl.ExitCode -ne 0) { throw "wrapper compile failed for $unit ($t): $($cl.Stderr)" }
             $objects += (ConvertTo-ShellPath $obj)
         }
-        $wraps = @($cycleSymbol, 'mem_initialize_memory', 'mem_mmu_translate', 'mem_toggle_watchpoints', 'vice_sharp_observe_clock') | ForEach-Object { "-Wl,--wrap=$_" }
+        $wrapSymbols = @($cycleSymbol, 'mem_initialize_memory', 'mem_mmu_translate', 'mem_toggle_watchpoints', 'vice_sharp_observe_clock')
+        if ($t -eq 'x64sc') { $wrapSymbols += 'vicii_steal_cycles' }
+        $wraps = $wrapSymbols | ForEach-Object { "-Wl,--wrap=$_" }
         $output = Join-Path $bin ("{0}-observer{1}" -f $t, $exeExt)
         $stock = [string]$linkLines.$t
         $program = [regex]::Escape($t + $exeExt)

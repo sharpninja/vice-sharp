@@ -122,7 +122,15 @@ function Compare-GatedRunPair {
     }
     $gateIdentical = ($withheldGate.Count -eq $keepGate.Count)
     if ($gateIdentical) { for ($i = 0; $i -lt $withheldGate.Count; $i++) { if ($withheldGate[$i] -ne $keepGate[$i]) { $gateIdentical = $false; break } } }
-    [pscustomobject]@{ KeepAccessLines = $keepAccess; KeepLinesAbsentFromWithheld = $missingLines; FirstAbsentLine = $firstMissing; GateSequencesIdentical = $gateIdentical }
+    # A forward gap in the gated clock sequence is a cycle the hook never saw (for example a VIC-II stolen
+    # cycle before S4a); a decrease is a reset and is reported separately.
+    $gaps = 0; $resets = 0; $previous = -1L
+    foreach ($g in $withheldGate) {
+        $clock = [long]($g.Substring(10))
+        if ($previous -ge 0) { if ($clock -gt $previous + 1) { $gaps++ } elseif ($clock -le $previous) { $resets++ } }
+        $previous = $clock
+    }
+    [pscustomobject]@{ KeepAccessLines = $keepAccess; KeepLinesAbsentFromWithheld = $missingLines; FirstAbsentLine = $firstMissing; GateSequencesIdentical = $gateIdentical; WithheldClockGaps = $gaps; WithheldClockResets = $resets }
 }
 
 $results = @()
@@ -142,8 +150,9 @@ foreach ($m in $machines) {
         if ($w.GateLines -ne $k.GateLines) { $findings += "$m/$n gate line counts differ: withheld $($w.GateLines) keep $($k.GateLines)" }
         $c = Compare-GatedRunPair -WithheldStderr (Join-Path $OutDir ("{0}-{1}-withheld.stderr" -f $m, $n)) -KeepStderr (Join-Path $OutDir ("{0}-{1}-keep.stderr" -f $m, $n))
         $comparisons += [pscustomobject]@{ Machine = $m; Cycles = $n; Comparison = $c }
-        Write-Output ("compare   keep access {0} absent-from-withheld {1} gate-identical {2}" -f $c.KeepAccessLines, $c.KeepLinesAbsentFromWithheld, $c.GateSequencesIdentical)
+        Write-Output ("compare   keep access {0} absent-from-withheld {1} gate-identical {2} clock-gaps {3} resets {4}" -f $c.KeepAccessLines, $c.KeepLinesAbsentFromWithheld, $c.GateSequencesIdentical, $c.WithheldClockGaps, $c.WithheldClockResets)
         if ($c.KeepLinesAbsentFromWithheld -ne 0) { $findings += "$m/$n $($c.KeepLinesAbsentFromWithheld) keep-run access lines absent from the withheld run (first: $($c.FirstAbsentLine))" }
+        if ($c.WithheldClockGaps -ne 0) { $findings += "$m/$n $($c.WithheldClockGaps) forward gaps in the gated clock sequence (cycles the hook never saw)" }
         if (-not $c.GateSequencesIdentical) { $findings += "$m/$n VICE_GATE sequences differ between withheld and keep" }
         if ($w.StopLines -or $k.StopLines) { $findings += "$m/$n STOP line present" }
         if ($w.MissingOrForeign -or $w.AccessMissingKind) { $findings += "$m/$n withheld run has missing or foreign reports ($($w.MissingOrForeign)) or accesses with kind missing ($($w.AccessMissingKind))" }
