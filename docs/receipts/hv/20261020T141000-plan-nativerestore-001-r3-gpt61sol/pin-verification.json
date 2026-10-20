@@ -1,0 +1,269 @@
+{
+  "timestampLocal": "2026-10-20T14:13:06",
+  "results": [
+    {
+      "path": "docs/plans/PLAN-NATIVERESTORE-001.md",
+      "expectedSha256": "6A59D7211F37E1DE16B1727287645187DE96CB9FDC7C4F674381AB515FDBB4B3",
+      "actualSha256": "6A59D7211F37E1DE16B1727287645187DE96CB9FDC7C4F674381AB515FDBB4B3",
+      "expectedBytes": 46030,
+      "actualBytes": 46030,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/verdict.json",
+      "expectedSha256": "F7C22A6F6FB44F17B99C2F39454762E883C46680D4F9E695765C78D461091EE9",
+      "actualSha256": "F7C22A6F6FB44F17B99C2F39454762E883C46680D4F9E695765C78D461091EE9",
+      "expectedBytes": 36684,
+      "actualBytes": 36684,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/verdict.md",
+      "expectedSha256": "EFBFB76A57ED827FD846D8F3C0EAC675C903BCB7142508245E025451E44BF5B8",
+      "actualSha256": "EFBFB76A57ED827FD846D8F3C0EAC675C903BCB7142508245E025451E44BF5B8",
+      "expectedBytes": 32523,
+      "actualBytes": 32523,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.md",
+      "expectedSha256": "7EDAA9A0494831229A84774CC99309E5F2BACBEB2945B5FC6039575284B7C5DD",
+      "actualSha256": "7EDAA9A0494831229A84774CC99309E5F2BACBEB2945B5FC6039575284B7C5DD",
+      "expectedBytes": 37495,
+      "actualBytes": 37495,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md",
+      "expectedSha256": "5FEF016E3F56F7AF4EEA56556E0081D837DE5C9FD4645BFEA6D71596A8B60FCF",
+      "actualSha256": "5FEF016E3F56F7AF4EEA56556E0081D837DE5C9FD4645BFEA6D71596A8B60FCF",
+      "expectedBytes": 133558,
+      "actualBytes": 133558,
+      "matches": true
+    },
+    {
+      "path": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+      "expectedSha256": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "actualSha256": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "expectedBytes": 37043,
+      "actualBytes": 37043,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md",
+      "expectedSha256": "CE1BA2F6E34268EDDDD4CE9A27552826258D38F888750F2F1D00F3FD6867F221",
+      "actualSha256": "CE1BA2F6E34268EDDDD4CE9A27552826258D38F888750F2F1D00F3FD6867F221",
+      "expectedBytes": 1700,
+      "actualBytes": 1700,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch",
+      "expectedSha256": "90604E39B827F850A382DC13DD921141290EF2C34E1483CDC6C612A07803E9E2",
+      "actualSha256": "90604E39B827F850A382DC13DD921141290EF2C34E1483CDC6C612A07803E9E2",
+      "expectedBytes": 22404,
+      "actualBytes": 22404,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-untracked-paths.txt",
+      "expectedSha256": "2129844CC74724740C6B6F376D61DD1A3B3952957FF591668968AB68A28E3765",
+      "actualSha256": "2129844CC74724740C6B6F376D61DD1A3B3952957FF591668968AB68A28E3765",
+      "expectedBytes": 92364,
+      "actualBytes": 92364,
+      "matches": true
+    },
+    {
+      "path": "docs/plans/PLAN-OBSERVER-001.md",
+      "expectedSha256": "1619F6A77FE658DE984254344731BCD2D5ACC826A4B71AC61277668F1C37D770",
+      "actualSha256": "1619F6A77FE658DE984254344731BCD2D5ACC826A4B71AC61277668F1C37D770",
+      "expectedBytes": 20104,
+      "actualBytes": 20104,
+      "matches": true
+    },
+    {
+      "path": "docs/plans/PLAN-VSFLOCKSTEP-001.md",
+      "expectedSha256": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "actualSha256": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "expectedBytes": 56395,
+      "actualBytes": 56395,
+      "matches": true
+    },
+    {
+      "path": "docs/requirements/technical/TR-Native-Vice-Snapshot.md",
+      "expectedSha256": "99103EA1E7D8E66A611E9C5F420D6093A37F44094A14A3E9FEECF78CC804C248",
+      "actualSha256": "99103EA1E7D8E66A611E9C5F420D6093A37F44094A14A3E9FEECF78CC804C248",
+      "expectedBytes": 8648,
+      "actualBytes": 8648,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md",
+      "expectedSha256": "7EB0818FDBD1C4E2F67A2AA3B9A22906A0A2EAD5CF75E48F16D43AF5319CC6A1",
+      "actualSha256": "7EB0818FDBD1C4E2F67A2AA3B9A22906A0A2EAD5CF75E48F16D43AF5319CC6A1",
+      "expectedBytes": 7705,
+      "actualBytes": 7705,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md",
+      "expectedSha256": "AF6BA3FF6702BE1C4AC015EDDBF84A7C675AF1A2F70F71FD6D11EB094D36C78B",
+      "actualSha256": "AF6BA3FF6702BE1C4AC015EDDBF84A7C675AF1A2F70F71FD6D11EB094D36C78B",
+      "expectedBytes": 5483,
+      "actualBytes": 5483,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md",
+      "expectedSha256": "A3ABB34250882488F34332885920A2C7F9C30EE68A14DB74BF5D6B4173B7EC74",
+      "actualSha256": "A3ABB34250882488F34332885920A2C7F9C30EE68A14DB74BF5D6B4173B7EC74",
+      "expectedBytes": 6874,
+      "actualBytes": 6874,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/README.md",
+      "expectedSha256": "69B3CBA67D832D3A7E4B08DA77CE0AB2A16B6E796A2C5BBF349DA5F7395FC0D2",
+      "actualSha256": "69B3CBA67D832D3A7E4B08DA77CE0AB2A16B6E796A2C5BBF349DA5F7395FC0D2",
+      "expectedBytes": 3792,
+      "actualBytes": 3792,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md",
+      "expectedSha256": "C3590AE0192853D835B7084091314E6FDB70958B051BE5DA2D95BEF3C687C325",
+      "actualSha256": "C3590AE0192853D835B7084091314E6FDB70958B051BE5DA2D95BEF3C687C325",
+      "expectedBytes": 3386,
+      "actualBytes": 3386,
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj",
+      "expectedSha256": "F3F480973F8064234C4151C547C5E6C8E53FCD8001B00966DD5B777381410A56",
+      "actualSha256": "F3F480973F8064234C4151C547C5E6C8E53FCD8001B00966DD5B777381410A56",
+      "expectedBytes": 4122,
+      "actualBytes": 4122,
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+      "expectedSha256": "4FDA26CA8F879E946E57FB6B033CDE8B53EDE99CD21EEFC2B32BDCED5396C731",
+      "actualSha256": "4FDA26CA8F879E946E57FB6B033CDE8B53EDE99CD21EEFC2B32BDCED5396C731",
+      "expectedBytes": 494,
+      "actualBytes": 494,
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs",
+      "expectedSha256": "EB97C7DBFFABD086CF39504F496BEC2231BEF2896AADD844D6E0F35D641DF1D1",
+      "actualSha256": "EB97C7DBFFABD086CF39504F496BEC2231BEF2896AADD844D6E0F35D641DF1D1",
+      "expectedBytes": 6479,
+      "actualBytes": 6479,
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+      "expectedSha256": "B1EF324968E81634CF37033A1F29FD75C605FB47D771CFDFAF4DF390124C671F",
+      "actualSha256": "B1EF324968E81634CF37033A1F29FD75C605FB47D771CFDFAF4DF390124C671F",
+      "expectedBytes": 80584,
+      "actualBytes": 80584,
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+      "expectedSha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "actualSha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "expectedBytes": 190854,
+      "actualBytes": 190854,
+      "matches": true
+    },
+    {
+      "path": "src/ViceSharp.Core/ViceNative.cs",
+      "expectedSha256": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+      "actualSha256": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+      "expectedBytes": 37725,
+      "actualBytes": 37725,
+      "matches": true
+    },
+    {
+      "path": "src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs",
+      "expectedSha256": "9E8CAA10C968A8FDDE18EF3A3AB666E7CC9E959506902AF8A800C57E8D19E583",
+      "actualSha256": "9E8CAA10C968A8FDDE18EF3A3AB666E7CC9E959506902AF8A800C57E8D19E583",
+      "expectedBytes": 4532,
+      "actualBytes": 4532,
+      "matches": true
+    },
+    {
+      "path": "native/Vice.Native.proj",
+      "expectedSha256": "F2B96B77241AB8DFDB284A3B430B9CABD04DD8096D6453072A38C80F0273EE57",
+      "actualSha256": "F2B96B77241AB8DFDB284A3B430B9CABD04DD8096D6453072A38C80F0273EE57",
+      "expectedBytes": 1749,
+      "actualBytes": 1749,
+      "matches": true
+    },
+    {
+      "path": ".gitmodules",
+      "expectedSha256": "829DD5B7BC4AB64749108E9F5DBAC06F28F666E916A46E92645EBCEFB1BB2C4A",
+      "actualSha256": "829DD5B7BC4AB64749108E9F5DBAC06F28F666E916A46E92645EBCEFB1BB2C4A",
+      "expectedBytes": 113,
+      "actualBytes": 113,
+      "matches": true
+    },
+    {
+      "path": "native/build-vice-observer.ps1",
+      "expectedSha256": "ADCC40B7EBD3F67BBC7DFAACFF40FC0F06D9EBC27EF3379FB6CFE8BE39B46E84",
+      "actualSha256": "ADCC40B7EBD3F67BBC7DFAACFF40FC0F06D9EBC27EF3379FB6CFE8BE39B46E84",
+      "expectedBytes": 20943,
+      "actualBytes": 20943,
+      "matches": true
+    },
+    {
+      "path": "tools/immutable-vice/Invoke-ObserverEquivalence.ps1",
+      "expectedSha256": "D9B96776A88973A592E6154CCD2D81010EEF087BCA44191544C6113BD4CF8315",
+      "actualSha256": "D9B96776A88973A592E6154CCD2D81010EEF087BCA44191544C6113BD4CF8315",
+      "expectedBytes": 15492,
+      "actualBytes": 15492,
+      "matches": true
+    },
+    {
+      "path": "tools/immutable-vice/clock-observer-x64sc.c",
+      "expectedSha256": "E54036379CC4C9024D8BF5C7E1272FAD6291A6733252E7B5AEC4DECD8CF659BB",
+      "actualSha256": "E54036379CC4C9024D8BF5C7E1272FAD6291A6733252E7B5AEC4DECD8CF659BB",
+      "expectedBytes": 2167,
+      "actualBytes": 2167,
+      "matches": true
+    },
+    {
+      "path": "build/Build.cs",
+      "expectedSha256": "5C55CB59C0A0371A261DDEDFEC67879F5250F852762DCD924A7D570363DF34D4",
+      "actualSha256": "5C55CB59C0A0371A261DDEDFEC67879F5250F852762DCD924A7D570363DF34D4",
+      "expectedBytes": 103509,
+      "actualBytes": 103509,
+      "matches": true
+    },
+    {
+      "path": "ViceSharp.slnx",
+      "expectedSha256": "EB70F73D9300B752D2251D7756ABEA03337AB61C317F10B47B39E287EDE4D900",
+      "actualSha256": "EB70F73D9300B752D2251D7756ABEA03337AB61C317F10B47B39E287EDE4D900",
+      "expectedBytes": 8517,
+      "actualBytes": 8517,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T141000-plan-nativerestore-001-r3-gpt61sol/prompt.md",
+      "expectedSha256": "0DC60992157925C8A8DAA61E63054161E1927CF14477D6DB5854B8422F05A9AA",
+      "actualSha256": "0DC60992157925C8A8DAA61E63054161E1927CF14477D6DB5854B8422F05A9AA",
+      "expectedBytes": 11666,
+      "actualBytes": 11666,
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T141000-plan-nativerestore-001-r3-gpt61sol/SELF-REVIEW.md",
+      "expectedSha256": "D5DA047163D873F8E3E0E53D1CA8F85FF9773231E32FD5CA6984F7E19B8EF6AA",
+      "actualSha256": "D5DA047163D873F8E3E0E53D1CA8F85FF9773231E32FD5CA6984F7E19B8EF6AA",
+      "expectedBytes": 8113,
+      "actualBytes": 8113,
+      "matches": true
+    }
+  ]
+}

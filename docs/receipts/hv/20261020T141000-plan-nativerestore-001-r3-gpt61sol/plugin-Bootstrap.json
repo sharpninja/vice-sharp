@@ -1,0 +1,9 @@
+{
+  "timestampLocal": "2026-10-20T14:13:45",
+  "operation": "Bootstrap",
+  "method": "workflow.sessionlog.bootstrap",
+  "output": "",
+  "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  code: internal_server_error\n  message: 'MCP_UNTRUSTED: marker refresh failed before REPL request'\n  retryable: false\n  details:\n    method: workflow.sessionlog.bootstrap\n\n",
+  "reviewerSessionId": "Codex-20261020T191342Z-nativerestore-r3",
+  "reviewerRequestId": "req-20261020T191342Z-nativerestore-r3"
+}
