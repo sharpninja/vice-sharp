@@ -21,9 +21,13 @@
 extern void __real_vice_sharp_observe_clock(uint64_t clock);
 extern void vice_sharp_bus_cycle(uint64_t clock);
 
+/* Both the write and the flush are checked: under the Windows MSVCRT, fprintf to a pipe
+ * whose reader has gone returns a positive count and only fflush reports the failure
+ * (LEGION2 finding 2026-10-20T08:13, msvcrt-stderr-probe); on glibc fprintf itself fails.
+ * Flushing here also keeps every event physically ahead of the gate record it precedes. */
 void vice_sharp_bus_sink(const char *kind, const char *detail)
 {
-    if (fprintf(stderr, "VICE_BUS,%s,%s\n", kind, detail) < 0) {
+    if (fprintf(stderr, "VICE_BUS,%s,%s\n", kind, detail) < 0 || fflush(stderr) != 0) {
         fprintf(stderr, "VICE_BUS_STOP,%d\n", 72);
         fflush(stderr);
         _Exit(72);

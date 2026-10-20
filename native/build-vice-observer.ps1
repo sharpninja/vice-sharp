@@ -4,18 +4,21 @@ PLAN-OBSERVER-001 slice S2b: build the stock VICE objects from the immutable mat
 x64sc and xvic with the external observer wrappers. Canonical script for both hosts; per-host paths only.
 
 .DESCRIPTION
-Stages (run in order, each idempotent, each leaving a receipt under the work root):
+Stages (run in order, each idempotent, each leaving a receipt under the receipts tree):
   Copy      Copy the pristine materialization source to a work tree and prove the copy byte-identical by
             SHA256 over every file, so autogen never writes into the materialization.
   Autogen   Run VICE's autogen.sh in the work tree (autoreconf; generates configure and Makefile.in there).
   Configure Out-of-tree configure in the build tree: headless UI, no sound or media libraries, no docs.
-  Make      Build with V=1 and capture the stock link lines of x64sc and xvic from the make log.
+  Make      Build the x64sc and xvic programs with V=1 and capture their stock link lines from the log.
   Link      Compile the wrapper translation units (tools/immutable-vice) and rerun each captured link line
             with the wrapper objects and the ld --wrap flags appended, writing <machine>-observer binaries
-            to the bin tree; record SHA256, nm of the __wrap_ symbols, and the exact link line.
+            to the bin tree; record SHA256, nm of the wrap symbols, and the exact link line.
   Inventory Hash the materialization again and compare with the Copy-stage list: it must be unchanged.
-Nothing under native/vice or the materialization source is modified. Generated files live only in the
-work, build and bin trees under artifacts/immutable-vice/<sha>/ (gitignored).
+Every native tool (sh, autoreconf, configure, make, gcc, nm) runs through the platform shell: /bin/sh on
+Linux, and on Windows the MSYS2 MINGW64 login shell (Payton directive 2026-10-20T08:07: "always use msys
+to compile native VICE code"), never gcc.exe called directly. Nothing under native/vice or the
+materialization source is modified; generated files live only in the work, build, bin and receipts trees
+under artifacts/immutable-vice/<sha>/ (gitignored).
 
 .PARAMETER Stage
 One of Copy, Autogen, Configure, Make, Link, Inventory, All.
@@ -29,14 +32,16 @@ param(
     [string] $Sha = 'cc67418cba58e71d8e70fd353e9de47199ad2075',
     [string] $RepoRoot = (Split-Path -Parent $PSScriptRoot),
     [int] $Jobs = [Environment]::ProcessorCount,
-    [string] $CCompiler = ''
+    [string] $MsysRoot = 'C:\msys64'
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $script:machineChoice = $Machine
 $script:jobCount = $Jobs
+$script:msysRootPath = $MsysRoot
 $hostTag = if ($IsWindows) { 'windows' } else { 'linux' }
+$exeExt = if ($IsWindows) { '.exe' } else { '' }
 $root = Join-Path $RepoRoot "artifacts/immutable-vice/$Sha"
 $source = Join-Path $root 'source/vice'
 $work = Join-Path $root "work-$hostTag/vice"
@@ -44,12 +49,16 @@ $build = Join-Path $root "build-$hostTag"
 $bin = Join-Path $root "bin-$hostTag"
 $receipts = Join-Path $root "receipts-$hostTag"
 $wrappers = Join-Path $RepoRoot 'tools/immutable-vice'
-if (-not $CCompiler) {
-    $CCompiler = if ($IsWindows) { 'C:\msys64\mingw64\bin\gcc.exe' } else { '/usr/bin/gcc' }
-}
-$shell = if ($IsWindows) { 'C:\msys64\usr\bin\bash.exe' } else { '/bin/sh' }
 foreach ($dir in @($build, $bin, $receipts)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
 if (-not (Test-Path -LiteralPath $source)) { throw "Materialization source missing: $source" }
+
+function ConvertTo-ShellPath {
+    param([Parameter(Mandatory)][string] $Path)
+    if (-not $IsWindows) { return $Path }
+    $full = [IO.Path]::GetFullPath($Path)
+    if ($full -match '^([A-Za-z]):\\(.*)$') { return ('/{0}/{1}' -f $Matches[1].ToLowerInvariant(), ($Matches[2] -replace '\\', '/')) }
+    return ($full -replace '\\', '/')
+}
 
 function Get-TreeHashList {
     param([Parameter(Mandatory)][string] $Root)
@@ -71,16 +80,26 @@ function Write-Receipt {
     return $path
 }
 
-function Invoke-Logged {
+# Runs one shell command line through the platform shell and logs command, cwd, exit and both streams.
+function Invoke-Native {
     param(
-        [Parameter(Mandatory)][string] $Executable,
-        [string[]] $Arguments = @(),
+        [Parameter(Mandatory)][string] $Command,
         [Parameter(Mandatory)][string] $WorkingDirectory,
         [Parameter(Mandatory)][string] $LogPath
     )
     $psi = [System.Diagnostics.ProcessStartInfo]::new()
-    $psi.FileName = $Executable
-    foreach ($a in $Arguments) { [void]$psi.ArgumentList.Add($a) }
+    if ($IsWindows) {
+        $psi.FileName = Join-Path $script:msysRootPath 'usr\bin\bash.exe'
+        [void]$psi.ArgumentList.Add('-lc')
+        [void]$psi.ArgumentList.Add($Command)
+        $psi.Environment['MSYSTEM'] = 'MINGW64'
+        $psi.Environment['CHERE_INVOKING'] = '1'
+        $psi.Environment['MSYS2_PATH_TYPE'] = 'minimal'
+    } else {
+        $psi.FileName = '/bin/sh'
+        [void]$psi.ArgumentList.Add('-c')
+        [void]$psi.ArgumentList.Add($Command)
+    }
     $psi.WorkingDirectory = $WorkingDirectory
     $psi.UseShellExecute = $false
     $psi.RedirectStandardOutput = $true
@@ -89,7 +108,7 @@ function Invoke-Logged {
     $stdout = $p.StandardOutput.ReadToEndAsync()
     $stderr = $p.StandardError.ReadToEndAsync()
     $p.WaitForExit()
-    $text = "COMMAND: {0} {1}`nCWD: {2}`nEXIT: {3}`n--- STDOUT`n{4}`n--- STDERR`n{5}" -f $Executable, ($Arguments -join ' '), $WorkingDirectory, $p.ExitCode, $stdout.Result, $stderr.Result
+    $text = "SHELL: {0}`nCOMMAND: {1}`nCWD: {2}`nEXIT: {3}`n--- STDOUT`n{4}`n--- STDERR`n{5}" -f $psi.FileName, $Command, $WorkingDirectory, $p.ExitCode, $stdout.Result, $stderr.Result
     Set-Content -LiteralPath $LogPath -Value $text -Encoding utf8
     return [pscustomobject]@{ ExitCode = $p.ExitCode; Stdout = $stdout.Result; Stderr = $stderr.Result; Log = $LogPath }
 }
@@ -121,7 +140,7 @@ function Step-Copy {
 
 function Step-Autogen {
     $log = Join-Path $receipts 'autogen.log'
-    $r = Invoke-Logged -Executable $shell -Arguments @('./autogen.sh') -WorkingDirectory $work -LogPath $log
+    $r = Invoke-Native -Command './autogen.sh' -WorkingDirectory $work -LogPath $log
     Write-Receipt -Name 'autogen' -Object ([pscustomobject]@{ Stage = 'Autogen'; ExitCode = $r.ExitCode; Log = $log; ConfigureExists = (Test-Path (Join-Path $work 'configure')) }) | Out-Null
     if ($r.ExitCode -ne 0 -or -not (Test-Path (Join-Path $work 'configure'))) { throw "autogen failed (exit $($r.ExitCode)); see $log" }
     Write-Output 'autogen ok'
@@ -129,15 +148,15 @@ function Step-Autogen {
 
 function Step-Configure {
     $log = Join-Path $receipts 'configure.log'
-    $configureArgs = @(
-        (Join-Path $work 'configure'),
+    $flags = @(
         '--enable-headlessui', '--disable-pdf-docs', '--disable-html-docs',
         '--without-pulse', '--without-alsa', '--without-oss', '--without-portaudio',
         '--without-flac', '--without-vorbis', '--without-mpg123', '--without-gif', '--without-lame',
         '--disable-ethernet', '--disable-realdevice', '--disable-x64', '--disable-x64-image'
     )
-    $r = Invoke-Logged -Executable $shell -Arguments $configureArgs -WorkingDirectory $build -LogPath $log
-    Write-Receipt -Name 'configure' -Object ([pscustomobject]@{ Stage = 'Configure'; ExitCode = $r.ExitCode; Arguments = $configureArgs; Log = $log }) | Out-Null
+    $command = ('"{0}" {1}' -f (ConvertTo-ShellPath (Join-Path $work 'configure')), ($flags -join ' '))
+    $r = Invoke-Native -Command $command -WorkingDirectory $build -LogPath $log
+    Write-Receipt -Name 'configure' -Object ([pscustomobject]@{ Stage = 'Configure'; ExitCode = $r.ExitCode; Command = $command; Log = $log }) | Out-Null
     if ($r.ExitCode -ne 0) { throw "configure failed (exit $($r.ExitCode)); see $log" }
     Write-Output 'configure ok'
 }
@@ -149,16 +168,21 @@ function Get-TargetList {
 function Step-Make {
     $log = Join-Path $receipts 'make.log'
     $targets = Get-TargetList
-    $r = Invoke-Logged -Executable 'make' -Arguments (@('-C', 'src', "-j$($script:jobCount)", 'V=1') + $targets) -WorkingDirectory $build -LogPath $log
+    $programs = @($targets | ForEach-Object { $_ + $exeExt })
+    # The per-program targets do not depend on the bundled libraries under src/lib (liblinenoiseng.a is
+    # only built by the lib subdirectory recursion), so build src/lib first, then the programs.
+    $command = ('make -C src/lib -j{0} V=1 && make -C src -j{0} V=1 {1}' -f $script:jobCount, ($programs -join ' '))
+    $r = Invoke-Native -Command $command -WorkingDirectory $build -LogPath $log
     $lines = ($r.Stdout -split "`n")
     $linkLines = @{}
     foreach ($t in $targets) {
-        $hit = @($lines | Where-Object { $_ -match "\s-o\s+$t(\s|$)" -and $_ -notmatch '^\s*(libtool|ar\s)' }) | Select-Object -Last 1
+        $program = [regex]::Escape($t + $exeExt)
+        $hit = @($lines | Where-Object { $_ -match "\s-o\s+$program(\s|$)" -and $_ -notmatch '^\s*(libtool|ar\s)' }) | Select-Object -Last 1
         if ($hit) { $linkLines[$t] = $hit.Trim() }
     }
     $linkPath = Join-Path $receipts 'stock-link-lines.json'
     $linkLines | ConvertTo-Json | Set-Content -LiteralPath $linkPath -Encoding utf8
-    Write-Receipt -Name 'make' -Object ([pscustomobject]@{ Stage = 'Make'; ExitCode = $r.ExitCode; Targets = $targets; LinkLinesFound = @($linkLines.Keys); Log = $log; LinkLines = $linkPath }) | Out-Null
+    Write-Receipt -Name 'make' -Object ([pscustomobject]@{ Stage = 'Make'; ExitCode = $r.ExitCode; Command = $command; LinkLinesFound = @($linkLines.Keys); Log = $log; LinkLines = $linkPath }) | Out-Null
     if ($r.ExitCode -ne 0) { throw "make failed (exit $($r.ExitCode)); see $log" }
     foreach ($t in $targets) { if (-not $linkLines.ContainsKey($t)) { throw "No link line captured for $t; see $log" } }
     Write-Output ("make ok; link lines captured for {0}" -f ($linkLines.Keys -join ', '))
@@ -172,25 +196,31 @@ function Step-Link {
     foreach ($t in Get-TargetList) {
         $cycleHook = if ($t -eq 'x64sc') { 'clock-observer-x64sc.c' } else { 'clock-observer.c' }
         $cycleSymbol = if ($t -eq 'x64sc') { 'vicii_cycle' } else { 'vic_cycle' }
-        $defines = if ($t -eq 'x64sc') { @('-DVICE_SHARP_ROWS=32') } else { @() }
+        $defines = if ($t -eq 'x64sc') { '-DVICE_SHARP_ROWS=32' } else { '' }
         $objDir = Join-Path $build "observer-obj/$t"
         New-Item -ItemType Directory -Force -Path $objDir | Out-Null
         $objects = @()
         foreach ($unit in @($cycleHook, 'clock-gate.c', 'gate-observer.c', 'bus-observer.c', 'bus-adapter.c')) {
             $obj = Join-Path $objDir ([IO.Path]::ChangeExtension($unit, '.o'))
-            $cl = Invoke-Logged -Executable $CCompiler -Arguments (@('-std=c11', '-Wall', '-Wextra', '-Werror', '-O2', '-g') + $defines + @('-c', (Join-Path $wrappers $unit), '-o', $obj)) -WorkingDirectory $objDir -LogPath (Join-Path $receipts "compile-$t-$([IO.Path]::GetFileNameWithoutExtension($unit)).log")
+            $command = ('gcc -std=c11 -Wall -Wextra -Werror -O2 -g {0} -c "{1}" -o "{2}"' -f $defines, (ConvertTo-ShellPath (Join-Path $wrappers $unit)), (ConvertTo-ShellPath $obj))
+            $cl = Invoke-Native -Command $command -WorkingDirectory $objDir -LogPath (Join-Path $receipts "compile-$t-$([IO.Path]::GetFileNameWithoutExtension($unit)).log")
             if ($cl.ExitCode -ne 0) { throw "wrapper compile failed for $unit ($t): $($cl.Stderr)" }
-            $objects += $obj
+            $objects += (ConvertTo-ShellPath $obj)
         }
         $wraps = @($cycleSymbol, 'mem_initialize_memory', 'mem_mmu_translate', 'mem_toggle_watchpoints', 'vice_sharp_observe_clock') | ForEach-Object { "-Wl,--wrap=$_" }
-        $output = Join-Path $bin "$t-observer"
+        $output = Join-Path $bin ("{0}-observer{1}" -f $t, $exeExt)
         $stock = [string]$linkLines.$t
-        $relink = $stock -replace "\s-o\s+$t(\s|$)", (" -o " + $output + '$1')
-        $relink = $relink + ' ' + (($objects + $wraps) -join ' ')
+        $program = [regex]::Escape($t + $exeExt)
+        # The wrapper objects go directly after "-o <output>", ahead of every stock object and archive: ld pulls
+        # archive members only for references already seen, so __real_<symbol> (resolved to the stock symbol
+        # inside an archive) must be referenced before that archive is scanned. The --wrap flags can go last.
+        $quotedObjects = ($objects | ForEach-Object { '"' + $_ + '"' }) -join ' '
+        $relink = $stock -replace "\s-o\s+$program(\s|$)", (' -o "' + (ConvertTo-ShellPath $output) + '" ' + $quotedObjects + '$1')
+        $relink = $relink + ' ' + ($wraps -join ' ')
         $log = Join-Path $receipts "link-$t.log"
-        $r = Invoke-Logged -Executable $shell -Arguments @('-c', $relink) -WorkingDirectory (Join-Path $build 'src') -LogPath $log
+        $r = Invoke-Native -Command $relink -WorkingDirectory (Join-Path $build 'src') -LogPath $log
         if ($r.ExitCode -ne 0) { throw "relink failed for $t (exit $($r.ExitCode)); see $log" }
-        $nm = Invoke-Logged -Executable 'nm' -Arguments @($output) -WorkingDirectory $bin -LogPath (Join-Path $receipts "nm-$t.log")
+        $nm = Invoke-Native -Command ('nm "{0}"' -f (ConvertTo-ShellPath $output)) -WorkingDirectory $bin -LogPath (Join-Path $receipts "nm-$t.log")
         $wrapSymbols = @(($nm.Stdout -split "`n") | Where-Object { $_ -match '__wrap_|__real_|vice_sharp_' } | ForEach-Object { $_.Trim() })
         $results += [pscustomobject]@{
             Machine = $t; Output = $output; Sha256 = (Get-FileHash -LiteralPath $output -Algorithm SHA256).Hash
@@ -198,7 +228,7 @@ function Step-Link {
         }
         Write-Output ("linked {0}: {1}" -f $t, $output)
     }
-    Write-Receipt -Name 'link' -Object ([pscustomobject]@{ Stage = 'Link'; Compiler = $CCompiler; Results = $results }) | Out-Null
+    Write-Receipt -Name 'link' -Object ([pscustomobject]@{ Stage = 'Link'; Host = $hostTag; Results = $results }) | Out-Null
 }
 
 function Step-Inventory {
