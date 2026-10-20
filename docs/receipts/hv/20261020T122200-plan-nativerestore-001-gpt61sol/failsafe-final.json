@@ -1,0 +1,19 @@
+{
+  "stage": "Final",
+  "queuePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T174553Z-review_final-8ebd.yaml",
+  "queueSha256": "3EADFDA93460770F42FBC77F9A2146359DAE802ECDC0DBACC2BF9330BA855572",
+  "queued": true,
+  "persisted": false,
+  "primaryReadback": false,
+  "localReadbackMatches": true,
+  "crlfLfNormalizationApplied": false,
+  "reviewerSessionId": "Codex-20261020T173749Z-hv-plan-nativerestore-001",
+  "reviewerRequestId": "req-20261020T173749Z-turn-5e79",
+  "timestampLocal": "2026-10-20T12:45:53.180-05:00",
+  "markdownChunkCount": 5,
+  "jsonChunkCount": 5,
+  "sourceMarkdownSha256": "AE61A94A163FDBD917ABAEEE9E2D96D29F78AE1477B013DD5B15D01894E2A040",
+  "readbackMarkdownSha256": "AE61A94A163FDBD917ABAEEE9E2D96D29F78AE1477B013DD5B15D01894E2A040",
+  "sourceJsonSha256": "1A1AD6A7CF2677E90A98BB5B999497FD09BFCEA242D71CE5F75E6B8B596BB20F",
+  "readbackJsonSha256": "1A1AD6A7CF2677E90A98BB5B999497FD09BFCEA242D71CE5F75E6B8B596BB20F"
+}

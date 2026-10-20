@@ -1,0 +1,7 @@
+{
+  "action": "Invoke",
+  "method": "workflow.sessionlog.queryHistory",
+  "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  code: internal_server_error\n  message: 'MCP_UNTRUSTED: marker refresh failed before REPL request'\n  retryable: false\n  details:\n    method: workflow.sessionlog.queryHistory\n\n",
+  "timestampLocal": "2026-10-20T12:46:29.676-05:00",
+  "persisted": false
+}

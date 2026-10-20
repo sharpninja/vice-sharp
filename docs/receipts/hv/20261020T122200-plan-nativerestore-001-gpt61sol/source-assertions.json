@@ -1,0 +1,250 @@
+{
+  "timestampLocal": "2026-10-20T12:47:50.096-05:00",
+  "nativeTrackedChanges": 8,
+  "nativeUntrackedEntries": 155,
+  "planClaims135Untracked": true,
+  "nativeProjectBuildNativeTargetPresent": true,
+  "harnessInvokesBuildNativeTarget": true,
+  "nativeSafeSolutionMembership": [
+    {
+      "project": "ViceSharp.NativeClockProbe.Tests",
+      "present": false
+    },
+    {
+      "project": "ViceSharp.OracleContract.Tests",
+      "present": false
+    },
+    {
+      "project": "ViceSharp.VsfCompatibility.Tests",
+      "present": false
+    }
+  ],
+  "consumerFileCount": 31,
+  "consumers": [
+    {
+      "path": "tests/ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 6
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 1
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/CpuValidationTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 3
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 4
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 3
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 4
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 4
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 4
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 2
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEngineParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 28
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 6
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 2
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 4
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 4
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 4
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 3
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 3
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 1
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 3
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 1
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 2
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceNativeBridge.cs",
+      "categories": [],
+      "viceFactsOrTheories": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 31
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 5
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 15
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 6
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 13
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceMachineValidationFixture.cs",
+      "categories": [],
+      "viceFactsOrTheories": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiValidationTests.cs",
+      "categories": [],
+      "viceFactsOrTheories": 2
+    }
+  ],
+  "builderSupportsWhatIf": false,
+  "equivalenceRunnerSupportsWhatIf": false,
+  "planNamesRealPhi2AecGate": false,
+  "oldInjectedHeaderHash": "5450FDA8CFEDB8A22BADA8CD04EE75FF830C48796592FF9EC0141E899D846259",
+  "oldUntrackedInventoryCount": 2527,
+  "scripts": [
+    {
+      "path": "Complete-ReviewChecks.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "151B454A5D15AE4DED310F55BCB494905159F29F93191D0566A8243B8CC3CA3A"
+    },
+    {
+      "path": "Get-ReviewState.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "174AD760FA8237BC84F15B48EF7932D603DE302407BDC68B9279921DC3540CE3"
+    },
+    {
+      "path": "Invoke-ReviewMcp.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "E3D4A5C2B409722F7051E0831750007A5E4C772C03835B14B83D7D57E65C3371"
+    },
+    {
+      "path": "Launch-Review.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "9240653D98F74181701A8FF11630F073306F50B8E19D9B3B32EE5607A38D57F6"
+    },
+    {
+      "path": "Prepare-ReviewLog.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "7ECF72DE1C3535BA5A63BF8C2523364F1FABD3A0A7ED885717FCBB3419D4053B"
+    },
+    {
+      "path": "Read-ReviewEvidence.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "B79F1ABC73CD3F0E077555FDC09C975922B55416E07170BCBEF59780B393EE59"
+    },
+    {
+      "path": "Save-ReviewFailsafe.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "04AB16820CBB63AFBAE25F3603B454F34D0B69049536A4A308834F326DC86014"
+    },
+    {
+      "path": "Test-ReviewAssertions.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "1C3DF5F72998B4C1E54E4020CF00C2B48F630C7525DAFE3D189552FFC3CA0E02"
+    },
+    {
+      "path": "Write-ReviewVerdict.ps1",
+      "parseErrorCount": 0,
+      "warningErrorCount": 0,
+      "issues": [],
+      "sha256": "5B8ADF90BD0BE91C8DE9F4AC54442D1AAF58F65C764E910B386009AC7EA8CC55"
+    }
+  ]
+}
