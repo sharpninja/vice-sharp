@@ -199,9 +199,15 @@ function Step-Link {
         $objDir = Join-Path $build "observer-obj/$t"
         New-Item -ItemType Directory -Force -Path $objDir | Out-Null
         $objects = @()
-        foreach ($unit in @($cycleHook, 'clock-gate.c', 'gate-observer.c', 'bus-observer.c', 'bus-adapter.c')) {
+        # The machine glue (obs-fields-*.c) reads VICE globals through the real headers of the work tree and
+        # the configured config.h of the build tree; every other unit is header-free.
+        $includes = @((Join-Path $work 'src'), (Join-Path $build 'src'), (Join-Path $work 'src/vic20'), (Join-Path $work 'src/raster'), (Join-Path $work 'src/viciisc')) |
+            ForEach-Object { '-I"' + (ConvertTo-ShellPath $_) + '"' }
+        $units = @($cycleHook, 'clock-gate.c', 'gate-observer.c', 'bus-observer.c', 'bus-adapter.c', 'obs-emitter.c', "obs-fields-$t.c")
+        foreach ($unit in $units) {
             $obj = Join-Path $objDir ([IO.Path]::ChangeExtension($unit, '.o'))
-            $command = ('gcc -std=c11 -Wall -Wextra -Werror -O2 -g {0} -c "{1}" -o "{2}"' -f $defines, (ConvertTo-ShellPath (Join-Path $wrappers $unit)), (ConvertTo-ShellPath $obj))
+            $unitIncludes = if ($unit -like 'obs-fields-*') { ($includes -join ' ') } else { '' }
+            $command = ('gcc -std=c11 -Wall -Wextra -Werror -O2 -g {0} {1} -c "{2}" -o "{3}"' -f $defines, $unitIncludes, (ConvertTo-ShellPath (Join-Path $wrappers $unit)), (ConvertTo-ShellPath $obj))
             $cl = Invoke-Native -Command $command -WorkingDirectory $objDir -LogPath (Join-Path $receipts "compile-$t-$([IO.Path]::GetFileNameWithoutExtension($unit)).log")
             if ($cl.ExitCode -ne 0) { throw "wrapper compile failed for $unit ($t): $($cl.Stderr)" }
             $objects += (ConvertTo-ShellPath $obj)

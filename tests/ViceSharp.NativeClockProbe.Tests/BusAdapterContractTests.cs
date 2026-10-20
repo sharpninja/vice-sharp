@@ -22,8 +22,13 @@ public static class BusAdapterFixtures
 
     public static string Nl => RealStdioFixtures.Nl;
 
+    // S4b: with VICESHARP_BUS_RAW=1 the raw access line stays; the adapter then composes the two VICE_OBS
+    // lines of the cycle (the test glue obs-fields-double.c reports x64sc rules, BA high, mask 0, no PHI1
+    // value, not stolen) and only then runs the real gate adapter, so every line of a cycle precedes its gate record.
     private static string Cycle(int clock) =>
-        $"VICE_BUS,access,read,4660,145,{clock}{Nl}VICE_BUS,cycle,{clock}{Nl}VICE_GATE,{clock}{Nl}";
+        $"VICE_BUS,access,read,4660,145,{clock}{Nl}VICE_BUS,cycle,{clock}{Nl}" +
+        $"VICE_OBS,1,{(clock - 7) * 2},PHI1,0,1,idle,0,,0,0,{clock}{Nl}VICE_OBS,1,{(clock - 7) * 2 + 1},PHI2,1,1,read,4660,145,0,0,{clock}{Nl}" +
+        $"VICE_GATE,{clock}{Nl}";
     private static string Init => $"VICE_BUS,repatch,514,1{Nl}";
 
     public static IEnumerable<object[]> Cases => new[]
@@ -80,7 +85,13 @@ public sealed class BusAdapterContractTests
         {
             wrongs.Add(good with { Stderr = null });
             // Bus events after the gate record of their cycle are wrong: the host reads the record before permitting the next cycle.
-            wrongs.Add(good with { Stderr = e.Stderr.Replace($"VICE_BUS,cycle,7{nl}VICE_GATE,7{nl}", $"VICE_GATE,7{nl}VICE_BUS,cycle,7{nl}") });
+            wrongs.Add(good with { Stderr = e.Stderr
+                .Replace($"VICE_OBS,1,1,PHI2,1,1,read,4660,145,0,0,7{nl}VICE_GATE,7{nl}", $"VICE_OBS,1,1,PHI2,1,1,read,4660,145,0,0,7{nl}")
+                .Replace($"VICE_BUS,access,read,4660,145,7{nl}VICE_BUS,cycle,7{nl}", $"VICE_GATE,7{nl}VICE_BUS,access,read,4660,145,7{nl}VICE_BUS,cycle,7{nl}") });
+            // The VICE_OBS pair must precede the gate record and carry the cycle's access; dropped or guessed is wrong.
+            wrongs.Add(good with { Stderr = e.Stderr.Replace($"VICE_OBS,1,1,PHI2,1,1,read,4660,145,0,0,7{nl}VICE_GATE,7{nl}", $"VICE_GATE,7{nl}VICE_OBS,1,1,PHI2,1,1,read,4660,145,0,0,7{nl}") });
+            wrongs.Add(good with { Stderr = e.Stderr.Replace($"VICE_OBS,1,0,PHI1,0,1,idle,0,,0,0,7{nl}", "") });
+            wrongs.Add(good with { Stderr = e.Stderr.Replace($"VICE_OBS,1,0,PHI1,0,1,idle,0,,0,0,7{nl}", $"VICE_OBS,1,0,PHI1,0,1,idle,0,0,0,0,7{nl}") });
             // Dropped access, dropped cycle, dropped repatch.
             wrongs.Add(good with { Stderr = e.Stderr.Replace($"VICE_BUS,access,read,4660,145,7{nl}", "") });
             wrongs.Add(good with { Stderr = e.Stderr.Replace($"VICE_BUS,cycle,7{nl}", "") });
@@ -101,7 +112,7 @@ public sealed class BusAdapterContractTests
 public sealed class BusAdapterRealProcessTests
 {
     private static readonly CompiledCFixture Real = new("bus-adapter-real",
-        ["bus-real-driver.c", "native-bus-double.c", "clock-observer.c", "bus-observer.c", "bus-adapter.c", "gate-observer.c", "clock-gate.c"],
+        ["bus-real-driver.c", "native-bus-double.c", "clock-observer.c", "bus-observer.c", "bus-adapter.c", "obs-emitter.c", "obs-fields-double.c", "gate-observer.c", "clock-gate.c"],
         "-Wl,--wrap=vic_cycle", "-Wl,--wrap=mem_initialize_memory", "-Wl,--wrap=mem_mmu_translate",
         "-Wl,--wrap=mem_toggle_watchpoints", "-Wl,--wrap=vice_sharp_observe_clock");
 
@@ -115,6 +126,7 @@ public sealed class BusAdapterRealProcessTests
                 RedirectStandardOutput = true, RedirectStandardError = true, WorkingDirectory = Real.EvidenceDirectory
             };
             if (c.Wait) start.ArgumentList.Add("wait");
+            start.Environment["VICESHARP_BUS_RAW"] = "1";
             using var process = Process.Start(start) ?? throw new InvalidOperationException("driver did not start");
             var stdout = process.StandardOutput.BaseStream.CopyToMemoryAsync();
             Task<byte[]>? stderr = null;

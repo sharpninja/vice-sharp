@@ -41,6 +41,13 @@ void vice_sharp_bus_sink(const char *kind, const char *detail)
     printf("%s,%s\n", kind, detail);
 }
 
+void vice_sharp_bus_on_access(const char *kind, uint16_t addr, uint8_t data)
+{
+    (void)kind;
+    (void)addr;
+    (void)data;
+}
+
 static int parse_number(const char *text, uint64_t *value)
 {
     char *end;

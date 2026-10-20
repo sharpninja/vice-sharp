@@ -58,6 +58,8 @@ extern void __real_mem_initialize_memory(void);
 extern void __real_mem_mmu_translate(unsigned int addr, uint8_t **base, int *start, int *limit);
 extern void __real_mem_toggle_watchpoints(int flag, void *context);
 extern void vice_sharp_bus_sink(const char *kind, const char *detail);
+/* S4b: every access is also handed to the adapter in binary form for the VICE_OBS composition. */
+extern void vice_sharp_bus_on_access(const char *kind, uint16_t addr, uint8_t data);
 #if VICE_SHARP_ROWS > 1
 extern int mem_get_current_bank_config(void);
 extern void mem_read_tab_set(unsigned int base, unsigned int index, read_func_ptr_t read_func);
@@ -104,6 +106,7 @@ static void emit_access(const char *kind, uint16_t addr, uint8_t data)
     char detail[64];
     snprintf(detail, sizeof detail, "%s,%u,%u,%" PRIu64, kind, (unsigned)addr, (unsigned)data, maincpu_clk);
     vice_sharp_bus_sink("access", detail);
+    vice_sharp_bus_on_access(kind, addr, data);
 }
 
 static int repoint_dummy(void);
