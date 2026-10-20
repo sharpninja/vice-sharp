@@ -1,0 +1,1 @@
+first fprintf=23 ferror=0; second fprintf=17 ferror=0; fflush=-1
