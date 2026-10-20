@@ -57,8 +57,6 @@ Scope: layer-1+
 
 ## FR-CFG-002 ROM and Romset Selection
 
-## FR-CFG-002: ROM and Romset Selection
-
 **ID:** FR-CFG-002
 **Title:** ROM and Romset Selection
 **Priority:** P0 -- Critical
@@ -1318,8 +1316,6 @@ Scope: layer-1+
 
 ## FR-INP-006 VICE VKM Keymap Selection and Real-Time Keyboard Translation
 
-## FR-INP-006: VICE Keymap Selection and Translation
-
 **ID:** FR-INP-006
 **Title:** VICE VKM Keymap Selection and Real-Time Keyboard Translation
 **Priority:** P0 -- Critical
@@ -1467,8 +1463,6 @@ Scope: layer-1+
 
 ## FR-MED-002 Video Recording
 
-## FR-MED-002: Video Recording
-
 **ID:** FR-MED-002
 **Title:** Video Recording (MP4 via FFmpeg)
 **Priority:** P1 -- Important
@@ -1507,8 +1501,6 @@ Scope: layer-1+
 - [ ] The recording pipeline uses zero managed allocations per frame on the hot path.
 
 ## FR-MED-003 Audio Recording
-
-## FR-MED-003: Audio Recording
 
 **ID:** FR-MED-003
 **Title:** Audio Recording (WAV/FLAC)
@@ -2300,8 +2292,6 @@ Scope: layer-1+
 
 ## FR-ROMM-LAUNCH-001 Download, attach, and boot library media
 
-## FR-ROMM-LAUNCH-001: Download, attach, and boot library media
-
 **ID:** FR-ROMM-LAUNCH-001
 **Title:** Download, attach, and boot library media
 **Priority:** P1 -- Important
@@ -2662,8 +2652,6 @@ Scope: layer-1+
 
 ## FR-SID-013 SID Audio Backend Wiring
 
-## FR-SID-013: SID Audio Backend Wiring
-
 **ID:** FR-SID-013
 **Title:** SID Audio Backend Wiring
 **Priority:** P1 -- Important
@@ -2743,8 +2731,6 @@ Scope: layer-1+
 
 ## FR-SNP-001 Save Machine State
 
-## FR-SNP-001: Save Machine State
-
 **ID:** FR-SNP-001
 **Title:** Save Complete Machine State to Snapshot
 **Priority:** P0 -- Critical
@@ -2788,8 +2774,6 @@ Scope: layer-1+
 - [ ] The `ISnapshotManager.Save()` method returns a snapshot handle or writes to a specified path.
 
 ## FR-SNP-002 Load Machine State
-
-## FR-SNP-002: Load Machine State
 
 **ID:** FR-SNP-002
 **Title:** Load Machine State from Snapshot
@@ -3151,8 +3135,6 @@ Scope: layer-1+
 - [ ] The status bar remains usable without stealing emulator focus for normal display interaction.
 
 ## FR-UI-003 Collapsible Tabbed Emulator Sidebar
-
-## FR-UI-003: Collapsible Tabbed Emulator Sidebar
 
 **ID:** FR-UI-003
 **Title:** Collapsible Tabbed Emulator Sidebar
@@ -3638,8 +3620,6 @@ Scope: layer-1+
 - [ ] Capture not sentinel/all-black after READY; BGRA alpha 0xFF (NTSC unpainted clamp rows opaque black) (evidence: Vic20PixelLockstep alpha asserts)
 
 ## FR-VIC20-002 VIC-20 memory map and expansions
-
-## FR-VIC20-002: VIC-20 memory map and expansions
 
 **ID:** FR-VIC20-002
 **Title:** VIC-20 base memory map and RAM expansions

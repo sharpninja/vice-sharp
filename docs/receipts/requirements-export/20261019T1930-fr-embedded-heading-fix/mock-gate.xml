@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="20" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="19:29:58">
+  <environment machine-name="PAYTON-LEGION2" os-version="10.0.26200" user="SYSTEM" nunit-version="2.5.8.0" clr-version="10.0.13" user-domain="" cwd="F:\GitHub\vice-sharp" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="0.9777" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\vice-sharp\docs\receipts\requirements-export\20261019T1930-fr-embedded-heading-fix\FrEmbeddedHeading.Tests.ps1" executed="True" result="Success" success="True" time="0.9777" asserts="0" description="F:\GitHub\vice-sharp\docs\receipts\requirements-export\20261019T1930-fr-embedded-heading-fix\FrEmbeddedHeading.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Remove-FrEmbeddedHeading" executed="True" result="Success" success="True" time="0.3026" asserts="0" description="Remove-FrEmbeddedHeading">
+            <results>
+              <test-case description="AC1/AC2: removes the colon-form heading and following blank lines, keeps the rest exactly" name="Remove-FrEmbeddedHeading.AC1/AC2: removes the colon-form heading and following blank lines, keeps the rest exactly" time="0.1631" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="AC1: removes the space-form heading" name="Remove-FrEmbeddedHeading.AC1: removes the space-form heading" time="0.0054" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="AC2: keeps CRLF line endings in the remainder" name="Remove-FrEmbeddedHeading.AC2: keeps CRLF line endings in the remainder" time="0.0045" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="AC3 negative: refuses a description with no heading" name="Remove-FrEmbeddedHeading.AC3 negative: refuses a description with no heading" time="0.029" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="AC3 negative: refuses another id heading" name="Remove-FrEmbeddedHeading.AC3 negative: refuses another id heading" time="0.008" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="AC3 negative: refuses an id that is only a prefix of the heading id" name="Remove-FrEmbeddedHeading.AC3 negative: refuses an id that is only a prefix of the heading id" time="0.0091" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="AC3 negative: refuses a heading that is not on the first line" name="Remove-FrEmbeddedHeading.AC3 negative: refuses a heading that is not on the first line" time="0.0192" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="AC3 negative: refuses a level-3 heading" name="Remove-FrEmbeddedHeading.AC3 negative: refuses a level-3 heading" time="0.0087" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="AC4 negative: refuses a description that would become empty" name="Remove-FrEmbeddedHeading.AC4 negative: refuses a description that would become empty" time="0.0104" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="AC5: live snapshot (before.json, 10 records)" executed="True" result="Success" success="True" time="0.4409" asserts="0" description="AC5: live snapshot (before.json, 10 records)">
+            <results>
+              <test-case description="has exactly the 10 expected ids" name="AC5: live snapshot (before.json, 10 records).has exactly the 10 expected ids" time="0.008" asserts="0" success="True" result="Success" executed="True" />
+              <test-suite type="ParameterizedTest" name="AC5: live snapshot (before.json, 10 records).&lt;_&gt; transforms, loses only its first line and blank lines, and keeps no own heading" executed="True" result="Success" success="True" time="0.1221" asserts="0" description="&lt;_&gt; transforms, loses only its first line and blank lines, and keeps no own heading">
+                <results>
+                  <test-case description="FR-CFG-002 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-CFG-002 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.0276" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-INP-006 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-INP-006 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.0153" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-MED-002 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-MED-002 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.0051" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-MED-003 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-MED-003 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.0102" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-ROMM-LAUNCH-001 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-ROMM-LAUNCH-001 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.007" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-SID-013 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-SID-013 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.0196" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-SNP-001 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-SNP-001 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.0057" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-SNP-002 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-SNP-002 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.0137" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-UI-003 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-UI-003 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.0048" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="FR-VIC20-002 transforms, loses only its first line and blank lines, and keeps no own heading" name="AC5: live snapshot (before.json, 10 records).FR-VIC20-002 transforms, loses only its first line and blank lines, and keeps no own heading" time="0.013" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
