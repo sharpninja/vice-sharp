@@ -88,7 +88,8 @@ function Invoke-Native {
     )
     $psi = [System.Diagnostics.ProcessStartInfo]::new()
     if ($IsWindows) {
-        $psi.FileName = Join-Path $script:msysRootPath 'usr\bin\bash.exe'
+        # Lab rule (Payton 2026-10-20T08:19): forward slashes on Windows.
+        $psi.FileName = ($script:msysRootPath -replace '\\', '/').TrimEnd('/') + '/usr/bin/bash.exe'
         [void]$psi.ArgumentList.Add('-lc')
         [void]$psi.ArgumentList.Add($Command)
         $psi.Environment['MSYSTEM'] = 'MINGW64'
@@ -112,29 +113,56 @@ function Invoke-Native {
     return [pscustomobject]@{ ExitCode = $p.ExitCode; Stdout = $stdout.Result; Stderr = $stderr.Result; Log = $LogPath }
 }
 
-function Step-Copy {
-    if (-not (Test-Path -LiteralPath $work)) {
-        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $work) | Out-Null
-        Copy-Item -LiteralPath $source -Destination $work -Recurse -Force
+# The copy set is the committed tracked-file list of the materialization (3,847 entries, SHA256|size|path,
+# proven byte-identical on both hosts, docs/receipts/native-vice/20261019T202542-linux-materialization/compare/),
+# restricted to the vice/ subtree: on PAYTON-LEGION2 the materialization is configured and built in place, so a
+# whole-folder copy would carry config.status into the work tree and the generated configure refuses an
+# out-of-tree build when $srcdir/config.status exists (LEGION2 finding 2026-10-20T10:08). Every copied file is
+# verified against the list's SHA256; a work tree that already holds config.status is refused, never cleaned.
+$script:trackedListPath = Join-Path $RepoRoot 'docs/receipts/native-vice/20261019T202542-linux-materialization/compare/omarchy-tracked-files.txt'
+
+function Get-TrackedViceList {
+    if (-not (Test-Path -LiteralPath $script:trackedListPath)) { throw "Tracked-file list missing: $script:trackedListPath" }
+    $entries = foreach ($line in Get-Content -LiteralPath $script:trackedListPath) {
+        if ([string]::IsNullOrWhiteSpace($line)) { continue }
+        $sha, $size, $path = $line -split '\|', 3
+        if ($path.StartsWith('vice/')) { [pscustomobject]@{ Sha256 = $sha.ToUpperInvariant(); Size = [long]$size; Path = $path.Substring(5) } }
     }
-    $sourceList = Get-TreeHashList -Root $source
-    $workList = Get-TreeHashList -Root $work
-    $workMap = @{}
-    foreach ($e in $workList) { $workMap[$e.Path] = $e.Sha256 }
-    $missing = @($sourceList | Where-Object { -not $workMap.ContainsKey($_.Path) })
-    $different = @($sourceList | Where-Object { $workMap.ContainsKey($_.Path) -and $workMap[$_.Path] -ne $_.Sha256 })
-    $listText = ($sourceList | ForEach-Object { "{0} {1}" -f $_.Sha256, $_.Path }) -join "`n"
+    return @($entries | Sort-Object -Property Path -Culture ([cultureinfo]::InvariantCulture))
+}
+
+function Step-Copy {
+    $tracked = Get-TrackedViceList
+    if (Test-Path -LiteralPath (Join-Path $work 'config.status')) {
+        throw "Work tree $work holds config.status (an in-tree configure); the out-of-tree configure would refuse it. Remove or rename the work tree (operator decision), then rerun Copy."
+    }
+    New-Item -ItemType Directory -Force -Path $work | Out-Null
+    $copied = 0
+    $missingSource = @()
+    $different = @()
+    foreach ($e in $tracked) {
+        $src = Join-Path $source $e.Path
+        $dst = Join-Path $work $e.Path
+        if (-not (Test-Path -LiteralPath $src)) { $missingSource += $e.Path; continue }
+        if (-not (Test-Path -LiteralPath $dst)) {
+            New-Item -ItemType Directory -Force -Path (Split-Path -Parent $dst) | Out-Null
+            Copy-Item -LiteralPath $src -Destination $dst -Force
+            $copied++
+        }
+        $hash = (Get-FileHash -LiteralPath $dst -Algorithm SHA256).Hash
+        if ($hash -ne $e.Sha256) { $different += $e.Path }
+    }
+    $listText = ($tracked | ForEach-Object { "{0} {1}" -f $_.Sha256, $_.Path }) -join "`n"
     $listSha = (Get-FileHash -InputStream ([IO.MemoryStream]::new([Text.Encoding]::UTF8.GetBytes($listText))) -Algorithm SHA256).Hash
     $sourceListPath = Join-Path $receipts 'materialization-hashes.txt'
     Set-Content -LiteralPath $sourceListPath -Value $listText -Encoding utf8
     $result = [pscustomobject]@{
-        Stage = 'Copy'; SourceFiles = $sourceList.Count; WorkFilesCoveringSource = $sourceList.Count - $missing.Count
-        Missing = @($missing | ForEach-Object { $_.Path }); Different = @($different | ForEach-Object { $_.Path })
-        SourceListSha256 = $listSha; SourceListPath = $sourceListPath
+        Stage = 'Copy'; TrackedViceFiles = $tracked.Count; CopiedNow = $copied; TrackedList = $script:trackedListPath
+        MissingInSource = $missingSource; DifferentInWork = $different; SourceListSha256 = $listSha; SourceListPath = $sourceListPath
     }
     Write-Receipt -Name 'copy' -Object $result | Out-Null
-    if ($missing.Count -or $different.Count) { throw "Work tree is not a byte-identical copy of the materialization ($($missing.Count) missing, $($different.Count) different)." }
-    Write-Output ("copy verified: {0} files, list SHA256 {1}" -f $sourceList.Count, $listSha)
+    if ($missingSource.Count -or $different.Count) { throw "Work tree does not match the tracked list ($($missingSource.Count) missing in the materialization, $($different.Count) different in the work tree)." }
+    Write-Output ("copy verified: {0} tracked vice/ files ({1} copied now), list SHA256 {2}" -f $tracked.Count, $copied, $listSha)
 }
 
 function Step-Autogen {
