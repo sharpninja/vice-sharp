@@ -24,11 +24,13 @@ param(
     [int[]] $Cycles = @(100000, 1000000),
     [string] $Sha = 'cc67418cba58e71d8e70fd353e9de47199ad2075',
     [string] $RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
-    [string] $OutDir = ''
+    [string] $OutDir = '',
+    [string] $MsysRoot = 'C:/msys64'
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+$script:msysRootPath = $MsysRoot
 $hostTag = if ($IsWindows) { 'windows' } else { 'linux' }
 $exeExt = if ($IsWindows) { '.exe' } else { '' }
 $root = Join-Path $RepoRoot "artifacts/immutable-vice/$Sha"
@@ -66,6 +68,13 @@ function Invoke-Run {
     # S4b: the adapter composes VICE_OBS lines by default and prints the raw per-access line only on request;
     # the per-cycle comparison below works on the raw lines, so request them.
     $psi.Environment['VICESHARP_BUS_RAW'] = '1'
+    # The MinGW-built binaries import libcurl-4, libpng16-16, libstdc++-6 and zlib1 from <MsysRoot>/mingw64/bin,
+    # which is on no machine or user Path (LEGION2 finding 2026-10-20T10:29); declare it here so the run does not
+    # depend on the caller's environment. Forward slashes, per the lab rule.
+    if ($IsWindows) {
+        $mingwBin = ($script:msysRootPath -replace '\\', '/').TrimEnd('/') + '/mingw64/bin'
+        $psi.Environment['Path'] = $mingwBin + ';' + [Environment]::GetEnvironmentVariable('Path')
+    }
     $p = [System.Diagnostics.Process]::Start($psi)
     $outFile = [IO.File]::Create($stdoutPath)
     $errFile = [IO.File]::Create($stderrPath)
