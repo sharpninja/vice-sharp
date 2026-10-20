@@ -1,0 +1,104 @@
+[
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/plans/PLAN-NATIVERESTORE-001.md",
+    "relativePath": "docs/plans/PLAN-NATIVERESTORE-001.md",
+    "sha256": "D96E986093559A8DE4C3778F118AB9EEBD7324AA22FE385949F4006567CA5CB4",
+    "bytes": 18394
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/handoff/HANDOFF.lockstep-plan.md",
+    "relativePath": "docs/receipts/handoff/HANDOFF.lockstep-plan.md",
+    "sha256": "7EDAA9A0494831229A84774CC99309E5F2BACBEB2945B5FC6039575284B7C5DD",
+    "bytes": 37495
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md",
+    "relativePath": "docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md",
+    "sha256": "EE0D232B424A73D899A489E8C644F03579471A52F895A697AA9178939925CD8D",
+    "bytes": 128979
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+    "relativePath": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+    "sha256": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+    "bytes": 37043
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md",
+    "relativePath": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md",
+    "sha256": "CE1BA2F6E34268EDDDD4CE9A27552826258D38F888750F2F1D00F3FD6867F221",
+    "bytes": 1700
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch",
+    "relativePath": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch",
+    "sha256": "90604E39B827F850A382DC13DD921141290EF2C34E1483CDC6C612A07803E9E2",
+    "bytes": 22404
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/plans/PLAN-OBSERVER-001.md",
+    "relativePath": "docs/plans/PLAN-OBSERVER-001.md",
+    "sha256": "1619F6A77FE658DE984254344731BCD2D5ACC826A4B71AC61277668F1C37D770",
+    "bytes": 20104
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md",
+    "relativePath": "docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md",
+    "sha256": "AF6BA3FF6702BE1C4AC015EDDBF84A7C675AF1A2F70F71FD6D11EB094D36C78B",
+    "bytes": 5483
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md",
+    "relativePath": "docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md",
+    "sha256": "A3ABB34250882488F34332885920A2C7F9C30EE68A14DB74BF5D6B4173B7EC74",
+    "bytes": 6874
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md",
+    "relativePath": "docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md",
+    "sha256": "C3590AE0192853D835B7084091314E6FDB70958B051BE5DA2D95BEF3C687C325",
+    "bytes": 3386
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/native/Vice.Native.proj",
+    "relativePath": "native/Vice.Native.proj",
+    "sha256": "F2B96B77241AB8DFDB284A3B430B9CABD04DD8096D6453072A38C80F0273EE57",
+    "bytes": 1749
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/.gitmodules",
+    "relativePath": ".gitmodules",
+    "sha256": "829DD5B7BC4AB64749108E9F5DBAC06F28F666E916A46E92645EBCEFB1BB2C4A",
+    "bytes": 113
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/native/build-vice-observer.ps1",
+    "relativePath": "native/build-vice-observer.ps1",
+    "sha256": "ADCC40B7EBD3F67BBC7DFAACFF40FC0F06D9EBC27EF3379FB6CFE8BE39B46E84",
+    "bytes": 20943
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/build/Build.cs",
+    "relativePath": "build/Build.cs",
+    "sha256": "5C55CB59C0A0371A261DDEDFEC67879F5250F852762DCD924A7D570363DF34D4",
+    "bytes": 103509
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/ViceSharp.slnx",
+    "relativePath": "ViceSharp.slnx",
+    "sha256": "EB70F73D9300B752D2251D7756ABEA03337AB61C317F10B47B39E287EDE4D900",
+    "bytes": 8517
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/prompt.md",
+    "relativePath": "docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/prompt.md",
+    "sha256": "8A4E1954838F0B451C592FD818A0107703700D5D5D4F80B3153308D8B160FDF2",
+    "bytes": 7291
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/SELF-REVIEW.md",
+    "relativePath": "docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/SELF-REVIEW.md",
+    "sha256": "8FF62752C8C8E38A07E57FB6748204D91387BEDEFD17900CF6040090804C9E90",
+    "bytes": 5435
+  }
+]
