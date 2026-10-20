@@ -1,0 +1,225 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Abstractions -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Abstractions/bin/Release/net10.0/ViceSharp.Abstractions.dll
+  ViceSharp.RomFetch -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomFetch/bin/Release/net10.0/ViceSharp.RomFetch.dll
+  ViceSharp.Protocol -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Protocol/bin/Release/net10.0/ViceSharp.Protocol.dll
+  ViceSharp.Chips -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Chips/bin/Release/net10.0/ViceSharp.Chips.dll
+  ViceSharp.Library.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Library.ViewModels/bin/Release/net10.0/ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.Input/bin/Release/net10.0/ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.ViewModels/bin/Release/net10.0/ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.RomM -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomM/bin/Release/net10.0/ViceSharp.RomM.dll
+  ViceSharp.Core -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/bin/Release/net10.0/ViceSharp.Core.dll
+  ViceSharp.Monitor -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Monitor/bin/Release/net10.0/ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Architectures/bin/Release/net10.0/ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Launcher/bin/Release/net10.0/ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Benchmarks/bin/Release/net10.0/ViceSharp.Benchmarks.dll
+  ViceSharp.Console -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Console/bin/Release/net10.0/ViceSharp.Console.dll
+  ViceSharp.Host.InProcess -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.InProcess/bin/Release/net10.0/ViceSharp.Host.InProcess.dll
+  ViceSharp.AdhocHelper -> /home/sharpninja/github/vice-sharp/src/ViceSharp.AdhocHelper/bin/Release/net10.0/ViceSharp.AdhocHelper.dll
+  ViceSharp.Xbox -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox/bin/Release/net10.0/ViceSharp.Xbox.dll
+  ViceSharp.Host -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host/bin/Release/net10.0/ViceSharp.Host.dll
+/home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/Views/SettingsView.axaml(76,18,76,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [/home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj]
+  ViceSharp.Avalonia -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/bin/Release/net10.0/ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.MacOS/bin/Release/net10.0/ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll
+  The native VICE oracle build is Windows-only; building the managed test harness.
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.23]     ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [FAIL]
+[xUnit.net 00:00:03.25]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc [FAIL]
+  Failed ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [14 ms]
+  Error Message:
+   CPU did not reach PC=$0400 within 64 ticks (PC=$0000).
+  Stack Trace:
+     at ViceSharp.TestHarness.Mos6510NmiTests.StepUntilPcReaches(Mos6502 cpu, UInt16 targetPc, Int32 maxTicks) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Mos6510NmiTests.cs:line 252
+   at ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Mos6510NmiTests.cs:line 143
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc [3 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 32779
+Actual:   32776
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1238
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.27]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 76
+Actual:   31
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1282
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.28]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks [FAIL]
+[xUnit.net 00:00:03.28]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks [< 1 ms]
+  Error Message:
+   wait-loop irq_delay delta=12 (want 11: 9 host CLK + 2 collapsed zp FETCH)
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2476
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 32780
+Actual:   32777
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 995
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.29]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough [FAIL]
+[xUnit.net 00:00:03.29]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough [< 1 ms]
+  Error Message:
+   Wolf64 2142610 BMI dummy INC_PC; PC=$800F cyc=1 trail=0 full=True nonOvlF=True nonOvlR=True
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2781
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 2
+Actual:   1
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 4866
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.30]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 248
+Actual:   249
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 188
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.32]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc [FAIL]
+[xUnit.net 00:00:03.33]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX [FAIL]
+[xUnit.net 00:00:03.33]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 2
+Actual:   1
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 4953
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 255
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2729
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 43
+Actual:   42
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2682
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.33]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 32778
+Actual:   32776
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1042
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.35]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 44
+Actual:   43
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2636
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.35]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 7
+Actual:   76
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 5571
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.36]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 248
+Actual:   247
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 103
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.38]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 2
+Actual:   1
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 5742
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.41]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 1
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 81
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.42]     ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [FAIL]
+[xUnit.net 00:00:03.42]     ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [FAIL]
+[xUnit.net 00:00:03.42]     ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [FAIL]
+  Failed ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 169
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuInterruptTests.cs:line 263
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 169
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuInterruptTests.cs:line 302
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 169
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuInterruptTests.cs:line 346
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: /home/sharpninja/codex-dispatch/phase-e-prep-20261019/cpu-diagnostic/cpu-diagnostic.trx
+
+Failed!  - Failed:    20, Passed:   142, Skipped:     0, Total:   162, Duration: 261 ms - ViceSharp.TestHarness.dll (net10.0)

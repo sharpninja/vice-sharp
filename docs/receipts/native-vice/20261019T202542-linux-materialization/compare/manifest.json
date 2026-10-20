@@ -1,0 +1,18 @@
+{
+  "copiedAt": "2026-10-19T20:32:49",
+  "sourceDir": "/home/sharpninja/codex-dispatch/materialization-20261019/compare",
+  "files": [
+    {
+      "path": "compare.json",
+      "sha256": "CE4BCD8B8D439108E3DB61FE7B5649FB48BAD87DB6B354DB8BABD5EEB10BFB2D",
+      "bytes": 290,
+      "source": "/home/sharpninja/codex-dispatch/materialization-20261019/compare/compare.json"
+    },
+    {
+      "path": "omarchy-tracked-files.txt",
+      "sha256": "F2833CA052F80490BBACC99D29F8E030C781845F882B8984B2B9EC7931B75289",
+      "bytes": 401578,
+      "source": "/home/sharpninja/codex-dispatch/materialization-20261019/compare/omarchy-tracked-files.txt"
+    }
+  ]
+}

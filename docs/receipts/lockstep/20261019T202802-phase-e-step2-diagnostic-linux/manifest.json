@@ -1,0 +1,30 @@
+{
+  "copiedAt": "2026-10-19T20:32:50",
+  "sourceDir": "/home/sharpninja/codex-dispatch/phase-e-prep-20261019/cpu-diagnostic",
+  "files": [
+    {
+      "path": "console.log",
+      "sha256": "B9A677B3A01A6664AAF1B189B8E2787C8535D8E039B367F0E750F49C3ED5C9B1",
+      "bytes": 18419,
+      "source": "/home/sharpninja/codex-dispatch/phase-e-prep-20261019/cpu-diagnostic/console.log"
+    },
+    {
+      "path": "cpu-diagnostic.trx",
+      "sha256": "3B31DEF9E5C4CB055AA0587C1741E9B5835A34BD3E200806F6895E3D181E55CD",
+      "bytes": 258595,
+      "source": "/home/sharpninja/codex-dispatch/phase-e-prep-20261019/cpu-diagnostic/cpu-diagnostic.trx"
+    },
+    {
+      "path": "native-inventory-after.txt",
+      "sha256": "A31D0C086A9A36D12581BA290351D06EE7E43D6D9E8C22C66E7F9A70DC1A94BD",
+      "bytes": 5359,
+      "source": "/home/sharpninja/codex-dispatch/phase-e-prep-20261019/cpu-diagnostic/native-inventory-after.txt"
+    },
+    {
+      "path": "native-inventory-before.txt",
+      "sha256": "A31D0C086A9A36D12581BA290351D06EE7E43D6D9E8C22C66E7F9A70DC1A94BD",
+      "bytes": 5359,
+      "source": "/home/sharpninja/codex-dispatch/phase-e-prep-20261019/cpu-diagnostic/native-inventory-before.txt"
+    }
+  ]
+}
