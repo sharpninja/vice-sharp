@@ -1,0 +1,11 @@
+{
+  "requestId": "req-20261020T203943Z-hv-nativerestore-r4",
+  "dialogItems": [
+    {
+      "timestamp": "2026-10-20T15:41:05",
+      "role": "model",
+      "category": "observation",
+      "content": "Class 1 pre-execution independent hostile review. Full single-file profile read. All 36 input pins match; observed develop HEAD a74f6c520fbd0e42573a05e8513ffebbcb2cf4f0. Linux native status 8 tracked modifications plus 155 untracked paths, 222 insertions and 8 deletions; pinned native gitlink matches. No marker or credential content read. Bootstrap and own beginTurn persisted via supported wrapper with drain disabled; two historical queued records remain untouched. Initial pin helper Get-Item required -Force for .gitmodules; corrected and rerun, all hashes matched."
+    }
+  ]
+}

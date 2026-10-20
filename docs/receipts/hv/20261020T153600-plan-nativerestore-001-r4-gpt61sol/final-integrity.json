@@ -1,0 +1,226 @@
+{
+  "timestampLocal": "2026-10-20T16:08:07",
+  "inputPinCount": 36,
+  "pinChecks": [
+    {
+      "path": "docs/plans/PLAN-NATIVERESTORE-001.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/verdict.json",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/verdict.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-untracked-paths.txt",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/plans/PLAN-OBSERVER-001.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/plans/PLAN-VSFLOCKSTEP-001.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/requirements/technical/TR-Native-Vice-Snapshot.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/README.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "src/ViceSharp.Core/ViceNative.cs",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "src/ViceSharp.Abstractions/IViceNative.cs",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "native/Vice.Native.proj",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": ".gitmodules",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "native/build-vice-observer.ps1",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tools/immutable-vice/Invoke-ObserverEquivalence.ps1",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tools/immutable-vice/clock-observer-x64sc.c",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "tools/immutable-vice/bus-adapter.c",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "build/Build.cs",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "ViceSharp.slnx",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/prompt.md",
+      "match": true,
+      "lengthMatch": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/SELF-REVIEW.md",
+      "match": true,
+      "lengthMatch": true
+    }
+  ],
+  "pinDriftCount": 0,
+  "nativeContentInventoryUnchanged": true,
+  "nativePathCount": 163,
+  "nativeHead": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeIndexClean": true,
+  "materializedSourceCount": 28,
+  "materializedSourcesMatchPinnedBlobs": true,
+  "materializedSourceReadbackUnchanged": true,
+  "head": "a74f6c520fbd0e42573a05e8513ffebbcb2cf4f0",
+  "headUnchanged": true,
+  "gitDiffCheckExit": 0,
+  "gitDiffCheckOutput": "",
+  "outsideReceiptGitStatusUnchanged": true,
+  "outsideReceiptStatus": [
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/.gitkeep",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T173749Z-review_triage_report-11e1.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T173750Z-review_initialize-ec54.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T173840Z-review_checkpoint-aeb3.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T174553Z-review_final-8ebd.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/20261020T132205-initialize.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/20261020T132632-source-checkpoint.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/20261020T133129-decisions.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/20261020T134408-final-readback.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/full-review-turn.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/plugin-cache/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T141000-plan-nativerestore-001-r3-gpt61sol/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T141000-plan-nativerestore-001-r3-gpt61sol/session-state.yaml",
+    "?? docs/receipts/hv/20261020T141000-plan-nativerestore-001-r3-gpt61sol/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/sessions/Codex-20261020T192007Z-hv-nativerestore-r3b/session-state.yaml",
+    "?? \"docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/system-commandline-sentinel-files/dotnet-suggest-registration-McpServer.Repl.Host, Version=1.4.41.0, Culture=neutral, PublicKeyToken=null\"",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/verdict.json.readback",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/verdict.md.readback"
+  ]
+}

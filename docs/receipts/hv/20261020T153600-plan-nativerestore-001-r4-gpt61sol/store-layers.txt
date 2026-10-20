@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20261020T204610Z-e1fd
+  result:
+    items:
+    - key: layer-1
+      order: 1
+      name: Layer 1
+      workspaceId: /home/sharpninja/github/vice-sharp
+      createdAtUtc: &o0
+        dateTime: 2026-10-16T00:15:29.2785581
+        utcDateTime: 2026-10-16T00:15:29.2785581Z
+        localDateTime: 2026-10-15T19:15:29.2785581-05:00
+        date: 2026-10-16T00:00:00.0000000
+        day: 16
+        dayOfWeek: Friday
+        dayOfYear: 289
+        hour: 0
+        millisecond: 278
+        microsecond: 558
+        nanosecond: 100
+        minute: 15
+        month: 10
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 29
+        ticks: 639277065292785581
+        utcTicks: 639277065292785581
+        timeOfDay: 00:15:29.2785581
+        year: 2026
+      updatedAtUtc: *o0
+    totalCount: 1
+  deprecated: true
+
+---
+

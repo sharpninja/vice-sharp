@@ -1,0 +1,6 @@
+Named Pipe Server instance error: The path '/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/CoreFxPipe_PSMCP.37' is of an invalid length for use with domain sockets on this platform.  The length must be between 1 and 108 characters, inclusive. (Parameter 'path')
+Actual value was /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/CoreFxPipe_PSMCP.37.
+Named Pipe Server instance error: The path '/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/CoreFxPipe_PSMCP.37' is of an invalid length for use with domain sockets on this platform.  The length must be between 1 and 108 characters, inclusive. (Parameter 'path')
+Actual value was /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/CoreFxPipe_PSMCP.37.
+{}
+

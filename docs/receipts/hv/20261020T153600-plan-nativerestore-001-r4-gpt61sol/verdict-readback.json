@@ -1,0 +1,42 @@
+{
+  "timestampLocal": "2026-10-20T16:04:59",
+  "mode": "primary",
+  "persisted": true,
+  "queued": false,
+  "reviewerAgent": "Codex",
+  "reviewerModel": "gpt-6.1-sol",
+  "reviewerEffort": "max",
+  "reviewerSessionId": "Codex-20261020T203928Z-plugin-session",
+  "reviewerRequestId": "req-20261020T203943Z-hv-nativerestore-r4",
+  "allExact": true,
+  "contents": [
+    {
+      "name": "verdict.md",
+      "expectedChunks": 8,
+      "readChunks": 8,
+      "sourceSha256": "0131157664812BCE2E7B08E0440F0A6C6E8368A24595CE8C67B7F42E79C98AC2",
+      "readbackSha256": "0131157664812BCE2E7B08E0440F0A6C6E8368A24595CE8C67B7F42E79C98AC2",
+      "exactMatch": true,
+      "normalizedMatch": true,
+      "normalization": "none; exact UTF-8/LF content",
+      "sourceCharacters": 35176,
+      "readbackCharacters": 35176
+    },
+    {
+      "name": "verdict.json",
+      "expectedChunks": 9,
+      "readChunks": 9,
+      "sourceSha256": "D108CBA76A50D87CAB084D4A044E042A5D4896986AE1F6583AC8A036BB4D4D23",
+      "readbackSha256": "D108CBA76A50D87CAB084D4A044E042A5D4896986AE1F6583AC8A036BB4D4D23",
+      "exactMatch": true,
+      "normalizedMatch": true,
+      "normalization": "none; exact UTF-8/LF content",
+      "sourceCharacters": 38239,
+      "readbackCharacters": 38239
+    }
+  ],
+  "turnStatus": "in_progress",
+  "historyMethod": "client.SessionLog.QueryAsync",
+  "historyReceipt": "content-readback.txt",
+  "normalizationDisclosure": "Per-file exact and LF-normalized hashes retained; none discarded."
+}

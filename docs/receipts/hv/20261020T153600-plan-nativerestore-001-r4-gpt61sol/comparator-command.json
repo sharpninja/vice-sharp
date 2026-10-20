@@ -1,0 +1,22 @@
+{
+  "timestampLocal": "2026-10-20T15:43:44",
+  "command": "dotnet",
+  "arguments": [
+    "test",
+    "tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj",
+    "-c",
+    "Release",
+    "--no-build",
+    "--no-restore",
+    "--nologo",
+    "--filter",
+    "FullyQualifiedName~Vic20HalfCycleComparatorTests",
+    "--logger",
+    "trx;LogFileName=comparator.trx",
+    "--results-directory",
+    "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol",
+    "--diag",
+    "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/comparator-vstest.diag.log"
+  ],
+  "binarySha256": "ED2C6E5F762EE797F07C50BEA4E6A7C8040C400384763B5EAE3C758ADAFD83D1"
+}

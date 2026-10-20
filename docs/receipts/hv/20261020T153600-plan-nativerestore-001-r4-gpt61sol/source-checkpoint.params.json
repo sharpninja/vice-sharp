@@ -1,0 +1,12 @@
+{
+  "requestId": "req-20261020T203943Z-hv-nativerestore-r4",
+  "actions": [
+    {
+      "order": 1792529298,
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "docs/plans/PLAN-NATIVERESTORE-001.md",
+      "description": "Source-backed review conclusions so far: R13 B explicitly assigns the missing state/comparator implementation in D2; the permitted no-build Release comparator filter reproduces 1 failed, 0 passed, 0 skipped at line 23. R14 A provides an explicit approved disposition for the dead rotation-table read; do not preserve the former UNKNOWN merely by repeating its source risk. R12 still changes the original 100000-cycle obligation to a measured later boundary. Active CPU translation units include 6510dtvcore.c, whose DO_INTERRUPT services pending IRQ/NMI before its exported-register trap; a trigger is therefore not a guarantee of the first boundary at the requested cycle. D1 trap mock controls need active-core ordering, not only a direct callback. All 22 inspected materialized source hashes match pinned Git blobs; fixture has 24 modules, expected clock/registers and DRIVE flags."
+    }
+  ]
+}
