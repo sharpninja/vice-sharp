@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 1,
+      "description": "Live native baseline before the permitted managed test: develop 1c46ce70f6702e6955c4b8dddce8f5f2a74f29c0; gitlink and native HEAD cc67418cba58e71d8e70fd353e9de47199ad2075; 8 tracked modified, 155 untracked, 222 additions and 8 deletions. Focused comparator Release test completed: 1 failed, 0 passed, 0 skipped at missing HalfCycleState line 23, exact command/stdout/TRX retained. This confirms an acknowledged baseline allocated to D2, not a passing product gate. Source verifies latched pending-mask dispatch and cross-object snapshot read seams. Broad effective-requirements output was refused by the credential-pattern guard before printing or saving; narrower supported reads are being used. No untrusted plugin result occurred.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol"
+    }
+  ]
+}

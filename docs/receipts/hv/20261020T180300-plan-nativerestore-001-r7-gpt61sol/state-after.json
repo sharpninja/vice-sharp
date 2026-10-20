@@ -1,0 +1,1354 @@
+{
+  "timestampLocal": "2026-10-20T18:43:56",
+  "branch": "develop",
+  "commit": "1c46ce70f6702e6955c4b8dddce8f5f2a74f29c0",
+  "gitlink": [
+    "160000 commit cc67418cba58e71d8e70fd353e9de47199ad2075\tnative/vice"
+  ],
+  "submoduleStatus": [
+    " cc67418cba58e71d8e70fd353e9de47199ad2075 native/vice (cc67418)"
+  ],
+  "nativeHead": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeStatus": [
+    " M vice/src/c64/c64cpusc.c",
+    " M vice/src/drive/drive-snapshot.c",
+    " M vice/src/drive/drivecpu.c",
+    " M vice/src/drive/drivecpu65c02.c",
+    " M vice/src/mainc64cpu.c",
+    " M vice/src/resid/filter8580new.h",
+    " M vice/src/resid/sid.h",
+    " M vice/src/sid/resid.cc",
+    "?? vice/.aclocal.out",
+    "?? vice/.autoconf.out",
+    "?? vice/.autoheader.out",
+    "?? vice/.automake.out",
+    "?? vice/Makefile.in",
+    "?? vice/aclocal.m4",
+    "?? vice/autom4te.cache/output.0",
+    "?? vice/autom4te.cache/output.1",
+    "?? vice/autom4te.cache/output.2",
+    "?? vice/autom4te.cache/output.3",
+    "?? vice/autom4te.cache/requests",
+    "?? vice/autom4te.cache/traces.0",
+    "?? vice/autom4te.cache/traces.1",
+    "?? vice/autom4te.cache/traces.2",
+    "?? vice/autom4te.cache/traces.3",
+    "?? vice/build/Makefile.in",
+    "?? vice/build/beos/Makefile.in",
+    "?? vice/build/macOS/Makefile.in",
+    "?? vice/compile",
+    "?? vice/config.log",
+    "?? vice/configure",
+    "?? vice/data/C128/Makefile.in",
+    "?? vice/data/C64/Makefile.in",
+    "?? vice/data/C64DTV/Makefile.in",
+    "?? vice/data/CBM-II/Makefile.in",
+    "?? vice/data/DRIVES/Makefile.in",
+    "?? vice/data/GLSL/Makefile.in",
+    "?? vice/data/Makefile.in",
+    "?? vice/data/PET/Makefile.in",
+    "?? vice/data/PLUS4/Makefile.in",
+    "?? vice/data/PRINTER/Makefile.in",
+    "?? vice/data/SCPU64/Makefile.in",
+    "?? vice/data/VIC20/Makefile.in",
+    "?? vice/data/common/Makefile.in",
+    "?? vice/data/hotkeys/Makefile.in",
+    "?? vice/data/joymaps/Makefile.in",
+    "?? vice/depcomp",
+    "?? vice/doc/Makefile.in",
+    "?? vice/doc/building/Makefile.in",
+    "?? vice/doc/html/Makefile.in",
+    "?? vice/doc/readmes/Makefile.in",
+    "?? vice/doc/vim/Makefile.in",
+    "?? vice/doc/vim/ftdetect/Makefile.in",
+    "?? vice/doc/vim/syntax/Makefile.in",
+    "?? vice/missing",
+    "?? vice/src/Makefile.in",
+    "?? vice/src/arch/Makefile.in",
+    "?? vice/src/arch/gtk3/Makefile.in",
+    "?? vice/src/arch/gtk3/data/Makefile.in",
+    "?? vice/src/arch/gtk3/data/macos/Makefile.in",
+    "?? vice/src/arch/gtk3/data/win32/Makefile.in",
+    "?? vice/src/arch/gtk3/joystickdrv/Makefile.in",
+    "?? vice/src/arch/gtk3/novte/Makefile.in",
+    "?? vice/src/arch/gtk3/widgets/Makefile.in",
+    "?? vice/src/arch/gtk3/widgets/base/Makefile.in",
+    "?? vice/src/arch/headless/Makefile.in",
+    "?? vice/src/arch/sdl/Makefile.in",
+    "?? vice/src/arch/shared/Makefile.in",
+    "?? vice/src/arch/shared/hotkeys/Makefile.in",
+    "?? vice/src/arch/shared/hwsiddrv/Makefile.in",
+    "?? vice/src/arch/shared/mididrv/Makefile.in",
+    "?? vice/src/arch/shared/socketdrv/Makefile.in",
+    "?? vice/src/arch/shared/sounddrv/Makefile.in",
+    "?? vice/src/buildtools/Makefile.in",
+    "?? vice/src/c128/Makefile.in",
+    "?? vice/src/c128/cart/Makefile.in",
+    "?? vice/src/c64/Makefile.in",
+    "?? vice/src/c64/cart/Makefile.in",
+    "?? vice/src/c64dtv/Makefile.in",
+    "?? vice/src/cbm2/Makefile.in",
+    "?? vice/src/cbm2/cart/Makefile.in",
+    "?? vice/src/config.h.in",
+    "?? vice/src/core/Makefile.in",
+    "?? vice/src/core/rtc/Makefile.in",
+    "?? vice/src/crtc/Makefile.in",
+    "?? vice/src/datasette/Makefile.in",
+    "?? vice/src/diag/Makefile.in",
+    "?? vice/src/diskimage/Makefile.in",
+    "?? vice/src/drive/Makefile.in",
+    "?? vice/src/drive/iec/Makefile.in",
+    "?? vice/src/drive/iec/c64exp/Makefile.in",
+    "?? vice/src/drive/iec/plus4exp/Makefile.in",
+    "?? vice/src/drive/iec128dcr/Makefile.in",
+    "?? vice/src/drive/iecieee/Makefile.in",
+    "?? vice/src/drive/ieee/Makefile.in",
+    "?? vice/src/drive/tcbm/Makefile.in",
+    "?? vice/src/fileio/Makefile.in",
+    "?? vice/src/fsdevice/Makefile.in",
+    "?? vice/src/gfxoutputdrv/Makefile.in",
+    "?? vice/src/hvsc/Makefile.in",
+    "?? vice/src/iecbus/Makefile.in",
+    "?? vice/src/imagecontents/Makefile.in",
+    "?? vice/src/joyport/Makefile.in",
+    "?? vice/src/lib/Makefile.in",
+    "?? vice/src/lib/libusbsiddrv/Makefile.in",
+    "?? vice/src/lib/libzmbv/Makefile.in",
+    "?? vice/src/lib/linenoise-ng/Makefile.in",
+    "?? vice/src/lib/md5/Makefile.in",
+    "?? vice/src/lib/p64/Makefile.in",
+    "?? vice/src/monitor/Makefile.in",
+    "?? vice/src/parallel/Makefile.in",
+    "?? vice/src/pet/Makefile.in",
+    "?? vice/src/plus4/Makefile.in",
+    "?? vice/src/plus4/cart/Makefile.in",
+    "?? vice/src/printerdrv/Makefile.in",
+    "?? vice/src/raster/Makefile.in",
+    "?? vice/src/resid-dtv/.aclocal.out",
+    "?? vice/src/resid-dtv/.autoconf.out",
+    "?? vice/src/resid-dtv/.automake.out",
+    "?? vice/src/resid-dtv/COPYING",
+    "?? vice/src/resid-dtv/INSTALL",
+    "?? vice/src/resid-dtv/Makefile.in",
+    "?? vice/src/resid-dtv/aclocal.m4",
+    "?? vice/src/resid-dtv/autom4te.cache/output.0",
+    "?? vice/src/resid-dtv/autom4te.cache/output.1",
+    "?? vice/src/resid-dtv/autom4te.cache/output.2",
+    "?? vice/src/resid-dtv/autom4te.cache/requests",
+    "?? vice/src/resid-dtv/autom4te.cache/traces.0",
+    "?? vice/src/resid-dtv/autom4te.cache/traces.1",
+    "?? vice/src/resid-dtv/autom4te.cache/traces.2",
+    "?? vice/src/resid-dtv/configure",
+    "?? vice/src/resid/.aclocal.out",
+    "?? vice/src/resid/.autoconf.out",
+    "?? vice/src/resid/.automake.out",
+    "?? vice/src/resid/COPYING",
+    "?? vice/src/resid/INSTALL",
+    "?? vice/src/resid/Makefile.in",
+    "?? vice/src/resid/aclocal.m4",
+    "?? vice/src/resid/autom4te.cache/output.0",
+    "?? vice/src/resid/autom4te.cache/output.1",
+    "?? vice/src/resid/autom4te.cache/output.2",
+    "?? vice/src/resid/autom4te.cache/requests",
+    "?? vice/src/resid/autom4te.cache/traces.0",
+    "?? vice/src/resid/autom4te.cache/traces.1",
+    "?? vice/src/resid/autom4te.cache/traces.2",
+    "?? vice/src/resid/configure",
+    "?? vice/src/rs232drv/Makefile.in",
+    "?? vice/src/samplerdrv/Makefile.in",
+    "?? vice/src/scpu64/Makefile.in",
+    "?? vice/src/serial/Makefile.in",
+    "?? vice/src/sid/Makefile.in",
+    "?? vice/src/tape/Makefile.in",
+    "?? vice/src/tapeport/Makefile.in",
+    "?? vice/src/tools/Makefile.in",
+    "?? vice/src/tools/cartconv/Makefile.in",
+    "?? vice/src/tools/petcat/Makefile.in",
+    "?? vice/src/userport/Makefile.in",
+    "?? vice/src/vdc/Makefile.in",
+    "?? vice/src/vdrive/Makefile.in",
+    "?? vice/src/vic20/Makefile.in",
+    "?? vice/src/vic20/cart/Makefile.in",
+    "?? vice/src/vicii/Makefile.in",
+    "?? vice/src/viciisc/Makefile.in",
+    "?? vice/src/video/Makefile.in",
+    "?? vice/ylwrap"
+  ],
+  "nativeDiffStat": [
+    " vice/src/c64/c64cpusc.c         |  25 +++++++++",
+    " vice/src/drive/drive-snapshot.c |  10 ++--",
+    " vice/src/drive/drivecpu.c       |   4 ++",
+    " vice/src/drive/drivecpu65c02.c  |   4 ++",
+    " vice/src/mainc64cpu.c           |  64 +++++++++++++++++++++--",
+    " vice/src/resid/filter8580new.h  |  10 ++++",
+    " vice/src/resid/sid.h            |   4 ++",
+    " vice/src/sid/resid.cc           | 109 ++++++++++++++++++++++++++++++++++++++++",
+    " 8 files changed, 222 insertions(+), 8 deletions(-)"
+  ],
+  "nativeNumStat": [
+    "25\t0\tvice/src/c64/c64cpusc.c",
+    "7\t3\tvice/src/drive/drive-snapshot.c",
+    "4\t0\tvice/src/drive/drivecpu.c",
+    "4\t0\tvice/src/drive/drivecpu65c02.c",
+    "59\t5\tvice/src/mainc64cpu.c",
+    "10\t0\tvice/src/resid/filter8580new.h",
+    "4\t0\tvice/src/resid/sid.h",
+    "109\t0\tvice/src/sid/resid.cc"
+  ],
+  "nativeFiles": [
+    {
+      "status": " M",
+      "path": "vice/src/c64/c64cpusc.c",
+      "sha256": "343C90E82B2713D51CCD77CE9A9DA4F4BDDEF92807966F6A90993A6E7628FAB1",
+      "bytes": 8422
+    },
+    {
+      "status": " M",
+      "path": "vice/src/drive/drive-snapshot.c",
+      "sha256": "2001B723AA495C387EFF430375ADE5BE630B658B0F17C3C3B74D5EDC9D5D58C0",
+      "bytes": 38030
+    },
+    {
+      "status": " M",
+      "path": "vice/src/drive/drivecpu.c",
+      "sha256": "E73C664EB61A981F851274FADD90B74612F948BA5DCFE028EFABCD197A2C5D8A",
+      "bytes": 21898
+    },
+    {
+      "status": " M",
+      "path": "vice/src/drive/drivecpu65c02.c",
+      "sha256": "7E07F563AF9644BE9C618D528525DE587948C4A703719AD8A71D591CA09D0195",
+      "bytes": 17835
+    },
+    {
+      "status": " M",
+      "path": "vice/src/mainc64cpu.c",
+      "sha256": "B69E3BCD9F2CE674A65B75D7E68195F89A735B8EEBE45F46F655FB2E8E04499D",
+      "bytes": 30708
+    },
+    {
+      "status": " M",
+      "path": "vice/src/resid/filter8580new.h",
+      "sha256": "CE939EF42EEB6475760B27EABB8A819B199665CC3077E94802F74C41E065B5E0",
+      "bytes": 60911
+    },
+    {
+      "status": " M",
+      "path": "vice/src/resid/sid.h",
+      "sha256": "42D8703EB51F62357F1C10983E7F206A5C9ED41254C2A55D71681A5AE4F821A2",
+      "bytes": 6754
+    },
+    {
+      "status": " M",
+      "path": "vice/src/sid/resid.cc",
+      "sha256": "0466F2232AF8CAC5B54747EBFB09A313932BDBC17A9FB4081506CD0B43433D33",
+      "bytes": 17913
+    },
+    {
+      "status": "??",
+      "path": "vice/.aclocal.out",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "status": "??",
+      "path": "vice/.autoconf.out",
+      "sha256": "614BBA96388F18FA861E98D97DF46E02710C57A514A6B921E3F31CBCFDC23306",
+      "bytes": 10324
+    },
+    {
+      "status": "??",
+      "path": "vice/.autoheader.out",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "status": "??",
+      "path": "vice/.automake.out",
+      "sha256": "23D739F740B17CC6589B41A569C7DD1AF8082B539E3937305DC21674DA905390",
+      "bytes": 3365
+    },
+    {
+      "status": "??",
+      "path": "vice/Makefile.in",
+      "sha256": "4B3FEC6E5C5E49D4829F69722C1D74C172A75A25C16898AAF52B31330563598D",
+      "bytes": 40259
+    },
+    {
+      "status": "??",
+      "path": "vice/aclocal.m4",
+      "sha256": "401A095982DFC796E1B16C3348AC32A36F290095A2EA10D186206678F8E73441",
+      "bytes": 50173
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/output.0",
+      "sha256": "DAC2CD93FF08ED4F45F2BCCC72F35660DAF07EFE5E4E098D830DC05B3DE9022D",
+      "bytes": 680036
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/output.1",
+      "sha256": "2802EA9248E253848765D5458092374750596CAE1185BDBC0CE547E446C709F4",
+      "bytes": 778413
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/output.2",
+      "sha256": "10B625224DD21D857C7045ED57B8E4C38DD904FBB96C2DC3710CEB5D869DF04F",
+      "bytes": 778416
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/output.3",
+      "sha256": "2802EA9248E253848765D5458092374750596CAE1185BDBC0CE547E446C709F4",
+      "bytes": 778413
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/requests",
+      "sha256": "D620CAF5442ADBC289A0DA39D4F487CEAD96F1D24AB73F77AC35F2707E34F3A1",
+      "bytes": 18066
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/traces.0",
+      "sha256": "123BC1E795CBA7813EA92E037615E59951A276B5BF0276C4A5EEE8D01035AB4B",
+      "bytes": 149010
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/traces.1",
+      "sha256": "7B1E68271A8981911E8B8D640475C68EC0EF7FACF518F461CE545AABC549C227",
+      "bytes": 187562
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/traces.2",
+      "sha256": "63F7C23FC4BD4BE6C749105716B4B557AF4066B833B2110366C6284154B73F1C",
+      "bytes": 243974
+    },
+    {
+      "status": "??",
+      "path": "vice/autom4te.cache/traces.3",
+      "sha256": "63F7C23FC4BD4BE6C749105716B4B557AF4066B833B2110366C6284154B73F1C",
+      "bytes": 243974
+    },
+    {
+      "status": "??",
+      "path": "vice/build/Makefile.in",
+      "sha256": "66911C1A765FC36FD279BAFE368C09D1426F8148EEBF075EA9912F37B6179250",
+      "bytes": 21974
+    },
+    {
+      "status": "??",
+      "path": "vice/build/beos/Makefile.in",
+      "sha256": "097E9E34FD240F6D7980E72076D439E3B1048729B7B1DF5E56F231155E6EE105",
+      "bytes": 15653
+    },
+    {
+      "status": "??",
+      "path": "vice/build/macOS/Makefile.in",
+      "sha256": "4A40C2F04CAD76EC8554D471CFA49B4F2499D415B70A033013B08331EF6FBD63",
+      "bytes": 15628
+    },
+    {
+      "status": "??",
+      "path": "vice/compile",
+      "sha256": "92ED7FEEDA61AD958DC3C4CC4EFD724E1414482F1CAD60B74B09E0633A93DFD6",
+      "bytes": 8064
+    },
+    {
+      "status": "??",
+      "path": "vice/config.log",
+      "sha256": "598B546F16809FA7CC3104FD32D0C03990842C24E4EC4FFC58D0933423822281",
+      "bytes": 66193
+    },
+    {
+      "status": "??",
+      "path": "vice/configure",
+      "sha256": "B957019A47404040C51C14BB62158F1777157E9FFE74B1C2B39289FF18291C69",
+      "bytes": 771367
+    },
+    {
+      "status": "??",
+      "path": "vice/data/C128/Makefile.in",
+      "sha256": "30B16EAEAC082A306A1586239CF8C5938FB6ADC1B3C9CEEAAE07A20A2D35221B",
+      "bytes": 19664
+    },
+    {
+      "status": "??",
+      "path": "vice/data/C64/Makefile.in",
+      "sha256": "2B9D8A6A6963FA7F4B2FE5D88D8FF3D9181F91EF88ADBAFBBA57493D98BF4AFE",
+      "bytes": 20098
+    },
+    {
+      "status": "??",
+      "path": "vice/data/C64DTV/Makefile.in",
+      "sha256": "BAC36A850508D762B4F3C5F2318DAD343F1182F19A7029AEDCC31B401337C393",
+      "bytes": 19596
+    },
+    {
+      "status": "??",
+      "path": "vice/data/CBM-II/Makefile.in",
+      "sha256": "635B340863B6DD469B32B59B189542D31EBF1C89C0E0FEA16B16FFBEBCA7C144",
+      "bytes": 19304
+    },
+    {
+      "status": "??",
+      "path": "vice/data/DRIVES/Makefile.in",
+      "sha256": "844B1143188CD45D28DA87A1F5EB0CDF95CA76CF2A1F4A90A0AFCF797F296E8B",
+      "bytes": 18219
+    },
+    {
+      "status": "??",
+      "path": "vice/data/GLSL/Makefile.in",
+      "sha256": "38D5EB53AEF7493A2FBA7F934049F785422FB2611CE73C283FCC2979A24ECF51",
+      "bytes": 17965
+    },
+    {
+      "status": "??",
+      "path": "vice/data/Makefile.in",
+      "sha256": "A93D50A56BD42C7AB35167432403943D528E42435EDC38EEE1404D8B384A90D0",
+      "bytes": 22042
+    },
+    {
+      "status": "??",
+      "path": "vice/data/PET/Makefile.in",
+      "sha256": "6B9D6B978DA21A307D902EF658623C82DCAE9D42A632D8A62ED8B47D0F8F9654",
+      "bytes": 19909
+    },
+    {
+      "status": "??",
+      "path": "vice/data/PLUS4/Makefile.in",
+      "sha256": "19C8C39A3A7C705951A0A02C9A088B16745978618711121A8F2185B3B5728A70",
+      "bytes": 19017
+    },
+    {
+      "status": "??",
+      "path": "vice/data/PRINTER/Makefile.in",
+      "sha256": "D434D32B714229B810057412572A84798E1C9792FAE6B1D96418B98888D4DC3E",
+      "bytes": 18049
+    },
+    {
+      "status": "??",
+      "path": "vice/data/SCPU64/Makefile.in",
+      "sha256": "E520DDC40D27895DA32220451C9B855951F8F4858411D2048EEEE7A95C2353B1",
+      "bytes": 20026
+    },
+    {
+      "status": "??",
+      "path": "vice/data/VIC20/Makefile.in",
+      "sha256": "66A04DC264D149AC25C70BB4D461868771282E5E9AC7301B3D63A39F010E2681",
+      "bytes": 18951
+    },
+    {
+      "status": "??",
+      "path": "vice/data/common/Makefile.in",
+      "sha256": "E8EDAB91DB198D750128C8F5D64FB01C8B6A25B2EBA33B90CA77866C4687BAB6",
+      "bytes": 41874
+    },
+    {
+      "status": "??",
+      "path": "vice/data/hotkeys/Makefile.in",
+      "sha256": "F2E97D4B4DE1EFDF7A78F49B2FEFD748E0A54DE0C25ABDBA9EEEAA5B691E60BF",
+      "bytes": 18317
+    },
+    {
+      "status": "??",
+      "path": "vice/data/joymaps/Makefile.in",
+      "sha256": "1EEA15372A0D8EA54B669EEC68E6226078797BD73F56DACBF16BB7BE97B99C77",
+      "bytes": 18758
+    },
+    {
+      "status": "??",
+      "path": "vice/depcomp",
+      "sha256": "AC3AE010382A83144FF6EC1A4C368A3F16A14EA2B12751AA73DDFB548D931574",
+      "bytes": 23700
+    },
+    {
+      "status": "??",
+      "path": "vice/doc/Makefile.in",
+      "sha256": "965BAF1EE8E710CFE0D9F41F665EF28469EB02D5058BFF2B2F2312328D5B7FD4",
+      "bytes": 26592
+    },
+    {
+      "status": "??",
+      "path": "vice/doc/building/Makefile.in",
+      "sha256": "4BE48B35399A20F920FDF6FCA2E7AF459A098598F1C998E2FA2C0AB363684CBF",
+      "bytes": 18183
+    },
+    {
+      "status": "??",
+      "path": "vice/doc/html/Makefile.in",
+      "sha256": "358A4455553BDBED38CA495293CD2FCA1061FD33A8E75595538503AF63D482E4",
+      "bytes": 20388
+    },
+    {
+      "status": "??",
+      "path": "vice/doc/readmes/Makefile.in",
+      "sha256": "8B2616EC4DAF35E131B5463CF946ED17771257CD0406804E919C244441AB28BB",
+      "bytes": 18135
+    },
+    {
+      "status": "??",
+      "path": "vice/doc/vim/Makefile.in",
+      "sha256": "DA22B746566A4503DC74D846638ADDBDC405FB32E0AE53B7BC2BCB60FC2E3D0B",
+      "bytes": 21991
+    },
+    {
+      "status": "??",
+      "path": "vice/doc/vim/ftdetect/Makefile.in",
+      "sha256": "F536F2CB2C2CFBFB80BD2089E16049D60A4E265E0579664CAFA224080DD4E2FC",
+      "bytes": 15644
+    },
+    {
+      "status": "??",
+      "path": "vice/doc/vim/syntax/Makefile.in",
+      "sha256": "75CD4F9C028F4A65537B37A98764C1544C01A69BBE995F16F12F968577042E7C",
+      "bytes": 15638
+    },
+    {
+      "status": "??",
+      "path": "vice/missing",
+      "sha256": "4F17C4A66EC5B8000D44573A576F6B5D9C0C84848E8FD1286F84A52F439DB4E9",
+      "bytes": 7733
+    },
+    {
+      "status": "??",
+      "path": "vice/src/Makefile.in",
+      "sha256": "5EC0655C29BA8CA2B163738CC96E23ADCF781EAF26D54DDCACBBCA0F05C6A5CC",
+      "bytes": 89904
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/Makefile.in",
+      "sha256": "B4D3CD720AC41D4F9D22A92FDECBA4DDC5AB8292792EC5CEF3B0F6311BCBF889",
+      "bytes": 22483
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/gtk3/Makefile.in",
+      "sha256": "DDC8C50852A295AABC5C83EA7BE16822094A5D6469253DCFDAF8CE5B89B77385",
+      "bytes": 49609
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/gtk3/data/Makefile.in",
+      "sha256": "64BED0FAF12E66700A602153867BFBCE864000C7019776EAE0CA4B4665031A78",
+      "bytes": 22155
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/gtk3/data/macos/Makefile.in",
+      "sha256": "2E694CEC4A8847AA1861176BF5CC4BA59EFB4CFAAA99DBC7E64E70F6742319E6",
+      "bytes": 15662
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/gtk3/data/win32/Makefile.in",
+      "sha256": "8A4B2BBC1E9C4DA3A10BCD01CC541B01DAA72E5C4843CF14AACE334CB07637CF",
+      "bytes": 16120
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/gtk3/joystickdrv/Makefile.in",
+      "sha256": "C242075CD110C5ADA912C8E38675E98D025C28DAA556C3552664C2D161C6E48D",
+      "bytes": 23403
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/gtk3/novte/Makefile.in",
+      "sha256": "34C30667286283752C71E378C81642817905AE3AF69DA31CE177A801DF735ACA",
+      "bytes": 26071
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/gtk3/widgets/Makefile.in",
+      "sha256": "43041EA30959C547DDECE58E6A13A2FDF6C0188CBDF8E6731E2E9D3117DE0E0F",
+      "bytes": 77880
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/gtk3/widgets/base/Makefile.in",
+      "sha256": "B736E283CBC5016F7F03094A14BC525AF5E930CB0604F84D490237C6EC89A88D",
+      "bytes": 28858
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/headless/Makefile.in",
+      "sha256": "7940C19FE466E16DB9CDFAD8F1239B9078DCAAA1E6B4517E103C5F0D856CB7C2",
+      "bytes": 26236
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/sdl/Makefile.in",
+      "sha256": "16F7FE9A40DB60E64E74D83A720B51B1F3382601222B3112444F7B8FB930C924",
+      "bytes": 50245
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/shared/Makefile.in",
+      "sha256": "F16BB2D88BCF89836E19B41DB8B3EA8E5D27A25138948BFC78C9D87AA2C1A7CE",
+      "bytes": 61023
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/shared/hotkeys/Makefile.in",
+      "sha256": "6C0A0F78109E1B91CF557B39FCD5654438F7EA816DA9973D98FF2617D76F2442",
+      "bytes": 23213
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/shared/hwsiddrv/Makefile.in",
+      "sha256": "3AE7FECB884F387C23FA43ED7392333828FEC1F12297C598414AE8D1E9545AA7",
+      "bytes": 26594
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/shared/mididrv/Makefile.in",
+      "sha256": "5A452256C834D050BFA993CC5F513925F059778462C7283F03D1DC4C4D51848D",
+      "bytes": 21233
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/shared/socketdrv/Makefile.in",
+      "sha256": "ECE81E3876B8667C8F0A97279245DBDEF80973A89CA57B69A179F86F875DCB50",
+      "bytes": 20884
+    },
+    {
+      "status": "??",
+      "path": "vice/src/arch/shared/sounddrv/Makefile.in",
+      "sha256": "54D6DF585199E99AEDAE35E92B98A772CC3CE62E3C0E12651A931419D701C021",
+      "bytes": 26800
+    },
+    {
+      "status": "??",
+      "path": "vice/src/buildtools/Makefile.in",
+      "sha256": "D5B649EED2E2CB15EE38E927563838E3476337675FCE3FBDEE3D71265432F2DB",
+      "bytes": 15848
+    },
+    {
+      "status": "??",
+      "path": "vice/src/c128/Makefile.in",
+      "sha256": "2D4FCBCB506A423E91D67922AD2A9FBC47219259629AF9204396DB4D2055320C",
+      "bytes": 31249
+    },
+    {
+      "status": "??",
+      "path": "vice/src/c128/cart/Makefile.in",
+      "sha256": "1DD9C8C2E0C683341FC75F26F6EE58959434D6A52E01F9AD19E86940CC267B22",
+      "bytes": 22511
+    },
+    {
+      "status": "??",
+      "path": "vice/src/c64/Makefile.in",
+      "sha256": "07041954582733F1F36E93F19A342E90A2409AB451461E6BAAA299B4AB84A651",
+      "bytes": 46900
+    },
+    {
+      "status": "??",
+      "path": "vice/src/c64/cart/Makefile.in",
+      "sha256": "8BFF7DE20257E2EB2D374EA486C61FB909DD34F0FA836BEDFE21A073BC1C3738",
+      "bytes": 47993
+    },
+    {
+      "status": "??",
+      "path": "vice/src/c64dtv/Makefile.in",
+      "sha256": "788C9366BB89FD339770437CE5C3F978D9675F780DD275F00A5677CCF6D88535",
+      "bytes": 27257
+    },
+    {
+      "status": "??",
+      "path": "vice/src/cbm2/Makefile.in",
+      "sha256": "E0B0281430A31C9F446E281752DB862638AA1830C488BA8CB1A6A9F9CF571FD3",
+      "bytes": 35495
+    },
+    {
+      "status": "??",
+      "path": "vice/src/cbm2/cart/Makefile.in",
+      "sha256": "A184B38F9BD231D3C42F800ACDC1C00B015137A753BFEC250A9129503AB5E325",
+      "bytes": 21239
+    },
+    {
+      "status": "??",
+      "path": "vice/src/config.h.in",
+      "sha256": "67A5086C2BB21B7E1EBA1CD1D2836044CF610595043534A8FB7F07D334D58528",
+      "bytes": 20946
+    },
+    {
+      "status": "??",
+      "path": "vice/src/core/Makefile.in",
+      "sha256": "F325036F23C9AD352CE0AA003D591416427FFE731072048598CBAB6963D26005",
+      "bytes": 28702
+    },
+    {
+      "status": "??",
+      "path": "vice/src/core/rtc/Makefile.in",
+      "sha256": "ABE25718F60B765DD787C80E70C0A4948709E9D094FB3851B6ADC456F1AC35DD",
+      "bytes": 22605
+    },
+    {
+      "status": "??",
+      "path": "vice/src/crtc/Makefile.in",
+      "sha256": "DC0BFD9EE3FEFC41B3E3BBDA1A973AB0FF9641356899BB55D073FB5BD6C75716",
+      "bytes": 22146
+    },
+    {
+      "status": "??",
+      "path": "vice/src/datasette/Makefile.in",
+      "sha256": "1F82448CB101D0D7D8FD79FA3669DFCECD827ABD2CABAAE2FEA321799F533BE3",
+      "bytes": 21025
+    },
+    {
+      "status": "??",
+      "path": "vice/src/diag/Makefile.in",
+      "sha256": "823D9218C39CDDF0F90CF933F24C8E95ABC54082C5CFF7C2591F886FA0D086CF",
+      "bytes": 20808
+    },
+    {
+      "status": "??",
+      "path": "vice/src/diskimage/Makefile.in",
+      "sha256": "555AB0AE2631AE8903B2895107196308CD2BE6750F71419F1A62CDA0D9E94197",
+      "bytes": 23095
+    },
+    {
+      "status": "??",
+      "path": "vice/src/drive/Makefile.in",
+      "sha256": "62CFDF22F9E86EC06B4F8ABFE12505B54CEBD8A9C36A69D4D6C2918AA0BAAAF7",
+      "bytes": 28972
+    },
+    {
+      "status": "??",
+      "path": "vice/src/drive/iec/Makefile.in",
+      "sha256": "D5A42006531A00C68A7BCAB0B03A9B42C8C3FB88696F1BB93855CC347231B340",
+      "bytes": 28243
+    },
+    {
+      "status": "??",
+      "path": "vice/src/drive/iec/c64exp/Makefile.in",
+      "sha256": "6D0262B229B365DF9A31F503D7A9F15FE569C29622FC3841AC48EF024CF3FACF",
+      "bytes": 22591
+    },
+    {
+      "status": "??",
+      "path": "vice/src/drive/iec/plus4exp/Makefile.in",
+      "sha256": "66970A58140FC3ECF127EEF56F5C9A38580F33802020D283A12AF7E39E227ABC",
+      "bytes": 21691
+    },
+    {
+      "status": "??",
+      "path": "vice/src/drive/iec128dcr/Makefile.in",
+      "sha256": "D6A1FF05D57E13D8D2329BD4307411890FED7540AED4AFA0EEC8113E75C5519C",
+      "bytes": 21827
+    },
+    {
+      "status": "??",
+      "path": "vice/src/drive/iecieee/Makefile.in",
+      "sha256": "8FD1E6970707EDC3D35D4F085548E0802FEAE3ED31EF5DA3FCF54DB90066FFDD",
+      "bytes": 21043
+    },
+    {
+      "status": "??",
+      "path": "vice/src/drive/ieee/Makefile.in",
+      "sha256": "CADF1B997CD089A64D9728D30C4F0A434D1099A98D3DDEF029127A9EE52ABCF8",
+      "bytes": 22648
+    },
+    {
+      "status": "??",
+      "path": "vice/src/drive/tcbm/Makefile.in",
+      "sha256": "95D65E113B56A9579C89DCFA66FECA577ED6F7694512DE87159ED46A0B086616",
+      "bytes": 22224
+    },
+    {
+      "status": "??",
+      "path": "vice/src/fileio/Makefile.in",
+      "sha256": "9117A4968DEC366ADE9C1DA76E60FDED275C98BAC97DF77B6D1D2F9E4ADD55B9",
+      "bytes": 21022
+    },
+    {
+      "status": "??",
+      "path": "vice/src/fsdevice/Makefile.in",
+      "sha256": "3D9DDBCB8CCABF659A6EBAC9E7C446EFAAE5C4615A22C957D13FFBB499341B8A",
+      "bytes": 23034
+    },
+    {
+      "status": "??",
+      "path": "vice/src/gfxoutputdrv/Makefile.in",
+      "sha256": "15FA9A84D848085C609B62666F014BD07E9527F72DACA887318C64B4420A1BA5",
+      "bytes": 24122
+    },
+    {
+      "status": "??",
+      "path": "vice/src/hvsc/Makefile.in",
+      "sha256": "6689BF0FCE70506384557097F82DD200FE6DEB153EA70E5373D26BB5A628C4C0",
+      "bytes": 21629
+    },
+    {
+      "status": "??",
+      "path": "vice/src/iecbus/Makefile.in",
+      "sha256": "6C037C64F5DB4E4960544EBE68378057DE7227037AA51B3B525E2F18B667F3E6",
+      "bytes": 20756
+    },
+    {
+      "status": "??",
+      "path": "vice/src/imagecontents/Makefile.in",
+      "sha256": "86785DDBF22BB8E89ECBC78C02028BE6FC4049161AB5DB7F2F1370E8A98BB8C2",
+      "bytes": 21979
+    },
+    {
+      "status": "??",
+      "path": "vice/src/joyport/Makefile.in",
+      "sha256": "321BC672B15481E55E7DCB1C4F26A71C43211E0C4257A81302EC20BEBFC5C070",
+      "bytes": 28983
+    },
+    {
+      "status": "??",
+      "path": "vice/src/lib/Makefile.in",
+      "sha256": "1A13D825D3C193105C2885109513D20B3AB74A0F5F4FDB55FBE349D295A43CB1",
+      "bytes": 22426
+    },
+    {
+      "status": "??",
+      "path": "vice/src/lib/libusbsiddrv/Makefile.in",
+      "sha256": "8D062FB249EA1766FA9FFB59DEE4C7DC376ACA36BD4E7EED73E9665AB883F414",
+      "bytes": 21776
+    },
+    {
+      "status": "??",
+      "path": "vice/src/lib/libzmbv/Makefile.in",
+      "sha256": "B354249DFBD0271E01C852987E112A205ECB238D0363D31F04D8E7021006C01D",
+      "bytes": 20823
+    },
+    {
+      "status": "??",
+      "path": "vice/src/lib/linenoise-ng/Makefile.in",
+      "sha256": "6B2C306700323D41AF7A0074E282E2FBB51C6D80E20F4CF58455D0FA5DE18202",
+      "bytes": 21369
+    },
+    {
+      "status": "??",
+      "path": "vice/src/lib/md5/Makefile.in",
+      "sha256": "BE40FFDED35F6636F7E3CA00BED8E3E31D4C81EC6B47A8EFFC958BD0D88A3A0D",
+      "bytes": 20529
+    },
+    {
+      "status": "??",
+      "path": "vice/src/lib/p64/Makefile.in",
+      "sha256": "2C37A0755BB97A3EE833482342878997650D04E686956663FB1EC4D3AFD44E49",
+      "bytes": 20616
+    },
+    {
+      "status": "??",
+      "path": "vice/src/monitor/Makefile.in",
+      "sha256": "A27B181C8D20DEAEC9C5A7417A35592EFB225DE86654127C07B2B6B85D0DBC0E",
+      "bytes": 29957
+    },
+    {
+      "status": "??",
+      "path": "vice/src/parallel/Makefile.in",
+      "sha256": "0D445672D4D15BF5753FACD8E9DB5EC103EE0ED646217516327642D6B68534ED",
+      "bytes": 21020
+    },
+    {
+      "status": "??",
+      "path": "vice/src/pet/Makefile.in",
+      "sha256": "13875742C28E2E3E25A234BB9F6694615D462FBC5DD10F563AC8944231451D68",
+      "bytes": 28148
+    },
+    {
+      "status": "??",
+      "path": "vice/src/plus4/Makefile.in",
+      "sha256": "6EAF9410805AEB2F3F4149F968A5751AE15BB839CFBBCD5C987622F719E33230",
+      "bytes": 36519
+    },
+    {
+      "status": "??",
+      "path": "vice/src/plus4/cart/Makefile.in",
+      "sha256": "07742351A88C55E3B45AC2B9604997F5A8528FE85E8565F72D4A89C6C7B723E0",
+      "bytes": 22797
+    },
+    {
+      "status": "??",
+      "path": "vice/src/printerdrv/Makefile.in",
+      "sha256": "309257C33B5D62E75DEEA8EBF3E5443B96FEBDB955E491B1826099727B046A60",
+      "bytes": 24161
+    },
+    {
+      "status": "??",
+      "path": "vice/src/raster/Makefile.in",
+      "sha256": "58198084C75DFE7414E5194D4FBF1DC57918E72E921F9128307E68B0F9E91997",
+      "bytes": 24542
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/.aclocal.out",
+      "sha256": "F5A7688239D9907CDC37B3D90696ADA907158D0265255F3060BDA54A0E33ABEF",
+      "bytes": 84
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/.autoconf.out",
+      "sha256": "B28A491B8F989A1C5C98F60B4917AB42DE77BEF34664625CDA4773577B4851C5",
+      "bytes": 1913
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/.automake.out",
+      "sha256": "04EC54F7CD4BFAB7C14874577BC5EB9AB02B3ADE2BD346329115097778AAD5F2",
+      "bytes": 686
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/COPYING",
+      "sha256": "3972DC9744F6499F0F9B2DBF76696F2AE7AD8AF9B23DDE66D6AF86C9DFB36986",
+      "bytes": 35149
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/INSTALL",
+      "sha256": "8269293B2738175F54354957D64F691EA9A55FFACB9D8912C79060A9B9BF769B",
+      "bytes": 17015
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/Makefile.in",
+      "sha256": "A0276D5906F65A2DE70079BF88A22C1A8B9E8A6E7309A7A15F4313B3667CD1E5",
+      "bytes": 25310
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/aclocal.m4",
+      "sha256": "FECDAAB61E94095324DC38C254AE6A4D9B77EB2505D71B9B8A59BE4FF008B684",
+      "bytes": 47340
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/autom4te.cache/output.0",
+      "sha256": "5F793A5B25A1DEC5C75E6BBE5D68BF78EB796B66A2E7DD69754D45A09E33C792",
+      "bytes": 166870
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/autom4te.cache/output.1",
+      "sha256": "C7D19B38F03932C5F84A1B9CEAE4B4814771C658035E223844C50A5687DBEB16",
+      "bytes": 166873
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/autom4te.cache/output.2",
+      "sha256": "5F793A5B25A1DEC5C75E6BBE5D68BF78EB796B66A2E7DD69754D45A09E33C792",
+      "bytes": 166870
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/autom4te.cache/requests",
+      "sha256": "23D149BF2E7FCD37E163E1AFB18A5E0C7CEB98A89CE945BA45B6F30C2E4CB453",
+      "bytes": 12043
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/autom4te.cache/traces.0",
+      "sha256": "D4DA30A7004A57213F5170EE25E0FF990A4B1AD11E82B7DA31ACB704AE82674F",
+      "bytes": 51894
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/autom4te.cache/traces.1",
+      "sha256": "22E7100E60ABB55020749155B0AB83CDF773C719F3D82663A4EDF50BAE3EC88A",
+      "bytes": 28881
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/autom4te.cache/traces.2",
+      "sha256": "22E7100E60ABB55020749155B0AB83CDF773C719F3D82663A4EDF50BAE3EC88A",
+      "bytes": 28881
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid-dtv/configure",
+      "sha256": "4033843400498CDF9812FB345502F72B743C42DE8A2A63FC6AE6FBE2837D4CC0",
+      "bytes": 165881
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/.aclocal.out",
+      "sha256": "F5A7688239D9907CDC37B3D90696ADA907158D0265255F3060BDA54A0E33ABEF",
+      "bytes": 84
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/.autoconf.out",
+      "sha256": "89D0357AB0A9305676E43E883543BF50C31DE9AD157A4DA04E85E63A1EB7D5C5",
+      "bytes": 4088
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/.automake.out",
+      "sha256": "98ECB93A5DE1B81DB8BCB48EC919DD62EAB960BBD399D023C0C06ABB2A02C884",
+      "bytes": 536
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/COPYING",
+      "sha256": "3972DC9744F6499F0F9B2DBF76696F2AE7AD8AF9B23DDE66D6AF86C9DFB36986",
+      "bytes": 35149
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/INSTALL",
+      "sha256": "8269293B2738175F54354957D64F691EA9A55FFACB9D8912C79060A9B9BF769B",
+      "bytes": 17015
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/Makefile.in",
+      "sha256": "BBFFE67EBE6A6E1DCA5A385B4CFF7FA186A08C48DAC4013DEED43E5EB87F7117",
+      "bytes": 26961
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/aclocal.m4",
+      "sha256": "FECDAAB61E94095324DC38C254AE6A4D9B77EB2505D71B9B8A59BE4FF008B684",
+      "bytes": 47340
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/autom4te.cache/output.0",
+      "sha256": "95ECBFD8CB9434A7E6D827A52E6370B729366F0809C929F7475EA40698C0E1AF",
+      "bytes": 173179
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/autom4te.cache/output.1",
+      "sha256": "C5B386E13822C074529CA40E8133AB50C42B2ABF557AD0CACF57D855045729E8",
+      "bytes": 173182
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/autom4te.cache/output.2",
+      "sha256": "95ECBFD8CB9434A7E6D827A52E6370B729366F0809C929F7475EA40698C0E1AF",
+      "bytes": 173179
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/autom4te.cache/requests",
+      "sha256": "23D149BF2E7FCD37E163E1AFB18A5E0C7CEB98A89CE945BA45B6F30C2E4CB453",
+      "bytes": 12043
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/autom4te.cache/traces.0",
+      "sha256": "E8CF090D43EE1B1E113B724DB0F7D68449BED6AF396079BC528F57E7C2ED4229",
+      "bytes": 55473
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/autom4te.cache/traces.1",
+      "sha256": "212633417D6A355CFA92CF409A74D8BC59E0CB1C41DC7BEAD8BADD0D740F8DB2",
+      "bytes": 34120
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/autom4te.cache/traces.2",
+      "sha256": "212633417D6A355CFA92CF409A74D8BC59E0CB1C41DC7BEAD8BADD0D740F8DB2",
+      "bytes": 34120
+    },
+    {
+      "status": "??",
+      "path": "vice/src/resid/configure",
+      "sha256": "4FA0709CCD421193CADBD61C18E760B5371AB1AA4F6DF15A112CFB00C455B79F",
+      "bytes": 172119
+    },
+    {
+      "status": "??",
+      "path": "vice/src/rs232drv/Makefile.in",
+      "sha256": "F892F2CE22C3886D214D4665D3B112E940CDEF70648EF5BCB4D624FFAF49CCD8",
+      "bytes": 22417
+    },
+    {
+      "status": "??",
+      "path": "vice/src/samplerdrv/Makefile.in",
+      "sha256": "DDA8887C9ED9302BC81220A1B2D9C769D50C38098663DB95F967C0BD817F958A",
+      "bytes": 21310
+    },
+    {
+      "status": "??",
+      "path": "vice/src/scpu64/Makefile.in",
+      "sha256": "1E8AE4726E4E8455A2230B3B4CD5C4B408F1136C4DA78DBD3AAF59F14F0AF94A",
+      "bytes": 24711
+    },
+    {
+      "status": "??",
+      "path": "vice/src/serial/Makefile.in",
+      "sha256": "F31588DD86DD1005348741AEC685AD189522469BB0847625874A5A3819D14EB7",
+      "bytes": 23588
+    },
+    {
+      "status": "??",
+      "path": "vice/src/sid/Makefile.in",
+      "sha256": "D454072E6894280EE00AC1AF0246ECB625A03E41234D4C7E969B0E20E3B25FF4",
+      "bytes": 25771
+    },
+    {
+      "status": "??",
+      "path": "vice/src/tape/Makefile.in",
+      "sha256": "28303D4AB64EC31A74987EA4CC7AAECA27CF8E087CA2DB331D2F3FBCD6C86F32",
+      "bytes": 21757
+    },
+    {
+      "status": "??",
+      "path": "vice/src/tapeport/Makefile.in",
+      "sha256": "B38536F4BCBEB3B1AC5BC56AA9B1DC884840427AA976DD19D771BE0540931F12",
+      "bytes": 22452
+    },
+    {
+      "status": "??",
+      "path": "vice/src/tools/Makefile.in",
+      "sha256": "C9B4253372086F12568F5FF96C601329F703D11F085092275FEC63805EFBDEF4",
+      "bytes": 22089
+    },
+    {
+      "status": "??",
+      "path": "vice/src/tools/cartconv/Makefile.in",
+      "sha256": "AC4CCB95482516EAA7E8B74D34E8FF2021143556C4E0D8493D30DA0E6DC61CE5",
+      "bytes": 25765
+    },
+    {
+      "status": "??",
+      "path": "vice/src/tools/petcat/Makefile.in",
+      "sha256": "3411B779FC7801813883F6AAD3B556649FB161D1CF5AE85EA9B91FE850C1B59E",
+      "bytes": 22855
+    },
+    {
+      "status": "??",
+      "path": "vice/src/userport/Makefile.in",
+      "sha256": "CAF661549663B465ABDAA538D5FBFD3B588D0CF24F4E93E76644090BABB996C1",
+      "bytes": 27506
+    },
+    {
+      "status": "??",
+      "path": "vice/src/vdc/Makefile.in",
+      "sha256": "C4D7B4DE8E4CEC14082C9687B6FA7B8884823BED6A10678D3548B794B97B9E63",
+      "bytes": 22088
+    },
+    {
+      "status": "??",
+      "path": "vice/src/vdrive/Makefile.in",
+      "sha256": "8AAAA8D4EDA1CC3012260FC49EF520B2DD84D6CA8DB8B54731CD1B1302ED0C45",
+      "bytes": 22519
+    },
+    {
+      "status": "??",
+      "path": "vice/src/vic20/Makefile.in",
+      "sha256": "D37EB7EACBA3137815C366F4E54592B3F38BBC6328942AF68335BB5EB46E9B1F",
+      "bytes": 34491
+    },
+    {
+      "status": "??",
+      "path": "vice/src/vic20/cart/Makefile.in",
+      "sha256": "B4C13B871E80F377FE2C16FFDED0B8786CC50FC047714CD8C371C62FE025BBE2",
+      "bytes": 25871
+    },
+    {
+      "status": "??",
+      "path": "vice/src/vicii/Makefile.in",
+      "sha256": "D71821A2E4534088C7347750F68D7FA6F49AD06385EED4ABFCEC7773FE96FB78",
+      "bytes": 26391
+    },
+    {
+      "status": "??",
+      "path": "vice/src/viciisc/Makefile.in",
+      "sha256": "C3D5A4591CA205CBDCBD9DE36E7ABC969992630D871885E1B13CF5BBE931925A",
+      "bytes": 24493
+    },
+    {
+      "status": "??",
+      "path": "vice/src/video/Makefile.in",
+      "sha256": "755BA111FC794341AD6FA6090EA6CD511024E1BF6FE3585515D8B8A0E2DA555D",
+      "bytes": 26782
+    },
+    {
+      "status": "??",
+      "path": "vice/ylwrap",
+      "sha256": "2429C34E7F0E95B15FA7AE944C42DE4454447AF7302586B123B7DFF2D4E01CDC",
+      "bytes": 6964
+    }
+  ],
+  "superprojectStatus": [
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/.gitkeep",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T173749Z-review_triage_report-11e1.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T173750Z-review_initialize-ec54.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T173840Z-review_checkpoint-aeb3.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T174553Z-review_final-8ebd.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/20261020T132205-initialize.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/20261020T132632-source-checkpoint.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/20261020T133129-decisions.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/20261020T134408-final-readback.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/full-review-turn.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/plugin-cache/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T141000-plan-nativerestore-001-r3-gpt61sol/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T141000-plan-nativerestore-001-r3-gpt61sol/session-state.yaml",
+    "?? docs/receipts/hv/20261020T141000-plan-nativerestore-001-r3-gpt61sol/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/sessions/Codex-20261020T192007Z-hv-nativerestore-r3b/session-state.yaml",
+    "?? \"docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/plugin-cache/system-commandline-sentinel-files/dotnet-suggest-registration-McpServer.Repl.Host, Version=1.4.41.0, Culture=neutral, PublicKeyToken=null\"",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/verdict.json.readback",
+    "?? docs/receipts/hv/20261020T141600-plan-nativerestore-001-r3b-gpt61sol/verdict.md.readback",
+    "?? docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/sessions/Codex-20261020T203943Z-hv-nativerestore-r4/session-state.yaml",
+    "?? \"docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/plugin-cache/system-commandline-sentinel-files/dotnet-suggest-registration-McpServer.Repl.Host, Version=1.4.41.0, Culture=neutral, PublicKeyToken=null\"",
+    "?? docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/verdict.json.readback",
+    "?? docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/verdict.md.readback",
+    "?? docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/plugin-cache/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/plugin-cache/sessions/Codex-20261020T213610Z-nativerestore-r5/session-state.yaml",
+    "?? docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/verdict.json.readback",
+    "?? docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/verdict.md.readback",
+    "?? docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/plugin-cache/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/plugin-cache/sessions/Codex-20261020T222756Z-nativerestore-r6/session-state.yaml",
+    "?? docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.json.readback",
+    "?? docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.md.readback",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/action-20261020T180724207.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/action-20261020T180724207.receipt.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/action-20261020T181420343.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/action-20261020T181420343.receipt.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/action-20261020T181940393.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/action-20261020T181940393.receipt.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/action-20261020T183259685.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/action-20261020T183259685.receipt.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/bootstrap.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-001.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-001.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-002.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-002.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-003.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-003.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-004.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-004.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-005.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-005.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-006.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-006.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-007.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-007.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-008.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-008.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-009.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-009.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-010.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-010.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-011.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-011.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-012.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-012.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-013.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-013.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-014.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-014.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-015.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-015.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-016.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-016.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-017.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.json-018.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-001.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-001.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-002.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-002.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-003.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-003.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-004.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-004.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-005.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-005.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-006.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-006.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-007.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-007.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-008.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-008.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-009.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-009.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-010.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-010.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-011.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-011.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-012.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-012.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-013.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/chunk-verdict.md-013.receipt.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/comparator-command.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/comparator-test-result.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/comparator-test.log",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/dialog-20261020T180724207.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/dialog-20261020T180724207.receipt.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/dialog-20261020T181420343.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/dialog-20261020T181420343.receipt.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/dialog-20261020T181940393.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/dialog-20261020T181940393.receipt.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/dialog-20261020T183259685.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/dialog-20261020T183259685.receipt.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/discovery-jit.log",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/discovery-test-result.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/discovery-test.stdout.log",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/effective-requirements.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/final-integrity.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/fr-snapshot.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/fr-vice.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/historical-ledger.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/history-active.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/history-active.proof.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/history-active.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/inspection.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/launch-result.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/oracle-todo.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/pin-check.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/plugin-begin.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/plugin-open.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/plugin-status.txt",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-audit.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-discovery.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-history.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-identity.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-inspect.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-mcp.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-persist.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-plugin-cache/current-turn.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-plugin-cache/session-state.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-plugin-cache/session-verb-outcome.yaml",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-projection.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-queries.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-read.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-record.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-source-pins.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-state.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-test.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/review-verdict.ps1",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/selector-projection.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/snapshot-mappings.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/source-pins.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/state-after.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/state-before.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/test-snapshot.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/test-vice.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/tr-cycle.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/tr-oracle.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/tr-resume.params.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/verdict-chunks.manifest.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/verdict.json",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/verdict.md",
+    "?? docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/vice-mappings.params.json"
+  ]
+}

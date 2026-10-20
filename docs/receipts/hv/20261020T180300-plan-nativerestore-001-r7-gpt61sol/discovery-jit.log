@@ -1,0 +1,152 @@
+; Assembly listing for method ViceSharp.Core.ViceNative:FindLibraryPath():System.String (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 160
+       lea      rbp, [rsp+0xA0]
+       xor      eax, eax
+       mov      qword ptr [rbp-0x98], rax
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  ymmword ptr [rbp-0x90], ymm8
+       vmovdqu  ymmword ptr [rbp-0x70], ymm8
+       vmovdqu  ymmword ptr [rbp-0x50], ymm8
+       mov      qword ptr [rbp-0x30], rax
+ 
+G_M000_IG02:                ;; offset=0x0034
+       mov      dword ptr [rbp-0x78], 0x3E8
+       call     [ViceSharp.Core.ViceNative:EnumerateCandidateLibraryPaths():System.Collections.Generic.IEnumerable`1[System.String]]
+       mov      gword ptr [rbp-0x58], rax
+       mov      rdi, gword ptr [rbp-0x58]
+       mov      rsi, 0x7CA8C85B9778
+       call     CORINFO_HELP_CLASSPROFILE32
+       mov      rax, gword ptr [rbp-0x58]
+       mov      gword ptr [rbp-0x80], rax
+       mov      rdi, gword ptr [rbp-0x80]
+       mov      r11, 0x7CA8C6441078
+       call     [r11]System.Collections.Generic.IEnumerable`1[System.__Canon]:GetEnumerator():System.Collections.Generic.IEnumerator`1[System.__Canon]:this
+       mov      gword ptr [rbp-0x30], rax
+ 
+G_M000_IG03:                ;; offset=0x0075
+       jmp      SHORT G_M000_IG07
+ 
+G_M000_IG04:                ;; offset=0x0077
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x60], rax
+       mov      rdi, gword ptr [rbp-0x60]
+       mov      rsi, 0x7CA8C85B9880
+       call     CORINFO_HELP_CLASSPROFILE32
+       mov      rax, gword ptr [rbp-0x60]
+       mov      gword ptr [rbp-0x88], rax
+       mov      rdi, gword ptr [rbp-0x88]
+       mov      r11, 0x7CA8C6441088
+       call     [r11]System.Collections.Generic.IEnumerator`1[System.__Canon]:get_Current():System.__Canon:this
+       mov      gword ptr [rbp-0x38], rax
+       lea      rsi, [rbp-0x40]
+       mov      rdi, gword ptr [rbp-0x38]
+       call     [ViceSharp.Core.ViceNative:TryCreateRelocatedRuntime(System.String,byref):bool]
+       test     eax, eax
+       jne      SHORT G_M000_IG05
+       mov      rax, gword ptr [rbp-0x38]
+       mov      gword ptr [rbp-0x50], rax
+       jmp      SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x00D1
+       mov      rdi, 0x7CA8C85B9988
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      gword ptr [rbp-0x50], rax
+ 
+G_M000_IG06:                ;; offset=0x00E8
+       mov      rax, gword ptr [rbp-0x50]
+       mov      gword ptr [rbp-0x48], rax
+       jmp      SHORT G_M000_IG11
+ 
+G_M000_IG07:                ;; offset=0x00F2
+       mov      eax, dword ptr [rbp-0x78]
+       dec      eax
+       mov      dword ptr [rbp-0x78], eax
+       cmp      dword ptr [rbp-0x78], 0
+       jg       SHORT G_M000_IG09
+ 
+G_M000_IG08:                ;; offset=0x0100
+       lea      rdi, [rbp-0x78]
+       mov      esi, 37
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG09:                ;; offset=0x010E
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x68], rax
+       mov      rdi, gword ptr [rbp-0x68]
+       mov      rsi, 0x7CA8C85B9990
+       call     CORINFO_HELP_CLASSPROFILE32
+       mov      rax, gword ptr [rbp-0x68]
+       mov      gword ptr [rbp-0x90], rax
+       mov      rdi, gword ptr [rbp-0x90]
+       mov      r11, 0x7CA8C6441080
+       call     [r11]System.Collections.IEnumerator:MoveNext():bool:this
+       test     eax, eax
+       jne      G_M000_IG04
+ 
+G_M000_IG10:                ;; offset=0x0150
+       call     G_M000_IG16
+       jmp      SHORT G_M000_IG12
+ 
+G_M000_IG11:                ;; offset=0x0157
+       call     G_M000_IG16
+       jmp      SHORT G_M000_IG14
+ 
+G_M000_IG12:                ;; offset=0x015E
+       mov      rdi, 0x7CA8C85B9BAC
+       call     CORINFO_HELP_COUNTPROFILE32
+       xor      rax, rax
+ 
+G_M000_IG13:                ;; offset=0x016F
+       add      rsp, 160
+       pop      rbp
+       ret      
+ 
+G_M000_IG14:                ;; offset=0x0178
+       mov      rdi, 0x7CA8C85B9BB0
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x48]
+ 
+G_M000_IG15:                ;; offset=0x018B
+       add      rsp, 160
+       pop      rbp
+       ret      
+ 
+G_M000_IG16:                ;; offset=0x0194
+       push     rax
+ 
+G_M000_IG17:                ;; offset=0x0195
+       cmp      gword ptr [rbp-0x30], 0
+       je       SHORT G_M000_IG18
+       mov      rdi, 0x7CA8C85B9A98
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x70], rax
+       mov      rdi, gword ptr [rbp-0x70]
+       mov      rsi, 0x7CA8C85B9AA0
+       call     CORINFO_HELP_CLASSPROFILE32
+       mov      rax, gword ptr [rbp-0x70]
+       mov      gword ptr [rbp-0x98], rax
+       mov      rdi, gword ptr [rbp-0x98]
+       mov      r11, 0x7CA8C6441090
+       call     [r11]System.IDisposable:Dispose():this
+ 
+G_M000_IG18:                ;; offset=0x01E5
+       mov      rdi, 0x7CA8C85B9BA8
+       call     CORINFO_HELP_COUNTPROFILE32
+       nop      
+ 
+G_M000_IG19:                ;; offset=0x01F5
+       add      rsp, 8
+       ret      
+ 
+; Total bytes of code 506
+

@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 4,
+      "description": "Decision: N19 remains FAIL in revision 7 because R12 line 61 still asserts that pinned VICE exports a correct register file only at an instruction boundary. The active 6510dtvcore.c FETCH_OPCODE at 1804 precedes BRK dispatch 1845-1847; BRK EXPORT_REGISTERS at 1012 follows opcode-fetch clock increments in c64/c64cpusc.c 124-179 and precedes BRK remaining cycles. The trap checkpoint design is source-feasible, but this global exclusive statement must be narrowed to the selected public trap seam. N20-N23 pass as future contracts, not executed implementation. Additional discovery, absent-candidate, and R15 propagation controls are ADD-AC because existing fail-closed gates prevent unsafe restoration; they do not independently cause DISAGREE.",
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol"
+    }
+  ]
+}

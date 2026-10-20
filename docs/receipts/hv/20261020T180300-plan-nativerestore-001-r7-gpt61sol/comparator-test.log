@@ -1,0 +1,40 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Abstractions -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Abstractions/bin/Release/net10.0/ViceSharp.Abstractions.dll
+  ViceSharp.RomFetch -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomFetch/bin/Release/net10.0/ViceSharp.RomFetch.dll
+  ViceSharp.Protocol -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Protocol/bin/Release/net10.0/ViceSharp.Protocol.dll
+  ViceSharp.Chips -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Chips/bin/Release/net10.0/ViceSharp.Chips.dll
+  ViceSharp.Library.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Library.ViewModels/bin/Release/net10.0/ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.Input/bin/Release/net10.0/ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.ViewModels/bin/Release/net10.0/ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.RomM -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomM/bin/Release/net10.0/ViceSharp.RomM.dll
+  ViceSharp.Core -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/bin/Release/net10.0/ViceSharp.Core.dll
+  ViceSharp.Monitor -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Monitor/bin/Release/net10.0/ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Architectures/bin/Release/net10.0/ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Launcher/bin/Release/net10.0/ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Benchmarks/bin/Release/net10.0/ViceSharp.Benchmarks.dll
+  ViceSharp.AdhocHelper -> /home/sharpninja/github/vice-sharp/src/ViceSharp.AdhocHelper/bin/Release/net10.0/ViceSharp.AdhocHelper.dll
+  ViceSharp.Host.InProcess -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.InProcess/bin/Release/net10.0/ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Console/bin/Release/net10.0/ViceSharp.Console.dll
+  ViceSharp.Xbox -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox/bin/Release/net10.0/ViceSharp.Xbox.dll
+  ViceSharp.Host -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host/bin/Release/net10.0/ViceSharp.Host.dll
+/home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/Views/SettingsView.axaml(76,18,76,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [/home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj]
+  ViceSharp.Avalonia -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/bin/Release/net10.0/ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.MacOS/bin/Release/net10.0/ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll
+  The native VICE oracle build is Windows-only; building the managed test harness.
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+Logging Vstest Diagnostics in file: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/TestResults/vstest.diag.log
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle [FAIL]
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+  Failed ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle [15 ms]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs:line 23
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/TestResults/vic20-comparator.trx
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 41 ms - ViceSharp.TestHarness.dll (net10.0)

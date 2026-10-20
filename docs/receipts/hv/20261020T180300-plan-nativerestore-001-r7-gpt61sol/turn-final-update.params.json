@@ -1,0 +1,22 @@
+{
+  "requestId": "req-20261020T230558Z-hv-nativerestore-r7",
+  "queryTitle": "Hostile review of Phase D restoration plan revision 7",
+  "interpretation": "Independent class-1 pre-execution hostile review of revision 7, every round-6 finding, historical round-3b/revision-4 dispositions and all mandatory source/rule/requirement/what-if surfaces.",
+  "response": "DISAGREE; accuracy 97; completeness 98; PASS 50; FAIL 1 (N19); UNKNOWN 0; ADD-AC 3 (N24-N26). Complete verdict.md and verdict.json are stored as ordered hv-full-content-r7 dialog chunks and primary-readback hash verified. No Phase D step executed or released.",
+  "contextList": [
+    "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/request.jsonl",
+    "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/response.jsonl",
+    "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/verdict.md",
+    "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/verdict.json",
+    "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/verdict.persistence.json",
+    "parentSessionId=ClaudeCode-20261020T015046Z-plugin-session",
+    "parentRequestId=req-20261020T172116Z-prompt-6c6d",
+    "PLAN-NATIVERESTORE-001 revision 7",
+    "TR-VSFLOCKSTEP-RESUME-001",
+    "TEST-VICE-001",
+    "TR-CYCLE-001",
+    "FR-SNP-005",
+    "TEST-SNP-002",
+    "PLAN-VICEORACLE-001"
+  ]
+}

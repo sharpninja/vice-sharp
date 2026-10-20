@@ -1,0 +1,15 @@
+type: result
+payload:
+  result:
+    code: unchanged
+    retryable: false
+    persisted: false
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.openSession
+    agent: Codex
+    sessionId: Codex-20261020T230558Z-hv-nativerestore-r7
+    requestId: ""
+    failsafePath: ""
+    message: workflow.sessionlog.openSession completed without a remote persistence receipt.
+    childStderr: ""

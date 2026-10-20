@@ -1,0 +1,918 @@
+{
+  "timestampLocal": "2026-10-20T18:26:35",
+  "patchLineCount": 599,
+  "hunkCount": 20,
+  "hunks": [
+    {
+      "file": "vice/src/c64/c64cpusc.c",
+      "line": 5,
+      "header": "@@ -32,6 +32,10 @@"
+    },
+    {
+      "file": "vice/src/c64/c64cpusc.c",
+      "line": 16,
+      "header": "@@ -44,11 +48,32 @@ CLOCK maincpu_clk_limit = 0L;"
+    },
+    {
+      "file": "vice/src/drive/drive-snapshot.c",
+      "line": 53,
+      "header": "@@ -314,9 +314,13 @@ int drive_snapshot_read_module(snapshot_t *s)"
+    },
+    {
+      "file": "vice/src/drive/drivecpu.c",
+      "line": 74,
+      "header": "@@ -188,6 +188,10 @@ void drivecpu_reset_clk(diskunit_context_t *drv)"
+    },
+    {
+      "file": "vice/src/drive/drivecpu65c02.c",
+      "line": 89,
+      "header": "@@ -170,6 +170,10 @@ void drivecpu65c02_reset_clk(diskunit_context_t *drv)"
+    },
+    {
+      "file": "vice/src/mainc64cpu.c",
+      "line": 104,
+      "header": "@@ -56,6 +56,10 @@"
+    },
+    {
+      "file": "vice/src/mainc64cpu.c",
+      "line": 115,
+      "header": "@@ -196,7 +200,24 @@ inline static void check_ba(void)"
+    },
+    {
+      "file": "vice/src/mainc64cpu.c",
+      "line": 140,
+      "header": "@@ -752,7 +773,37 @@ void maincpu_mainloop(void)"
+    },
+    {
+      "file": "vice/src/mainc64cpu.c",
+      "line": 178,
+      "header": "@@ -951,11 +1002,31 @@ int maincpu_snapshot_read_module(snapshot_t *s)"
+    },
+    {
+      "file": "vice/src/mainviccpu.c",
+      "line": 219,
+      "header": "@@ -47,6 +47,10 @@"
+    },
+    {
+      "file": "vice/src/mainviccpu.c",
+      "line": 230,
+      "header": "@@ -579,7 +583,35 @@ void maincpu_mainloop(void)"
+    },
+    {
+      "file": "vice/src/resid/filter8580new.h",
+      "line": 270,
+      "header": "@@ -551,6 +551,16 @@ public:"
+    },
+    {
+      "file": "vice/src/resid/sid.h",
+      "line": 291,
+      "header": "@@ -61,6 +61,10 @@ public:"
+    },
+    {
+      "file": "vice/src/sid/resid.cc",
+      "line": 306,
+      "header": "@@ -449,4 +449,113 @@ sid_engine_t resid_hooks ="
+    },
+    {
+      "file": "vice/src/vic20/vic20cpu.c",
+      "line": 424,
+      "header": "@@ -31,6 +31,10 @@"
+    },
+    {
+      "file": "vice/src/vic20/vic20cpu.c",
+      "line": 435,
+      "header": "@@ -40,7 +44,26 @@ CLOCK maincpu_clk_limit = 0L;"
+    },
+    {
+      "file": "vice/src/vic20/vic20sound.c",
+      "line": 466,
+      "header": "@@ -306,7 +306,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, float *pbuf, int"
+    },
+    {
+      "file": "vice/src/vic20/vic20sound.c",
+      "line": 487,
+      "header": "@@ -338,7 +350,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, int16_t *pbuf, in"
+    },
+    {
+      "file": "vice/src/vic20/vic20sound.c",
+      "line": 508,
+      "header": "@@ -578,3 +602,77 @@ void sound_machine_enable(int enable)"
+    },
+    {
+      "file": "vice/src/vic20/vic20sound.h",
+      "line": 590,
+      "header": "@@ -36,4 +36,9 @@ void vic_sound_reset(sound_t *psid, CLOCK cpu_clk);"
+    }
+  ],
+  "inventoryCount": 2527,
+  "inventoryExtensions": [
+    {
+      "Name": ".Po",
+      "Count": 1432
+    },
+    {
+      "Name": ".o",
+      "Count": 745
+    },
+    {
+      "Name": "",
+      "Count": 121
+    },
+    {
+      "Name": ".in",
+      "Count": 107
+    },
+    {
+      "Name": ".a",
+      "Count": 59
+    },
+    {
+      "Name": ".h",
+      "Count": 17
+    },
+    {
+      "Name": ".out",
+      "Count": 10
+    },
+    {
+      "Name": ".1",
+      "Count": 6
+    },
+    {
+      "Name": ".0",
+      "Count": 6
+    },
+    {
+      "Name": ".2",
+      "Count": 6
+    },
+    {
+      "Name": ".status",
+      "Count": 3
+    },
+    {
+      "Name": ".log",
+      "Count": 3
+    },
+    {
+      "Name": ".m4",
+      "Count": 3
+    },
+    {
+      "Name": ".3",
+      "Count": 2
+    },
+    {
+      "Name": ".c",
+      "Count": 2
+    },
+    {
+      "Name": ".exe",
+      "Count": 2
+    },
+    {
+      "Name": ".o65",
+      "Count": 1
+    },
+    {
+      "Name": ".sh",
+      "Count": 1
+    },
+    {
+      "Name": ".vice-shim-configure-flags",
+      "Count": 1
+    }
+  ],
+  "makefileCount": 106,
+  "fixtures": [
+    {
+      "path": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.4.vsf",
+      "sha256": "1D6A178A1C415FA1B5BCCC30551E5FC210701E363762B05EEDCDF237F88F8EFF",
+      "bytes": 193261,
+      "machine": "C64SC",
+      "modules": [
+        {
+          "name": "MAINCPU",
+          "major": 1,
+          "minor": 4,
+          "offset": 58,
+          "size": 125,
+          "payloadBytes": 103,
+          "clock": 30250590,
+          "a": 0,
+          "x": 1,
+          "y": 214,
+          "sp": 242,
+          "pc": 3937,
+          "p": 224
+        },
+        {
+          "name": "C64MEM",
+          "major": 0,
+          "minor": 1,
+          "offset": 183,
+          "size": 65577,
+          "payloadBytes": 65555
+        },
+        {
+          "name": "C64CART",
+          "major": 0,
+          "minor": 1,
+          "offset": 65760,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "CIA1",
+          "major": 2,
+          "minor": 5,
+          "offset": 65783,
+          "size": 99,
+          "payloadBytes": 77
+        },
+        {
+          "name": "CIA2",
+          "major": 2,
+          "minor": 5,
+          "offset": 65882,
+          "size": 99,
+          "payloadBytes": 77
+        },
+        {
+          "name": "SID",
+          "major": 1,
+          "minor": 5,
+          "offset": 65981,
+          "size": 58,
+          "payloadBytes": 36
+        },
+        {
+          "name": "SIDEXTENDED",
+          "major": 1,
+          "minor": 4,
+          "offset": 66039,
+          "size": 155,
+          "payloadBytes": 133
+        },
+        {
+          "name": "DRIVE8",
+          "major": 2,
+          "minor": 0,
+          "offset": 66194,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE9",
+          "major": 2,
+          "minor": 0,
+          "offset": 66361,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE10",
+          "major": 2,
+          "minor": 0,
+          "offset": 66528,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE11",
+          "major": 2,
+          "minor": 0,
+          "offset": 66695,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVECPU0",
+          "major": 1,
+          "minor": 3,
+          "offset": 66862,
+          "size": 2174,
+          "payloadBytes": 2152
+        },
+        {
+          "name": "1541VIA1D0",
+          "major": 2,
+          "minor": 2,
+          "offset": 69036,
+          "size": 50,
+          "payloadBytes": 28
+        },
+        {
+          "name": "VIA2D0",
+          "major": 2,
+          "minor": 2,
+          "offset": 69086,
+          "size": 50,
+          "payloadBytes": 28
+        },
+        {
+          "name": "FSDRIVE",
+          "major": 0,
+          "minor": 0,
+          "offset": 69136,
+          "size": 280,
+          "payloadBytes": 258
+        },
+        {
+          "name": "VIC-II",
+          "major": 1,
+          "minor": 3,
+          "offset": 69416,
+          "size": 123437,
+          "payloadBytes": 123415
+        },
+        {
+          "name": "GLUE",
+          "major": 1,
+          "minor": 0,
+          "offset": 192853,
+          "size": 25,
+          "payloadBytes": 3
+        },
+        {
+          "name": "C64MEMHACKS",
+          "major": 0,
+          "minor": 0,
+          "offset": 192878,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "TAPEPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 192901,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "DATASETTE",
+          "major": 1,
+          "minor": 5,
+          "offset": 192925,
+          "size": 100,
+          "payloadBytes": 78
+        },
+        {
+          "name": "KEYBOARD",
+          "major": 1,
+          "minor": 1,
+          "offset": 193025,
+          "size": 118,
+          "payloadBytes": 96
+        },
+        {
+          "name": "JOYPORT0",
+          "major": 0,
+          "minor": 0,
+          "offset": 193143,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "JOYSTICK0",
+          "major": 1,
+          "minor": 2,
+          "offset": 193166,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "JOYPORT1",
+          "major": 0,
+          "minor": 0,
+          "offset": 193190,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "JOYSTICK1",
+          "major": 1,
+          "minor": 2,
+          "offset": 193213,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "USERPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 193237,
+          "size": 24,
+          "payloadBytes": 2
+        }
+      ]
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.2.vsf",
+      "sha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "bytes": 190854,
+      "machine": "C64SC",
+      "modules": [
+        {
+          "name": "MAINCPU",
+          "major": 1,
+          "minor": 2,
+          "offset": 58,
+          "size": 113,
+          "payloadBytes": 91,
+          "clock": 109163946,
+          "a": 194,
+          "x": 2,
+          "y": 0,
+          "sp": 250,
+          "pc": 22377,
+          "p": 160
+        },
+        {
+          "name": "C64MEM",
+          "major": 0,
+          "minor": 1,
+          "offset": 171,
+          "size": 65577,
+          "payloadBytes": 65555
+        },
+        {
+          "name": "C64CART",
+          "major": 0,
+          "minor": 1,
+          "offset": 65748,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "CIA1",
+          "major": 2,
+          "minor": 5,
+          "offset": 65771,
+          "size": 99,
+          "payloadBytes": 77
+        },
+        {
+          "name": "CIA2",
+          "major": 2,
+          "minor": 5,
+          "offset": 65870,
+          "size": 99,
+          "payloadBytes": 77
+        },
+        {
+          "name": "SID",
+          "major": 1,
+          "minor": 5,
+          "offset": 65969,
+          "size": 58,
+          "payloadBytes": 36
+        },
+        {
+          "name": "SIDEXTENDED",
+          "major": 1,
+          "minor": 4,
+          "offset": 66027,
+          "size": 155,
+          "payloadBytes": 133
+        },
+        {
+          "name": "VDRIVEIMAGE8",
+          "major": 2,
+          "minor": 0,
+          "offset": 66182,
+          "size": 22,
+          "payloadBytes": 0
+        },
+        {
+          "name": "DRIVE8",
+          "major": 2,
+          "minor": 0,
+          "offset": 66204,
+          "size": 24,
+          "payloadBytes": 2,
+          "has_tde": 0,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE9",
+          "major": 2,
+          "minor": 0,
+          "offset": 66228,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE10",
+          "major": 2,
+          "minor": 0,
+          "offset": 66395,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE11",
+          "major": 2,
+          "minor": 0,
+          "offset": 66562,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "FSDRIVE",
+          "major": 0,
+          "minor": 0,
+          "offset": 66729,
+          "size": 280,
+          "payloadBytes": 258
+        },
+        {
+          "name": "VIC-II",
+          "major": 1,
+          "minor": 3,
+          "offset": 67009,
+          "size": 123437,
+          "payloadBytes": 123415
+        },
+        {
+          "name": "GLUE",
+          "major": 1,
+          "minor": 0,
+          "offset": 190446,
+          "size": 25,
+          "payloadBytes": 3
+        },
+        {
+          "name": "C64MEMHACKS",
+          "major": 0,
+          "minor": 0,
+          "offset": 190471,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "TAPEPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 190494,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "DATASETTE",
+          "major": 1,
+          "minor": 5,
+          "offset": 190518,
+          "size": 100,
+          "payloadBytes": 78
+        },
+        {
+          "name": "KEYBOARD",
+          "major": 1,
+          "minor": 1,
+          "offset": 190618,
+          "size": 118,
+          "payloadBytes": 96
+        },
+        {
+          "name": "JOYPORT0",
+          "major": 0,
+          "minor": 0,
+          "offset": 190736,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "JOYSTICK0",
+          "major": 1,
+          "minor": 2,
+          "offset": 190759,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "JOYPORT1",
+          "major": 0,
+          "minor": 0,
+          "offset": 190783,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "JOYSTICK1",
+          "major": 1,
+          "minor": 2,
+          "offset": 190806,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "USERPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 190830,
+          "size": 24,
+          "payloadBytes": 2
+        }
+      ]
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+      "sha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "bytes": 190854,
+      "machine": "C64SC",
+      "modules": [
+        {
+          "name": "MAINCPU",
+          "major": 1,
+          "minor": 2,
+          "offset": 58,
+          "size": 113,
+          "payloadBytes": 91,
+          "clock": 109163946,
+          "a": 194,
+          "x": 2,
+          "y": 0,
+          "sp": 250,
+          "pc": 22377,
+          "p": 160
+        },
+        {
+          "name": "C64MEM",
+          "major": 0,
+          "minor": 1,
+          "offset": 171,
+          "size": 65577,
+          "payloadBytes": 65555
+        },
+        {
+          "name": "C64CART",
+          "major": 0,
+          "minor": 1,
+          "offset": 65748,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "CIA1",
+          "major": 2,
+          "minor": 5,
+          "offset": 65771,
+          "size": 99,
+          "payloadBytes": 77
+        },
+        {
+          "name": "CIA2",
+          "major": 2,
+          "minor": 5,
+          "offset": 65870,
+          "size": 99,
+          "payloadBytes": 77
+        },
+        {
+          "name": "SID",
+          "major": 1,
+          "minor": 5,
+          "offset": 65969,
+          "size": 58,
+          "payloadBytes": 36
+        },
+        {
+          "name": "SIDEXTENDED",
+          "major": 1,
+          "minor": 4,
+          "offset": 66027,
+          "size": 155,
+          "payloadBytes": 133
+        },
+        {
+          "name": "VDRIVEIMAGE8",
+          "major": 2,
+          "minor": 0,
+          "offset": 66182,
+          "size": 22,
+          "payloadBytes": 0
+        },
+        {
+          "name": "DRIVE8",
+          "major": 2,
+          "minor": 0,
+          "offset": 66204,
+          "size": 24,
+          "payloadBytes": 2,
+          "has_tde": 0,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE9",
+          "major": 2,
+          "minor": 0,
+          "offset": 66228,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE10",
+          "major": 2,
+          "minor": 0,
+          "offset": 66395,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "DRIVE11",
+          "major": 2,
+          "minor": 0,
+          "offset": 66562,
+          "size": 167,
+          "payloadBytes": 145,
+          "has_tde": 1,
+          "has_drives": 1
+        },
+        {
+          "name": "FSDRIVE",
+          "major": 0,
+          "minor": 0,
+          "offset": 66729,
+          "size": 280,
+          "payloadBytes": 258
+        },
+        {
+          "name": "VIC-II",
+          "major": 1,
+          "minor": 3,
+          "offset": 67009,
+          "size": 123437,
+          "payloadBytes": 123415
+        },
+        {
+          "name": "GLUE",
+          "major": 1,
+          "minor": 0,
+          "offset": 190446,
+          "size": 25,
+          "payloadBytes": 3
+        },
+        {
+          "name": "C64MEMHACKS",
+          "major": 0,
+          "minor": 0,
+          "offset": 190471,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "TAPEPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 190494,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "DATASETTE",
+          "major": 1,
+          "minor": 5,
+          "offset": 190518,
+          "size": 100,
+          "payloadBytes": 78
+        },
+        {
+          "name": "KEYBOARD",
+          "major": 1,
+          "minor": 1,
+          "offset": 190618,
+          "size": 118,
+          "payloadBytes": 96
+        },
+        {
+          "name": "JOYPORT0",
+          "major": 0,
+          "minor": 0,
+          "offset": 190736,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "JOYSTICK0",
+          "major": 1,
+          "minor": 2,
+          "offset": 190759,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "JOYPORT1",
+          "major": 0,
+          "minor": 0,
+          "offset": 190783,
+          "size": 23,
+          "payloadBytes": 1
+        },
+        {
+          "name": "JOYSTICK1",
+          "major": 1,
+          "minor": 2,
+          "offset": 190806,
+          "size": 24,
+          "payloadBytes": 2
+        },
+        {
+          "name": "USERPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 190830,
+          "size": 24,
+          "payloadBytes": 2
+        }
+      ]
+    }
+  ],
+  "semanticCandidateCount": 56,
+  "semanticCandidates": [
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.Benchmarks/NativeViceBaseline.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C64MachineProfileTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/RasterBarGroundTruthTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/RasterBarRendererTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/LockstepValidator.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidExactOracleTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEngineParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisiteTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceMachineValidationFixture.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceNativeBridge.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Xbox/XboxTestConventionTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Xbox/XboxAotLinkTests.cs"
+  ],
+  "tokenCandidateCount": 43,
+  "tokenWithCategoryCount": 5,
+  "nativeProjectCallers": [
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj:10:    <ViceNativeProject>$(MSBuildThisFileDirectory)..\\..\\native\\Vice.Native.proj</ViceNativeProject>",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj:70:          Condition=\"'$(DesignTimeBuild)' != 'true' and Exists('$(ViceNativeProject)')\">",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj:72:    <MSBuild Projects=\"$(ViceNativeProject)\" Targets=\"BuildNative\" Condition=\"'$(OS)' == 'Windows_NT'\" />"
+  ],
+  "proposedToolExists": false,
+  "nukeTargetDefinitions": []
+}

@@ -1,0 +1,15 @@
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.appendActions
+    agent: Codex
+    sessionId: Codex-20261020T230558Z-hv-nativerestore-r7
+    requestId: req-20261020T230558Z-hv-nativerestore-r7
+    failsafePath: ""
+    message: Session log persist confirmed a durable write for request 'req-20261020T230558Z-hv-nativerestore-r7'.
+    childStderr: ""

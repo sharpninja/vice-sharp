@@ -1,0 +1,25 @@
+{
+  "timestampLocal": "2026-10-20T18:17:19",
+  "command": "dotnet",
+  "arguments": [
+    "test",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj",
+    "-c",
+    "Release",
+    "--no-build",
+    "--no-restore",
+    "--filter",
+    "FullyQualifiedName~Vic20HalfCycleComparatorTests",
+    "--results-directory",
+    "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/TestResults",
+    "--logger",
+    "trx;LogFileName=vic20-comparator-discovery.trx"
+  ],
+  "exitCode": 1,
+  "jitFileExists": true,
+  "diagnosticEnvironment": {
+    "DOTNET_ReadyToRun": "0",
+    "DOTNET_JitDisasm": "ViceSharp.Core.ViceNative:FindLibraryPath",
+    "DOTNET_JitStdOutFile": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/discovery-jit.log"
+  }
+}

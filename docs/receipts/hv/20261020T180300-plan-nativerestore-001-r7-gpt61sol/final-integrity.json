@@ -1,0 +1,227 @@
+{
+  "timestampLocal": "2026-10-20T18:43:56",
+  "initialBranch": "develop",
+  "finalBranch": "develop",
+  "initialHead": "1c46ce70f6702e6955c4b8dddce8f5f2a74f29c0",
+  "finalHead": "1c46ce70f6702e6955c4b8dddce8f5f2a74f29c0",
+  "initialNativeHead": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "finalNativeHead": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeFileCountBefore": 163,
+  "nativeFileCountAfter": 163,
+  "nativeDifferences": [],
+  "nativeStatusEqual": true,
+  "submoduleStatusEqual": true,
+  "nativeIndexPaths": [],
+  "nativeIndexCommandExit": 0,
+  "pins": [
+    {
+      "path": "docs/plans/PLAN-NATIVERESTORE-001.md",
+      "matches": true,
+      "bytes": 76497
+    },
+    {
+      "path": "docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.json",
+      "matches": true,
+      "bytes": 56329
+    },
+    {
+      "path": "docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.md",
+      "matches": true,
+      "bytes": 44672
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.md",
+      "matches": true,
+      "bytes": 37495
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md",
+      "matches": true,
+      "bytes": 133558
+    },
+    {
+      "path": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+      "matches": true,
+      "bytes": 37043
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md",
+      "matches": true,
+      "bytes": 1700
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch",
+      "matches": true,
+      "bytes": 22404
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-untracked-paths.txt",
+      "matches": true,
+      "bytes": 92364
+    },
+    {
+      "path": "docs/plans/PLAN-OBSERVER-001.md",
+      "matches": true,
+      "bytes": 20104
+    },
+    {
+      "path": "docs/plans/PLAN-VSFLOCKSTEP-001.md",
+      "matches": true,
+      "bytes": 56395
+    },
+    {
+      "path": "docs/requirements/technical/TR-Native-Vice-Snapshot.md",
+      "matches": true,
+      "bytes": 8648
+    },
+    {
+      "path": "docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md",
+      "matches": true,
+      "bytes": 7705
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md",
+      "matches": true,
+      "bytes": 5483
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md",
+      "matches": true,
+      "bytes": 6874
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/README.md",
+      "matches": true,
+      "bytes": 3792
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md",
+      "matches": true,
+      "bytes": 3386
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj",
+      "matches": true,
+      "bytes": 4122
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+      "matches": true,
+      "bytes": 494
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs",
+      "matches": true,
+      "bytes": 545
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs",
+      "matches": true,
+      "bytes": 6479
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+      "matches": true,
+      "bytes": 80584
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs",
+      "matches": true,
+      "bytes": 3553
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+      "matches": true,
+      "bytes": 190854
+    },
+    {
+      "path": "tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.2.vsf",
+      "matches": true,
+      "bytes": 190854
+    },
+    {
+      "path": "tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.4.vsf",
+      "matches": true,
+      "bytes": 193261
+    },
+    {
+      "path": "src/ViceSharp.Core/ViceNative.cs",
+      "matches": true,
+      "bytes": 37725
+    },
+    {
+      "path": "src/ViceSharp.Abstractions/IViceNative.cs",
+      "matches": true,
+      "bytes": 12055
+    },
+    {
+      "path": "src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs",
+      "matches": true,
+      "bytes": 4532
+    },
+    {
+      "path": "native/Vice.Native.proj",
+      "matches": true,
+      "bytes": 1749
+    },
+    {
+      "path": ".gitmodules",
+      "matches": true,
+      "bytes": 113
+    },
+    {
+      "path": "native/build-vice-observer.ps1",
+      "matches": true,
+      "bytes": 20943
+    },
+    {
+      "path": "tools/immutable-vice/Invoke-ObserverEquivalence.ps1",
+      "matches": true,
+      "bytes": 15492
+    },
+    {
+      "path": "tools/immutable-vice/clock-observer-x64sc.c",
+      "matches": true,
+      "bytes": 2167
+    },
+    {
+      "path": "tools/immutable-vice/bus-adapter.c",
+      "matches": true,
+      "bytes": 4406
+    },
+    {
+      "path": "tools/immutable-vice/clock-gate.c",
+      "matches": true,
+      "bytes": 599
+    },
+    {
+      "path": "tools/immutable-vice/obs-emitter.c",
+      "matches": true,
+      "bytes": 2951
+    },
+    {
+      "path": "build/Build.cs",
+      "matches": true,
+      "bytes": 103509
+    },
+    {
+      "path": "ViceSharp.slnx",
+      "matches": true,
+      "bytes": 8517
+    },
+    {
+      "path": "docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/prompt.md",
+      "matches": true,
+      "bytes": 13513
+    },
+    {
+      "path": "docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/SELF-REVIEW.md",
+      "matches": true,
+      "bytes": 9807
+    }
+  ],
+  "pinCount": 41,
+  "pinDriftCount": 0,
+  "gitDiffCheckExit": 0,
+  "gitDiffCheckOutput": []
+}
