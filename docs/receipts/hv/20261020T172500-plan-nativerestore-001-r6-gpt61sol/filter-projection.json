@@ -1,0 +1,28 @@
+{
+  "timestampLocal": "2026-10-20T17:38:42",
+  "basis": "Build.cs current filter plus only the edit explicitly named in D2; a static projection, not execution of future code",
+  "projectedTestFilter": "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy",
+  "unchangedCiTestFilter": "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration",
+  "cases": [
+    {
+      "category": "VsfSlice1Contract",
+      "projectedTestSelected": true,
+      "unchangedCiTestSelected": true
+    },
+    {
+      "category": "VsfSlice1Real",
+      "projectedTestSelected": true,
+      "unchangedCiTestSelected": true
+    },
+    {
+      "category": "ShimLegacy",
+      "projectedTestSelected": false,
+      "unchangedCiTestSelected": true
+    },
+    {
+      "category": "Ordinary",
+      "projectedTestSelected": true,
+      "unchangedCiTestSelected": true
+    }
+  ]
+}

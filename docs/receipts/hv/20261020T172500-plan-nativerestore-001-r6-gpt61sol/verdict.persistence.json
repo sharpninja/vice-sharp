@@ -1,0 +1,201 @@
+{
+  "timestampLocal": "2026-10-20T17:57:58",
+  "persisted": true,
+  "queued": false,
+  "degraded": false,
+  "sourceType": "Codex",
+  "reviewerAgent": "Codex",
+  "reviewerModel": "gpt-6.1-sol",
+  "reviewerEffort": "max",
+  "reviewerSessionId": "Codex-20261020T222731Z-plugin-session",
+  "reviewerRequestId": "req-20261020T222756Z-nativerestore-r6",
+  "parentSessionId": "ClaudeCode-20261020T015046Z-plugin-session",
+  "parentRequestId": "req-20261020T172116Z-prompt-6c6d",
+  "agentSessionId": "01a15b6b-e50d-75b1-880b-e9fd6da7c823",
+  "agentExecutablePath": "/home/sharpninja/.local/share/mise/installs/codex/latest/bin/codex",
+  "agentExecutableVersion": "codex-cli 0.162.1",
+  "serverModelField": "codex",
+  "exactModelEvidence": "request.jsonl CLI launch model/effort; server header is generic codex",
+  "historyQuery": "Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method client.SessionLog.QueryAsync -ParamsObject @{agent=Codex;limit=1;offset=0}, through Save-ReviewPersistence.ps1",
+  "historyReceiptPath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/history-completed-turn.txt",
+  "historyReceiptSha256": "26C39959B6EE11B91BAA613D75AC0A5C81964F64F4633A52DBDA4FEF2743C110",
+  "turnTitle": "Hostile review native restoration plan revision 6",
+  "turnStatus": "completed",
+  "sessionHeaderStatus": "in_progress",
+  "note": "The exact review turn is completed; the session header may remain in_progress. Whole prose and JSON are in ordered readable dialog chunks, not just a digest or local failsafe.",
+  "content": [
+    {
+      "name": "verdict.md",
+      "chunks": [
+        {
+          "index": 1,
+          "chars": 6000,
+          "rawSha256": "0796B8DD79325D205942A85D7A761D9905456194CBD7A9C24419F94A4CD9C08D",
+          "lfSha256": "0796B8DD79325D205942A85D7A761D9905456194CBD7A9C24419F94A4CD9C08D",
+          "normalizedMatches": true
+        },
+        {
+          "index": 2,
+          "chars": 6000,
+          "rawSha256": "E98909D23366E36D4C6A16C30DCC4C202551E3FA647372207C77A421C3E911E6",
+          "lfSha256": "E98909D23366E36D4C6A16C30DCC4C202551E3FA647372207C77A421C3E911E6",
+          "normalizedMatches": true
+        },
+        {
+          "index": 3,
+          "chars": 6000,
+          "rawSha256": "2DF0299066509E085031C2E3F985C23BEF6F82117423128EB96BEE95496B1143",
+          "lfSha256": "2DF0299066509E085031C2E3F985C23BEF6F82117423128EB96BEE95496B1143",
+          "normalizedMatches": true
+        },
+        {
+          "index": 4,
+          "chars": 6000,
+          "rawSha256": "163D22FE0F5BCCB8B39C70885F20D78346756E80DFC40A9FD8667A3CD6E9EA62",
+          "lfSha256": "163D22FE0F5BCCB8B39C70885F20D78346756E80DFC40A9FD8667A3CD6E9EA62",
+          "normalizedMatches": true
+        },
+        {
+          "index": 5,
+          "chars": 6000,
+          "rawSha256": "1E331C856342BF7D1F1B6BCD01E1132BE4F2F26E396072E17140C66728EA5A52",
+          "lfSha256": "1E331C856342BF7D1F1B6BCD01E1132BE4F2F26E396072E17140C66728EA5A52",
+          "normalizedMatches": true
+        },
+        {
+          "index": 6,
+          "chars": 6000,
+          "rawSha256": "44110E4FA2678BF556129662EAD9FF1F78501CA48A02204AC772BD6744932A8C",
+          "lfSha256": "44110E4FA2678BF556129662EAD9FF1F78501CA48A02204AC772BD6744932A8C",
+          "normalizedMatches": true
+        },
+        {
+          "index": 7,
+          "chars": 6000,
+          "rawSha256": "0BD0205163DEE84D2DF357EF0A1FC885FAAC613DD40DD9B20298E8505F0B8E8E",
+          "lfSha256": "0BD0205163DEE84D2DF357EF0A1FC885FAAC613DD40DD9B20298E8505F0B8E8E",
+          "normalizedMatches": true
+        },
+        {
+          "index": 8,
+          "chars": 2672,
+          "rawSha256": "C0E68579AAC64D221628F7953085ACFC8869DDF1A586DB281FFE473F01E18773",
+          "lfSha256": "C0E68579AAC64D221628F7953085ACFC8869DDF1A586DB281FFE473F01E18773",
+          "normalizedMatches": true
+        }
+      ],
+      "sourceBytes": 44672,
+      "readbackBytes": 44672,
+      "sourceSha256": "010046A75909831664DDEB95081FED7A39722EF329D6DF814CFCE9E27E8ECC78",
+      "readbackSha256": "010046A75909831664DDEB95081FED7A39722EF329D6DF814CFCE9E27E8ECC78",
+      "rawBytesMatch": true,
+      "sourceLfSha256": "010046A75909831664DDEB95081FED7A39722EF329D6DF814CFCE9E27E8ECC78",
+      "readbackLfSha256": "010046A75909831664DDEB95081FED7A39722EF329D6DF814CFCE9E27E8ECC78",
+      "normalizedMatches": true,
+      "normalization": "none"
+    },
+    {
+      "name": "verdict.json",
+      "chunks": [
+        {
+          "index": 1,
+          "chars": 6000,
+          "rawSha256": "F8A8764230659267FDBEE3207CF7796F9695695A0A0824EB91AEB2DD9CEE5C0E",
+          "lfSha256": "F8A8764230659267FDBEE3207CF7796F9695695A0A0824EB91AEB2DD9CEE5C0E",
+          "normalizedMatches": true
+        },
+        {
+          "index": 2,
+          "chars": 6000,
+          "rawSha256": "217755DEE8E66AD9823C490C6B00E755A7BFB967E54F4EA9B7F15DE12F91986B",
+          "lfSha256": "217755DEE8E66AD9823C490C6B00E755A7BFB967E54F4EA9B7F15DE12F91986B",
+          "normalizedMatches": true
+        },
+        {
+          "index": 3,
+          "chars": 6000,
+          "rawSha256": "4A10825E7A20A70EF5698E99A05211C9105B80136E06366BD16419B46A222A06",
+          "lfSha256": "4A10825E7A20A70EF5698E99A05211C9105B80136E06366BD16419B46A222A06",
+          "normalizedMatches": true
+        },
+        {
+          "index": 4,
+          "chars": 6000,
+          "rawSha256": "A7094E967BA089A01E601CE9407C3ED6D8798642FD41B6FF04BE3C98054F34B4",
+          "lfSha256": "A7094E967BA089A01E601CE9407C3ED6D8798642FD41B6FF04BE3C98054F34B4",
+          "normalizedMatches": true
+        },
+        {
+          "index": 5,
+          "chars": 6000,
+          "rawSha256": "14A063CC814A3C2B1314CCE680FA968076483A1FE55395111294CE5692D2F581",
+          "lfSha256": "14A063CC814A3C2B1314CCE680FA968076483A1FE55395111294CE5692D2F581",
+          "normalizedMatches": true
+        },
+        {
+          "index": 6,
+          "chars": 6000,
+          "rawSha256": "C204FE86B1A4F71C5A0945A1C16780D96C1ABF185A43341158CDBDF99FF609BF",
+          "lfSha256": "C204FE86B1A4F71C5A0945A1C16780D96C1ABF185A43341158CDBDF99FF609BF",
+          "normalizedMatches": true
+        },
+        {
+          "index": 7,
+          "chars": 6000,
+          "rawSha256": "1745117DAC6B5E6406B45B123CF6D2CBA9A27543E51908DE442F90525A764A56",
+          "lfSha256": "1745117DAC6B5E6406B45B123CF6D2CBA9A27543E51908DE442F90525A764A56",
+          "normalizedMatches": true
+        },
+        {
+          "index": 8,
+          "chars": 6000,
+          "rawSha256": "4F97EB3658F71B5A963901389FABE30C1F4EA1035C0B586B0F871801E1D64E90",
+          "lfSha256": "4F97EB3658F71B5A963901389FABE30C1F4EA1035C0B586B0F871801E1D64E90",
+          "normalizedMatches": true
+        },
+        {
+          "index": 9,
+          "chars": 6000,
+          "rawSha256": "AC943991CD02526057152A82E5FB71A25EC6ABBF5CDBADFFFAF3B04D6262D604",
+          "lfSha256": "AC943991CD02526057152A82E5FB71A25EC6ABBF5CDBADFFFAF3B04D6262D604",
+          "normalizedMatches": true
+        },
+        {
+          "index": 10,
+          "chars": 2329,
+          "rawSha256": "B57D3F81C04C3D000C0AA42CB5E9AFE9C102BC53C4F76DD3D8002F88DC2D5197",
+          "lfSha256": "B57D3F81C04C3D000C0AA42CB5E9AFE9C102BC53C4F76DD3D8002F88DC2D5197",
+          "normalizedMatches": true
+        }
+      ],
+      "sourceBytes": 56329,
+      "readbackBytes": 56329,
+      "sourceSha256": "0701F3A8B47A4E9CEB58268740A84391D0AD4C3A2DA19D5EBDD4381BE5A250FA",
+      "readbackSha256": "0701F3A8B47A4E9CEB58268740A84391D0AD4C3A2DA19D5EBDD4381BE5A250FA",
+      "rawBytesMatch": true,
+      "sourceLfSha256": "0701F3A8B47A4E9CEB58268740A84391D0AD4C3A2DA19D5EBDD4381BE5A250FA",
+      "readbackLfSha256": "0701F3A8B47A4E9CEB58268740A84391D0AD4C3A2DA19D5EBDD4381BE5A250FA",
+      "normalizedMatches": true,
+      "normalization": "none"
+    }
+  ],
+  "allCompleteContentVerified": true,
+  "completeReceiptPath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/persistence-complete.txt",
+  "stopGateReceiptPath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/persistence-stop-gate.txt",
+  "stopGateRawResponse": "{}",
+  "stopGateInterpretation": "Empty object is the nonblocking return in supported plugin-hook.ps1 Close-PluginTurnIfNeeded line 1262; no status:passed field is fabricated.",
+  "finalIntegrityReceiptPath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/review-integrity-final.json",
+  "finalIntegrityReceiptSha256": "50731BFE877665D7336420069C0B9AC8E9BD1C7A4B9E5149B4AF1AE401FA7F76",
+  "historicalQueuedRecordsAtBootstrap": 2,
+  "historicalQueueHandling": "Never replayed, drained or canceled; MCP_FAILSAFE_DRAIN_DISABLED=1 throughout own wrapper operations",
+  "requestPath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/request.jsonl",
+  "responsePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/response.jsonl",
+  "responseHashNote": "Response stream remains live until CLI exit; no misleading final-stream hash is claimed before exit",
+  "OverallVerdict": "DISAGREE",
+  "accuracyPercent": 97,
+  "completenessPercent": 97,
+  "passCount": 45,
+  "failCount": 3,
+  "unknownCount": 0,
+  "addAcCount": 3
+}

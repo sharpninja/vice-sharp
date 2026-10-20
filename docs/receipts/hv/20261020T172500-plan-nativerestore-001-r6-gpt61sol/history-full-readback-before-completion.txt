@@ -1,0 +1,1620 @@
+type: result
+payload:
+  requestId: req-20261020T225630Z-72bb
+  result:
+    totalCount: 5
+    limit: 1
+    offset: 0
+    items:
+    - sourceType: Codex
+      sessionId: Codex-20261020T222731Z-plugin-session
+      agentSessionId: 01a15b6b-e50d-75b1-880b-e9fd6da7c823
+      agentExecutablePath: /home/sharpninja/.local/share/mise/installs/codex/latest/bin/codex
+      agentExecutableVersion: codex-cli 0.162.1
+      title: Hostile review native restoration plan revision 6
+      model: codex
+      started: 2026-10-20T22:27:34.0000000+00:00
+      lastUpdated: 2026-10-20T22:54:58.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20261020T222756Z-nativerestore-r6
+        timestamp: 2026-10-20T22:27:59.0000000+00:00
+        queryText: >
+          # Hostile validation round 6: PLAN-NATIVERESTORE-001 revision 6 (Phase D plan) before execution
+
+
+          You are the independent hostile reviewer for this round: GPT-6.1-Sol at reasoning effort max through the Codex CLI on LAB-OMARCHY, workspace /home/sharpninja/github/vice-sharp, branch develop (the checkout is recorded in input-pins.json). The implementer is a Claude session (claude-fable-5-1-high@ClaudeCode); you are a different agent family by the operator's rule. This is round 6 of a plan review before any of its steps execute; nothing under native/vice has changed, and nothing may change during your review. This launch passes sandbox_workspace_write.network_access=true, so the supported plugin's health check reaches the McpServer; round 3b persisted its turn this way.
+
+
+          Round 5 (receipt docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/, verdict.json and verdict.md pinned here) returned DISAGREE 97/96 with N12, N14 and N19 failing, N15 to N18 as added ACs, and 40 PASS. The implementer verified every round 5 finding against source (no real v1.3 snapshot exists in the repository; EXPORT_REGISTERS also runs at DMA handling line 451 and BRK line 1012), asked the operator about the v1.3 input, and rewrote the plan as revision 6; section 7 maps each finding of all rounds to its amendment. Your job is to re-verify against the live sources, not to re-read your own round 5 as truth: for every round 5 finding state PASS, FAIL or UNKNOWN with evidence (one entry per round 5 id), then attack the whole revised plan again for anything new that the amendments introduced, in particular: the R15 amendment of TR-VSFLOCKSTEP-RESUME-001 AC1 to external v1.2 and v1.4 (is it an explicit, operator-decided semantic amendment routed through the requirements wrapper in D1 and read back, with Slice 1 line 340 matched, and is nothing else silently reduced?), the explicit BLOCKED nonpassing Phase D end state and the cumulative target denominator (N14), the checkpoint writer and gate interaction controls (N15), the audit interval started before discovery with the attribute-only and provider-only controls (N16), the seam-level allocation test (N17), the clock versus half-cycle budget rules (N18) and the narrowed trap statement (N19).
+
+
+          CREDENTIAL RULE (round 1 R01 was yours): do NOT read, cat, print, copy or quote AGENTS-README-FIRST.yaml or any file holding an API key, in any shell, helper or tool call. The supported plugin reads the marker itself; you only call its wrappers through file-based PowerShell helpers. If any output you produce would contain a credential, stop that command.
+
+
+          TIMESTAMP RULE (round 2 R02 was yours): every progress object and every timestamp you emit is measured at the moment of emission by a command, never estimated or backfilled.
+
+
+          FIRST: run the add-profile skill exactly as its SKILL.md says (read every non-skill *.md under /home/sharpninja/.claude/profile in full; currently PROFILE-MERGED.md). Bootstrap your own supported plugin (mcpserver-codex-plugin, root /home/sharpninja/github/mcpserver-codex-plugin; verify with Invoke-CodexMcpPlugin.ps1 -Command Status) with MCP_FAILSAFE_DRAIN_DISABLED=1 set, and open your own review session-log turn through it, titled with a short summary of this request, linked to the parent ids in this directory's request.jsonl (parentSessionId, parentRequestId). If the plugin reports untrusted, record the exact error and the sandbox arguments from request.jsonl, do not repair hooks, settings or environment, do not replay queues, do not cancel historical turns, attempt the supported triage once, then use the authorized full-content failsafe and label queued versus persisted. Do not invoke nested reviewers, do not substitute the model. There are no time or turn bounds on this review.
+
+
+          MANDATORY live progress: before analysis and at meaningful checkpoints, emit a TEXT JSON object into your output with timestampLocal (measured), numeric completionPercent and etaSeconds (null only if genuinely unknown). These are your own reports, not deadlines.
+
+
+          Operator rulings verbatim (treat as acceptance criteria): D4 (2026-10-19): native restoration approved; "Build artifacts are not code dirt. They should be gitignored."; "restore native/vice means revert the tracked modifications after preserving them, and exclude the build output through git ignore rules instead of deleting it". D3: "No HV until your current scope of work is complete and passes 98/98 holistic self-assessment", clarified "This is a remediation/cleanup phase, not new code"; on 2026-10-20T12:21 the operator stated that plans are hostile-validated under the standing rules, which is why these rounds exist. 10:40: "Wait for the Windows trace results first" (satisfied: Windows 100k, 1M and x64sc 4M equal to Linux, receipt docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/). 10:53: "Before beginning phase D implementation, ensure both omarchy and legion2 have latest desktop build installed via nuke." (done on both). 10:57: R1 "B: .gitmodules ignore = untracked only"; R2 and R3 "A: retire it now"; R4 "Yes, exclude and keep"; R5 "Yes, add in D2". 12:09: "Hold until LEGION2 reports". 13:03: R6 "A: ShimLegacy category (Recommended)"; R7 "A: reject all three (Recommended)"; R8 "A: observer -autostart .vsf (Recommended)"; R9 "A: known-red set of 20 (Recommended)". 14:06: R10 "A: adapter launch precondition (Recommended)"; R11 "B: require a native register observer". 14:14: "sandboxes need network access, at least to loopback." 15:30: R12 "B: exact cycle N required"; R13 "B: implement HalfCycleState in Phase D"; R14 "A: accept as benign dead read (Recommended)". 16:29, asked explicitly whether to approve a pinned boundary checkpoint instead: R12 "B: literal 100,000 only". 17:23, asked how to handle the missing real v1.3 input for AC1: R15, verbatim, "change to v1.2 and v1.4" (the plan treats this as an explicit semantic amendment of AC1 applied through the requirements wrapper in D1). The plan now keeps the literal 100,000 trigger, distinguishes trigger and write clocks, accepts an xvic fixture only at write clock 100,000 on both hosts, and otherwise records BLOCKER-R12-XVIC-CHECKPOINT for the operator while every other Phase D obligation completes; judge whether this honors the ruling exactly and whether the blocker handling is complete and observable. Standing rules: never move a file (copy, verify by hash, retain the original until the operator clears deletion); never force-push; PowerShell only, no Python, no Node; every script analyzer-checked and dry-run with -WhatIf; BDPv4 mocks first for every behavior change; VICE is immutable (never edit, patch, generate into, clean or restore native/vice outside this plan's approved steps).
+
+
+          Read end to end, rehashing every pin in input-pins.json before you start and disclosing any drift: docs/plans/PLAN-NATIVERESTORE-001.md (the subject, revision 4), the round 3b verdict.json and verdict.md, docs/receipts/handoff/HANDOFF.lockstep-plan.md section 4 Phase D (line 115 is the exit) and Phase F (line 130 onward), docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md sections 4 and 11, docs/plans/PLAN-VICE-IMMUTABLE-001.md (Phase 0, Phase 3, Phase 4 field set, task 5 at lines 113 to 119), docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md, its patch (all 20 hunks) and native-vice-untracked-paths.txt, docs/plans/PLAN-OBSERVER-001.md (S5), docs/plans/PLAN-VSFLOCKSTEP-001.md (lines 230 to 243 and Slice 1 lines 321 to 350), docs/requirements/technical/TR-Native-Vice-Snapshot.md (AC1 and AC2), docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md, tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj, tests/ViceSharp.TestHarness/ViceFactAttribute.cs, tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs, tests/ViceSharp.TestHarness/LockstepValidator.cs, tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs, tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf, src/ViceSharp.Core/ViceNative.cs, src/ViceSharp.Abstractions/IViceNative.cs, src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs, native/Vice.Native.proj, .gitmodules, native/build-vice-observer.ps1, tools/immutable-vice/Invoke-ObserverEquivalence.ps1, tools/immutable-vice/clock-observer-x64sc.c and bus-adapter.c (the existing wrapper and sink pattern), build/Build.cs, ViceSharp.slnx, this directory's SELF-REVIEW.md. Verify the plan's state claims yourself: git -C native/vice status --porcelain=v1 -uall, git -C native/vice diff --stat, git submodule status, the semantic native consumers under tests, the callers of Vice.Native.proj, the absence of the two Nuke targets and the generator tool, a focused managed run of Vic20HalfCycleComparatorTests (allowed: dotnet test on the TestHarness with that filter only), and in the pinned materialization under artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src (read only): interrupt.h line 305 and 6510core.c lines 482 to 486 (trap with exported registers), machine.h lines 145 and 148, autostart.c lines 884 to 888, 1266 to 1274 and 1552 to 1575, c64-snapshot.c lines 115 to 155, mainc64cpu.c lines 359 to 362, 513 and 934 onward, mainviccpu.c line 756 onward, mos6510.h lines 116 to 136, monitor.c lines 2237 to 2248, mon_parse.y line 265, mon_lex.l lines 183 and 221, initcmdline.c lines 279 to 286, drive-snapshot.c writer 135 to 165 and reader 313 to 339, 368 to 419, 433 and 540 to 550, rotation.c lines 186 to 205, drive-resources.c set_drive_type and line 168, iecbus.c lines 493 to 547, resources.h resources_get_int. Read-only on everything outside this receipt directory; you may run read-only git and grep commands and managed dotnet test commands on the three native-safe projects and the one named TestHarness filter; never build the full solution, never build native code, never touch native/vice or artifacts/immutable-vice.
+
+
+          Mandatory attack surfaces (profile 7.2): (1) every claim in the plan (counts, the 20-hunk classification, the pinned-source facts, the fixture facts, the new D1 and D2 designs); (2) workspace rules (honesty, receipts, MCP-only storage, PowerShell only, no Python, never move a file, VICE immutable, no silent exclusion or AC reduction, zero-allocation hot path for the load detector); (3) requirements: class 1; mapping to TR-VSFLOCKSTEP-RESUME-001 AC1 and AC2, TEST-VICE-001 AC1 and AC2, TR-CYCLE-001 AC4 (managed, left pending), FR-SNP-005 AC3 and TEST-SNP-002 AC4 (the comparator fixture), PLAN-VICEORACLE-001 tasks 4 and 5; the Slice 1 amendment, the R12 checkpoint wording and the AC2 reference change must preserve semantics or state the amendment explicitly; (4) the plan holistically: definition of done, blockers, phase dependencies, rollback (A03), both machines, the trap-based checkpoint writer (does the trap fire at the next instruction boundary with a complete exported register file, can machine_write_snapshot be called from a trap callback safely, is the resulting MAINCPU clock the clock at the boundary, does arming at cycle N through the clock hook interfere with the gate), the snapshot observer's two wraps (are both calls cross-object on both machines; is the load result observable before the next gate line; does an emitted VICE_SNAP line change any equivalence claim), the HalfCycleState design against the fixture's reflection (property names, types, enum, mismatch object members and message), the load detector against the zero-allocation and determinism invariants, the N02 ordering rules against the pinned read and reset paths, the N07 budget against -limitcycles semantics, the obligation map against every Slice 1 line. Run the what-if pass per criterion (a fixture whose pinned checkpoint clock differs between hosts; a trap that fires after a pending interrupt; a checkpoint requested at a cycle inside a stolen-cycle run; a resume whose first access is a stolen cycle; a shim consumer reached only through a data provider; a load-log file that cannot be written; the 20 known-red set changing; a Windows checkout with autocrlf). Chain rules to find deadlocks. Where the plan does not state an observable outcome, propose a valid AC with the step that owns it; adding a valid AC is a finding of kind "add AC", not a FAIL by itself unless the gap makes a step unsafe.
+
+
+          Save verdict.md, verdict.json and verdict.persistence.json in THIS directory (docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/). Required JSON fields: OverallVerdict (AGREE or DISAGREE), accuracyPercent, completenessPercent, passCount, failCount, unknownCount, findings (id, status PASS or FAIL or UNKNOWN or ADD-AC, severity, file and line or section, evidence, rationale, correction; one entry per round 3b finding id stating its disposition in revision 4, plus new ids), reviewerAgent, reviewerModel, reviewerEffort, reviewerSessionId, reviewerRequestId, requestPath, responsePath. Persist the COMPLETE prose and JSON verdict, every finding and both scores, in your own session-log turn (ordered small chunks if the wrapper's argument limits require it; read back, reassemble, compare hashes, disclose any CRLF/LF normalization), complete the turn and prove its completed state with a history query; write that proof into verdict.persistence.json. End with the whole verdict in your output stream. OverallVerdict is AGREE only if every applicable surface passes and both scores are at least 98; do not inflate scores; a sub-98 score is DISAGREE even with zero FAIL. No commit, no push, no edit outside this directory.
+        queryTitle: Hostile review native restoration plan revision 6
+        response: Supported plugin is available. BeginTurn returned persisted:true. Zero drift across all 41 input pins. Existing two queued operations were not replayed.
+        interpretation: Class 1 independent plan review, revision 6, all prior IDs plus whole-plan/requirements/workspace attacks. Literal R12 preserved; no execution authorized. Full prose/JSON persisted in ordered chunks and verified before completion.
+        status: in_progress
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'All 41 input SHA256/length pins match; live develop HEAD ff24117d7d756404fad439a3c14c14336709eb8c. Native Git: 8 tracked modifications, 155 untracked entries, 222 insertions/8 deletions, gitlink and HEAD cc67418cba58e71d8e70fd353e9de47199ad2075. Authorized Release comparator test: 1 failed, 0 passed, 0 skipped, missing HalfCycleState at line 23; retained TRX/diagnostic/stdout. D2 R13 explicitly owns implementation. Source recheck identifies residual only-at-traps/JAM/monitor text at plan line 54 despite corrected line 14.'
+          type: validation
+          status: completed
+          filePath: comparator-test.log
+        - order: 2
+          description: 'R15 explicitly amends AC1 via D1 wrapper/readback, preserves synthetic v1.3 bytes and aligns Slice 1. N14 adds a genuine nonpassing BLOCKED state and a separately nonzero cumulative denominator. New source-pinned propagation gap: D2 only adds Category!=ShimLegacy to Test; VsfSlice1Real remains selected after D5, contradicting only-cumulative D5 rule. CiTest retains the other old filter. N19 false exclusivity remains at line 54. Live effective requirements all seven pending; own history confirms exact linked review turn in_progress. Fixture bytes independently confirm v1.2 clock 109163946 and DRIVE8 0/1; three VSFs contain no real v1.3.'
+          type: validation
+          status: completed
+          filePath: filter-projection.json
+        - order: 30
+          description: 'Source-based disposition: R15 is an explicit operator-approved semantic AC1 amendment to external v1.2/v1.4, with requirement-wrapper update/readback allocated to D1. N14 now states a nonpassing BLOCKED lifecycle and cumulative denominator. Do not infer acceptance from either until implementation evidence exists. Reject the alternative of treating the old v1.3 requirement as silently waived.'
+          type: design_decision
+          status: completed
+          filePath: ./docs/plans/PLAN-NATIVERESTORE-001.md
+        - order: 31
+          description: 'Reviewer process failure: a commentary update reused the previously measured local timestamp instead of running a new measurement at emission. R02 is FAIL for this round. Command-generated progress JSON timestamps remain measured at emission. Corrected immediately with a fresh Progress command and disclosed in output; do not describe timestamp compliance as unqualified PASS.'
+          type: validation
+          status: completed
+          filePath: ./docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/response.jsonl
+        - order: 32
+          description: 'N19 remains FAIL: plan section 1 correctly lists DMA and BRK exports, but R11 line 54 still claims exports occur only at traps, JAM and monitor entry. New N20 is FAIL: D2 only adds ShimLegacy exclusion to Test; Build.cs CiTest has its own unchanged filter, and neither filter excludes VsfSlice1Real, contradicting D5 exclusive cumulative execution and section 5 every-gate removal. R12 one-host mismatch then cannot satisfy ordinary A05. Reject silently skipping real cases or broadening R9; require explicit consistent gate selections and denominators. Additional transactional candidate retention, already-latched interrupt and low-clock terminal controls are ADD-AC, not alleged executed regressions.'
+          type: design_decision
+          status: completed
+          filePath: ./docs/plans/PLAN-NATIVERESTORE-001.md
+        - order: 600001
+          description: 'Complete independent round 6 prose: all 47 prior IDs plus four new findings, evidence, corrections, requirements and structured what-if pass. DISAGREE 97 accuracy / 97 completeness; PASS 45 FAIL 3 UNKNOWN 0 ADD-AC 3. Fails R02,N19,N20.'
+          type: create
+          status: completed
+          filePath: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.md
+        - order: 600002
+          description: Complete native-object JSON verdict with all 51 findings, both scores, exact reviewer and parent IDs and revision-4 dispositions for all 35 round-3b IDs.
+          type: create
+          status: completed
+          filePath: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.json
+        - order: 600003
+          description: 41/41 final pins match, checkout/native status unchanged, 163 changed/untracked native file hashes unchanged against measured midpoint inventory, outside-receipt tracked status clean, git diff --check exit 0. No full/native build or native execution; authorized comparator baseline failed 1 passed 0 skipped 0.
+          type: validation
+          status: completed
+          filePath: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/review-integrity-final.json
+        - order: 600004
+          description: Receipt-only PowerShell helpers parser/analyzer checked with zero findings and WhatIf dry runs; complete fixture payload inspection retained separately. No implementation, file moves, deletion, commit or push.
+          type: validation
+          status: completed
+          filePath: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/script-validation.json
+        model: codex
+        tokenCount: 0
+        tags:
+        - PLAN-NATIVERESTORE-001
+        - revision-6
+        - hostile-validation
+        - gpt-6.1-sol
+        - effort-max
+        - parentSessionId:ClaudeCode-20261020T015046Z-plugin-session
+        - parentRequestId:req-20261020T172116Z-prompt-6c6d
+        - DISAGREE
+        - accuracy:97
+        - completeness:97
+        - max
+        contextList:
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/request.jsonl
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/prompt.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/response.jsonl
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/input-pins.json
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.json
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/verdict.persistence.json
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/review-integrity-final.json
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/script-validation.json
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/fixture-inspection.json
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/native-final.json
+        - /home/sharpninja/github/vice-sharp/docs/plans/PLAN-NATIVERESTORE-001.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/verdict.json
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/verdict.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/handoff/HANDOFF.lockstep-plan.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md
+        - /home/sharpninja/github/vice-sharp/docs/plans/PLAN-VICE-IMMUTABLE-001.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch
+        - /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-untracked-paths.txt
+        - /home/sharpninja/github/vice-sharp/docs/plans/PLAN-OBSERVER-001.md
+        - /home/sharpninja/github/vice-sharp/docs/plans/PLAN-VSFLOCKSTEP-001.md
+        - /home/sharpninja/github/vice-sharp/docs/requirements/technical/TR-Native-Vice-Snapshot.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/README.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceFactAttribute.cs
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/LockstepValidator.cs
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.2.vsf
+        - /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.4.vsf
+        - /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/ViceNative.cs
+        - /home/sharpninja/github/vice-sharp/src/ViceSharp.Abstractions/IViceNative.cs
+        - /home/sharpninja/github/vice-sharp/src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs
+        - /home/sharpninja/github/vice-sharp/native/Vice.Native.proj
+        - /home/sharpninja/github/vice-sharp/.gitmodules
+        - /home/sharpninja/github/vice-sharp/native/build-vice-observer.ps1
+        - /home/sharpninja/github/vice-sharp/tools/immutable-vice/Invoke-ObserverEquivalence.ps1
+        - /home/sharpninja/github/vice-sharp/tools/immutable-vice/clock-observer-x64sc.c
+        - /home/sharpninja/github/vice-sharp/tools/immutable-vice/bus-adapter.c
+        - /home/sharpninja/github/vice-sharp/tools/immutable-vice/clock-gate.c
+        - /home/sharpninja/github/vice-sharp/tools/immutable-vice/obs-emitter.c
+        - /home/sharpninja/github/vice-sharp/build/Build.cs
+        - /home/sharpninja/github/vice-sharp/ViceSharp.slnx
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/SELF-REVIEW.md
+        processingDialog:
+        - timestamp: 2026-10-20T22:31:27.2978140+00:00
+          role: model
+          content: 'All 41 input SHA256/length pins match; live develop HEAD ff24117d7d756404fad439a3c14c14336709eb8c. Native Git: 8 tracked modifications, 155 untracked entries, 222 insertions/8 deletions, gitlink and HEAD cc67418cba58e71d8e70fd353e9de47199ad2075. Authorized Release comparator test: 1 failed, 0 passed, 0 skipped, missing HalfCycleState at line 23; retained TRX/diagnostic/stdout. D2 R13 explicitly owns implementation. Source recheck identifies residual only-at-traps/JAM/monitor text at plan line 54 despite corrected line 14.'
+          category: observation
+        - timestamp: 2026-10-20T22:38:42.2808157+00:00
+          role: model
+          content: 'R15 explicitly amends AC1 via D1 wrapper/readback, preserves synthetic v1.3 bytes and aligns Slice 1. N14 adds a genuine nonpassing BLOCKED state and a separately nonzero cumulative denominator. New source-pinned propagation gap: D2 only adds Category!=ShimLegacy to Test; VsfSlice1Real remains selected after D5, contradicting only-cumulative D5 rule. CiTest retains the other old filter. N19 false exclusivity remains at line 54. Live effective requirements all seven pending; own history confirms exact linked review turn in_progress. Fixture bytes independently confirm v1.2 clock 109163946 and DRIVE8 0/1; three VSFs contain no real v1.3.'
+          category: observation
+        - timestamp: 2026-10-20T22:45:03.0777843+00:00
+          role: model
+          content: 'Source-based disposition: R15 is an explicit operator-approved semantic AC1 amendment to external v1.2/v1.4, with requirement-wrapper update/readback allocated to D1. N14 now states a nonpassing BLOCKED lifecycle and cumulative denominator. Do not infer acceptance from either until implementation evidence exists. Reject the alternative of treating the old v1.3 requirement as silently waived.'
+          category: decision
+        - timestamp: 2026-10-20T22:46:50.1745931+00:00
+          role: model
+          content: 'Reviewer process failure: a commentary update reused the previously measured local timestamp instead of running a new measurement at emission. R02 is FAIL for this round. Command-generated progress JSON timestamps remain measured at emission. Corrected immediately with a fresh Progress command and disclosed in output; do not describe timestamp compliance as unqualified PASS.'
+          category: observation
+        - timestamp: 2026-10-20T22:46:57.9679775+00:00
+          role: model
+          content: 'N19 remains FAIL: plan section 1 correctly lists DMA and BRK exports, but R11 line 54 still claims exports occur only at traps, JAM and monitor entry. New N20 is FAIL: D2 only adds ShimLegacy exclusion to Test; Build.cs CiTest has its own unchanged filter, and neither filter excludes VsfSlice1Real, contradicting D5 exclusive cumulative execution and section 5 every-gate removal. R12 one-host mismatch then cannot satisfy ordinary A05. Reject silently skipping real cases or broadening R9; require explicit consistent gate selections and denominators. Additional transactional candidate retention, already-latched interrupt and low-clock terminal controls are ADD-AC, not alleged executed regressions.'
+          category: decision
+        - timestamp: 2026-10-20T22:55:27.8443903+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.md|0001|0008
+
+            2026-10-20T17:54:17 - Hostile validation round 6: PLAN-NATIVERESTORE-001 revision 6.
+
+
+            OverallVerdict: DISAGREE. Accuracy 97%; completeness 97%. PASS 45, FAIL 3, UNKNOWN 0, ADD-AC 3. The FAIL list is R02 (reviewer timestamp process), N19 (stale false register-export exclusivity) and N20 (gate selection propagation). No Phase D execution or done-state is authorized.
+
+
+            Accuracy is below the threshold because one source claim remains false and this reviewer reused a measured timestamp in one commentary instead of measuring anew at emission. Completeness is below the threshold because the proposed gate filters do not enforce real-test exclusivity or every-gate shim retirement. The three ADD-AC items are additional controls, not independent FAILs.
+
+
+            This is a class-1 pre-execution plan review. All 47 round-5 IDs receive one fresh disposition below; all 35 round-3b IDs also carry their historical revision-4 disposition in the JSON, read from the round-4 verdict only for that historical purpose. Current findings were rechecked against source. The subject is revision 6 despite stale revision-4 wording in the brief. All 41 input pins matched before analysis; input-pins is a file array rather than a checkout-commit pin. Live checkout is develop at ff24117d7d756404fad439a3c14c14336709eb8c.
+
+
+            R15 is an explicit operator-decided semantic amendment: external v1.2/v1.4 replaces external v1.2/v1.3 for AC1. D1 owns the requirement-wrapper update, primary readback and Slice 1 line 340 propagation before acceptance. Synthetic v1.3 byte normalization and the 199 adapter cases remain. AC2 changes the builder reference while preserving its semantics. R12 remains literal 100000 for both trigger and accepted write clock on both hosts. A mismatch yields a nonpassing BLOCKED cumulative result with case IDs and independent counts, no Phase E and no done-state. These contract repairs pass; their gate-filter propagation does not.
+
+
+            Each finding follows with source/evidence, rationale and correction. PASS addresses the plan contract or observed starting fact, not unexecuted production acceptance.
+
+
+            - P01 PASS (info): Input identity and drift. [docs/plans/PLAN-NATIVERESTORE-001.md:3]
+              Evidence: All 41 initial SHA256 and byte-length pins match. Subject is revision 6, 72648 bytes, SHA256 AF56C59034D8164AA0AEC6045B556AE7948623C3D87F182EF85FEC4637DF33FA. Live develop HEAD ff24117d7d756404fad439a3c14c14336709eb8c.
+              Judgment: The revision-4 phrases in the brief are stale; input-pins is a file-pin array and does not actually contain the checkout commit.
+              Correction: Review revision 6; retain separate live checkout metadata and final rehash.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - P02 PASS (info): Native starting state. [docs/plans/PLAN-NATIVERESTORE-001.md:8]
+              Evidence: Live native HEAD and gitlink are cc67418cba58e71d8e70fd353e9de47199ad2075; 163 porcelain entries: 8 tracked modified, 155 untracked; 222 insertions, 8 deletions; index clean. native-initial.json retains content hashes.
+              Judgment: The Linux claims match live Git. Historical Windows data is not presented as a fresh Windows measurement.
+              Correction: Measure and preserve each host independently in D0.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - P03 PASS (info): R1 B and retained output. [docs/plans/PLAN-NATIVERESTORE-001.md:83]
+              Evidence: .gitmodules currently says ignore = dirty; D4 explicitly changes it to untracked and requires empty tracked/index diffs plus the exact retained path/hash/length inventory.
+              Judgment: This implements the operator distinction between tracked modifications and retained build output without hiding tracked dirt.
+              Correction: Keep the untracked inventory and approved ignore mode on both hosts.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - P04 PASS (info): Plan-review authority and implementation hold. [docs/plans/PLAN-NATIVERESTORE-001.md:78]
+              Evidence: D-pre requires host install receipts, Windows traces, this plan at AGREE, and the verbatim operator release; handoff v2 section 11 records the 12:21 clarification permitting plan HV.
+              Judgment: This review is authorized and does not release D0 or restoration.
+              Correction: Retain the implementation hold under this DISAGREE result.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - P05 PASS (info): Both desktop installation receipts. [docs/plans/PLAN-NATIVERESTORE-001.md:78]
+              Evidence: Linux 20261020T105400 and Windows 20261020T121000 READMEs record Nuke DeployUser/InstallMsi, release 1.3.111 and ProductVersion commit 2c8d60284229b9fedc2d50f840153b9e8d8cbcbf.
+              Judgment: The required host-attributed receipts exist; this reviewer did not remeasure the installed GUIs remotely.
+              Correction: Bind those exact receipts to D0 entry evidence.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - P06 PASS (info): Phase C evidence scope. [docs/plans/PLAN-NATIVERESTORE-001.md:13]
+              Evidence: Linux S2b/S4 and Windows 20261020T102600 receipts support seeded reset-workload equivalence at 100k, 1M and x64sc 4M. PLAN-OBSERVER-001 S5 separately defers the real snapshot register check.
+              Judgment: Bounded native reference equivalence is not managed parity or snapshot acceptance.
+              Correction: Retain seed, workload, streams and both-host matrix in the D5 rerun.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - P07 PASS (info): Copy, preservation and retirement authority. [docs/plans/PLAN-NATIVERESTORE-001.md:79]
+              Evidence: D0 copies and hash-verifies originals; D4 restores only named tracked paths after preservation; R2/R3 authorize retirement of named old builders; R4 retains all untracked files; A03 prohibits automatic reapply.
+              Judgment: The approved planned operations pre
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:55:27.8454988+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.md|0002|0008
+
+            serve originals and do not authorize any review-time mutation.
+              Correction: Keep host-specific committed preservation evidence before overwrite; no moves or untracked deletion.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F01 PASS (medium): Counts and historical inventory. [docs/plans/PLAN-NATIVERESTORE-001.md:9]
+              Evidence: The entire 2527-path historical list was parsed: 1432 .Po, 745 .o, 59 .a, 2 .exe, 107 .in and 106 Makefiles. Live Linux count is 8 modified and 155 untracked. counts.json retains the denominator.
+              Judgment: The collapsed-directory and extension errors are corrected; historical Windows counts remain explicitly historical.
+              Correction: Recompute current Windows and Linux inventories in D0.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F02 PASS (high): Actual native build caller retirement. [docs/plans/PLAN-NATIVERESTORE-001.md:81]
+              Evidence: TestHarness.csproj:10 and 68-75 invoke Vice.Native.proj BuildNative on Windows. D2 removes the property/call, old builders and project, then demands both-host solution build logs with no shim invocation. New targets/tool are absent today.
+              Judgment: The plan identifies the executable call path rather than assuming a nonexistent Nuke native target was responsible.
+              Correction: Verify zero remaining callers before deleting the approved obsolete project.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F03 PASS (high): Semantic native consumer and load detector ownership. [docs/plans/PLAN-NATIVERESTORE-001.md:81]
+              Evidence: Actual consumers include plain Fact tests and helper/provider paths, beyond the 43 token hits. D0 owns per-method inventory; D2 owns dual-binding resolve/create audit, loud failures and discovery controls.
+              Judgment: The detector is planned work, not an existing capability or proof from an availability string. Cross-gate filter propagation is separately failed under N20.
+              Correction: Implement and bind the same correct/incorrect mock cases before real gate use; retain actual gate audit.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F04 PASS (high): All twenty historical hunks classified. [docs/plans/PLAN-NATIVERESTORE-001.md:19]
+              Evidence: All 599 patch lines and 20 hunk headers in 12 files were inspected. H1-H12 cover hosted exports, bootstrap, MAINCPU reads, drive clocks/reset, SID probes, VIC-20 sound and injected inputs; H5/H6/H9 are identified behavior corrections.
+              Judgment: No hunk is silently treated as byte normalization. Rejected sound behavior is explicitly owned by Phase F item 6; R7/R14 dispositions are explicit.
+              Correction: Keep the D0 live hunk-to-disposition comparison and named downstream owners.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F05 PASS (high): Literal checkpoint value preserved. [docs/plans/PLAN-NATIVERESTORE-001.md:61]
+              Evidence: R12 remains literal trigger 100000 and write clock 100000 on both hosts; D1/D5 distinguish the two clocks, never rearm at the later value, and raise BLOCKER-R12-XVIC-CHECKPOINT otherwise.
+              Judgment: This honors the repeated ruling without asserting immutable VICE can produce a correct interior-instruction snapshot. BLOCKED is expressly nonpassing.
+              Correction: Keep the exact value and measured context; obtain a new operator decision to lift a real blocker.
+              Historical revision-4 disposition of this round-3b ID: FAIL. Current status above is revision 6.
+
+            - F06 PASS (high): Comparator prerequisite allocated to D2. [docs/plans/PLAN-NATIVERESTORE-001.md:62]
+              Evidence: The permitted Release comparator run produced Failed 1, Passed 0, Skipped 0 at Assert.NotNull(stateType), line 23. D2 now owns HalfCycleState and CompareHalfCycleStates, mocks first, preserving existing assertions and exact R9 set.
+              Judgment: The observed baseline failure is acknowledged and allocated; it is not a passing implementation gate or added baseline exception.
+              Correction: Make the reflection fixture and independent per-field negative controls green before D2 acceptance.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F07 PASS (high): Restore pre-overwrite and resume safety. [docs/plans/PLAN-NATIVERESTORE-001.md:83]
+              Evidence: D4 checks repository/host/gitlink, empty index, preserved hashes or already-clean Git comparison per path; mock controls cover staged drift, partial completion, missing/corrupt receipts and wrong identity.
+              Judgment: Unexpected live state stops before overwrite, and interrupted work resumes only verified untouched paths.
+              Correction: Retain both host state reports and rehash preserved copies before and after.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F08 PASS (high): Content-aware nonmutation bracket. [docs/plans/PLAN-NATIVERESTORE-001.md:79]
+              Evidence: D0 and D2/D4/D5 use SHA256 plus length for every modified and untracked path, not just porcelain path equality; a mock changed-untracked-file control is mandatory.
+              Judgment: An overwrite of an existing generated or injected file is observable.
+              Correction: Keep the full per-path baseline and final comparison on each host.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F09 PASS (high): PowerShell analyzer and dry-run ownership. [docs/plans/PLAN-NATIVERESTORE-001.md:76]
+              Evidence: Current builder:26 and equivalence script:20 lack SupportsShouldProcess and create directories on entry. D1 first adds tested WhatIf behavior; section 4 demands Pester, parser/analyzer and a dry run before real state-changing execution.
+              Judgment: The missing capability is allocated before its D5 use, not falsely claimed present.
+              Correction: Require dry runs to create neit
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:55:27.8456323+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.md|0003|0008
+
+            her files nor directories and retain zero-finding analyzer output.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F10 PASS (high): Comparator mapping and pending managed acceptance. [docs/plans/PLAN-NATIVERESTORE-001.md:94]
+              Evidence: Comparator summary currently mislabels TR-CYCLE-001 AC4. R13/D2 correct to FR-SNP-005 AC3 and TEST-SNP-002 AC4; D5 supplies REAL-C64-PHI2-AEC-001 native reference evidence and a class-summary test while managed AC4/task 5 stay pending.
+              Judgment: State comparison and native trace evidence do not satisfy managed cycle behavior or falsely describe future lockstep implementation as current.
+              Correction: Preserve this distinction in docs, requirements evidence and TODO updates.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - F11 PASS (medium): AC2 reference update and blast radius. [docs/plans/PLAN-NATIVERESTORE-001.md:103]
+              Evidence: D1 routes AC2 builder-reference replacement through the requirement wrapper, preserving pinned clean out-of-tree build and external units; section 5 separately names AC1 as the R15 semantic amendment.
+              Judgment: A reference-only AC2 change is distinguished from the operator-decided AC1 change.
+              Correction: Read back both ACs and regenerated projections; preserve all other semantics.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - R01 PASS (high): Current reviewer credential handling. [request.jsonl:1]
+              Evidence: No marker, credential store or API-key file was opened or printed. Supported file-based PowerShell wrappers internally consumed their configuration; public verdict/history records were read without raw REST.
+              Judgment: The original credential disclosure is not repeated; no historical key rotation is claimed.
+              Correction: Keep marker and credential files excluded from future reviewer reads.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - U01 PASS (high): Own supported primary session turn. [verdict.persistence.json:1]
+              Evidence: Supported Status/bootstrap/BeginTurn and appended observations/decisions returned persisted:true, queued:false, degraded:false for own session/turn. Final complete-content readback and completed history proof are required in verdict.persistence.json.
+              Judgment: This PASS is conditional on the final proof accompanying delivery. Two preexisting queued records were neither replayed nor canceled and are not current review persistence.
+              Correction: Do not deliver a persisted/completed claim unless final reassembly and history proof succeed.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - U02 PASS (medium): Effective requirements, mappings and TODO readback. [docs/plans/PLAN-NATIVERESTORE-001.md:79]
+              Evidence: Supported effective-requirements, FR-VICE-001 and FR-SNP-005 mapping reads and PLAN-VICEORACLE-001 TODO read succeeded. Seven selected requirements and tasks 4/5 are pending; current AC1 still has external 1.2/1.3, as expected before D1 amendment.
+              Judgment: Live store state, not a prior verdict, establishes remaining obligations. No requirement/TODO writes or Windows-store remeasurement occurred in this review.
+              Correction: D0/D1 must retain exact mappings and approved AC updates/readback through wrappers.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - A01 PASS (medium): Every current hunk gets a host disposition. [docs/plans/PLAN-NATIVERESTORE-001.md:79]
+              Evidence: D0 requires each @@ hunk to map to a classification row, explained host-context difference, or blocking unclassified hunk; wrong-host and missing-hunk controls are required.
+              Judgment: The old Windows superset is not used as evidence that current host deltas are identical.
+              Correction: Keep the separate host hunk ledgers and fail on unclassified or uncovered behavior.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - A02 PASS (high): Both-host entry evidence and explicit release. [docs/plans/PLAN-NATIVERESTORE-001.md:78]
+              Evidence: EntryEvidence_BindsBothHostsAndExplicitRelease names both installations, complete Windows matrix, plan AGREE and the operator release; D0 cannot run until all are present.
+              Judgment: Neither receipt arrival nor plan-review activity constitutes an implementation release.
+              Correction: Keep D0 held after this result.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - A03 PASS (high): Post-restore failure and rollback authority. [docs/plans/PLAN-NATIVERESTORE-001.md:83]
+              Evidence: Failure after the first or both hosts stops before Phase E with preserved originals, per-host states and pinned restored source; no automatic patch reapply or deletion. D4 owns mock cases.
+              Judgment: Safe interruption does not require restoring the rejected dirty oracle automatically.
+              Correction: Preserve evidence and seek only a scoped new recovery decision if needed.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - N01 PASS (high): R10 prevents the live uninitialized clock-copy path. [docs/plans/PLAN-NATIVERESTORE-001.md:56]
+              Evidence: Fixture scan confirms DRIVE8 2.0 payload [0,1], length 2. Pinned drive-snapshot.c:315-319,368-419,540-550 leaves three clocks uninitialized then copies them for non-NONE units. D1 computes drive<n>type 0 preconditions, enforces them last and rejects missing flags.
+              Judgment: The approved bytes and rejected patch remain; the launch precondition prevents this distinct active clock path. It does not claim to eliminate the R14 dead read.
+              Correction: Prove valid, missing and malformed precondition cases before native loads on both hosts.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:55:51.5461121+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.md|0004|0008
+             status above is revision 6.
+
+            - N02 PASS (high): Full-load result and ordered resume boundary. [docs/plans/PLAN-NATIVERESTORE-001.md:91]
+              Evidence: Autostart calls machine_read_snapshot cross-object; both machine readers call maincpu_snapshot_read_module cross-object. CPU reader success precedes later modules; c64-snapshot.c:146-153 resets on later failure. D5 requires resume, then load,0 before next gate, first clock C+1 and PC access after possible stolen cycles.
+              Judgment: A matching CPU module alone cannot masquerade as complete load. load,-1 and reset signatures are rejected; stream order, not a guessed clock threshold, is authoritative.
+              Correction: Retain both wraps, exact forwarding and all late-failure/reset controls.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - A04 PASS (medium): Repository identity and Windows autocrlf. [docs/plans/PLAN-NATIVERESTORE-001.md:83]
+              Evidence: D4 verifies host/repository/gitlink and uses git diff --exit-code for already-restored paths; Pester includes CRLF-converted Windows checkout. Preserved-copy hashes compare actual host bytes separately.
+              Judgment: The resume check does not assume Git blob bytes equal CRLF worktree bytes.
+              Correction: Keep exact original copies and let Git apply configured checkout conversion.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - A05 PASS (high): Identity-based execution evidence. [docs/plans/PLAN-NATIVERESTORE-001.md:81]
+              Evidence: A05 retains selected IDs and terminal TRX for every project, zero skipped/aborted/not-executed, exactly the 20 named R9 failures, and controls for swapped sets, missing projects, discovery drift and partial runs.
+              Judgment: The execution contract itself is discriminating. Its selection propagation into D5/CiTest is the distinct new FAIL N20.
+              Correction: Keep this strict denominator while correcting selectors; do not broaden R9 or treat blocked as passed.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - A06 PASS (medium): Up-to-date builder and interrupted rerun. [docs/plans/PLAN-NATIVERESTORE-001.md:80]
+              Evidence: Builder:220-231 replaces link evidence from current make stdout and fails when no line appears. D1 now requires reuse only after object hash verification and a named prerequisite failure before replacing prior evidence, with mock resume and D5 real reruns.
+              Judgment: The real current rerun limitation has an explicit safe remedy allocated before use.
+              Correction: Retain verified original link evidence; do not overwrite it with an empty rerun capture.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - R02 FAIL (high): Reviewer timestamp emission rule. [response.jsonl:1]
+              Evidence: One commentary update reused an earlier command-measured local timestamp instead of measuring it at emission. The next Progress command measured a fresh timestamp and the reviewer immediately disclosed the violation. Command-generated progress JSON objects were measured when emitted.
+              Judgment: This is a current reviewer-process failure under the explicit timestamp rule, not a defect in revision 6 and not excused by the earlier value having once been measured.
+              Correction: Keep this failure visible in the receipt and full verdict. Measure anew immediately before every future timestamped output; never backfill or describe this round as unqualified timestamp-compliant.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - N03 PASS (medium): R14 dead-read disposition. [docs/plans/PLAN-NATIVERESTORE-001.md:64]
+              Evidence: rotation.c:194 reads each rotation_table_ptr entry into speed_zone and :203 overwrites it before use. H5 initialized only clocks. R14 explicitly accepts this read; D5 retains two-host continuation trace evidence.
+              Judgment: Operator acceptance resolves the previous open decision. This does not prove portable defined C behavior, sanitizer cleanliness or safety of separate live uninitialized clock reads.
+              Correction: Retain the exact limited disposition without generalizing it.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - N04 PASS (high): Architectural register observer and forwarding. [docs/plans/PLAN-NATIVERESTORE-001.md:57]
+              Evidence: Both MAINCPU readers populate global maincpu_regs. mos6510.h:116-136 reconstructs N/Z/unused bit; the supplied fixture has P=$A0. D1 tests all status combinations, wide clock/PC, exactly-once real calls, preserved result/state, and sink failures.
+              Judgment: The selected public seams expose resume-boundary registers on both machines. Per-cycle local registers are not promised.
+              Correction: Bind these same cases to the real wrappers and retain both-host streams.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - N05 PASS (high): DRIVE payload validation and resource/media effects. [docs/plans/PLAN-NATIVERESTORE-001.md:91]
+              Evidence: Pinned writer stores has_tde/has_drives as first two payload bytes; missing modules follow TDE-off reader path. set_drive_type detaches media and iecbus routes changed unit state. D1 validates bytes/length; D5 records effective type/TDE/media per unit using public APIs.
+              Judgment: The precondition side effect is observable rather than silently preserving an inaccurate media claim.
+              Correction: Reject invalid/truncated payloads before launch and retain explicit no-media context where detached.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - N06 PASS (high): Provider/helper consumers and managed fakes. [docs/plans/PLAN-NATIVERESTORE-001.md:79]
+              Evidence: D0 requires a semantic per-method inventory and four controls, including helper/provider-only native use and a selected pure managed fake. C
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:55:51.5470015+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.md|0005|0008
+
+            urrent literal-dot semantic grep yields 55 candidate files; plan records 56 historically, not a completed inventory.
+              Judgment: Neither a token count nor every IViceNative implementation is a reliable load classification. The final D0 ledger remains authoritative.
+              Correction: Reconcile current candidates per method and retain the fake in applicable gates.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - N07 PASS (high): Absolute cycle limit and full nonempty window. [docs/plans/PLAN-NATIVERESTORE-001.md:91]
+              Evidence: initcmdline.c:279-286 stores an absolute limit; CPU loops check maincpu_clk > limit after an instruction. D5 records prelude, restored clock, W cycles/2W half-cycles, gate permits, retained overshoot tail and explicit termination reason.
+              Judgment: No exact-cycle stop is inferred from limitcycles; complete continuation is required, not a short clock/PC prefix.
+              Correction: Preserve the window and reject truncation, early exit, overflow and prelude-only results.
+              Historical revision-4 disposition of this round-3b ID: PASS. Current status above is revision 6.
+
+            - N08 PASS (high): D1 mock contracts, D2 boundary and D5 real bindings. [docs/plans/PLAN-NATIVERESTORE-001.md:80]
+              Evidence: D1 creates each named Slice 1 family as VsfSlice1Contract with fake/receipt inputs; D5 adds same-assertion VsfSlice1Real cases from artifacts produced that run; D2 explicitly contains no future real artifact dependency.
+              Judgment: The D2-before-D5 dependency is now explicit and no skip/stale fixture is accepted. Selector propagation remains N20.
+              Correction: Retain the same case assertions and list both category denominators explicitly.
+
+            - N09 PASS (high): Tasks stay pending through the D3 review hold. [docs/plans/PLAN-NATIVERESTORE-001.md:96]
+              Evidence: Exit and section 5 keep task 4 pending until step 12 accepted HV and task 5 until Phase E/final managed gate. Live TODO shows both false.
+              Judgment: Phase D no longer depends on an unauthorized intermediate done-state; execution evidence can be attached while tasks remain pending.
+              Correction: Keep requirement satisfaction and TODO completion separate from evidence attachment.
+
+            - N10 PASS (high): Marker-relative windows and own observational history. [docs/plans/PLAN-NATIVERESTORE-001.md:91]
+              Evidence: D5 aligns each run to its own checkpoint/load marker, preserves raw indices, rejects trimming/reused history and requires matching first-offset AEC even when the first resumed access is stolen. Existing bus-adapter/obs-emitter maintain process-local history.
+              Judgment: The rule demands a real observable result rather than assuming observer-local state is restored by VSF.
+              Correction: Keep first-stolen-cycle and stale-history controls and fail on mismatches.
+
+            - N11 PASS (high): Detector initialization, error and inert behavior. [docs/plans/PLAN-NATIVERESTORE-001.md:81]
+              Evidence: D2 covers the combined resolver plus xvic availability/create paths, alias/fallback ordering in fresh processes, pre-discovery env setup, retained logs, missing/unwritable audit failure and positive controls in separate logs.
+              Judgment: A native availability query alone is not proof of actual library loading; the new detector must observe the specified resolve/load attempts without polluting the warmed step path.
+              Correction: Retain xvic-first/x64-first and failed-load controls for both bindings; never silently swallow audit failure.
+
+            - N12 PASS (high): R15 explicitly amends the external fixture obligation. [docs/plans/PLAN-NATIVERESTORE-001.md:63]
+              Evidence: All three repository VSFs were parsed: two identical real MAINCPU 1.2 files and one real 1.4 file, none 1.3. R15 verbatim changes real inputs to v1.2/v1.4. D1 wrapper update/readback and Slice 1 line 340 propagation are explicit; D5 real 1.2 resume and native-written 1.4 round trip retain complete window checks.
+              Judgment: This is an authorized semantic AC1 amendment, not synthetic v1.3 mislabeled as external. Existing synthetic 1.3 normalization and 199 byte cases remain; AC2 only changes the builder reference.
+              Correction: Read back the exact revised AC1 and AC2 before acceptance. Remove the obsolete optional v1.3-input blocker phrase at Exit:96 as propagation cleanup.
+
+            - N13 PASS (medium): Per-host budgets and evidence. [docs/plans/PLAN-NATIVERESTORE-001.md:91]
+              Evidence: D5 allocates exact invocation, prelude, clock budget, unit conversion, expected permits, final window, low-clock and high-restored-clock controls and retained tail per host and fixture.
+              Judgment: The acceptance denominator and interval no longer adapt to convenient output.
+              Correction: Retain measured values on both hosts; use the additional terminal control in N23.
+
+            - N14 PASS (high): Explicit nonpassing BLOCKED lifecycle and cumulative denominator. [docs/plans/PLAN-NATIVERESTORE-001.md:61]
+              Evidence: R12, D5:87/93 and Exit:96 explicitly report each blocked xvic case ID, measured clocks, independent counts and nonzero cumulative exit; Phase E, done-states, partial-pass and skip interpretations are forbidden. One-host and both-host mismatch mock/real controls are allocated.
+              Judgment: The old complete-with-blocker contradiction is repaired at the acceptance-contract level. Ordinary/cumulative selector propagation still fails under new N20 and does not justify weakening this contract.
+              Correction: Keep the blocked cumulative denominator and ordinary execution denominator distinct, and fix N20.
+
+            - N15 PASS (high): Armed checkpoint writer preserves gate interactions. [docs/plans/PLAN-NATIVERESTORE-001.md:80]
+              Evidence: D1 now explicitly tests armed clock-gate composition: one record/permit per advanced cycle, held permit prevents further advancement, quit/EOF/error unchanged, measured trigger/write clocks under interrupt and stolen runs; D5 repeats real both-host cases.
+              Judgment: Unset-variable equivalence alone is no longer offered as evidence for the armed path.
+              Co
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:55:51.5471065+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.md|0006|0008
+
+            rrection: Keep all armed controls and no-snapshot rerun with zero VICE_SNAP lines.
+
+
+            - N16 PASS (high): Audit starts before discovery. [docs/plans/PLAN-NATIVERESTORE-001.md:81]
+              Evidence: D2 sets audit env in the launched dotnet test process before discovery, never truncates after discovery, and names fresh attribute-only/provider-only attempt controls plus selected managed fake and separate positives.
+              Judgment: A trait exclusion cannot itself prove discovery/provider side effects are absent; the added interval and controls address that gap.
+              Correction: Observe every specified attempt or fail the gate visibly; never initialize the audit inside a test body.
+
+            - N17 PASS (high): Seam-level zero-allocation and determinism test. [docs/plans/PLAN-NATIVERESTORE-001.md:81]
+              Evidence: D2 explicitly allocates warmed repeated step calls for both native bindings with audit unset, zero incremental allocations and log calls, unchanged deterministic output, and deliberately allocating/logging doubles rejected.
+              Judgment: This tests the native step seam directly rather than citing adjacent managed tests as allocation evidence.
+              Correction: Keep independent expected output and identical real-bound cases; exclude cold initialization from the warmed measurement explicitly.
+
+            - N18 PASS (high): Clock versus half-cycle budget and prelude controls. [docs/plans/PLAN-NATIVERESTORE-001.md:91]
+              Evidence: D5 states W CPU cycles = 2W records, whole-cycle windows, odd requests and overflow rejected, low-clock early checkpoint with raised prelude-safe limit, high-clock legacy fixture, permit count and retained overshoot tail.
+              Judgment: The explicit unit and infeasible-budget outcomes requested in round 5 are now present. Low-clock termination needs the additive N23 control to remove remaining execution ambiguity.
+              Correction: Preserve the exact window; document one canonical low-clock limit and termination result.
+
+            - N19 FAIL (medium): Export-exclusivity correction was not propagated. [docs/plans/PLAN-NATIVERESTORE-001.md:54]
+              Evidence: Section 1 line 14 now correctly includes DMA and BRK exports, but R11 line 54 still says interpreter locals are exported only at traps, JAM and monitor entry. Pinned active 6510dtvcore.c calls EXPORT_REGISTERS at DMA:451 and BRK:1012 in addition to traps/JAM/monitor.
+              Judgment: The correct new sentence and stale exclusive sentence contradict each other. The public trap seam remains valid; this FAIL concerns an incorrect source claim, not permission to expose arbitrary-cycle registers.
+              Correction: Replace every exclusive list with the narrower public-seam claim and search all copies. Also qualify first-boundary wording for the already-latched interrupt case in N22.
+
+            - N20 FAIL (high): Gate filters contradict real-test exclusivity and every-gate retirement. [docs/plans/PLAN-NATIVERESTORE-001.md:81]
+              Evidence: Build.cs:97-112 Test runs solution with category exclusions; CiTest:133-142 has a separate identical filter. D2 adds only Category!=ShimLegacy to Test and adds the three projects to the solution. D5:93 requires VsfSlice1Real only in the cumulative target; :94 reruns Test under A05; section 5:102 says ShimLegacy leaves every gate. filter-projection.json shows VsfSlice1Real still selected by ordinary Test/CiTest and ShimLegacy still selected by unchanged CiTest.
+              Judgment: After D5 adds real tests, the stated exact edits cannot enforce the promised denominators. With R12 blocked, ordinary Test executes blocked native cases or violates A05 by omitting selected cases; CiTest still reaches retired consumers. This is a gate-chain defect, not a request to change the exact 20 known-red set.
+              Correction: D2 must explicitly apply consistent selectors to Test and CiTest: ordinary selections exclude ShimLegacy and VsfSlice1Real while retaining contract cases; cumulative selection includes every required real case with stable IDs, explicit BLOCKED outcomes and nonzero exit. Add selection/projection controls at D2 and after D5 registration; retain per-gate denominators and reject leakage or omissions.
+
+            - N21 ADD-AC (medium): D1/D2/D5 RejectedCheckpoint_PreservesCandidatesAndPublishedFixture. [docs/plans/PLAN-NATIVERESTORE-001.md:88]
+              Evidence: The callback necessarily invokes machine_write_snapshot before the generator can inspect its write clock, while R12 says generator writes no fixture on a mismatch. Cross-host acceptance also occurs after candidate bytes exist.
+              Judgment: The safe fail-closed acceptance is stated, but candidate retention and an already-published fixture/manifest during failure or restart need an observable contract. This is an added AC, not an alleged native write during review.
+              Correction: Own in generator contract D1/D2 and real D5: on one-host mismatch, malformed/missing checkpoint record, write failure or interrupted retry, accepted fixture and manifest remain unchanged; retain candidate bytes, hashes and logs under a receipt, never delete/move or silently publish them; emit named BLOCKED/nonzero with affected IDs, and do not accept a stale prior artifact as newly generated.
+
+            - N22 ADD-AC (medium): D1/D5 TrapRequest_AfterInterruptMaskWasLatched. [docs/plans/PLAN-NATIVERESTORE-001.md:80]
+              Evidence: 6510dtvcore.c:1758 copies global_pending_int, :1763 calls DO_INTERRUPT, and macro :354 copies its argument into ik. A clock-hook request during an already-dispatched IRQ/NMI may not be in ik at :408; :1804 then fetches a handler opcode before the next sample.
+              Judgment: A pending interrupt at trigger and a trigger raised after the pending mask was latched are different histories. Acceptance remains safe because actual write clock must equal 100000, but a mock must not force the callback to the earlier boundary.
+              Correction: Add a correct/rejected mock control for trigger during the dispatched interrupt after mask capture and bind it to both-host D5 context. Preserve the measured callback clock and reject later clocks under literal R12; narrow first-boun
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:55:55.9782865+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.md|0007|0008
+
+            dary wording to the actual pending-mask dispatch semantics.
+
+
+            - N23 ADD-AC (medium): D1/D5 LowClockResume_TerminatesAfterCompleteWindow. [docs/plans/PLAN-NATIVERESTORE-001.md:91]
+              Evidence: D1 says limit=C+W and prelude cannot reach it; D5 low-clock positive case instead raises the limit to prelude length+W. Restoring C rewinds the absolute clock; CPU limit is tested only after instructions and can overshoot.
+              Judgment: Unit conversion is explicit, but the exact finite terminal result and gate-permit accounting when the raised prelude-safe limit exceeds C+W need one canonical outcome. A missing terminal choice can leave a producer waiting for another permit after the compared window.
+              Correction: Own D1 launch-budget contract and D5: low-clock positive observes load,0 and exactly W compared cycles/2W half-cycles, then reaches an explicit bounded terminal gate/process outcome; record permits, any retained tail and exit reason. Reject a producer awaiting an unsupplied permit, early stop or silently stretched window. Reconcile the D1 C+W wording with the D5 exception without prescribing a new protocol.
+
+            Requirements and obligation mapping:
+
+
+            - TR-VSFLOCKSTEP-RESUME-001: AC1 R15 semantic input amendment explicitly allocated to D1 wrapper update/readback and Slice 1 propagation; real 1.2/1.4 resume/roundtrip and existing synthetic 1.3 bytes retained. AC2 only replaces builder reference while preserving pinned out-of-tree/external-only semantics. No satisfaction claimed.
+
+
+            - FR-VICE-001 / TR-VICE-ORACLE-001 / TEST-VICE-001: Live effective/mapping readbacks pending. D0 preservation, clean pinned source and unchanged inventories allocate TEST-VICE-001 AC1/AC2; dirty native output remains diagnostic. Other original ACs retained.
+
+
+            - TR-CYCLE-001 AC4: Managed CPU PHI2/AEC behavior remains pending Phase E. REAL-C64-PHI2-AEC-001 is native reference evidence only, not managed satisfaction.
+
+
+            - FR-SNP-005 AC3 / TEST-SNP-002 AC4: Comparator fixture mapping corrected in D2; HalfCycleState and state comparator owned there. This does not complete the full snapshot import/export requirements.
+
+
+            - PLAN-VICEORACLE-001 tasks 4 and 5: Both currently false. Evidence attached while pending; task 4 done-state only after step 12 accepted HV, task 5 after managed/final gates. No TODO was changed by this review.
+
+
+            - PLAN-VSFLOCKSTEP-001 Slice 1: Builder/preflight, both-machine libraries reinterpreted as observer binaries, all schema-1 fields/edges, fixture provenance, prerequisites, deterministic PAL/NTSC literal-100000 generation, R10 launch, real resume, round trip, negatives and cumulative command each have D1/D2/D5 owners. N20 prevents the stated gate isolation; N21-N23 add failure/terminal controls.
+
+
+            Structured what-if pass:
+
+
+            - Different checkpoint clocks on hosts: One-host and both-host mismatch are nonpassing BLOCKED, IDs and both measured clocks retained; no rearm or alternate literal. N14 PASS; candidate publication addition N21.
+
+
+            - Pending interrupt at checkpoint: Writer uses measured callback clock after register export; later value fails literal R12. Add the already-latched dispatch history N22; never force the mock clock.
+
+
+            - Checkpoint inside stolen-cycle run: Armed gate controls preserve exactly-once gate forwarding and permits; delayed write clock remains measured and rejected if not 100000. N15 PASS.
+
+
+            - First resumed access is stolen: Retain idle/stolen prefix, first CPU access at PC, own BA history and full marker-relative equality; no warm-up trimming. N02/N10 PASS.
+
+
+            - Shim reached only through data provider or attribute: Pre-discovery audit retained; fresh native-attempt controls observable or gate fails; managed fake remains selected. N06/N16 PASS. CiTest leakage is N20 FAIL.
+
+
+            - Audit file unwritable or missing: Attempt/gate fails loudly, never empty-log success; positive controls have separate logs. N11 PASS.
+
+
+            - Exact 20 known-red set changes: A05 rejects added, removed or equal-sized substituted IDs, incomplete TRX or skipped cases. Report improvement or regression for operator decision; never silently mutate R9.
+
+
+            - Windows autocrlf checkout: Git compares restored checkout semantically; preserved hashes compare host bytes; CRLF mock required. Wrong host or unexpected content stops before overwrite. A04 PASS.
+
+
+            - Crash/restart between hosts or after candidate write: D4 classifies restored/untouched/unexpected and stops after later failure without reapply; generator publication/retry retention addition N21 closes remaining candidate outcome.
+
+
+            - Low-clock fixture and raised prelude-safe budget: Whole-cycle interval and load required, odd/overflow/early exit rejected. Add explicit terminal permit/process outcome N23; do not rely on limitcycles as exact stop.
+
+
+            - Cross-workspace/session or stale evidence: Restorer checks repository, host, gitlink and verified preservation; D5 real cases consume only artifacts produced that run. Own review turn uses explicit parent IDs and exact history lookup.
+
+
+            - R12 blocked while ordinary and cumulative suites execute: Explicit BLOCKED lifecycle is correct, but unchanged selectors leak real tests into ordinary gates and retired consumers into CiTest. N20 FAIL; fix selectors, not denominator or R12.
+
+
+            Native seam assessment: Public trap runs after EXPORT_REGISTERS with IMPORT afterward; machine_write_snapshot delegates synchronously to native snapshot writer, which writes MAINCPU clock from maincpu_clk. Both machine read wrappers are cross-object. Safe boundary feasibility is supported by source, not executed here. Actual callback clocks remain acceptance evidence; already-latched interrupt nuance is N22. New VICE_SNAP lines are not part of old no-snapshot equivalence; D1/D5 require inert reruns with none.
+
+
+            Retained baseline test: dotnet test "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj" -c Release --filter "FullyQualifiedName~Vic20HalfCycleComparatorTests" --results-directory "/home/sharpninja/github/vice-sharp/docs/receipts
+
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:55:55.9790561+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.md|0008|0008
+
+            /hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/TestResults" --logger "trx;LogFileName=vic20-comparator.trx" --diag "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/TestResults/vstest.diag.log" --blame-hang --blame-hang-timeout 5m. Exit 1; Passed 0, Failed 1, Skipped 0. Failure is missing HalfCycleState at the reflection assertion, allocated to D2. See comparator-test.log and TestResults/vic20-comparator.trx. No native/full solution gate ran.
+
+
+            Integrity: native gitlink/HEAD cc67418cba58e71d8e70fd353e9de47199ad2075, 8 modified tracked plus 155 untracked, clean native index. Complete historical patch/inventory and requested documents were read; 20 materialized source files were checked against pinned Git blobs. Final pin, native-content and tracked-worktree comparisons are retained in review-integrity-final.json. The native content baseline was measured after the allowed test, not before it.
+
+
+            Reviewer: Codex / gpt-6.1-sol / max, through the requested Codex CLI; no model substitution or nested reviewer. Add-profile read all non-skill Markdown files (1), and was repeated after compaction. Supported plugin root /home/sharpninja/github/mcpserver-codex-plugin; MCP_FAILSAFE_DRAIN_DISABLED=1. Primary writes succeeded; two historical queued records were untouched. No untrusted result occurred, so the conditional triage/failsafe branch was not invoked. Exact model/effort comes from request.jsonl; the server model header is generic codex.
+
+
+            Own session: Codex-20261020T222731Z-plugin-session; request: req-20261020T222756Z-nativerestore-r6. Parent: ClaudeCode-20261020T015046Z-plugin-session / req-20261020T172116Z-prompt-6c6d.
+
+
+            Request: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/request.jsonl. Response stream: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/response.jsonl. The response stream is still live until CLI exit; no final stream hash is claimed here. Complete prose and complete JSON are stored in ordered readable primary turn chunks, read back/reassembled and hash-compared; exact completed history proof, raw/LF-normalization results and final artifact hashes are in verdict.persistence.json. Delivery of this paragraph as a persistence claim requires that proof to succeed first.
+
+
+            Execution remains held. Correct the two plan findings N19/N20 and incorporate or explicitly dispose the three additive ACs; the reviewer-process R02 failure remains recorded in this round and requires no product edit. A new qualifying review is required before implementation release.
+
+
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:55:55.9791732+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0001|0010
+
+            {
+              "OverallVerdict": "DISAGREE",
+              "accuracyPercent": 97,
+              "completenessPercent": 97,
+              "scoreRationale": {
+                "accuracy": "Most claims independently match source; the unpropagated export exclusivity statement is false and this reviewer violated one timestamp emission. The score is not a passing score.",
+                "completeness": "R15 and BLOCKED lifecycle amendments are explicit, but ordinary/CiTest/cumulative selections are inconsistent. Candidate publication, late trap arming and low-clock terminal outcomes also need added controls."
+              },
+              "passCount": 45,
+              "failCount": 3,
+              "unknownCount": 0,
+              "addAcCount": 3,
+              "findings": [
+                {
+                  "id": "P01",
+                  "status": "PASS",
+                  "severity": "info",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 3,
+                  "section": "Input identity and drift",
+                  "evidence": "All 41 initial SHA256 and byte-length pins match. Subject is revision 6, 72648 bytes, SHA256 AF56C59034D8164AA0AEC6045B556AE7948623C3D87F182EF85FEC4637DF33FA. Live develop HEAD ff24117d7d756404fad439a3c14c14336709eb8c.",
+                  "rationale": "The revision-4 phrases in the brief are stale; input-pins is a file-pin array and does not actually contain the checkout commit.",
+                  "correction": "Review revision 6; retain separate live checkout metadata and final rehash.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "P02",
+                  "status": "PASS",
+                  "severity": "info",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 8,
+                  "section": "Native starting state",
+                  "evidence": "Live native HEAD and gitlink are cc67418cba58e71d8e70fd353e9de47199ad2075; 163 porcelain entries: 8 tracked modified, 155 untracked; 222 insertions, 8 deletions; index clean. native-initial.json retains content hashes.",
+                  "rationale": "The Linux claims match live Git. Historical Windows data is not presented as a fresh Windows measurement.",
+                  "correction": "Measure and preserve each host independently in D0.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "P03",
+                  "status": "PASS",
+                  "severity": "info",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 83,
+                  "section": "R1 B and retained output",
+                  "evidence": ".gitmodules currently says ignore = dirty; D4 explicitly changes it to untracked and requires empty tracked/index diffs plus the exact retained path/hash/length inventory.",
+                  "rationale": "This implements the operator distinction between tracked modifications and retained build output without hiding tracked dirt.",
+                  "correction": "Keep the untracked inventory and approved ignore mode on both hosts.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "P04",
+                  "status": "PASS",
+                  "severity": "info",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 78,
+                  "section": "Plan-review authority and implementation hold",
+                  "evidence": "D-pre requires host install receipts, Windows traces, this plan at AGREE, and the verbatim operator release; handoff v2 section 11 records the 12:21 clarification permitting plan HV.",
+                  "rationale": "This review is authorized and does not release D0 or restoration.",
+                  "correction": "Retain the implementation hold under this DISAGREE result.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "P05",
+                  "status": "PASS",
+                  "severity": "info",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 78,
+                  "section": "Both desktop installation receipts",
+                  "evidence": "Linux 20261020T105400 and Windows 20261020T121000 READMEs record Nuke DeployUser/InstallMsi, release 1.3.111 and ProductVersion commit 2c8d60284229b9fedc2d50f840153b9e8d8cbcbf.",
+                  "rationale": "The required host-attributed receipts exist; this reviewer did not remeasure the installed GUIs remotely.",
+                  "correction": "Bind those exact receipts to D0 entry evidence.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "P06",
+                  "status": "PASS",
+                  "severity": "info",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 13,
+                  "section": "Phase C evidence scope",
+                  "evidence": "Linux S2b/S4 and Windows 20261020T102600 receipts support seeded reset-workload equivalence at 100k, 1M and x64sc 4M. PLAN-OBSERVER-001 S5 separately defers the real snapshot register check.",
+                  "rationale": "Bounded native reference equivalence is not managed parity or snapshot acceptance.",
+                  "correction": "Retain seed, workload, streams and both-host matrix in the D5 rerun.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "P07",
+                  "status": "PASS",
+                  "severity": "info",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 79,
+                  "section": "Copy, preservation and retirement authority",
+                  "evidence": "D0 copies and hash-verifies originals; D4 restores only named tracked paths after preservation; R2/R3 authorize retirement of named old builders; R4 retains all u
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:00.5954593+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0002|0010
+
+            ntracked files; A03 prohibits automatic reapply.",
+                  "rationale": "The approved planned operations preserve originals and do not authorize any review-time mutation.",
+                  "correction": "Keep host-specific committed preservation evidence before overwrite; no moves or untracked deletion.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F01",
+                  "status": "PASS",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 9,
+                  "section": "Counts and historical inventory",
+                  "evidence": "The entire 2527-path historical list was parsed: 1432 .Po, 745 .o, 59 .a, 2 .exe, 107 .in and 106 Makefiles. Live Linux count is 8 modified and 155 untracked. counts.json retains the denominator.",
+                  "rationale": "The collapsed-directory and extension errors are corrected; historical Windows counts remain explicitly historical.",
+                  "correction": "Recompute current Windows and Linux inventories in D0.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F02",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 81,
+                  "section": "Actual native build caller retirement",
+                  "evidence": "TestHarness.csproj:10 and 68-75 invoke Vice.Native.proj BuildNative on Windows. D2 removes the property/call, old builders and project, then demands both-host solution build logs with no shim invocation. New targets/tool are absent today.",
+                  "rationale": "The plan identifies the executable call path rather than assuming a nonexistent Nuke native target was responsible.",
+                  "correction": "Verify zero remaining callers before deleting the approved obsolete project.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F03",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 81,
+                  "section": "Semantic native consumer and load detector ownership",
+                  "evidence": "Actual consumers include plain Fact tests and helper/provider paths, beyond the 43 token hits. D0 owns per-method inventory; D2 owns dual-binding resolve/create audit, loud failures and discovery controls.",
+                  "rationale": "The detector is planned work, not an existing capability or proof from an availability string. Cross-gate filter propagation is separately failed under N20.",
+                  "correction": "Implement and bind the same correct/incorrect mock cases before real gate use; retain actual gate audit.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F04",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 19,
+                  "section": "All twenty historical hunks classified",
+                  "evidence": "All 599 patch lines and 20 hunk headers in 12 files were inspected. H1-H12 cover hosted exports, bootstrap, MAINCPU reads, drive clocks/reset, SID probes, VIC-20 sound and injected inputs; H5/H6/H9 are identified behavior corrections.",
+                  "rationale": "No hunk is silently treated as byte normalization. Rejected sound behavior is explicitly owned by Phase F item 6; R7/R14 dispositions are explicit.",
+                  "correction": "Keep the D0 live hunk-to-disposition comparison and named downstream owners.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F05",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 61,
+                  "section": "Literal checkpoint value preserved",
+                  "evidence": "R12 remains literal trigger 100000 and write clock 100000 on both hosts; D1/D5 distinguish the two clocks, never rearm at the later value, and raise BLOCKER-R12-XVIC-CHECKPOINT otherwise.",
+                  "rationale": "This honors the repeated ruling without asserting immutable VICE can produce a correct interior-instruction snapshot. BLOCKED is expressly nonpassing.",
+                  "correction": "Keep the exact value and measured context; obtain a new operator decision to lift a real blocker.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "FAIL",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F06",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 62,
+                  "section": "Comparator prerequisite allocated to D2",
+                  "evidence": "The permitted Release comparator run produced Failed 1, Passed 0, Skipped 0 at Assert.NotNull(stateType), line 23. D2 now owns HalfCycleState and CompareHalfCycleStates, mocks first, preserving existing assertions and exact R9 set.",
+                  "rationale": "The observed baseline failure is acknowledged and allocated; it is not a passing implementation gate or added baseline exception.",
+                  "correction": "Make the reflection fixture and independent per-field negative controls green before D2 acceptance.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposi
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:00.5963939+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0003|0010
+
+            tion"
+                },
+                {
+                  "id": "F07",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 83,
+                  "section": "Restore pre-overwrite and resume safety",
+                  "evidence": "D4 checks repository/host/gitlink, empty index, preserved hashes or already-clean Git comparison per path; mock controls cover staged drift, partial completion, missing/corrupt receipts and wrong identity.",
+                  "rationale": "Unexpected live state stops before overwrite, and interrupted work resumes only verified untouched paths.",
+                  "correction": "Retain both host state reports and rehash preserved copies before and after.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F08",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 79,
+                  "section": "Content-aware nonmutation bracket",
+                  "evidence": "D0 and D2/D4/D5 use SHA256 plus length for every modified and untracked path, not just porcelain path equality; a mock changed-untracked-file control is mandatory.",
+                  "rationale": "An overwrite of an existing generated or injected file is observable.",
+                  "correction": "Keep the full per-path baseline and final comparison on each host.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F09",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 76,
+                  "section": "PowerShell analyzer and dry-run ownership",
+                  "evidence": "Current builder:26 and equivalence script:20 lack SupportsShouldProcess and create directories on entry. D1 first adds tested WhatIf behavior; section 4 demands Pester, parser/analyzer and a dry run before real state-changing execution.",
+                  "rationale": "The missing capability is allocated before its D5 use, not falsely claimed present.",
+                  "correction": "Require dry runs to create neither files nor directories and retain zero-finding analyzer output.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F10",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 94,
+                  "section": "Comparator mapping and pending managed acceptance",
+                  "evidence": "Comparator summary currently mislabels TR-CYCLE-001 AC4. R13/D2 correct to FR-SNP-005 AC3 and TEST-SNP-002 AC4; D5 supplies REAL-C64-PHI2-AEC-001 native reference evidence and a class-summary test while managed AC4/task 5 stay pending.",
+                  "rationale": "State comparison and native trace evidence do not satisfy managed cycle behavior or falsely describe future lockstep implementation as current.",
+                  "correction": "Preserve this distinction in docs, requirements evidence and TODO updates.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "F11",
+                  "status": "PASS",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 103,
+                  "section": "AC2 reference update and blast radius",
+                  "evidence": "D1 routes AC2 builder-reference replacement through the requirement wrapper, preserving pinned clean out-of-tree build and external units; section 5 separately names AC1 as the R15 semantic amendment.",
+                  "rationale": "A reference-only AC2 change is distinguished from the operator-decided AC1 change.",
+                  "correction": "Read back both ACs and regenerated projections; preserve all other semantics.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "R01",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "request.jsonl",
+                  "line": 1,
+                  "section": "Current reviewer credential handling",
+                  "evidence": "No marker, credential store or API-key file was opened or printed. Supported file-based PowerShell wrappers internally consumed their configuration; public verdict/history records were read without raw REST.",
+                  "rationale": "The original credential disclosure is not repeated; no historical key rotation is claimed.",
+                  "correction": "Keep marker and credential files excluded from future reviewer reads.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "U01",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "verdict.persistence.json",
+                  "line": 1,
+                  "section": "Own supported primary session turn",
+                  "evidence": "Supported Status/bootstrap/BeginTurn and appended observations/decisions returned persisted:true, queued:false, degraded:false for own session/turn. Final complete-content readback and completed history proof are required in verdict.persistence.json.",
+                  "rationale": "This PASS is conditional on the final proof accompanying delivery. Two preexisting queued records were neither replayed nor canceled and are not current review persistence.",
+                  "correction": "Do not deliver a persisted/completed claim unless final reassembly and history proof succeed.",
+                  "round5Status": "PASS",
+                  "round3bDispositi
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:00.5964963+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0004|0010
+
+            onInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "U02",
+                  "status": "PASS",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 79,
+                  "section": "Effective requirements, mappings and TODO readback",
+                  "evidence": "Supported effective-requirements, FR-VICE-001 and FR-SNP-005 mapping reads and PLAN-VICEORACLE-001 TODO read succeeded. Seven selected requirements and tasks 4/5 are pending; current AC1 still has external 1.2/1.3, as expected before D1 amendment.",
+                  "rationale": "Live store state, not a prior verdict, establishes remaining obligations. No requirement/TODO writes or Windows-store remeasurement occurred in this review.",
+                  "correction": "D0/D1 must retain exact mappings and approved AC updates/readback through wrappers.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "A01",
+                  "status": "PASS",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 79,
+                  "section": "Every current hunk gets a host disposition",
+                  "evidence": "D0 requires each @@ hunk to map to a classification row, explained host-context difference, or blocking unclassified hunk; wrong-host and missing-hunk controls are required.",
+                  "rationale": "The old Windows superset is not used as evidence that current host deltas are identical.",
+                  "correction": "Keep the separate host hunk ledgers and fail on unclassified or uncovered behavior.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "A02",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 78,
+                  "section": "Both-host entry evidence and explicit release",
+                  "evidence": "EntryEvidence_BindsBothHostsAndExplicitRelease names both installations, complete Windows matrix, plan AGREE and the operator release; D0 cannot run until all are present.",
+                  "rationale": "Neither receipt arrival nor plan-review activity constitutes an implementation release.",
+                  "correction": "Keep D0 held after this result.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "A03",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 83,
+                  "section": "Post-restore failure and rollback authority",
+                  "evidence": "Failure after the first or both hosts stops before Phase E with preserved originals, per-host states and pinned restored source; no automatic patch reapply or deletion. D4 owns mock cases.",
+                  "rationale": "Safe interruption does not require restoring the rejected dirty oracle automatically.",
+                  "correction": "Preserve evidence and seek only a scoped new recovery decision if needed.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "N01",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 56,
+                  "section": "R10 prevents the live uninitialized clock-copy path",
+                  "evidence": "Fixture scan confirms DRIVE8 2.0 payload [0,1], length 2. Pinned drive-snapshot.c:315-319,368-419,540-550 leaves three clocks uninitialized then copies them for non-NONE units. D1 computes drive<n>type 0 preconditions, enforces them last and rejects missing flags.",
+                  "rationale": "The approved bytes and rejected patch remain; the launch precondition prevents this distinct active clock path. It does not claim to eliminate the R14 dead read.",
+                  "correction": "Prove valid, missing and malformed precondition cases before native loads on both hosts.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "N02",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 91,
+                  "section": "Full-load result and ordered resume boundary",
+                  "evidence": "Autostart calls machine_read_snapshot cross-object; both machine readers call maincpu_snapshot_read_module cross-object. CPU reader success precedes later modules; c64-snapshot.c:146-153 resets on later failure. D5 requires resume, then load,0 before next gate, first clock C+1 and PC access after possible stolen cycles.",
+                  "rationale": "A matching CPU module alone cannot masquerade as complete load. load,-1 and reset signatures are rejected; stream order, not a guessed clock threshold, is authoritative.",
+                  "correction": "Retain both wraps, exact forwarding and all late-failure/reset controls.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "A04",
+                  "status": "PASS",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 83,
+                  "section": "Repository identity and Windows autocrlf",
+                  "evidence": "D4 verifies host/repository/gitlink and uses git diff --exit-code for already-restored paths; Pester includes CRLF-converted Wi
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:20.5973536+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0005|0010
+
+            ndows checkout. Preserved-copy hashes compare actual host bytes separately.",
+                  "rationale": "The resume check does not assume Git blob bytes equal CRLF worktree bytes.",
+                  "correction": "Keep exact original copies and let Git apply configured checkout conversion.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "A05",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 81,
+                  "section": "Identity-based execution evidence",
+                  "evidence": "A05 retains selected IDs and terminal TRX for every project, zero skipped/aborted/not-executed, exactly the 20 named R9 failures, and controls for swapped sets, missing projects, discovery drift and partial runs.",
+                  "rationale": "The execution contract itself is discriminating. Its selection propagation into D5/CiTest is the distinct new FAIL N20.",
+                  "correction": "Keep this strict denominator while correcting selectors; do not broaden R9 or treat blocked as passed.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "A06",
+                  "status": "PASS",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 80,
+                  "section": "Up-to-date builder and interrupted rerun",
+                  "evidence": "Builder:220-231 replaces link evidence from current make stdout and fails when no line appears. D1 now requires reuse only after object hash verification and a named prerequisite failure before replacing prior evidence, with mock resume and D5 real reruns.",
+                  "rationale": "The real current rerun limitation has an explicit safe remedy allocated before use.",
+                  "correction": "Retain verified original link evidence; do not overwrite it with an empty rerun capture.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "R02",
+                  "status": "FAIL",
+                  "severity": "high",
+                  "file": "response.jsonl",
+                  "line": 1,
+                  "section": "Reviewer timestamp emission rule",
+                  "evidence": "One commentary update reused an earlier command-measured local timestamp instead of measuring it at emission. The next Progress command measured a fresh timestamp and the reviewer immediately disclosed the violation. Command-generated progress JSON objects were measured when emitted.",
+                  "rationale": "This is a current reviewer-process failure under the explicit timestamp rule, not a defect in revision 6 and not excused by the earlier value having once been measured.",
+                  "correction": "Keep this failure visible in the receipt and full verdict. Measure anew immediately before every future timestamped output; never backfill or describe this round as unqualified timestamp-compliant.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "N03",
+                  "status": "PASS",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 64,
+                  "section": "R14 dead-read disposition",
+                  "evidence": "rotation.c:194 reads each rotation_table_ptr entry into speed_zone and :203 overwrites it before use. H5 initialized only clocks. R14 explicitly accepts this read; D5 retains two-host continuation trace evidence.",
+                  "rationale": "Operator acceptance resolves the previous open decision. This does not prove portable defined C behavior, sanitizer cleanliness or safety of separate live uninitialized clock reads.",
+                  "correction": "Retain the exact limited disposition without generalizing it.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "N04",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 57,
+                  "section": "Architectural register observer and forwarding",
+                  "evidence": "Both MAINCPU readers populate global maincpu_regs. mos6510.h:116-136 reconstructs N/Z/unused bit; the supplied fixture has P=$A0. D1 tests all status combinations, wide clock/PC, exactly-once real calls, preserved result/state, and sink failures.",
+                  "rationale": "The selected public seams expose resume-boundary registers on both machines. Per-cycle local registers are not promised.",
+                  "correction": "Bind these same cases to the real wrappers and retain both-host streams.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "N05",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 91,
+                  "section": "DRIVE payload validation and resource/media effects",
+                  "evidence": "Pinned writer stores has_tde/has_drives as first two payload bytes; missing modules follow TDE-off reader path. set_drive_type detaches media and iecbus routes changed unit state. D1 validates bytes/length; D5 records effective type/TDE/media per unit using public APIs.",
+                  "rationale": "The precondition side effect is observable rather than silently preserving an inaccurate media claim.",
+                  "correction": "Reject invalid/truncated payloads before launch and retain explicit no-media c
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:20.5981072+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0006|0010
+
+            ontext where detached.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "N06",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 79,
+                  "section": "Provider/helper consumers and managed fakes",
+                  "evidence": "D0 requires a semantic per-method inventory and four controls, including helper/provider-only native use and a selected pure managed fake. Current literal-dot semantic grep yields 55 candidate files; plan records 56 historically, not a completed inventory.",
+                  "rationale": "Neither a token count nor every IViceNative implementation is a reliable load classification. The final D0 ledger remains authoritative.",
+                  "correction": "Reconcile current candidates per method and retain the fake in applicable gates.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "N07",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 91,
+                  "section": "Absolute cycle limit and full nonempty window",
+                  "evidence": "initcmdline.c:279-286 stores an absolute limit; CPU loops check maincpu_clk > limit after an instruction. D5 records prelude, restored clock, W cycles/2W half-cycles, gate permits, retained overshoot tail and explicit termination reason.",
+                  "rationale": "No exact-cycle stop is inferred from limitcycles; complete continuation is required, not a short clock/PC prefix.",
+                  "correction": "Preserve the window and reject truncation, early exit, overflow and prelude-only results.",
+                  "round5Status": "PASS",
+                  "round3bDispositionInRevision4": "PASS",
+                  "historicalDispositionSource": "round-4 verdict.json; historical metadata only, not evidence for current disposition"
+                },
+                {
+                  "id": "N08",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 80,
+                  "section": "D1 mock contracts, D2 boundary and D5 real bindings",
+                  "evidence": "D1 creates each named Slice 1 family as VsfSlice1Contract with fake/receipt inputs; D5 adds same-assertion VsfSlice1Real cases from artifacts produced that run; D2 explicitly contains no future real artifact dependency.",
+                  "rationale": "The D2-before-D5 dependency is now explicit and no skip/stale fixture is accepted. Selector propagation remains N20.",
+                  "correction": "Retain the same case assertions and list both category denominators explicitly.",
+                  "round5Status": "PASS"
+                },
+                {
+                  "id": "N09",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 96,
+                  "section": "Tasks stay pending through the D3 review hold",
+                  "evidence": "Exit and section 5 keep task 4 pending until step 12 accepted HV and task 5 until Phase E/final managed gate. Live TODO shows both false.",
+                  "rationale": "Phase D no longer depends on an unauthorized intermediate done-state; execution evidence can be attached while tasks remain pending.",
+                  "correction": "Keep requirement satisfaction and TODO completion separate from evidence attachment.",
+                  "round5Status": "PASS"
+                },
+                {
+                  "id": "N10",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 91,
+                  "section": "Marker-relative windows and own observational history",
+                  "evidence": "D5 aligns each run to its own checkpoint/load marker, preserves raw indices, rejects trimming/reused history and requires matching first-offset AEC even when the first resumed access is stolen. Existing bus-adapter/obs-emitter maintain process-local history.",
+                  "rationale": "The rule demands a real observable result rather than assuming observer-local state is restored by VSF.",
+                  "correction": "Keep first-stolen-cycle and stale-history controls and fail on mismatches.",
+                  "round5Status": "PASS"
+                },
+                {
+                  "id": "N11",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 81,
+                  "section": "Detector initialization, error and inert behavior",
+                  "evidence": "D2 covers the combined resolver plus xvic availability/create paths, alias/fallback ordering in fresh processes, pre-discovery env setup, retained logs, missing/unwritable audit failure and positive controls in separate logs.",
+                  "rationale": "A native availability query alone is not proof of actual library loading; the new detector must observe the specified resolve/load attempts without polluting the warmed step path.",
+                  "correction": "Retain xvic-first/x64-first and failed-load controls for both bindings; never silently swallow audit failure.",
+                  "round5Status": "PASS"
+                },
+                {
+                  "id": "N12",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 63,
+                  "section": "R15 explicitly amends the external fixture obligation",
+                  "evidence": "All three repository VSFs were parsed: two identical real MAINCPU 1.2 files and one real 1.4 file, none 1.3. R15 verbatim changes real inputs to v1.2/v1.4. D1 wrapper update/readback and Slice 1 line 340 propagation are explicit; D5 real 1.2 resume and native-written 1.4 round trip retain complete window checks.",
+                  "rationale": "This is an authorized semantic AC1 amendment, not synthetic v1.3 mislabeled as external. Existing synthetic 1.3 normalization and 199 byte cases remain; AC2 only changes the builder reference.",
+                  "correction": "Read back the exact revised AC1 and AC2 before acceptance. Remove the obsolete op
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:20.5982161+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0007|0010
+
+            tional v1.3-input blocker phrase at Exit:96 as propagation cleanup.",
+                  "round5Status": "FAIL"
+                },
+                {
+                  "id": "N13",
+                  "status": "PASS",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 91,
+                  "section": "Per-host budgets and evidence",
+                  "evidence": "D5 allocates exact invocation, prelude, clock budget, unit conversion, expected permits, final window, low-clock and high-restored-clock controls and retained tail per host and fixture.",
+                  "rationale": "The acceptance denominator and interval no longer adapt to convenient output.",
+                  "correction": "Retain measured values on both hosts; use the additional terminal control in N23.",
+                  "round5Status": "PASS"
+                },
+                {
+                  "id": "N14",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 61,
+                  "section": "Explicit nonpassing BLOCKED lifecycle and cumulative denominator",
+                  "evidence": "R12, D5:87/93 and Exit:96 explicitly report each blocked xvic case ID, measured clocks, independent counts and nonzero cumulative exit; Phase E, done-states, partial-pass and skip interpretations are forbidden. One-host and both-host mismatch mock/real controls are allocated.",
+                  "rationale": "The old complete-with-blocker contradiction is repaired at the acceptance-contract level. Ordinary/cumulative selector propagation still fails under new N20 and does not justify weakening this contract.",
+                  "correction": "Keep the blocked cumulative denominator and ordinary execution denominator distinct, and fix N20.",
+                  "round5Status": "FAIL"
+                },
+                {
+                  "id": "N15",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 80,
+                  "section": "Armed checkpoint writer preserves gate interactions",
+                  "evidence": "D1 now explicitly tests armed clock-gate composition: one record/permit per advanced cycle, held permit prevents further advancement, quit/EOF/error unchanged, measured trigger/write clocks under interrupt and stolen runs; D5 repeats real both-host cases.",
+                  "rationale": "Unset-variable equivalence alone is no longer offered as evidence for the armed path.",
+                  "correction": "Keep all armed controls and no-snapshot rerun with zero VICE_SNAP lines.",
+                  "round5Status": "ADD-AC"
+                },
+                {
+                  "id": "N16",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 81,
+                  "section": "Audit starts before discovery",
+                  "evidence": "D2 sets audit env in the launched dotnet test process before discovery, never truncates after discovery, and names fresh attribute-only/provider-only attempt controls plus selected managed fake and separate positives.",
+                  "rationale": "A trait exclusion cannot itself prove discovery/provider side effects are absent; the added interval and controls address that gap.",
+                  "correction": "Observe every specified attempt or fail the gate visibly; never initialize the audit inside a test body.",
+                  "round5Status": "ADD-AC"
+                },
+                {
+                  "id": "N17",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 81,
+                  "section": "Seam-level zero-allocation and determinism test",
+                  "evidence": "D2 explicitly allocates warmed repeated step calls for both native bindings with audit unset, zero incremental allocations and log calls, unchanged deterministic output, and deliberately allocating/logging doubles rejected.",
+                  "rationale": "This tests the native step seam directly rather than citing adjacent managed tests as allocation evidence.",
+                  "correction": "Keep independent expected output and identical real-bound cases; exclude cold initialization from the warmed measurement explicitly.",
+                  "round5Status": "ADD-AC"
+                },
+                {
+                  "id": "N18",
+                  "status": "PASS",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 91,
+                  "section": "Clock versus half-cycle budget and prelude controls",
+                  "evidence": "D5 states W CPU cycles = 2W records, whole-cycle windows, odd requests and overflow rejected, low-clock early checkpoint with raised prelude-safe limit, high-clock legacy fixture, permit count and retained overshoot tail.",
+                  "rationale": "The explicit unit and infeasible-budget outcomes requested in round 5 are now present. Low-clock termination needs the additive N23 control to remove remaining execution ambiguity.",
+                  "correction": "Preserve the exact window; document one canonical low-clock limit and termination result.",
+                  "round5Status": "ADD-AC"
+                },
+                {
+                  "id": "N19",
+                  "status": "FAIL",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 54,
+                  "section": "Export-exclusivity correction was not propagated",
+                  "evidence": "Section 1 line 14 now correctly includes DMA and BRK exports, but R11 line 54 still says interpreter locals are exported only at traps, JAM and monitor entry. Pinned active 6510dtvcore.c calls EXPORT_REGISTERS at DMA:451 and BRK:1012 in addition to traps/JAM/monitor.",
+                  "rationale": "The correct new sentence and stale exclusive sentence contradict each other. The public trap seam remains valid; this FAIL concerns an incorrect source claim, not permission to expose arbitrary-cycle registers.",
+                  "correction": "Replace every exclusive list with the narrower public-seam claim and search all copies. Also qualify first-boundary wording for the already-latched interrupt case in N22.",
+                  "round5Status": "FAIL"
+                },
+                {
+                  "id": "N20",
+                  "status": "FAIL",
+                  "severity": "high",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 81,
+                  "section": "Gate filters contradict real-test exclusivity and every-gate retirement",
+                  "evidence": "Build.cs:97-11
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:25.0838977+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0008|0010
+
+            2 Test runs solution with category exclusions; CiTest:133-142 has a separate identical filter. D2 adds only Category!=ShimLegacy to Test and adds the three projects to the solution. D5:93 requires VsfSlice1Real only in the cumulative target; :94 reruns Test under A05; section 5:102 says ShimLegacy leaves every gate. filter-projection.json shows VsfSlice1Real still selected by ordinary Test/CiTest and ShimLegacy still selected by unchanged CiTest.",
+                  "rationale": "After D5 adds real tests, the stated exact edits cannot enforce the promised denominators. With R12 blocked, ordinary Test executes blocked native cases or violates A05 by omitting selected cases; CiTest still reaches retired consumers. This is a gate-chain defect, not a request to change the exact 20 known-red set.",
+                  "correction": "D2 must explicitly apply consistent selectors to Test and CiTest: ordinary selections exclude ShimLegacy and VsfSlice1Real while retaining contract cases; cumulative selection includes every required real case with stable IDs, explicit BLOCKED outcomes and nonzero exit. Add selection/projection controls at D2 and after D5 registration; retain per-gate denominators and reject leakage or omissions."
+                },
+                {
+                  "id": "N21",
+                  "status": "ADD-AC",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 88,
+                  "section": "D1/D2/D5 RejectedCheckpoint_PreservesCandidatesAndPublishedFixture",
+                  "evidence": "The callback necessarily invokes machine_write_snapshot before the generator can inspect its write clock, while R12 says generator writes no fixture on a mismatch. Cross-host acceptance also occurs after candidate bytes exist.",
+                  "rationale": "The safe fail-closed acceptance is stated, but candidate retention and an already-published fixture/manifest during failure or restart need an observable contract. This is an added AC, not an alleged native write during review.",
+                  "correction": "Own in generator contract D1/D2 and real D5: on one-host mismatch, malformed/missing checkpoint record, write failure or interrupted retry, accepted fixture and manifest remain unchanged; retain candidate bytes, hashes and logs under a receipt, never delete/move or silently publish them; emit named BLOCKED/nonzero with affected IDs, and do not accept a stale prior artifact as newly generated."
+                },
+                {
+                  "id": "N22",
+                  "status": "ADD-AC",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 80,
+                  "section": "D1/D5 TrapRequest_AfterInterruptMaskWasLatched",
+                  "evidence": "6510dtvcore.c:1758 copies global_pending_int, :1763 calls DO_INTERRUPT, and macro :354 copies its argument into ik. A clock-hook request during an already-dispatched IRQ/NMI may not be in ik at :408; :1804 then fetches a handler opcode before the next sample.",
+                  "rationale": "A pending interrupt at trigger and a trigger raised after the pending mask was latched are different histories. Acceptance remains safe because actual write clock must equal 100000, but a mock must not force the callback to the earlier boundary.",
+                  "correction": "Add a correct/rejected mock control for trigger during the dispatched interrupt after mask capture and bind it to both-host D5 context. Preserve the measured callback clock and reject later clocks under literal R12; narrow first-boundary wording to the actual pending-mask dispatch semantics."
+                },
+                {
+                  "id": "N23",
+                  "status": "ADD-AC",
+                  "severity": "medium",
+                  "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                  "line": 91,
+                  "section": "D1/D5 LowClockResume_TerminatesAfterCompleteWindow",
+                  "evidence": "D1 says limit=C+W and prelude cannot reach it; D5 low-clock positive case instead raises the limit to prelude length+W. Restoring C rewinds the absolute clock; CPU limit is tested only after instructions and can overshoot.",
+                  "rationale": "Unit conversion is explicit, but the exact finite terminal result and gate-permit accounting when the raised prelude-safe limit exceeds C+W need one canonical outcome. A missing terminal choice can leave a producer waiting for another permit after the compared window.",
+                  "correction": "Own D1 launch-budget contract and D5: low-clock positive observes load,0 and exactly W compared cycles/2W half-cycles, then reaches an explicit bounded terminal gate/process outcome; record permits, any retained tail and exit reason. Reject a producer awaiting an unsupplied permit, early stop or silently stretched window. Reconcile the D1 C+W wording with the D5 exception without prescribing a new protocol."
+                }
+              ],
+              "reviewerAgent": "Codex",
+              "reviewerModel": "gpt-6.1-sol",
+              "reviewerEffort": "max",
+              "reviewerSessionId": "Codex-20261020T222731Z-plugin-session",
+              "reviewerRequestId": "req-20261020T222756Z-nativerestore-r6",
+              "parentSessionId": "ClaudeCode-20261020T015046Z-plugin-session",
+              "parentRequestId": "req-20261020T172116Z-prompt-6c6d",
+              "requestPath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/request.jsonl",
+              "responsePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/response.jsonl",
+              "timestampLocal": "2026-10-20T17:54:17",
+              "workClass": 1,
+              "subjectRevision": 6,
+              "subjectPath": "docs/plans/PLAN-NATIVERESTORE-001.md",
+              "priorRound5Ids": [
+                "P01",
+                "P02",
+                "P03",
+                "P04",
+                "P05",
+                "P06",
+                "P07",
+                "F01",
+                "F02",
+                "F03",
+                "F04",
+                "F05",
+                "F06",
+                "F07",
+                "F08",
+                "F09",
+                "F10",
+                "F11",
+                "R01",
+                "U01",
+                "U02",
+                "A01",
+                "A02",
+                "A03",
+                "N01",
+                "N02",
+                "A04",
+                "A05",
+                "A06",
+                "R02",
+                "N03",
+                "N04",
+                "N05",
+                "N06",
+                "N07",
+                "N08",
+                "N09",
+                "N10",
+                "N11",
+                "N12",
+                "N13",
+                "N14",
+                "N15",
+                "N16",
+                "N17",
+                "N18",
+                "N19"
+              ],
+              "historicalRound3bIds":
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:25.0845686+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0009|0010
+             [
+                "P01",
+                "P02",
+                "P03",
+                "P04",
+                "P05",
+                "P06",
+                "P07",
+                "F01",
+                "F02",
+                "F03",
+                "F04",
+                "F05",
+                "F06",
+                "F07",
+                "F08",
+                "F09",
+                "F10",
+                "F11",
+                "R01",
+                "U01",
+                "U02",
+                "A01",
+                "A02",
+                "A03",
+                "N01",
+                "N02",
+                "A04",
+                "A05",
+                "A06",
+                "R02",
+                "N03",
+                "N04",
+                "N05",
+                "N06",
+                "N07"
+              ],
+              "classificationNote": "Independent pre-execution review of a class-1 implementation plan. PASS means the plan contract is adequately allocated and the cited current facts match, not that future implementation gates passed. ADD-AC is additive and is not a FAIL by itself.",
+              "inputIdentityNote": "Brief contains stale revision-4 references; actual subject is revision 6. File-pin array lacks checkout commit. Live checkout recorded separately. No input-pin drift.",
+              "requirements": [
+                {
+                  "id": "TR-VSFLOCKSTEP-RESUME-001",
+                  "assessment": "AC1 R15 semantic input amendment explicitly allocated to D1 wrapper update/readback and Slice 1 propagation; real 1.2/1.4 resume/roundtrip and existing synthetic 1.3 bytes retained. AC2 only replaces builder reference while preserving pinned out-of-tree/external-only semantics. No satisfaction claimed."
+                },
+                {
+                  "id": "FR-VICE-001 / TR-VICE-ORACLE-001 / TEST-VICE-001",
+                  "assessment": "Live effective/mapping readbacks pending. D0 preservation, clean pinned source and unchanged inventories allocate TEST-VICE-001 AC1/AC2; dirty native output remains diagnostic. Other original ACs retained."
+                },
+                {
+                  "id": "TR-CYCLE-001 AC4",
+                  "assessment": "Managed CPU PHI2/AEC behavior remains pending Phase E. REAL-C64-PHI2-AEC-001 is native reference evidence only, not managed satisfaction."
+                },
+                {
+                  "id": "FR-SNP-005 AC3 / TEST-SNP-002 AC4",
+                  "assessment": "Comparator fixture mapping corrected in D2; HalfCycleState and state comparator owned there. This does not complete the full snapshot import/export requirements."
+                },
+                {
+                  "id": "PLAN-VICEORACLE-001 tasks 4 and 5",
+                  "assessment": "Both currently false. Evidence attached while pending; task 4 done-state only after step 12 accepted HV, task 5 after managed/final gates. No TODO was changed by this review."
+                },
+                {
+                  "id": "PLAN-VSFLOCKSTEP-001 Slice 1",
+                  "assessment": "Builder/preflight, both-machine libraries reinterpreted as observer binaries, all schema-1 fields/edges, fixture provenance, prerequisites, deterministic PAL/NTSC literal-100000 generation, R10 launch, real resume, round trip, negatives and cumulative command each have D1/D2/D5 owners. N20 prevents the stated gate isolation; N21-N23 add failure/terminal controls."
+                }
+              ],
+              "whatIf": [
+                {
+                  "case": "Different checkpoint clocks on hosts",
+                  "outcome": "One-host and both-host mismatch are nonpassing BLOCKED, IDs and both measured clocks retained; no rearm or alternate literal. N14 PASS; candidate publication addition N21."
+                },
+                {
+                  "case": "Pending interrupt at checkpoint",
+                  "outcome": "Writer uses measured callback clock after register export; later value fails literal R12. Add the already-latched dispatch history N22; never force the mock clock."
+                },
+                {
+                  "case": "Checkpoint inside stolen-cycle run",
+                  "outcome": "Armed gate controls preserve exactly-once gate forwarding and permits; delayed write clock remains measured and rejected if not 100000. N15 PASS."
+                },
+                {
+                  "case": "First resumed access is stolen",
+                  "outcome": "Retain idle/stolen prefix, first CPU access at PC, own BA history and full marker-relative equality; no warm-up trimming. N02/N10 PASS."
+                },
+                {
+                  "case": "Shim reached only through data provider or attribute",
+                  "outcome": "Pre-discovery audit retained; fresh native-attempt controls observable or gate fails; managed fake remains selected. N06/N16 PASS. CiTest leakage is N20 FAIL."
+                },
+                {
+                  "case": "Audit file unwritable or missing",
+                  "outcome": "Attempt/gate fails loudly, never empty-log success; positive controls have separate logs. N11 PASS."
+                },
+                {
+                  "case": "Exact 20 known-red set changes",
+                  "outcome": "A05 rejects added, removed or equal-sized substituted IDs, incomplete TRX or skipped cases. Report improvement or regression for operator decision; never silently mutate R9."
+                },
+                {
+                  "case": "Windows autocrlf checkout",
+                  "outcome": "Git compares restored checkout semantically; preserved hashes compare host bytes; CRLF mock required. Wrong host or unexpected content stops before overwrite. A04 PASS."
+                },
+                {
+                  "case": "Crash/restart between hosts or after candidate write",
+                  "outcome": "D4 classifies restored/untouched/unexpected and stops after later failure without reapply; generator publication/retry retention addition N21 closes remaining candidate outcome."
+                },
+                {
+                  "case": "Low-clock fixture and raised prelude-safe budget",
+                  "outcome": "Whole-cycle interval and load required, odd/overflow/early exit rejected. Add explicit terminal permit/process outcome N23; do not rely on limitcycles as exact stop."
+                },
+                {
+                  "case": "Cross-workspace/session or stale evidence",
+                  "outcome": "Restorer checks repository, host, gitlink and verified preservation; D5 real cases consume only artifacts produced that run. Own review turn uses explicit parent IDs and exact history lookup."
+                },
+                {
+                  "case": "R12 blocked while ordinary and cumulative suites execute",
+                  "outcome": "Explicit BLOCKED lifecycle is correct, but unchanged selectors leak real tests into ordinary gates and retired consumers into CiTest. N20 FAIL; fix selectors, not denominator or R12."
+                }
+              ],
+              "sourceSafetyAssessment": "Public trap runs after EXPORT_REGISTERS with IMPORT afterward; machine_write_snapshot delegates synchronously to native snapshot writer, which writes MAINCPU clock from maincpu_clk. Both machine read wrappers are cross-obje
+            END-HV-R6
+          category: observation
+        - timestamp: 2026-10-20T22:56:25.0846628+00:00
+          role: model
+          content: >-
+            BEGIN-HV-R6|verdict.json|0010|0010
+
+            ct. Safe boundary feasibility is supported by source, not executed here. Actual callback clocks remain acceptance evidence; already-latched interrupt nuance is N22. New VICE_SNAP lines are not part of old no-snapshot equivalence; D1/D5 require inert reruns with none.",
+              "testEvidence": {
+                "command": "dotnet test \"/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj\" -c Release --filter \"FullyQualifiedName~Vic20HalfCycleComparatorTests\" --results-directory \"/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/TestResults\" --logger \"trx;LogFileName=vic20-comparator.trx\" --diag \"/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/TestResults/vstest.diag.log\" --blame-hang --blame-hang-timeout 5m",
+                "commandSource": "Review.ps1 Test operation; exact arguments retained in that helper.",
+                "passed": 0,
+                "failed": 1,
+                "skipped": 0,
+                "exitCode": 1,
+                "reason": "Baseline missing reflected HalfCycleState at line 23; D2 owns implementation under R13.",
+                "stdout": "comparator-test.log",
+                "trx": "TestResults/vic20-comparator.trx"
+              },
+              "reviewLimits": [
+                "No Phase D step executed. No native binary/build, full solution build/test, commit, push, file move or deletion.",
+                "No marker or credential file read. No raw REST. PowerShell only; no Python/Node or nested reviewer.",
+                "Both-host runtime requirements were reviewed as future acceptance contracts and pinned host receipts, not reexecuted remotely.",
+                "Native 163-file content inventory was first captured after the allowed comparator test, not before it; initial input pins preceded analysis, and final comparisons bracket subsequent review.",
+                "Supported plugin server model field is generic codex; exact model/effort are attributed to the CLI launch request, not fabricated from that server field.",
+                "R02 reviewer emission violation is included as FAIL; it does not itself require a plan amendment."
+              ],
+              "completionPolicy": "DISAGREE: neither implementation nor any goal/TODO/AC done-state is authorized. Full verdict prose and JSON must be primary persisted, reassembled by hash and the turn completed with history proof in verdict.persistence.json before delivery."
+            }
+
+
+            END-HV-R6
+          category: observation
+
+---

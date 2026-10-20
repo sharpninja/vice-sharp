@@ -1,0 +1,9 @@
+{
+  "timestampLocal": "2026-10-20T17:54:51",
+  "sessionId": "Codex-20261020T222731Z-plugin-session",
+  "requestId": "req-20261020T222756Z-nativerestore-r6",
+  "model": "gpt-6.1-sol",
+  "effort": "max",
+  "sourceType": "Codex",
+  "note": "Actual supported-plugin returned identity; prior requested custom identity retained in response stream."
+}

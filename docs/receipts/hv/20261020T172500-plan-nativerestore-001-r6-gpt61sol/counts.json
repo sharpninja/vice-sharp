@@ -1,0 +1,195 @@
+{
+  "timestampLocal": "2026-10-20T17:34:09",
+  "historicalInventoryLines": 2527,
+  "historicalExtensions": [
+    {
+      "Name": "",
+      "Count": 121
+    },
+    {
+      "Name": ".0",
+      "Count": 6
+    },
+    {
+      "Name": ".1",
+      "Count": 6
+    },
+    {
+      "Name": ".2",
+      "Count": 6
+    },
+    {
+      "Name": ".3",
+      "Count": 2
+    },
+    {
+      "Name": ".a",
+      "Count": 59
+    },
+    {
+      "Name": ".c",
+      "Count": 2
+    },
+    {
+      "Name": ".exe",
+      "Count": 2
+    },
+    {
+      "Name": ".h",
+      "Count": 17
+    },
+    {
+      "Name": ".in",
+      "Count": 107
+    },
+    {
+      "Name": ".log",
+      "Count": 3
+    },
+    {
+      "Name": ".m4",
+      "Count": 3
+    },
+    {
+      "Name": ".o",
+      "Count": 745
+    },
+    {
+      "Name": ".o65",
+      "Count": 1
+    },
+    {
+      "Name": ".out",
+      "Count": 10
+    },
+    {
+      "Name": ".Po",
+      "Count": 1432
+    },
+    {
+      "Name": ".sh",
+      "Count": 1
+    },
+    {
+      "Name": ".status",
+      "Count": 3
+    },
+    {
+      "Name": ".vice-shim-configure-flags",
+      "Count": 1
+    }
+  ],
+  "historicalMakefiles": 106,
+  "patchHunks": 20,
+  "patchFiles": 12,
+  "tokenCandidateCount": 43,
+  "tokenCandidates": [
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CaptureRunLogUtilityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C64MachineProfileTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Xbox/XboxTestConventionTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/LockstepValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidExactOracleTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/HostShells/XboxUwpHeadShellTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEngineParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceNativeBridge.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceMachineValidationFixture.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Xbox/XboxAudioBackendFactoryTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Xbox/XAudio2SourceVoiceBackendTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Xbox/XAudio2AudioMathTests.cs"
+  ],
+  "semanticCandidateCount": 55,
+  "semanticCandidates": [
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C64MachineProfileTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/LockstepValidator.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Xbox/XboxTestConventionTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/RasterBarRendererTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/RasterBarGroundTruthTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidExactOracleTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEngineParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisiteTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceNativeBridge.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceMachineValidationFixture.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiValidationTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Xbox/XboxAotLinkTests.cs"
+  ],
+  "generatorExists": false,
+  "nativeProjectCallers": [
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj:10:    <ViceNativeProject>$(MSBuildThisFileDirectory)..\\..\\native\\Vice.Native.proj</ViceNativeProject>",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj:70:          Condition=\"'$(DesignTimeBuild)' != 'true' and Exists('$(ViceNativeProject)')\">",
+    "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj:72:    <MSBuild Projects=\"$(ViceNativeProject)\" Targets=\"BuildNative\" Condition=\"'$(OS)' == 'Windows_NT'\" />"
+  ]
+}
