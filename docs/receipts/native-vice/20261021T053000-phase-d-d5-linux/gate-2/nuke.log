@@ -1,0 +1,798 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Linux,.NETCoreApp,Version=v10.0)
+​
+07:48:23 [WRN] Exception was suppressed
+Microsoft.Build.Exceptions.InvalidProjectFileException: The expression "[MSBuild]::GetTargetFrameworkIdentifier(net10.0)" cannot be evaluated. Could not load file or assembly 'NuGet.Frameworks, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'. The located assembly's manifest definition does not match the assembly reference. (0x80131040)  /home/sharpninja/.dotnet/sdk/10.0.402/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets
+   at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject(String errorSubCategoryResourceName, IElementLocation elementLocation, String resourceName, Object[] args)
+   at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject[T1,T2](IElementLocation elementLocation, String resourceName, T1 arg0, T2 arg1)
+   at Microsoft.Build.Evaluation.Expander`2.Function.Execute(Object objectInstance, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation)
+   at Microsoft.Build.Evaluation.Expander`2.PropertyExpander.ExpandPropertyBody(String propertyBody, Object propertyValue, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation, PropertiesUseTracker propertiesUseTracker, IFileSystem fileSystem)
+   at Microsoft.Build.Evaluation.Expander`2.PropertyExpander.ExpandPropertiesLeaveTypedAndEscaped(String expression, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation, PropertiesUseTracker propertiesUseTracker, IFileSystem fileSystem)
+   at Microsoft.Build.Evaluation.Expander`2.ExpandIntoStringLeaveEscaped(String expression, ExpanderOptions options, IElementLocation elementLocation)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluatePropertyElement(ProjectPropertyElement propertyElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluatePropertyGroupElement(ProjectPropertyGroupElement propertyGroupElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.Evaluate()
+   at Microsoft.Build.Evaluation.Evaluator`4.Evaluate(IEvaluatorData`4 data, Project project, ProjectRootElement root, ProjectLoadSettings loadSettings, Int32 maxNodeCount, PropertyDictionary`1 environmentProperties, ICollection`1 propertiesFromCommandLine, ILoggingService loggingService, IItemFactory`2 itemFactory, IToolsetProvider toolsetProvider, IDirectoryCacheFactory directoryCacheFactory, ProjectRootElementCacheBase projectRootElementCache, BuildEventContext buildEventContext, ISdkResolverService sdkResolverService, Int32 submissionId, EvaluationContext evaluationContext, Boolean interactive)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.Reevaluate(ILoggingService loggingServiceForEvaluation, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.ReevaluateIfNecessary(ILoggingService loggingServiceForEvaluation, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.Initialize(IDictionary`2 globalProperties, String toolsVersion, String subToolsetVersion, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext, Boolean interactive)
+   at Microsoft.Build.Evaluation.Project.FromProjectRootElement(ProjectRootElement rootElement, ProjectOptions options)
+   at Nuke.Common.ProjectModel.ProjectModelTasks.ParseProject(String projectFile, String configuration, String targetFramework) in /_/source/Nuke.ProjectModel/ProjectModelTasks.cs:line 97
+   at Nuke.Common.Execution.Telemetry.CheckAwareness() in /_/source/Nuke.Build/Telemetry/Telemetry.cs:line 73
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+​
+╬════════════
+║ Restore
+╬═══
+​
+07:48:23 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/vice-sharp/ViceSharp.slnx
+07:48:25 [DBG]   Determining projects to restore...
+07:48:25 [DBG]   All projects are up-to-date for restore.
+​
+╬════════════
+║ Compile
+╬═══
+​
+07:48:26 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/vice-sharp/ViceSharp.slnx --configuration Release --no-restore
+07:48:27 [DBG]   ViceSharp.Protocol -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Protocol/bin/Release/net10.0/ViceSharp.Protocol.dll
+07:48:27 [DBG]   ViceSharp.SourceGen -> /home/sharpninja/github/vice-sharp/src/ViceSharp.SourceGen/bin/Release/netstandard2.0/ViceSharp.SourceGen.dll
+07:48:27 [DBG]   ViceSharp.AiReview.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.AiReview.Tests/bin/Release/net10.0/ViceSharp.AiReview.Tests.dll
+07:48:27 [DBG]   ViceSharp.OracleContract.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.OracleContract.Tests/bin/Release/net10.0/ViceSharp.OracleContract.Tests.dll
+07:48:27 [DBG]   ViceSharp.NativeClockProbe.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/ViceSharp.NativeClockProbe.Tests.dll
+07:48:27 [DBG]   ViceSharp.ViceCompatibility -> /home/sharpninja/github/vice-sharp/src/ViceSharp.ViceCompatibility/bin/Debug/net10.0/ViceSharp.ViceCompatibility.dll
+07:48:27 [DBG]   ViceSharp.Library.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Library.ViewModels/bin/Release/net10.0/ViceSharp.Library.ViewModels.dll
+07:48:27 [DBG]   ViceSharp.SnapshotFixtureGenerator -> /home/sharpninja/github/vice-sharp/tools/ViceSharp.SnapshotFixtureGenerator/bin/Release/net10.0/ViceSharp.SnapshotFixtureGenerator.dll
+07:48:27 [DBG]   ViceSharp.RomM -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomM/bin/Release/net10.0/ViceSharp.RomM.dll
+07:48:27 [DBG]   ViceSharp.VsfCompatibility.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll
+07:48:27 [DBG]   ViceSharp.Library.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.Tests/bin/Release/net10.0/ViceSharp.Library.Tests.dll
+07:48:27 [DBG]   ViceSharp.Library.IntegrationTests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.IntegrationTests/bin/Release/net10.0/ViceSharp.Library.IntegrationTests.dll
+07:48:27 [DBG]   ViceSharp.Abstractions -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Abstractions/bin/Release/net10.0/ViceSharp.Abstractions.dll
+07:48:27 [DBG]   ViceSharp.Xbox.Input -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.Input/bin/Release/net10.0/ViceSharp.Xbox.Input.dll
+07:48:27 [DBG]   ViceSharp.RomFetch -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomFetch/bin/Release/net10.0/ViceSharp.RomFetch.dll
+07:48:27 [DBG]   ViceSharp.Chips -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Chips/bin/Release/net10.0/ViceSharp.Chips.dll
+07:48:27 [DBG]   ViceSharp.Xbox.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.ViewModels/bin/Release/net10.0/ViceSharp.Xbox.ViewModels.dll
+07:48:27 [DBG]   ViceSharp.Core -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/bin/Release/net10.0/ViceSharp.Core.dll
+07:48:27 [DBG]   ViceSharp.Monitor -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Monitor/bin/Release/net10.0/ViceSharp.Monitor.dll
+07:48:27 [DBG]   ViceSharp.Architectures -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Architectures/bin/Release/net10.0/ViceSharp.Architectures.dll
+07:48:27 [DBG]   ViceSharp.NativeLoadProbe -> /home/sharpninja/github/vice-sharp/tools/ViceSharp.NativeLoadProbe/bin/Release/net10.0/ViceSharp.NativeLoadProbe.dll
+07:48:28 [DBG]   ViceSharp.Launcher -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Launcher/bin/Release/net10.0/ViceSharp.Launcher.dll
+07:48:28 [DBG]   ViceSharp.Benchmarks -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Benchmarks/bin/Release/net10.0/ViceSharp.Benchmarks.dll
+07:48:28 [DBG]   ViceSharp.Core.Package -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Core.Package/bin/Release/net10.0/ViceSharp.Core.Package.dll
+07:48:28 [DBG]   ViceSharp.AdhocHelper -> /home/sharpninja/github/vice-sharp/src/ViceSharp.AdhocHelper/bin/Release/net10.0/ViceSharp.AdhocHelper.dll
+07:48:28 [DBG]   ViceSharp.Host.InProcess -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.InProcess/bin/Release/net10.0/ViceSharp.Host.InProcess.dll
+07:48:28 [DBG]   ViceSharp.Console -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Console/bin/Release/net10.0/ViceSharp.Console.dll
+07:48:28 [DBG]   ViceSharp.Xbox -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox/bin/Release/net10.0/ViceSharp.Xbox.dll
+07:48:28 [DBG]   ViceSharp.Host -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host/bin/Release/net10.0/ViceSharp.Host.dll
+07:48:28 [DBG]   ViceSharp.Avalonia -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/bin/Release/net10.0/ViceSharp.Avalonia.dll
+07:48:28 [DBG]   ViceSharp.Host.Android -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.Android/bin/Release/net10.0/ViceSharp.Host.Android.dll
+07:48:28 [DBG]   ViceSharp.Host.iOS -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.iOS/bin/Release/net10.0/ViceSharp.Host.iOS.dll
+07:48:28 [DBG]   ViceSharp.Host.MacOS -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.MacOS/bin/Release/net10.0/ViceSharp.Host.MacOS.dll
+07:48:28 [DBG]   ViceSharp.Host.Xbox -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.Xbox/bin/Release/net10.0/ViceSharp.Host.Xbox.dll
+07:48:28 [DBG]   ViceSharp.Heads.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll
+07:48:28 [DBG]   ViceSharp.TestHarness -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll
+07:48:28 [DBG] 
+07:48:28 [DBG] Build succeeded.
+07:48:28 [DBG]     0 Warning(s)
+07:48:28 [DBG]     0 Error(s)
+07:48:28 [DBG] 
+07:48:28 [DBG] Time Elapsed 00:00:02.42
+​
+╬═════════
+║ Test
+╬══
+​
+07:48:28 [INF] Test: results /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results, native load log /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/native-load.log, ROM root /home/sharpninja/github/vice-sharp/native/vice/vice/data, filter Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real
+07:48:28 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/vice-sharp/ViceSharp.slnx --configuration Release --no-restore --no-build --filter Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real --results-directory /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results --logger trx
+07:48:31 [DBG] Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.Tests/bin/Release/net10.0/ViceSharp.Library.Tests.dll (.NETCoreApp,Version=v10.0)
+07:48:31 [DBG] Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.IntegrationTests/bin/Release/net10.0/ViceSharp.Library.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+07:48:31 [DBG] Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.AiReview.Tests/bin/Release/net10.0/ViceSharp.AiReview.Tests.dll (.NETCoreApp,Version=v10.0)
+07:48:31 [DBG] Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll (.NETCoreApp,Version=v10.0)
+07:48:31 [DBG] Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll (.NETCoreApp,Version=v10.0)
+07:48:31 [DBG] Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/ViceSharp.NativeClockProbe.Tests.dll (.NETCoreApp,Version=v10.0)
+07:48:31 [DBG] Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+07:48:31 [DBG] Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.OracleContract.Tests/bin/Release/net10.0/ViceSharp.OracleContract.Tests.dll (.NETCoreApp,Version=v10.0)
+07:48:31 [DBG] A total of 1 test files matched the specified pattern.
+07:48:31 [DBG] A total of 1 test files matched the specified pattern.
+07:48:31 [DBG] A total of 1 test files matched the specified pattern.
+07:48:31 [DBG] A total of 1 test files matched the specified pattern.
+07:48:31 [DBG] A total of 1 test files matched the specified pattern.
+07:48:31 [DBG] A total of 1 test files matched the specified pattern.
+07:48:31 [DBG] A total of 1 test files matched the specified pattern.
+07:48:31 [DBG] A total of 1 test files matched the specified pattern.
+07:48:33 [DBG] No test matches the given testcase filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real` in /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.IntegrationTests/bin/Release/net10.0/ViceSharp.Library.IntegrationTests.dll
+07:48:34 [DBG] Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results/_LAB-OMARCHY_2026-10-21_07_48_34_net10.0.trx
+07:48:34 [DBG] 
+07:48:34 [DBG] Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results/_LAB-OMARCHY_2026-10-21_07_48_34_net10.0[1].trx
+07:48:34 [DBG] 
+07:48:34 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 117 ms - ViceSharp.AiReview.Tests.dll (net10.0)
+07:48:35 [DBG] Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results/_LAB-OMARCHY_2026-10-21_07_48_34_net10.0[2].trx
+07:48:35 [DBG] 
+07:48:35 [DBG] Passed!  - Failed:     0, Passed:   124, Skipped:     0, Total:   124, Duration: 1 s - ViceSharp.Library.Tests.dll (net10.0)
+07:48:35 [DBG] Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results/_LAB-OMARCHY_2026-10-21_07_48_34_net10.0[3].trx
+07:48:35 [DBG] 
+07:48:35 [DBG] Passed!  - Failed:     0, Passed:   148, Skipped:     0, Total:   148, Duration: 484 ms - ViceSharp.OracleContract.Tests.dll (net10.0)
+07:48:37 [DBG] Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results/_LAB-OMARCHY_2026-10-21_07_48_35_net10.0.trx
+07:48:37 [DBG] 
+07:48:37 [DBG] Passed!  - Failed:     0, Passed:   360, Skipped:     0, Total:   360, Duration: 1 s - ViceSharp.NativeClockProbe.Tests.dll (net10.0)
+07:48:38 [DBG] Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results/_LAB-OMARCHY_2026-10-21_07_48_34_net10.0[4].trx
+07:48:38 [DBG] 
+07:48:38 [DBG] Passed!  - Failed:     0, Passed:   256, Skipped:     0, Total:   256, Duration: 3 s - ViceSharp.VsfCompatibility.Tests.dll (net10.0)
+07:48:41 [DBG] Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results/_LAB-OMARCHY_2026-10-21_07_48_34_net10.0[5].trx
+07:48:41 [DBG] 
+07:48:41 [DBG] Passed!  - Failed:     0, Passed:    61, Skipped:     0, Total:    61, Duration: 6 s - ViceSharp.Heads.Tests.dll (net10.0)
+07:48:48 [ERR] [xUnit.net 00:00:15.90]     ViceSharp.TestHarness.XmlDocsConventionTests.TestMethods_HaveRequiredXmlDocs [FAIL]
+07:48:48 [DBG]   Failed ViceSharp.TestHarness.XmlDocsConventionTests.TestMethods_HaveRequiredXmlDocs [110 ms]
+07:48:48 [DBG]   Error Message:
+07:48:48 [DBG]    QA-XMLDOCS-001: found 74 test method(s) missing required XMLDOCS tokens (FR-/TR-, 'Use case:', 'Acceptance:'); expected at most 0.
+07:48:48 [DBG] Source dir scanned: /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/
+07:48:48 [DBG] Sample violations:
+07:48:48 [DBG]   - AttachPanelViewModelTests.cs::Launch_SyntheticT64_RecreatesTrueDriveAndQueuesAutostart
+07:48:48 [DBG]   - AttachPanelViewModelTests.cs::AttachAsync_ConvertedT64_RecreatesFromD64AndRemembersSource
+07:48:48 [DBG]   - AttachPanelViewModelTests.cs::Launch_MalformedAfterAttachment_ReturnsErrorAndAllowsRetry
+07:48:48 [DBG]   - AttachPanelViewModelTests.cs::SelectedMachineProfile_Change_NotifiesVic20Visibility
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::StaAbsAtJsrTarget_ThirdFetchHoldsOpcodePcBeforeStore
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::JsrAfterRts_Cycle3StillPeeksStack
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::JsrAfterSoftDeferredImmediateLoad_Cycle3StillPeeksStack
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::StaIndY_Rts_LdaImm_SecondFetchHoldsPreOpThenNextTickFetchesFollowingStaIndY
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::StaIndYAfterLdaAbsXWithoutTrailingCheckpoint_Cycle4AdvancesPc
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::StaIndYAfterImmediateLoadTrailingCheckpoint_Cycle4AdvancesPc
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::InyAfterEarlyAdvancedStaIndY_LastClkCompletesTransfer
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::StaIndYAfterFusedIny_Cycle4AdvancesPc
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::HeldStaIndYAfterStagedStoreChain_DeyLastClkHoldsPreOp
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::HeldStaIndY_DeyTakenBpl_IrqBetweenCpuClocks_DispatchesBeforeTargetJsr
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::SoftDeferredTaxThenLdaImm_SecondFetchHoldsPreOpState
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::ConsecutiveImmediateLoads_SecondFetchHoldsFollowingLoadPreOpState
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::StoreThenImmediateLoad_SecondFetchHoldsPreOpState
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::RtsAfterStaZp_TwoTrailingCheckpointsFirstPullVisibleAtCycle3
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::ClcAfterLdaZp_OneTrailingCheckpointCompletesFlagUpdate
+07:48:48 [DBG]   - CpuVisiblePcTimingTests.cs::LdaZpAfterRolZp_ThreeTrailingCheckpointsShowsLoadedAOnDataRead
+07:48:48 [DBG]   ... and 54 more
+07:48:48 [DBG]   Stack Trace:
+07:48:48 [DBG]      at ViceSharp.TestHarness.XmlDocsConventionTests.TestMethods_HaveRequiredXmlDocs() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs:line 90
+07:48:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:48:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:48:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:48:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:48:49 [ERR] [xUnit.net 00:00:16.23]     ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests.BranchNotTaken_StillConsumesTheOffsetByte [FAIL]
+07:48:49 [DBG]   Failed ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests.BranchNotTaken_StillConsumesTheOffsetByte [1 ms]
+07:48:49 [DBG]   Error Message:
+07:48:49 [DBG]    Assert.Equal() Failure: Values differ
+07:48:49 [DBG] Expected: 32770
+07:48:49 [DBG] Actual:   32771
+07:48:49 [DBG]   Stack Trace:
+07:48:49 [DBG]      at ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests.BranchNotTaken_StillConsumesTheOffsetByte() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuReadModifyWriteRegressionTests.cs:line 70
+07:48:49 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:48:49 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:48:49 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:48:49 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:48:54 [ERR] [xUnit.net 00:00:21.69]     ViceSharp.TestHarness.EmulationPipelineSpeedDiagTests.AppPipeline_Warp_Exceeds_RealTime [FAIL]
+07:48:54 [DBG]   Failed ViceSharp.TestHarness.EmulationPipelineSpeedDiagTests.AppPipeline_Warp_Exceeds_RealTime [5 s]
+07:48:54 [DBG]   Error Message:
+07:48:54 [DBG]    DIAG warp pace = 131.2% of real time, committed fps = 65.7
+07:48:54 [DBG]   Stack Trace:
+07:48:54 [DBG]      at ViceSharp.TestHarness.EmulationPipelineSpeedDiagTests.AppPipeline_Warp_Exceeds_RealTime() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/EmulationPipelineSpeedDiagTests.cs:line 57
+07:48:54 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:48:54 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:48:54 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:48:54 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:06 [DBG] [xUnit.net 00:00:33.12]     ViceSharp.TestHarness.WinMmAudioThroughputDiagTests.WinMm_Backend_Accepts_Samples_At_Device_Rate [SKIP]
+07:49:06 [DBG]   Skipped ViceSharp.TestHarness.WinMmAudioThroughputDiagTests.WinMm_Backend_Accepts_Samples_At_Device_Rate [1 ms]
+07:49:06 [DBG] [xUnit.net 00:00:33.13]     ViceSharp.TestHarness.LiveDeployedAppSettingsBisectTests.DeployedApp_SettingsBisect_ReportsPhaseSpeeds [SKIP]
+07:49:06 [DBG]   Skipped ViceSharp.TestHarness.LiveDeployedAppSettingsBisectTests.DeployedApp_SettingsBisect_ReportsPhaseSpeeds [1 ms]
+07:49:12 [ERR] [xUnit.net 00:00:39.56]     ViceSharp.TestHarness.NativeCollectionConventionTests.NativeBridgeTestClasses_DeclareNativeViceCollection [FAIL]
+07:49:12 [DBG]   Failed ViceSharp.TestHarness.NativeCollectionConventionTests.NativeBridgeTestClasses_DeclareNativeViceCollection [39 ms]
+07:49:12 [DBG]   Error Message:
+07:49:12 [DBG]    Native-bridge test classes missing [Collection("NativeVice")]:
+07:49:12 [DBG]   - Vic20/Vic20LockstepScaffoldTests.cs
+07:49:12 [DBG]   Stack Trace:
+07:49:12 [DBG]      at ViceSharp.TestHarness.NativeCollectionConventionTests.NativeBridgeTestClasses_DeclareNativeViceCollection() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs:line 93
+07:49:12 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:12 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:12 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:12 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:13 [ERR] [xUnit.net 00:00:40.79]     ViceSharp.TestHarness.SidFactoryTests.Create_ConfiguresAudioClockOnlyWithBackend [FAIL]
+07:49:13 [DBG]   Failed ViceSharp.TestHarness.SidFactoryTests.Create_ConfiguresAudioClockOnlyWithBackend [4 ms]
+07:49:13 [DBG]   Error Message:
+07:49:13 [DBG]    Assert.True() Failure
+07:49:13 [DBG] Expected: True
+07:49:13 [DBG] Actual:   False
+07:49:13 [DBG]   Stack Trace:
+07:49:13 [DBG]      at ViceSharp.TestHarness.SidFactoryTests.Create_ConfiguresAudioClockOnlyWithBackend() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/SidFactoryTests.cs:line 68
+07:49:13 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:13 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:13 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:13 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:15 [ERR] [xUnit.net 00:00:42.50]     ViceSharp.TestHarness.BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations [FAIL]
+07:49:15 [DBG]   Failed ViceSharp.TestHarness.BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations [81 ms]
+07:49:15 [DBG]   Error Message:
+07:49:15 [DBG]    Assert.Equal() Failure: Values differ
+07:49:15 [DBG] Expected: 0
+07:49:15 [DBG] Actual:   4586808
+07:49:15 [DBG]   Stack Trace:
+07:49:15 [DBG]      at ViceSharp.TestHarness.BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/BenchmarksSmokeTests.cs:line 164
+07:49:15 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:15 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:15 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:15 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:15 [ERR] [xUnit.net 00:00:42.72]     ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests.ResolveConfigDirectory_ExpandsEnvironmentVariables [FAIL]
+07:49:15 [DBG]   Failed ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests.ResolveConfigDirectory_ExpandsEnvironmentVariables [1 ms]
+07:49:15 [DBG]   Error Message:
+07:49:15 [DBG]    Assert.DoesNotContain() Failure: Sub-string found
+07:49:15 [DBG]                                                    ↓ (pos 83)
+07:49:15 [DBG] String: ···"eSharp.TestHarness/bin/Release/net10.0/%TEMP%/vice"
+07:49:15 [DBG] Found:  "%"
+07:49:15 [DBG]   Stack Trace:
+07:49:15 [DBG]      at ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests.ResolveConfigDirectory_ExpandsEnvironmentVariables() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Configuration/ViceConfigLocatorTests.cs:line 49
+07:49:15 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:15 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:15 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:15 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:17 [ERR] [xUnit.net 00:00:45.09]     ViceSharp.TestHarness.VicIID011ControlTests.D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch [FAIL]
+07:49:17 [DBG]   Failed ViceSharp.TestHarness.VicIID011ControlTests.D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch [3 ms]
+07:49:17 [DBG]   Error Message:
+07:49:17 [DBG]    Assert.Equal() Failure: Values differ
+07:49:17 [DBG] Expected: 128
+07:49:17 [DBG] Actual:   0
+07:49:17 [DBG]   Stack Trace:
+07:49:17 [DBG]      at ViceSharp.TestHarness.VicIID011ControlTests.D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIID011ControlTests.cs:line 128
+07:49:17 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:17 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:17 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:17 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:22 [DBG] [xUnit.net 00:00:49.77]     ViceSharp.TestHarness.LiveHandlerTraceTests.Trace_LiveIrqHandler_FromUserSnapshot [SKIP]
+07:49:22 [DBG]   Skipped ViceSharp.TestHarness.LiveHandlerTraceTests.Trace_LiveIrqHandler_FromUserSnapshot [1 ms]
+07:49:25 [ERR] [xUnit.net 00:00:52.68]     ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Unregister_RemovesDeviceFromDispatch [FAIL]
+07:49:25 [DBG]   Failed ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Unregister_RemovesDeviceFromDispatch [< 1 ms]
+07:49:25 [DBG]   Error Message:
+07:49:25 [ERR] [xUnit.net 00:00:52.68]     ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Write_ToUnmappedAddressIsSilentlyDropped [FAIL]
+07:49:25 [DBG]    Assert.Equal() Failure: Values differ
+07:49:25 [DBG] Expected: 255
+07:49:25 [DBG] Actual:   85
+07:49:25 [DBG]   Stack Trace:
+07:49:25 [DBG]      at ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Unregister_RemovesDeviceFromDispatch() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/BasicBusAndSimpleRamTests.cs:line 217
+07:49:25 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:25 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:25 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:25 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:25 [DBG]   Failed ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Write_ToUnmappedAddressIsSilentlyDropped [< 1 ms]
+07:49:25 [DBG]   Error Message:
+07:49:25 [DBG]    Assert.Equal() Failure: Values differ
+07:49:25 [DBG] Expected: 255
+07:49:25 [DBG] Actual:   187
+07:49:25 [DBG]   Stack Trace:
+07:49:25 [DBG]      at ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Write_ToUnmappedAddressIsSilentlyDropped() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/BasicBusAndSimpleRamTests.cs:line 279
+07:49:25 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:25 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:25 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:25 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:25 [DBG] [xUnit.net 00:00:52.88]     ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_SilentWarp_Measures_Core_Headroom [SKIP]
+07:49:25 [DBG] [xUnit.net 00:00:52.88]     ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_UserConfig_LiveAudio_ViceGate_Sustains_RealTime [SKIP]
+07:49:25 [DBG]   Skipped ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_SilentWarp_Measures_Core_Headroom [1 ms]
+07:49:25 [DBG]   Skipped ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests.Demo_UserConfig_LiveAudio_ViceGate_Sustains_RealTime [1 ms]
+07:49:41 [ERR] [xUnit.net 00:01:08.92]     ViceSharp.TestHarness.WarpAudioDiscardTests.AppPipeline_FastForward251_WithLiveAudio_Reaches_Target [FAIL]
+07:49:41 [DBG]   Failed ViceSharp.TestHarness.WarpAudioDiscardTests.AppPipeline_FastForward251_WithLiveAudio_Reaches_Target [5 s]
+07:49:41 [DBG]   Error Message:
+07:49:41 [DBG]    DIAG fast-forward 251% pace = 102.8% of real time
+07:49:41 [DBG]   Stack Trace:
+07:49:41 [DBG]      at ViceSharp.TestHarness.WarpAudioDiscardTests.AppPipeline_FastForward251_WithLiveAudio_Reaches_Target() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/WarpAudioDiscardTests.cs:line 219
+07:49:41 [DBG] --- End of stack trace from previous location ---
+07:49:47 [DBG] [xUnit.net 00:01:14.29]     ViceSharp.TestHarness.ThreadAffinityTests.TryPinCurrentThread_Applies_The_Mask [SKIP]
+07:49:47 [DBG] [xUnit.net 00:01:14.29]     ViceSharp.TestHarness.ThreadAffinityTests.Pump_Worker_Pins_From_Environment [SKIP]
+07:49:47 [DBG]   Skipped ViceSharp.TestHarness.ThreadAffinityTests.TryPinCurrentThread_Applies_The_Mask [1 ms]
+07:49:47 [DBG]   Skipped ViceSharp.TestHarness.ThreadAffinityTests.Pump_Worker_Pins_From_Environment [1 ms]
+07:49:48 [ERR] [xUnit.net 00:01:15.17]     ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3 [FAIL]
+07:49:48 [ERR] [xUnit.net 00:01:15.17]     ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_AssertsIrqWhenSdrMaskEnabled [FAIL]
+07:49:49 [DBG]   Failed ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3 [22 ms]
+07:49:49 [DBG]   Error Message:
+07:49:49 [DBG]    Expected value to be 8 because after 8 Timer A underflows in SP output mode, ICR bit 3 must latch, but found 0 (difference of -8).
+07:49:49 [DBG]   Stack Trace:
+07:49:49 [DBG]      at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+07:49:49 [DBG]    at ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CiaSerialPortTests.cs:line 76
+07:49:49 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:49 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:49 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:49 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:49 [DBG]   Failed ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_AssertsIrqWhenSdrMaskEnabled [4 ms]
+07:49:49 [DBG]   Error Message:
+07:49:49 [DBG]    Expected irq.IsAsserted to be True because SDR-complete event must assert IRQ when IMR bit 3 is enabled, but found False.
+07:49:49 [DBG]   Stack Trace:
+07:49:49 [DBG]      at FluentAssertions.Primitives.BooleanAssertions`1.BeTrue(String because, Object[] becauseArgs)
+07:49:49 [DBG]    at ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_AssertsIrqWhenSdrMaskEnabled() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CiaSerialPortTests.cs:line 112
+07:49:49 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:49 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:49 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:49 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:52 [ERR] [xUnit.net 00:01:19.73]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals [FAIL]
+07:49:52 [DBG]   Failed ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals [34 ms]
+07:49:52 [DBG]   Error Message:
+07:49:52 [DBG]    Assert.DoesNotContain() Failure: Sub-string found
+07:49:52 [DBG]                                       ↓ (pos 328653)
+07:49:52 [DBG] String: ···".Platform.Storage;\nusing ViceSharp.Core.FlashCarts"···
+07:49:52 [DBG] Found:  "ViceSharp.Core"
+07:49:52 [DBG]   Stack Trace:
+07:49:52 [DBG]      at ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/AvaloniaBoundaryTests.cs:line 60
+07:49:52 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:52 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:49:52 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:49:52 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:49:52 [ERR] [xUnit.net 00:01:19.83]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly [FAIL]
+07:49:52 [DBG]   Failed ViceSharp.TestHarness.AvaloniaBoundaryTests.AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly [3 ms]
+07:49:52 [DBG]   Error Message:
+07:49:52 [DBG]    Assert.Equal() Failure: Values differ
+07:49:52 [DBG] Expected: 1000
+07:49:52 [DBG] Actual:   0
+07:49:52 [DBG]   Stack Trace:
+07:49:52 [DBG]      at ViceSharp.TestHarness.AvaloniaBoundaryTests.AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/AvaloniaBoundaryTests.cs:line 274
+07:49:52 [DBG] --- End of stack trace from previous location ---
+07:50:23 [DBG] [xUnit.net 00:01:50.63]     ViceSharp.TestHarness.RasterBarGroundTruthTests.IrqTopology_FromUserSnapshot_ReportsArmedSources [SKIP]
+07:50:25 [DBG]   Skipped ViceSharp.TestHarness.RasterBarGroundTruthTests.IrqTopology_FromUserSnapshot_ReportsArmedSources [1 ms]
+07:50:25 [ERR] [xUnit.net 00:01:52.71]     ViceSharp.TestHarness.VicIiCoreTimingTests.SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu [FAIL]
+07:50:25 [DBG]   Failed ViceSharp.TestHarness.VicIiCoreTimingTests.SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu [1 ms]
+07:50:25 [DBG]   Error Message:
+07:50:25 [DBG]    Assert.Equal() Failure: Values differ
+07:50:25 [DBG] Expected: 0
+07:50:25 [DBG] Actual:   1
+07:50:25 [DBG]   Stack Trace:
+07:50:25 [DBG]      at ViceSharp.TestHarness.VicIiCoreTimingTests.SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicIiCoreTimingTests.cs:line 296
+07:50:25 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:25 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:25 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:25 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:25 [DBG] [xUnit.net 00:01:52.74]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClock [SKIP]
+07:50:25 [DBG] [xUnit.net 00:01:52.74]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClockUnderPullLoad [SKIP]
+07:50:25 [DBG] [xUnit.net 00:01:52.74]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureVicePacedClock [SKIP]
+07:50:25 [DBG] [xUnit.net 00:01:52.74]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureGuiFramePumpThroughput [SKIP]
+07:50:25 [DBG] [xUnit.net 00:01:52.74]     ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureC64ChipsetFrameCost [SKIP]
+07:50:25 [DBG]   Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClock [1 ms]
+07:50:25 [DBG]   Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClockUnderPullLoad [1 ms]
+07:50:25 [DBG]   Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureVicePacedClock [1 ms]
+07:50:25 [DBG]   Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureGuiFramePumpThroughput [1 ms]
+07:50:25 [DBG]   Skipped ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureC64ChipsetFrameCost [1 ms]
+07:50:27 [DBG] [xUnit.net 00:01:54.81]     ViceSharp.TestHarness.LiveLimiterBandProbeTests.DeployedApp_LimiterBand_ReportsAchievedSpeeds [SKIP]
+07:50:27 [DBG]   Skipped ViceSharp.TestHarness.LiveLimiterBandProbeTests.DeployedApp_LimiterBand_ReportsAchievedSpeeds [1 ms]
+07:50:27 [ERR] [xUnit.net 00:01:54.82]     ViceSharp.TestHarness.Mos6510BrkTests.Brk_RtiReturnsToInstructionAfterSignatureByte [FAIL]
+07:50:27 [DBG]   Failed ViceSharp.TestHarness.Mos6510BrkTests.Brk_RtiReturnsToInstructionAfterSignatureByte [< 1 ms]
+07:50:27 [DBG]   Error Message:
+07:50:27 [DBG]    CPU did not reach PC=$C002 within 32 ticks (PC=$0800).
+07:50:27 [DBG]   Stack Trace:
+07:50:27 [DBG]      at ViceSharp.TestHarness.Mos6510BrkTests.StepUntilPcReaches(Mos6502 cpu, UInt16 targetPc, Int32 maxTicks) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Mos6510BrkTests.cs:line 217
+07:50:27 [DBG]    at ViceSharp.TestHarness.Mos6510BrkTests.Brk_RtiReturnsToInstructionAfterSignatureByte() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Mos6510BrkTests.cs:line 177
+07:50:27 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:27 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:27 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:27 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:29 [ERR] [xUnit.net 00:01:56.92]     ViceSharp.TestHarness.ProtocolHostIntegrationTests.GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient [FAIL]
+07:50:29 [DBG]   Failed ViceSharp.TestHarness.ProtocolHostIntegrationTests.GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient [27 ms]
+07:50:29 [DBG]   Error Message:
+07:50:29 [DBG]    Assert.Equal() Failure: Strings differ
+07:50:29 [DBG]            ↓ (pos 0)
+07:50:29 [DBG] Expected: "software"
+07:50:29 [DBG] Actual:   "host"
+07:50:29 [DBG]            ↑ (pos 0)
+07:50:29 [DBG]   Stack Trace:
+07:50:29 [DBG]      at ViceSharp.TestHarness.ProtocolHostIntegrationTests.GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ProtocolHostIntegrationTests.cs:line 799
+07:50:29 [DBG] --- End of stack trace from previous location ---
+07:50:31 [ERR] [xUnit.net 00:01:58.71]     ViceSharp.TestHarness.ProtocolHostIntegrationTests.SettingsService_ListsProfilesAndAppliesLiveLimiter [FAIL]
+07:50:31 [DBG]   Failed ViceSharp.TestHarness.ProtocolHostIntegrationTests.SettingsService_ListsProfilesAndAppliesLiveLimiter [5 ms]
+07:50:31 [DBG]   Error Message:
+07:50:31 [DBG]    Assert.Equal() Failure: Strings differ
+07:50:31 [DBG]            ↓ (pos 0)
+07:50:31 [DBG] Expected: "software"
+07:50:31 [DBG] Actual:   "host"
+07:50:31 [DBG]            ↑ (pos 0)
+07:50:31 [DBG]   Stack Trace:
+07:50:31 [DBG]      at ViceSharp.TestHarness.ProtocolHostIntegrationTests.SettingsService_ListsProfilesAndAppliesLiveLimiter() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/ProtocolHostIntegrationTests.cs:line 146
+07:50:31 [DBG] --- End of stack trace from previous location ---
+07:50:31 [DBG] [xUnit.net 00:01:58.96]     ViceSharp.TestHarness.LiveDeployedAppSpeedProbeTests.DeployedApp_Demo_Sustains_RealTime [SKIP]
+07:50:31 [DBG]   Skipped ViceSharp.TestHarness.LiveDeployedAppSpeedProbeTests.DeployedApp_Demo_Sustains_RealTime [1 ms]
+07:50:33 [DBG]   Skipped ViceSharp.TestHarness.Vic20.BranchCycleCountTests.NotTakenBne_CycleTrace [1 ms]
+07:50:33 [DBG]   Skipped ViceSharp.TestHarness.Vic20.BranchCycleCountTests.TakenBne_CycleTrace [1 ms]
+07:50:33 [DBG] [xUnit.net 00:02:01.07]     ViceSharp.TestHarness.Diagnostics.Wolf64FrameDumpTests.DumpAutostartFrame_WritesBmpAndVicRegs [SKIP]
+07:50:34 [DBG]   Skipped ViceSharp.TestHarness.Diagnostics.Wolf64FrameDumpTests.DumpAutostartFrame_WritesBmpAndVicRegs [1 ms]
+07:50:37 [ERR] [xUnit.net 00:02:04.51]     ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests.Registers_D012Read_ReturnsLiveRasterLowByte [FAIL]
+07:50:37 [DBG]   Failed ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests.Registers_D012Read_ReturnsLiveRasterLowByte [1 ms]
+07:50:37 [DBG]   Error Message:
+07:50:37 [DBG]    Assert.Equal() Failure: Values differ
+07:50:37 [DBG] Expected: 129
+07:50:37 [DBG] Actual:   128
+07:50:37 [DBG]   Stack Trace:
+07:50:37 [DBG]      at ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests.Registers_D012Read_ReturnsLiveRasterLowByte() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/VicBorderIrqFaithfulParityTests.cs:line 757
+07:50:37 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:37 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:37 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:37 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.40]     ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    CPU did not reach PC=$0400 within 64 ticks (PC=$0000).
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.Mos6510NmiTests.StepUntilPcReaches(Mos6502 cpu, UInt16 targetPc, Int32 maxTicks) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Mos6510NmiTests.cs:line 252
+07:50:48 [DBG]    at ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Mos6510NmiTests.cs:line 143
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.60]     ViceSharp.TestHarness.CpuInstructionCompletedEventTests.CompletedInstruction_PublishesOpcodeAndRegisters [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuInstructionCompletedEventTests.CompletedInstruction_PublishesOpcodeAndRegisters [1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 66
+07:50:48 [DBG] Actual:   0
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuInstructionCompletedEventTests.CompletedInstruction_PublishesOpcodeAndRegisters() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuInstructionCompletedEventTests.cs:line 51
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.61]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc [FAIL]
+07:50:48 [ERR] [xUnit.net 00:02:15.62]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc [< 1 ms]
+07:50:48 [ERR] [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks [FAIL]
+07:50:48 [DBG]   Error Message:
+07:50:48 [ERR] [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags [FAIL]
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [ERR] [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough [FAIL]
+07:50:48 [DBG] Expected: 32779
+07:50:48 [ERR] [xUnit.net 00:02:15.64]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad [FAIL]
+07:50:48 [DBG] Actual:   32776
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1238
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 76
+07:50:48 [DBG] Actual:   31
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1282
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    wait-loop irq_delay delta=12 (want 11: 9 host CLK + 2 collapsed zp FETCH)
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2476
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 32780
+07:50:48 [DBG] Actual:   32777
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 995
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Wolf64 2142610 BMI dummy INC_PC; PC=$800F cyc=1 trail=0 full=True nonOvlF=True nonOvlR=True
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2781
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [ERR] [xUnit.net 00:02:15.64]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull [FAIL]
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 2
+07:50:48 [DBG] Actual:   1
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 4866
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 248
+07:50:48 [DBG] Actual:   249
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 188
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.66]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 2
+07:50:48 [ERR] [xUnit.net 00:02:15.66]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX [FAIL]
+07:50:48 [DBG] Actual:   1
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 4953
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.67]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY [FAIL]
+07:50:48 [ERR] [xUnit.net 00:02:15.67]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 255
+07:50:48 [DBG] Actual:   0
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2729
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 43
+07:50:48 [DBG] Actual:   42
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2682
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 32778
+07:50:48 [DBG] Actual:   32776
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1042
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.68]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 44
+07:50:48 [DBG] Actual:   43
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2636
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.68]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 7
+07:50:48 [DBG] Actual:   76
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 5571
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.69]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 248
+07:50:48 [DBG] Actual:   247
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 103
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.71]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 2
+07:50:48 [DBG] Actual:   1
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 5742
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.72]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 1
+07:50:48 [DBG] Actual:   0
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 81
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.74]     ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests.MotorOnPlayPressed_WithImrEnabled_AssertsIrq [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests.MotorOnPlayPressed_WithImrEnabled_AssertsIrq [1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Expected irq.IsAsserted to be True because with IMR bit 4 enabled, pulse-driven FLAG must assert IRQ, but found False.
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at FluentAssertions.Primitives.BooleanAssertions`1.BeTrue(String because, Object[] becauseArgs)
+07:50:48 [DBG]    at ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests.MotorOnPlayPressed_WithImrEnabled_AssertsIrq() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Tape/DatasetteCia1FlagTests.cs:line 182
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [FAIL]
+07:50:48 [ERR] [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 169
+07:50:48 [DBG] Actual:   0
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuInterruptTests.cs:line 263
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 169
+07:50:48 [DBG] Actual:   0
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuInterruptTests.cs:line 302
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:48 [ERR] [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [FAIL]
+07:50:48 [DBG]   Failed ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [< 1 ms]
+07:50:48 [DBG]   Error Message:
+07:50:48 [DBG]    Assert.Equal() Failure: Values differ
+07:50:48 [DBG] Expected: 169
+07:50:48 [DBG] Actual:   0
+07:50:48 [DBG]   Stack Trace:
+07:50:48 [DBG]      at ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuInterruptTests.cs:line 346
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+07:50:48 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+07:50:48 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+07:50:53 [DBG] Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results/_LAB-OMARCHY_2026-10-21_07_48_39_net10.0.trx
+07:50:53 [DBG] 
+07:50:53 [DBG] Failed!  - Failed:    42, Passed:  3465, Skipped:    16, Total:  3523, Duration: 2 m 13 s - ViceSharp.TestHarness.dll (net10.0)
+07:50:53 [INF] Native load log /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/native-load.log exists and is empty
+07:50:53 [ERR] Target Test has thrown an exception
+Nuke.Common.Tooling.ProcessException: Process 'dotnet' exited with code 1.
+   > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/vice-sharp/ViceSharp.slnx --configuration Release --no-restore --no-build --filter Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real --results-directory /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/gate-2/test-results --logger trx
+   @ /home/sharpninja/github/vice-sharp
+Error output:
+   [xUnit.net 00:00:15.90]     ViceSharp.TestHarness.XmlDocsConventionTests.TestMethods_HaveRequiredXmlDocs [FAIL]
+   [xUnit.net 00:00:16.23]     ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests.BranchNotTaken_StillConsumesTheOffsetByte [FAIL]
+   [xUnit.net 00:00:21.69]     ViceSharp.TestHarness.EmulationPipelineSpeedDiagTests.AppPipeline_Warp_Exceeds_RealTime [FAIL]
+   [xUnit.net 00:00:39.56]     ViceSharp.TestHarness.NativeCollectionConventionTests.NativeBridgeTestClasses_DeclareNativeViceCollection [FAIL]
+   [xUnit.net 00:00:40.79]     ViceSharp.TestHarness.SidFactoryTests.Create_ConfiguresAudioClockOnlyWithBackend [FAIL]
+   [xUnit.net 00:00:42.50]     ViceSharp.TestHarness.BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations [FAIL]
+   [xUnit.net 00:00:42.72]     ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests.ResolveConfigDirectory_ExpandsEnvironmentVariables [FAIL]
+   [xUnit.net 00:00:45.09]     ViceSharp.TestHarness.VicIID011ControlTests.D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch [FAIL]
+   [xUnit.net 00:00:52.68]     ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Unregister_RemovesDeviceFromDispatch [FAIL]
+   [xUnit.net 00:00:52.68]     ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Write_ToUnmappedAddressIsSilentlyDropped [FAIL]
+   [xUnit.net 00:01:08.92]     ViceSharp.TestHarness.WarpAudioDiscardTests.AppPipeline_FastForward251_WithLiveAudio_Reaches_Target [FAIL]
+   [xUnit.net 00:01:15.17]     ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3 [FAIL]
+   [xUnit.net 00:01:15.17]     ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_AssertsIrqWhenSdrMaskEnabled [FAIL]
+   [xUnit.net 00:01:19.73]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals [FAIL]
+   [xUnit.net 00:01:19.83]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly [FAIL]
+   [xUnit.net 00:01:52.71]     ViceSharp.TestHarness.VicIiCoreTimingTests.SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu [FAIL]
+   [xUnit.net 00:01:54.82]     ViceSharp.TestHarness.Mos6510BrkTests.Brk_RtiReturnsToInstructionAfterSignatureByte [FAIL]
+   [xUnit.net 00:01:56.92]     ViceSharp.TestHarness.ProtocolHostIntegrationTests.GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient [FAIL]
+   [xUnit.net 00:01:58.71]     ViceSharp.TestHarness.ProtocolHostIntegrationTests.SettingsService_ListsProfilesAndAppliesLiveLimiter [FAIL]
+   [xUnit.net 00:02:04.51]     ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests.Registers_D012Read_ReturnsLiveRasterLowByte [FAIL]
+   [xUnit.net 00:02:15.40]     ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [FAIL]
+   [xUnit.net 00:02:15.60]     ViceSharp.TestHarness.CpuInstructionCompletedEventTests.CompletedInstruction_PublishesOpcodeAndRegisters [FAIL]
+   [xUnit.net 00:02:15.61]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc [FAIL]
+   [xUnit.net 00:02:15.62]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA [FAIL]
+   [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks [FAIL]
+   [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags [FAIL]
+   [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough [FAIL]
+   [xUnit.net 00:02:15.64]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad [FAIL]
+   [xUnit.net 00:02:15.64]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull [FAIL]
+   [xUnit.net 00:02:15.66]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc [FAIL]
+   [xUnit.net 00:02:15.66]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX [FAIL]
+   [xUnit.net 00:02:15.67]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY [FAIL]
+   [xUnit.net 00:02:15.67]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags [FAIL]
+   [xUnit.net 00:02:15.68]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY [FAIL]
+   [xUnit.net 00:02:15.68]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc [FAIL]
+   [xUnit.net 00:02:15.69]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice [FAIL]
+   [xUnit.net 00:02:15.71]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough [FAIL]
+   [xUnit.net 00:02:15.72]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner [FAIL]
+   [xUnit.net 00:02:15.74]     ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests.MotorOnPlayPressed_WithImrEnabled_AssertsIrq [FAIL]
+   [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [FAIL]
+   [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [FAIL]
+   [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [FAIL]
+
+   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38
+   at Nuke.Common.Tooling.ToolTasks.<>c.<GetExitHandler>b__4_0(ToolOptions _, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 27
+   at Nuke.Common.Tooling.ToolTasks.<>c__DisplayClass8_0.<GetExitHandlerInternal>b__3(ToolOptions o, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 22
+   at Nuke.Common.Tooling.ToolTasks.Run[T](T options) in /_/source/Nuke.Tooling/ToolTasks.Run.cs:line 36
+   at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetTest(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 34
+   at Build.<get_Test>b__32_1() in /home/sharpninja/github/vice-sharp/build/Build.cs:line 127
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[WRN] : Exception was suppressed
+[ERR] Test: [xUnit.net 00:00:15.90]     ViceSharp.TestHarness.XmlDocsConventionTests.TestMethods_HaveRequiredXmlDocs [FAIL]
+[ERR] Test: [xUnit.net 00:00:16.23]     ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests.BranchNotTaken_StillConsumesTheOffsetByte [FAIL]
+[ERR] Test: [xUnit.net 00:00:21.69]     ViceSharp.TestHarness.EmulationPipelineSpeedDiagTests.AppPipeline_Warp_Exceeds_RealTime [FAIL]
+[ERR] Test: [xUnit.net 00:00:39.56]     ViceSharp.TestHarness.NativeCollectionConventionTests.NativeBridgeTestClasses_DeclareNativeViceCollection [FAIL]
+[ERR] Test: [xUnit.net 00:00:40.79]     ViceSharp.TestHarness.SidFactoryTests.Create_ConfiguresAudioClockOnlyWithBackend [FAIL]
+[ERR] Test: [xUnit.net 00:00:42.50]     ViceSharp.TestHarness.BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations [FAIL]
+[ERR] Test: [xUnit.net 00:00:42.72]     ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests.ResolveConfigDirectory_ExpandsEnvironmentVariables [FAIL]
+[ERR] Test: [xUnit.net 00:00:45.09]     ViceSharp.TestHarness.VicIID011ControlTests.D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch [FAIL]
+[ERR] Test: [xUnit.net 00:00:52.68]     ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Unregister_RemovesDeviceFromDispatch [FAIL]
+[ERR] Test: [xUnit.net 00:00:52.68]     ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Write_ToUnmappedAddressIsSilentlyDropped [FAIL]
+[ERR] Test: [xUnit.net 00:01:08.92]     ViceSharp.TestHarness.WarpAudioDiscardTests.AppPipeline_FastForward251_WithLiveAudio_Reaches_Target [FAIL]
+[ERR] Test: [xUnit.net 00:01:15.17]     ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3 [FAIL]
+[ERR] Test: [xUnit.net 00:01:15.17]     ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_AssertsIrqWhenSdrMaskEnabled [FAIL]
+[ERR] Test: [xUnit.net 00:01:19.73]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals [FAIL]
+[ERR] Test: [xUnit.net 00:01:19.83]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly [FAIL]
+[ERR] Test: [xUnit.net 00:01:52.71]     ViceSharp.TestHarness.VicIiCoreTimingTests.SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu [FAIL]
+[ERR] Test: [xUnit.net 00:01:54.82]     ViceSharp.TestHarness.Mos6510BrkTests.Brk_RtiReturnsToInstructionAfterSignatureByte [FAIL]
+[ERR] Test: [xUnit.net 00:01:56.92]     ViceSharp.TestHarness.ProtocolHostIntegrationTests.GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient [FAIL]
+[ERR] Test: [xUnit.net 00:01:58.71]     ViceSharp.TestHarness.ProtocolHostIntegrationTests.SettingsService_ListsProfilesAndAppliesLiveLimiter [FAIL]
+[ERR] Test: [xUnit.net 00:02:04.51]     ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests.Registers_D012Read_ReturnsLiveRasterLowByte [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.40]     ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.60]     ViceSharp.TestHarness.CpuInstructionCompletedEventTests.CompletedInstruction_PublishesOpcodeAndRegisters [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.61]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.62]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.63]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.64]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.64]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.66]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.66]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.67]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.67]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.68]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.68]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.69]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.71]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.72]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.74]     ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests.MotorOnPlayPressed_WithImrEnabled_AssertsIrq [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [FAIL]
+[ERR] Test: [xUnit.net 00:02:15.86]     ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [FAIL]
+[ERR] Test: Target Test has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:02
+Compile            Succeeded       0:02
+Test               Failed          2:24   // ProcessException: Process 'dotnet' exited with code 1.
+───────────────────────────────────────
+Total                              2:29
+═══════════════════════════════════════
+​
+Build failed on 10/21/2026 7:50:53 AM. (╯°□°）╯︵ ┻━┻

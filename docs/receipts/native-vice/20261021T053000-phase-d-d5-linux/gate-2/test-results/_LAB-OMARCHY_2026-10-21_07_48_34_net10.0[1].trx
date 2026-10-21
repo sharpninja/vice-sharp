@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="fc360948-3c9a-44b6-9bc6-428b9f90c7e5" name="@LAB-OMARCHY 2026-10-21 07:48:34" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-21T07:48:34.4570808-05:00" queuing="2026-10-21T07:48:34.4570809-05:00" start="2026-10-21T07:48:31.5099679-05:00" finish="2026-10-21T07:48:34.4779599-05:00" />
+  <TestSettings name="default" id="9ae0eff6-2d08-4e05-a29a-eac75bd5e69e">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-10-21_07_48_34" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="397dcbda-dc93-4805-84e2-1576045da862" testId="e646f041-eb18-3ec2-8063-56bc3589df20" testName="ViceSharp.AiReview.Tests.ReviewLogTests.ReviewsDirectory_EndsWithDocsReviews" computerName="LAB-OMARCHY" duration="00:00:00.0205003" startTime="2026-10-21T07:48:34.0994190-05:00" endTime="2026-10-21T07:48:34.1345010-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="397dcbda-dc93-4805-84e2-1576045da862" />
+    <UnitTestResult executionId="60e14046-d5ca-4abd-9737-300b938def2b" testId="3ce43cf5-0b3c-b924-ef4f-ac7fb01dd764" testName="ViceSharp.AiReview.Tests.ReviewLogTests.Write_PreservesRawText_WhenResponseIsNotJson" computerName="LAB-OMARCHY" duration="00:00:00.0044269" startTime="2026-10-21T07:48:34.2129141-05:00" endTime="2026-10-21T07:48:34.2174056-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60e14046-d5ca-4abd-9737-300b938def2b" />
+    <UnitTestResult executionId="9e474ae1-fa05-4aa5-bf61-e035df5aa278" testId="5e0818fc-dc7a-0ff4-89b7-7e846db011fc" testName="ViceSharp.AiReview.Tests.ReviewLogTests.Write_CreatesTimestampedMarkdown_WithPromptAndResponse" computerName="LAB-OMARCHY" duration="00:00:00.0636874" startTime="2026-10-21T07:48:34.1480791-05:00" endTime="2026-10-21T07:48:34.2119550-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e474ae1-fa05-4aa5-bf61-e035df5aa278" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.AiReview.Tests.ReviewLogTests.Write_PreservesRawText_WhenResponseIsNotJson" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.aireview.tests/bin/release/net10.0/vicesharp.aireview.tests.dll" id="3ce43cf5-0b3c-b924-ef4f-ac7fb01dd764">
+      <Execution id="60e14046-d5ca-4abd-9737-300b938def2b" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.AiReview.Tests/bin/Release/net10.0/ViceSharp.AiReview.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.AiReview.Tests.ReviewLogTests" name="Write_PreservesRawText_WhenResponseIsNotJson" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.AiReview.Tests.ReviewLogTests.ReviewsDirectory_EndsWithDocsReviews" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.aireview.tests/bin/release/net10.0/vicesharp.aireview.tests.dll" id="e646f041-eb18-3ec2-8063-56bc3589df20">
+      <Execution id="397dcbda-dc93-4805-84e2-1576045da862" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.AiReview.Tests/bin/Release/net10.0/ViceSharp.AiReview.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.AiReview.Tests.ReviewLogTests" name="ReviewsDirectory_EndsWithDocsReviews" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.AiReview.Tests.ReviewLogTests.Write_CreatesTimestampedMarkdown_WithPromptAndResponse" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.aireview.tests/bin/release/net10.0/vicesharp.aireview.tests.dll" id="5e0818fc-dc7a-0ff4-89b7-7e846db011fc">
+      <Execution id="9e474ae1-fa05-4aa5-bf61-e035df5aa278" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.AiReview.Tests/bin/Release/net10.0/ViceSharp.AiReview.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.AiReview.Tests.ReviewLogTests" name="Write_CreatesTimestampedMarkdown_WithPromptAndResponse" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e646f041-eb18-3ec2-8063-56bc3589df20" executionId="397dcbda-dc93-4805-84e2-1576045da862" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3ce43cf5-0b3c-b924-ef4f-ac7fb01dd764" executionId="60e14046-d5ca-4abd-9737-300b938def2b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e0818fc-dc7a-0ff4-89b7-7e846db011fc" executionId="9e474ae1-fa05-4aa5-bf61-e035df5aa278" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)
+[xUnit.net 00:00:00.47]   Discovering: ViceSharp.AiReview.Tests
+[xUnit.net 00:00:00.96]   Discovered:  ViceSharp.AiReview.Tests
+[xUnit.net 00:00:01.42]   Starting:    ViceSharp.AiReview.Tests
+[xUnit.net 00:00:01.70]   Finished:    ViceSharp.AiReview.Tests (ID = 'b27d95a57473f76494f9b413233d68477d1ae589517e93c792a5588e4a446b5a')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
