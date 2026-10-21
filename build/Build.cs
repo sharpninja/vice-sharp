@@ -103,19 +103,38 @@ sealed partial class Build : NukeBuild
     /// (ShimLegacy, rebound in Phases E and F; R6) and the real-bound VSF Slice 1 cases that only the
     /// cumulative NativeSnapshotCompatibilityTest target runs (VsfSlice1Real; N08).
     /// </summary>
-    const string OrdinaryTestFilter =
+    internal const string OrdinaryTestFilter =
         "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real";
 
+    /// <summary>
+    /// The ordinary local gate. PLAN-NATIVERESTORE-001 D2 (A05, N11, N16): one TRX per project is retained in the
+    /// results directory, and VICESHARP_NATIVE_LOAD_LOG names a file created empty before the test process starts
+    /// (so the audit interval covers discovery) that must still exist and be empty afterwards.
+    /// </summary>
     Target Test => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
-            DotNetTest(s => s
-                .SetProjectFile(Solution)
-                .SetConfiguration(Configuration)
-                .SetNoRestore(true)
-                .SetNoBuild(true)
-                .SetFilter(OrdinaryTestFilter));
+            var results = ResolvedTestResultsDirectory;
+            Directory.CreateDirectory(results);
+            var log = PrepareNativeLoadLog();
+            Serilog.Log.Information("Test: results {Results}, native load log {Log}, filter {Filter}", results, log, OrdinaryTestFilter);
+            try
+            {
+                DotNetTest(s => s
+                    .SetProjectFile(Solution)
+                    .SetConfiguration(Configuration)
+                    .SetNoRestore(true)
+                    .SetNoBuild(true)
+                    .SetFilter(OrdinaryTestFilter)
+                    .SetResultsDirectory(results)
+                    .SetLoggers("trx")
+                    .SetProcessEnvironmentVariable("VICESHARP_NATIVE_LOAD_LOG", log));
+            }
+            finally
+            {
+                AssertNativeLoadLogEmpty(log);
+            }
         });
 
     /// <summary>
