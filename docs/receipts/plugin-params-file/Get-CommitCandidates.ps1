@@ -12,7 +12,9 @@
 param(
     [string]$RepoRoot = 'F:\GitHub\vice-sharp',
     [long]$MaxBytes = 10MB,
-    [string]$OutPath = (Join-Path $PSScriptRoot 'commit-candidates.json')
+    [string]$OutPath = (Join-Path $PSScriptRoot 'commit-candidates.json'),
+    # Optional replacement for the built-in group map: name -> repo-relative roots.
+    [System.Collections.IDictionary]$GroupOverride
 )
 
 Set-StrictMode -Version Latest
@@ -26,6 +28,7 @@ $groups = [ordered]@{
     'plugin-params-file'   = @('docs/receipts/plugin-params-file')
     'nuke-tests-windows'   = @('docs/receipts/nuke-tests/20261019T143210-targets-windows', 'docs/receipts/nuke-tests/20261019T143442-requirement-capture-legion2', 'docs/receipts/nuke-tests/Invoke-NukeTestsStep5Windows.ps1', 'docs/receipts/nuke-tests/Invoke-NukeTestsStep6Capture.ps1')
 }
+if ($GroupOverride) { $groups = $GroupOverride }
 
 # Literal secret values, held in memory only.
 $secrets = [System.Collections.Generic.List[object]]::new()
@@ -87,7 +90,7 @@ $rows = @($rows)
 "secret values loaded=$($secrets.Count) (values not printed): $(@($secrets | ForEach-Object Rule) -join ', ')"
 foreach ($g in $groups.Keys) {
     $r = @($rows | Where-Object Group -EQ $g)
-    '{0}: files={1} ignored={2} overMax={3} bytes={4:N0} withHits={5}' -f $g, $r.Count, @($r | Where-Object Ignored).Count, @($r | Where-Object OverMax).Count, ($r | Measure-Object Bytes -Sum).Sum, @($r | Where-Object { $_.Hits.Count }).Count
+    '{0}: files={1} ignored={2} overMax={3} bytes={4:N0} withHits={5}' -f $g, $r.Count, @($r | Where-Object Ignored).Count, @($r | Where-Object OverMax).Count, $(if ($r.Count) { ($r | Measure-Object Bytes -Sum).Sum } else { 0 }), @($r | Where-Object { $_.Hits.Count }).Count
 }
 'over max:'; $rows | Where-Object OverMax | ForEach-Object { '  {0} {1:N0}' -f $_.Path, $_.Bytes }
 'hits:'; $rows | Where-Object { $_.Hits.Count } | ForEach-Object { '  {0}: {1}' -f $_.Path, ($_.Hits -join ', ') }
