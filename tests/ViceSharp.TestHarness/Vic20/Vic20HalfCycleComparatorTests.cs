@@ -4,9 +4,10 @@ using System.Reflection;
 using Xunit;
 
 /// <summary>
-/// FR-SNP-005 AC3, TEST-SNP-002 AC4, and TR-CYCLE-001 AC4.
-/// Acceptance: lockstep compares the real CPU bus event on every half-cycle and
-/// reports the first differing cycle even when the architectural registers match.
+/// FR-SNP-005 AC3 and TEST-SNP-002 AC4 (the state-level comparator; the managed TR-CYCLE-001 AC4 evidence
+/// belongs to Phase E and is not claimed here: PLAN-NATIVERESTORE-001 D2, round 3b F10).
+/// Acceptance: the comparator reports the first differing field with the exact half-cycle
+/// even when the architectural registers match.
 /// </summary>
 public sealed class Vic20HalfCycleComparatorTests
 {

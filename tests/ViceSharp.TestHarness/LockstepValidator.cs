@@ -15,7 +15,7 @@ namespace ViceSharp.TestHarness;
 /// <summary>
 /// Lockstep cycle accurate validator comparing ViceSharp against original VICE
 /// </summary>
-public sealed class LockstepValidator : IDisposable
+public sealed partial class LockstepValidator : IDisposable
 {
     private const ushort KernalCloseVector = 0xFFC3;
     private static readonly string[] C64Drive8LoadSequence =
