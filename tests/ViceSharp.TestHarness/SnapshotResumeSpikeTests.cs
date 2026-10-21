@@ -44,6 +44,7 @@ public sealed class SnapshotResumeSpikeTests
     /// (true-drive DRIVE8-11 etc.) loads fully. Skips when the native shim or the .vsf
     /// fixture is absent.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void Spike_ExternalX64ScVsf_LoadDiagnostic()
     {
@@ -84,6 +85,7 @@ public sealed class SnapshotResumeSpikeTests
     /// values parsed from the snapshot's MAINCPU module. Skips when the native shim or
     /// the .vsf fixture is absent.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot()
     {
@@ -133,6 +135,7 @@ public sealed class SnapshotResumeSpikeTests
     /// 50k-cycle window is measured and logged (diagnostic, not gated). Skips when the
     /// native shim is unavailable.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void Spike_ShimRoundTripResume_MeasuresLockstepDepth()
     {

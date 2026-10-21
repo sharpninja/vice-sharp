@@ -21,6 +21,7 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: <see cref="LockstepValidator"/> reports zero cycles and
     /// no register mismatch (PC, A, X, Y, S, P) against native VICE.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void ResetStateMatches()
     {
@@ -40,6 +41,7 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: 100 cycles execute with no mismatch and the validator
     /// reports exactly 100 cycles executed.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void First100CyclesMatch()
     {
@@ -60,6 +62,7 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: 10,000 cycles execute with no register mismatch and
     /// the validator reports exactly 10,000 cycles executed.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void First10000CyclesMatch()
     {
@@ -79,6 +82,7 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: After 10,000 lockstep cycles, CIA1 Timer A live counters
     ///   match native GetCiaState.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void First10000_Cia1TimerA_MatchesNative()
     {
@@ -100,6 +104,7 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: 100,000 cycles execute with zero register mismatch and
     /// the validator reports exactly 100,000 cycles executed.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void First100000CyclesMatch()
     {
@@ -117,6 +122,7 @@ public sealed class LockstepValidationTests : IDisposable
     ///   idle loop and CIA Timer A IRQ have been running.
     /// Acceptance: After 100,000 lockstep cycles, CIA1 Timer A matches native.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void First100000_Cia1TimerA_MatchesNative()
     {

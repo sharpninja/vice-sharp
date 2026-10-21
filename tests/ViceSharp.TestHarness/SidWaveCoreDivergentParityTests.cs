@@ -215,6 +215,7 @@ public sealed class SidWaveCoreDivergentParityTests
     /// equal exactly (300 * 0xFFFF) mod 2^24 = 0x2BFED4, never the unmasked
     /// 0x012BFED4.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-ACC-02", ParityTag.Divergent, pending: false)]
     public void Accumulator_StoredValueIsMaskedTo24Bits()
@@ -266,6 +267,7 @@ public sealed class SidWaveCoreDivergentParityTests
     /// reads exactly 0x55 (sawtooth of 0x555555, top 8 of acc &gt;&gt; 12)
     /// on both sides.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-ACC-05", ParityTag.Divergent, pending: false)]
     public void Accumulator_PowersUpWithEvenBitsHigh0x555555()
@@ -313,6 +315,7 @@ public sealed class SidWaveCoreDivergentParityTests
     /// cycles change neither side (reset cleared FREQ to 0, wave.cc:304),
     /// proving the accumulator was preserved rather than re-derived.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-ACC-06", ParityTag.Divergent, pending: false)]
     public void Reset_PreservesAccumulatorExactly()
@@ -380,6 +383,7 @@ public sealed class SidWaveCoreDivergentParityTests
     /// +198500 exactly 0x00 (the twelfth fade drains the latch) and +199500
     /// still 0x00 (a zero latch never re-arms the fade timer).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-07", ParityTag.Divergent, pending: false)]
     public void Osc3_Waveform0ReadsFloatingDacFadeOfLastSelectedOutput()

@@ -57,6 +57,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// Acceptance: after Reset(), PixelSequencer.Cregs[0x00..0x0F] equal their
     /// own index (identity mapping), and Cregs[0x10..0x2E] equal 0x00.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-01", ParityTag.Divergent, pending: false)]
     public void Cregs_InitializedToIdentityLower16_ZeroForRest_AfterReset()
@@ -83,6 +84,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// to 3, the resolved background pixel in LineIndices equals 3 (cregs
     /// path), not 0 (live _regs path).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-02", ParityTag.Divergent, pending: false)]
     public void DrawColors8_ResolvesSymbolicCode_ViaCregs_NotLiveRegister()
@@ -115,6 +117,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// VicLastColorValueWrite=7 and ticking one cycle results in
     /// Cregs[0x21]==7 (the pending write was consumed by draw_colors8).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-03", ParityTag.Divergent, pending: false)]
     public void DrawColors8_AppliesPendingColorWrite_ToCregs_AtCycleStart()
@@ -142,6 +145,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// background pixel at column 0 of the affected cycle outputs 0 (old
     /// resolved value), while pixel 1 outputs 5 (new cregs value).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-04", ParityTag.Divergent, pending: false)]
     public void DrawColors6569_OnePixelRingDelay_PendingWrite_AffectsPixel1Not0()
@@ -183,6 +187,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// the affected cycle outputs 5 (no delay), contrasting with the 6569
     /// result of 0 from AC-04.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-05", ParityTag.Divergent, pending: false)]
     public void DrawColors8565_NoRingDelay_PendingWrite_AffectsPixel0Immediately()
@@ -216,6 +221,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// DisplayCycle (so last_color_reg=0x21 and pixel_buffer[0]=0x21), the
     /// 8565 grey-dot fires and LineIndices[DisplayCycle*8+0] equals 0x0F.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-06", ParityTag.Divergent, pending: false)]
     public void DrawColors8565_GreyDot_Pixel0Forced0x0F_WhenPixelBuffer0EqualsLastColorReg()
@@ -261,6 +267,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// cycle, VicLastColorRegWrite is reset to 0xFF and
     /// PixelSequencer.LastColorReg equals 0x21 (the transferred value).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-07", ParityTag.Divergent, pending: false)]
     public void UpdateCregs_TransfersLastColorReg_AndResetsChipPending_AfterCycle()
@@ -287,6 +294,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// DbufOffset equals DisplayCycle*8; after advancing to cycle 1 of the
     /// following line (BeginLine reset), DbufOffset equals 8.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-08", ParityTag.Divergent, pending: false)]
     public void DbufOffset_IncrementsBy8PerCycle_ResetsAtLineStart()
@@ -318,6 +326,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// Acceptance: MonitorColorStore(0x21, 9) immediately sets Cregs[0x21]=9,
     /// LastColorReg=0x21, LastColorValue=9 without waiting for a Tick.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-09", ParityTag.Divergent, pending: false)]
     public void MonitorColorStore_ImmediatelyUpdatesCregs_AndLastColorReg()
@@ -343,6 +352,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// NEW colour (7). The managed V3 path (resolving via live _regs) gives 7
     /// for pixel 0, proving the divergence.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-10", ParityTag.Divergent, pending: false)]
     public void DrawColors8_FullLine_MidLineBgChange_RingDelay_OldValueAtPixel0()
@@ -401,6 +411,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// display cycle results in Vmode11Pipe==0x10 ((ECM bit 6 of $D011)&gt;&gt;2),
     /// proving the OR-in occurred at pixel 4 within the cycle.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-03", ParityTag.Divergent, pending: false)]
     public void Vmode11Pipe_6569_RisingEdgeEcm_OredInAtPixel4()
@@ -425,6 +436,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// ECM ($D011 bit 6) and ticking one more cycle results in Vmode11Pipe==0
     /// (falling-edge AND-in at pixel 6 cleared the ECM bit).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-04", ParityTag.Divergent, pending: false)]
     public void Vmode11Pipe_6569_FallingEdgeEcm_AndedAtPixel6_ClearsEcm()
@@ -454,6 +466,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// Vmode11Pipe equals 0x10 after the following cycle (whole-cell update
     /// vs. 6569 which requires two separate edge events).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-05", ParityTag.Divergent, pending: false)]
     public void Vmode11Pipe_8565_WholeCellUpdate_AfterPixel7()
@@ -483,6 +496,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// Acceptance: with MCM=0 settled, Vmode16Pipe2 is 0; after enabling MCM
     /// and ticking one cycle, Vmode16Pipe2 equals 4 (($D016 &amp; 0x10) &gt;&gt; 2).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-06", ParityTag.Divergent, pending: false)]
     public void Vmode16Pipe2_McmTwoStagePipe_UpdatesOneCycleLate()
@@ -512,6 +526,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// writing ECM=1 and ticking one more cycle yields Vmode11Pipe=0x10,
     /// proving mode change is per-cell and was absent from DisplayCycle output.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-09", ParityTag.Divergent, pending: false)]
     public void Vmode11Pipe_MidLineEcmChange_IsPerCell_NotWholeLine()

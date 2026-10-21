@@ -19,6 +19,7 @@ public sealed class Vic20PixelFrameTests
     /// <summary>Past KERNAL screen clear into READY (same order as video lockstep smoke).</summary>
     public const int BootCycles = 2_000_000;
 
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void CaptureVisibleFrame_AfterBoot_ReturnsPalNormalCanvas()
     {
@@ -51,6 +52,7 @@ public sealed class Vic20PixelFrameTests
         Assert.True(nonZero > 100, $"expected painted pixels, nonZeroRgb={nonZero}");
     }
 
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void ManagedAndNative_FrameGeometry_MatchAfterBoot()
     {
@@ -90,6 +92,7 @@ public sealed class Vic20PixelFrameTests
             "both borders black - capture or present path likely empty");
     }
 
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void CaptureFrameIndices_DimensionsMatchBgra()
     {

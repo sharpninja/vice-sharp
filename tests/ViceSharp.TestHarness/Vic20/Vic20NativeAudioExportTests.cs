@@ -11,6 +11,7 @@ using Xunit;
 [Collection("NativeVice")]
 public sealed class Vic20NativeAudioExportTests
 {
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void RenderVic20Samples_AfterReset_ReturnsSamples()
     {

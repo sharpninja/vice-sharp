@@ -115,6 +115,7 @@ public sealed class VicIISpriteDmaNativeCheckpointTests
     /// Acceptance: Both native and managed assertions pass for all five model selectors.
     /// Byrd: checkpoint test; no production code change needed.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(NonPalAndExtendedModelSelectors))]
     public void Sprite3DmaWindow_NativeAndManagedBothActive_ModelSpecificCycleTable(string modelSelector)

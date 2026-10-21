@@ -21,6 +21,7 @@ public sealed class Vic20WorkloadLockstep
     /// <summary>~2s NTSC (2 * 1_022_727).</summary>
     public const int TwoSecondNtscCycles = 2_045_454;
 
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void EveryCycle_Workload_Match_FocusedPal()
     {
@@ -30,6 +31,7 @@ public sealed class Vic20WorkloadLockstep
         Assert.Equal(FocusedBudget, matched);
     }
 
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void EveryCycle_Workload_Match_FocusedNtsc()
     {
@@ -40,6 +42,7 @@ public sealed class Vic20WorkloadLockstep
     }
 
     /// <summary>AC-CPU-03: ≥2s PAL non-idle every-cycle. Requires VICESHARP_LOCKSTEP_2S=1.</summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void EveryCycle_Workload_Match_TwoSecondPal()
     {
@@ -54,6 +57,7 @@ public sealed class Vic20WorkloadLockstep
     }
 
     /// <summary>AC-CPU-04: ≥2s NTSC non-idle every-cycle. Requires VICESHARP_LOCKSTEP_2S=1.</summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void EveryCycle_Workload_Match_TwoSecondNtsc()
     {

@@ -12,6 +12,7 @@ public sealed class LockstepValidatorKernalCloseTests
     /// Acceptance: The C64 public CLOSE vector at $FFC3 is resolved through
     /// its indirect <c>JMP ($031C)</c> vector to the live close routine target.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void ResolveKernalJumpTarget_FollowsC64CloseIndirectVector()
     {

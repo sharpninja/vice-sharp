@@ -103,6 +103,7 @@ public sealed class SidNoiseDivergentParityTests
     /// from the cycle-15 value at cycle 18. Managed per-voice ShiftRegister(0)
     /// and ShiftPipeline(0) must match oracle bit-exactly at every step.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-05", ParityTag.Divergent, pending: false)]
     public void NoiseSrClocksWithTwoCyclePipelineDelay()
@@ -174,6 +175,7 @@ public sealed class SidNoiseDivergentParityTests
     /// must equal the oracle's value exactly. If the managed SR stayed at the
     /// reset seed, the assertion fails.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-06", ParityTag.Divergent, pending: false)]
     public void NoiseSrFreeRunsWithoutNoiseWaveformSelected()
@@ -227,6 +229,7 @@ public sealed class SidNoiseDivergentParityTests
     /// different cycles; managed ShiftRegister(0) and ShiftRegister(1) must each
     /// match the corresponding oracle register exactly.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-07", ParityTag.Divergent, pending: false)]
     public void NoiseSrIsPerVoiceNotShared()
@@ -284,6 +287,7 @@ public sealed class SidNoiseDivergentParityTests
     /// equals exactly NoiseOutput12(managed.VoiceShiftRegister(2)) >> 4.
     /// Both oracle and managed reads agree across all 300 cycles.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-08", ParityTag.Divergent, pending: false)]
     public void NoiseOsc3ReadsCorrect12BitTaps()
@@ -346,6 +350,7 @@ public sealed class SidNoiseDivergentParityTests
     /// the computed voice output is non-zero. Additionally, the oracle and managed
     /// agree on the OSC3 value with noise not selected.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-09", ParityTag.Divergent, pending: false)]
     public void NoNoiseMaskPassesSawtoothThroughUnaltered()
@@ -405,6 +410,7 @@ public sealed class SidNoiseDivergentParityTests
     /// oracle ShiftRegisters equal 0x7ffffe. All three managed VoiceShiftRegister
     /// values must also equal 0x7ffffe.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-10", ParityTag.Divergent, pending: false)]
     public void PowerOnSeedIs0x7FFFFe()
@@ -447,6 +453,7 @@ public sealed class SidNoiseDivergentParityTests
     /// Run 50 more cycles and verify oracle SR[0] stays 0. Managed SR(0) must
     /// equal oracle SR(0) at every sampled point (no reseed).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-11", ParityTag.Divergent, pending: false)]
     public void ZeroedShiftRegisterStaysLockedWithoutReseed()
@@ -515,6 +522,7 @@ public sealed class SidNoiseDivergentParityTests
     /// its pre-test value (not reset). Managed VoiceShiftRegister(0) must equal
     /// oracle ShiftRegister[0] exactly.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-12", ParityTag.Divergent, pending: false)]
     public void TestRising_DoesNotResetShiftRegister()
@@ -569,6 +577,7 @@ public sealed class SidNoiseDivergentParityTests
     /// result: bit0 = (~srBefore >> 17) and 1, new_sr = ((srBefore shl 1) or bit0)
     /// and 0x7FFFFF. Managed VoiceShiftRegister(0) must equal oracle exactly.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-13", ParityTag.Divergent, pending: false)]
     public void TestFalling_ClocksShiftRegisterOnceWithNotBit17()
@@ -625,6 +634,7 @@ public sealed class SidNoiseDivergentParityTests
     /// ShiftRegister[0] at that point is 0xffffff (unmasked fade from 0x7ffffe).
     /// Managed VoiceShiftRegister(0) must equal 0xffffff.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-14", ParityTag.Divergent, pending: false)]
     public void TestHeld_FadesShiftRegisterViaShiftregBitfade()
@@ -672,6 +682,7 @@ public sealed class SidNoiseDivergentParityTests
     /// cycle decrements it to 999. Both oracle and managed ShiftRegisterReset[0]
     /// equal 999.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-15", ParityTag.Divergent, pending: false)]
     public void TestBit_ResetFadeConstants6581Are35000And1000()
@@ -721,6 +732,7 @@ public sealed class SidNoiseDivergentParityTests
     /// differs from the unmodified free-run value. Managed VoiceShiftRegister(0)
     /// must equal oracle ShiftRegister[0] exactly at every sampled cycle.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-16", ParityTag.Divergent, pending: false)]
     public void CombinedWaveform_WritesOutputBackIntoShiftRegister()
@@ -770,6 +782,7 @@ public sealed class SidNoiseDivergentParityTests
     /// The oracle OSC3 reflects the write_shift_register clamping; agreement
     /// proves the managed path computes the same.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-17", ParityTag.Divergent, pending: false)]
     public void CombinedWaveform_NoiseOutputAndedWithWaveformOutput()
@@ -822,6 +835,7 @@ public sealed class SidNoiseDivergentParityTests
     /// is 0 and oracle read($1B) is 0. Managed VoiceShiftRegister(2) must equal 0
     /// and managed read($D41B) must equal 0.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-18", ParityTag.Divergent, pending: false)]
     public void NoisePlusCombinedWaveform_DecaysToZeroLockup()
@@ -885,6 +899,7 @@ public sealed class SidNoiseDivergentParityTests
     /// clocks on both sides, oracle ShiftRegister[0] must equal managed
     /// VoiceShiftRegister(0) exactly.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-19", ParityTag.Divergent, pending: false)]
     public void SingleCycleManagedMatchesOracleForTypicalFrequency()

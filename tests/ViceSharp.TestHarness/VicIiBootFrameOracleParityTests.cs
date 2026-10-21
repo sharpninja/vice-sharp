@@ -33,6 +33,7 @@ public sealed class VicIiBootFrameOracleParityTests
     /// the same frame count, all 384x272 visible palette indices are equal
     /// (zero mismatches).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void Boot_Frame_Indices_Match_Vice_Oracle_Bit_Exact()
     {

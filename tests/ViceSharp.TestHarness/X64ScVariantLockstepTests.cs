@@ -155,6 +155,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: <see cref="LockstepValidator.Run"/> reports Success
     /// after 0 cycles for every variant id.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ResetStateMatches_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -174,6 +175,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: <see cref="LockstepValidator.Run"/> reports Success
     /// and TotalCyclesExecuted equals the profile's CyclesPerLine.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstProfileScanlineMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -195,6 +197,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Success reported after CyclesPerLine*2 cycles and
     /// TotalCyclesExecuted equals that target.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstTwoProfileScanlinesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -217,6 +220,7 @@ public sealed class X64ScVariantLockstepTests
     /// CyclesPerLine*RasterLines cycles, with a full trace logged on
     /// failure.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -240,6 +244,7 @@ public sealed class X64ScVariantLockstepTests
     /// and running CyclesPerLine*RasterLines cycles, RAM windows still
     /// match between managed and native machines.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void D64Attach_FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -289,6 +294,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: RAM windows match between managed and native after
     /// CyclesPerLine*RasterLines cycles with Space pressed.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
     public void HeldSpace_FirstProfileFrameMatches_ForEveryKeyboardEnabledNoCartridgeX64ScVariant(string modelSelector)
@@ -345,6 +351,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after exactly
     /// CyclesPerLine*RasterLines*2 cycles for every no-cartridge variant.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstTwoProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -368,6 +375,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after exactly
     /// CyclesPerLine*RasterLines*10 cycles for every no-cartridge variant.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstTenProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -414,6 +422,7 @@ public sealed class X64ScVariantLockstepTests
     /// after exactly NominalClockHz*30 cycles with zero skipped coverage in
     /// this environment.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal()
     {
@@ -453,6 +462,7 @@ public sealed class X64ScVariantLockstepTests
     /// appears or appears at a different offset the test fails with both
     /// rendered screens dumped in the message.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
     public void BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant(string modelSelector)
@@ -504,6 +514,7 @@ public sealed class X64ScVariantLockstepTests
     /// machines display READY at the same offset; otherwise both screen
     /// dumps are surfaced in the failure message.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
     public void D64Attach_BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant(string modelSelector)
@@ -572,6 +583,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after one full frame for
     /// every (selector, mapping mode, size) combination.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(StandardCartridgeAutostartCases))]
     public void FirstProfileFrameMatches_ForStandardCartridgeAutostart(
@@ -598,6 +610,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after exactly two profile
     /// frames for every (selector, mapping mode, size) combination.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(StandardCartridgeAutostartCases))]
     public void FirstTwoProfileFramesMatch_ForStandardCartridgeAutostart(
@@ -624,6 +637,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator runs CyclesPerLine cycles, reports Success,
     /// and TotalCyclesExecuted equals CyclesPerLine.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -647,6 +661,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after CyclesPerLine*2
     /// cycles for both "ultimax" and "max" selectors.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -670,6 +685,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after exactly one full
     /// profile frame for "ultimax" and "max".
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -693,6 +709,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after CyclesPerLine *
     /// RasterLines * 2 cycles for both "ultimax" and "max".
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -717,6 +734,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after exactly
     /// CyclesPerLine cycles for "c64gs" and "gs".
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
@@ -739,6 +757,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after CyclesPerLine*2
     /// cycles for both "c64gs" and "gs".
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
@@ -761,6 +780,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after exactly
     /// CyclesPerLine*RasterLines cycles for "c64gs" and "gs".
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
@@ -784,6 +804,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: Validator reports Success after CyclesPerLine *
     /// RasterLines * 2 cycles for both "c64gs" and "gs".
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
@@ -808,6 +829,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: <c>AssertSelectedRamWindowsMatch</c> succeeds after
     /// reset and again after running CyclesPerLine cycles in lockstep.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void SelectedRamWindowsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -839,6 +861,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: <c>AssertSelectedRamWindowsMatch</c> succeeds after
     /// reset and after running CyclesPerLine*RasterLines cycles.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void SelectedRamWindowsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -864,6 +887,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: <c>AssertVicRasterTimingMatches</c> succeeds at reset
     /// and after CyclesPerLine cycles.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ViciiRasterTimingMatchesNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -904,6 +928,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: <c>AssertViciiRegistersMatch</c> succeeds after
     /// running CyclesPerLine cycles in lockstep.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ViciiRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -941,6 +966,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: For each probed CIA2 address, managed read equals
     /// native read; on mismatch the failure includes a phi1 diagnostic.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -983,6 +1009,7 @@ public sealed class X64ScVariantLockstepTests
     /// machines, every probed CIA2 address reads back the same byte
     /// from managed and native.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [InlineData("c64")]
     [InlineData("c64gs")]
@@ -1022,6 +1049,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: <c>AssertVicRasterTimingMatches</c> succeeds after
     /// CyclesPerLine*RasterLines cycles in lockstep.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ViciiRasterTimingMatchesNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -1057,6 +1085,7 @@ public sealed class X64ScVariantLockstepTests
     /// interrupt state) succeed both at reset and after CyclesPerLine
     /// cycles of lockstep.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ChipRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -1105,6 +1134,7 @@ public sealed class X64ScVariantLockstepTests
     /// Acceptance: CIA1, CIA2 (if connected), SID, and interrupt-state
     /// helpers all succeed after CyclesPerLine*RasterLines cycles.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ChipRegisterCheckpointsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -1146,6 +1176,7 @@ public sealed class X64ScVariantLockstepTests
     /// and the CPU register snapshot match native VICE for every
     /// required variant.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ResetAfterActivityMatchesNative_ForEveryRequiredX64ScVariant(string modelSelector)

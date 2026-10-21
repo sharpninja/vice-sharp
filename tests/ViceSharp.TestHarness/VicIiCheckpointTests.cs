@@ -123,6 +123,7 @@ public sealed class VicIiCheckpointTests
     /// and immediately reading it back yields the same 200 byte values.
     /// VICE vicii-fetch.c:135-166 (c-access reads, no write side-effect).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void Native_ScreenRam_ImmediateReadBackMatchesWrite()
     {
@@ -170,6 +171,7 @@ public sealed class VicIiCheckpointTests
     /// BASIC READY and does not reach rows 20-24 within a single 19,656-cycle frame.
     /// VICE vicii-fetch.c:135-166, vicii-cycle.c:541-548.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void Native_ScreenRamPattern_SurvivesOneFullPalFrame_VicDmaIsReadOnly()
     {

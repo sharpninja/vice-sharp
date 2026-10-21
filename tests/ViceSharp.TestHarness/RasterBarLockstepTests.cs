@@ -50,6 +50,7 @@ public sealed class RasterBarLockstepTests
     /// frame to compare; per-bar divergences are logged to artifacts, not gated. Skips
     /// when the shim or the staged .vsf is absent.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void RasterBarSchedule_Managed_MatchesVice_FromSnapshot()
     {
@@ -162,6 +163,7 @@ public sealed class RasterBarLockstepTests
     /// artifacts/rastercmp/perinstr-cycles.txt; the test requires only that the walk
     /// executed at least one instruction. Skips when the shim or the staged .vsf is absent.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void RasterLoop_PerInstructionCycles_MatchVice_FromSnapshot()
     {
@@ -264,6 +266,7 @@ public sealed class RasterBarLockstepTests
     /// artifacts/rastercmp/stad020-cyclelevel.txt. Skips when the shim or the staged
     /// .vsf is absent.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void StaD020_CycleLevel_StealState_VsVice_FromSnapshot()
     {

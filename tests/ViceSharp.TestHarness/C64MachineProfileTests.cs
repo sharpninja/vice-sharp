@@ -515,6 +515,7 @@ public sealed class C64MachineProfileTests
     /// each alias, GetModel reports the expected native model enum, and
     /// the model enum stays the same after a native reset.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(RequiredProfileAliases))]
     public void NativeVice_CreatesAndResetsEveryManagedX64ScAlias(string alias, string expectedId)
@@ -544,6 +545,7 @@ public sealed class C64MachineProfileTests
     /// reports the "c64" native model enum, and the value persists
     /// across a native reset.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void NativeVice_DefaultCreateSelectsPalBreadboxModel()
     {

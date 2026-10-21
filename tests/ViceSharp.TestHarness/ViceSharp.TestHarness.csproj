@@ -47,6 +47,9 @@
     -->
     <ProjectReference Include="../../src/ViceSharp.Xbox/ViceSharp.Xbox.csproj" />
     <ProjectReference Include="../ViceSharp.Benchmarks/ViceSharp.Benchmarks.csproj" />
+    <!-- PLAN-NATIVERESTORE-001 D2 load detector: build the fresh-process control console before the harness;
+         NativeLoadLogProcessControlTests launches it from its own output directory. Not referenced as an assembly. -->
+    <ProjectReference Include="../../tools/ViceSharp.NativeLoadProbe/ViceSharp.NativeLoadProbe.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>

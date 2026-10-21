@@ -14,7 +14,7 @@ namespace ViceSharp.Core;
 /// </summary>
 public static unsafe partial class ViceNativeXvic
 {
-    private const string LibraryName = "vice_xvic";
+    internal const string LibraryName = "vice_xvic";
     private static readonly string[] AlternateLibraryNames = ["vice_xvic"];
     private static readonly string[] RelativeSearchDirectories =
     [
@@ -29,7 +29,11 @@ public static unsafe partial class ViceNativeXvic
     private static readonly Lazy<string?> ResolvedLibraryPath = new(FindLibraryPath);
 
     // DllImport resolver is installed once on the Core assembly by ViceNative
-    // (combined vice_x64 + vice_xvic). Do not call SetDllImportResolver here.
+    // (combined vice_x64 + vice_xvic). Do not call SetDllImportResolver here; make sure it ran.
+    static ViceNativeXvic()
+    {
+        ViceNative.EnsureResolverInstalled();
+    }
 
     public static bool IsAvailable => ResolvedLibraryPath.Value is not null;
 
@@ -155,10 +159,17 @@ public static unsafe partial class ViceNativeXvic
 
     private static string? FindLibraryPath()
     {
+        // Evaluated once through ResolvedLibraryPath (IsAvailable, ResolvedPath, AvailabilityMessage,
+        // CreateInstance); recorded by the PLAN-NATIVERESTORE-001 D2 load detector (round 7 N24).
+        string? result = null;
         foreach (var candidatePath in EnumerateCandidateLibraryPaths())
-            return TryCreateRelocatedRuntime(candidatePath, out var relocatedPath) ? relocatedPath : candidatePath;
+        {
+            result = TryCreateRelocatedRuntime(candidatePath, out var relocatedPath) ? relocatedPath : candidatePath;
+            break;
+        }
 
-        return null;
+        NativeLoadAudit.Record(LibraryName, result, result is null ? NativeLoadAudit.Unresolved : NativeLoadAudit.Resolved);
+        return result;
     }
 
     private static IEnumerable<string> EnumerateCandidateLibraryPaths()

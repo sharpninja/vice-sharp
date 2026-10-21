@@ -10,6 +10,7 @@ using Xunit;
 [Collection("NativeVice")]
 public sealed class Vic20PixelLockstepDiag
 {
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void Dump_ReadyPal_IndexHistogram()
     {

@@ -39,6 +39,7 @@ public sealed class NativeResidueDiagTests
     /// VIC beam phase, raw+peek register files, zero-page RAM) is empty; on
     /// failure the message names the exact residue fields.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void FreshMachine_BootState_IsIdentical_AfterSnapshotResume()
     {
@@ -82,6 +83,7 @@ public sealed class NativeResidueDiagTests
     /// Acceptance: the before/after trace diff is empty; on failure the
     /// message names the first divergent checkpoint and field.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void FreshMachine_PostActivityResetTrace_IsIdentical_AfterSnapshotResume()
     {
@@ -130,6 +132,7 @@ public sealed class NativeResidueDiagTests
     /// (the fresh-boot baseline). RED before the fix (the planted value leaks
     /// through), GREEN after.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void FreshMachine_DriveCycleAccum_IsZero_AfterResidue()
     {
@@ -175,6 +178,7 @@ public sealed class NativeResidueDiagTests
     /// Acceptance: after both scenarios the drive-8 clock residue is 0/0/0; the
     /// poison steps first prove the scratch drive carried nonzero clocks.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void FreshMachine_DriveAttachDetachClocks_AreZero_AfterResidue()
     {

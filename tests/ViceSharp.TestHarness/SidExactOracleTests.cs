@@ -35,6 +35,7 @@ public sealed class SidExactOracleTests
     /// accumulator == (0x1000 * 1000) &amp; 0xFFFFFF and OSC3 == accumulator &gt;&gt; 16
     /// (bit-exact, no tolerance).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void ExactClock_AccumulatorFollowsClosedForm()
     {
@@ -74,6 +75,7 @@ public sealed class SidExactOracleTests
     /// cycles exactly (single-cycle trace: counter reaches 148, one reset/arm
     /// cycle, two envelope_pipeline cycles overlapping the next count).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void ExactClock_AttackStepSpacing_MatchesSingleCyclePipeline()
     {
@@ -122,6 +124,7 @@ public sealed class SidExactOracleTests
     /// reset/write/clock sequence report byte-identical vice_sid_exact_state
     /// structs (full struct memory compare, delta 0).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void ExactClock_IsDeterministicAcrossInstances()
     {
@@ -162,6 +165,7 @@ public sealed class SidExactOracleTests
     /// sustain=0xF, ENV3 register read == exported envelope_counter[2] == 0xFF
     /// (a quiet plateau, so the ENV3 sample latch and the live counter agree).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void ExactRead_Env3MatchesExportedEnvelopeCounter()
     {

@@ -28,6 +28,7 @@ public sealed class Vic20DivergeProbe
     /// Every-cycle CPU match for a focused multi-hundred-k window (past former 5005/5023 fails).
     /// Fails closed when any pinned oracle prerequisite is absent or stale.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void EveryCycle_CpuRegs_Match_FocusedWindow()
     {
@@ -42,6 +43,7 @@ public sealed class Vic20DivergeProbe
     /// Long every-cycle probe (~2s PAL). Skips unless VICESHARP_LOCKSTEP_2S=1
     /// so the default Vic20 filter stays fast.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void EveryCycle_CpuRegs_Match_TwoSecondPal()
     {
@@ -58,6 +60,7 @@ public sealed class Vic20DivergeProbe
     /// Long every-cycle probe (~10s PAL). Skips unless VICESHARP_LOCKSTEP_10S=1
     /// (wall ~30-90s; keep off default filters).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void EveryCycle_CpuRegs_Match_TenSecondPal()
     {
@@ -73,6 +76,7 @@ public sealed class Vic20DivergeProbe
     /// <summary>
     /// Long every-cycle probe (~10s NTSC). Skips unless VICESHARP_LOCKSTEP_10S=1.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void EveryCycle_CpuRegs_Match_TenSecondNtsc()
     {

@@ -48,6 +48,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// (pot.cc:25-29); the managed chip returned _registers[0x19] (0).
     /// Acceptance: managed $D419 read equals the oracle read($19) equals 0xFF.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-POT-01", ParityTag.Divergent, pending: false)]
     public void PotX_Returns0xFF_MatchingOracle()
@@ -78,6 +79,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// Acceptance: the oracle read($19) is 0xFF, and after the managed read the
     /// managed bus seam holds 0xFF with a full 6581 ttl (0x1D00).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-POT-02", ParityTag.Divergent, pending: false)]
     public void PotX_Read_LatchesBusValueAndTtl()
@@ -108,6 +110,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// Acceptance: the oracle read($1A) is 0xFF, the managed read matches, and
     /// the managed bus seam latches 0xFF with a full ttl.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-POT-03", ParityTag.Divergent, pending: false)]
     public void PotY_Returns0xFFAndLatchesBus()
@@ -140,6 +143,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// Acceptance: after arbitrary register writes and 1000 lockstep cycles,
     /// both POTX and POTY read exactly 0xFF on both sides.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-POT-04", ParityTag.Divergent, pending: false)]
     public void PotReads_Constant0xFF_AcrossWritesAndCycles()
@@ -183,6 +187,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// holds the written byte with a full 6581 ttl, and a following write-only
     /// read reports it on the oracle read path.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-01", ParityTag.Divergent, pending: false)]
     public void AnyWrite_SetsBusValueAndTtl_MatchingOracle()
@@ -221,6 +226,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// oracle's value bit-exactly and leaves the managed bus seam equal to the
     /// value just returned.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-02", ParityTag.Divergent, pending: false)]
     public void ReadOf19Through1C_SetsBusAndReturnsBusValue()
@@ -259,6 +265,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// both sides; after an OSC3 read latches a new value, a $D405 read returns
     /// that OSC3 byte on both sides.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-03", ParityTag.Divergent, pending: false)]
     public void WriteOnlyRegisterRead_ReturnsSharedBusValue()
@@ -299,6 +306,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// Acceptance: after a write the value survives ttl-1 cycles and the bus
     /// reads zero on the ttl-th cycle.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-04", ParityTag.Divergent, pending: false)]
     public void BusAging_OneCycleDecrement_ZeroesAtTtlExpiry()
@@ -330,6 +338,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// Acceptance: after a write, N single ticks (for several N below the ttl)
     /// leave DataBusValueTtl == 0x1D00 - N.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-05", ParityTag.Divergent, pending: false)]
     public void BusAging_NCycles_EquivalentToBatchedDecrement()
@@ -354,6 +363,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// S1; authored as a regression lock.
     /// Acceptance: managed DataBusValueTtl right after a write equals 0x1D00.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-06", ParityTag.Divergent, pending: false)]
     public void DataBusTtl6581_Is0x1D00()
@@ -390,6 +400,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// Acceptance: after a write then Reset, both DataBusValue and
     /// DataBusValueTtl are 0.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-08", ParityTag.Divergent, pending: false)]
     public void Reset_ClearsBusValueAndTtl()
@@ -411,6 +422,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// Acceptance: after driving voice 3, an OSC3 read followed by a $D400 read
     /// returns the same OSC3 byte on both sides.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-09", ParityTag.Divergent, pending: false)]
     public void Osc3Read_LatchesBus()
@@ -444,6 +456,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// Acceptance: after driving voice 3, an ENV3 read followed by a $D400 read
     /// returns the same ENV3 byte on both sides.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-10", ParityTag.Divergent, pending: false)]
     public void Env3Read_LatchesBus()

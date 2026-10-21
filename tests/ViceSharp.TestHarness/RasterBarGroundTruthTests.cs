@@ -56,6 +56,7 @@ public sealed class RasterBarGroundTruthTests
     /// passing no-op); the schedule is written to artifacts/rastercmp/groundtruth-bars.txt.
     /// Skips when the shim or the staged .vsf is absent.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void GroundTruth_RasterBarSchedule_FromUserSnapshot()
     {

@@ -38,6 +38,7 @@ public sealed class SidOutputAmplifyParityTests
     ///   equals AmplifyToPcm16(CycleExternalFilterOutput)/32768f exactly.
     /// viceCite: sid.h:190-194.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OUTPUT-01", ParityTag.Divergent, pending: false)]
     public void Output_CompositeLockstepAndAmplifiedFloat()

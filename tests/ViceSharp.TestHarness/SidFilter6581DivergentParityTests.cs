@@ -577,6 +577,7 @@ public sealed class SidFilter6581DivergentParityTests
     ///   possible if the filter sub-steps at dt=3 exactly like reSID.
     /// viceCite: filter8580new.h:872-892.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-6581-27", ParityTag.Divergent, pending: false)]
     public void FilterSubStepping_DeltaTFlt3_BatchedLockstep()
@@ -835,6 +836,7 @@ public sealed class SidFilter6581DivergentParityTests
     ///   the numeric op-amp model. Compared vs the oracle filter-state probe [8].
     /// viceCite: sid.cc:745-828.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-01", ParityTag.Divergent, pending: false)]
     public void FilterClockedPerPhi2_StateEvolvesEachTick()
@@ -857,6 +859,7 @@ public sealed class SidFilter6581DivergentParityTests
     ///   CycleExternalFilterOutput = (ExtFiltVlp - ExtFiltVhp) >> 11.
     /// viceCite: sid.cc:831.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-02", ParityTag.Divergent, pending: false)]
     public void ExtFiltClockedPerPhi2_VlpEvolves()
@@ -971,6 +974,7 @@ public sealed class SidFilter6581DivergentParityTests
     ///   sub-steps at dt=3 exactly like reSID.
     /// viceCite: filter8580new.h:872-892.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-03", ParityTag.Divergent, pending: false)]
     public void FilterClockSubStepping_DeltaTFlt3_BatchedLockstep()
@@ -991,6 +995,7 @@ public sealed class SidFilter6581DivergentParityTests
     ///   filter sub-steps at dt=8 exactly like reSID.
     /// viceCite: extfilt.h:134-152.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-04", ParityTag.Divergent, pending: false)]
     public void ExtFiltSubStepping_DeltaTFlt8_BatchedLockstep()

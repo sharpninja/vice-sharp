@@ -66,6 +66,7 @@ public sealed class Vic20SnapshotRoundTripTests
     /// path by resetting managed only, restore blob, then continue lockstep
     /// only if native was also reset and re-run to same cycle (deterministic).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [Fact]
     public void Unexpanded_ManagedBlob_ResumeLockstep_Short()
     {

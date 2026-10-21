@@ -27,6 +27,7 @@ public sealed class CaptureRunLogUtilityTests
     /// number of per-cycle entries, saves a v1 cpulog to the requested path
     /// and reports its size; without them it skips.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void CaptureBaselineRunLog_FromEnvironment()
     {

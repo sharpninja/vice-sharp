@@ -113,6 +113,7 @@ public sealed class SidWaveOsc3DivergentParityTests
     /// 300 (rising half: 0x96 = doubled phase 0x4B) and cycle 600 (folded
     /// half after the MSB at cycle 512: 0xD3), matching wave.cc:96 exactly.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-01", ParityTag.Divergent, pending: false)]
     public void Osc3_ReturnsSelectedTriangleWaveformOutputTopBits()
@@ -172,6 +173,7 @@ public sealed class SidWaveOsc3DivergentParityTests
     /// reads exactly 0xD3 (MSB-folded doubled slope, wave.cc:96): the same
     /// phase, two selection-dependent readbacks.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-02", ParityTag.Divergent, pending: false)]
     public void Osc3_IsWaveformDependentNotPhaseDependent()
@@ -236,6 +238,7 @@ public sealed class SidWaveOsc3DivergentParityTests
     /// cycle 512 (the first cycle with accumulator &gt;&gt; 12 == pw) still
     /// reads 0x00 and cycle 513 reads 0xFF.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-03", ParityTag.Divergent, pending: false)]
     public void Osc3_PulseOnlyReadsRailsNotARamp()
@@ -303,6 +306,7 @@ public sealed class SidWaveOsc3DivergentParityTests
     /// managed noise register, and the oracle register demonstrably shifted
     /// during the window.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-04", ParityTag.Divergent, pending: false)]
     public void Osc3_NoiseReadsNoiseOutputTopBits()

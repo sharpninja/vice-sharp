@@ -61,6 +61,7 @@ public sealed class VicExactFrameOracleTests
     /// $D020 low nibble, and the frame contains more than one distinct index
     /// (border + screen background at READY).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void CaptureIndices_ReadyScreen_GeometryAndIndexDomainExact()
     {
@@ -97,6 +98,7 @@ public sealed class VicExactFrameOracleTests
     /// snapshot and stepped the same two PAL frames produce byte-identical
     /// index captures (delta 0 across all 104448 pixels).
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void CaptureIndices_Deterministic_AcrossInstances()
     {
@@ -132,6 +134,7 @@ public sealed class VicExactFrameOracleTests
     /// capture: pixels with equal indices have equal BGRA values and pixels
     /// with different indices have different BGRA values.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void CaptureVisibleFrame_RealPath_MatchesIndexIdentity()
     {

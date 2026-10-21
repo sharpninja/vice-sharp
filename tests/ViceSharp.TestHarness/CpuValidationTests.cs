@@ -25,6 +25,7 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     /// Acceptance: Managed register file (A, X, Y, P, S, PC) is bit-for-bit
     /// equal to the native VICE CPU's register file immediately after reset.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void Reset_StateMatchesVICE()
     {
@@ -42,6 +43,7 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     /// of the first 64 cycles; any mismatch fails the test with the cycle
     /// number and offending registers.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void First64Cycles_MatchVICE()
     {
@@ -64,6 +66,7 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     /// when any cycle differs the test throws a combined trace including the
     /// pre-step, post-step and divergence summary for each failing cycle.
     /// </summary>
+    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     public void BootstrapTrace_First12Cycles()
     {
