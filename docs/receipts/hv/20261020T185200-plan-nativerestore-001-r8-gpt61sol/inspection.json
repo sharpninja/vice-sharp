@@ -1,0 +1,598 @@
+{
+  "timestampLocal": "2026-10-20T19:13:41",
+  "patchLines": 599,
+  "hunks": [
+    "@@ -32,6 +32,10 @@",
+    "@@ -44,11 +48,32 @@ CLOCK maincpu_clk_limit = 0L;",
+    "@@ -314,9 +314,13 @@ int drive_snapshot_read_module(snapshot_t *s)",
+    "@@ -188,6 +188,10 @@ void drivecpu_reset_clk(diskunit_context_t *drv)",
+    "@@ -170,6 +170,10 @@ void drivecpu65c02_reset_clk(diskunit_context_t *drv)",
+    "@@ -56,6 +56,10 @@",
+    "@@ -196,7 +200,24 @@ inline static void check_ba(void)",
+    "@@ -752,7 +773,37 @@ void maincpu_mainloop(void)",
+    "@@ -951,11 +1002,31 @@ int maincpu_snapshot_read_module(snapshot_t *s)",
+    "@@ -47,6 +47,10 @@",
+    "@@ -579,7 +583,35 @@ void maincpu_mainloop(void)",
+    "@@ -551,6 +551,16 @@ public:",
+    "@@ -61,6 +61,10 @@ public:",
+    "@@ -449,4 +449,113 @@ sid_engine_t resid_hooks =",
+    "@@ -31,6 +31,10 @@",
+    "@@ -40,7 +44,26 @@ CLOCK maincpu_clk_limit = 0L;",
+    "@@ -306,7 +306,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, float *pbuf, int",
+    "@@ -338,7 +350,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, int16_t *pbuf, in",
+    "@@ -578,3 +602,77 @@ void sound_machine_enable(int enable)",
+    "@@ -36,4 +36,9 @@ void vic_sound_reset(sound_t *psid, CLOCK cpu_clk);"
+  ],
+  "files": [
+    "diff --git a/vice/src/c64/c64cpusc.c b/vice/src/c64/c64cpusc.c",
+    "diff --git a/vice/src/drive/drive-snapshot.c b/vice/src/drive/drive-snapshot.c",
+    "diff --git a/vice/src/drive/drivecpu.c b/vice/src/drive/drivecpu.c",
+    "diff --git a/vice/src/drive/drivecpu65c02.c b/vice/src/drive/drivecpu65c02.c",
+    "diff --git a/vice/src/mainc64cpu.c b/vice/src/mainc64cpu.c",
+    "diff --git a/vice/src/mainviccpu.c b/vice/src/mainviccpu.c",
+    "diff --git a/vice/src/resid/filter8580new.h b/vice/src/resid/filter8580new.h",
+    "diff --git a/vice/src/resid/sid.h b/vice/src/resid/sid.h",
+    "diff --git a/vice/src/sid/resid.cc b/vice/src/sid/resid.cc",
+    "diff --git a/vice/src/vic20/vic20cpu.c b/vice/src/vic20/vic20cpu.c",
+    "diff --git a/vice/src/vic20/vic20sound.c b/vice/src/vic20/vic20sound.c",
+    "diff --git a/vice/src/vic20/vic20sound.h b/vice/src/vic20/vic20sound.h"
+  ],
+  "inventoryCount": 2527,
+  "extensionCounts": [
+    {
+      "Name": ".Po",
+      "Count": 1432
+    },
+    {
+      "Name": ".o",
+      "Count": 745
+    },
+    {
+      "Name": "",
+      "Count": 121
+    },
+    {
+      "Name": ".in",
+      "Count": 107
+    },
+    {
+      "Name": ".a",
+      "Count": 59
+    },
+    {
+      "Name": ".h",
+      "Count": 17
+    },
+    {
+      "Name": ".out",
+      "Count": 10
+    },
+    {
+      "Name": ".1",
+      "Count": 6
+    },
+    {
+      "Name": ".0",
+      "Count": 6
+    },
+    {
+      "Name": ".2",
+      "Count": 6
+    },
+    {
+      "Name": ".status",
+      "Count": 3
+    },
+    {
+      "Name": ".log",
+      "Count": 3
+    },
+    {
+      "Name": ".m4",
+      "Count": 3
+    },
+    {
+      "Name": ".3",
+      "Count": 2
+    },
+    {
+      "Name": ".c",
+      "Count": 2
+    },
+    {
+      "Name": ".exe",
+      "Count": 2
+    },
+    {
+      "Name": ".o65",
+      "Count": 1
+    },
+    {
+      "Name": ".sh",
+      "Count": 1
+    },
+    {
+      "Name": ".vice-shim-configure-flags",
+      "Count": 1
+    }
+  ],
+  "makefiles": 106,
+  "fixtures": [
+    {
+      "path": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+      "sha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "length": 190854,
+      "modules": [
+        {
+          "name": "MAINCPU",
+          "major": 1,
+          "minor": 2,
+          "offset": 58,
+          "length": 113,
+          "payloadLength": 91,
+          "clock": 109163946,
+          "A": 194,
+          "X": 2,
+          "Y": 0,
+          "SP": 250,
+          "PC": 22377,
+          "P": 160
+        },
+        {
+          "name": "C64MEM",
+          "major": 0,
+          "minor": 1,
+          "offset": 171,
+          "length": 65577,
+          "payloadLength": 65555
+        },
+        {
+          "name": "C64CART",
+          "major": 0,
+          "minor": 1,
+          "offset": 65748,
+          "length": 23,
+          "payloadLength": 1
+        },
+        {
+          "name": "CIA1",
+          "major": 2,
+          "minor": 5,
+          "offset": 65771,
+          "length": 99,
+          "payloadLength": 77
+        },
+        {
+          "name": "CIA2",
+          "major": 2,
+          "minor": 5,
+          "offset": 65870,
+          "length": 99,
+          "payloadLength": 77
+        },
+        {
+          "name": "SID",
+          "major": 1,
+          "minor": 5,
+          "offset": 65969,
+          "length": 58,
+          "payloadLength": 36
+        },
+        {
+          "name": "SIDEXTENDED",
+          "major": 1,
+          "minor": 4,
+          "offset": 66027,
+          "length": 155,
+          "payloadLength": 133
+        },
+        {
+          "name": "VDRIVEIMAGE8",
+          "major": 2,
+          "minor": 0,
+          "offset": 66182,
+          "length": 22,
+          "payloadLength": 0
+        },
+        {
+          "name": "DRIVE8",
+          "major": 2,
+          "minor": 0,
+          "offset": 66204,
+          "length": 24,
+          "payloadLength": 2,
+          "payloadFirstBytes": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "DRIVE9",
+          "major": 2,
+          "minor": 0,
+          "offset": 66228,
+          "length": 167,
+          "payloadLength": 145,
+          "payloadFirstBytes": [
+            1,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "DRIVE10",
+          "major": 2,
+          "minor": 0,
+          "offset": 66395,
+          "length": 167,
+          "payloadLength": 145,
+          "payloadFirstBytes": [
+            1,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "DRIVE11",
+          "major": 2,
+          "minor": 0,
+          "offset": 66562,
+          "length": 167,
+          "payloadLength": 145,
+          "payloadFirstBytes": [
+            1,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "FSDRIVE",
+          "major": 0,
+          "minor": 0,
+          "offset": 66729,
+          "length": 280,
+          "payloadLength": 258
+        },
+        {
+          "name": "VIC-II",
+          "major": 1,
+          "minor": 3,
+          "offset": 67009,
+          "length": 123437,
+          "payloadLength": 123415
+        },
+        {
+          "name": "GLUE",
+          "major": 1,
+          "minor": 0,
+          "offset": 190446,
+          "length": 25,
+          "payloadLength": 3
+        },
+        {
+          "name": "C64MEMHACKS",
+          "major": 0,
+          "minor": 0,
+          "offset": 190471,
+          "length": 23,
+          "payloadLength": 1
+        },
+        {
+          "name": "TAPEPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 190494,
+          "length": 24,
+          "payloadLength": 2
+        },
+        {
+          "name": "DATASETTE",
+          "major": 1,
+          "minor": 5,
+          "offset": 190518,
+          "length": 100,
+          "payloadLength": 78
+        },
+        {
+          "name": "KEYBOARD",
+          "major": 1,
+          "minor": 1,
+          "offset": 190618,
+          "length": 118,
+          "payloadLength": 96
+        },
+        {
+          "name": "JOYPORT0",
+          "major": 0,
+          "minor": 0,
+          "offset": 190736,
+          "length": 23,
+          "payloadLength": 1
+        },
+        {
+          "name": "JOYSTICK0",
+          "major": 1,
+          "minor": 2,
+          "offset": 190759,
+          "length": 24,
+          "payloadLength": 2
+        },
+        {
+          "name": "JOYPORT1",
+          "major": 0,
+          "minor": 0,
+          "offset": 190783,
+          "length": 23,
+          "payloadLength": 1
+        },
+        {
+          "name": "JOYSTICK1",
+          "major": 1,
+          "minor": 2,
+          "offset": 190806,
+          "length": 24,
+          "payloadLength": 2
+        },
+        {
+          "name": "USERPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 190830,
+          "length": 24,
+          "payloadLength": 2
+        }
+      ],
+      "parsedTo": 190854
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.4.vsf",
+      "sha256": "1D6A178A1C415FA1B5BCCC30551E5FC210701E363762B05EEDCDF237F88F8EFF",
+      "length": 193261,
+      "modules": [
+        {
+          "name": "MAINCPU",
+          "major": 1,
+          "minor": 4,
+          "offset": 58,
+          "length": 125,
+          "payloadLength": 103,
+          "clock": 30250590,
+          "A": 0,
+          "X": 1,
+          "Y": 214,
+          "SP": 242,
+          "PC": 3937,
+          "P": 224
+        },
+        {
+          "name": "C64MEM",
+          "major": 0,
+          "minor": 1,
+          "offset": 183,
+          "length": 65577,
+          "payloadLength": 65555
+        },
+        {
+          "name": "C64CART",
+          "major": 0,
+          "minor": 1,
+          "offset": 65760,
+          "length": 23,
+          "payloadLength": 1
+        },
+        {
+          "name": "CIA1",
+          "major": 2,
+          "minor": 5,
+          "offset": 65783,
+          "length": 99,
+          "payloadLength": 77
+        },
+        {
+          "name": "CIA2",
+          "major": 2,
+          "minor": 5,
+          "offset": 65882,
+          "length": 99,
+          "payloadLength": 77
+        },
+        {
+          "name": "SID",
+          "major": 1,
+          "minor": 5,
+          "offset": 65981,
+          "length": 58,
+          "payloadLength": 36
+        },
+        {
+          "name": "SIDEXTENDED",
+          "major": 1,
+          "minor": 4,
+          "offset": 66039,
+          "length": 155,
+          "payloadLength": 133
+        },
+        {
+          "name": "DRIVE8",
+          "major": 2,
+          "minor": 0,
+          "offset": 66194,
+          "length": 167,
+          "payloadLength": 145,
+          "payloadFirstBytes": [
+            1,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "DRIVE9",
+          "major": 2,
+          "minor": 0,
+          "offset": 66361,
+          "length": 167,
+          "payloadLength": 145,
+          "payloadFirstBytes": [
+            1,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "DRIVE10",
+          "major": 2,
+          "minor": 0,
+          "offset": 66528,
+          "length": 167,
+          "payloadLength": 145,
+          "payloadFirstBytes": [
+            1,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "DRIVE11",
+          "major": 2,
+          "minor": 0,
+          "offset": 66695,
+          "length": 167,
+          "payloadLength": 145,
+          "payloadFirstBytes": [
+            1,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "DRIVECPU0",
+          "major": 1,
+          "minor": 3,
+          "offset": 66862,
+          "length": 2174,
+          "payloadLength": 2152
+        },
+        {
+          "name": "1541VIA1D0",
+          "major": 2,
+          "minor": 2,
+          "offset": 69036,
+          "length": 50,
+          "payloadLength": 28
+        },
+        {
+          "name": "VIA2D0",
+          "major": 2,
+          "minor": 2,
+          "offset": 69086,
+          "length": 50,
+          "payloadLength": 28
+        },
+        {
+          "name": "FSDRIVE",
+          "major": 0,
+          "minor": 0,
+          "offset": 69136,
+          "length": 280,
+          "payloadLength": 258
+        },
+        {
+          "name": "VIC-II",
+          "major": 1,
+          "minor": 3,
+          "offset": 69416,
+          "length": 123437,
+          "payloadLength": 123415
+        },
+        {
+          "name": "GLUE",
+          "major": 1,
+          "minor": 0,
+          "offset": 192853,
+          "length": 25,
+          "payloadLength": 3
+        },
+        {
+          "name": "C64MEMHACKS",
+          "major": 0,
+          "minor": 0,
+          "offset": 192878,
+          "length": 23,
+          "payloadLength": 1
+        },
+        {
+          "name": "TAPEPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 192901,
+          "length": 24,
+          "payloadLength": 2
+        },
+        {
+          "name": "DATASETTE",
+          "major": 1,
+          "minor": 5,
+          "offset": 192925,
+          "length": 100,
+          "payloadLength": 78
+        },
+        {
+          "name": "KEYBOARD",
+          "major": 1,
+          "minor": 1,
+          "offset": 193025,
+          "length": 118,
+          "payloadLength": 96
+        },
+        {
+          "name": "JOYPORT0",
+          "major": 0,
+          "minor": 0,
+          "offset": 193143,
+          "length": 23,
+          "payloadLength": 1
+        },
+        {
+          "name": "JOYSTICK0",
+          "major": 1,
+          "minor": 2,
+          "offset": 193166,
+          "length": 24,
+          "payloadLength": 2
+        },
+        {
+          "name": "JOYPORT1",
+          "major": 0,
+          "minor": 0,
+          "offset": 193190,
+          "length": 23,
+          "payloadLength": 1
+        },
+        {
+          "name": "JOYSTICK1",
+          "major": 1,
+          "minor": 2,
+          "offset": 193213,
+          "length": 24,
+          "payloadLength": 2
+        },
+        {
+          "name": "USERPORT",
+          "major": 1,
+          "minor": 0,
+          "offset": 193237,
+          "length": 24,
+          "payloadLength": 2
+        }
+      ],
+      "parsedTo": 193261
+    }
+  ]
+}

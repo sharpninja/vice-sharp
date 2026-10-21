@@ -1,0 +1,32 @@
+type: result
+payload:
+  requestId: req-20261021T000058Z-143d
+  result:
+    id: TEST-VICE-001
+    title: Immutable native VICE oracle integrity gates
+    description: Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable.
+    status: pending
+    priority: critical
+    area: VICE
+    testType: unit
+    notes: Covers FR-VICE-001 and TR-VICE-ORACLE-001.
+    acceptanceCriteria:
+    - id: ac-01
+      text: A clean-target preflight passes for the pinned native/vice commit and a simulated dirty-target fixture is rejected before parity execution.
+      isSatisfied: false
+    - id: ac-02
+      text: The wrapper integration test proves no tracked native/vice file changes across build and execution.
+      isSatisfied: false
+    - id: ac-03
+      text: Oracle receipts prove native commit identity, clean tracked source, wrapper provenance, exact commands, and failed 0 skipped 0 for the claimed gate.
+      isSatisfied: false
+    - id: ac-04
+      text: When a required real bus or timing observation is unavailable, the test fails at that first missing observation and does not substitute PeekBus, PC inference, fabricated data, or a modified native build.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T00:00:59.9621774+00:00
+    updatedAt: 2026-10-21T00:00:59.9623511+00:00
+  deprecated: true
+
+---
+

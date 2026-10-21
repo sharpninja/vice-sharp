@@ -1,0 +1,31 @@
+type: result
+payload:
+  requestId: req-20261021T000052Z-2246
+  result:
+    id: FR-VICE-001
+    title: Immutable native VICE behavioral target
+    description: ViceSharp shall conform managed emulator behavior to a pinned, unmodified native VICE revision. Native VICE source and oracle behavior shall never be changed to make ViceSharp pass; observation and control integrations must be implemented as wrappers outside native/vice.
+    status: pending
+    priority: critical
+    area: VICE
+    notes: 'Operator directive 2026-10-03: VICE native is the immutable target. Wrappers are allowed; modifying VICE is forbidden.'
+    acceptanceCriteria:
+    - id: ac-01
+      text: Every parity or lockstep acceptance run identifies the pinned native/vice commit and proves no tracked native/vice file differs from that commit before or after the run.
+      isSatisfied: false
+    - id: ac-02
+      text: Emulator-behavior corrections are made in managed ViceSharp; native integration code may wrap or observe VICE only from outside native/vice and may not alter target source or behavior.
+      isSatisfied: false
+    - id: ac-03
+      text: Oracle binaries used as acceptance evidence are built from the pinned unmodified VICE target; evidence from a patched or behavior-modified VICE build is rejected.
+      isSatisfied: false
+    - id: ac-04
+      text: When an external wrapper cannot obtain a required observation from immutable VICE, the parity gate fails closed and reports the missing observation instead of inferring data or changing VICE.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T00:00:53.8284120+00:00
+    updatedAt: 2026-10-21T00:00:53.8285685+00:00
+  deprecated: true
+
+---
+

@@ -1,0 +1,46 @@
+type: result
+payload:
+  requestId: req-20261021T000427Z-0e21
+  result:
+    id: FR-SNP-005
+    title: Native VICE Snapshot Interoperability
+    description: For supported x64sc C64 and xvic VIC-20 systems, native VICE .vsf is the canonical ViceSharp snapshot format. All normal supported public and Avalonia desktop capture, save, restore, file, quick-slot, and named-slot paths must read or write native VICE snapshots through the existing managed state-transfer bridge. Proprietary ViceSharp runtime and replay payloads are not peer snapshot formats and may only remain behind an explicit legacy migration boundary.
+    status: pending
+    priority: critical
+    area: SNP
+    notes: 'Operator correction 2026-10-03: Native VICE VSF support has been the actual ViceSharp snapshot-format requirement since day one and must not be treated as secondary or opt-in. This preserves and completes the existing managed VSF resume bridge and does not replace or retire FR-VSFLOCKSTEP-001.'
+    acceptanceCriteria:
+    - id: ac-01
+      text: ViceSharp loads native VICE .vsf snapshots produced by x64sc and xvic for supported C64 and VIC-20 configurations without translating them to a ViceSharp-only snapshot format first.
+      isSatisfied: false
+    - id: ac-02
+      text: After native .vsf load, managed CPU, RAM, video-chip, CIA/VIA, SID/VIC audio, machine timing, cartridge, tape, and drive state represented by the snapshot matches the corresponding VICE resumed state at the same checkpoint.
+      isSatisfied: false
+    - id: ac-03
+      text: Starting from the same native .vsf checkpoint, ViceSharp and the corresponding VICE engine remain in checkpoint and cycle lockstep for at least 100000 cycles with zero CPU, bus, video, timer, interrupt, and mapped-memory divergences.
+      isSatisfied: false
+    - id: ac-04
+      text: ViceSharp writes native VICE .vsf snapshots for supported x64sc and xvic machines that the corresponding VICE engine loads successfully and resumes with matching state.
+      isSatisfied: false
+    - id: ac-05
+      text: Native VICE to ViceSharp to native VICE and ViceSharp to native VICE to ViceSharp round trips preserve every supported snapshot module and deterministic continuation behavior.
+      isSatisfied: false
+    - id: ac-06
+      text: Wrong machine identity, unsupported container or mandatory-module version, a manifest-invalid mandatory module set, truncated header or module framing, invalid or oversized lengths, trailing bytes, and byte corruption that violates envelope invariants or makes native VICE reject the snapshot are rejected before externally visible machine-state mutation with a descriptive compatibility error. VSF has no general payload checksum, so arbitrary payload bit flips not rejected by structural validation or native VICE are not falsely claimed detectable.
+      isSatisfied: false
+    - id: ac-07
+      text: Acceptance tests provision or generate their required native shim and .vsf fixtures; absence of the shim or fixture is a gate failure, never a skipped passing result.
+      isSatisfied: false
+    - id: ac-08
+      text: Every normal supported public and Avalonia win-x64 desktop snapshot entry point, including CaptureSnapshot, .vsf file save/load, quick save/load, and ten named slots, uses native VICE .vsf as the canonical default without an opt-in selector. A host without the packaged native runtime returns unavailable and never falls back to a proprietary format; UWP/Xbox implementation remains out of active scope without retiring its historical requirements.
+      isSatisfied: false
+    - id: ac-09
+      text: Existing vice-sharp.machine-snapshot.v2 and vice-sharp.runtime-snapshot.v1 payloads are accepted only by an explicit ImportLegacySnapshot operation and RPC that restores them once; no normal snapshot capture or save emits them, and replay payloads remain outside the snapshot API.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T00:04:28.9106333+00:00
+    updatedAt: 2026-10-21T00:04:28.9107432+00:00
+  deprecated: true
+
+---
+

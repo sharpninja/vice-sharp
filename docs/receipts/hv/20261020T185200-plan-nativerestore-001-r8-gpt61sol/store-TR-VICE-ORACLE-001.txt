@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20261021T000055Z-7360
+  result:
+    id: TR-VICE-ORACLE-001
+    title: Read-only native VICE oracle boundary
+    description: The native/vice gitlink is a read-only behavioral oracle. All stepping, tracing, snapshot, bus-event, and lifecycle integration must be implemented by external wrappers, launchers, link-time interposition, or public VICE interfaces that leave the pinned target source and semantics unchanged.
+    status: pending
+    priority: critical
+    area: VICE
+    subarea: ORACLE
+    notes: No patch application or direct source edit under native/vice is permitted.
+    acceptanceCriteria:
+    - id: ac-01
+      text: The native oracle preflight fails before validation when any tracked file under native/vice differs from the pinned gitlink commit.
+      isSatisfied: false
+    - id: ac-02
+      text: Wrapper builds and tests do not edit, generate source into, or apply patches to tracked native/vice paths.
+      isSatisfied: false
+    - id: ac-03
+      text: Required CPU bus events, timing, snapshots, and lifecycle observations come from real immutable VICE execution through external wrapper mechanisms; PeekBus, PC-derived values, and fabricated events are forbidden.
+      isSatisfied: false
+    - id: ac-04
+      text: Each oracle receipt records the native/vice commit, wrapper version or hash, clean-target proof, command, and zero-failure/zero-skip result for the claimed scope.
+      isSatisfied: false
+    - id: ac-05
+      text: A missing wrapper capability is an explicit blocker and cannot be remediated by modifying native/vice.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T00:00:56.8643267+00:00
+    updatedAt: 2026-10-21T00:00:56.8644623+00:00
+  deprecated: true
+
+---
+

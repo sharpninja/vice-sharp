@@ -1,0 +1,11 @@
+{
+  "reviewerAgent": "Codex",
+  "reviewerModel": "gpt-6.1-sol",
+  "reviewerEffort": "max",
+  "reviewerSessionId": "Codex-20261020T235538Z-plugin-session",
+  "reviewerRequestId": "req-20261020T235529Z-nativerestore-r8",
+  "parentSessionId": "ClaudeCode-20261020T015046Z-plugin-session",
+  "parentRequestId": "req-20261020T172116Z-prompt-6c6d",
+  "runtimeThreadId": "01a15bbb-c003-7423-9af5-f9a4ac2cd68e",
+  "timestampLocal": "2026-10-20T18:55:29"
+}

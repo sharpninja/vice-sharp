@@ -1,0 +1,19 @@
+{
+  "requestId": "req-20261020T235529Z-nativerestore-r8",
+  "actions": [
+    {
+      "order": 8,
+      "type": "validation",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/verdict.json",
+      "description": "AGREE; accuracy 98; completeness 98; PASS 54; FAIL 0; UNKNOWN 0; ADD-AC 2. Complete verdict.md and verdict.json are stored as ordered hv-full-content-r8 dialog chunks and primary-readback hash verified. No Phase D step executed or implementation release granted."
+    },
+    {
+      "order": 9,
+      "type": "create",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/verdict.md",
+      "description": "Complete hostile-review prose and JSON persisted in ordered chunks, read back and reassembled; both raw and LF-normalized SHA256 comparisons retained. No commit or push."
+    }
+  ]
+}

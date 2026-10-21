@@ -1,0 +1,5 @@
+{
+  "requestId": "req-20261020T235529Z-nativerestore-r8",
+  "queryTitle": "Hostile review of Phase D restoration plan revision 8",
+  "response": "AGREE; accuracy 98; completeness 98; PASS 54; FAIL 0; UNKNOWN 0; ADD-AC 2. Complete verdict.md and verdict.json are stored as ordered hv-full-content-r8 dialog chunks and primary-readback hash verified. No Phase D step executed or implementation release granted."
+}

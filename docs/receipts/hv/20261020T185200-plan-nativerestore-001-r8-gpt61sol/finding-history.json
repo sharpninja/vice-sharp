@@ -1,0 +1,439 @@
+{
+  "timestampLocal": "2026-10-20T19:13:57",
+  "round3bCount": 35,
+  "round7Count": 54,
+  "ledger": [
+    {
+      "id": "P01",
+      "round7Status": "PASS",
+      "round7Section": "Input identity and stale brief labels",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "All 36 SHA256 and byte-length pins match in initial-pins.json. Subject hash 3B490C06FFD6ED55E847B4A530FBA381784020D4889B0F8BB72B9F955AD5BFAA, 58109 bytes. Live develop HEAD is a74f6c520fbd0e42573a05e8513ffebbcb2cf4f0."
+    },
+    {
+      "id": "P02",
+      "round7Status": "PASS",
+      "round7Section": "Live native starting state",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "initial-git.json and initial-inventory.json independently show native gitlink/HEAD cc67418cba58e71d8e70fd353e9de47199ad2075, 8 tracked modifications, 155 untracked paths, 222 insertions and 8 deletions."
+    },
+    {
+      "id": "P03",
+      "round7Status": "PASS",
+      "round7Section": "R1 B and retained build output",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": ".gitmodules:4 currently says ignore = dirty. R1 B, D4 and Exit require ignore = untracked, empty tracked/index diffs, and the exact retained untracked content inventory."
+    },
+    {
+      "id": "P04",
+      "round7Status": "PASS",
+      "round7Section": "Plan-review authority and implementation hold",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D-pre requires both installations, Windows trace evidence, plan AGREE and explicit release before D0. Handoff v2:268 records the operator clarification authorizing plan HV."
+    },
+    {
+      "id": "P05",
+      "round7Status": "PASS",
+      "round7Section": "Both desktop installation receipts",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "Linux 20261020T105400 and Windows 20261020T121000 installation READMEs record Nuke deployment/InstallMsi, installed 1.3.111 and ProductVersion commit 2c8d60284229b9fedc2d50f840153b9e8d8cbcbf."
+    },
+    {
+      "id": "P06",
+      "round7Status": "PASS",
+      "round7Section": "Phase C evidence scope",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "The pinned S2b/S4 Linux READMEs and Windows 20261020T102600 README support seeded reset-workload builds/equivalence at 100k, 1M and x64sc 4M. S5 explicitly deferred real snapshot register checks."
+    },
+    {
+      "id": "P07",
+      "round7Status": "PASS",
+      "round7Section": "Preservation and retirement authority",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D0 copies and hash-verifies tracked/injected source while retaining originals; D4 restores named tracked paths only. R2/R3 expressly retire the named builders; R4 retains untracked files. A03 prohibits automatic reapply/delete."
+    },
+    {
+      "id": "F01",
+      "round7Status": "PASS",
+      "round7Section": "Counts and historical inventory",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "The complete 2527-line historical inventory was parsed; counts are 1432 .Po, 745 .o, 59 .a, 2 .exe and 107 .in. Live Linux porcelain has 163 entries, 8 modified plus 155 untracked."
+    },
+    {
+      "id": "F02",
+      "round7Status": "PASS",
+      "round7Section": "Actual native build callers and retirement",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "TestHarness.csproj:10 defines ViceNativeProject; :68-74 defines the BuildViceNative target and Windows BuildNative invocation. Vice.Native.proj:5,14,32-39 owns the in-tree shim path. Scoped live searches find the project caller and no Nuke BuildViceNative target."
+    },
+    {
+      "id": "F03",
+      "round7Status": "PASS",
+      "round7Section": "Semantic consumer inventory and detector ownership",
+      "round3bStatus": "FAIL",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "ViceNative.cs:36-71 currently has no logging; ViceNative.Xvic.cs:31-40 shares its resolver arrangement. D2 explicitly adds env-gated attempt/result logging, positive/failing/unset controls and an empty retained gate log. R6 explicitly enumerates direct, helper and provider use per method."
+    },
+    {
+      "id": "F04",
+      "round7Status": "PASS",
+      "round7Section": "All twenty historical hunks classified",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "The complete 599-line patch has 20 @@ headers in 12 files. initial-inventory.json records every header. H1-H10 and H12 cover all 20; H11 is the separate injected header/configuration. H5/H6/H9 are rejected corrections with explicit R7 ownership."
+    },
+    {
+      "id": "F05",
+      "round7Status": "PASS",
+      "round7Section": "Literal 100000 checkpoint and blocker lifecycle",
+      "round3bStatus": "FAIL",
+      "revision4Disposition": "FAIL",
+      "revision4Evidence": "VSF plan:241 requires both xvic fixtures at 100000 cycles; the operator chose exact cycle N. Revision 4 instead freezes the first measured later boundary. Both actual CPU units include 6510dtvcore.c (mainc64cpu.c:809, mainviccpu.c:636), whose :354-412 services IRQ/NMI before the exported-register trap, using an earlier local ik. R12/D5 then arm at the newly measured callback clock, rather than the original trigger clock."
+    },
+    {
+      "id": "F06",
+      "round7Status": "PASS",
+      "round7Section": "Comparator prerequisite allocated to D2",
+      "round3bStatus": "FAIL",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "The authorized Release no-build/no-restore filter reproduced 1 failed, 0 passed, 0 skipped at Vic20HalfCycleComparatorTests.cs:23. Source searches find no current HalfCycleState or CompareHalfCycleStates definitions. R13 B explicitly assigns both implementations and a green fixture to D2."
+    },
+    {
+      "id": "F07",
+      "round7Status": "PASS",
+      "round7Section": "Restore pre-overwrite and partial-resume safety",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D4 checks repository/host/gitlink identity, clean index and each live file against preserved bytes or Git-clean checkout state before overwrite. It rejects unexpected state and resumes only untouched paths."
+    },
+    {
+      "id": "F08",
+      "round7Status": "PASS",
+      "round7Section": "Content-aware integrity bracket",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D0 hashes and records lengths of every modified tracked and untracked file; D2/D4/D5 and Exit require matching relevant inventories. D2 includes a changed-existing-untracked-file negative control."
+    },
+    {
+      "id": "F09",
+      "round7Status": "PASS",
+      "round7Section": "Analyzer and actual WhatIf support",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "The live builder:26 and equivalence script:20 lack SupportsShouldProcess and create directories at :52/:41. D1 explicitly adds it, no-side-effect dry-run Pester tests and analyzer-zero gates."
+    },
+    {
+      "id": "F10",
+      "round7Status": "PASS",
+      "round7Section": "Comparator mapping and pending managed cycle acceptance",
+      "round3bStatus": "FAIL",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "R13 B explicitly corrects Vic20HalfCycleComparatorTests.cs:7 to FR-SNP-005 AC3 / TEST-SNP-002 AC4 while preserving assertions. D5:93 and Exit:95 label native PHI2/AEC traces as reference evidence and keep managed TR-CYCLE-001 AC4 and task 5 pending."
+    },
+    {
+      "id": "F11",
+      "round7Status": "PASS",
+      "round7Section": "AC2 reference-only amendment",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "The live canonical TR AC2 still names build-vice-shim.ps1. D1 explicitly changes only that reference through the wrapper while retaining clean materialization, original source hashes, generated-artifact inventory and external units. Section 5 lists the new units/tool/detector/comparator."
+    },
+    {
+      "id": "R01",
+      "round7Status": "PASS",
+      "round7Section": "Current reviewer credential handling",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "No marker or credential file was read or printed by this reviewer. Supported plugin operations used analyzed receipt-local PowerShell helpers; only the plugin internally consumes its marker."
+    },
+    {
+      "id": "U01",
+      "round7Status": "PASS",
+      "round7Section": "Own supported primary review turn",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "Bootstrap/begin/checkpoint wrappers return persisted:true, queued:false and degraded:false for this own review turn. Status reports two historical pending records; drain is disabled. verdict.persistence.json is required to prove complete-content hashes and completed-turn history."
+    },
+    {
+      "id": "U02",
+      "round7Status": "PASS",
+      "round7Section": "Live requirements, mappings and TODO state",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "Fresh supported effective/listMappings/todo.get receipts are retained as store-*.txt and store-effective.selected.json. Seven relevant FR/TR/TEST records are pending with unsatisfied ACs; FR-VICE and FR-SNP mappings are present. PLAN-VICEORACLE-001 tasks 4 and 5 are false."
+    },
+    {
+      "id": "A01",
+      "round7Status": "PASS",
+      "round7Section": "Every current hunk has a host disposition",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D0 requires each fresh @@ hunk mapped, an explained host-context difference recorded, or a blocker. Missing-hunk and wrong-host controls are explicit."
+    },
+    {
+      "id": "A02",
+      "round7Status": "PASS",
+      "round7Section": "Both-host evidence and explicit implementation release",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "EntryEvidence_BindsBothHostsAndExplicitRelease requires both installed commit/version receipts, Windows trace matrix, plan AGREE and operator release before D0."
+    },
+    {
+      "id": "A03",
+      "round7Status": "PASS",
+      "round7Section": "Post-restore failure and rollback authority",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D4 stops before Phase E on D5 failure, retains all originals/receipts, reports both host path states and keeps restored source pinned; no automatic patch reapply or untracked deletion."
+    },
+    {
+      "id": "N01",
+      "round7Status": "PASS",
+      "round7Section": "R10 launch precondition avoids active uninitialized clock copy",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "Fresh fixture byte inspection confirms MAINCPU 1.2, clock 109163946, PC 22377, P A0, DRIVE8 2.0 payload 0,1. Pinned drive-snapshot.c:540-550 skips the three clock copies when type is NONE; drive-resources.c:243-246 sets NONE and disables the drive."
+    },
+    {
+      "id": "N02",
+      "round7Status": "PASS",
+      "round7Section": "Full-load result and exact stream ordering",
+      "round3bStatus": "FAIL",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "R11 wraps both cross-object calls. c64-snapshot.c:121-153 and vic20-snapshot.c:129-165 confirm CPU success precedes later readers and a later failure schedules reset. D5 requires ordered resume, load,0, next gate at clock+1, permitted idle/stolen prefix and first CPU read/dummy at PC, and rejects later failures/unrelated resets."
+    },
+    {
+      "id": "A04",
+      "round7Status": "PASS",
+      "round7Section": "Repository identity and autocrlf",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D4 uses Git diff --exit-code on each path to recognize an already restored checkout, and checks root, native gitdir, SHA and host before writes. Windows CRLF interruption/resume is explicitly a mock case."
+    },
+    {
+      "id": "A05",
+      "round7Status": "PASS",
+      "round7Section": "Identity-based gate execution and exact known-red set",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D2/D5 retain selected IDs and terminal per-project TRX, require zero skipped/aborted/not-executed, exactly the named R9 failure set, and reject swapped failures, missing projects, discovery drift and partial runs."
+    },
+    {
+      "id": "A06",
+      "round7Status": "PASS",
+      "round7Section": "Up-to-date and interrupted builder rerun",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "Live Make:220-231 relies on current stdout and replaces stock-link-lines.json before checking missing link lines. D1 requires hash-verified prior evidence reuse or a named safe prerequisite before replacing it; D5 reruns All on both hosts."
+    },
+    {
+      "id": "R02",
+      "round7Status": "PASS",
+      "round7Section": "Current reviewer timestamp handling",
+      "round3bStatus": "PASS",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "Progress objects were emitted from PowerShell DateTime.Now at execution, with numeric percentages and measured-at-emission local time; ETAs are estimates and not deadlines. Artifact timestamps are likewise command-generated."
+    },
+    {
+      "id": "N03",
+      "round7Status": "PASS",
+      "round7Section": "R14 dead-read disposition",
+      "round3bStatus": "UNKNOWN",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "drive-snapshot.c:315,394,433 passes the partly uninitialized rotation array. rotation.c:194 assigns speed_zone, then :203 overwrites it before use. Patch H5 zeroed only clocks. R14 A expressly accepts this dead read; D1 documents it and D5 retains two-host continuation equality."
+    },
+    {
+      "id": "N04",
+      "round7Status": "PASS",
+      "round7Section": "Architectural register observer and forwarding",
+      "round3bStatus": "ADD-AC",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "mos6510.h:116-136 separates N/Z and recomposes P. The fixture P is A0. R11/D1 specify architectural P combinations, wide clock/PC, exactly-once forwarding, preserved return/state, no resume on reader failure, ordered load result and checked stderr/flush failure 72."
+    },
+    {
+      "id": "N05",
+      "round7Status": "PASS",
+      "round7Section": "DRIVE payload validation and resource/media consequences",
+      "round3bStatus": "ADD-AC",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "D0/D1 reject truncated or invalid DRIVE flags/counts before launch and verify final nonoverridable NONE flags; D5 records post-load type/TDE and continuation. resources_get_int reads registered unit->type (drive-resources.c:273-275); the reader writes that field, so the observation is feasible. The setter detaches images at :158-162 and changes bus state; iecbus.c:512-547 confirms routing effects."
+    },
+    {
+      "id": "N06",
+      "round7Status": "PASS",
+      "round7Section": "Provider/helper consumers and managed fakes",
+      "round3bStatus": "ADD-AC",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "R6/D0 name direct plain Fact, helper/provider-only, pure managed IViceNative fake and string-only controls. The live semantic search returns 56 candidate files, including plain Fact/theory callers and nonconsumer string mentions."
+    },
+    {
+      "id": "N07",
+      "round7Status": "PASS",
+      "round7Section": "Absolute cycle limit and full nonempty window",
+      "round3bStatus": "ADD-AC",
+      "revision4Disposition": "PASS",
+      "revision4Evidence": "initcmdline.c:279-286 assigns an absolute clock limit; mainc64cpu.c:813-818 and mainviccpu.c:640-645 test it after an instruction with >. D1 now requires restored-clock plus interval above the prelude, gate permits throughout, and nonempty expected continuation. D5 rejects prelude-only/early/truncated/missing/extra/reordered output."
+    },
+    {
+      "id": "N08",
+      "round7Status": "PASS",
+      "round7Section": "Mock contracts before real artifact dependencies",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N09",
+      "round7Status": "PASS",
+      "round7Section": "Tasks remain pending through the review hold",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N10",
+      "round7Status": "PASS",
+      "round7Section": "Marker-relative windows and process-local history",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N11",
+      "round7Status": "PASS",
+      "round7Section": "Detector initialization, failure and inertness",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N12",
+      "round7Status": "PASS",
+      "round7Section": "Authorized R15 real-input amendment",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N13",
+      "round7Status": "PASS",
+      "round7Section": "Per-host budget receipts",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N14",
+      "round7Status": "PASS",
+      "round7Section": "Nonpassing BLOCKED exit and independent denominators",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N15",
+      "round7Status": "PASS",
+      "round7Section": "Armed checkpoint writer preserves gate interactions",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N16",
+      "round7Status": "PASS",
+      "round7Section": "Audit interval starts before discovery",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N17",
+      "round7Status": "PASS",
+      "round7Section": "Seam-level zero allocation and determinism",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N18",
+      "round7Status": "PASS",
+      "round7Section": "Cycle/half-cycle units and feasibility",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N19",
+      "round7Status": "FAIL",
+      "round7Section": "Exclusive register-export claim survives",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N20",
+      "round7Status": "PASS",
+      "round7Section": "Shared Test/CiTest selector and cumulative projection",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N21",
+      "round7Status": "PASS",
+      "round7Section": "Generator mismatch/failure publication contract",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N22",
+      "round7Status": "PASS",
+      "round7Section": "Pending-mask capture and delayed trap control",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N23",
+      "round7Status": "PASS",
+      "round7Section": "Reconciled budget and bounded terminal result",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N24",
+      "round7Status": "ADD-AC",
+      "round7Section": "D2/D5 OrdinaryDiscovery_ExcludedShimMetadataDoesNotResolveLibraries",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N25",
+      "round7Status": "ADD-AC",
+      "round7Section": "D1/D2/D5 FailedWriter_RecordsAbsentCandidateHonestly",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    },
+    {
+      "id": "N26",
+      "round7Status": "ADD-AC",
+      "round7Section": "D1 R15 propagation without dropping synthetic 1.3",
+      "round3bStatus": null,
+      "revision4Disposition": null,
+      "revision4Evidence": null
+    }
+  ]
+}
