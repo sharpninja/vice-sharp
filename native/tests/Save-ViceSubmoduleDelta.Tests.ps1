@@ -30,6 +30,9 @@ BeforeAll {
         New-Item -ItemType Directory -Path (Join-Path $Root 'vice/src/.deps') -Force | Out-Null
         Set-Content -LiteralPath (Join-Path $Root 'vice/src/.deps/mainc64cpu.Po') -Value 'dep' -Encoding ascii
         Set-Content -LiteralPath (Join-Path $Root 'vice/.autoconf.out') -Value 'autoconf log' -Encoding ascii
+        New-Item -ItemType Directory -Path (Join-Path $Root 'vice/src/resid') -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $Root 'vice/src/resid/wave6581_PST.h') -Value 'generated table' -Encoding ascii
+        Set-Content -LiteralPath (Join-Path $Root 'vice/src/.vice-shim-configure-flags') -Value '--enable-shim' -Encoding ascii
         Set-Content -LiteralPath (Join-Path $Root 'vice/src/vice-shim-runtime.h') -Value '#define SHIM 1' -Encoding ascii
         return (& git -C $Root rev-parse HEAD).Trim()
     }
@@ -74,13 +77,16 @@ Describe 'Save-ViceSubmoduleDelta manifest contract' -Tag MockGate {
         $m.checkedOutSha | Should -Be $script:Head
         $m.cachedDiffEmpty | Should -BeTrue
         $m.counts.trackedModified | Should -Be 2
-        $m.counts.untrackedTotal | Should -Be 5
-        $m.counts.untrackedHidden | Should -Be 2
-        $m.counts.untrackedOrdinary | Should -Be 3
-        $m.counts.porcelainEntries | Should -Be 7
+        $m.counts.untrackedTotal | Should -Be 7
+        $m.counts.untrackedHidden | Should -Be 3
+        $m.counts.untrackedOrdinary | Should -Be 4
+        $m.counts.porcelainEntries | Should -Be 9
         ($m.entries | Where-Object path -eq 'vice/src/mainc64cpu.o').class | Should -Be 'generated'
         ($m.entries | Where-Object path -eq 'vice/.autoconf.out').class | Should -Be 'generated'
         ($m.entries | Where-Object path -eq 'vice/.autoconf.out').hidden | Should -BeTrue
+        ($m.entries | Where-Object path -eq 'vice/src/resid/wave6581_PST.h').class | Should -Be 'generated'
+        ($m.entries | Where-Object path -eq 'vice/src/.vice-shim-configure-flags').class | Should -Be 'injected'
+        $m.preserved.Count | Should -Be 4
         ($m.entries | Where-Object path -eq 'vice/configure').class | Should -Be 'generated'
         ($m.entries | Where-Object path -eq 'vice/src/.deps/mainc64cpu.Po').hidden | Should -BeTrue
         ($m.entries | Where-Object path -eq 'vice/src/vice-shim-runtime.h').class | Should -Be 'injected'
@@ -89,7 +95,7 @@ Describe 'Save-ViceSubmoduleDelta manifest contract' -Tag MockGate {
             $e.sha256 | Should -Match '^[0-9A-F]{64}$'
             $e.length | Should -BeGreaterThan 0
         }
-        $m.preserved.Count | Should -Be 3
+        $m.preserved.Count | Should -Be 4
         foreach ($p in $m.preserved) {
             (Get-FileHash -LiteralPath (Join-Path $script:Receipt $p.copyPath) -Algorithm SHA256).Hash | Should -Be $p.sha256
             (Get-FileHash -LiteralPath (Join-Path $script:Sub $p.path) -Algorithm SHA256).Hash | Should -Be $p.sha256

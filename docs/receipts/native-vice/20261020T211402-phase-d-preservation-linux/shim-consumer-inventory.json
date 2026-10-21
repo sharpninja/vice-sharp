@@ -1,0 +1,2537 @@
+{
+  "testRoot": "/home/sharpninja/github/vice-sharp/tests",
+  "counts": {
+    "files": 567,
+    "types": 852,
+    "testMethods": 3324,
+    "consumers": 241,
+    "helpers": 59
+  },
+  "helpers": [
+    {
+      "type": "NativeViceBaseline",
+      "project": "ViceSharp.Benchmarks",
+      "reason": "direct",
+      "file": "ViceSharp.Benchmarks/NativeViceBaseline.cs"
+    },
+    {
+      "type": "Program",
+      "project": "ViceSharp.Benchmarks",
+      "reason": "via NativeViceBaseline",
+      "file": "ViceSharp.Benchmarks/Program.cs"
+    },
+    {
+      "type": "C64ColorRamPlaNativeTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs"
+    },
+    {
+      "type": "C64MachineProfileTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/C64MachineProfileTests.cs"
+    },
+    {
+      "type": "C64VkmKeyboardTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/C64VkmKeyboardTests.cs"
+    },
+    {
+      "type": "CaptureRunLogUtilityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/CaptureRunLogUtilityTests.cs"
+    },
+    {
+      "type": "CpuValidationTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/CpuValidationTests.cs"
+    },
+    {
+      "type": "LockstepDriveValidationTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs"
+    },
+    {
+      "type": "LockstepValidationTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs"
+    },
+    {
+      "type": "LockstepValidator",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/LockstepValidator.cs"
+    },
+    {
+      "type": "LockstepValidatorKernalCloseTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "via LockstepValidator",
+      "file": "ViceSharp.TestHarness/LockstepValidatorKernalCloseTests.cs"
+    },
+    {
+      "type": "NativeResidueDiagTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs"
+    },
+    {
+      "type": "RasterBarGroundTruthTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/RasterBarGroundTruthTests.cs"
+    },
+    {
+      "type": "RasterBarLockstepTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/RasterBarLockstepTests.cs"
+    },
+    {
+      "type": "RasterBarRendererTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/RasterBarRendererTests.cs"
+    },
+    {
+      "type": "Sid8580VariantParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Sid8580VariantParityTests.cs"
+    },
+    {
+      "type": "SidBatchedClockParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs"
+    },
+    {
+      "type": "SidCombinedDacresDivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs"
+    },
+    {
+      "type": "SidDatabusPotDivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs"
+    },
+    {
+      "type": "SidEngineClockingProbeTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidEngineClockingProbeTests.cs"
+    },
+    {
+      "type": "SidEngineParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidEngineParityTests.cs"
+    },
+    {
+      "type": "SidEnvDivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs"
+    },
+    {
+      "type": "SidExactOracleTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs"
+    },
+    {
+      "type": "SidFilter6581DivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs"
+    },
+    {
+      "type": "SidFilter8580DivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs"
+    },
+    {
+      "type": "SidNoiseDivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs"
+    },
+    {
+      "type": "SidOutputAmplifyParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs"
+    },
+    {
+      "type": "SidPcmEquivalencyTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs"
+    },
+    {
+      "type": "SidResampleDivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidResampleDivergentParityTests.cs"
+    },
+    {
+      "type": "SidSyncRingTestbitDivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs"
+    },
+    {
+      "type": "SidWaveCoreDivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs"
+    },
+    {
+      "type": "SidWaveOsc3DivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs"
+    },
+    {
+      "type": "SnapshotResumeSpikeTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs"
+    },
+    {
+      "type": "SnapshotRunLogParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs"
+    },
+    {
+      "type": "Vic20DivergeProbe",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs"
+    },
+    {
+      "type": "Vic20LockstepScaffoldTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs"
+    },
+    {
+      "type": "Vic20NativeAudioExportTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs"
+    },
+    {
+      "type": "Vic20NativeLockstepTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs"
+    },
+    {
+      "type": "Vic20PixelFrameTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs"
+    },
+    {
+      "type": "Vic20PixelLockstep",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs"
+    },
+    {
+      "type": "Vic20PixelLockstepDiag",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs"
+    },
+    {
+      "type": "Vic20SnapshotRoundTripTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs"
+    },
+    {
+      "type": "Vic20SoundLockstep",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs"
+    },
+    {
+      "type": "Vic20VideoLockstep",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs"
+    },
+    {
+      "type": "Vic20WorkloadLockstep",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs"
+    },
+    {
+      "type": "VicColorDisplayModeDivergentParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs"
+    },
+    {
+      "type": "ViceFactAttribute",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/ViceFactAttribute.cs"
+    },
+    {
+      "type": "ViceMachineValidationFixture",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/ViceMachineValidationFixture.cs"
+    },
+    {
+      "type": "ViceNativeBridge",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/ViceNativeBridge.cs"
+    },
+    {
+      "type": "ViceTheoryAttribute",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/ViceTheoryAttribute.cs"
+    },
+    {
+      "type": "VicExactFrameOracleTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/VicExactFrameOracleTests.cs"
+    },
+    {
+      "type": "VicIiBootFrameOracleParityTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs"
+    },
+    {
+      "type": "VicIiCheckpointTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/VicIiCheckpointTests.cs"
+    },
+    {
+      "type": "VicIIRegisterReadbackNativeTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs"
+    },
+    {
+      "type": "VicIISpriteDmaNativeCheckpointTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs"
+    },
+    {
+      "type": "VicIiValidationTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/VicIiValidationTests.cs"
+    },
+    {
+      "type": "X64ScVariantLockstepTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs"
+    },
+    {
+      "type": "XvicOraclePrerequisites",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs"
+    },
+    {
+      "type": "XvicOraclePrerequisiteTests",
+      "project": "ViceSharp.TestHarness",
+      "reason": "direct",
+      "file": "ViceSharp.TestHarness/Vic20/XvicOraclePrerequisiteTests.cs"
+    }
+  ],
+  "consumers": [
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepDriveValidationTests",
+      "method": "DriveAccessors_OutOfRangeUnit_ReturnZero",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepDriveValidationTests",
+      "method": "DriveAccessors_ValidUnit_DoNotThrow",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepDriveValidationTests",
+      "method": "GetDrivePc_IsCallable_WithoutCrashing",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepDriveValidationTests",
+      "method": "TrueDriveEmulation_EnabledOnUnit8_DriveCpuAdvances",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepDriveValidationTests",
+      "method": "TrueDriveEmulation_RejectsOutOfRangeUnits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepDriveValidationTests",
+      "method": "TrueDriveEmulation_RoundTrips_Per_Unit",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "C64ColorRamPlaNativeTests",
+      "method": "RamOnlyPla_D800Store_MatchesNativeRamPeek",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "C64ColorRamPlaNativeTests",
+      "method": "Wolf64Disk_Cia1TimerA_MatchesNativeAfter20000Cycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "C64ColorRamPlaNativeTests",
+      "method": "Wolf64Disk_Cia1TimerA_MatchesNativeThroughIrqWindow",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "C64ColorRamPlaNativeTests",
+      "method": "Wolf64Disk_ReportsFirstMismatchCycle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64MachineProfileTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "C64MachineProfileTests",
+      "method": "NativeVice_CreatesAndResetsEveryManagedX64ScAlias",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64MachineProfileTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "C64MachineProfileTests",
+      "method": "NativeVice_DefaultCreateSelectsPalBreadboxModel",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "C64VkmKeyboardTests",
+      "method": "SelectedVkmMap_CiaMatrixScanMatchesNativeX64Sc",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/CaptureRunLogUtilityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "CaptureRunLogUtilityTests",
+      "method": "CaptureBaselineRunLog_FromEnvironment",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/CpuValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "CpuValidationTests",
+      "method": "BootstrapTrace_First12Cycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/CpuValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "CpuValidationTests",
+      "method": "First64Cycles_MatchVICE",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/CpuValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "CpuValidationTests",
+      "method": "Reset_StateMatchesVICE",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepValidationTests",
+      "method": "First10000_Cia1TimerA_MatchesNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepValidationTests",
+      "method": "First100000_Cia1TimerA_MatchesNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepValidationTests",
+      "method": "First100000CyclesMatch",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepValidationTests",
+      "method": "First10000CyclesMatch",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepValidationTests",
+      "method": "First100CyclesMatch",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepValidationTests",
+      "method": "ResetStateMatches",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidatorKernalCloseTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "LockstepValidatorKernalCloseTests",
+      "method": "ResolveKernalJumpTarget_FollowsC64CloseIndirectVector",
+      "attribute": "Fact",
+      "reason": "transitive",
+      "via": "LockstepValidator"
+    },
+    {
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "NativeResidueDiagTests",
+      "method": "FreshMachine_BootState_IsIdentical_AfterSnapshotResume",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "NativeResidueDiagTests",
+      "method": "FreshMachine_DriveAttachDetachClocks_AreZero_AfterResidue",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "NativeResidueDiagTests",
+      "method": "FreshMachine_DriveCycleAccum_IsZero_AfterResidue",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "NativeResidueDiagTests",
+      "method": "FreshMachine_PostActivityResetTrace_IsIdentical_AfterSnapshotResume",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarGroundTruthTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "RasterBarGroundTruthTests",
+      "method": "GroundTruth_RasterBarSchedule_FromUserSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "RasterBarLockstepTests",
+      "method": "RasterBarSchedule_Managed_MatchesVice_FromSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "RasterBarLockstepTests",
+      "method": "RasterLoop_PerInstructionCycles_MatchVice_FromSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "RasterBarLockstepTests",
+      "method": "StaD020_CycleLevel_StealState_VsVice_FromSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarRendererTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "RasterBarRendererTests",
+      "method": "DemoBars_ManagedRenderedFrame_AlignsWithViceBorderColoursPerLine",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarRendererTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "RasterBarRendererTests",
+      "method": "DemoBars_ReplayedViceTimeline_ManagedRendererMatchesVicePerLineBorder",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Sid8580VariantParityTests",
+      "method": "CombinedWaveforms_8580_OutputLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Sid8580VariantParityTests",
+      "method": "SampleFast_1CycleWriteDelay_LockstepVsOracle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidBatchedClockParityTests",
+      "method": "ExtFilterClockDeltaT_DeltaTFlt8_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidBatchedClockParityTests",
+      "method": "ExtFilterWiring_PerCycleOutputLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidBatchedClockParityTests",
+      "method": "OscMsbToggleSubStepping_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidBatchedClockParityTests",
+      "method": "WritePipelinePrologue_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveDistinct6581vs8580Tables_ST_ix7F8",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveGatingFormula_ST_ix800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoisePulse6581Formula_NPT_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoisePulse8580Formula_NPST_8580_ix800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoisePulseRouting_NPS_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoNoiseGating_PS_pw0",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoPulseGating_PT_pw0",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveRingIndexMsbSubstitution_PT_ring",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveRingMsbMaskFormula_ArmedWhenNoSaw",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveSawAccWriteback_ST_postIx800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveSawtoothFormula_PS_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveSRWriteback_NoisePST",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveSubTableMap_PT_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveTableSelector_ST_ix800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveTriangleFormula_ST_ix7F8",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveUsesRomNotAnalyticAnd_PST_ix800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveVerbatimRomTable_ST_MultiplePositions",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDac6581MissingTermination_Bit0EqualsBit1",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDac8580CorrectTermination_MonotonicLowBits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacBuiltWithCorrectParams_6581vs8580",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacMosfetLeakage_6581Higher",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacOutputUsesModelDac_Sawtooth_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacPerBitVoltageAlgorithm_Boundaries",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacRawOsc3VsDacVoiceOutput_Diverge",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacRoundHalfUp_MaxEntryIs0xFFF",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacVoSuperpositionAndRounding_MonotonicFor8580",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacWaveZeroLevel_Scaled12Bit",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WavePath12Bit_Sawtooth_ix_A00",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "AnyWrite_SetsBusValueAndTtl_MatchingOracle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "BusAging_NCycles_EquivalentToBatchedDecrement",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "BusAging_OneCycleDecrement_ZeroesAtTtlExpiry",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "DataBusTtl6581_Is0x1D00",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "Env3Read_LatchesBus",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "Osc3Read_LatchesBus",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "PotReads_Constant0xFF_AcrossWritesAndCycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "PotX_Read_LatchesBusValueAndTtl",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "PotX_Returns0xFF_MatchingOracle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "PotY_Returns0xFFAndLatchesBus",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "ReadOf19Through1C_SetsBusAndReturnsBusValue",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "Reset_ClearsBusValueAndTtl",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "WriteOnlyRegisterRead_ReturnsSharedBusValue",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidEngineClockingProbeTests",
+      "method": "Probe_NativeReSidInternalStateAdvancesOnStep",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEngineParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidEngineParityTests",
+      "method": "ManagedEnvelopeMatchesNativeReSid_CycleExact",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEngineParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidEngineParityTests",
+      "method": "ManagedOscillatorMatchesNativeReSid_CycleExact",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidEnvDivergentParityTests",
+      "method": "BusValue_AgesByExactlyTheElapsedClockedCycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidEnvDivergentParityTests",
+      "method": "EnvelopeReset_PreservesEnvelopeCounterExactlyAsReSid",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidEnvDivergentParityTests",
+      "method": "PerCycleClockChain_RunsPipelinedWriteAndBusAgingStages",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidEnvDivergentParityTests",
+      "method": "PowerUp_SeedsEnvelopeCounter0xAAAndReleasesExactlyAsReSid",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidExactOracleTests",
+      "method": "ExactClock_AccumulatorFollowsClosedForm",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidExactOracleTests",
+      "method": "ExactClock_AttackStepSpacing_MatchesSingleCyclePipeline",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidExactOracleTests",
+      "method": "ExactClock_IsDeterministicAcrossInstances",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidExactOracleTests",
+      "method": "ExactRead_Env3MatchesExportedEnvelopeCounter",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "ExtFiltClockedPerPhi2_VlpEvolves",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "ExtFiltSubStepping_DeltaTFlt8_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "FilterClockedPerPhi2_StateEvolvesEachTick",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "FilterClockSubStepping_DeltaTFlt3_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "FilterSubStepping_DeltaTFlt3_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidFilter8580DivergentParityTests",
+      "method": "PerCycleOrder_8580_ExtFilterOutputLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidFilter8580DivergentParityTests",
+      "method": "SetW0_8580_CutoffSweep_FilterProbeLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidFilter8580DivergentParityTests",
+      "method": "SolveIntegrate8580_LpProgram_FilterProbeLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "CombinedWaveform_NoiseOutputAndedWithWaveformOutput",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "CombinedWaveform_WritesOutputBackIntoShiftRegister",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoiseOsc3ReadsCorrect12BitTaps",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoisePlusCombinedWaveform_DecaysToZeroLockup",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoiseSrClocksWithTwoCyclePipelineDelay",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoiseSrFreeRunsWithoutNoiseWaveformSelected",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoiseSrIsPerVoiceNotShared",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoNoiseMaskPassesSawtoothThroughUnaltered",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "PowerOnSeedIs0x7FFFFe",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "SingleCycleManagedMatchesOracleForTypicalFrequency",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "TestBit_ResetFadeConstants6581Are35000And1000",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "TestFalling_ClocksShiftRegisterOnceWithNotBit17",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "TestHeld_FadesShiftRegisterViaShiftregBitfade",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "TestRising_DoesNotResetShiftRegister",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "ZeroedShiftRegisterStaysLockedWithoutReseed",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidOutputAmplifyParityTests",
+      "method": "Output_CompositeLockstepAndAmplifiedFloat",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Voice1_AdsrSweep_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Voice1_HardSync_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Voice1_Triangle_GateOn_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Voice1_TriangleSaw_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Volume_DigiPlayback_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidResampleDivergentParityTests",
+      "method": "SampleFast_BatchedClock_BufferedLockstep_BothModels",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidResampleDivergentParityTests",
+      "method": "SampleInterpolate_BufferedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidResampleDivergentParityTests",
+      "method": "SampleResample_KaiserFir_BufferedLockstep_BothModels",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "HardSync_FiresOnRisingEdgeOfSourceMsb",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "HardSync_SameCycleSyncSourceSpecialCaseSuppressesDestSync",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "TestBit_ShiftRegisterIsPerVoiceNotShared",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "TestBitFalling_ClocksShiftRegisterOnceWithInvertedBit17",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "TestBitRising_ArmsSlowShiftRegisterResetOf35000Cycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "TestBitRising_FlushesShiftPipelineToZero",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidWaveCoreDivergentParityTests",
+      "method": "Accumulator_PowersUpWithEvenBitsHigh0x555555",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidWaveCoreDivergentParityTests",
+      "method": "Accumulator_StoredValueIsMaskedTo24Bits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidWaveCoreDivergentParityTests",
+      "method": "Osc3_Waveform0ReadsFloatingDacFadeOfLastSelectedOutput",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidWaveCoreDivergentParityTests",
+      "method": "Reset_PreservesAccumulatorExactly",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidWaveOsc3DivergentParityTests",
+      "method": "Osc3_IsWaveformDependentNotPhaseDependent",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidWaveOsc3DivergentParityTests",
+      "method": "Osc3_NoiseReadsNoiseOutputTopBits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidWaveOsc3DivergentParityTests",
+      "method": "Osc3_PulseOnlyReadsRailsNotARamp",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SidWaveOsc3DivergentParityTests",
+      "method": "Osc3_ReturnsSelectedTriangleWaveformOutputTopBits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SnapshotResumeSpikeTests",
+      "method": "ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SnapshotResumeSpikeTests",
+      "method": "Spike_ExternalX64ScVsf_LoadDiagnostic",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SnapshotResumeSpikeTests",
+      "method": "Spike_ShimRoundTripResume_MeasuresLockstepDepth",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SnapshotRunLogParityTests",
+      "method": "RunFromSnapshot_ReadyFixture_HoldsLockstepZeroDivergence",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SnapshotRunLogParityTests",
+      "method": "RunFromSnapshot_WithVideoCapture_ProducesMuxedVideoAndAudioStreams",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SnapshotRunLogParityTests",
+      "method": "SaveNativeRunLog_ReadyFixture_ManagedMatchesAllEntries",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "SnapshotRunLogParityTests",
+      "method": "SnapshotRun_MatchesViceRunLog",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20DivergeProbe",
+      "method": "EveryCycle_CpuRegs_Match_FocusedWindow",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20DivergeProbe",
+      "method": "EveryCycle_CpuRegs_Match_TenSecondNtsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20DivergeProbe",
+      "method": "EveryCycle_CpuRegs_Match_TenSecondPal",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20DivergeProbe",
+      "method": "EveryCycle_CpuRegs_Match_TwoSecondPal",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20LockstepScaffoldTests",
+      "method": "NativeShim_CreatesVic20Models_WhenXvicOraclePresent",
+      "attribute": "Theory",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20LockstepScaffoldTests",
+      "method": "NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20LockstepScaffoldTests",
+      "method": "NativeXvic_StepAdvancesCycle_WhenOraclePresent",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20NativeAudioExportTests",
+      "method": "RenderVic20Samples_AfterReset_ReturnsSamples",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20NativeLockstepTests",
+      "method": "LockstepValidator_AcceptsVic20Model_WhenOraclePresent",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_Managed_CpuRegs_Lockstep",
+      "attribute": "Theory",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_Managed_DualVia_ControlRegs_Lockstep",
+      "attribute": "Theory",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_Managed_PMatches_ThroughCmpAbsX",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_Managed_VicI_Regs_Lockstep",
+      "attribute": "Theory",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_VicRasterAdvances_AndMatchesManaged",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelFrameTests",
+      "method": "CaptureFrameIndices_DimensionsMatchBgra",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelFrameTests",
+      "method": "CaptureVisibleFrame_AfterBoot_ReturnsPalNormalCanvas",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelFrameTests",
+      "method": "ManagedAndNative_FrameGeometry_MatchAfterBoot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelLockstep",
+      "method": "Bgra_BusyPal_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelLockstep",
+      "method": "Bgra_ReadyNtsc_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelLockstep",
+      "method": "Bgra_ReadyPal_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelLockstep",
+      "method": "Index_BusyPal_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelLockstep",
+      "method": "Index_ReadyNtsc_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelLockstep",
+      "method": "Index_ReadyPal_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20PixelLockstepDiag",
+      "method": "Dump_ReadyPal_IndexHistogram",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20SnapshotRoundTripTests",
+      "method": "Unexpanded_ManagedBlob_ResumeLockstep_Short",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20SoundLockstep",
+      "method": "Silence_MatchesXvic",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20SoundLockstep",
+      "method": "Tone_MatchesXvic",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20VideoLockstep",
+      "method": "EveryCycle_VicI_VideoState_Match_2k",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20VideoLockstep",
+      "method": "EveryCycle_VicI_VideoState_Match_2k_Ntsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20VideoLockstep",
+      "method": "EveryCycle_VicI_VideoState_Match_FocusedWindow",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20VideoLockstep",
+      "method": "EveryCycle_VicI_VideoState_Match_FocusedWindow_Ntsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20WorkloadLockstep",
+      "method": "EveryCycle_Workload_Match_FocusedNtsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20WorkloadLockstep",
+      "method": "EveryCycle_Workload_Match_FocusedPal",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20WorkloadLockstep",
+      "method": "EveryCycle_Workload_Match_TwoSecondNtsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "Vic20WorkloadLockstep",
+      "method": "EveryCycle_Workload_Match_TwoSecondPal",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Cregs_InitializedToIdentityLower16_ZeroForRest_AfterReset",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DbufOffset_IncrementsBy8PerCycle_ResetsAtLineStart",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors6569_OnePixelRingDelay_PendingWrite_AffectsPixel1Not0",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8_AppliesPendingColorWrite_ToCregs_AtCycleStart",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8_FullLine_MidLineBgChange_RingDelay_OldValueAtPixel0",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8_ResolvesSymbolicCode_ViaCregs_NotLiveRegister",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8565_GreyDot_Pixel0Forced0x0F_WhenPixelBuffer0EqualsLastColorReg",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8565_NoRingDelay_PendingWrite_AffectsPixel0Immediately",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "MonitorColorStore_ImmediatelyUpdatesCregs_AndLastColorReg",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "UpdateCregs_TransfersLastColorReg_AndResetsChipPending_AfterCycle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode11Pipe_6569_FallingEdgeEcm_AndedAtPixel6_ClearsEcm",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode11Pipe_6569_RisingEdgeEcm_OredInAtPixel4",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode11Pipe_8565_WholeCellUpdate_AfterPixel7",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode11Pipe_MidLineEcmChange_IsPerCell_NotWholeLine",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode16Pipe2_McmTwoStagePipe_UpdatesOneCycleLate",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicExactFrameOracleTests",
+      "method": "CaptureIndices_Deterministic_AcrossInstances",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicExactFrameOracleTests",
+      "method": "CaptureIndices_ReadyScreen_GeometryAndIndexDomainExact",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicExactFrameOracleTests",
+      "method": "CaptureVisibleFrame_RealPath_MatchesIndexIdentity",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIiBootFrameOracleParityTests",
+      "method": "Boot_Frame_Indices_Match_Vice_Oracle_Bit_Exact",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIiCheckpointTests",
+      "method": "Native_ScreenRam_ImmediateReadBackMatchesWrite",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIiCheckpointTests",
+      "method": "Native_ScreenRamPattern_SurvivesOneFullPalFrame_VicDmaIsReadOnly",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_FliAFLI_BadlineTiming_ForcedEveryLine_FliBugWindow_Checkpoint_Match",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_InvalidEcm_PriorityBufferAtRaster_MockContractValidated",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_InvalidEcm_PriorityCollision_HiddenBit_Match",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_RegisterReadback_FixedBits_Unused_CollisionIgnore_Match",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_VisibleFrame_DisplayMode_InvalidEcm_Checkpoint_Match",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_VisibleFrame_FullBuffer_DisplayMode_InvalidEcm_Match",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIISpriteDmaNativeCheckpointTests",
+      "method": "Sprite3DmaWindow_NativeAndManagedBothActive_ModelSpecificCycleTable",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIiValidationTests",
+      "method": "FirstTwoScanlines_MatchVICE",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiValidationTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "VicIiValidationTests",
+      "method": "Reset_StateMatchesVICE",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "AbsentCia2IoReadsMatchNative_ForUltimax",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ChipRegisterCheckpointsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ChipRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ConnectedCia2IoWritesAndReadsMatchNative_ForC64Family",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "D64Attach_BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "D64Attach_FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileFrameMatches_ForC64GsWithDeterministicGameSystemCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileFrameMatches_ForStandardCartridgeAutostart",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileFrameMatches_ForUltimaxWithDeterministicCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileScanlineMatches_ForC64GsWithDeterministicGameSystemCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileScanlineMatches_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileScanlineMatches_ForUltimaxWithDeterministicCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTenProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileFramesMatch_ForC64GsWithDeterministicGameSystemCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileFramesMatch_ForStandardCartridgeAutostart",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileFramesMatch_ForUltimaxWithDeterministicCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileScanlinesMatch_ForC64GsWithDeterministicGameSystemCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileScanlinesMatch_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileScanlinesMatch_ForUltimaxWithDeterministicCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "HeldSpace_FirstProfileFrameMatches_ForEveryKeyboardEnabledNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ResetAfterActivityMatchesNative_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ResetStateMatches_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "SelectedRamWindowsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "SelectedRamWindowsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ViciiRasterTimingMatchesNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ViciiRasterTimingMatchesNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "project": "ViceSharp.TestHarness",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ViciiRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null
+    }
+  ]
+}
