@@ -17,7 +17,7 @@ Equivalence claims checked here: exit screenshots byte-identical across the thre
 equal between withheld and keep; no STOP, no missing or foreign report, no access with kind missing in the
 withheld run. Any difference is reported, never tolerated. Nothing under the materialization is touched.
 #>
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess)]
 param(
     [ValidateSet('x64sc', 'xvic', 'both')]
     [string] $Machine = 'both',
@@ -38,6 +38,11 @@ $data = Join-Path $root "work-$hostTag/vice/data"
 $buildSrc = Join-Path $root "build-$hostTag/src"
 $bin = Join-Path $root "bin-$hostTag"
 if (-not $OutDir) { $OutDir = Join-Path $root ("equivalence-$hostTag/" + (Get-Date -Format 'yyyyMMddTHHmmss')) }
+# PLAN-NATIVERESTORE-001 D1 (F09): the dry run stops here, before the output directory or any file is created.
+if (-not $PSCmdlet.ShouldProcess($OutDir, ('run the stock, withheld and keep triples for {0} at {1} cycles and write the results' -f $Machine, ($Cycles -join ', ')))) {
+    Write-Output 'dry run: no directory created, no file written'
+    return
+}
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 $machines = if ($Machine -eq 'both') { @('xvic', 'x64sc') } else { @($Machine) }
 

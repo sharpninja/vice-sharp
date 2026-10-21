@@ -23,7 +23,7 @@ under artifacts/immutable-vice/<sha>/ (gitignored).
 .PARAMETER Stage
 One of Copy, Autogen, Configure, Make, Link, Inventory, All.
 #>
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess)]
 param(
     [ValidateSet('Copy', 'Autogen', 'Configure', 'Make', 'Link', 'Inventory', 'All')]
     [string] $Stage = 'All',
@@ -49,8 +49,15 @@ $build = Join-Path $root "build-$hostTag"
 $bin = Join-Path $root "bin-$hostTag"
 $receipts = Join-Path $root "receipts-$hostTag"
 $wrappers = Join-Path $RepoRoot 'tools/immutable-vice'
-foreach ($dir in @($build, $bin, $receipts)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+Import-Module (Join-Path $PSScriptRoot 'lib/ObserverBuild.psm1') -Force
 if (-not (Test-Path -LiteralPath $source)) { throw "Materialization source missing: $source" }
+$stages = if ($Stage -eq 'All') { @('Copy', 'Autogen', 'Configure', 'Make', 'Link', 'Inventory') } else { @($Stage) }
+# PLAN-NATIVERESTORE-001 D1 (F09): the dry run stops here, before any directory or file is created.
+if (-not $PSCmdlet.ShouldProcess($root, ('run stage(s) {0} for {1}: create the build, bin and receipts directories, copy, configure, make, link and write receipts' -f ($stages -join ', '), $Machine))) {
+    Write-Output 'dry run: no directory created, no file written'
+    return
+}
+foreach ($dir in @($build, $bin, $receipts)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
 
 # Lab rule (Payton 2026-10-20T08:19): forward slashes on Windows for every path handed to the shell (C:/...).
 function ConvertTo-ShellPath {
@@ -224,12 +231,22 @@ function Step-Make {
         $hit = @($lines | Where-Object { $_ -match "\s-o\s+$program(\s|$)" -and $_ -notmatch '^\s*(libtool|ar\s)' }) | Select-Object -Last 1
         if ($hit) { $linkLines[$t] = $hit.Trim() }
     }
-    $linkPath = Join-Path $receipts 'stock-link-lines.json'
-    $linkLines | ConvertTo-Json | Set-Content -LiteralPath $linkPath -Encoding utf8
-    Write-Receipt -Name 'make' -Object ([pscustomobject]@{ Stage = 'Make'; ExitCode = $r.ExitCode; Command = $command; LinkLinesFound = @($linkLines.Keys); Log = $log; LinkLines = $linkPath }) | Out-Null
     if ($r.ExitCode -ne 0) { throw "make failed (exit $($r.ExitCode)); see $log" }
-    foreach ($t in $targets) { if (-not $linkLines.ContainsKey($t)) { throw "No link line captured for $t; see $log" } }
-    Write-Output ("make ok; link lines captured for {0}" -f ($linkLines.Keys -join ', '))
+    # PLAN-NATIVERESTORE-001 D1 (A06): an up-to-date make emits no link line; the retained lines are reused only
+    # after every object they name still hashes as recorded at capture, otherwise the stage stops with a named
+    # prerequisite and replaces nothing (native/lib/ObserverBuild.psm1, proven by native/tests/ObserverBuild.Tests.ps1).
+    $srcDir = Join-Path $build 'src'
+    $resolved = Resolve-StockLinkLine -Captured $linkLines -Targets $targets -ReceiptsDirectory $receipts -ObjectHashProvider {
+        param($relative)
+        $full = Join-Path $srcDir $relative
+        if (Test-Path -LiteralPath $full -PathType Leaf) { (Get-FileHash -LiteralPath $full -Algorithm SHA256).Hash } else { $null }
+    }
+    if ($resolved.Written) {
+        $resolved.Lines | ConvertTo-Json | Set-Content -LiteralPath $resolved.LinesPath -Encoding utf8
+        $resolved.Objects | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $resolved.ObjectsPath -Encoding utf8
+    }
+    Write-Receipt -Name 'make' -Object ([pscustomobject]@{ Stage = 'Make'; ExitCode = $r.ExitCode; Command = $command; LinkLinesFound = @($linkLines.Keys); LinkLineSource = $resolved.Source; Log = $log; LinkLines = $resolved.LinesPath; LinkObjects = $resolved.ObjectsPath }) | Out-Null
+    Write-Output ("make ok; link lines {0}" -f (($targets | ForEach-Object { $_ + '=' + $resolved.Source[$_] }) -join ', '))
 }
 
 function Step-Link {
@@ -315,7 +332,6 @@ function Step-Inventory {
     Write-Output ("original materialization files unchanged: {0}" -f $beforeMap.Count)
 }
 
-$stages = if ($Stage -eq 'All') { @('Copy', 'Autogen', 'Configure', 'Make', 'Link', 'Inventory') } else { @($Stage) }
 foreach ($s in $stages) {
     Write-Output ("=== {0} ({1}) ===" -f $s, (Get-Date -Format 'yyyy-MM-ddTHH:mm:ss'))
     & "Step-$s"
