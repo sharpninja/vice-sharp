@@ -11,8 +11,8 @@ using Xunit;
 [Collection("NativeVice")]
 public sealed class Vic20NativeAudioExportTests
 {
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void RenderVic20Samples_AfterReset_ReturnsSamples()
     {
         XvicOraclePrerequisites.ValidateCurrent();

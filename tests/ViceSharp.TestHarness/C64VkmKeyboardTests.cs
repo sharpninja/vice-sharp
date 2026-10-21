@@ -177,9 +177,9 @@ public sealed class C64VkmKeyboardTests
     /// press and release transitions; profiles without keyboards report
     /// the key as not applied.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceTheory]
     [MemberData(nameof(VkmKeyboardParityCases))]
+    [Trait("Category", "ShimLegacy")]
     public void SelectedVkmMap_CiaMatrixScanMatchesNativeX64Sc(string modelSelector, string key)
     {
         var result = C64VkmParser.Load(FindGtk3PosVkm());

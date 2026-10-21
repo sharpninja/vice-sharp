@@ -4,10 +4,10 @@ using Xunit;
 namespace ViceSharp.TestHarness;
 
 /// <summary>
-/// PLAN-NATIVERESTORE-001 D2 (round 5 N16, round 7 N24): constructing <see cref="ViceFactAttribute"/> and
-/// <see cref="ViceTheoryAttribute"/>, which xunit does for every decorated method during discovery whether or not the
-/// method is selected, records no resolve or load attempt; the skip is declared as a run-time gate on
-/// <see cref="ViceNativeAvailability"/> instead.
+/// PLAN-NATIVERESTORE-001 D2 (round 5 N16, round 7 N24); TR-VICE-ORACLE-001 AC2: constructing
+/// <see cref="ViceFactAttribute"/> and <see cref="ViceTheoryAttribute"/>, which xunit does for every decorated
+/// method during discovery whether or not the method is selected, records no resolve or load attempt; the skip is
+/// declared as a run-time gate on <see cref="ViceNativeAvailability"/> instead.
 /// </summary>
 [Collection("NativeLoadAudit")]
 public sealed class ViceAttributeDiscoveryTests
@@ -18,6 +18,14 @@ public sealed class ViceAttributeDiscoveryTests
         public void Record(string library, string? path, string outcome) => Calls++;
     }
 
+    /// <summary>
+    /// TR-VICE-ORACLE-001 AC2; PLAN-NATIVERESTORE-001 D2 round 5 N16 and round 7 N24.
+    /// Use case: an ordinary gate that excludes the ShimLegacy category still constructs every ViceFact and
+    /// ViceTheory attribute at discovery, so construction must not touch the native binding.
+    /// Acceptance: with a counting double installed, constructing both attributes records zero attempts, and each
+    /// attribute declares the run-time gate (Skip reason, SkipUnless IsAvailable, SkipType ViceNativeAvailability)
+    /// with discovery enumeration disabled for the theory.
+    /// </summary>
     [Fact]
     public void AttributeConstruction_RecordsNoNativeAttempt_AndDeclaresARunTimeGate()
     {

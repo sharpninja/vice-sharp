@@ -28,8 +28,8 @@ public sealed class VicIiValidationTests : LockstepTestRunner<Mos6569>, IAsyncLi
     /// Acceptance: CompareStates returns Passed; any diverging field or
     /// register byte fails the test with the field name and offending value.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Reset_StateMatchesVICE()
     {
         _fixture.ResetBoth();
@@ -47,8 +47,8 @@ public sealed class VicIiValidationTests : LockstepTestRunner<Mos6569>, IAsyncLi
     /// Acceptance: Every cycle compares equal between managed and native;
     /// any difference fails with the cycle number and offending state.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTwoScanlines_MatchVICE()
     {
         _fixture.ResetBoth();

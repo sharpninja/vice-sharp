@@ -35,8 +35,8 @@ public sealed class SidEngineClockingProbeTests
     /// greater than its pre-render value. It does not assert engine parity. Skips when
     /// the native shim is unavailable.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Probe_NativeReSidInternalStateAdvancesOnStep()
     {
         if (!ViceNative.IsAvailable)

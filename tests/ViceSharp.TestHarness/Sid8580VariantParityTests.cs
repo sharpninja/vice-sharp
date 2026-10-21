@@ -139,9 +139,9 @@ public sealed class Sid8580VariantParityTests
     ///   write/clock program yields bit-exact SID output every cycle.
     /// viceCite: sid.h:231-234.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-8580-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SampleFast_1CycleWriteDelay_LockstepVsOracle()
     {
         var program = new (ushort reg, byte val)[]
@@ -248,9 +248,9 @@ public sealed class Sid8580VariantParityTests
     ///   bit-exact SID output every cycle.
     /// viceCite: wave8580_PS.h / wave8580_PT.h / wave8580_PST.h.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-8580-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveforms_8580_OutputLockstep()
     {
         var program = new (ushort reg, byte val)[]

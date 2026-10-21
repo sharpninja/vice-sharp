@@ -159,9 +159,9 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// must equal the oracle's exactly. Assert both oracle and managed equal 0
     /// after 256 cycles (sync fired on the rising edge this cycle).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-SYNC-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void HardSync_FiresOnRisingEdgeOfSourceMsb()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -218,9 +218,9 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// direction). Both oracle accumulators[0] and accumulators[1] must equal
     /// managed accumulators 0 and 1 exactly after 256 cycles.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-SYNC-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void HardSync_SameCycleSyncSourceSpecialCaseSuppressesDestSync()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -479,9 +479,9 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// One clock later, oracle ShiftRegisterReset[0] = 34999 (one decrement),
     /// managed VoiceShiftRegisterReset(0) = 34999.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-TESTBIT-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBitRising_ArmsSlowShiftRegisterResetOf35000Cycles()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -524,9 +524,9 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// ShiftPipeline[0] = 0 and managed VoiceShiftPipeline(0) = 0 (pipeline
     /// flushed by writeCONTROL_REG, wave.cc:233).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-TESTBIT-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBitRising_FlushesShiftPipelineToZero()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -576,9 +576,9 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// the formula: bit0 = (~sr >> 17) and 1, new_sr = ((sr << 1) | bit0) and 0x7FFFFF.
     /// Oracle and managed must agree exactly on the post-release value.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-TESTBIT-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBitFalling_ClocksShiftRegisterOnceWithInvertedBit17()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -637,9 +637,9 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// Managed VoiceShiftRegisterReset(0) and (1) must match the oracle values
     /// exactly.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-TESTBIT-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBit_ShiftRegisterIsPerVoiceNotShared()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

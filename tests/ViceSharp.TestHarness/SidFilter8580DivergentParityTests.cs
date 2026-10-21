@@ -235,9 +235,9 @@ public sealed class SidFilter8580DivergentParityTests
     ///   program (4000 cycles).
     /// viceCite: filter8580new.cc:760-764.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-8580-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SetW0_8580_CutoffSweep_FilterProbeLockstep()
     {
         AssertFilter8580LockstepVsOracle(
@@ -261,9 +261,9 @@ public sealed class SidFilter8580DivergentParityTests
     ///   integrator trajectory exercises the DAC-gate math.
     /// viceCite: filter8580new.h:1913-1937.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-8580-11", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SolveIntegrate8580_LpProgram_FilterProbeLockstep()
     {
         AssertFilter8580LockstepVsOracle(
@@ -284,9 +284,9 @@ public sealed class SidFilter8580DivergentParityTests
     ///   oracle SID output bit-exact across a BP/HP-routed program (4000 cycles).
     /// viceCite: filter8580new.h:769-778.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-8580-12", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PerCycleOrder_8580_ExtFilterOutputLockstep()
     {
         AssertFilter8580LockstepVsOracle(

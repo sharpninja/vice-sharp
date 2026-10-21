@@ -86,8 +86,8 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// (peak > 0.003 of full scale) under the reference-tolerant gate documented
     /// in the class XMLDOCS.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Voice1_Triangle_GateOn_AgreesWithNative()
     {
         EnsureNativeAvailable();
@@ -111,8 +111,8 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// Acceptance: peak amplitude non-silent on both sides per the reference-
     /// tolerant gate.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Voice1_TriangleSaw_AgreesWithNative()
     {
         EnsureNativeAvailable();
@@ -136,8 +136,8 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// Acceptance: peak amplitude non-silent on both sides per the reference-
     /// tolerant gate.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Voice1_AdsrSweep_AgreesWithNative()
     {
         EnsureNativeAvailable();
@@ -163,8 +163,8 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// Acceptance: peak amplitude non-silent on both sides per the reference-
     /// tolerant gate.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Voice1_HardSync_AgreesWithNative()
     {
         EnsureNativeAvailable();
@@ -192,8 +192,8 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// Acceptance: peak amplitude non-silent on both sides per the reference-
     /// tolerant gate.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Volume_DigiPlayback_AgreesWithNative()
     {
         EnsureNativeAvailable();

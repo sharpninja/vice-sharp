@@ -21,8 +21,8 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: <see cref="LockstepValidator"/> reports zero cycles and
     /// no register mismatch (PC, A, X, Y, S, P) against native VICE.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void ResetStateMatches()
     {
         // Act
@@ -41,8 +41,8 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: 100 cycles execute with no mismatch and the validator
     /// reports exactly 100 cycles executed.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void First100CyclesMatch()
     {
         // Act
@@ -62,8 +62,8 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: 10,000 cycles execute with no register mismatch and
     /// the validator reports exactly 10,000 cycles executed.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void First10000CyclesMatch()
     {
         // Act
@@ -82,8 +82,8 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: After 10,000 lockstep cycles, CIA1 Timer A live counters
     ///   match native GetCiaState.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void First10000_Cia1TimerA_MatchesNative()
     {
         var report = _validator.Run(10000);
@@ -104,8 +104,8 @@ public sealed class LockstepValidationTests : IDisposable
     /// Acceptance: 100,000 cycles execute with zero register mismatch and
     /// the validator reports exactly 100,000 cycles executed.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void First100000CyclesMatch()
     {
         // Act
@@ -122,8 +122,8 @@ public sealed class LockstepValidationTests : IDisposable
     ///   idle loop and CIA Timer A IRQ have been running.
     /// Acceptance: After 100,000 lockstep cycles, CIA1 Timer A matches native.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void First100000_Cia1TimerA_MatchesNative()
     {
         var report = _validator.Run(100000);

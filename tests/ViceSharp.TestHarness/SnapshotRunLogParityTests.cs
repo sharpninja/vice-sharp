@@ -100,9 +100,9 @@ public sealed class SnapshotRunLogParityTests
     /// of the instruction stream around the divergence PC with a DIVERGES-HERE marker.
     /// Skips when no fixture pairs are staged or the native shim is absent.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceTheory(SkipTestWithoutData = true)]
     [MemberData(nameof(DiscoverCases))]
+    [Trait("Category", "ShimLegacy")]
     public void SnapshotRun_MatchesViceRunLog(string snapshotPath, string runLogPath)
     {
         var expected = CpuRunLog.Load(runLogPath);
@@ -199,8 +199,8 @@ public sealed class SnapshotRunLogParityTests
     /// disassembly with DIVERGES-HERE marker). Skips when the shim or the READY
     /// fixture is absent.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void SaveNativeRunLog_ReadyFixture_ManagedMatchesAllEntries()
     {
         var vsf = LocateFixturePath("Vsf", ReadyFixtureName);
@@ -313,8 +313,8 @@ public sealed class SnapshotRunLogParityTests
     /// trace are logged via ITestOutputHelper before the assert. Skips when the
     /// shim or the READY fixture is absent.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void RunFromSnapshot_ReadyFixture_HoldsLockstepZeroDivergence()
     {
         var vsf = LocateFixturePath("Vsf", ReadyFixtureName);
@@ -365,8 +365,8 @@ public sealed class SnapshotRunLogParityTests
     /// covers the full run regardless); the report outcome is logged. Skips when
     /// ffmpeg, the shim, or the READY fixture is absent.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void RunFromSnapshot_WithVideoCapture_ProducesMuxedVideoAndAudioStreams()
     {
         var ffmpeg = FfmpegLocator.Locate();

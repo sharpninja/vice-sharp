@@ -207,9 +207,9 @@ public sealed class SidEnvDivergentParityTests
     /// must both preserve exactly 0x40, and one post-reset clock must make
     /// ENV3 read exactly 0x40 on both sides. Bit-exact, no tolerance.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-ENV-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void EnvelopeReset_PreservesEnvelopeCounterExactlyAsReSid()
     {
         // Native oracle: walk voice 3 to counter 0x40, then reset.
@@ -289,9 +289,9 @@ public sealed class SidEnvDivergentParityTests
     /// one-cycle reset delay), and the exported/captured voice-3 counters are
     /// equal at cycles 1 and 600 (0x68 at 600).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-ENV-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PowerUp_SeedsEnvelopeCounter0xAAAndReleasesExactlyAsReSid()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -407,9 +407,9 @@ public sealed class SidEnvDivergentParityTests
     /// reads 0 on both sides (6581 writes commit immediately; the slot is
     /// still checked every cycle per sid.h:231-234).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-CLOCK-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PerCycleClockChain_RunsPipelinedWriteAndBusAgingStages()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -551,9 +551,9 @@ public sealed class SidEnvDivergentParityTests
     /// boundary observed on the oracle pins the trajectory), then managed
     /// ttl -5 after five more cycles. Bit-exact equality at every checkpoint.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-CLOCK-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void BusValue_AgesByExactlyTheElapsedClockedCycles()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

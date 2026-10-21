@@ -95,9 +95,9 @@ public sealed class SidBatchedClockParityTests
     ///   external filter sub-steps at dt=8 exactly like reSID.
     /// viceCite: extfilt.h:121-153.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-EXTFILT-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void ExtFilterClockDeltaT_DeltaTFlt8_BatchedLockstep()
         => AssertFastBatchedLockstep("c64", MakeSid6581, SawLp, 8000);
 
@@ -151,9 +151,9 @@ public sealed class SidBatchedClockParityTests
     ///   the per-cycle extfilt.clock(filter.output()) wiring).
     /// viceCite: sid.cc:828-831.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-EXTFILT-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void ExtFilterWiring_PerCycleOutputLockstep()
     {
         var sid = MakeSid6581();
@@ -191,9 +191,9 @@ public sealed class SidBatchedClockParityTests
     ///   oscillators sub-step to the MSB toggles exactly like reSID.
     /// viceCite: sid.cc:776-820.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-CLOCK-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void OscMsbToggleSubStepping_BatchedLockstep()
         => AssertFastBatchedLockstep("c64", MakeSid6581, new (ushort, byte)[]
         {
@@ -213,9 +213,9 @@ public sealed class SidBatchedClockParityTests
     ///   yields bit-exact output.
     /// viceCite: sid.cc:749-756.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-CLOCK-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WritePipelinePrologue_BatchedLockstep()
     {
         var program = new (ushort reg, byte val)[]

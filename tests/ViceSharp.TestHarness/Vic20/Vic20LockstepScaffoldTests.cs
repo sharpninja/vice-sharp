@@ -17,11 +17,11 @@ public sealed class Vic20LockstepScaffoldTests
     /// <summary>
     /// N0: Vic20 profile selectors create via vice_xvic when the oracle is built.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Theory]
     [InlineData("vic20")]
     [InlineData("vic20ntsc")]
     [InlineData("xvic")]
+    [Trait("Category", "ShimLegacy")]
     public void NativeShim_CreatesVic20Models_WhenXvicOraclePresent(string modelSelector)
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -36,8 +36,8 @@ public sealed class Vic20LockstepScaffoldTests
     /// <summary>
     /// N1 precursor: native step advances master cycle when oracle is present.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_StepAdvancesCycle_WhenOraclePresent()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -72,8 +72,8 @@ public sealed class Vic20LockstepScaffoldTests
     /// <summary>
     /// N1: short native vs managed CPU lockstep (PC + A) after equal cycle counts.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent()
     {
         XvicOraclePrerequisites.ValidateCurrent();

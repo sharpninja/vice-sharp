@@ -118,7 +118,10 @@ sealed partial class Build : NukeBuild
             var results = ResolvedTestResultsDirectory;
             Directory.CreateDirectory(results);
             var log = PrepareNativeLoadLog();
-            Serilog.Log.Information("Test: results {Results}, native load log {Log}, filter {Filter}", results, log, OrdinaryTestFilter);
+            // The vendored VICE data tree of the submodule is the local ROM root when the machine sets none
+            // (the Phase A step 2 rerun of 2026-10-19 established this: docs/receipts/lockstep/20261019T103200-...).
+            var romRoot = ResolveLocalRomRoot();
+            Serilog.Log.Information("Test: results {Results}, native load log {Log}, ROM root {RomRoot}, filter {Filter}", results, log, romRoot ?? "(machine default)", OrdinaryTestFilter);
             try
             {
                 DotNetTest(s => s
@@ -129,7 +132,8 @@ sealed partial class Build : NukeBuild
                     .SetFilter(OrdinaryTestFilter)
                     .SetResultsDirectory(results)
                     .SetLoggers("trx")
-                    .SetProcessEnvironmentVariable("VICESHARP_NATIVE_LOAD_LOG", log));
+                    .SetProcessEnvironmentVariable("VICESHARP_NATIVE_LOAD_LOG", log)
+                    .When(_ => romRoot is not null, x => x.SetProcessEnvironmentVariable("VICESHARP_ROM_PATH", romRoot)));
             }
             finally
             {

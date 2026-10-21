@@ -27,8 +27,8 @@ public sealed class CaptureRunLogUtilityTests
     /// number of per-cycle entries, saves a v1 cpulog to the requested path
     /// and reports its size; without them it skips.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void CaptureBaselineRunLog_FromEnvironment()
     {
         var vsf = Environment.GetEnvironmentVariable("VICESHARP_CAPTURE_VSF");

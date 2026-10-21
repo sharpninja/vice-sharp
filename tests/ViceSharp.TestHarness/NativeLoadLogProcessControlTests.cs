@@ -5,12 +5,13 @@ using Xunit;
 namespace ViceSharp.TestHarness;
 
 /// <summary>
-/// PLAN-NATIVERESTORE-001 D2 load detector, fresh-process controls (round 4 N11; round 5 N16): each scenario runs
-/// the probe console in a new process with VICESHARP_NATIVE_LOAD_LOG pointing at a fresh file, so the once-per-process
-/// resolvers are observed cold. Positive controls (xvic first, x64 first, alias and fallback probing, a failing load)
-/// must show their attempts in their own logs; the managed fake and the empty scenario must leave the log empty; an
-/// unwritable log fails the process loudly. These assertions are host independent: a host that carries a real
-/// library records resolved and loaded or failed lines, a host without one records unresolved lines.
+/// PLAN-NATIVERESTORE-001 D2 load detector, fresh-process controls (round 4 N11; round 5 N16); TR-VICE-ORACLE-001
+/// AC2 and AC4. Each scenario runs the probe console in a new process with VICESHARP_NATIVE_LOAD_LOG pointing at a
+/// fresh file, so the once-per-process resolvers are observed cold. Positive controls (xvic first, x64 first, alias
+/// and fallback probing, a failing load) must show their attempts in their own logs; the managed fake and the empty
+/// scenario must leave the log empty; an unwritable log fails the process loudly. These assertions are host
+/// independent: a host that carries a real library records resolved and loaded or failed lines, a host without one
+/// records unresolved lines.
 /// </summary>
 public sealed class NativeLoadLogProcessControlTests
 {
@@ -62,6 +63,11 @@ public sealed class NativeLoadLogProcessControlTests
         return (parts[0], parts[1], parts[2]);
     }
 
+    /// <summary>
+    /// TR-VICE-ORACLE-001 AC2; PLAN-NATIVERESTORE-001 D2 round 4 N11.
+    /// Use case: a process that never touches the bindings is the baseline every positive control is compared to.
+    /// Acceptance: the probe's empty scenario exits 0 and leaves the pre-created log empty.
+    /// </summary>
     [Fact]
     public void EmptyScenario_LeavesAnEmptyLog()
     {
@@ -70,6 +76,11 @@ public sealed class NativeLoadLogProcessControlTests
         Assert.Empty(log);
     }
 
+    /// <summary>
+    /// TR-VICE-ORACLE-001 AC2; PLAN-NATIVERESTORE-001 D2 R6 (a managed fake is not a consumer).
+    /// Use case: tests that step a managed IViceNative double stay selected in the ordinary gate and must not log.
+    /// Acceptance: the managed-fake scenario steps 1000 times, exits 0, and leaves the log empty.
+    /// </summary>
     [Fact]
     public void ManagedFake_StaysSilent()
     {
@@ -79,6 +90,12 @@ public sealed class NativeLoadLogProcessControlTests
         Assert.Empty(log);
     }
 
+    /// <summary>
+    /// TR-VICE-ORACLE-001 AC4; PLAN-NATIVERESTORE-001 D2 round 7 N24 (availability probes are in scope).
+    /// Use case: IsAvailable of either binding, in either order, is an attempt the log must show.
+    /// Acceptance: a fresh process records exactly one probe line per library in call order, each with a resolved
+    /// path when and only when the outcome is resolved.
+    /// </summary>
     [Theory]
     [InlineData("x64-first", "vice_x64", "vice_xvic")]
     [InlineData("xvic-first", "vice_xvic", "vice_x64")]
@@ -97,6 +114,13 @@ public sealed class NativeLoadLogProcessControlTests
         Assert.Equal(b.Outcome == "resolved", b.Path != "none");
     }
 
+    /// <summary>
+    /// TR-VICE-ORACLE-001 AC4; PLAN-NATIVERESTORE-001 D2 round 4 N11 (alias and fallback probing, failing load).
+    /// Use case: a library file that resolves but cannot load, including the vice-shim alias, must be visible as
+    /// resolve then failure rather than disappearing into a DllNotFoundException.
+    /// Acceptance: the scenario exits 2 (expected load failure) and the log holds a resolved line whose path names
+    /// the planted file followed by a failed line with the same path.
+    /// </summary>
     [Theory]
     [InlineData("failing-load", "vice_x64", "vice_x64")]
     [InlineData("failing-load-xvic", "vice_xvic", "vice_xvic")]
@@ -113,6 +137,12 @@ public sealed class NativeLoadLogProcessControlTests
         Assert.Equal(probe.Path, load.Path);
     }
 
+    /// <summary>
+    /// TR-VICE-ORACLE-001 AC4; PLAN-NATIVERESTORE-001 D2 round 4 N11 (unwritable log fails loudly).
+    /// Use case: a gate pointed at an unwritable log must fail the native attempt, never pass silently.
+    /// Acceptance: with the variable naming a file in a missing directory, the x64-first scenario exits nonzero and
+    /// its stderr names VICESHARP_NATIVE_LOAD_LOG; no log file exists afterwards.
+    /// </summary>
     [Fact]
     public void UnwritableLog_FailsTheProcessLoudly()
     {

@@ -17,8 +17,8 @@ public sealed class Vic20PixelLockstep
     public const int BootCycles = 2_000_000;
 
     /// <summary>TEST-VIC20-001 / AC-PX-02: READY PAL index SequenceEqual.</summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Index_ReadyPal_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -26,8 +26,8 @@ public sealed class Vic20PixelLockstep
     }
 
     /// <summary>AC-PX-03: READY NTSC index SequenceEqual.</summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Index_ReadyNtsc_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -51,8 +51,8 @@ public sealed class Vic20PixelLockstep
     }
 
     /// <summary>AC-PX-04: busy screen PAL — border color reg poke then index equal.</summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Index_BusyPal_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -67,8 +67,8 @@ public sealed class Vic20PixelLockstep
     /// Use case: READY PAL pixel lockstep.
     /// Acceptance: Failed=0 for this fact when xvic is available.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Bgra_ReadyPal_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -143,8 +143,8 @@ public sealed class Vic20PixelLockstep
     /// Use case: busy PAL pixel lockstep.
     /// Acceptance: Failed=0 when xvic is available.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Bgra_BusyPal_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -199,8 +199,8 @@ public sealed class Vic20PixelLockstep
     /// Use case: READY NTSC pixel lockstep.
     /// Acceptance: Failed=0 when xvic is available.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Bgra_ReadyNtsc_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();

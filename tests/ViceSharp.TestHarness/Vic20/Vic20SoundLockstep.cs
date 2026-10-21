@@ -84,8 +84,8 @@ public sealed class Vic20SoundLockstep
     }
 
     /// <summary>AC-SD-03: silence sample buffer SequenceEqual vs xvic for fixed cycle budget.</summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Silence_MatchesXvic()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -107,8 +107,8 @@ public sealed class Vic20SoundLockstep
     }
 
     /// <summary>AC-SD-04: single-channel tone SequenceEqual vs xvic.</summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Tone_MatchesXvic()
     {
         XvicOraclePrerequisites.ValidateCurrent();

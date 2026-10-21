@@ -99,16 +99,18 @@ Describe 'Add-ShimLegacyTraits' {
     }
     AfterEach { Remove-Item -LiteralPath $script:Root -Recurse -Force -ErrorAction SilentlyContinue }
 
-    It 'tags exactly the inventory methods and leaves the fake, the string-only mention and the plain test alone' {
+    It 'tags exactly the inventory methods, last in the attribute block, and leaves the fake, the string-only mention and the plain test alone' {
         $report = & $script:Script -InventoryPath $script:Inventory -TestRoot $script:Root
         $report.counts.tagged | Should -Be 3
+        $report.counts.relocated | Should -Be 0
         $report.counts.notFound | Should -Be 0
         $direct = @(Get-Content -LiteralPath $script:DirectPath)
         @($direct | Where-Object { $_ -like '*Trait("Category", "ShimLegacy")*' }).Count | Should -Be 2
         @($direct | Where-Object { $_ -like '*Xunit.Trait*' }).Count | Should -Be 0
-        $idxTrait = [array]::IndexOf($direct, '    [Trait("Category", "ShimLegacy")]')
-        $direct[$idxTrait + 1] | Should -Be '    [Fact]'
-        $direct[$idxTrait + 2] | Should -Be '    public void Direct_UsesNative()'
+        $idxDecl = [array]::IndexOf($direct, '    public void Direct_UsesNative()')
+        $direct[$idxDecl - 1] | Should -Be '    [Trait("Category", "ShimLegacy")]'
+        $direct[$idxDecl - 2] | Should -Be '    [Fact]'
+        $direct[$idxDecl - 3] | Should -BeLike '    /// <summary>*'
         $idxString = [array]::IndexOf($direct, '    public void StringOnly_MentionsViceNative()')
         $direct[$idxString - 1] | Should -Be '    [Fact]'
         $direct[$idxString - 2] | Should -Be ''
@@ -119,16 +121,36 @@ Describe 'Add-ShimLegacyTraits' {
         $fake[$idxFakeTest - 2] | Should -Be '{'
     }
 
-    It 'inserts before a multi-line attribute block and uses the qualified form without using Xunit' {
+    It 'inserts after a multi-line attribute block and uses the qualified form without using Xunit' {
         & $script:Script -InventoryPath $script:Inventory -TestRoot $script:Root | Out-Null
         $direct = @(Get-Content -LiteralPath $script:DirectPath)
         $idx = [array]::IndexOf($direct, '    public void Transitive_ViaHelper(int a, int b)')
-        $direct[$idx - 5] | Should -Be '    [Trait("Category", "ShimLegacy")]'
-        $direct[$idx - 4] | Should -Be '    [Theory]'
+        $direct[$idx - 1] | Should -Be '    [Trait("Category", "ShimLegacy")]'
+        $direct[$idx - 2] | Should -Be '        2)]'
+        $direct[$idx - 5] | Should -Be '    [Theory]'
         $fake = @(Get-Content -LiteralPath $script:FakePath)
         $idx2 = [array]::IndexOf($fake, '    public void NoUsingXunit_DirectConsumer()')
-        $fake[$idx2 - 2] | Should -Be '    [Xunit.Trait("Category", "ShimLegacy")]'
-        $fake[$idx2 - 1] | Should -Be '    [Xunit.Fact]'
+        $fake[$idx2 - 1] | Should -Be '    [Xunit.Trait("Category", "ShimLegacy")]'
+        $fake[$idx2 - 2] | Should -Be '    [Xunit.Fact]'
+    }
+
+    It 'relocates a trait found earlier in the block to the end, once' {
+        $lines = [Collections.Generic.List[string]]::new([string[]](Get-Content -LiteralPath $script:DirectPath))
+        $idxFact = [array]::IndexOf($lines.ToArray(), '    [Fact]')
+        $lines.Insert($idxFact, '    [Trait("Category", "ShimLegacy")]')
+        [IO.File]::WriteAllText($script:DirectPath, ($lines.ToArray() -join "`r`n"), [Text.UTF8Encoding]::new($true))
+        $report = & $script:Script -InventoryPath $script:Inventory -TestRoot $script:Root
+        $report.counts.relocated | Should -Be 1
+        $report.counts.tagged | Should -Be 2
+        $direct = @(Get-Content -LiteralPath $script:DirectPath)
+        @($direct | Where-Object { $_ -like '*ShimLegacy*' }).Count | Should -Be 2
+        $idxDecl = [array]::IndexOf($direct, '    public void Direct_UsesNative()')
+        $direct[$idxDecl - 1] | Should -Be '    [Trait("Category", "ShimLegacy")]'
+        $direct[$idxDecl - 2] | Should -Be '    [Fact]'
+        $direct[$idxDecl - 3] | Should -BeLike '    /// <summary>*'
+        $second = & $script:Script -InventoryPath $script:Inventory -TestRoot $script:Root
+        $second.counts.relocated | Should -Be 0
+        $second.counts.alreadyTagged | Should -Be 3
     }
 
     It 'preserves CRLF, LF and byte order marks' {

@@ -52,8 +52,8 @@ public sealed class SidEngineParityTests
     /// native reSID OSC3 and the closed-form value - zero mismatches, no tolerance.
     /// Skips when the native shim is unavailable.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void ManagedOscillatorMatchesNativeReSid_CycleExact()
     {
         if (!ViceNative.IsAvailable)
@@ -104,8 +104,8 @@ public sealed class SidEngineParityTests
     /// delta 0 is deferred until that native-side discrepancy is resolved;
     /// per-checkpoint deltas are logged. Skips when the native shim is unavailable.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void ManagedEnvelopeMatchesNativeReSid_CycleExact()
     {
         if (!ViceNative.IsAvailable)

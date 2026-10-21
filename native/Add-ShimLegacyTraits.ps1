@@ -6,9 +6,12 @@ semantic shim-consumer inventory (Get-ShimConsumerInventory.ps1 output).
 
 .DESCRIPTION
 For every consumer entry (file, class, method) the script locates the method declaration, finds the contiguous
-attribute block above it and inserts the trait as the first attribute with the declaration's indentation, using the
-short form when the file has "using Xunit;" and the qualified Xunit.Trait form otherwise. Methods already carrying the
-trait are reported as alreadyTagged and left alone, so the script is idempotent. A method that cannot be found, or
+attribute block above it and inserts the trait as the LAST attribute, directly above the declaration, with the
+declaration's indentation, using the short form when the file has "using Xunit;" and the qualified Xunit.Trait form
+otherwise. The trait goes last so that the XML doc block stays immediately above the Fact, Theory, ViceFact or
+ViceTheory attribute, which is where XmlDocsConventionTests (QA-XMLDOCS-001) looks for it. A trait found earlier in
+the block is relocated to the end (reported as relocated); methods already carrying the trait in the last position
+are reported as alreadyTagged and left alone, so the script is idempotent. A method that cannot be found, or
 that matches more than one declaration, is reported and makes the script fail without writing that file. Nothing
 outside the inventory is touched: a managed fake, a string-only mention or a plain test in the same file stays as it
 is. Line endings and byte order marks are preserved. Each tagged method is classified to the phase that rebinds it:
@@ -61,6 +64,7 @@ function Get-AttributeBlockStart {
 }
 
 $tagged = [Collections.Generic.List[object]]::new()
+$relocated = [Collections.Generic.List[object]]::new()
 $already = [Collections.Generic.List[object]]::new()
 $notFound = [Collections.Generic.List[object]]::new()
 $ambiguous = [Collections.Generic.List[object]]::new()
@@ -97,14 +101,23 @@ foreach ($group in ($consumers | Group-Object -Property file)) {
         $c = $entry.consumer
         $decl = $entry.index
         $blockStart = Get-AttributeBlockStart -Lines $lines.ToArray() -DeclarationIndex $decl
-        $block = @($lines.GetRange($blockStart, $decl - $blockStart))
         $record = [pscustomobject]@{
             file = $relative; class = $c.class; method = $c.method; attribute = $c.attribute; reason = $c.reason; via = $c.via
             line = $blockStart + 1; rebind = Get-RebindPhase -File $relative -ClassName $c.class
         }
-        if (@($block | Where-Object { $_ -match [regex]::Escape($traitText) }).Count -gt 0) { $already.Add($record); continue }
+        $traitPattern = [regex]::Escape($traitText)
         $indent = ([regex]::Match($lines[$decl], '^\s*')).Value
-        $lines.Insert($blockStart, $indent + $attributeLine)
+        $traitIndices = @()
+        for ($k = $blockStart; $k -lt $decl; $k++) { if ($lines[$k] -match $traitPattern) { $traitIndices += $k } }
+        if ($traitIndices.Count -eq 1 -and $traitIndices[0] -eq ($decl - 1)) { $already.Add($record); continue }
+        if ($traitIndices.Count -gt 0) {
+            foreach ($k in ($traitIndices | Sort-Object -Descending)) { $lines.RemoveAt($k) }
+            $lines.Insert($decl - $traitIndices.Count, $indent + $attributeLine)
+            $relocated.Add($record)
+            $fileChanged = $true
+            continue
+        }
+        $lines.Insert($decl, $indent + $attributeLine)
         $tagged.Add($record)
         $fileChanged = $true
     }
@@ -119,8 +132,9 @@ foreach ($group in ($consumers | Group-Object -Property file)) {
 $report = [pscustomobject]@{
     inventoryPath = $InventoryPath
     inventoryConsumers = $consumers.Count
-    counts = [pscustomobject]@{ tagged = $tagged.Count; alreadyTagged = $already.Count; notFound = $notFound.Count; ambiguous = $ambiguous.Count; filesWritten = $filesWritten }
+    counts = [pscustomobject]@{ tagged = $tagged.Count; relocated = $relocated.Count; alreadyTagged = $already.Count; notFound = $notFound.Count; ambiguous = $ambiguous.Count; filesWritten = $filesWritten }
     tagged = @($tagged)
+    relocated = @($relocated)
     alreadyTagged = @($already)
     notFound = @($notFound)
     ambiguous = @($ambiguous)

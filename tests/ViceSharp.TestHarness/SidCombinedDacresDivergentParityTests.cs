@@ -155,9 +155,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// to ix=0x800 (2048 cycles): oracle OSC3 = wave6581__ST[0x800]&gt;&gt;4 = 0x00,
     /// managed analytic-AND OSC3 = 0x80. Both equal 0x00 after ROM table port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveTableSelector_ST_ix800()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -190,9 +190,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// wave6581_P_T[0x400]&gt;&gt;4 = 0x00, managed analytic tri gives 0x80.
     /// Both 0x00 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveSubTableMap_PT_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -226,9 +226,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// oracle OSC3 = wave6581__ST[0x7F8]&gt;&gt;4 = 0x3E, managed analytic
     /// AND gives 0x7F. Both 0x3E after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveTriangleFormula_ST_ix7F8()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -259,9 +259,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// (1024 cycles): oracle OSC3 = wave6581_PS_[0x400]&gt;&gt;4 = 0x00, managed
     /// analytic saw gives 0x40. Both 0x00 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveSawtoothFormula_PS_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -294,9 +294,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// (2048 cycles): oracle OSC3 = wave6581_PST[0x800]&gt;&gt;4 = 0x00, managed
     /// analytic tri&amp;saw = 0x80. Both 0x00 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveUsesRomNotAnalyticAnd_PST_ix800()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -331,9 +331,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// (= 0x7F0 &gt;&gt; 4). The two must differ after ROM port; before port both
     /// return the analytic 0x7F.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveDistinct6581vs8580Tables_ST_ix7F8()
     {
         // No oracle: two independent managed chip instances.
@@ -384,9 +384,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// (2048 cycles): oracle OSC3 = wave6581__ST[0x800]&gt;&gt;4 = 0x00. Managed
     /// pre-gate value diverges (analytic AND = 0x800); after ROM port both match.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveGatingFormula_ST_ix800()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -418,9 +418,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// Acceptance: voice 3 P_T (ctrl 0x50) with pw=0 at ix=0x400 (1024 cycles):
     /// oracle 0x00, managed analytic tri 0x80. Both 0x00 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoPulseGating_PT_pw0()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -452,9 +452,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// (1024 cycles): oracle OSC3 = wave6581_PS_[0x400]&gt;&gt;4 = 0x00, managed
     /// analytic saw gives 0x40. Both 0x00 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoNoiseGating_PS_pw0()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -488,9 +488,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// wave6581_P_T[0x400]&gt;&gt;4 = 0x00. Managed analytic tri at ix=0x400 = 0x80.
     /// Both 0x00 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveRingIndexMsbSubstitution_PT_ring()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -525,9 +525,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// ring (ix_eff = 0x400), OSC3 = 0x00 (P_T ROM). Managed analytic gives
     /// wrong ix (0x80). Both 0x00 after ROM port + ring formula correct.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-11", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveRingMsbMaskFormula_ArmedWhenNoSaw()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -565,9 +565,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// cycles): oracle OSC3 = wave6581_PS_[0x10]&gt;&gt;4 = 0x00; managed analytic saw
     /// gives 0x01. Both match oracle 0x00 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-12", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoisePulseRouting_NPS_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -604,9 +604,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// cycles): oracle OSC3 = wave6581_P_T[0x08]&gt;&gt;4 = 0x00; managed analytic
     /// tri gives 0x01. Both match oracle 0x00 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-13", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoisePulse6581Formula_NPT_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -642,9 +642,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// Assert.NotEqual fails - test RED). After S7: Sid6581 OSC3=0x7F, Sid8580
     /// OSC3=0x78 (Assert.NotEqual passes, exact values match - test GREEN).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-14", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoisePulse8580Formula_NPST_8580_ix800()
     {
         // No oracle: two independent managed chip instances at ix=0x7F8 (PST, pw=0).
@@ -697,9 +697,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// ix = 0x001. Oracle OSC3 = __ST[0x001]&gt;&gt;4 = 0x00; managed without writeback
     /// has acc = 0x801000, ix = 0x801. Both must match after writeback + ROM.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-15", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveSawAccWriteback_ST_postIx800()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -737,9 +737,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// cycles): oracle OSC3 = wave6581_PST[0x7FC]&gt;&gt;4 = 0x78; managed analytic
     /// AND gives 0x7F. Both 0x78 after ROM port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-16", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveSRWriteback_NoisePST()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -775,9 +775,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// oracle OSC3 must match managed at every position after port. All five
     /// differ from the analytic AND before port.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-17", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveVerbatimRomTable_ST_MultiplePositions()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -849,9 +849,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// (0x400 - 0x380) * envDac[N] &gt;&gt; 8 (raw). They diverge because
     /// model_dac_6581[0x400] != 0x400.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacOutputUsesModelDac_Sawtooth_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -905,9 +905,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// valid 16-bit integer. Voice output equals (model_dac[0xA00] - 0x380)
     /// * envDac[N] &gt;&gt; 8 after S7.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WavePath12Bit_Sawtooth_ix_A00()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -955,9 +955,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// a lower value at index 1 than index 2 due to missing termination
     /// resistor (nonmonotonic low-bit regime).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacBuiltWithCorrectParams_6581vs8580()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -994,9 +994,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// lower than the 8580 table entry at index 0 (more leakage in 6581
     /// pulls zero bits lower). Both are &gt;= 0.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacMosfetLeakage_6581Higher()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1030,9 +1030,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// (index 0) must equal 0; and a mid-range entry (0x800) must be
     /// strictly between 0 and 0xFFF.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacPerBitVoltageAlgorithm_Boundaries()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1059,9 +1059,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// are strictly monotonically increasing (dac[i+1] &gt; dac[i]). The
     /// 6581 DAC is NOT strictly monotone (dac[1] == dac[2]).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacVoSuperpositionAndRounding_MonotonicFor8580()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1095,9 +1095,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// Acceptance: BuildEnvelopeDacTable(12, 2.20, false)[1] ==
     /// BuildEnvelopeDacTable(12, 2.20, false)[2].
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDac6581MissingTermination_Bit0EqualsBit1()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1122,9 +1122,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// BuildEnvelopeDacTable(12, 2.00, true)[2] (strictly increasing at
     /// low bits). The full monotone sweep is covered in AC-06.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDac8580CorrectTermination_MonotonicLowBits()
     {
         ushort[] dac8580 = Sid6581.BuildEnvelopeDacTable(12, 2.00, term: true);
@@ -1148,9 +1148,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// ushort truncation: (4096-1) = 4095 = 0xFFF). The entry just below
     /// 0xFFF (0xFFE) must be &lt; 0xFFF.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacRoundHalfUp_MaxEntryIs0xFFF()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1174,9 +1174,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// CycleVoiceOutputs.Voice2 uses model_dac[0x400] not 0x400.
     /// Assert OSC3 = 0x40 AND voice output != (0x400 - 0x380) * envDac[N] &gt;&gt; 8.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacRawOsc3VsDacVoiceOutput_Diverge()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -1233,9 +1233,9 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// Sid8580. And model_dac_6581[0x380] != 0x380 (DAC output at wave_zero
     /// index differs from the index itself - pure coincidence if equal).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-11", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacWaveZeroLevel_Scaled12Bit()
     {
         var sid6581 = BuildSid6581();

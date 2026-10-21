@@ -63,9 +63,9 @@ public sealed class SidResampleDivergentParityTests
     ///   program that exercises every batched sub-step path.
     /// viceCite: sid.cc:868-892, 745-832.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OUTPUT-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SampleFast_BatchedClock_BufferedLockstep_BothModels()
     {
         AssertBufferedOutputLockstep("c64", MakeSid6581, SidSamplingMethod.Fast, SyncRingProgram, 30000);
@@ -80,9 +80,9 @@ public sealed class SidResampleDivergentParityTests
     ///   oracle at SAMPLE_INTERPOLATE, element-for-element, for &gt;= 30000 samples.
     /// viceCite: sid.cc:904-938.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OUTPUT-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SampleInterpolate_BufferedLockstep()
         => AssertBufferedOutputLockstep("c64", MakeSid6581, SidSamplingMethod.Interpolate, SawLpProgram, 30000);
 
@@ -96,9 +96,9 @@ public sealed class SidResampleDivergentParityTests
     ///   latter also seals the S11 scaleFactor 5 and S12 amplify end-to-end.
     /// viceCite: sid.cc:977-1038.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [ViceFact]
     [ParityAc("TEST-SID-OUTPUT-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SampleResample_KaiserFir_BufferedLockstep_BothModels()
     {
         AssertBufferedOutputLockstep("c64", MakeSid6581, SidSamplingMethod.Resample, SawLpProgram, 44100);

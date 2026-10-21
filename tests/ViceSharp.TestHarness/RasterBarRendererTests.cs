@@ -206,8 +206,8 @@ public sealed class RasterBarRendererTests
     /// MidLineBorderColorChange_RendersTwoColourBandsOnOneScanline. Skips when the shim
     /// or the staged .vsf is absent.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void DemoBars_ManagedRenderedFrame_AlignsWithViceBorderColoursPerLine()
     {
         if (!ViceNative.IsAvailable) { Assert.Skip(ViceNative.AvailabilityMessage); return; }
@@ -300,8 +300,8 @@ public sealed class RasterBarRendererTests
     /// RENDERED frame's per-line border colour matches VICE's on at least 95% of them;
     /// mismatched lines are logged. Skips when the shim or the staged .vsf is absent.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void DemoBars_ReplayedViceTimeline_ManagedRendererMatchesVicePerLineBorder()
     {
         if (!ViceNative.IsAvailable) { Assert.Skip(ViceNative.AvailabilityMessage); return; }

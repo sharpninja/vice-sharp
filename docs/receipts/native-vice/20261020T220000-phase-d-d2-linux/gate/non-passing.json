@@ -1,0 +1,1213 @@
+[
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.AvaloniaBoundaryTests",
+    "method": "AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.AvaloniaBoundaryTests",
+    "method": "AvaloniaSources_DoNotReferenceRuntimeInternals",
+    "message": "Assert.DoesNotContain() Failure: Sub-string found"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.BasicBusAndSimpleRamTests",
+    "method": "BasicBus_Unregister_RemovesDeviceFromDispatch",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.BasicBusAndSimpleRamTests",
+    "method": "BasicBus_Write_ToUnmappedAddressIsSilentlyDropped",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.BenchmarksSmokeTests",
+    "method": "RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C1541MachineBuildTests",
+    "method": "Build_ProducesMachineWithDriveRoleDevices",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C1541MachineBuildTests",
+    "method": "DriveRam_ReadsBackWhatWasWritten",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C1541MachineBuildTests",
+    "method": "DriveRom_LoadsAt_C000_AndIsReadOnly",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C1541MachineBuildTests",
+    "method": "Reset_LoadsPcFromRomResetVector",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C1541MachineBuildTests",
+    "method": "Vias_RespondToBusAccess_WithMirroring",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C1541RomResolutionTests",
+    "method": "Descriptor_With1541IiVariant_ResolvesAlternateRom",
+    "message": "Expected desc.RequiredRoms!.IsComplete(provider) to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C1541RomResolutionTests",
+    "method": "RomProvider_ResolvesStandard1541Dos_FromNativeViceSubmodule",
+    "message": "Expected set.IsComplete(provider) to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C64Plus1541IntegrationTests",
+    "method": "Coordinator_AdvancesC64AndDrive_AtTheirOwnRates",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C64Plus1541IntegrationTests",
+    "method": "Coordinator_LongRun_BothMachinesExecuteWithoutCrash",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C64Plus1541IntegrationTests",
+    "method": "Coordinator_Reset_ResetsBothMachines",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C64Plus1541IntegrationTests",
+    "method": "IecBus_PropagatesAtn_BetweenHostAndDrive",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.C64Plus1541IntegrationTests",
+    "method": "IecBus_WiredOr_BothSidesPullDataLow_DriveReleasesFirst",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.CoordinatorMachineTests",
+    "method": "Load_ThroughAdapterAsIMachine_LandsProgramAt0801",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.CoordinatorMachineTests",
+    "method": "RunFrame_AdvancesHostAndDrive",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.CoordinatorMachineTests",
+    "method": "StepInstruction_AdvancesHostAndDrive",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.D64AttachTests",
+    "method": "Build_MissingImagePath_Throws_FileNotFound",
+    "message": "Assert.Throws() Failure: Exception type was not an exact match"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.D64AttachTests",
+    "method": "Build_WrongSizedImage_Throws",
+    "message": "Assert.Throws() Failure: Exception type was not an exact match"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.D64AttachTests",
+    "method": "DescriptorWithImagePath_BuildsMachineWithMountedDisk",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.D64AttachTests",
+    "method": "DescriptorWithoutImagePath_HasNoDriveDiskDevice",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.D64AttachTests",
+    "method": "MultiSystemYaml_WithDiskImagePath_MountsDisk",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.Iec1541BootTickTests",
+    "method": "Coordinator_DrivingDriveMachine_AdvancesItOneToOne",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.Iec1541BootTickTests",
+    "method": "DriveCpu_ExecutesRomFromResetVector",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.Iec1541BootTickTests",
+    "method": "DriveCpu_Runs_50kCycles_WithoutCrash",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.Iec1541BootTickTests",
+    "method": "Reset_IsIdempotent_AfterPartialRun",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.TrueDriveFactoryTests",
+    "method": "Create_HonorsTrueDriveFieldOnTheRequest",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.TrueDriveFactoryTests",
+    "method": "Create_TrueDriveWithDiskPath_LoadsProgramOverIec",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.TrueDriveFactoryTests",
+    "method": "Create_TrueDriveWithDiskPath_RegistersMediaAttachment",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.TrueDriveFactoryTests",
+    "method": "Create_WithTrueDriveOn_BuildsCoordinatorRigThatRuns",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.TrueDriveLoadTests",
+    "method": "Load_FromTrueDrive1541_StreamsProgramIntoC64Ram",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C1541.TrueDrivePumpPathLoadTests",
+    "method": "Load_ViaCoordinatorStepInstruction_StreamsProgramAndDriveRunsOwnClock",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_LoadsViceModelRomResourceBytes",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_LoadsViceModelRomResourceBytes",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_LoadsViceModelRomResourceBytes",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore PET64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_LoadsViceModelRomResourceBytes",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore PET64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_LoadsViceModelRomResourceBytes",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_LoadsViceModelRomResourceBytes",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Japanese is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_LoadsViceModelRomResourceBytes",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 old NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_LoadsViceModelRomResourceBytes",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 old PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 old NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore PET64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore PET64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Japanese is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 old PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_RegistersCia2OnlyWhenProfileConnectsCia2",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_RegistersDatasetteOnlyWhenProfileConnectsTapePort",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_RegistersDatasetteOnlyWhenProfileConnectsTapePort",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_RegistersDatasetteOnlyWhenProfileConnectsTapePort",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_RegistersIecDrivesOnlyWhenProfileConnectsIecBus",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_RegistersIecDrivesOnlyWhenProfileConnectsIecBus",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_RegistersIecDrivesOnlyWhenProfileConnectsIecBus",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_RegistersSelectedSystemCoreAsGlueBetweenProfileAndChips",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_UsesProfileTimingAndChipDefaults",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore PET64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_UsesProfileTimingAndChipDefaults",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_UsesProfileTimingAndChipDefaults",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_UsesProfileTimingAndChipDefaults",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore PET64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_UsesProfileTimingAndChipDefaults",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Japanese is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_UsesProfileTimingAndChipDefaults",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 old PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_UsesProfileTimingAndChipDefaults",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 old NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "ArchitectureBuilder_UsesProfileTimingAndChipDefaults",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "C64GsCartridgeRomLowFollowsPlaVisibilityDuringRamTest",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "C64GsSystemCore_DisablesKeyboardMatrixEvenThoughHostInputSurfaceExists",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "HostFactory_CreatesSessionForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore PET64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "HostFactory_CreatesSessionForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "HostFactory_CreatesSessionForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 old PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "HostFactory_CreatesSessionForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "HostFactory_CreatesSessionForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore PET64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "HostFactory_CreatesSessionForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Japanese is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "HostFactory_CreatesSessionForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "HostFactory_CreatesSessionForEveryRequiredX64ScVariant",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 old NTSC is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "X64ScProfiles_SelectViceModelRomResources",
+    "message": "Expected profile.BasicRomName to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "X64ScProfiles_SelectViceModelRomResources",
+    "message": "Expected profile.BasicRomName to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "X64ScProfiles_SelectViceModelRomResources",
+    "message": "Expected profile.BasicRomName to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "X64ScProfiles_SelectViceModelRomResources",
+    "message": "Expected profile.BasicRomName to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "X64ScProfiles_SelectViceModelRomResources",
+    "message": "Expected profile.BasicRomName to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "X64ScProfiles_SelectViceModelRomResources",
+    "message": "Expected profile.BasicRomName to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "X64ScProfiles_SelectViceModelRomResources",
+    "message": "Expected profile.BasicRomName to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineProfileTests",
+    "method": "X64ScProfiles_SelectViceModelRomResources",
+    "message": "Expected profile.BasicRomName to be True, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.C64MachineTests",
+    "method": "C64GsCia2PortA_ReadsDisconnectedSerialInputWithBits6And7Low",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CiaSerialPortTests",
+    "method": "OutputMode_AssertsIrqWhenSdrMaskEnabled",
+    "message": "Expected irq.IsAsserted to be True because SDR-complete event must assert IRQ when IMR bit 3 is enabled, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CiaSerialPortTests",
+    "method": "OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3",
+    "message": "Expected value to be 8 because after 8 Timer A underflows in SP output mode, ICR bit 3 must latch, but found 0 (difference of -8)."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests",
+    "method": "ResolveConfigDirectory_ExpandsEnvironmentVariables",
+    "message": "Assert.DoesNotContain() Failure: Sub-string found"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuInstructionCompletedEventTests",
+    "method": "CompletedInstruction_PublishesOpcodeAndRegisters",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuInterruptTests",
+    "method": "LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuInterruptTests",
+    "method": "Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuInterruptTests",
+    "method": "RtsThenLdaImm_NextTick_FetchesFollowingOpcode",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests",
+    "method": "BranchNotTaken_StillConsumesTheOffsetByte",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "InyAfterPla_LastClk_ExportsNextPcAndY",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "Jsr_ReturnAddressPushTimingMatchesHostedVice",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "Rts_DebugCycleTwo_HasCompletedLowBytePull",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "TakenBne_StolenFetch_Cycle1_ExportsFallThrough",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "TaxThenTakenBmi_Cycle1_ExportsFallthrough",
+    "message": "Wolf64 2142610 BMI dummy INC_PC; PC=$800F cyc=1 trail=0 full=True nonOvlF=True nonOvlR=True"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuVisiblePcTimingTests",
+    "method": "WaitLoopIteration_IrqPending_CountsThirteenViceClocks",
+    "message": "wait-loop irq_delay delta=12 (want 11: 9 host CLK + 2 collapsed zp FETCH)"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.EmulationPipelineSpeedDiagTests",
+    "method": "AppPipeline_TrueDrive_Limited_Sustains_RealTime",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.FrMon005AcceptanceTests",
+    "method": "DriveView_ShowsDriveMemory",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Mos6510BrkTests",
+    "method": "Brk_RtiReturnsToInstructionAfterSignatureByte",
+    "message": "CPU did not reach PC=$C002 within 32 ticks (PC=$0800)."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Mos6510NmiTests",
+    "method": "Nmi_RtiReturnsCpuToPreNmiState",
+    "message": "CPU did not reach PC=$0400 within 64 ticks (PC=$0000)."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.NativeCollectionConventionTests",
+    "method": "NativeBridgeTestClasses_DeclareNativeViceCollection",
+    "message": "Native-bridge test classes missing [Collection(\"NativeVice\")]:"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.ProtocolHostIntegrationTests",
+    "method": "GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient",
+    "message": "Assert.Equal() Failure: Strings differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.ProtocolHostIntegrationTests",
+    "method": "MediaService_AttachesRawC64GsCartridgeOnlyToGameSystemProfile",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.ProtocolHostIntegrationTests",
+    "method": "MediaService_AttachTapReportsNotAppliedWhenVariantHasNoTapePort",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore SX-64 PAL is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.ProtocolHostIntegrationTests",
+    "method": "SettingsService_ListsProfilesAndAppliesLiveLimiter",
+    "message": "Assert.Equal() Failure: Strings differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.SidFactoryTests",
+    "method": "Create_ConfiguresAudioClockOnlyWithBackend",
+    "message": "Assert.True() Failure"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests",
+    "method": "MotorOnPlayPressed_WithImrEnabled_AssertsIrq",
+    "message": "Expected irq.IsAsserted to be True because with IMR bit 4 enabled, pulse-driven FLAG must assert IRQ, but found False."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests",
+    "method": "Registers_D012Read_ReturnsLiveRasterLowByte",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.VicIiCoreTimingTests",
+    "method": "SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.VicIID011ControlTests",
+    "method": "D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.WarpAudioDiscardTests",
+    "method": "AppPipeline_FastForward251_WithLiveAudio_Reaches_Target",
+    "message": "DIAG fast-forward 251% pace = 175.3% of real time"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.ArchitectureBuilderIecBusTests",
+    "method": "C64Gs_HasNoIecBus",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 64 Games System is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.C1541DriveMechanismDeviceTests",
+    "method": "AutoBind_NoDiskMounted_DriveVia2Pb4ReadsLow",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.C1541DriveMechanismDeviceTests",
+    "method": "AutoBind_With_DiskMounted_DriveVia2Pb4ReadsHigh",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.C64Plus1541BootBusActivityTests",
+    "method": "C64KernalBoot_DrivesIecBus_TracerObservesTransitions",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.C64Plus1541BootBusActivityTests",
+    "method": "Tracer_Detach_StopsRecording",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.C64Plus1541BootBusActivityTests",
+    "method": "Tracer_MaxEvents_DropsOldest_OnOverflow",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.C64Plus1541BootBusActivityTests",
+    "method": "Tracer_Reset_ClearsEvents_WithoutDetaching",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiBusTopologyTests",
+    "method": "AllThreeMachines_AdvanceAtIndependentClockRates",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiBusTopologyTests",
+    "method": "BothBuses_CarryTraffic_KernalDrivesIec_SyntheticDrivesUserPort",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiBusTopologyTests",
+    "method": "Build_ProducesThreeSystems_TwoBuses_FourEndpoints",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiBusTopologyTests",
+    "method": "Buses_AreIsolated_NoCrosstalkOnSimilarSignals",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiBusTopologyTests",
+    "method": "HostCia2_AutoBound_ToBothIecAndUserPort",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiSystemAutoBindTests",
+    "method": "AutoBind_C64Plus1541_HostAssertsAtn_DriveSeesIt",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiSystemAutoBindTests",
+    "method": "AutoBind_CoordinatorDrivesBoth_AndBusStaysOperable",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiSystemAutoBindTests",
+    "method": "AutoBind_DoesNotFire_OnNonCanonicalBusName",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiSystemAutoBindTests",
+    "method": "AutoBind_DriveAssertsData_HostCia2SeesIt",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiSystemAutoBindTests",
+    "method": "AutoBind_HonorsDeviceNumberFromDescriptor",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiSystemKindDispatchTests",
+    "method": "Kind_AutoBind_HostAssertsAtn_BothDrivesSeeIt",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiSystemKindDispatchTests",
+    "method": "Kind_BuildsRealC64AndC1541Architectures",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.MultiSystemKindDispatchTests",
+    "method": "Kind_HonorsDeviceNumber_FromYaml",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.SampleMultiSystemYamlTests",
+    "method": "SampleYaml_CoordinatorDrivesBothMachines",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.SampleMultiSystemYamlTests",
+    "method": "SampleYaml_HostAssertsAtn_DriveSeesIt",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.SampleMultiSystemYamlTests",
+    "method": "SampleYaml_LoadsAndBuilds_CleanTopology",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.TwoDriveTopologyTests",
+    "method": "Build_ProducesThreeSystems_WithExpectedClocks",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.TwoDriveTopologyTests",
+    "method": "Coordinator_AdvancesAllClocks_AtTheirOwnRates",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.TwoDriveTopologyTests",
+    "method": "Coordinator_RunsAllThreeMachines_PcsAdvance",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.TwoDriveTopologyTests",
+    "method": "EachDrive_VIA1_HasDeviceNumberJumpers",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.TwoDriveTopologyTests",
+    "method": "IecBus_WiredOr_Across_AllThreeEndpoints",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Wiring.TwoDriveTopologyTests",
+    "method": "TwoDriveBoot_TracerObserves_IecTraffic",
+    "message": "System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.XmlDocsConventionTests",
+    "method": "TestMethods_HaveRequiredXmlDocs",
+    "message": "QA-XMLDOCS-001: found 286 test method(s) missing required XMLDOCS tokens (FR-/TR-, 'Use case:', 'Acceptance:'); expected at most 0."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.ClockThroughputBenchmarkTests",
+    "method": "MeasureC64ChipsetFrameCost",
+    "message": "Set VICESHARP_CLOCK_BENCH=1 to run the C64 chipset benchmark."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.ClockThroughputBenchmarkTests",
+    "method": "MeasureGuiFramePumpThroughput",
+    "message": "Set VICESHARP_CLOCK_BENCH=1 to run the clock-throughput benchmark."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.ClockThroughputBenchmarkTests",
+    "method": "MeasurePumpLoopPacedClock",
+    "message": "Set VICESHARP_CLOCK_BENCH=1 to run the pump-loop pacing benchmark."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.ClockThroughputBenchmarkTests",
+    "method": "MeasurePumpLoopPacedClockUnderPullLoad",
+    "message": "Set VICESHARP_CLOCK_BENCH=1 to run the pump-pull-load benchmark."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.ClockThroughputBenchmarkTests",
+    "method": "MeasureVicePacedClock",
+    "message": "Set VICESHARP_CLOCK_BENCH=1 to run the VICE-gate pacing benchmark."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests",
+    "method": "Demo_SilentWarp_Measures_Core_Headroom",
+    "message": "Pieces of Light d64 not present on this machine."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.DemoWorkloadSpeedDiagTests",
+    "method": "Demo_UserConfig_LiveAudio_ViceGate_Sustains_RealTime",
+    "message": "Pieces of Light d64 not present on this machine."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.Diagnostics.Wolf64FrameDumpTests",
+    "method": "DumpAutostartFrame_WritesBmpAndVicRegs",
+    "message": "missing F:\\GitHub\\vice-sharp\\validation-output\\wolf64-frame-diff-20260915\\wolf64.d64"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.LiveDeployedAppSettingsBisectTests",
+    "method": "DeployedApp_SettingsBisect_ReportsPhaseSpeeds",
+    "message": "Live-app bisect (mutates the running deployed app's settings and always fails with its report); opt in with VICESHARP_LIVE_PROBE=1."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.LiveDeployedAppSpeedProbeTests",
+    "method": "DeployedApp_Demo_Sustains_RealTime",
+    "message": "Live-app probe (attaches media and resets the running deployed app); opt in with VICESHARP_LIVE_PROBE=1."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.LiveHandlerTraceTests",
+    "method": "Trace_LiveIrqHandler_FromUserSnapshot",
+    "message": "user snapshot not present"
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.LiveLimiterBandProbeTests",
+    "method": "DeployedApp_LimiterBand_ReportsAchievedSpeeds",
+    "message": "Live-app probe (mutates the running deployed app's limiter); opt in with VICESHARP_LIVE_PROBE=1."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.RasterBarGroundTruthTests",
+    "method": "IrqTopology_FromUserSnapshot_ReportsArmedSources",
+    "message": "Staged demo .vsf snapshot not present."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.ThreadAffinityTests",
+    "method": "Pump_Worker_Pins_From_Environment",
+    "message": "Thread affinity is Windows-only."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.ThreadAffinityTests",
+    "method": "TryPinCurrentThread_Applies_The_Mask",
+    "message": "Thread affinity is Windows-only."
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.Vic20.BranchCycleCountTests",
+    "method": "NotTakenBne_CycleTrace",
+    "message": ""
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.Vic20.BranchCycleCountTests",
+    "method": "TakenBne_CycleTrace",
+    "message": ""
+  },
+  {
+    "trx": "_LAB-OMARCHY_2026-10-20_22_39_27_net10.0.trx",
+    "outcome": "NotExecuted",
+    "className": "ViceSharp.TestHarness.WinMmAudioThroughputDiagTests",
+    "method": "WinMm_Backend_Accepts_Samples_At_Device_Rate",
+    "message": "WinMM is Windows-only."
+  }
+]

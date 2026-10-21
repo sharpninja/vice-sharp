@@ -75,6 +75,18 @@ partial class Build
         return log;
     }
 
+    /// <summary>
+    /// The ROM root for a local Test run: null when VICESHARP_ROM_PATH or VICE_DATA_PATH is already set (the machine
+    /// decides), otherwise the submodule's vendored data tree when it carries a C64 directory, otherwise null.
+    /// </summary>
+    string? ResolveLocalRomRoot()
+    {
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VICESHARP_ROM_PATH")) || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VICE_DATA_PATH")))
+            return null;
+        var vendored = RootDirectory / "native" / "vice" / "vice" / "data";
+        return Directory.Exists(vendored / "C64") ? vendored.ToString() : null;
+    }
+
     /// <summary>Fails when the load log is missing or holds any attempt (N11).</summary>
     static void AssertNativeLoadLogEmpty(AbsolutePath log)
     {

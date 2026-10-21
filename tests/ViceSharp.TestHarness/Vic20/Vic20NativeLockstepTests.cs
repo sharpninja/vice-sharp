@@ -37,9 +37,9 @@ public sealed class Vic20NativeLockstepTests
     /// <summary>
     /// Full CPU lockstep (A/X/Y/S/P/PC) for multiple budgets.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Theory]
     [MemberData(nameof(CycleCounts))]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_Managed_CpuRegs_Lockstep(string modelSelector, int cycles)
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -66,8 +66,8 @@ public sealed class Vic20NativeLockstepTests
     /// After last-bus open-bus fix, P must match through the first 64 cycles
     /// (includes kernal CMP $A003,X at cycle 25).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_Managed_PMatches_ThroughCmpAbsX()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -94,11 +94,11 @@ public sealed class Vic20NativeLockstepTests
     /// Compares DDRA/DDRB, ACR, PCR, IER (offsets 2,3,11,12,14) at $9110 and $9120
     /// via side-effect-free peeks on both sides.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Theory]
     [InlineData(64)]
     [InlineData(256)]
     [InlineData(1024)]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_Managed_DualVia_ControlRegs_Lockstep(int cycles)
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -127,12 +127,12 @@ public sealed class Vic20NativeLockstepTests
     /// during the CPU lockstep window (kernal has not yet programmed $9000; both
     /// start power-on zeros and raster counters advance with matching VICE encoding).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Theory]
     [InlineData(64)]
     [InlineData(256)]
     [InlineData(1024)]
     [InlineData(5000)]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_Managed_VicI_Regs_Lockstep(int cycles)
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -178,8 +178,8 @@ public sealed class Vic20NativeLockstepTests
     /// <summary>
     /// VIC-I raster advances on native and matches managed $9004 peek (VICE encoding).
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_VicRasterAdvances_AndMatchesManaged()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -211,8 +211,8 @@ public sealed class Vic20NativeLockstepTests
     /// <summary>
     /// LockstepValidator constructs a Vic20 pair when oracle present.
     /// </summary>
-    [Trait("Category", "ShimLegacy")]
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void LockstepValidator_AcceptsVic20Model_WhenOraclePresent()
     {
         XvicOraclePrerequisites.ValidateCurrent();
