@@ -37,7 +37,7 @@ public static unsafe partial class ViceNativeXvic
     public static string? ResolvedPath => ResolvedLibraryPath.Value;
     public static string AvailabilityMessage => ResolvedLibraryPath.Value is { } path
         ? $"Native VICE xvic library resolved at '{path}'."
-        : "Native VICE xvic library not found. Build 'vice_xvic' via native/build-vice-shim-xvic.sh into the test output or a searched native directory.";
+        : "Native VICE xvic library not found. The shim builders were retired (PLAN-NATIVERESTORE-001 R2 A); tests bound to 'vice_xvic' are ShimLegacy until Phase F rebinds them to the observer binaries.";
 
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_create")]
     public static partial IntPtr Create();

@@ -7,7 +7,8 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ViceNativeProject>$(MSBuildThisFileDirectory)..\..\native\Vice.Native.proj</ViceNativeProject>
+    <!-- PLAN-NATIVERESTORE-001 D2 (R2 A): the hosted shim MSBuild project and its BuildNative target are retired;
+         the only native builder is native/build-vice-observer.ps1 and no managed build invokes it. -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -64,14 +65,5 @@
     <None Update="Fixtures\D64\*.d64" CopyToOutputDirectory="PreserveNewest" />
     <None Update="Fixtures\Vsf\*.vsf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
-
-  <Target Name="BuildViceNative"
-          BeforeTargets="Build"
-          Condition="'$(DesignTimeBuild)' != 'true' and Exists('$(ViceNativeProject)')">
-    <!-- The hosted oracle uses Win32 APIs; managed tests do not require its build on Unix. -->
-    <MSBuild Projects="$(ViceNativeProject)" Targets="BuildNative" Condition="'$(OS)' == 'Windows_NT'" />
-    <Message Condition="'$(OS)' != 'Windows_NT'" Importance="high"
-             Text="The native VICE oracle build is Windows-only; building the managed test harness." />
-  </Target>
 
 </Project>

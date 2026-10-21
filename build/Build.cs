@@ -94,6 +94,18 @@ sealed partial class Build : NukeBuild
             Git("commit -m \"wip: $(Get-Date -Format 'yyyy-MM-dd HH:mm')\"");
         });
 
+    /// <summary>
+    /// The one selector of the ordinary gates (Test and CiTest; PLAN-NATIVERESTORE-001 D2, round 6 N20).
+    /// Excludes Determinism (its own target), the slow, host-bound, non-deterministic aiUnit AI reviews
+    /// (AiReview target), the quarantined not-yet-remediated parity ACs (ParityPending, admitted per slice as
+    /// they flip green: PLAN-VICEPARITY-001), the legacy renderer tests awaiting per-cycle replacement
+    /// (ParityLegacy, deleted as V-slices land), Integration, the tests bound to the retired shim DLL
+    /// (ShimLegacy, rebound in Phases E and F; R6) and the real-bound VSF Slice 1 cases that only the
+    /// cumulative NativeSnapshotCompatibilityTest target runs (VsfSlice1Real; N08).
+    /// </summary>
+    const string OrdinaryTestFilter =
+        "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real";
+
     Target Test => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -103,13 +115,7 @@ sealed partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetNoRestore(true)
                 .SetNoBuild(true)
-                // Exclude Determinism (its own target), the slow, host-bound,
-                // non-deterministic aiUnit AI reviews (AiReview target), the
-                // quarantined not-yet-remediated parity ACs (ParityPending,
-                // admitted per slice as they flip green: PLAN-VICEPARITY-001),
-                // and the legacy renderer tests awaiting per-cycle replacement
-                // (ParityLegacy, deleted as V-slices land).
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration"));
+                .SetFilter(OrdinaryTestFilter));
         });
 
     /// <summary>
@@ -137,7 +143,7 @@ sealed partial class Build : NukeBuild
             DotNetTest(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration")
+                .SetFilter(OrdinaryTestFilter)
                 .When(_ => romRoot is not null, x => x
                     .SetProcessEnvironmentVariable("VICESHARP_ROM_PATH", romRoot)));
         });

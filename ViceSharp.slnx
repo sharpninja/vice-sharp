@@ -159,5 +159,18 @@
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
+    <!-- PLAN-NATIVERESTORE-001 D2 (R5): the three native-safe projects join the solution and every ordinary gate. -->
+    <Project Path="tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.OracleContract.Tests/ViceSharp.OracleContract.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
   </Folder>
 </Solution>
