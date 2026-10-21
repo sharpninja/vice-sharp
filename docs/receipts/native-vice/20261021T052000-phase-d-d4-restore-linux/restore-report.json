@@ -1,0 +1,147 @@
+{
+  "host": "LAB-OMARCHY",
+  "superprojectRoot": "/home/sharpninja/github/vice-sharp",
+  "submodulePath": "/home/sharpninja/github/vice-sharp/native/vice",
+  "receiptDirectory": "/home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261020T211402-phase-d-preservation-linux",
+  "gitlink": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "checkedOutSha": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "preservedChecks": [
+    {
+      "path": "vice/src/c64/c64cpusc.c",
+      "copyPath": "preserved/vice/src/c64/c64cpusc.c",
+      "expected": "343C90E82B2713D51CCD77CE9A9DA4F4BDDEF92807966F6A90993A6E7628FAB1",
+      "actual": "343C90E82B2713D51CCD77CE9A9DA4F4BDDEF92807966F6A90993A6E7628FAB1",
+      "ok": true
+    },
+    {
+      "path": "vice/src/drive/drive-snapshot.c",
+      "copyPath": "preserved/vice/src/drive/drive-snapshot.c",
+      "expected": "2001B723AA495C387EFF430375ADE5BE630B658B0F17C3C3B74D5EDC9D5D58C0",
+      "actual": "2001B723AA495C387EFF430375ADE5BE630B658B0F17C3C3B74D5EDC9D5D58C0",
+      "ok": true
+    },
+    {
+      "path": "vice/src/drive/drivecpu.c",
+      "copyPath": "preserved/vice/src/drive/drivecpu.c",
+      "expected": "E73C664EB61A981F851274FADD90B74612F948BA5DCFE028EFABCD197A2C5D8A",
+      "actual": "E73C664EB61A981F851274FADD90B74612F948BA5DCFE028EFABCD197A2C5D8A",
+      "ok": true
+    },
+    {
+      "path": "vice/src/drive/drivecpu65c02.c",
+      "copyPath": "preserved/vice/src/drive/drivecpu65c02.c",
+      "expected": "7E07F563AF9644BE9C618D528525DE587948C4A703719AD8A71D591CA09D0195",
+      "actual": "7E07F563AF9644BE9C618D528525DE587948C4A703719AD8A71D591CA09D0195",
+      "ok": true
+    },
+    {
+      "path": "vice/src/mainc64cpu.c",
+      "copyPath": "preserved/vice/src/mainc64cpu.c",
+      "expected": "B69E3BCD9F2CE674A65B75D7E68195F89A735B8EEBE45F46F655FB2E8E04499D",
+      "actual": "B69E3BCD9F2CE674A65B75D7E68195F89A735B8EEBE45F46F655FB2E8E04499D",
+      "ok": true
+    },
+    {
+      "path": "vice/src/resid/filter8580new.h",
+      "copyPath": "preserved/vice/src/resid/filter8580new.h",
+      "expected": "CE939EF42EEB6475760B27EABB8A819B199665CC3077E94802F74C41E065B5E0",
+      "actual": "CE939EF42EEB6475760B27EABB8A819B199665CC3077E94802F74C41E065B5E0",
+      "ok": true
+    },
+    {
+      "path": "vice/src/resid/sid.h",
+      "copyPath": "preserved/vice/src/resid/sid.h",
+      "expected": "42D8703EB51F62357F1C10983E7F206A5C9ED41254C2A55D71681A5AE4F821A2",
+      "actual": "42D8703EB51F62357F1C10983E7F206A5C9ED41254C2A55D71681A5AE4F821A2",
+      "ok": true
+    },
+    {
+      "path": "vice/src/sid/resid.cc",
+      "copyPath": "preserved/vice/src/sid/resid.cc",
+      "expected": "0466F2232AF8CAC5B54747EBFB09A313932BDBC17A9FB4081506CD0B43433D33",
+      "actual": "0466F2232AF8CAC5B54747EBFB09A313932BDBC17A9FB4081506CD0B43433D33",
+      "ok": true
+    }
+  ],
+  "inventoryBefore": {
+    "added": [],
+    "deleted": [],
+    "changed": [],
+    "equal": true
+  },
+  "paths": [
+    {
+      "path": "vice/src/c64/c64cpusc.c",
+      "state": "untouched",
+      "liveSha256": "343C90E82B2713D51CCD77CE9A9DA4F4BDDEF92807966F6A90993A6E7628FAB1",
+      "preservedSha256": "343C90E82B2713D51CCD77CE9A9DA4F4BDDEF92807966F6A90993A6E7628FAB1"
+    },
+    {
+      "path": "vice/src/drive/drive-snapshot.c",
+      "state": "untouched",
+      "liveSha256": "2001B723AA495C387EFF430375ADE5BE630B658B0F17C3C3B74D5EDC9D5D58C0",
+      "preservedSha256": "2001B723AA495C387EFF430375ADE5BE630B658B0F17C3C3B74D5EDC9D5D58C0"
+    },
+    {
+      "path": "vice/src/drive/drivecpu.c",
+      "state": "untouched",
+      "liveSha256": "E73C664EB61A981F851274FADD90B74612F948BA5DCFE028EFABCD197A2C5D8A",
+      "preservedSha256": "E73C664EB61A981F851274FADD90B74612F948BA5DCFE028EFABCD197A2C5D8A"
+    },
+    {
+      "path": "vice/src/drive/drivecpu65c02.c",
+      "state": "untouched",
+      "liveSha256": "7E07F563AF9644BE9C618D528525DE587948C4A703719AD8A71D591CA09D0195",
+      "preservedSha256": "7E07F563AF9644BE9C618D528525DE587948C4A703719AD8A71D591CA09D0195"
+    },
+    {
+      "path": "vice/src/mainc64cpu.c",
+      "state": "untouched",
+      "liveSha256": "B69E3BCD9F2CE674A65B75D7E68195F89A735B8EEBE45F46F655FB2E8E04499D",
+      "preservedSha256": "B69E3BCD9F2CE674A65B75D7E68195F89A735B8EEBE45F46F655FB2E8E04499D"
+    },
+    {
+      "path": "vice/src/resid/filter8580new.h",
+      "state": "untouched",
+      "liveSha256": "CE939EF42EEB6475760B27EABB8A819B199665CC3077E94802F74C41E065B5E0",
+      "preservedSha256": "CE939EF42EEB6475760B27EABB8A819B199665CC3077E94802F74C41E065B5E0"
+    },
+    {
+      "path": "vice/src/resid/sid.h",
+      "state": "untouched",
+      "liveSha256": "42D8703EB51F62357F1C10983E7F206A5C9ED41254C2A55D71681A5AE4F821A2",
+      "preservedSha256": "42D8703EB51F62357F1C10983E7F206A5C9ED41254C2A55D71681A5AE4F821A2"
+    },
+    {
+      "path": "vice/src/sid/resid.cc",
+      "state": "untouched",
+      "liveSha256": "0466F2232AF8CAC5B54747EBFB09A313932BDBC17A9FB4081506CD0B43433D33",
+      "preservedSha256": "0466F2232AF8CAC5B54747EBFB09A313932BDBC17A9FB4081506CD0B43433D33"
+    }
+  ],
+  "restored": [
+    "vice/src/c64/c64cpusc.c",
+    "vice/src/drive/drive-snapshot.c",
+    "vice/src/drive/drivecpu.c",
+    "vice/src/drive/drivecpu65c02.c",
+    "vice/src/mainc64cpu.c",
+    "vice/src/resid/filter8580new.h",
+    "vice/src/resid/sid.h",
+    "vice/src/sid/resid.cc"
+  ],
+  "proofs": {
+    "diffEmpty": true,
+    "cachedDiffEmpty": true,
+    "trackedEntriesAfter": 0,
+    "untrackedEqual": true,
+    "untrackedAdded": [],
+    "untrackedDeleted": [],
+    "untrackedChanged": [],
+    "superprojectSubmoduleClean": true,
+    "superprojectStatusLines": [],
+    "gitlinkEqualsHead": true,
+    "preservedStillMatch": true
+  },
+  "stops": [],
+  "outcome": "Complete"
+}
