@@ -1,5 +1,7 @@
 # ViceSharp handoff v2: C64 and VIC-20 lockstep with VICE, two-machine edition
 
+RETIRED 2026-10-21T11:22 by Payton's instruction ("writing a new handoff and retiring any existing handoff"): superseded by `HANDOFF.lockstep-plan.v3.md` in this directory, which is the single forward handoff. This file is kept unchanged below the banner as the chronological record (section 11 runs through 2026-10-21T07:55); where it and v3 differ, v3 wins.
+
 Written 2026-10-17 (local, America/Chicago, timestamps measured) by Claude Code (claude-fable-5-1) on LAB-OMARCHY, workspace `/home/sharpninja/github/vice-sharp`, branch `develop` at `d00e8c5584d0031b3637c649335964f8d5225da0`. MCP session: the hook-opened ClaudeCode session of this chat; the task turns are `req-20261017T125711Z-prompt-e491` and its successors on 2026-10-17.
 
 This file supersedes `HANDOFF.lockstep-plan.md` (written 07:40 today on PAYTON-LEGION2, SHA256 `7EDAA9A0494831229A84774CC99309E5F2BACBEB2945B5FC6039575284B7C5DD`, copied here byte-identical) as the single forward plan. Where v1 and this file differ, this file wins; the differences are listed in section 2.3. It does not edit v1, the two preserved `HANDOFF.before.md` files, the root `HANDOFF.md`, or any plan under `docs/plans/`. Nothing is committed by the turn that wrote it.

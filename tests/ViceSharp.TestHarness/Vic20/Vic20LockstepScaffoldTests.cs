@@ -12,6 +12,7 @@ using Xunit;
     /// at the kernal reset vector, and multi-cycle step advances PC/cycle. Managed
     /// dual-machine determinism remains the interim accuracy gate.
 /// </summary>
+[Collection("NativeVice")]
 public sealed class Vic20LockstepScaffoldTests
 {
     /// <summary>

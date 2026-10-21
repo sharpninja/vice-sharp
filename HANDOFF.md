@@ -1,5 +1,9 @@
 # ViceSharp handoff
 
+## 2026-10-21T11:22 current handoff pointer
+
+The single forward handoff is `docs/receipts/handoff/HANDOFF.lockstep-plan.v3.md` (Phase D of PLAN-NATIVERESTORE-001 at its exit in the BLOCKED state, with Payton's rulings R17 to R19 recorded and their execution not yet started). `HANDOFF.lockstep-plan.v2.md` is retired and kept as the chronological record. Every entry below this one is historical.
+
 ## 2026-10-16T12:36:10 documentation refresh
 
 The operator requested refresh-docs followed by wrap-up. Current RomM desktop

@@ -43,11 +43,25 @@ public sealed class ViceConfigLocatorTests
     [Fact]
     public void ResolveConfigDirectory_ExpandsEnvironmentVariables()
     {
-        var resolved = ViceConfigLocator.ResolveConfigDirectory(
-            InMemory(("ViceSharp:ConfigDirectory", Path.Combine("%TEMP%", "vice"))));
+        // PLAN-NATIVERESTORE-001 D6: the variable is set by the test itself. The earlier form used %TEMP%, which is
+        // unset on Linux hosts, so Environment.ExpandEnvironmentVariables left it untouched and the case failed there
+        // without any defect in the locator (D2 gate, D5 gate run 2 on LAB-OMARCHY).
+        const string variable = "VICESHARP_CONFIG_TEST_ROOT";
+        var previous = Environment.GetEnvironmentVariable(variable);
+        Environment.SetEnvironmentVariable(variable, Path.GetTempPath());
+        try
+        {
+            var resolved = ViceConfigLocator.ResolveConfigDirectory(
+                InMemory(("ViceSharp:ConfigDirectory", Path.Combine("%" + variable + "%", "vice"))));
 
-        Assert.DoesNotContain("%", resolved);
-        Assert.EndsWith("vice", resolved, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain("%", resolved);
+            Assert.EndsWith("vice", resolved, StringComparison.OrdinalIgnoreCase);
+            Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()).TrimEnd(Path.DirectorySeparatorChar), resolved, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable(variable, previous);
+        }
     }
 
     [Fact]
