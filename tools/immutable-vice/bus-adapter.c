@@ -63,6 +63,15 @@ static void read_environment(void)
     }
 }
 
+/* PLAN-NATIVERESTORE-001 D1: the snapshot observer and checkpoint units (snapshot-observer.c,
+ * snapshot-checkpoint.c) write their VICE_SNAP records through the same checked channel. */
+void vice_sharp_snapshot_sink(const char *line)
+{
+    write_line(line);
+}
+
+extern void vice_sharp_checkpoint_on_clock(uint64_t clock);
+
 void vice_sharp_bus_sink(const char *kind, const char *detail)
 {
     read_environment();
@@ -107,5 +116,7 @@ void __wrap_vice_sharp_observe_clock(uint64_t clock)
     vice_sharp_obs_fill(&in);
     vice_sharp_obs_cycle(&in);
     have_access = 0;
+    /* Inert unless VICESHARP_SNAPSHOT_AT is set (snapshot-checkpoint.c, R12): one branch per cycle. */
+    vice_sharp_checkpoint_on_clock(clock);
     __real_vice_sharp_observe_clock(clock);
 }

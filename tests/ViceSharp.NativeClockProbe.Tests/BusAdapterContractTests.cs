@@ -112,7 +112,7 @@ public sealed class BusAdapterContractTests
 public sealed class BusAdapterRealProcessTests
 {
     private static readonly CompiledCFixture Real = new("bus-adapter-real",
-        ["bus-real-driver.c", "native-bus-double.c", "clock-observer.c", "bus-observer.c", "bus-adapter.c", "obs-emitter.c", "obs-fields-double.c", "gate-observer.c", "clock-gate.c"],
+        ["bus-real-driver.c", "native-bus-double.c", "clock-observer.c", "bus-observer.c", "bus-adapter.c", "obs-emitter.c", "obs-fields-double.c", "gate-observer.c", "clock-gate.c", "snapshot-checkpoint-stub.c"],
         "-Wl,--wrap=vic_cycle", "-Wl,--wrap=mem_initialize_memory", "-Wl,--wrap=mem_mmu_translate",
         "-Wl,--wrap=mem_toggle_watchpoints", "-Wl,--wrap=vice_sharp_observe_clock");
 

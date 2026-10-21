@@ -248,16 +248,18 @@ function Step-Link {
         # the configured config.h of the build tree; every other unit is header-free.
         $includes = @((Join-Path $work 'src'), (Join-Path $build 'src'), (Join-Path $work 'src/vic20'), (Join-Path $work 'src/raster'), (Join-Path $work 'src/viciisc')) |
             ForEach-Object { '-I"' + (ConvertTo-ShellPath $_) + '"' }
-        $units = @($cycleHook, 'clock-gate.c', 'gate-observer.c', 'bus-observer.c', 'bus-adapter.c', 'obs-emitter.c', "obs-fields-$t.c")
+        # PLAN-NATIVERESTORE-001 D1 (R11 B, R12): snapshot-observer.c and snapshot-checkpoint.c are header-free;
+        # obs-snapshot-glue.c reads maincpu_regs and the drive resources through the real headers like obs-fields.
+        $units = @($cycleHook, 'clock-gate.c', 'gate-observer.c', 'bus-observer.c', 'bus-adapter.c', 'obs-emitter.c', "obs-fields-$t.c", 'snapshot-observer.c', 'snapshot-checkpoint.c', 'obs-snapshot-glue.c')
         foreach ($unit in $units) {
             $obj = Join-Path $objDir ([IO.Path]::ChangeExtension($unit, '.o'))
-            $unitIncludes = if ($unit -like 'obs-fields-*') { ($includes -join ' ') } else { '' }
+            $unitIncludes = if ($unit -like 'obs-fields-*' -or $unit -eq 'obs-snapshot-glue.c') { ($includes -join ' ') } else { '' }
             $command = ('gcc -std=c11 -Wall -Wextra -Werror -O2 -g {0} {1} -c "{2}" -o "{3}"' -f $defines, $unitIncludes, (ConvertTo-ShellPath (Join-Path $wrappers $unit)), (ConvertTo-ShellPath $obj))
             $cl = Invoke-Native -Command $command -WorkingDirectory $objDir -LogPath (Join-Path $receipts "compile-$t-$([IO.Path]::GetFileNameWithoutExtension($unit)).log")
             if ($cl.ExitCode -ne 0) { throw "wrapper compile failed for $unit ($t): $($cl.Stderr)" }
             $objects += (ConvertTo-ShellPath $obj)
         }
-        $wrapSymbols = @($cycleSymbol, 'mem_initialize_memory', 'mem_mmu_translate', 'mem_toggle_watchpoints', 'vice_sharp_observe_clock')
+        $wrapSymbols = @($cycleSymbol, 'mem_initialize_memory', 'mem_mmu_translate', 'mem_toggle_watchpoints', 'vice_sharp_observe_clock', 'maincpu_snapshot_read_module', 'machine_read_snapshot')
         if ($t -eq 'x64sc') { $wrapSymbols += 'vicii_steal_cycles' }
         $wraps = $wrapSymbols | ForEach-Object { "-Wl,--wrap=$_" }
         $output = Join-Path $bin ("{0}-observer{1}" -f $t, $exeExt)

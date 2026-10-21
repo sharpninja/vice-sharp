@@ -20,6 +20,9 @@
     <None Include="../../tools/immutable-vice/obs-emitter.c" Link="Fixtures/obs-emitter.c" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tools/immutable-vice/obs-emitter.h" Link="Fixtures/obs-emitter.h" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tools/immutable-vice/obs-fields.h" Link="Fixtures/obs-fields.h" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/snapshot-observer.c" Link="Fixtures/snapshot-observer.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/snapshot-observer.h" Link="Fixtures/snapshot-observer.h" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/snapshot-checkpoint.c" Link="Fixtures/snapshot-checkpoint.c" CopyToOutputDirectory="PreserveNewest" />
     <None Update="Fixtures/*.h" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
