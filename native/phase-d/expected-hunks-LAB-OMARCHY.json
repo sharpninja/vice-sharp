@@ -1,0 +1,17 @@
+{
+  "host": "LAB-OMARCHY",
+  "source": "PLAN-NATIVERESTORE-001 section 2 rows (H1 to H8) for the 8-file Linux delta; oldStart values are the old-side line numbers of the Oct 4 patch, identical for identical hunks against the pinned commit cc67418cba58e71d8e70fd353e9de47199ad2075. Measured host difference (D0 dry run 2026-10-20T21:15): the Linux delta has 11 hunks, not 12; the H2 hunk at mainc64cpu.c old line 196 (the checkpoint inside the stolen-cycle loop) is absent on LAB-OMARCHY, so it is not listed here; its absence changes no disposition (H2 is rejected either way)",
+  "rows": [
+    { "file": "vice/src/c64/c64cpusc.c", "oldStart": 32, "row": "H1" },
+    { "file": "vice/src/c64/c64cpusc.c", "oldStart": 44, "row": "H1" },
+    { "file": "vice/src/drive/drive-snapshot.c", "oldStart": 314, "row": "H5" },
+    { "file": "vice/src/drive/drivecpu.c", "oldStart": 188, "row": "H6" },
+    { "file": "vice/src/drive/drivecpu65c02.c", "oldStart": 170, "row": "H6" },
+    { "file": "vice/src/mainc64cpu.c", "oldStart": 56, "row": "H2" },
+    { "file": "vice/src/mainc64cpu.c", "oldStart": 752, "row": "H3" },
+    { "file": "vice/src/mainc64cpu.c", "oldStart": 951, "row": "H4" },
+    { "file": "vice/src/resid/filter8580new.h", "oldStart": 551, "row": "H8" },
+    { "file": "vice/src/resid/sid.h", "oldStart": 61, "row": "H8" },
+    { "file": "vice/src/sid/resid.cc", "oldStart": 449, "row": "H8" }
+  ]
+}

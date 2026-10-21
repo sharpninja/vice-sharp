@@ -1,0 +1,26 @@
+{
+  "host": "PAYTON-LEGION2",
+  "source": "PLAN-NATIVERESTORE-001 section 2 rows (H1 to H12) for the 12-file Windows delta recorded in the Oct 4 patch (docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch); a hunk whose context moved is reported as an explained difference, a hunk absent from this table as unclassified",
+  "rows": [
+    { "file": "vice/src/c64/c64cpusc.c", "oldStart": 32, "row": "H1" },
+    { "file": "vice/src/c64/c64cpusc.c", "oldStart": 44, "row": "H1" },
+    { "file": "vice/src/drive/drive-snapshot.c", "oldStart": 314, "row": "H5" },
+    { "file": "vice/src/drive/drivecpu.c", "oldStart": 188, "row": "H6" },
+    { "file": "vice/src/drive/drivecpu65c02.c", "oldStart": 170, "row": "H6" },
+    { "file": "vice/src/mainc64cpu.c", "oldStart": 56, "row": "H2" },
+    { "file": "vice/src/mainc64cpu.c", "oldStart": 196, "row": "H2" },
+    { "file": "vice/src/mainc64cpu.c", "oldStart": 752, "row": "H3" },
+    { "file": "vice/src/mainc64cpu.c", "oldStart": 951, "row": "H4" },
+    { "file": "vice/src/mainviccpu.c", "oldStart": 47, "row": "H7" },
+    { "file": "vice/src/mainviccpu.c", "oldStart": 579, "row": "H12" },
+    { "file": "vice/src/resid/filter8580new.h", "oldStart": 551, "row": "H8" },
+    { "file": "vice/src/resid/sid.h", "oldStart": 61, "row": "H8" },
+    { "file": "vice/src/sid/resid.cc", "oldStart": 449, "row": "H8" },
+    { "file": "vice/src/vic20/vic20cpu.c", "oldStart": 31, "row": "H7" },
+    { "file": "vice/src/vic20/vic20cpu.c", "oldStart": 40, "row": "H7" },
+    { "file": "vice/src/vic20/vic20sound.c", "oldStart": 306, "row": "H9" },
+    { "file": "vice/src/vic20/vic20sound.c", "oldStart": 338, "row": "H9" },
+    { "file": "vice/src/vic20/vic20sound.c", "oldStart": 578, "row": "H10" },
+    { "file": "vice/src/vic20/vic20sound.h", "oldStart": 36, "row": "H10" }
+  ]
+}
