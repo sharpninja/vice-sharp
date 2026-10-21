@@ -15,7 +15,7 @@ namespace ViceSharp.NativeClockProbe.Tests;
 /// </summary>
 public static class BusAdapterFixtures
 {
-    public sealed record AdapterCase(string Name, bool Wait, string Input, bool CloseStderr);
+    public sealed record AdapterCase(string Name, bool Wait, string Input, bool CloseStderr, bool Resume = false);
     public sealed record AdapterExpected(int[] ExitCodes, string? Stderr, string? Stdout, string? ForbiddenStdout = null);
     public sealed record AdapterObservation(int ExitCode, string? Stderr, string Stdout);
     public interface IBusAdapterProbe { AdapterObservation Run(AdapterCase c); }
@@ -31,9 +31,19 @@ public static class BusAdapterFixtures
         $"VICE_GATE,{clock}{Nl}";
     private static string Init => $"VICE_BUS,repatch,514,1{Nl}";
 
+    // PLAN-NATIVERESTORE-001 D5 resume boundary (LAB-OMARCHY 2026-10-21T06:43, raw trace lines 15205770 to 15205780):
+    // an access pending when the snapshot resume record is written belongs to the pre-load world. It is reported
+    // as VICE_BUS,preload and never attributed to a cycle; the opcode fetch at the restored PC that follows in the
+    // same slot is the cycle's access (not "extra").
+    private static string ResumeCycle(int clock) =>
+        $"VICE_BUS,access,read,4660,145,{clock}{Nl}VICE_BUS,preload,read,4660,145{Nl}VICE_SNAP,resume,{clock},0,0,0,0,4661,32{Nl}" +
+        $"VICE_BUS,access,read,4661,144,{clock}{Nl}VICE_BUS,cycle,{clock}{Nl}" +
+        $"VICE_OBS,1,{(clock - 7) * 2},PHI1,0,1,idle,0,,0,0,{clock}{Nl}VICE_OBS,1,{(clock - 7) * 2 + 1},PHI2,1,1,read,4661,144,0,0,{clock}{Nl}" +
+        $"VICE_GATE,{clock}{Nl}";
+
     public static IEnumerable<object[]> Cases => new[]
     {
-        "continue-both", "continue-then-quit", "eof-first", "broken-stderr"
+        "continue-both", "continue-then-quit", "eof-first", "broken-stderr", "resume-boundary"
     }.Select(n => new object[] { n });
 
     public static (AdapterCase Case, AdapterExpected Expected) Get(string name) => name switch
@@ -46,6 +56,8 @@ public static class BusAdapterFixtures
             new([66], Init + Cycle(7) + $"VICE_GATE_STOP,66{Nl}", null, "NATIVE_AFTER")),
         // The first sink write (repatch after the rebuild) hits the closed pipe: stop 72, nothing returns to native.
         "broken-stderr" => (new(name, true, "cc", true), new([72], null, null, "NATIVE_AFTER")),
+        "resume-boundary" => (new(name, false, "cc", false, Resume: true),
+            new([0], Init + Cycle(7) + ResumeCycle(8), $"init,0{Nl}NATIVE_AFTER,7{Nl}NATIVE_AFTER,8{Nl}")),
         _ => throw new ArgumentOutOfRangeException(nameof(name))
     };
 
@@ -79,7 +91,16 @@ public sealed class BusAdapterContractTests
         {
             null, good with { ExitCode = 71 }, good with { Stderr = (good.Stderr ?? "") + "x" },
         };
-        if (name != "continue-both") wrongs.Add(good with { ExitCode = 0 });
+        if (name is not ("continue-both" or "resume-boundary")) wrongs.Add(good with { ExitCode = 0 });
+        if (name == "resume-boundary")
+        {
+            // The pre-fix observation: the peek attributed to the cycle and the opcode fetch demoted to "extra".
+            wrongs.Add(good with { Stderr = e.Stderr!
+                .Replace($"VICE_BUS,preload,read,4660,145{nl}", "")
+                .Replace($"VICE_BUS,access,read,4661,144,8{nl}", $"VICE_BUS,access,read,4661,144,8{nl}VICE_BUS,extra,read,4661,144{nl}")
+                .Replace("PHI2,1,1,read,4661,144,0,0,8", "PHI2,1,1,read,4660,145,0,0,8") });
+            wrongs.Add(good with { Stderr = e.Stderr!.Replace($"VICE_BUS,preload,read,4660,145{nl}", "") });
+        }
         if (e.ForbiddenStdout is not null) wrongs.Add(good with { Stdout = $"init,0{nl}{e.ForbiddenStdout}{nl}" });
         if (e.Stderr is not null)
         {
@@ -126,6 +147,7 @@ public sealed class BusAdapterRealProcessTests
                 RedirectStandardOutput = true, RedirectStandardError = true, WorkingDirectory = Real.EvidenceDirectory
             };
             if (c.Wait) start.ArgumentList.Add("wait");
+            if (c.Resume) start.ArgumentList.Add("resume");
             start.Environment["VICESHARP_BUS_RAW"] = "1";
             using var process = Process.Start(start) ?? throw new InvalidOperationException("driver did not start");
             var stdout = process.StandardOutput.BaseStream.CopyToMemoryAsync();

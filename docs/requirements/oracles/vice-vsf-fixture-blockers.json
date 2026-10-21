@@ -1,0 +1,64 @@
+[
+  {
+    "fixtureId": "xvic-ntsc-unexpanded",
+    "blocker": "BLOCKER-R12-XVIC-CHECKPOINT",
+    "recordedAt": "2026-10-21T06:57:14",
+    "reasons": [
+      "host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed",
+      "host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed"
+    ],
+    "clocks": [
+      {
+        "host": "LAB-OMARCHY",
+        "trigger": 100000,
+        "writeClock": 100002,
+        "writerResult": 0,
+        "mainCpuClock": null,
+        "candidateSha256": "BB4F4F19AB54421F8726C04FCE146843475EE453B5043198506363F91A3A6EB5",
+        "outcome": "blocked",
+        "reason": "BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed"
+      },
+      {
+        "host": "LAB-OMARCHY",
+        "trigger": 100000,
+        "writeClock": 100002,
+        "writerResult": 0,
+        "mainCpuClock": null,
+        "candidateSha256": "BB4F4F19AB54421F8726C04FCE146843475EE453B5043198506363F91A3A6EB5",
+        "outcome": "blocked",
+        "reason": "BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed"
+      }
+    ]
+  },
+  {
+    "fixtureId": "xvic-pal-unexpanded",
+    "blocker": "BLOCKER-R12-XVIC-CHECKPOINT",
+    "recordedAt": "2026-10-21T06:57:13",
+    "reasons": [
+      "host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed",
+      "host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed"
+    ],
+    "clocks": [
+      {
+        "host": "LAB-OMARCHY",
+        "trigger": 100000,
+        "writeClock": 100002,
+        "writerResult": 0,
+        "mainCpuClock": null,
+        "candidateSha256": "20932DC3E8634F9024EA1E82D57B953CAAB7C796A912F0884E0516934EDF8014",
+        "outcome": "blocked",
+        "reason": "BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed"
+      },
+      {
+        "host": "LAB-OMARCHY",
+        "trigger": 100000,
+        "writeClock": 100002,
+        "writerResult": 0,
+        "mainCpuClock": null,
+        "candidateSha256": "20932DC3E8634F9024EA1E82D57B953CAAB7C796A912F0884E0516934EDF8014",
+        "outcome": "blocked",
+        "reason": "BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed"
+      }
+    ]
+  }
+]

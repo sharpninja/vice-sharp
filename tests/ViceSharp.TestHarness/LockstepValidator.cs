@@ -13,7 +13,12 @@ using ViceSharp.Core.Wiring;
 namespace ViceSharp.TestHarness;
 
 /// <summary>
-/// Lockstep cycle accurate validator comparing ViceSharp against original VICE
+/// Lockstep validator bound to the retired VICE shim: drives the managed C64 and an <see cref="IViceNative"/> process
+/// in step and compares CPU registers and CIA state sample by sample. The shim binary no longer exists, so the suites
+/// built on this class carry the ShimLegacy category (PLAN-NATIVERESTORE-001 R6) and are not executed until Phase E
+/// item 1 rebinds them to the observer-field, half-cycle comparator. The state-level piece of that comparator,
+/// <c>CompareHalfCycleStates</c> in LockstepValidator.HalfCycle.cs (D2), is the only part implemented today; the
+/// comparator itself is not implemented by this class.
 /// </summary>
 public sealed partial class LockstepValidator : IDisposable
 {

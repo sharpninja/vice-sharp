@@ -1,0 +1,10 @@
+{
+  "Stage": "Copy",
+  "TrackedViceFiles": 3841,
+  "CopiedNow": 0,
+  "TrackedList": "/home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261019T202542-linux-materialization/compare/omarchy-tracked-files.txt",
+  "MissingInSource": [],
+  "DifferentInWork": [],
+  "SourceListSha256": "85157F5A509E3E841056961E02D16E48357AEB830AF2C9A9535B00DDE5337E27",
+  "SourceListPath": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/receipts-linux/materialization-hashes.txt"
+}

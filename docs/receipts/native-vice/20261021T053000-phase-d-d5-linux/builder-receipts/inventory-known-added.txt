@@ -1,0 +1,3 @@
+.mcpServer/claude/session-state.yaml
+src/.mcpServer/claude/session-state.yaml
+src/.mcpServer/claude/session-verb-outcome.yaml

@@ -35,6 +35,8 @@ public sealed class FixtureCandidate
     public string? ObserverSha256 { get; init; }
     public int ProcessExitCode { get; init; }
     public bool TimedOut { get; init; }
+    /// <summary>True when the run ended through the pinned core's cycle-limit path (the normal end of a generation run).</summary>
+    public bool LimitReached { get; init; }
     public IReadOnlyList<string> SnapshotLines { get; init; } = [];
     public int ExitCode { get; init; }
     public IReadOnlyList<string> BlockedIds { get; init; } = [];

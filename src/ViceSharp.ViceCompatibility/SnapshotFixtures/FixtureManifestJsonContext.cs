@@ -9,6 +9,7 @@ namespace ViceSharp.ViceCompatibility.SnapshotFixtures;
 [JsonSerializable(typeof(FixtureManifestEntry))]
 [JsonSerializable(typeof(FixtureCandidate))]
 [JsonSerializable(typeof(FixtureClassification))]
+[JsonSerializable(typeof(List<FixtureBlockerRecord>))]
 [JsonSerializable(typeof(JsonElement))]
 public sealed partial class FixtureManifestJsonContext : JsonSerializerContext
 {

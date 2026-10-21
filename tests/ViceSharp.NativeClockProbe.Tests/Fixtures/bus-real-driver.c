@@ -4,7 +4,11 @@
  * clock-observer.c, whose vice_sharp_observe_clock call is wrapped by bus-adapter.c), writing
  * NATIVE_AFTER,<clock> to stdout after each return. Real stdin, stdout and stderr; no seam. With
  * argv[1] == "wait" it first reads one stdin byte so a test can close the stderr pipe before the
- * first sink write (broken-pipe case). The double prints "init,<n>" to stdout during the rebuild.
+ * first sink write (broken-pipe case). With argv[1] == "resume" the clock 8 slot reproduces the
+ * PLAN-NATIVERESTORE-001 D5 resume boundary (LAB-OMARCHY 2026-10-21T06:43): a non-cycle peek
+ * (autostart.c 602 check2 -> kbdbuf.c 235 kbdbuf_is_empty -> mem_read) is followed by the snapshot
+ * resume record and then by the opcode fetch at the restored PC, all before the cycle hook.
+ * The double prints "init,<n>" to stdout during the rebuild.
  */
 #include <stdint.h>
 #include <stdio.h>
@@ -16,15 +20,21 @@ uint64_t maincpu_clk;
 extern read_func_ptr_t *_mem_read_tab_ptr;
 extern void mem_initialize_memory(void);
 extern void vic_cycle(void);
+extern void vice_sharp_snapshot_sink(const char *line);
 
 int main(int argc, char **argv)
 {
+    int resume = argc > 1 && strcmp(argv[1], "resume") == 0;
     if (argc > 1 && strcmp(argv[1], "wait") == 0) {
         (void)fgetc(stdin);
     }
     mem_initialize_memory();
     for (maincpu_clk = 7; maincpu_clk <= 8; maincpu_clk++) {
         (void)_mem_read_tab_ptr[0x12]((uint16_t)0x1234);
+        if (resume && maincpu_clk == 8) {
+            vice_sharp_snapshot_sink("VICE_SNAP,resume,8,0,0,0,0,4661,32");
+            (void)_mem_read_tab_ptr[0x12]((uint16_t)0x1235);
+        }
         vic_cycle();
         printf("NATIVE_AFTER,%u\n", (unsigned)maincpu_clk);
         fflush(stdout);

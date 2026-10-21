@@ -26,8 +26,14 @@ public sealed class SnapshotFixtureGenerator
     }
 
     /// <summary>
-    /// The exact observer command line: -default, the model, the machine arguments, -seed 1 (deterministic RAM
-    /// init), +logcolorize, -sounddev dummy, the data root and the absolute cycle limit of trigger plus margin.
+    /// The exact observer command line: -default, +logcolorize first, -seed 1 (deterministic RAM init), -sounddev
+    /// dummy, the data root, the absolute cycle limit of trigger plus margin, then the model and the machine
+    /// arguments last. Pinned cause (operator core analysis of the 2026-10-21T05:42 and 05:50 crashes, confirmed by
+    /// rerun at 05:57 on LAB-OMARCHY): VICE processes options in order, and an option that logs while it is parsed
+    /// ("-model c64" logs "Initializing chip model MOS6569R3.", "-memory none" logs "Extension memory enabled:")
+    /// reaches log_archdep (log.c 607) with stdout a pipe and colors still enabled, where line 615 calls strlen on
+    /// the null color-free buffer: SIGSEGV before the first log line (exit 139, zero bytes on both streams). With
+    /// +logcolorize processed before them both machines run to the cycle limit in either position.
     /// </summary>
     public static string[] BuildArguments(SnapshotFixtureSpec spec)
     {
@@ -35,9 +41,9 @@ public sealed class SnapshotFixtureGenerator
         var limit = checked(spec.Trigger + spec.LimitMargin);
         return
         [
-            "-default", "-model", spec.Model, .. spec.MachineArguments,
-            "-seed", "1", "+logcolorize", "-sounddev", "dummy", "-directory", spec.DataRoot,
-            "-limitcycles", limit.ToString(CultureInfo.InvariantCulture)
+            "-default", "+logcolorize", "-seed", "1", "-sounddev", "dummy", "-directory", spec.DataRoot,
+            "-limitcycles", limit.ToString(CultureInfo.InvariantCulture),
+            "-model", spec.Model, .. spec.MachineArguments
         ];
     }
 
@@ -70,9 +76,9 @@ public sealed class SnapshotFixtureGenerator
         {
             [CheckpointVariable] = spec.Trigger.ToString(CultureInfo.InvariantCulture) + ":" + spec.CandidatePath,
         };
-        var request = new CommandRequest(spec.ObserverPath, arguments, Path.GetDirectoryName(Path.GetFullPath(spec.ObserverPath))!, environment, spec.StderrPath);
+        var request = new CommandRequest(spec.ObserverPath, arguments, Path.GetDirectoryName(Path.GetFullPath(spec.ObserverPath))!, environment, spec.StderrPath, checked(spec.Trigger + spec.LimitMargin));
         var result = _runner.Run(request);
-        baseline = Copy(baseline, c => { c.ProcessExitCode = result.ExitCode; c.TimedOut = result.TimedOut; c.SnapshotLines = result.SnapshotLines; });
+        baseline = Copy(baseline, c => { c.ProcessExitCode = result.ExitCode; c.TimedOut = result.TimedOut; c.LimitReached = result.LimitReached; c.SnapshotLines = result.SnapshotLines; });
 
         var checkpoint = result.SnapshotLines.Select(ParseCheckpoint).FirstOrDefault(p => p is not null);
         if (result.TimedOut)
@@ -100,8 +106,12 @@ public sealed class SnapshotFixtureGenerator
         baseline = Copy(baseline, c => c.MainCpuClock = mainCpuClock);
         if (mainCpuClock != spec.Trigger)
             return Block(baseline, $"{SnapshotFixtureClassifier.BlockerId}: the candidate's MAINCPU clock {mainCpuClock} differs from the trigger {spec.Trigger} (write clock {writeClock})");
-        if (result.ExitCode != 0)
-            return Fail(baseline, $"the observer exited with code {result.ExitCode} after the checkpoint");
+        // The pinned VICE ends a -limitcycles run through its cycle-limit error path (mainc64cpu.c 813 to 816,
+        // maincpu.c 640 to 643: "cycle limit reached." then exit), which reports exit code 1; that is the expected
+        // end of every generation run. Any other nonzero exit, or exit 1 without the limit message, is a failure.
+        var normalEnd = result.ExitCode == 0 || (result.ExitCode == 1 && result.LimitReached);
+        if (!normalEnd)
+            return Fail(baseline, $"the observer exited with code {result.ExitCode} after the checkpoint without reaching the cycle limit");
         return Copy(baseline, c => { c.ExitCode = FixtureCandidate.AcceptedExit; c.BlockedIds = []; c.Reason = "accepted candidate: write clock and MAINCPU clock equal the trigger"; });
     }
 
@@ -138,7 +148,7 @@ public sealed class SnapshotFixtureGenerator
 
     private sealed class Mutable
     {
-        public string? ObserverSha256; public int ProcessExitCode; public bool TimedOut; public IReadOnlyList<string> SnapshotLines = [];
+        public string? ObserverSha256; public int ProcessExitCode; public bool TimedOut; public bool LimitReached; public IReadOnlyList<string> SnapshotLines = [];
         public ulong? WriteClock; public int WriterResult; public ulong? MainCpuClock; public string? CandidateSha256; public long? CandidateLength;
         public int ExitCode; public IReadOnlyList<string> BlockedIds = []; public string Reason = "";
     }
@@ -147,7 +157,7 @@ public sealed class SnapshotFixtureGenerator
     {
         var m = new Mutable
         {
-            ObserverSha256 = c.ObserverSha256, ProcessExitCode = c.ProcessExitCode, TimedOut = c.TimedOut, SnapshotLines = c.SnapshotLines,
+            ObserverSha256 = c.ObserverSha256, ProcessExitCode = c.ProcessExitCode, TimedOut = c.TimedOut, LimitReached = c.LimitReached, SnapshotLines = c.SnapshotLines,
             WriteClock = c.WriteClock, WriterResult = c.WriterResult, MainCpuClock = c.MainCpuClock, CandidateSha256 = c.CandidateSha256,
             CandidateLength = c.CandidateLength, ExitCode = c.ExitCode, BlockedIds = c.BlockedIds, Reason = c.Reason,
         };
@@ -156,7 +166,7 @@ public sealed class SnapshotFixtureGenerator
         {
             FixtureId = c.FixtureId, Host = c.Host, Machine = c.Machine, Model = c.Model, Trigger = c.Trigger, Command = c.Command, Roms = c.Roms,
             CandidatePath = c.CandidatePath, ObserverSha256 = m.ObserverSha256, ProcessExitCode = m.ProcessExitCode, TimedOut = m.TimedOut,
-            SnapshotLines = m.SnapshotLines, WriteClock = m.WriteClock, WriterResult = m.WriterResult, MainCpuClock = m.MainCpuClock,
+            LimitReached = m.LimitReached, SnapshotLines = m.SnapshotLines, WriteClock = m.WriteClock, WriterResult = m.WriterResult, MainCpuClock = m.MainCpuClock,
             CandidateSha256 = m.CandidateSha256, CandidateLength = m.CandidateLength, ExitCode = m.ExitCode, BlockedIds = m.BlockedIds, Reason = m.Reason,
         };
     }

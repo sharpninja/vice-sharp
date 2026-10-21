@@ -55,6 +55,8 @@ public static class Program
         var runs = o.TryGetValue("runs-per-host", out var r) ? int.Parse(r[0], CultureInfo.InvariantCulture) : 2;
         var classification = SnapshotFixtureClassifier.Classify(fixtureId, trigger, candidates, Many(o, "host"), runs);
         FixturePublisher.SaveClassification(classification, Path.GetFullPath(One(o, "out")));
+        if (o.TryGetValue("blockers", out var blockers) && blockers.Count == 1)
+            FixtureBlockers.Apply(Path.GetFullPath(blockers[0]), classification, SnapshotFixtureClassifier.BlockerId, DateTime.Now.ToString("s", CultureInfo.InvariantCulture));
         Console.WriteLine($"{fixtureId}: {classification.Outcome}" + (classification.AcceptedSha256 is null ? "" : $" sha256 {classification.AcceptedSha256}"));
         foreach (var clock in classification.Clocks)
             Console.WriteLine($"  {clock.Host}: trigger {clock.Trigger}, write clock {Format(clock.WriteClock)}, writer result {clock.WriterResult}, MAINCPU clock {Format(clock.MainCpuClock)}, {clock.Outcome}");

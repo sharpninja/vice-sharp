@@ -55,15 +55,32 @@ public sealed class SnapshotFixtureGeneratorImplementationTests : IDisposable
     private static byte[] SyntheticSnapshot(ulong mainCpuClock) => VsfBuilder.Build(VsfBuilder.MainCpu(1, 4, mainCpuClock, 0xE000, 0x24));
 
     /// <summary>A runner that writes the candidate with the given MAINCPU clock and reports the given write clock.</summary>
-    private static FakeRunner Runner(ulong writeClock, ulong mainCpuClock, int writerResult = 0, bool writeBytes = true, int exitCode = 0)
+    /// <summary>The pinned VICE ends a -limitcycles run with "cycle limit reached." and exit code 1 (mainc64cpu.c 813, maincpu.c 640); the fake does the same by default.</summary>
+    private static FakeRunner Runner(ulong writeClock, ulong mainCpuClock, int writerResult = 0, bool writeBytes = true, int exitCode = 1, bool limitReached = true)
         => new(request =>
         {
             if (writeBytes) File.WriteAllBytes(CandidatePathOf(request), SyntheticSnapshot(mainCpuClock));
             var line = writerResult == 0
                 ? $"VICE_SNAP,checkpoint,{Trigger},{writeClock}"
                 : $"VICE_SNAP,checkpoint-fail,{Trigger},{writeClock},{writerResult}";
-            return new CommandResult(exitCode, false, [line]);
+            return new CommandResult(exitCode, false, [line], limitReached);
         });
+
+    [Fact]
+    public void LimitExit_IsTheNormalEnd_AndAnyOtherNonzeroExitFails()
+    {
+        var limit = new SnapshotFixtureGenerator(Runner(Trigger, Trigger, exitCode: 1, limitReached: true), _allowlist).Generate(Spec());
+        Assert.Equal(FixtureCandidate.AcceptedExit, limit.ExitCode);
+        Assert.True(limit.LimitReached);
+        Assert.Equal(1, limit.ProcessExitCode);
+        var clean = new SnapshotFixtureGenerator(Runner(Trigger, Trigger, exitCode: 0, limitReached: false), _allowlist).Generate(Spec());
+        Assert.Equal(FixtureCandidate.AcceptedExit, clean.ExitCode);
+        var crash = new SnapshotFixtureGenerator(Runner(Trigger, Trigger, exitCode: 1, limitReached: false), _allowlist).Generate(Spec());
+        Assert.Equal(FixtureCandidate.FailedExit, crash.ExitCode);
+        Assert.Contains("without reaching the cycle limit", crash.Reason);
+        var other = new SnapshotFixtureGenerator(Runner(Trigger, Trigger, exitCode: 66, limitReached: true), _allowlist).Generate(Spec());
+        Assert.Equal(FixtureCandidate.FailedExit, other.ExitCode);
+    }
 
     private SnapshotFixtureSpec Spec(string host = "LAB-OMARCHY", string run = "1", ulong trigger = Trigger) => new(
         "xvic-pal-unexpanded", "xvic", "vic20", ["-memory", "none"], trigger, _observer, _dataRoot, Roms,
@@ -76,9 +93,12 @@ public sealed class SnapshotFixtureGeneratorImplementationTests : IDisposable
         var candidate = new SnapshotFixtureGenerator(runner, _allowlist).Generate(Spec());
         var request = Assert.Single(runner.Requests);
         Assert.Equal(_observer, request.FileName);
-        Assert.Equal(["-default", "-model", "vic20", "-memory", "none", "-seed", "1", "+logcolorize", "-sounddev", "dummy", "-directory", _dataRoot, "-limitcycles", "150000"], request.Arguments);
+        // +logcolorize first: an option that logs while parsed ("-model c64", "-memory none") crashes the pinned
+        // binaries in log.c 615 when colors are still enabled and stdout is a pipe (cause pinned 2026-10-21T05:57).
+        Assert.Equal(["-default", "+logcolorize", "-seed", "1", "-sounddev", "dummy", "-directory", _dataRoot, "-limitcycles", "150000", "-model", "vic20", "-memory", "none"], request.Arguments);
         Assert.Equal($"{Trigger}:{Spec().CandidatePath}", request.Environment[SnapshotFixtureGenerator.CheckpointVariable]);
         Assert.Equal(Path.GetDirectoryName(_observer), request.WorkingDirectory);
+        Assert.Equal(150_000UL, request.PermitCycles);   // the gated observer needs one permit per cycle up to the limit
         Assert.All(candidate.Roms, r => Assert.True(r.Ok, r.Reason));
         Assert.Equal(3, candidate.Roms.Count);
         Assert.Contains("-limitcycles 150000", candidate.Command);

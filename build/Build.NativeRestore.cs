@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
@@ -152,11 +153,14 @@ partial class Build
                 var receipts = directories.SelectMany(d => Directory.EnumerateFiles(d, $"{id}-*.candidate.json")).OrderBy(p => p, StringComparer.Ordinal).ToArray();
                 foreach (var receipt in receipts)
                 {
-                    var hostName = Path.GetFileName(receipt)[(id.Length + 1)..].Split('-')[0];
+                    // The host comes from the receipt itself (host names carry hyphens: LAB-OMARCHY, PAYTON-LEGION2).
+                    using var document = JsonDocument.Parse(File.ReadAllBytes(receipt));
+                    var hostName = document.RootElement.GetProperty("host").GetString()!;
                     if (!hosts.Contains(hostName)) hosts.Add(hostName);
                 }
                 var classification = ArtifactsDirectory / "native-snapshot-fixtures" / RunStamp / $"{id}.classification.json";
-                var arguments = new List<string> { "classify", "--fixture-id", id, "--trigger", LiteralCheckpointClock.ToString(), "--out", classification };
+                var blockers = RootDirectory / "docs" / "requirements" / "oracles" / "vice-vsf-fixture-blockers.json";
+                var arguments = new List<string> { "classify", "--fixture-id", id, "--trigger", LiteralCheckpointClock.ToString(), "--out", classification, "--blockers", blockers };
                 foreach (var r in receipts) { arguments.Add("--receipt"); arguments.Add(r); }
                 foreach (var h in hosts) { arguments.Add("--host"); arguments.Add(h); }
                 var exit = RunFixtureGenerator(arguments);

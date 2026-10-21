@@ -173,4 +173,16 @@
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
   </Folder>
+  <Folder Name="/tools/">
+    <!-- PLAN-NATIVERESTORE-001 D2 and D5: the fixture generator console the Nuke targets run (without rebuilding) after
+         Compile, and the load-detector probe the harness launches. Neither references a native library. -->
+    <Project Path="tools/ViceSharp.SnapshotFixtureGenerator/ViceSharp.SnapshotFixtureGenerator.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tools/ViceSharp.NativeLoadProbe/ViceSharp.NativeLoadProbe.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+  </Folder>
 </Solution>

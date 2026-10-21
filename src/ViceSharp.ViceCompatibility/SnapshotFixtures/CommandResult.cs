@@ -7,4 +7,8 @@ namespace ViceSharp.ViceCompatibility.SnapshotFixtures;
 /// <param name="ExitCode">Process exit code (-1 when the runner stopped the process).</param>
 /// <param name="TimedOut">True when the wall-clock budget expired and the runner stopped the process.</param>
 /// <param name="SnapshotLines">Every stderr line that starts with <c>VICE_SNAP,</c>, in order.</param>
-public sealed record CommandResult(int ExitCode, bool TimedOut, IReadOnlyList<string> SnapshotLines);
+/// <param name="LimitReached">
+/// True when stdout carries the pinned core's "cycle limit reached." error (mainc64cpu.c 813 to 816, maincpu.c 640
+/// to 643), the normal end of a -limitcycles run, which the pinned VICE reports with exit code 1.
+/// </param>
+public sealed record CommandResult(int ExitCode, bool TimedOut, IReadOnlyList<string> SnapshotLines, bool LimitReached = false);

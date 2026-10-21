@@ -14,8 +14,10 @@ namespace ViceSharp.VsfCompatibility.Tests;
 [Trait("Category", "VsfSlice1Contract")]
 public sealed class VsfSlice1ManifestAndResumeContractTests
 {
-    // Pinned c64-snapshot.c 121 to 137 read order; the manifest's restore order must match it.
-    public static readonly string[] PinnedX64scOrder = ["MAINCPU", "C64", "CIA1", "CIA2", "SID", "DRIVE8", "DRIVE9", "DRIVE10", "DRIVE11", "VIC-II", "C64GLUE", "EVENT", "MEMHACKS", "TAPEPORT", "KEYBOARD", "JOYPORT1", "JOYPORT2", "USERPORT"];
+    // Pinned c64-snapshot.c 121 to 136 read order (one reader unit per call; drive_snapshot_read_module at line 126
+    // is listed as its four units); the manifest's restore order must match it. FSDRIVE (line 127,
+    // fsdrive_snapshot_read_module) was missing from this list until the D5 real binding (2026-10-21T05:59).
+    public static readonly string[] PinnedX64scOrder = ["MAINCPU", "C64", "CIA1", "CIA2", "SID", "DRIVE8", "DRIVE9", "DRIVE10", "DRIVE11", "FSDRIVE", "VIC-II", "C64GLUE", "EVENT", "MEMHACKS", "TAPEPORT", "KEYBOARD", "JOYPORT1", "JOYPORT2", "USERPORT"];
 
     public sealed record ModuleEntry(string Machine, string Name, string Version, int RestoreOrder, string[] Categories, string NativeExport, string NativeImport, string ManagedRecord, string ManagedAdapter, bool Mandatory, string SourceAnchor);
     public sealed record FixtureEntry(string Path, string Sha256, long Length, string Machine, string Model, string Command, ulong TriggerClock, ulong WriteClock, string[] RomHashes, string[] MediaHashes);

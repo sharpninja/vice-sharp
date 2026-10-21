@@ -9,17 +9,22 @@
  *    (resources.h 162, resources_get_int) and the attached image name of each unit's first drive
  *    (attach.h 52, file_system_get_disk_name; "none" when nothing is attached), so an image
  *    detached by the R10 launch precondition is visible as an explicit no-media context.
- * Same for x64sc and xvic. Compile with -I<work>/src -I<build>/src. */
+ * Same for x64sc and xvic. Compile with -I<work>/src -I<build>/src.
+ * maincpu.h is not included: it pulls mainlock.h and archdep.h (an arch header outside the
+ * wrapper include path, found by the D5 Link stage on Linux 2026-10-21); the one declaration this
+ * unit needs from it, "extern mos6510_regs_t maincpu_regs;" (maincpu.h 55), is repeated here
+ * against the pinned type of mos6510.h, so the glue still binds the real global. */
 #include <stddef.h>
 #include <stdio.h>
 
 #include "vice.h"
 #include "attach.h"
-#include "maincpu.h"
 #include "mos6510.h"
 #include "resources.h"
 
 #include "snapshot-observer.h"
+
+extern mos6510_regs_t maincpu_regs;   /* maincpu.h 55 */
 
 void vice_sharp_snapshot_registers(vice_sharp_cpu_regs *out)
 {
