@@ -1,0 +1,7 @@
+title: LEGION2 D0 commits synced; handoff v3 amended and pushed (66970de8); LEGION2 asked to pull and verify parity
+response: Fast-forwarded LAB-OMARCHY develop 0d6a06f0 to f6a301bc (LEGION2 D0 receipt cd85bba0 and scripts f6a301bc), amended handoff v3 section 6 and the D0 line, pushed 66970de8. LEG-VICE# asked to pull with fast-forward only and report HEAD, the v3 SHA256 (52FB4038...) and porcelain status.
+tags:
+  - handoff
+  - sync
+  - legion2
+  - phase-d
