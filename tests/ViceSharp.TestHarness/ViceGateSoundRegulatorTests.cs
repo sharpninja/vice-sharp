@@ -178,9 +178,10 @@ public sealed class ViceGateSoundRegulatorTests
     }
 
     /// <summary>
-    /// FR-SNDREG-001 / FR-MED-003 / TEST-SNDREG-001. Losing a playback device through
-    /// either recording wrapper must select vsync pacing without disabling recording
-    /// or modifying samples forwarded to the backend. No real audio device is opened.
+    /// FR-SNDREG-001 / FR-MED-003 / TEST-SNDREG-001.
+    /// Use case: A playback device becomes unavailable through either recording wrapper.
+    /// Acceptance: Pacing switches to vsync and recording and forwarded samples continue.
+    /// The test uses a fake device.
     /// </summary>
     [Theory]
     [InlineData(false)]
@@ -220,8 +221,9 @@ public sealed class ViceGateSoundRegulatorTests
     }
 
     /// <summary>
-    /// FR-SNDREG-001 / FR-MED-003 / TEST-SNDREG-001. A recorder-only wrapper captures
-    /// samples but cannot supply device pacing, so an armed SID must use vsync.
+    /// FR-SNDREG-001 / FR-MED-003 / TEST-SNDREG-001.
+    /// Use case: An armed SID uses a recorder-only wrapper.
+    /// Acceptance: The wrapper captures samples and the regulator selects vsync.
     /// </summary>
     [Theory]
     [InlineData(false)]
@@ -251,8 +253,10 @@ public sealed class ViceGateSoundRegulatorTests
     }
 
     /// <summary>
-    /// FR-SNDREG-001 / TEST-SNDREG-001. Backends implementing the original interface
-    /// remain timing sources through both recording wrappers without an availability override.
+    /// FR-SNDREG-001 / TEST-SNDREG-001.
+    /// Use case: A playback backend uses the original timing interface with no
+    /// availability override.
+    /// Acceptance: It remains a timing source through both recording wrappers.
     /// </summary>
     [Theory]
     [InlineData(false)]
@@ -271,9 +275,9 @@ public sealed class ViceGateSoundRegulatorTests
     }
 
     /// <summary>
-    /// FR-SNDREG-001 / FR-VIC20-SOUND-001 / TEST-SNDREG-001. VIC-I shares the
-    /// playback backend and must fall back to vsync when it fails, while leaving
-    /// its generated sample stream available to the recording tap.
+    /// FR-SNDREG-001 / FR-VIC20-SOUND-001 / TEST-SNDREG-001.
+    /// Use case: VIC-I loses playback during sample generation.
+    /// Acceptance: Pacing falls back to vsync and samples still reach the recording tap.
     /// </summary>
     [Fact]
     public void Tick_Vic20PlaybackDeviceLost_SelectsVsyncAndKeepsSubmittingSamples()

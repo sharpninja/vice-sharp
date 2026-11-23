@@ -19,7 +19,13 @@ using Xunit;
 /// </summary>
 public sealed class SettingsRestartLifecycleTests
 {
-    /// <summary>Restarted sessions can still record and suspend/resume their live output.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-CFG-008 / FR-MED-003.
+    /// Use case: Restart a rig using factory audio with a recording tap and a warp
+    /// policy.
+    /// Acceptance: The replacement keeps the tap and can suspend and resume live
+    /// playback.
+    /// </summary>
     [Fact]
     public async Task Restart_PreservesFactoryAudioTapAndWarpPolicy()
     {
@@ -47,7 +53,12 @@ public sealed class SettingsRestartLifecycleTests
         Assert.Equal(4u, BinaryPrimitives.ReadUInt32LittleEndian(output.ToArray().AsSpan(40)));
     }
 
-    /// <summary>Normal pacing after a restart resumes the shared leaf paused by old warp/fast-forward.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-CFG-008.
+    /// Use case: Restart with settings that return a suspended shared audio backend to
+    /// normal pacing.
+    /// Acceptance: The shared backend resumes after settings are applied.
+    /// </summary>
     [Theory]
     [InlineData(100, false)]
     [InlineData(250, true)]
@@ -72,7 +83,12 @@ public sealed class SettingsRestartLifecycleTests
         Assert.False(playback.Paused);
     }
 
-    /// <summary>The actual 1541 unit and current inserted/ejected disk survive C64 restarts.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-DRVTRUE-001.
+    /// Use case: Restart a C64 with a 1541 configured as unit 8 or 9.
+    /// Acceptance: The replacement retains the unit and disk state, including an ejected
+    /// disk.
+    /// </summary>
     [Theory]
     [InlineData(8, false)]
     [InlineData(9, false)]
@@ -135,7 +151,11 @@ public sealed class SettingsRestartLifecycleTests
         // Retain generated inputs for diagnosis; no user ROM or game image is copied.
     }
 
-    /// <summary>Profiles without a C64 IEC connection do not request an incompatible true-drive rig.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-DRVTRUE-001.
+    /// Use case: Restart from C64 True Drive into a model without the C64 IEC connection.
+    /// Acceptance: The request for the replacement drops the incompatible drive.
+    /// </summary>
     [Theory]
     [InlineData("minimal")]
     [InlineData("ultimax")]
@@ -156,7 +176,12 @@ public sealed class SettingsRestartLifecycleTests
         Assert.Empty(factory.Request.TrueDriveDiskImagePath);
     }
 
-    /// <summary>Capture finalization precedes the registry notification and patches WAV sizes.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-MED-003.
+    /// Use case: Restart with active captures.
+    /// Acceptance: Finalization precedes registry notification and patches the WAV
+    /// lengths.
+    /// </summary>
     [Fact]
     public async Task Restart_FinalizesCapturesBeforeReplacement()
     {
@@ -189,7 +214,11 @@ public sealed class SettingsRestartLifecycleTests
         finally { current.EndAllCaptures(); }
     }
 
-    /// <summary>A failing video finalizer still closes WAV output and leaves the old session reachable.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-03 / FR-MED-003.
+    /// Use case: A video capture finalizer fails during a settings restart.
+    /// Acceptance: WAV output still closes and the existing session remains reachable.
+    /// </summary>
     [Fact]
     public async Task Restart_CaptureFailureKeepsOldSessionAndClosesOtherCaptures()
     {
@@ -219,7 +248,11 @@ public sealed class SettingsRestartLifecycleTests
         Assert.Equal(2u, BinaryPrimitives.ReadUInt32LittleEndian(output.ToArray().AsSpan(40)));
     }
 
-    /// <summary>Construction failure does not stop captures belonging to the unchanged session.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-03 / FR-MED-003.
+    /// Use case: Replacement construction fails while the existing session records.
+    /// Acceptance: The old session and its captures remain active.
+    /// </summary>
     [Theory]
     [InlineData("invalid-operation")]
     [InlineData("io")]
@@ -253,7 +286,12 @@ public sealed class SettingsRestartLifecycleTests
         finally { current.EndAllCaptures(); }
     }
 
-    /// <summary>Reopening an externally changed/removed disk fails visibly without abandoning the live rig.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 and ac-03 / FR-DRVTRUE-001.
+    /// Use case: Restart attempts to reopen an externally changed or deleted attached
+    /// disk.
+    /// Acceptance: The error is visible and the existing rig remains active.
+    /// </summary>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]

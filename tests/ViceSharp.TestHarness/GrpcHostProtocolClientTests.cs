@@ -27,8 +27,9 @@ using Xunit;
 public sealed class GrpcHostProtocolClientTests
 {
     /// <summary>
-    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: attach-only owns TrueDrive recreation, so it must
-    /// complete before reporting success rather than defer failure to a background status RPC.
+    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001.
+    /// Use case: Enable True Drive in an attach-only flow.
+    /// Acceptance: Session recreation finishes before the call reports success.
     /// </summary>
     [Fact]
     public async Task SetTrueDriveAsync_CompletesSessionCreationBeforeReturning()
@@ -45,8 +46,10 @@ public sealed class GrpcHostProtocolClientTests
     }
 
     /// <summary>
-    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: a rejected disk reports its original reason and
-    /// clears only that disk path; the next action can create an empty TrueDrive rig and attach again.
+    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001.
+    /// Use case: A disk is rejected during True Drive recreation.
+    /// Acceptance: The client reports the original reason, clears the rejected path, and
+    /// can later create an empty rig and attach again.
     /// </summary>
     [Fact]
     public async Task SetTrueDriveAsync_RejectedDisk_DoesNotPoisonLaterSessions()
@@ -95,7 +98,11 @@ public sealed class GrpcHostProtocolClientTests
         }
     }
 
-    /// <summary>FR-DRVTRUE-001: transport failure/cancellation does not discard a valid requested disk.</summary>
+    /// <summary>
+    /// FR-DRVTRUE-001.
+    /// Use case: A valid requested disk encounters an unavailable or canceled RPC.
+    /// Acceptance: The disk selection remains available for retry.
+    /// </summary>
     [Theory]
     [InlineData(StatusCode.Unavailable)]
     [InlineData(StatusCode.Cancelled)]
@@ -133,7 +140,11 @@ public sealed class GrpcHostProtocolClientTests
         }
     }
 
-    /// <summary>FR-DRVTRUE-001: an already-canceled configuration change preserves the active rig.</summary>
+    /// <summary>
+    /// FR-DRVTRUE-001.
+    /// Use case: The request to change True Drive is already canceled.
+    /// Acceptance: The existing session and disk selection are retained.
+    /// </summary>
     [Fact]
     public async Task SetTrueDriveAsync_PreCanceled_PreservesCurrentSessionAndSelection()
     {

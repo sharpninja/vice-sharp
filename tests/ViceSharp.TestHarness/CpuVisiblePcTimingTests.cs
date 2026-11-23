@@ -694,9 +694,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// A JSR target begins with a distinct FETCH_OPCODE phase. For STA absolute,
+    /// Use case: A JSR target begins with a distinct FETCH_OPCODE phase. For STA absolute,
     /// DebugCycle 2 is the third fetch checkpoint in this staged path; ST's
     /// INC_PC and STORE clock follow on the next host tick.
+    /// Acceptance: At the third STA fetch after JSR, the opcode PC remains visible and
+    /// the target has yet to be written.
     /// </summary>
     [Fact]
     public void StaAbsAtJsrTarget_ThirdFetchHoldsOpcodePcBeforeStore()
@@ -2019,9 +2021,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE RTS completes its return JUMP without a clock. A JSR at the return
+    /// Use case: VICE RTS completes its return JUMP without a clock. A JSR at the return
     /// target then executes both FETCH_OPCODE clocks and STACK_PEEK before its
     /// first return-address push, independent of earlier overlap history.
+    /// Acceptance: Cycle 3 of the JSR at the RTS return target peeks at the stack and
+    /// leaves the stack pointer unchanged.
     /// </summary>
     [Fact]
     public void JsrAfterRts_Cycle3StillPeeksStack()
@@ -2065,9 +2069,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE completes an immediate load's register and flag updates without a
+    /// Use case: VICE completes an immediate load's register and flag updates without a
     /// clock, then begins the following FETCH_OPCODE. When RTS returns to LDY #
     /// followed by JSR, that JSR therefore retains its STACK_PEEK at cycle 3.
+    /// Acceptance: The JSR after the deferred LDY retains the separate stack peek at
+    /// cycle 3.
     /// </summary>
     [Fact]
     public void JsrAfterSoftDeferredImmediateLoad_Cycle3StillPeeksStack()
@@ -3950,9 +3956,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// Upstream VICE performs both FETCH_OPCODE clocks before LDA immediate
+    /// Use case: Upstream VICE performs both FETCH_OPCODE clocks before LDA immediate
     /// updates A. After STA (zp),Y and RTS, the second LDA fetch still exposes
     /// the opcode PC and pre-load A; the next tick commits A and fetches STA.
+    /// Acceptance: The second LDA fetch still shows the opcode PC and old A. The next
+    /// tick loads A and fetches STA.
     /// </summary>
     [Fact]
     public void StaIndY_Rts_LdaImm_SecondFetchHoldsPreOpThenNextTickFetchesFollowingStaIndY()
@@ -4004,10 +4012,12 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// Upstream VICE executes LD's register/flag update and INC_PC after the
+    /// Use case: Upstream VICE executes LD's register/flag update and INC_PC after the
     /// absolute-indexed data clock. With no exported next-PC checkpoint left
     /// behind, the following STA (zp),Y has consumed its overlapping first
     /// fetch and reaches ST's unclocked INC_PC(2) at cycle 4.
+    /// Acceptance: At cycle 4 of STA (zp),Y, the visible PC advances by two when the
+    /// preceding indexed load left no trailing checkpoint.
     /// </summary>
     [Fact]
     public void StaIndYAfterLdaAbsXWithoutTrailingCheckpoint_Cycle4AdvancesPc()
@@ -4059,9 +4069,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// When a preceding immediate load consumes the overlapping fetch phase,
+    /// Use case: When a preceding immediate load consumes the overlapping fetch phase,
     /// VICE reaches ST's unclocked INC_PC(2) on STA (zp),Y cycle 4. Branch and
     /// cold-entry paths retain their separate cycle-4 opcode-PC checkpoint.
+    /// Acceptance: An immediate load with a trailing checkpoint advances the following
+    /// STA (zp),Y to opcode PC plus two at cycle 4.
     /// </summary>
     [Fact]
     public void StaIndYAfterImmediateLoadTrailingCheckpoint_Cycle4AdvancesPc()
@@ -4105,8 +4117,10 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// An early-advanced STA (zp),Y does not retain the held-store phase. Its
+    /// Use case: An early-advanced STA (zp),Y does not retain the held-store phase. Its
     /// following INY therefore completes on the normal final implied checkpoint.
+    /// Acceptance: INY updates Y and finishes on the last implied checkpoint after the
+    /// early-advancing STA.
     /// </summary>
     [Fact]
     public void InyAfterEarlyAdvancedStaIndY_LastClkCompletesTransfer()
@@ -4151,8 +4165,10 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// A fused implied body consumes the overlapping phase before the following
+    /// Use case: A fused implied body consumes the overlapping phase before the following
     /// store. VICE therefore reaches STA (zp),Y's unclocked INC_PC at cycle 4.
+    /// Acceptance: At cycle 4 after fused INY, STA (zp),Y has advanced its visible PC by
+    /// two.
     /// </summary>
     [Fact]
     public void StaIndYAfterFusedIny_Cycle4AdvancesPc()
@@ -4199,9 +4215,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// A staged store ends the prior implied-fusion chain after its entry phase
+    /// Use case: A staged store ends the prior implied-fusion chain after its entry phase
     /// is captured. That chain must not survive RTS and force a later held-store
     /// DEY to execute on its final fetch checkpoint.
+    /// Acceptance: DEY's final fetch after the held store still shows the pre-instruction
+    /// Y value.
     /// </summary>
     [Fact]
     public void HeldStaIndYAfterStagedStoreChain_DeyLastClkHoldsPreOp()
@@ -4255,10 +4273,12 @@ public sealed class CpuVisiblePcTimingTests
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001 / TR-LOCKSTEP-VSF-001,
     /// TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE interrupt_delay dispatches alarms before testing irq_clk and therefore
+    /// Use case: VICE interrupt_delay dispatches alarms before testing irq_clk and therefore
     /// counts an IRQ edge raised between CPU clocks on the immediately following
     /// CLK_INC. After held STA (zp),Y / DEY / taken BPL, that third delay clock
     /// dispatches IRQ before the branch target JSR can be fetched.
+    /// Acceptance: The interrupt sequence starts before the target JSR fetch and
+    /// redirects to the IRQ handler.
     /// </summary>
     [Fact]
     public void HeldStaIndY_DeyTakenBpl_IrqBetweenCpuClocks_DispatchesBeforeTargetJsr()
@@ -4347,9 +4367,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// A soft-deferred implied body commits before the following FETCH_OPCODE.
+    /// Use case: A soft-deferred implied body commits before the following FETCH_OPCODE.
     /// When that following instruction is LDA immediate, VICE still exports the
     /// LDA opcode PC and pre-load accumulator on its second fetch clock.
+    /// Acceptance: The TAX result is visible, while the second LDA fetch retains the LDA
+    /// opcode PC and pre-load A.
     /// </summary>
     [Fact]
     public void SoftDeferredTaxThenLdaImm_SecondFetchHoldsPreOpState()
@@ -4418,9 +4440,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// Consecutive VICE LD(GET_IMM) bodies remain separated by the following
+    /// Use case: Consecutive VICE LD(GET_IMM) bodies remain separated by the following
     /// instruction's two FETCH_OPCODE clocks. The second load's final fetch
     /// checkpoint still exposes its opcode PC and pre-load register value.
+    /// Acceptance: The second immediate load keeps its opcode PC and its prior
+    /// destination register on its final fetch checkpoint.
     /// </summary>
     [Fact]
     public void ConsecutiveImmediateLoads_SecondFetchHoldsFollowingLoadPreOpState()
@@ -4457,9 +4481,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE ST executes INC_PC before its final STORE clock. The following
+    /// Use case: VICE ST executes INC_PC before its final STORE clock. The following
     /// immediate load therefore retains both FETCH_OPCODE checkpoints before
     /// LD(GET_IMM) updates the destination register.
+    /// Acceptance: The load after the store retains the old destination value on its
+    /// second fetch, then commits the operand.
     /// </summary>
     [Fact]
     public void StoreThenImmediateLoad_SecondFetchHoldsPreOpState()
@@ -4507,9 +4533,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// An unindexed VICE ST path with two exported next-PC checkpoints overlaps
+    /// Use case: An unindexed VICE ST path with two exported next-PC checkpoints overlaps
     /// RTS's first FETCH clock. STACK_PEEK is therefore already complete when
     /// DebugCycle 3 exports the first pull.
+    /// Acceptance: RTS has already entered the first stack pull on its cycle-3
+    /// checkpoint, advancing S.
     /// </summary>
     [Fact]
     public void RtsAfterStaZp_TwoTrailingCheckpointsFirstPullVisibleAtCycle3()
@@ -4578,10 +4606,12 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE LD performs its register and flag updates plus INC_PC after the
+    /// Use case: VICE LD performs its register and flag updates plus INC_PC after the
     /// addressing-mode read clock. One exported next-PC checkpoint overlaps
     /// the following implied instruction's first FETCH clock, so CLC completes
     /// on the second.
+    /// Acceptance: CLC clears carry by the second fetch checkpoint following the
+    /// one-checkpoint zero-page load.
     /// </summary>
     [Fact]
     public void ClcAfterLdaZp_OneTrailingCheckpointCompletesFlagUpdate()
@@ -4626,9 +4656,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE zero-page RMW's dummy and final write clocks consume the following
+    /// Use case: VICE zero-page RMW's dummy and final write clocks consume the following
     /// fetch-only phase. LDA zero-page therefore exposes its loaded A on the
     /// GET_ZERO data-read clock.
+    /// Acceptance: On the zero-page data read, A already contains the new byte and PC is
+    /// at the next instruction.
     /// </summary>
     [Fact]
     public void LdaZpAfterRolZp_ThreeTrailingCheckpointsShowsLoadedAOnDataRead()
@@ -4670,9 +4702,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE zero-page RMW's dummy and final write clocks leave the following
+    /// Use case: VICE zero-page RMW's dummy and final write clocks leave the following
     /// instruction past its fetch-only phase. ADC absolute therefore commits
     /// on its data-read checkpoint instead of adding a synthetic host hold.
+    /// Acceptance: ADC updates A on the absolute data-read clock following the zero-page
+    /// RMW checkpoints.
     /// </summary>
     [Fact]
     public void AdcAbsAfterRolZp_ThreeTrailingCheckpointsCompletesAdd()
@@ -4721,9 +4755,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE zero-page RMW performs its dummy and final write clocks after
+    /// Use case: VICE zero-page RMW performs its dummy and final write clocks after
     /// INC_PC. Three exported next-PC checkpoints let the following
     /// accumulator ASL execute on its second FETCH_OPCODE clock.
+    /// Acceptance: On the second ASL fetch after ROL's trailing checkpoints, the
+    /// accumulator shift has committed.
     /// </summary>
     [Fact]
     public void AslAAfterRolZp_ThreeTrailingCheckpointsCompletesShift()
@@ -4767,9 +4803,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE unindexed ST uses INC_PC followed by its write clock. When that
+    /// Use case: VICE unindexed ST uses INC_PC followed by its write clock. When that
     /// path leaves two next-PC checkpoints, the following implied TAX reaches
     /// its register update and INC_PC on the second FETCH_OPCODE clock.
+    /// Acceptance: TAX copies A to X by the second fetch checkpoint following the
+    /// two-checkpoint zero-page store.
     /// </summary>
     [Fact]
     public void StaZpThenTax_TwoTrailingCheckpointsCompletesTransfer()
@@ -4834,10 +4872,12 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE ST absolute has already exported two next-PC checkpoints when the
+    /// Use case: VICE ST absolute has already exported two next-PC checkpoints when the
     /// following immediate load reaches its second FETCH_OPCODE clock. The
     /// clock therefore also exposes LD(GET_IMM), unlike the one-checkpoint
     /// zero-page store path.
+    /// Acceptance: LDA's destination register already contains the operand at the second
+    /// fetch after the absolute store.
     /// </summary>
     [Fact]
     public void AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad()
@@ -4876,9 +4916,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE FETCH_OPCODE performs two clocks before LDA immediate executes.
+    /// Use case: VICE FETCH_OPCODE performs two clocks before LDA immediate executes.
     /// A not-taken BEQ cannot make the immediate body visible on the second
     /// fetch checkpoint.
+    /// Acceptance: At LDA's second fetch after the not-taken BEQ, the opcode PC and
+    /// previous A are still visible.
     /// </summary>
     [Fact]
     public void NotTakenBeqThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc()
@@ -4921,9 +4963,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE uses the same FETCH_OPCODE then LD(GET_IMM) order at a taken
+    /// Use case: VICE uses the same FETCH_OPCODE then LD(GET_IMM) order at a taken
     /// same-page branch target. The second LDA fetch exposes pre-load A and
     /// opcode PC; the following tick commits A without a body-only clock.
+    /// Acceptance: At the taken target's second LDA fetch, the opcode PC and old A remain
+    /// visible until the next tick.
     /// </summary>
     [Fact]
     public void TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc()
@@ -4969,11 +5013,13 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// A taken branch whose preceding store exported two next-PC checkpoints
+    /// Use case: A taken branch whose preceding store exported two next-PC checkpoints
     /// has already staged fall-through and completed its dummy clock before the
     /// target JUMP. VICE therefore completes target LD(GET_IMM) on its second
     /// FETCH checkpoint. A later non-load immediate with one exported next-PC
     /// checkpoint likewise consumes the overlapping phase before LDY GET_ZERO.
+    /// Acceptance: The target LDA commits on its second fetch, and the later LDY
+    /// zero-page shows its new value on GET_ZERO.
     /// </summary>
     [Fact]
     public void TakenBccAfterStaAbsThenLdaImm_CompletesAndFusesFollowingLdyZp()
@@ -5140,9 +5186,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// Wolf64 sample 85626 follows CPX immediate with a not-taken BCC.
+    /// Use case: Wolf64 sample 85626 follows CPX immediate with a not-taken BCC.
     /// Native VICE still exposes the LDX opcode PC and pre-load X on that
     /// checkpoint; managed must preserve the same fetch phase.
+    /// Acceptance: On the second LDX fetch after CPX and the not-taken BCC, X and the
+    /// opcode PC retain pre-load values.
     /// </summary>
     [Fact]
     public void LdxImmAfterCpxImmAndNotTakenBcc_SecondFetch_HoldsPreOpXAndOpcodePc()
@@ -6647,9 +6695,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// Upstream VICE 6510dtvcore.c executes both FETCH_OPCODE clocks before
+    /// Use case: Upstream VICE 6510dtvcore.c executes both FETCH_OPCODE clocks before
     /// ST increments PC and begins INT_IND_Y_W. The second fetch therefore
     /// still exports the opcode PC for every STA (zp),Y predecessor.
+    /// Acceptance: The standalone STA (zp),Y still exposes the opcode PC on the cycle-4
+    /// fetch checkpoint.
     /// </summary>
     [Fact]
     public void StaIndY_CycleFour_HoldsOpcodePc()
@@ -7104,7 +7154,12 @@ public sealed class CpuVisiblePcTimingTests
         Assert.Equal((byte)0xD0, cpu.DebugOpcode);
         Assert.Equal((ushort)0x8004, cpu.PC);
     }
-    ///   Native first LDA zp host tick already has A=$27 (GET_ZERO). Managed
+
+    /// <summary>
+    /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
+    /// Use case: A zero-page INC delayed by BA still sets the phase
+    ///   for the following LDA. Native first LDA zp host tick already
+    ///   has A=$27 (GET_ZERO). Managed
     ///   still had pre-INC A=$77 on DebugCycle 2.
     /// Acceptance: After SystemClock BA skip of INC $10 ($26->$27) with
     ///   preload A=$77, the first FETCH tick of the following LDA $10 has
@@ -7312,9 +7367,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE ST(SET_ABS_X) has exported three next-PC checkpoints before the
+    /// Use case: VICE ST(SET_ABS_X) has exported three next-PC checkpoints before the
     /// following implied body. Its FETCH phase is therefore consumed and INX
     /// must expose its updated register and next PC on the final checkpoint.
+    /// Acceptance: At the last fetch checkpoint after the indexed store, INX exposes the
+    /// incremented X and next PC.
     /// </summary>
     [Fact]
     public void StaAbsXWithThreeTrailingCheckpointsThenInx_CompletesOnFinalFetch()
@@ -7382,9 +7439,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-003, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE GET_ABS performs LOAD on its final clock. When a soft-deferred
+    /// Use case: VICE GET_ABS performs LOAD on its final clock. When a soft-deferred
     /// immediate load leaves the following absolute load in a non-overlapped
     /// FETCH phase, the data-read checkpoint must still expose pre-load A.
+    /// Acceptance: The absolute data-read checkpoint after the deferred immediate load
+    /// retains the pre-load accumulator.
     /// </summary>
     [Fact]
     public void LdaAbsAfterSoftDeferredImmediateLoad_DataReadKeepsPreloadA()
@@ -7436,9 +7495,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-003, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE RTS completes its unclocked PC increment after the final stack LOAD.
+    /// Use case: VICE RTS completes its unclocked PC increment after the final stack LOAD.
     /// The following LDA absolute still exposes pre-load A on GET_ABS's
     /// data-read checkpoint even though the managed overlap flags are clear.
+    /// Acceptance: After RTS, the absolute data-read checkpoint still exposes the
+    /// pre-load register.
     /// </summary>
     [Theory]
     [InlineData((byte)0x60, (byte)0xAD)]
@@ -7515,9 +7576,11 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-003, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE JMP performs its unclocked JUMP after the final operand clock.
+    /// Use case: VICE JMP performs its unclocked JUMP after the final operand clock.
     /// When that JUMP was soft-deferred, the target STA zero-page begins with
     /// a distinct FETCH and its store checkpoint must still expose opcode PC.
+    /// Acceptance: During the zero-page store at the deferred JMP target, the opcode PC
+    /// is still visible.
     /// </summary>
     [Fact]
     public void StaZpAfterSoftDeferredJmp_WriteCycleKeepsOpcodePc()
@@ -7569,10 +7632,12 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-003, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
-    /// VICE's not-taken BRANCH can prefetch a fall-through RTS, but that fetch
+    /// Use case: VICE's not-taken BRANCH can prefetch a fall-through RTS, but that fetch
     /// does not turn the preceding immediate compare into an RTS source-clock
     /// overlap. STACK_PEEK remains ahead of the first PULL, so S must not move
     /// on the RTS cycle-3 checkpoint.
+    /// Acceptance: On the prefetched RTS cycle-3 checkpoint, the stack pointer is still
+    /// the pre-pull value.
     /// </summary>
     [Fact]
     public void NotTakenBccPrefetchedRts_CycleThreeKeepsStackPointer()
@@ -7692,7 +7757,7 @@ public sealed class CpuVisiblePcTimingTests
 
     /// <summary>
     /// FR: FR-CPU-002, TR: TR-CYCLE-001 / TR-LOCKSTEP-VSF-001.
-    /// Use cases: Wolf64 samples 119162-119181. VICE LDX immediate completes
+    /// Use case: Wolf64 samples 119162-119181. VICE LDX immediate completes
     ///   after its second FETCH checkpoint, so the following STX zero-page write
     ///   still exports the STX opcode PC. That staged-store chain establishes a
     ///   non-overlapped phase which later keeps STA (zp),Y's second FETCH at the

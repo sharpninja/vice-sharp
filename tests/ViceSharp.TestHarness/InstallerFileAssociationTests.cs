@@ -23,9 +23,10 @@ public sealed class InstallerFileAssociationTests
     }
 
     /// <summary>
-    /// FR: FR-INSTALL-001, TR: TR-INSTALL-ASSOC-001, TEST-INSTALL-001.
-    /// Acceptance: ViceSharp.wxs registers each Commodore extension ProgId and
-    /// an open command with the published exe and %1.
+    /// FR-INSTALL-001 / TR-INSTALL-ASSOC-001 / TEST-INSTALL-001.
+    /// Use case: Open a supported media file from Windows Explorer.
+    /// Acceptance: The installer registers its ProgID and an Open command containing the
+    /// published executable and %1.
     /// </summary>
     [Fact]
     public void Wxs_RegistersOpenVerb_ForEachSupportedExtension()
@@ -47,9 +48,10 @@ public sealed class InstallerFileAssociationTests
     }
 
     /// <summary>
-    /// FR: FR-INSTALL-001, TR: TR-INSTALL-ASSOC-001, TEST-INSTALL-001.
-    /// Acceptance: argv parser takes the first existing registered path and
-    /// skips the exe and flags.
+    /// FR-INSTALL-001 / TR-INSTALL-ASSOC-001 / TEST-INSTALL-001.
+    /// Use case: Parse argv with flags and multiple file candidates.
+    /// Acceptance: The first existing registered path wins, skipping the executable and
+    /// flags.
     /// </summary>
     [Fact]
     public void TryGetOpenPath_PicksFirstExistingRegisteredFile()
@@ -72,9 +74,10 @@ public sealed class InstallerFileAssociationTests
     }
 
     /// <summary>
-    /// FR-INSTALL-001 / TR-INSTALL-ASSOC-001 / TEST-INSTALL-001: desktop Open passes
-    /// an absolute media path after the executable, including spaces and optional quotes.
-    /// Unix root separators must not be mistaken for Windows slash switches.
+    /// FR-INSTALL-001 / TR-INSTALL-ASSOC-001 / TEST-INSTALL-001.
+    /// Use case: Open an absolute media path with spaces, quoted or unquoted.
+    /// Acceptance: The argument parser accepts the file path, including a leading Unix
+    /// slash.
     /// </summary>
     [Theory]
     [InlineData(false)]
@@ -99,8 +102,10 @@ public sealed class InstallerFileAssociationTests
     }
 
     /// <summary>
-    /// TEST-INSTALL-001: dash options are never media; slash options retain their
-    /// Windows meaning while a Unix-rooted registered path remains eligible.
+    /// FR-INSTALL-001 / TR-INSTALL-ASSOC-001 / TEST-INSTALL-001.
+    /// Use case: Parse media candidates and platform-specific option prefixes.
+    /// Acceptance: Dash options are excluded. Slash switches keep their Windows meaning,
+    /// while Unix-rooted registered files remain eligible.
     /// </summary>
     [Fact]
     public void TryGetOpenPath_OptionPrefixes_RespectPlatform()
