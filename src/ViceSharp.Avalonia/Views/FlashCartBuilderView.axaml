@@ -1,8 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:fc="using:ViceSharp.Core.FlashCarts"
+             xmlns:fc="using:ViceSharp.Abstractions"
              x:Class="ViceSharp.Avalonia.Views.FlashCartBuilderView"
-             x:DataType="fc:FlashCartImageBuilderViewModel">
+             x:DataType="fc:IFlashCartImageBuilder">
+    <!-- 2026-11-23, TR-MVVM-001 and D6/R18. Bind through the desktop builder contract. -->
     <DockPanel Margin="12">
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
             <Button Content="Import into bank…" Click="OnImport" />
@@ -22,7 +23,7 @@
                           SelectionChanged="OnProfileChanged"
                           HorizontalAlignment="Stretch">
                     <ComboBox.ItemTemplate>
-                        <DataTemplate x:DataType="fc:IFlashCartProfile">
+                        <DataTemplate x:DataType="fc:IFlashCartBuilderProfile">
                             <TextBlock Text="{Binding DisplayName}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
@@ -35,7 +36,7 @@
                      SelectedIndex="{Binding SelectedBankIndex, Mode=TwoWay}"
                      Height="280">
                 <ListBox.ItemTemplate>
-                    <DataTemplate x:DataType="fc:FlashBankSlotViewItem">
+                    <DataTemplate x:DataType="fc:IFlashCartBuilderBank">
                         <DockPanel>
                             <TextBlock Text="{Binding Label}" Width="140" />
                             <TextBlock Text="{Binding ContentKind}" Width="60" Margin="8,0" />

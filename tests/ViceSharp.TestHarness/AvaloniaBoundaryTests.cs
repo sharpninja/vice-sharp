@@ -51,13 +51,37 @@ public sealed class AvaloniaBoundaryTests
     public void AvaloniaSources_DoNotReferenceRuntimeInternals()
     {
         var sourceRoot = Path.Combine(RepoRoot, "src", "ViceSharp.Avalonia");
-        var source = string.Join(
-            Environment.NewLine,
-            Directory.EnumerateFiles(sourceRoot, "*.cs", SearchOption.AllDirectories)
-                .OrderBy(path => path)
-                .Select(File.ReadAllText));
+        var sourceFiles = Directory.EnumerateFiles(sourceRoot, "*", SearchOption.AllDirectories)
+            .Where(path => Path.GetExtension(path) is ".cs" or ".axaml")
+            .OrderBy(path => path);
+        foreach (var path in sourceFiles)
+        {
+            var dependency = FindRuntimeDependency(File.ReadAllText(path));
+            Assert.True(dependency is null, $"{Path.GetRelativePath(sourceRoot, path)} references {dependency}.");
+        }
+    }
 
-        foreach (var forbidden in new[]
+    /// <summary>
+    /// TR-MVVM-001 and D6/R18, 2026-11-23.
+    /// Use case: A desktop head imports the flash cart builder's view
+    /// model through a composition boundary.
+    /// Acceptance: The source scanner accepts the host and abstraction
+    /// namespaces and rejects Core from C# and compiled XAML bindings.
+    /// </summary>
+    [Theory]
+    [InlineData("using ViceSharp.Abstractions;", null)]
+    [InlineData("using ViceSharp.Host;", null)]
+    [InlineData("using ViceSharp.Core.FlashCarts;", "ViceSharp.Core")]
+    [InlineData("xmlns:fc=\"using:ViceSharp.Core.FlashCarts\"", "ViceSharp.Core")]
+    public void RuntimeBoundaryScan_RecognizesFlashCartDependencies(string source, string? expected)
+    {
+        Assert.Equal(expected, FindRuntimeDependency(source));
+    }
+
+    /// <summary>TR-MVVM-001, 2026-11-23. Finds a forbidden runtime symbol in desktop source.</summary>
+    private static string? FindRuntimeDependency(string source)
+    {
+        string[] forbidden =
         {
             "ViceSharp.Architectures",
             "ViceSharp.Core",
@@ -66,10 +90,8 @@ public sealed class AvaloniaBoundaryTests
             "IMachine",
             "IVideoChip",
             "ArchitectureBuilder"
-        })
-        {
-            Assert.DoesNotContain(forbidden, source);
-        }
+        };
+        return forbidden.FirstOrDefault(symbol => source.Contains(symbol, StringComparison.Ordinal));
     }
 
     /// <summary>

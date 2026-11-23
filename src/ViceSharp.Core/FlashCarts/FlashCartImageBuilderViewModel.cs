@@ -1,17 +1,21 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ViceSharp.Abstractions;
 
 namespace ViceSharp.Core.FlashCarts;
 
 /// <summary>
 /// Portable flash cart image builder (TR-MVVM-001: no Avalonia/UWP types).
 /// Heads bind this and supply <see cref="IFlashBuilderFileIo"/> / optional session hook.
+/// 2026-11-23, TR-MVVM-001 and D6/R18: implement the view-facing
+/// contract using the same profiles and observable bank collection.
 /// </summary>
-public sealed class FlashCartImageBuilderViewModel : INotifyPropertyChanged
+public sealed class FlashCartImageBuilderViewModel : IFlashCartImageBuilder
 {
     private readonly IFlashBuilderFileIo? _fileIo;
     private readonly IFlashBuilderSessionHook? _sessionHook;
+    private readonly IReadOnlyList<IFlashCartBuilderProfile> _viewProfiles;
     private FlashImageBuilder _builder;
     private string _selectedProfileId = FlashCartProfiles.Fe3.Id;
     private int _selectedBankIndex;
@@ -19,12 +23,18 @@ public sealed class FlashCartImageBuilderViewModel : INotifyPropertyChanged
     private string _statusText = "Select a profile and import bank files.";
     private string? _lastError;
 
+    /// <summary>
+    /// Initializes the first profile and bank list.
+    /// 2026-11-23, TR-MVVM-001 and D6/R18: keep a stable instance of each
+    /// profile used by selection bindings.
+    /// </summary>
     public FlashCartImageBuilderViewModel(
         IFlashBuilderFileIo? fileIo = null,
         IFlashBuilderSessionHook? sessionHook = null)
     {
         _fileIo = fileIo;
         _sessionHook = sessionHook;
+        _viewProfiles = Profiles.Select(profile => new BuilderProfile(profile.Id, profile.DisplayName)).ToArray();
         _builder = new FlashImageBuilder(FlashCartProfiles.Fe3);
         RebuildBankItems();
     }
@@ -62,6 +72,15 @@ public sealed class FlashCartImageBuilderViewModel : INotifyPropertyChanged
     public IFlashCartProfile SelectedProfile => _builder.Profile;
 
     public ObservableCollection<FlashBankSlotViewItem> Banks { get; } = new();
+
+    /// <inheritdoc />
+    IReadOnlyList<IFlashCartBuilderProfile> IFlashCartImageBuilder.Profiles => _viewProfiles;
+
+    /// <inheritdoc />
+    IReadOnlyList<IFlashCartBuilderBank> IFlashCartImageBuilder.Banks => Banks;
+
+    /// <summary>TR-MVVM-001, 2026-11-23. Selector data without cartridge implementation types.</summary>
+    private sealed record BuilderProfile(string Id, string DisplayName) : IFlashCartBuilderProfile;
 
     public int SelectedBankIndex
     {
@@ -207,8 +226,11 @@ public sealed class FlashCartImageBuilderViewModel : INotifyPropertyChanged
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
 
-/// <summary>Bindable snapshot of a bank slot.</summary>
-public sealed class FlashBankSlotViewItem
+/// <summary>
+/// Bindable snapshot of a bank slot.
+/// 2026-11-23, TR-MVVM-001 and D6/R18: expose bank display fields through the view-facing contract.
+/// </summary>
+public sealed class FlashBankSlotViewItem : IFlashCartBuilderBank
 {
     public FlashBankSlotViewItem(FlashBankSlot slot)
     {
