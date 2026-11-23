@@ -44,6 +44,15 @@ public sealed partial class SystemClock : IClock
     /// host ticks (no VICE CLK) or on the latch tick itself (Wolf64 2109675).
     /// </summary>
     private int _irqDelayCycles;
+    private FetchIrqSample _debugFetchIrqSample;
+
+    /// <summary>
+    /// TR-ALLOC-001 ac-01 and D6/R18, 2026-11-23. Stores the last fetch
+    /// IRQ diagnostic as values so a CPU clock does not allocate a string.
+    /// </summary>
+    private readonly record struct FetchIrqSample(
+        string? Result, bool Boundary, int Delay, int DelayNeeded, bool? Line,
+        bool DelaysInterrupt, bool EnablesInterrupt, int SequenceRemaining, bool SuppressedBoundary);
 
     /// <summary>
     /// Host cycle of the last nirq 0 to 1 (VICE <c>irq_clk</c>).
@@ -57,8 +66,18 @@ public sealed partial class SystemClock : IClock
     /// <summary>
     /// Last IRQ sample taken while the CPU was at cycle 0 (FETCH or last CLK).
     /// Post-tick samples after FETCH (cycle &gt; 0) do not overwrite this.
+    /// 2026-11-23, TR-ALLOC-001 and D6/R18: format only when the caller reads the note.
     /// </summary>
-    public string DebugFetchIrqNote { get; private set; } = "";
+    public string DebugFetchIrqNote
+    {
+        get
+        {
+            var sample = _debugFetchIrqSample;
+            return sample.Result is null
+                ? ""
+                : $"{sample.Result} bound={sample.Boundary} delay={sample.Delay}/{sample.DelayNeeded} line={sample.Line} delays={sample.DelaysInterrupt} en={sample.EnablesInterrupt} seq={sample.SequenceRemaining} supp={sample.SuppressedBoundary}";
+        }
+    }
 
     public long TotalCycles => _cycle;
 
@@ -253,15 +272,18 @@ public sealed partial class SystemClock : IClock
         NoteFetchIrqSample("skip");
     }
 
+    /// <summary>
+    /// TR-ALLOC-001 ac-01, 2026-11-23. Capture the diagnostic without formatting on the clock path.
+    /// </summary>
     private void NoteFetchIrqSample(string result)
     {
         if (_cpu is null || _cpu.DebugCycle != 0)
             return;
-        var need = InterruptDelayCycles;
-        if (_cpu.LastOpcodeDelaysInterrupt)
-            need++;
-        DebugFetchIrqNote =
-            $"{result} bound={_cpu.IsInstructionBoundary} delay={_irqDelayCycles}/{need} line={_irqLine?.IsAsserted} delays={_cpu.LastOpcodeDelaysInterrupt} en={_cpu.LastOpcodeEnablesIrq} seq={_cpu.DebugInterruptSequenceRemaining} supp={_cpu.DebugSuppressBootstrapBoundary}";
+        var delaysInterrupt = _cpu.LastOpcodeDelaysInterrupt;
+        _debugFetchIrqSample = new FetchIrqSample(
+            result, _cpu.IsInstructionBoundary, _irqDelayCycles, InterruptDelayCycles + (delaysInterrupt ? 1 : 0),
+            _irqLine?.IsAsserted, delaysInterrupt, _cpu.LastOpcodeEnablesIrq,
+            _cpu.DebugInterruptSequenceRemaining, _cpu.DebugSuppressBootstrapBoundary);
     }
 
     private bool UpdateIrqAssertClock()

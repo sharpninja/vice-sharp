@@ -1,6 +1,8 @@
 namespace ViceSharp.TestHarness;
 
+using NSubstitute;
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.Cpu;
 using ViceSharp.Core;
 using Xunit;
 
@@ -19,6 +21,28 @@ using Xunit;
 /// </summary>
 public sealed class SystemClockTests
 {
+    /// <summary>
+    /// TR-ALLOC-001 ac-01 and TR-CYCLE-001, D6/R18, 2026-11-23.
+    /// Use case: An IRQ debugger reads the most recent fetch sample
+    /// after the input line has changed.
+    /// Acceptance: The diagnostic shows the line at the sample and
+    /// clears on clock-position restore.
+    /// </summary>
+    [Fact]
+    public void FetchIrqNote_UsesSampledLineAndClearsOnRestore()
+    {
+        var irq = Substitute.For<IInterruptLine>();
+        var clock = new SystemClock(985_248, new Mos6502(new BasicBus()), irq);
+        Assert.Empty(clock.DebugFetchIrqNote);
+
+        clock.Step();
+        irq.IsAsserted.Returns(true);
+        Assert.Contains("skip bound=True delay=0/2 line=False", clock.DebugFetchIrqNote, StringComparison.Ordinal);
+
+        clock.RestoreLegacyPosition(0);
+        Assert.Empty(clock.DebugFetchIrqNote);
+    }
+
     private sealed class RecordingDevice : IClockedDevice
     {
         private readonly List<long> _ticks = new();

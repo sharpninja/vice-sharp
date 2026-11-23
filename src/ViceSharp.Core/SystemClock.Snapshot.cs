@@ -42,6 +42,7 @@ public sealed partial class SystemClock
     /// <summary>
     /// Restores a validated clock payload without ticking or resetting devices.
     /// The target must have the same frequency and ordered device schedule.
+    /// 2026-11-23, FR-SNP-002 and TR-ALLOC-001: discard the transient IRQ diagnostic sample.
     /// </summary>
     public void RestoreSnapshot(ReadOnlySpan<byte> payload)
     {
@@ -55,7 +56,7 @@ public sealed partial class SystemClock
         RestoreLine(_nmiLine, state.Nmi);
         for (var i = 0; i < _devices.Count; i++)
             SetCounter(_devices[i], state.Counters[i]);
-        DebugFetchIrqNote = "";
+        _debugFetchIrqSample = default;
     }
 
     /// <summary>
@@ -63,6 +64,7 @@ public sealed partial class SystemClock
     /// divisor phases from reset, discard stale NMI edges, and restart IRQ delay
     /// at the imported cycle. This is not exact continuation of a saved clock.
     /// Call after the legacy chip injectors, without concurrent stepping.
+    /// 2026-11-23, FR-SNP-002 and TR-ALLOC-001: discard the transient IRQ diagnostic sample.
     /// </summary>
     public void RestoreLegacyPosition(long cycle)
     {
@@ -76,7 +78,7 @@ public sealed partial class SystemClock
         _irqDelayCycles = 0;
         if (_irqLine is InterruptLine irq) irq.ConsumeRisingEdge();
         if (_nmiLine is InterruptLine nmi) nmi.ConsumeRisingEdge();
-        DebugFetchIrqNote = "";
+        _debugFetchIrqSample = default;
     }
 
     private ClockState ReadSnapshot(ReadOnlySpan<byte> payload)
