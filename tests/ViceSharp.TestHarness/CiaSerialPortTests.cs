@@ -7,13 +7,12 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-CIA-SDR (BACKFILL-CIA serial port).
+/// FR/TR: FR-CIA-005 (CIA serial port).
 /// Use case: MOS 6526 CIA Serial Data Register ($DC0C) and SP shift
 /// behaviour driven by CRA bit 6 (SP direction). Output mode (CRA.6 = 1)
-/// shifts one bit per Timer A underflow; after 8 shifts ICR bit 3 (SDR
-/// IRQ) latches and, when masked-in via IMR, asserts the IRQ line. Input
-/// mode (CRA.6 = 0) is silent in this slice because the CNT pin is not
-/// yet plumbed.
+/// toggles CNT on each Timer A underflow and emits one bit on each
+/// falling CNT edge. After the eighth bit, ICR bit 3 latches and
+/// asserts IRQ if enabled. Input shifts require external CNT edges.
 /// </summary>
 public sealed class CiaSerialPortTests
 {
@@ -26,7 +25,7 @@ public sealed class CiaSerialPortTests
     }
 
     /// <summary>
-    /// FR/TR: FR-CIA-SDR (BACKFILL-CIA serial port).
+    /// FR/TR: FR-CIA-005.
     /// Use case: $DC0C is the Serial Data Register. Software should be
     /// able to write a byte and read it back before any shifting starts.
     /// Acceptance: After writing 0xA5 to $DC0C, reading $DC0C returns
@@ -43,49 +42,63 @@ public sealed class CiaSerialPortTests
     }
 
     /// <summary>
-    /// FR/TR: FR-CIA-SDR (BACKFILL-CIA serial port).
-    /// Use case: With CRA bit 6 = 1 (SP output direction) and Timer A
-    /// running, each Timer A underflow shifts one bit out of SDR. After
-    /// 8 underflows the byte is fully shifted and ICR bit 3 (SDR IRQ)
-    /// must latch even before any IMR enable.
-    /// Acceptance: With Timer A latch=5 (fast underflows), CRA=0x51
-    /// (start + force-load + SP output), and SDR = 0xA5, ticking past 8
-    /// Timer A underflows causes ICR bit 3 to be set.
+    /// FR/TR: FR-CIA-005 ac-01, ac-03, ac-04 and ac-06.
+    /// Use case: Software transmits one byte and polls for completion.
+    /// Acceptance: An SDR write before enabling output triggers no
+    /// transfer. In output mode the eight falling CNT edges carry $A5
+    /// in order. ICR bit 3 latches after the eighth bit with IRQ masked.
+    /// 2026-11-23, D6/R18: use the CNT half-cycles and SDR arming order
+    /// from VICE ciacore.c.
     /// </summary>
     [Fact]
-    public void OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3()
+    public void OutputMode_EighthTransmittedBit_LatchesSdrIcrBit3()
     {
-        var (cia, _) = BuildCiaWithIrq();
+        var (cia, irq) = BuildCiaWithIrq();
 
         // Timer A latch = 5 -> short underflow cycle for fast test.
         cia.Write(0xDC04, 0x05);
         cia.Write(0xDC05, 0x00);
 
-        // SDR = 0xA5 (alternating bit pattern).
         cia.Write(0xDC0C, 0xA5);
+        cia.Write(0xDC0E, 0x51);
+        for (var i = 0; i < 24; i++)
+        {
+            cia.Tick();
+            cia.SerialClockPin.Should().BeTrue("an SDR write in input mode does not start output");
+        }
 
-        // CRA = 0x51: start (bit 0) + force-load (bit 4) + SP output (bit 6).
+        cia.Write(0xDC0E, 0x50); // stop and reload Timer A, leaving SP in output mode
+        cia.Write(0xDC0C, 0xA5);
         cia.Write(0xDC0E, 0x51);
 
-        // 8 underflows * ~5 cycles each + load/count pipeline overhead.
-        // Tick generously (100 cycles) to ensure 8 underflows occur.
-        for (var i = 0; i < 100; i++)
-            cia.Tick();
+        for (var bit = 7; bit >= 0; bit--)
+        {
+            (cia.Peek(0xDC0D) & 0x08).Should().Be(0, "SDR must remain clear before the last falling edge");
+            AdvanceToNextCntTransition(cia).Should().BeFalse();
+            cia.SerialPortPin.Should().Be(((0xA5 >> bit) & 1) != 0);
+            if (bit > 0)
+                AdvanceToNextCntTransition(cia).Should().BeTrue();
+        }
 
-        // ICR bit 3 (0x08) is the SDR / SP interrupt source.
-        var icr = cia.Read(0xDC0D);
-        (icr & 0x08).Should().Be(0x08, "after 8 Timer A underflows in SP output mode, ICR bit 3 must latch");
+        // Allow VICE's post-edge interrupt pipeline to publish before
+        // another Timer A underflow is due.
+        for (var i = 0; i < 4; i++)
+            cia.Tick();
+        (cia.Read(0xDC0D) & 0x08).Should().Be(0x08);
+        irq.IsAsserted.Should().BeFalse("the SDR interrupt is masked");
     }
 
     /// <summary>
-    /// FR/TR: FR-CIA-SDR (BACKFILL-CIA serial port).
+    /// FR/TR: FR-CIA-005 ac-03 and FR-CIA-007.
     /// Use case: When ICR mask bit 3 is enabled via the IMR (write 0x88
     /// to $DC0D: bit 7 = set, bit 3 = SP), the SDR-complete event must
     /// drive the CIA's IRQ line high. Reading $DC0D returns the SDR
     /// flag plus the master IR bit and releases the line.
-    /// Acceptance: Same configuration as the prior test but with the
-    /// IMR bit 3 enabled before starting; after 8 Timer A underflows the
-    /// IRQ line is asserted and a single ICR read clears it.
+    /// Acceptance: IRQ stays clear through the first fourteen CNT
+    /// transitions. After the last falling edge, SDR asserts IRQ and a
+    /// single ICR read clears it.
+    /// 2026-11-23, D6/R18: program CRA before writing SDR and check
+    /// the IRQ across the eighth bit rather than counting eight underflows.
     /// </summary>
     [Fact]
     public void OutputMode_AssertsIrqWhenSdrMaskEnabled()
@@ -99,14 +112,18 @@ public sealed class CiaSerialPortTests
         // Enable IMR bit 3 (SP/SDR IRQ): 0x88 = set + SP bit.
         cia.Write(0xDC0D, 0x88);
 
-        // SDR = 0xFF.
+        cia.Write(0xDC0E, 0x50); // select output before writing SDR
         cia.Write(0xDC0C, 0xFF);
-
-        // CRA = 0x51: start + force-load + SP output.
         cia.Write(0xDC0E, 0x51);
 
-        // Run enough cycles for 8 Timer A underflows.
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < 14; i++)
+        {
+            AdvanceToNextCntTransition(cia);
+            irq.IsAsserted.Should().BeFalse("a partial byte cannot raise the SDR interrupt");
+        }
+
+        AdvanceToNextCntTransition(cia).Should().BeFalse("the eighth bit is emitted on the falling edge");
+        for (var i = 0; i < 4; i++)
             cia.Tick();
 
         irq.IsAsserted.Should().BeTrue("SDR-complete event must assert IRQ when IMR bit 3 is enabled");
@@ -121,7 +138,7 @@ public sealed class CiaSerialPortTests
     }
 
     /// <summary>
-    /// FR/TR: FR-CIA-SDR (BACKFILL-CIA serial port).
+    /// FR/TR: FR-CIA-005 ac-02 and ac-05.
     /// Use case: CRA bit 6 = 0 selects SP input direction. The shift in
     /// this slice is driven by the CNT pin, which is not plumbed yet, so
     /// no shifts occur regardless of how long Timer A runs. ICR bit 3
@@ -158,16 +175,15 @@ public sealed class CiaSerialPortTests
     }
 
     /// <summary>
-    /// FR/TR: FR-CIA-SDR (BACKFILL-CIA serial port).
-    /// Use case: A partial shift (fewer than 8 Timer A underflows) must
-    /// not yet latch ICR bit 3. The SP interrupt fires only when the
-    /// full 8-bit byte has been shifted out.
-    /// Acceptance: With Timer A latch=5 and CRA in SP output mode, after
-    /// 7 Timer A underflows worth of ticks (~35 phi2 cycles) ICR bit 3
-    /// must still be clear.
+    /// FR/TR: FR-CIA-005 ac-01 and ac-03.
+    /// Use case: A partial transmission cannot signal SDR completion.
+    /// Acceptance: ICR bit 3 is clear with only four bits transmitted,
+    /// after eight Timer A underflows.
+    /// 2026-11-23, D6/R18: arm a real transfer before checking the
+    /// incomplete shift.
     /// </summary>
     [Fact]
-    public void OutputMode_PartialShift_LessThanEightUnderflows_DoesNotLatchIcrBit3()
+    public void OutputMode_PartialShift_EightUnderflows_DoesNotLatchIcrBit3()
     {
         var (cia, _) = BuildCiaWithIrq();
 
@@ -175,20 +191,31 @@ public sealed class CiaSerialPortTests
         cia.Write(0xDC04, 0x05);
         cia.Write(0xDC05, 0x00);
 
-        // SDR = 0xA5.
+        cia.Write(0xDC0E, 0x50);
         cia.Write(0xDC0C, 0xA5);
-
-        // CRA = 0x51: start + force-load + SP output.
         cia.Write(0xDC0E, 0x51);
 
-        // Force-load pipeline burns ~2 cycles, then 5 counts per
-        // underflow * 6 underflows = 30 -> total 32 cycles guarantees
-        // at least 6 underflows but stays well under 8. Keep at 35.
-        for (var i = 0; i < 35; i++)
-            cia.Tick();
+        for (var i = 0; i < 8; i++)
+            AdvanceToNextCntTransition(cia);
 
-        // ICR bit 3 must NOT be set yet because we're under 8 underflows.
         var icr = cia.Read(0xDC0D);
-        (icr & 0x08).Should().Be(0x00, "ICR bit 3 must not latch until 8 Timer A underflows complete the byte shift");
+        (icr & 0x08).Should().Be(0x00);
+    }
+
+    /// <summary>
+    /// FR-CIA-005 ac-01 and ac-06, 2026-11-23. Waits for one CNT half-cycle
+    /// with the tests' Timer A latch of five.
+    /// </summary>
+    private static bool AdvanceToNextCntTransition(Mos6526 cia)
+    {
+        var previousLevel = cia.SerialClockPin;
+        for (var cycles = 0; cycles < 12; cycles++)
+        {
+            cia.Tick();
+            if (cia.SerialClockPin != previousLevel)
+                return cia.SerialClockPin;
+        }
+
+        throw new InvalidOperationException("CNT did not toggle within one Timer A interval.");
     }
 }
