@@ -114,6 +114,80 @@ public sealed class SnapshotFixtureGeneratorImplementationTests : IDisposable
         Assert.Contains(runner.Requests[1].ViceLogPath!, witnessed.Command, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17. Use case: compare stock VIC-20 snapshots.
+    /// Acceptance: the two unused VIA1 v2.2 input-latch bytes may differ, and adjacent state must match.
+    /// </summary>
+    [Fact]
+    public void PinnedXvicComparison_UsesOnlyTheTwoUnusedInputLatchBytes()
+    {
+        AssertPinnedViaComparison((left, right) =>
+        {
+            const string id = "xvic-pal-unexpanded";
+            string[] hosts = ["LAB-OMARCHY", "PAYTON-LEGION2"];
+            var runs = new[] { PinnedViaRun(left, hosts[0], 1), PinnedViaRun(left, hosts[0], 2),
+                PinnedViaRun(right, hosts[1], 1), PinnedViaRun(right, hosts[1], 2) };
+            var comparison = SnapshotFixtureClassifier.ClassifyPinnedXvic(id, 100_002, runs, hosts, FixtureManifest.PinnedViceCommit);
+            if (comparison.IsAccepted)
+            {
+                Assert.Equal(runs[0].Receipt.CandidateSha256, comparison.AcceptedSha256);
+                Assert.Equal(runs[2].Receipt.CandidateSha256, comparison.Clocks[2].CandidateSha256);
+                Assert.NotEqual(comparison.AcceptedSha256, comparison.Clocks[2].CandidateSha256);
+                Assert.Contains("23 (ILA) and 24 (ILB)", comparison.ByteComparisonException);
+                Assert.False(SnapshotFixtureClassifier.ClassifyPinnedXvic(id, 100_002, runs, hosts, "different-pin").IsAccepted);
+                runs[3] = (runs[3].Receipt, (byte[])left.Clone());
+                Assert.False(SnapshotFixtureClassifier.ClassifyPinnedXvic(id, 100_002, runs, hosts, FixtureManifest.PinnedViceCommit).IsAccepted);
+                runs[3] = runs[2];
+                Assert.False(SnapshotFixtureClassifier.ClassifyPinnedXvic(id, 100_002, runs, hosts, FixtureManifest.PinnedViceCommit).IsAccepted);
+            }
+            return comparison.IsAccepted;
+        });
+    }
+
+    private static (FixtureCandidate Receipt, byte[]? Bytes) PinnedViaRun(byte[] bytes, string host, int run) => (new()
+    {
+        FixtureId = "xvic-pal-unexpanded", Machine = "xvic", Model = "vic20", Host = host,
+        Trigger = 100_002, WriteClock = 100_002, MainCpuClock = 100_002, WriterResult = 0,
+        CandidatePath = $"{host}-{run}.vsf",
+        CandidateSha256 = Convert.ToHexString(SHA256.HashData(bytes)), CandidateLength = bytes.LongLength,
+        ExitCode = FixtureCandidate.AcceptedExit,
+    }, bytes);
+
+    private static void AssertPinnedViaComparison(Func<byte[], byte[], bool> compare)
+    {
+        const int payload = 58 + 22;
+        var baseline = PinnedXvicSnapshot(new byte[28]);
+        var sameState = (byte[])baseline.Clone();
+        sameState[payload + 23] = 0x5c;
+        sameState[payload + 24] = 0x61;
+        Assert.True(compare(baseline, sameState));
+        foreach (var offset in new[] { 21, payload + 16, payload + 22, payload + 25, sameState.Length - 1 })
+        {
+            var changed = (byte[])sameState.Clone();
+            changed[offset] ^= 1;
+            Assert.False(compare(baseline, changed));
+        }
+        var enabledLeft = (byte[])baseline.Clone();
+        var enabledRight = (byte[])sameState.Clone();
+        enabledLeft[payload + 16] = enabledRight[payload + 16] = 1;
+        Assert.False(compare(enabledLeft, enabledRight));
+        enabledLeft[payload + 16] = enabledRight[payload + 16] = 0;
+        enabledLeft[58 + 5] = enabledRight[58 + 5] = 1;
+        Assert.False(compare(enabledLeft, enabledRight));
+        Assert.Equal(0, baseline[payload + 23]);
+        Assert.Equal(0x5c, sameState[payload + 23]);
+        Assert.Equal(0x61, sameState[payload + 24]);
+    }
+
+    private static byte[] PinnedXvicSnapshot(byte[] viaPayload)
+    {
+        var snapshot = VsfBuilder.Build(new("VIA1", 2, 2, viaPayload), VsfBuilder.MainCpu(1, 4, 100_002, 0xE000, 0x24));
+        snapshot[19] = 3;
+        snapshot[20] = 1;
+        "VIC20"u8.CopyTo(snapshot.AsSpan(21));
+        return snapshot;
+    }
+
     private SnapshotFixtureSpec Spec(string host = "LAB-OMARCHY", string run = "1", ulong trigger = Trigger) => new(
         "xvic-pal-unexpanded", "xvic", "vic20", ["-memory", "none"], trigger, _observer, _dataRoot, Roms,
         Path.Combine(_root, "candidates", $"{host}-{run}.vsf"), Path.Combine(_root, "candidates", $"{host}-{run}.stderr"), host);

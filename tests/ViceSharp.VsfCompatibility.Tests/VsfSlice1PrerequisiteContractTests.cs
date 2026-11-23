@@ -16,6 +16,11 @@ namespace ViceSharp.VsfCompatibility.Tests;
 public sealed class VsfSlice1PrerequisiteContractTests
 {
     public const string PinnedSha = "cc67418cba58e71d8e70fd353e9de47199ad2075";
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17 and TEST-VSFLOCKSTEP-001 AC1:
+    /// the measured, approved instruction boundary for both VIC-20 Slice 1 fixture models.
+    /// </summary>
+    public const ulong XvicFixtureCheckpoint = 100_002;
     public static readonly string[] RequiredWraps = ["vicii_cycle", "vic_cycle", "mem_initialize_memory", "mem_mmu_translate", "mem_toggle_watchpoints", "vice_sharp_observe_clock", "maincpu_snapshot_read_module", "machine_read_snapshot"];
     public static readonly string[] RequiredTools = ["gcc", "make", "autoconf", "automake", "libtool", "bash"];
 
@@ -41,8 +46,8 @@ public sealed class VsfSlice1PrerequisiteContractTests
     public static FixtureRecord[] ValidFixtures() =>
     [
         new("tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf", "x64sc", "PAL", "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19", 190854, 0, 0, [new string('1', 64)], [], "supplied", true),
-        new("fixtures/xvic-pal-100000.vsf", "xvic", "PAL", new string('C', 64), 1000, 100000, 100000, [new string('2', 64)], [], "xvic-observer -seed 1 VICESHARP_SNAPSHOT_AT=100000:...", true),
-        new("fixtures/xvic-ntsc-100000.vsf", "xvic", "NTSC", new string('D', 64), 1000, 100000, 100000, [new string('3', 64)], [], "xvic-observer -seed 1 VICESHARP_SNAPSHOT_AT=100000:...", true)
+        new("fixtures/xvic-pal-100002.vsf", "xvic", "PAL", new string('C', 64), 1000, XvicFixtureCheckpoint, XvicFixtureCheckpoint, [new string('2', 64)], [], "xvic-observer -seed 1 VICESHARP_SNAPSHOT_AT=100002:...", true),
+        new("fixtures/xvic-ntsc-100002.vsf", "xvic", "NTSC", new string('D', 64), 1000, XvicFixtureCheckpoint, XvicFixtureCheckpoint, [new string('3', 64)], [], "xvic-observer -seed 1 VICESHARP_SNAPSHOT_AT=100002:...", true)
     ];
 
     public static ToolRecord[] ValidTools() => RequiredTools.Select(t => new ToolRecord(t, "C:/msys64/mingw64/bin/" + t, true)).ToArray();
@@ -74,8 +79,8 @@ public sealed class VsfSlice1PrerequisiteContractTests
         {
             var f = Assert.Single(fixtures, x => x.Machine == "xvic" && x.Model == model);
             Assert.True(f.Present, "an xvic fixture that was not written is BLOCKED, never passed");
-            Assert.Equal(100000UL, f.TriggerClock);
-            Assert.Equal(100000UL, f.WriteClock);
+            Assert.Equal(XvicFixtureCheckpoint, f.TriggerClock);
+            Assert.Equal(XvicFixtureCheckpoint, f.WriteClock);
             Assert.Matches("^[0-9A-F]{64}$", f.Sha256);
             Assert.NotEmpty(f.RomHashes);
             Assert.All(f.RomHashes, h => Assert.Matches("^[0-9A-F]{64}$", h));
@@ -142,7 +147,8 @@ public sealed class VsfSlice1PrerequisiteContractTests
         Reject(f => f.Where(x => x.Model != "NTSC").ToArray());                                            // omitted fixture
         Reject(f => f.Select(x => x.Path.EndsWith("truedrive.vsf", StringComparison.Ordinal) ? x with { Sha256 = new string('9', 64) } : x).ToArray()); // wrong hash
         Reject(f => f.Select(x => x.Path.EndsWith("truedrive.vsf", StringComparison.Ordinal) ? x with { Length = 1 } : x).ToArray());                // wrong length
-        Reject(f => f.Select(x => x.Machine == "xvic" ? x with { WriteClock = 100007 } : x).ToArray());    // write clock not the literal trigger (R12)
+        Reject(f => f.Select(x => x.Machine == "xvic" ? x with { WriteClock = 100007 } : x).ToArray());    // write clock differs from the approved R17 trigger
+        Reject(f => f.Select(x => x.Machine == "xvic" ? x with { TriggerClock = 100000, WriteClock = 100000 } : x).ToArray()); // superseded trigger
         Reject(f => f.Select(x => x.Machine == "xvic" ? x with { Present = false } : x).ToArray());        // BLOCKED fixture never passes
         Reject(f => f.Select(x => x.Machine == "xvic" ? x with { RomHashes = [] } : x).ToArray());         // ROM hash missing
         Reject(f => f.Select(x => x.Machine == "xvic" ? x with { MediaHashes = ["bad"] } : x).ToArray());  // media hash malformed

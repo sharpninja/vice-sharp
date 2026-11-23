@@ -38,6 +38,10 @@ public sealed class NativeViceSnapshotResumeTests
 
         public ResumeTrace Run(ResumeInput input) => Run(input, VsfSlice1RealEvidence.SuppliedFixture, normalize: true, "v12-resume");
 
+        /// <summary>
+        /// 2026-11-23, PLAN-NATIVERESTORE-001 D5 and TR-VSFLOCKSTEP-RESUME-001 AC1. Keep the native
+        /// cycle-limit record in a fresh per-run VICE log, including on Windows when stdout is empty.
+        /// </summary>
         public ResumeTrace Run(ResumeInput input, string fixturePath, bool normalize, string label)
         {
             var observer = VsfSlice1RealEvidence.ObserverPath("x64sc");
@@ -56,11 +60,15 @@ public sealed class NativeViceSnapshotResumeTests
             // The headless stock binary needs the dummy sound device and the data root (the same two options the
             // equivalence runner passes); inserted before -limitcycles so the precondition flags stay last (N05).
             var limitIndex = arguments.IndexOf("-limitcycles");
-            arguments.InsertRange(limitIndex, ["-sounddev", "dummy", "-directory", VsfSlice1RealEvidence.DataRoot]);
             LastStderrPath = Path.Combine(OutputDirectory, label + ".stderr");
+            var viceLogPath = $"{LastStderrPath}.{Guid.NewGuid():N}.vice.log";
+            arguments.InsertRange(limitIndex, ["-sounddev", "dummy", "-directory", VsfSlice1RealEvidence.DataRoot, "-logfile", viceLogPath]);
             // Permits cover the prelude up to the load plus everything after it up to the limit (the restored clock
             // can be far below the limit when the fixture was written early), plus a margin; never the limiting factor.
-            var request = new CommandRequest(observer, arguments, Path.GetDirectoryName(observer)!, new Dictionary<string, string>(StringComparer.Ordinal), LastStderrPath, input.PreludeCycles + budget.LimitCycles + 100_000, 1_800_000);
+            var request = new CommandRequest(observer, arguments, Path.GetDirectoryName(observer)!, new Dictionary<string, string>(StringComparer.Ordinal), LastStderrPath, input.PreludeCycles + budget.LimitCycles + 100_000, 1_800_000)
+            {
+                ViceLogPath = viceLogPath,
+            };
             LastResult = new ProcessCommandRunner().Run(request);
             File.WriteAllText(Path.Combine(OutputDirectory, label + ".command.txt"), observer + " " + string.Join(' ', arguments) + "\n");
             var lines = ExtractResumeLines(LastStderrPath, LastResult);

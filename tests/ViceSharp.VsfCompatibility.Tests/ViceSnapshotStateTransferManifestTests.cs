@@ -106,45 +106,41 @@ public sealed class NativeViceSnapshotFixtureGeneratorTests
             .OrderBy(p => p, StringComparer.Ordinal);
     }
 
-    internal static GeneratorOutcome ToOutcome(FixtureCandidate c, string receiptPath, Manifest manifest)
-    {
-        var retained = c.CandidatePath is null ? null : Path.Combine(Path.GetDirectoryName(receiptPath)!, Path.GetFileName(c.CandidatePath));
-        var bytes = retained is not null && File.Exists(retained) ? File.ReadAllBytes(retained) : null;
-        if (bytes is not null) Assert.Equal(c.CandidateSha256, Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(bytes)));
-        var accepted = Path.Combine(VsfSlice1RealEvidence.FixtureDirectory, c.FixtureId + ".vsf");
-        var acceptedChanged = File.Exists(accepted) && VsfSlice1RealEvidence.Sha256Of(accepted) != c.CandidateSha256;
-        var manifestChanged = manifest.Fixtures.Any(f => f.Path.EndsWith(c.FixtureId + ".vsf", StringComparison.Ordinal) && f.Sha256 != c.CandidateSha256);
-        return new GeneratorOutcome(c.Host, c.Trigger, c.WriteClock, c.WriterResult, bytes, bytes is null ? null : c.CandidateSha256, acceptedChanged, manifestChanged, c.ExitCode, [.. c.BlockedIds]);
-    }
-
     /// <summary>
-    /// TR-VSFLOCKSTEP-RESUME-001 AC1 (real receipts); PLAN-NATIVERESTORE-001 D5, R12 B.
-    /// Use case: every fixture id with committed candidate receipts has at least two fresh-command runs whose
-    /// classification is correct: accepted runs are byte identical and published, anything else is retained,
-    /// unpublished, nonzero and BLOCKED by id.
-    /// Acceptance: the contract assertion passes per fixture id; a blocked id is then reported as BLOCKED with the
-    /// measured trigger and write clocks of every host (never approximated).
+    /// TR-VSFLOCKSTEP-RESUME-001 AC1 (real receipts); PLAN-NATIVERESTORE-001 D5, R12 B and R17 C.
+    /// Use case: each published VIC-20 fixture has four retained fresh-command runs spanning the two required hosts.
+    /// Acceptance: validate the approved cohort, with historical R12 attempts retained as historical evidence.
+    /// 2026-11-23: bind the R17 contract to real receipts and require a published matching hash for each model.
     /// </summary>
     [Fact]
     public void Regeneration_IsByteDeterministic()
     {
-        var receipts = CommittedCandidateReceipts().ToArray();
+        const ulong trigger = VsfSlice1PrerequisiteContractTests.XvicFixtureCheckpoint;
+        var receipts = CommittedCandidateReceipts().Select(path => (Path: path, Candidate: FixturePublisher.LoadCandidate(path))).ToArray();
         Assert.True(receipts.Length > 0, "no committed candidate receipts under docs/receipts/native-vice/*/fixture-candidates");
+        var blockers = FixtureBlockers.Load(VsfSlice1RealEvidence.BlockersPath);
         var manifest = ViceSnapshotStateTransferManifestTests.LoadManifest(VsfSlice1RealEvidence.ManifestPath);
-        var byFixture = receipts.Select(p => (Path: p, Candidate: FixturePublisher.LoadCandidate(p))).GroupBy(x => x.Candidate.FixtureId, StringComparer.Ordinal).ToArray();
-        Assert.NotEmpty(byFixture);
-        var blocked = new List<string>();
-        foreach (var group in byFixture)
+        foreach (var fixtureId in new[] { "xvic-pal-unexpanded", "xvic-ntsc-unexpanded" })
         {
-            var runs = group.Select(x => ToOutcome(x.Candidate, x.Path, manifest)).ToArray();
-            AssertRegeneration(runs);
-            if (runs.Any(r => r.BlockedIds.Length > 0))
-            {
-                var clocks = string.Join("; ", group.Select(x => $"{x.Candidate.Host}: trigger {x.Candidate.Trigger}, write clock {(x.Candidate.WriteClock?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "none")}, writer result {x.Candidate.WriterResult}, sha256 {x.Candidate.CandidateSha256 ?? "none"}"));
-                blocked.Add($"{group.Key}: {clocks}");
-            }
+            var blocker = blockers.FirstOrDefault(b => b.FixtureId == fixtureId);
+            if (blocker is not null)
+                Assert.Fail(FixtureBlockers.Message(blocker));
+            // The old 100,000 measurements remain available but belong to the superseded R12 cohort.
+            var group = receipts.Where(r => r.Candidate.FixtureId == fixtureId && r.Candidate.Trigger != 100_000).ToArray();
+            Assert.Equal(4, group.Select(r => r.Candidate.CandidatePath).Distinct(StringComparer.OrdinalIgnoreCase).Count());
+            Assert.All(group, r => Assert.Equal(trigger, r.Candidate.MainCpuClock));
+            var runs = group.Select(x => (Receipt: x.Candidate,
+                Bytes: (byte[]?)File.ReadAllBytes(FixturePublisher.FindRetainedSnapshot(x.Path, x.Candidate) ??
+                    throw new InvalidDataException($"Missing raw candidate beside {x.Path}")))).ToArray();
+            AssertR17Regeneration([.. runs.Select(x => new GeneratorOutcome(x.Receipt.Host, x.Receipt.Trigger,
+                x.Receipt.WriteClock, x.Receipt.WriterResult, x.Bytes, x.Receipt.CandidateSha256,
+                false, false, x.Receipt.ExitCode, [.. x.Receipt.BlockedIds]))]);
+            var comparison = SnapshotFixtureClassifier.ClassifyPinnedXvic(fixtureId, trigger, runs,
+                ["LAB-OMARCHY", "PAYTON-LEGION2"], FixtureManifest.PinnedViceCommit);
+            Assert.True(comparison.IsAccepted, string.Join("; ", comparison.Reasons));
+            var entry = Assert.Single(manifest.Fixtures, f => f.Path.EndsWith("/ready-" + fixtureId + ".vsf", StringComparison.Ordinal));
+            Assert.Equal(comparison.AcceptedSha256, entry.Sha256);
+            Assert.Equal(entry.Sha256, VsfSlice1RealEvidence.Sha256Of(Path.Combine(VsfSlice1RealEvidence.RepoRoot, entry.Path)));
         }
-        if (blocked.Count > 0)
-            Assert.Fail("BLOCKED: " + SnapshotFixtureClassifier.BlockerId + " " + string.Join(" | ", blocked));
     }
 }

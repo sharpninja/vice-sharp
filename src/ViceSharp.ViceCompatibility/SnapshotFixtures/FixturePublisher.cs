@@ -60,6 +60,20 @@ public static class FixturePublisher
             ?? throw new InvalidDataException($"Candidate receipt '{path}' is empty.");
     }
 
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17. Resolve the raw snapshot next to its receipt after a
+    /// cross-host transfer, or use the recorded original path when present.
+    /// </summary>
+    public static string? FindRetainedSnapshot(string receiptPath, FixtureCandidate candidate)
+    {
+        var original = candidate.CandidatePath;
+        if (string.IsNullOrEmpty(original)) return null;
+        var sibling = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(receiptPath))!,
+            Path.GetFileName(original.Replace('\\', '/')));
+        if (File.Exists(sibling)) return sibling;
+        return File.Exists(original) ? original : null;
+    }
+
     /// <summary>Writes a classification as JSON.</summary>
     public static void SaveClassification(FixtureClassification classification, string path)
     {

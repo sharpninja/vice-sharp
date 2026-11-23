@@ -110,7 +110,11 @@ public static class X64ScNativeLaunch
         return ["-autostart", snapshotPath, "+logcolorize", "-seed", "1", "-limitcycles", limitCycles.ToString(CultureInfo.InvariantCulture), .. precondition];
     }
 
-    private static IEnumerable<(string Name, int Offset, int Size)> Modules(ReadOnlySpan<byte> snapshot)
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17. Shares validated module boundaries with the pinned VIC-20
+    /// fixture comparison.
+    /// </summary>
+    internal static IEnumerable<(string Name, int Offset, int Size)> Modules(ReadOnlySpan<byte> snapshot)
     {
         var list = new List<(string, int, int)>();
         if (snapshot.Length < 37 || !snapshot[..19].SequenceEqual("VICE Snapshot File\x1a"u8))

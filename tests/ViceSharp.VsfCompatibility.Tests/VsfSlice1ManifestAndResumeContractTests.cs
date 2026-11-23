@@ -118,6 +118,47 @@ public sealed class VsfSlice1ManifestAndResumeContractTests
         }
     }
 
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17 and TEST-VSFLOCKSTEP-001 AC1:
+    /// require the exact approved boundary and two accepted runs from each named lab host.
+    /// </summary>
+    internal static void AssertR17Regeneration(GeneratorOutcome[] runs)
+    {
+        const ulong trigger = VsfSlice1PrerequisiteContractTests.XvicFixtureCheckpoint;
+        Assert.Equal(4, runs.Length);
+        foreach (var host in new[] { "LAB-OMARCHY", "PAYTON-LEGION2" })
+            Assert.Equal(2, runs.Count(r => r.Host == host));
+        Assert.All(runs, run =>
+        {
+            Assert.Equal(trigger, run.Trigger);
+            Assert.Equal(trigger, run.WriteClock);
+            Assert.Equal(0, run.WriterResult);
+            Assert.Equal(0, run.ExitCode);
+            Assert.Empty(run.BlockedIds);
+            Assert.NotEmpty(run.CandidateBytes!);
+            Assert.Matches("^[0-9A-F]{64}$", run.CandidateSha256!);
+        });
+    }
+
+    /// <summary>
+    /// Use case: accept and publish only a complete, matching R17 cohort.
+    /// Acceptance: TR-VSFLOCKSTEP-RESUME-001 AC1 and PLAN-NATIVERESTORE-001 D5b/R17.
+    /// 2026-11-23: distinguish a complete cohort from a missing host, wrong boundary or invalid raw hash.
+    /// </summary>
+    [Fact]
+    public void CurrentRegeneration_RequiresTheApprovedBoundaryAndTwoRunsOnEachHost()
+    {
+        const ulong trigger = VsfSlice1PrerequisiteContractTests.XvicFixtureCheckpoint;
+        static GeneratorOutcome Ok(string host) => new(host, trigger, trigger, 0, [1, 2, 3], new string('C', 64), true, true, 0, []);
+        var linux = Ok("LAB-OMARCHY");
+        var windows = Ok("PAYTON-LEGION2");
+        AssertR17Regeneration([linux, linux, windows, windows]);
+        Assert.ThrowsAny<XunitException>(() => AssertR17Regeneration([linux, linux, linux, windows]));
+        Assert.ThrowsAny<XunitException>(() => AssertR17Regeneration([linux, linux, windows, windows with { WriteClock = 100_003 }]));
+        Assert.ThrowsAny<XunitException>(() => AssertR17Regeneration([linux, linux, windows, windows with { Trigger = 100_000, WriteClock = 100_000 }]));
+        Assert.ThrowsAny<XunitException>(() => AssertR17Regeneration([linux, linux, windows, windows with { CandidateSha256 = "not-a-raw-sha256" }]));
+    }
+
     [Fact]
     public void Regeneration_IsByteDeterministic_and_mismatch_retains_candidates_without_publishing()
     {

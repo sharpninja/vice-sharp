@@ -52,7 +52,7 @@ public sealed class NativeViceSnapshotPrerequisiteTests
                 var entry = manifest.Fixtures.FirstOrDefault(f => f.Machine == "xvic" && f.Model == model);
                 if (entry is null)
                 {
-                    records.Add(new FixtureRecord("(not in the manifest)", "xvic", label, "", 0, 100000, 0, [], [], "", false));
+                    records.Add(new FixtureRecord("(not in the manifest)", "xvic", label, "", 0, XvicFixtureCheckpoint, 0, [], [], "", false));
                     continue;
                 }
                 var path = Path.Combine(VsfSlice1RealEvidence.RepoRoot, entry.Path.Replace('/', Path.DirectorySeparatorChar));

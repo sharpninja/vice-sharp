@@ -47,17 +47,25 @@ public static class Program
         return candidate.ExitCode;
     }
 
+    /// <summary>2026-11-23, D5b/R17. Bind the authorized pinned comparison to retained raw files.</summary>
     private static int Classify(Dictionary<string, List<string>> o)
     {
         var fixtureId = One(o, "fixture-id");
         var trigger = ulong.Parse(One(o, "trigger"), CultureInfo.InvariantCulture);
-        var candidates = Many(o, "receipt").Select(p => FixturePublisher.LoadCandidate(Path.GetFullPath(p))).ToArray();
+        var receipts = Many(o, "receipt").Select(p => (Path: Path.GetFullPath(p), Candidate: FixturePublisher.LoadCandidate(p))).ToArray();
         var runs = o.TryGetValue("runs-per-host", out var r) ? int.Parse(r[0], CultureInfo.InvariantCulture) : 2;
-        var classification = SnapshotFixtureClassifier.Classify(fixtureId, trigger, candidates, Many(o, "host"), runs);
+        var hosts = Many(o, "host");
+        var classification = o.ContainsKey("vice-commit") && runs == 2
+            ? SnapshotFixtureClassifier.ClassifyPinnedXvic(fixtureId, trigger, [.. receipts.Select(receipt =>
+                (receipt.Candidate, FixturePublisher.FindRetainedSnapshot(receipt.Path, receipt.Candidate) is { } path
+                    ? File.ReadAllBytes(path) : null))], hosts, One(o, "vice-commit"))
+            : SnapshotFixtureClassifier.Classify(fixtureId, trigger, [.. receipts.Select(receipt => receipt.Candidate)], hosts, runs);
         FixturePublisher.SaveClassification(classification, Path.GetFullPath(One(o, "out")));
         if (o.TryGetValue("blockers", out var blockers) && blockers.Count == 1)
             FixtureBlockers.Apply(Path.GetFullPath(blockers[0]), classification, SnapshotFixtureClassifier.BlockerId, DateTime.Now.ToString("s", CultureInfo.InvariantCulture));
         Console.WriteLine($"{fixtureId}: {classification.Outcome}" + (classification.AcceptedSha256 is null ? "" : $" sha256 {classification.AcceptedSha256}"));
+        if (classification.ByteComparisonException is { } comparisonException)
+            Console.WriteLine($"  Comparison excludes {comparisonException}. Candidate files and their raw SHA-256 values are retained.");
         foreach (var clock in classification.Clocks)
             Console.WriteLine($"  {clock.Host}: trigger {clock.Trigger}, write clock {Format(clock.WriteClock)}, writer result {clock.WriterResult}, MAINCPU clock {Format(clock.MainCpuClock)}, {clock.Outcome}");
         foreach (var reason in classification.Reasons)
@@ -70,7 +78,8 @@ public static class Program
         var classificationPath = Path.GetFullPath(One(o, "classification"));
         var classification = System.Text.Json.JsonSerializer.Deserialize(File.ReadAllText(classificationPath), FixtureManifestJsonContext.Default.FixtureClassification)
             ?? throw new InvalidDataException("empty classification");
-        var candidate = FixturePublisher.LoadCandidate(Path.GetFullPath(One(o, "receipt")));
+        var receiptPath = Path.GetFullPath(One(o, "receipt"));
+        var candidate = FixturePublisher.LoadCandidate(receiptPath);
         var entry = new FixtureManifestEntry
         {
             Path = One(o, "manifest-path"), Sha256 = candidate.CandidateSha256 ?? "", Length = candidate.CandidateLength ?? 0,
@@ -78,7 +87,8 @@ public static class Program
             WriteClock = candidate.WriteClock ?? 0, RomHashes = [.. candidate.Roms.Select(x => x.Sha256 ?? "")], MediaHashes = [],
             Hosts = [.. Many(o, "host")], ObserverSha256 = candidate.ObserverSha256,
         };
-        var result = FixturePublisher.Publish(classification, candidate.CandidatePath ?? throw new InvalidDataException("candidate path missing"), Path.GetFullPath(One(o, "fixture")), Path.GetFullPath(One(o, "manifest")), entry);
+        var result = FixturePublisher.Publish(classification, FixturePublisher.FindRetainedSnapshot(receiptPath, candidate) ??
+            throw new InvalidDataException("retained candidate is missing"), Path.GetFullPath(One(o, "fixture")), Path.GetFullPath(One(o, "manifest")), entry);
         Console.WriteLine($"published {result.FixturePath} (changed {result.FixtureChanged}); manifest {result.ManifestPath} (changed {result.ManifestChanged})");
         return 0;
     }
