@@ -64,6 +64,26 @@ public static class X64ScNativeLaunch
     }
 
     /// <summary>
+    /// Reads the saved x64sc VIC-II model used by the native resume launch.
+    /// 2026-11-23, TR-VSFLOCKSTEP-RESUME-001 AC1 and PLAN-NATIVERESTORE-001 D5. The first payload byte
+    /// in the pinned <c>VIC-II</c> module is the model. Its native reader rejects a different active model.
+    /// </summary>
+    /// <param name="snapshot">The complete x64sc snapshot that will be resumed.</param>
+    /// <returns>The pinned VICE model number accepted by <c>-VICIImodel</c>.</returns>
+    /// <exception cref="InvalidDataException">The snapshot or its VIC-II module is malformed or unsupported.</exception>
+    public static byte ReadViciiModel(ReadOnlySpan<byte> snapshot)
+    {
+        var modules = Modules(snapshot).Where(module => module.Name == "VIC-II").ToArray();
+        if (modules.Length != 1)
+            throw Invalid("Exactly one VIC-II module is required for resume.");
+        var (_, offset, size) = modules[0];
+        if (size <= ModuleHeaderSize || snapshot[offset + 16] != 1 || snapshot[offset + 17] > 3)
+            throw Invalid("Unsupported or truncated VIC-II module.");
+        var model = snapshot[offset + ModuleHeaderSize];
+        return model <= 6 ? model : throw Invalid($"Unsupported VIC-II model {model}.");
+    }
+
+    /// <summary>
     /// The R10 launch precondition: "-drive&lt;n&gt;type 0" for every unit whose module is missing or has has_tde 0, in unit
     /// order. Fails closed (N05) when any present DRIVE payload is shorter than two bytes, so a native load can never
     /// start from an unvalidated drive module.

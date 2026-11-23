@@ -11,6 +11,14 @@ namespace ViceSharp.VsfCompatibility.Tests;
 /// </summary>
 public sealed class NativeLaunchPreconditionImplementationTests
 {
+    /// <summary>
+    /// 2026-11-23, TR-VSFLOCKSTEP-RESUME-001 AC1. Use case: align the pinned VICE reader with the saved VIC-II.
+    /// Acceptance: bind the mock-proven snapshot and malformed-metadata cases to the real model reader.
+    /// </summary>
+    [Fact]
+    public void ViciiModel_UsesTheSavedSnapshotModel()
+        => NativeLaunchPreconditionContractTests.AssertViciiModel((_, _) => snapshot => X64ScNativeLaunch.ReadViciiModel(snapshot));
+
     [Theory]
     [MemberData(nameof(NativeLaunchPreconditionContractTests.ValidNames), MemberType = typeof(NativeLaunchPreconditionContractTests))]
     public void Real_adapter_reads_units_and_computes_the_precondition(string name)

@@ -14,6 +14,45 @@ namespace ViceSharp.VsfCompatibility.Tests;
 /// </summary>
 public sealed class NativeLaunchPreconditionContractTests
 {
+    /// <summary>
+    /// 2026-11-23, TR-VSFLOCKSTEP-RESUME-001 AC1 and PLAN-NATIVERESTORE-001 D5.
+    /// Use case: resume either PAL VIC-II variant regardless of the host startup model.
+    /// Acceptance: read the snapshot's VIC-II model, including 0 and 1, and reject invalid model metadata.
+    /// </summary>
+    [Fact]
+    public void ViciiModel_ResumesBothPalVariantsAndRejectsInvalidMetadata()
+    {
+        AssertViciiModel((snapshot, expected) =>
+        {
+            var mock = Substitute.For<Func<byte[], byte>>();
+            if (expected is { } model) mock(snapshot).Returns(model);
+            else mock(snapshot).Returns(_ => throw new InvalidDataException("invalid VIC-II metadata"));
+            return mock;
+        });
+        Assert.ThrowsAny<XunitException>(() => AssertViciiModel((_, _) => _ => 0));
+    }
+
+    internal static void AssertViciiModel(Func<byte[], byte?, Func<byte[], byte>> resolveReader)
+    {
+        var cases = new (byte[] Snapshot, byte? Model)[]
+        {
+            (VsfBuilder.Build(new VsfBuilder.Module("VIC-II", 1, 3, [0])), 0),
+            (VsfBuilder.Build(new VsfBuilder.Module("VIC-II", 1, 3, [1])), 1),
+            (VsfBuilder.Build(new VsfBuilder.Module("VIC-II", 1, 3, [6])), 6),
+            (VsfBuilder.Build(new VsfBuilder.Module("VIC-II", 1, 3, [7])), null),
+            (VsfBuilder.Build(new VsfBuilder.Module("VIC-II", 1, 3, [])), null),
+            (VsfBuilder.Build(new VsfBuilder.Module("VIC-II", 1, 4, [1])), null),
+            (VsfBuilder.Build(new VsfBuilder.Module("VIC-II", 1, 3, [0]), new VsfBuilder.Module("VIC-II", 1, 3, [1])), null),
+            (VsfBuilder.Build(), null),
+        };
+        foreach (var (snapshot, model) in cases)
+        {
+            var read = resolveReader(snapshot, model);
+            if (model is { } expected) Assert.Equal(expected, read(snapshot));
+            else Assert.Throws<InvalidDataException>(() => read(snapshot));
+        }
+    }
+
     /// <summary>One DRIVE unit as read from the container payload.</summary>
     public sealed record DriveUnit(int Unit, bool Present, int? HasTde, int? HasDrives);
 

@@ -40,7 +40,7 @@ public sealed class NativeViceSnapshotResumeTests
 
         /// <summary>
         /// 2026-11-23, PLAN-NATIVERESTORE-001 D5 and TR-VSFLOCKSTEP-RESUME-001 AC1. Keep the native
-        /// cycle-limit record in a fresh per-run VICE log, including on Windows when stdout is empty.
+        /// cycle-limit record in a fresh per-run VICE log and select the snapshot's VIC-II model in stock VICE.
         /// </summary>
         public ResumeTrace Run(ResumeInput input, string fixturePath, bool normalize, string label)
         {
@@ -57,12 +57,15 @@ public sealed class NativeViceSnapshotResumeTests
             Assert.Equal(input.Precondition, precondition);
             var budget = X64ScNativeLaunch.ComputeBudget(input.Clock, input.WindowCycles, input.PreludeCycles);
             var arguments = X64ScNativeLaunch.BuildArguments(NormalizedPath, precondition, budget.LimitCycles).ToList();
+            arguments.Insert(0, "-default");
             // The headless stock binary needs the dummy sound device and the data root (the same two options the
             // equivalence runner passes); inserted before -limitcycles so the precondition flags stay last (N05).
             var limitIndex = arguments.IndexOf("-limitcycles");
             LastStderrPath = Path.Combine(OutputDirectory, label + ".stderr");
             var viceLogPath = $"{LastStderrPath}.{Guid.NewGuid():N}.vice.log";
-            arguments.InsertRange(limitIndex, ["-sounddev", "dummy", "-directory", VsfSlice1RealEvidence.DataRoot, "-logfile", viceLogPath]);
+            var vicii = X64ScNativeLaunch.ReadViciiModel(launchBytes).ToString(CultureInfo.InvariantCulture);
+            arguments.InsertRange(limitIndex, ["-sounddev", "dummy", "-directory", VsfSlice1RealEvidence.DataRoot,
+                "-logfile", viceLogPath, "-VICIImodel", vicii]);
             // Permits cover the prelude up to the load plus everything after it up to the limit (the restored clock
             // can be far below the limit when the fixture was written early), plus a margin; never the limiting factor.
             var request = new CommandRequest(observer, arguments, Path.GetDirectoryName(observer)!, new Dictionary<string, string>(StringComparer.Ordinal), LastStderrPath, input.PreludeCycles + budget.LimitCycles + 100_000, 1_800_000)
@@ -139,9 +142,12 @@ public sealed class NativeViceSnapshotResumeTests
     /// Acceptance: the written candidate is a v1.4 MAINCPU snapshot whose clock equals the measured write clock; the
     /// resumed run passes the resume boundary assertion against it; and the VICE_OBS records of the window, compared
     /// relative to each origin's marker, are identical field by field (N10).
+    /// 2026-11-23: run the same round trip independently for MOS6569 (C64) and MOS8565 (C64C).
     /// </summary>
-    [Fact]
-    public void RoundTrip_PinnedWriterThenResume_PostResumeSequenceMatchesWriter()
+    [Theory]
+    [InlineData("c64", 0)]
+    [InlineData("c64c", 1)]
+    public void RoundTrip_PinnedWriterThenResume_PostResumeSequenceMatchesWriter(string machineModel, int viciiModel)
     {
         const ulong trigger = 300_000;
         var observer = VsfSlice1RealEvidence.ObserverPath("x64sc");
@@ -150,11 +156,7 @@ public sealed class NativeViceSnapshotResumeTests
         Directory.CreateDirectory(probe.OutputDirectory);
         var candidate = Path.Combine(probe.OutputDirectory, "roundtrip-candidate.vsf");
         var stderr = Path.Combine(probe.OutputDirectory, "roundtrip-writer.stderr");
-        // The resume launch carries no model option, so the writer must use the resume process's default model:
-        // the factory VICIIModel is 8565 (viciisc/vicii-resources.c 202), the C64C ("c64c", c64-cmdline-options.c 64).
-        // "-model c64" selects the 6569 (line 134) and the pinned reader refuses the snapshot ("Snapshot was made with
-        // model 0 while the current model is 1", vicii-snapshot.c 193 to 197; run 20261021T065157).
-        var spec = new SnapshotFixtureSpec("x64sc-roundtrip", "x64sc", "c64c", [], trigger, observer, VsfSlice1RealEvidence.DataRoot,
+        var spec = new SnapshotFixtureSpec("x64sc-roundtrip", "x64sc", machineModel, [], trigger, observer, VsfSlice1RealEvidence.DataRoot,
             ["C64/basic-901226-01.bin", "C64/kernal-901227-03.bin", "C64/chargen-901225-01.bin", "DRIVES/dos1541-325302-01+901229-05.bin"],
             candidate, stderr, Environment.MachineName, LimitMargin: WindowCycles + 50);
         var written = new SnapshotFixtureGenerator(new ProcessCommandRunner()).Generate(spec);
@@ -165,6 +167,7 @@ public sealed class NativeViceSnapshotResumeTests
         var cpu = X64ScNativeLaunch.ReadMainCpu(candidateBytes);
         Assert.Equal(4, cpu.Minor);
         Assert.Equal(writeClock, cpu.Clock);
+        Assert.Equal(viciiModel, X64ScNativeLaunch.ReadViciiModel(candidateBytes));
 
         // Writer's post-checkpoint window: the OBS records after the checkpoint record, indices rebased.
         var writerWindow = WindowAfterMarker(stderr, "VICE_SNAP,checkpoint,", (int)(WindowCycles * 2));

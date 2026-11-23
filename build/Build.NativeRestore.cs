@@ -218,7 +218,7 @@ partial class Build
             var filter = NativeSnapshotFixtureMocksOnly
                 ? "FullyQualifiedName~Publisher_ManifestPreservationMock"
                 : NativeSnapshotFixtureAcceptanceMocksOnly
-                    ? "FullyQualifiedName~VsfSlice1PrerequisiteContractTests|FullyQualifiedName~VsfSlice1ManifestAndResumeContractTests"
+                    ? "FullyQualifiedName~VsfSlice1PrerequisiteContractTests|FullyQualifiedName~VsfSlice1ManifestAndResumeContractTests|FullyQualifiedName~NativeLaunchPreconditionContractTests|FullyQualifiedName~NativeLaunchPreconditionImplementationTests"
                     : "FullyQualifiedName~SnapshotFixtureGeneratorImplementationTests";
             Directory.CreateDirectory(results);
             DotNetTest(s => s.SetProjectFile(project).SetConfiguration(Configuration).SetFilter(filter)
