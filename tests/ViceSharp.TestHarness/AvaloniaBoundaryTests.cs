@@ -244,6 +244,8 @@ public sealed class AvaloniaBoundaryTests
     /// dirty, ApplySettingsAsync forwards the canonical values to the
     /// host, RestartSession flag is honoured, and RevertSettings rolls
     /// the dirty changes back to the last applied values.
+    /// 2026-11-23, FR-WARP-001 and PLAN-NATIVERESTORE-001 D6/R18:
+    /// disabling the limiter sends the canonical zero rate for warp.
     /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly()
@@ -271,7 +273,7 @@ public sealed class AvaloniaBoundaryTests
 
         await viewModel.ApplySettingsAsync(restartRequired: false, TestContext.Current.CancellationToken);
 
-        Assert.Equal(AttachPanelViewModel.LimiterMaximumPercent, client.LimiterRatePercent);
+        Assert.Equal(0, client.LimiterRatePercent);
         Assert.True(client.LimiterEnabled.HasValue);
         Assert.False(client.LimiterEnabled.Value);
         Assert.NotNull(client.LastDisplaySettings);
@@ -290,6 +292,7 @@ public sealed class AvaloniaBoundaryTests
         Assert.False(viewModel.RequiresRestart);
         Assert.Contains("applied", viewModel.SettingsStatusText, StringComparison.OrdinalIgnoreCase);
 
+        viewModel.LimiterEnabled = true;
         viewModel.LimiterRatePercent = 25;
         Assert.True(viewModel.HasPendingSettingsChanges);
         await viewModel.ApplySettingsAsync(restartRequired: true, TestContext.Current.CancellationToken);

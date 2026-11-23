@@ -103,6 +103,7 @@ public sealed class ProtocolHostIntegrationTests
     /// Acceptance: ListProfiles returns the C64 profile catalog and
     /// SetLimiterRate updates the live limiter on the active session
     /// without disrupting the session id.
+    /// 2026-11-23, FR-CFG-003 and PLAN-NATIVERESTORE-001 D6/R18: display changes take effect at the next frame.
     /// </summary>
     [Fact]
     public async Task SettingsService_ListsProfilesAndAppliesLiveLimiter()
@@ -143,11 +144,17 @@ public sealed class ProtocolHostIntegrationTests
         Assert.NotNull(updated.Settings);
         Assert.Equal(125, updated.Settings.Limiter.RatePercent);
         Assert.False(updated.Settings.Limiter.IsEnabled);
-        Assert.Equal("software", updated.Settings.Display.Renderer);
-        Assert.Equal("pepto", updated.Settings.Display.Palette);
-        Assert.Equal("fit-window", updated.Settings.Display.Scale);
-        Assert.Equal("borderless", updated.Settings.Display.CropMode);
-        Assert.Equal("force-4-3", updated.Settings.Display.AspectMode);
+        Assert.Equal(settings.Settings.Display, updated.Settings.Display);
+        Assert.Contains(updated.Diagnostics, diagnostic => diagnostic.Setting == "display" && !diagnostic.AppliedLive);
+        ApplySettingsAtFrameBoundary(registry, created.SessionId);
+        var afterFrame = await settingsService.GetSettingsAsync(new SessionRequest(created.SessionId), TestContext.Current.CancellationToken);
+        Assert.Equal(RpcStatusCode.Ok, afterFrame.Status.Code);
+        Assert.NotNull(afterFrame.Settings);
+        Assert.Equal("software", afterFrame.Settings.Display.Renderer);
+        Assert.Equal("pepto", afterFrame.Settings.Display.Palette);
+        Assert.Equal("fit-window", afterFrame.Settings.Display.Scale);
+        Assert.Equal("borderless", afterFrame.Settings.Display.CropMode);
+        Assert.Equal("force-4-3", afterFrame.Settings.Display.AspectMode);
         Assert.Equal("keyboard-only", updated.Settings.Input.Mode);
         Assert.Equal("muted", updated.Settings.Audio!.Mode);
         Assert.Equal("configured-paths", updated.Settings.Resources!.Mode);
@@ -747,7 +754,9 @@ public sealed class ProtocolHostIntegrationTests
     /// to enumerate profiles, apply settings and observe the resulting
     /// EmulatorStatus changes.
     /// Acceptance: All settings operations succeed over the generated
-    /// gRPC client and the returned status reflects every change.
+    /// gRPC client. Display settings are visible in the first settings read
+    /// after the frame boundary.
+    /// 2026-11-23, FR-CFG-003 and PLAN-NATIVERESTORE-001 D6/R18: exercise default display staging over gRPC.
     /// </summary>
     [Fact]
     public async Task GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient()
@@ -796,11 +805,17 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(GrpcContracts.RpcStatusCode.Ok, updated.Status.Code);
         Assert.Equal(150, updated.Settings.Limiter.RatePercent);
         Assert.True(updated.Settings.Limiter.IsEnabled);
-        Assert.Equal("software", updated.Settings.Display.Renderer);
-        Assert.Equal("amber", updated.Settings.Display.Palette);
-        Assert.Equal("fit-window", updated.Settings.Display.Scale);
-        Assert.Equal("borderless", updated.Settings.Display.CropMode);
-        Assert.Equal("force-4-3", updated.Settings.Display.AspectMode);
+        Assert.Equal("host", updated.Settings.Display.Renderer);
+        Assert.Contains(updated.Diagnostics, diagnostic => diagnostic.Setting == "display" && !diagnostic.AppliedLive);
+        ApplySettingsAtFrameBoundary(host.Services.GetRequiredService<EmulatorRuntimeRegistry>(), created.SessionId);
+        var afterFrame = await settingsClient.GetSettingsAsync(new GrpcContracts.SessionRequest { SessionId = created.SessionId },
+            cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(GrpcContracts.RpcStatusCode.Ok, afterFrame.Status.Code);
+        Assert.Equal("software", afterFrame.Settings.Display.Renderer);
+        Assert.Equal("amber", afterFrame.Settings.Display.Palette);
+        Assert.Equal("fit-window", afterFrame.Settings.Display.Scale);
+        Assert.Equal("borderless", afterFrame.Settings.Display.CropMode);
+        Assert.Equal("force-4-3", afterFrame.Settings.Display.AspectMode);
         Assert.Equal("keyboard-only", updated.Settings.Input.Mode);
         Assert.Equal("muted", updated.Settings.Audio.Mode);
         Assert.Equal("configured-paths", updated.Settings.Resources.Mode);
@@ -1579,6 +1594,17 @@ public sealed class ProtocolHostIntegrationTests
         Assert.NotNull(added.EmulatorStatus);
         Assert.Equal(GrpcContracts.RpcStatusCode.Ok, removed.Status.Code);
         Assert.Empty(removed.Breakpoints);
+    }
+
+    /// <summary>2026-11-23, FR-CFG-003 and D6/R18. Drive the scheduled display commit without a timing-dependent wait.</summary>
+    private static void ApplySettingsAtFrameBoundary(EmulatorRuntimeRegistry registry, string sessionId)
+    {
+        Assert.True(registry.TryGet(sessionId, out var session));
+        lock (session.SyncRoot)
+        {
+            session.ApplyFrameBoundarySettings();
+            Assert.True(session.DisplayAppliedAtFrameBoundary);
+        }
     }
 
     private static async Task<IHost> CreateGrpcHostAsync()
