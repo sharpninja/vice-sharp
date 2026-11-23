@@ -489,7 +489,8 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
     private byte _opcode;
     private ushort _currentInstructionPc; // fetch address of the in-flight instruction (for the completed-instruction publish)
-    private bool _instructionExecuted; // guards the instruction-completed publish against the first (pre-fetch) boundary
+    private bool _instructionExecuted;
+    private bool _instructionCompletionPending;
     private int _cycle;
     private int _bootstrapCycles;
     private bool _suppressBootstrapBoundary;
@@ -1044,18 +1045,6 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 }
             }
 
-            // Instruction boundary: the previous instruction has fully executed.
-            // Publish it (opcode + post-execution registers) for diagnostic / pacing
-            // subscribers. Gated on a live subscriber so an unobserved run pays only
-            // a null + count check per instruction; pure notification, so cycle parity
-            // is unaffected.
-            if (_instructionExecuted && _pubSub is { SubscriptionCount: > 0 })
-            {
-                _pubSub.Publish(
-                    CpuInstructionCompletedEvent.Topic,
-                    new CpuInstructionCompletedEvent(_currentInstructionPc, _opcode, A, X, Y, S, P, _pc));
-            }
-
             // Soft-deferred JMP abs: apply JUMP before fetching the target insn.
             // Target's first FETCH is clean (c=539733 INX nX/nPC lag without this).
             // Clear the one-instruction provenance at every boundary, then set it
@@ -1078,6 +1067,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 // LD performs its register/flag updates and INC_PC after GET_IMM's
                 // final CLK. Preserve that source phase for the opcode fetched below.
                 completedImmediateLoadBeforeFetch = true;
+                PublishInstructionCompletion();
                 // VICE DO_INTERRUPT before next FETCH. Soft-deferred imm commits
                 // on the same host tick as that FETCH — sample IRQ first
                 // (NTSC c=520829). If IRQ arms, skip FETCH this tick.
@@ -1152,6 +1142,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
             afterSoftCompare = afterSoftCompare || afterSoftBody;
 
+            PublishInstructionCompletion();
             _instructionPC = _pc;
             _visiblePC = _instructionPC;
             _currentInstructionPc = _pc; // the instruction about to be fetched here
@@ -1255,6 +1246,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             if (!IsZeroPageIncrementDecrementOpcode(_opcode))
                 _deferZpRmwPcAdvanceOne = false;
             _instructionExecuted = true; // a real instruction has now been fetched/executed
+            _instructionCompletionPending = true;
             _cycle = GetCycleCount(_opcode);
             // Match host-visible xvic taken-branch length (VICE BRANCH is always
             // 3 CLK; first FETCH may be overlapped with the previous opcode's
@@ -4058,6 +4050,25 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         _stagedNzValue = (byte)(A - value);
     }
 
+    /// <summary>
+    /// Publishes the committed register state once per opcode when observed.
+    /// 2026-11-23, TR-PUBSUB-CPU-001 and D6/R18: publish after deferred
+    /// instruction bodies and before an IRQ can interrupt the next fetch.
+    /// </summary>
+    private void PublishInstructionCompletion()
+    {
+        if (!_instructionCompletionPending)
+            return;
+
+        _instructionCompletionPending = false;
+        if (_pubSub is { SubscriptionCount: > 0 } pubSub)
+        {
+            pubSub.Publish(
+                CpuInstructionCompletedEvent.Topic,
+                new CpuInstructionCompletedEvent(_currentInstructionPc, _opcode, A, X, Y, S, P, _pc));
+        }
+    }
+
     private void CompleteDeferredImmediateLoad()
     {
         var value = Read((ushort)(_instructionPC + 1));
@@ -4434,6 +4445,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     {
         _opcode = 0;
         _cycle = 0;
+        _instructionCompletionPending = false;
         _baDelayedFetchClk = false;
         _holdAbsLoadOpcodeLastClk = false;
         _afterLdaAbsHold = false;
