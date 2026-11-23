@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Text.Json.Nodes;
 using ViceSharp.ViceCompatibility.SnapshotFixtures;
 
 namespace ViceSharp.VsfCompatibility.Tests;
@@ -301,6 +302,87 @@ public sealed class SnapshotFixtureGeneratorImplementationTests : IDisposable
         var wrongEntry = new FixtureManifestEntry { Path = entry.Path, Sha256 = new string('A', 64), Length = entry.Length };
         Assert.Throws<InvalidOperationException>(() => FixturePublisher.Publish(classification, runs[0].CandidatePath!, fixturePath, manifestPath, wrongEntry));
     }
+
+    /// <summary>
+    /// Use case: add a native VIC-20 candidate without losing the native reader contract or supplied C64 fixture.
+    /// Acceptance: R17 and D5b of PLAN-NATIVERESTORE-001 retain framing, read-order sources, modules and all
+    /// supplied-fixture metadata supporting TR-VSFLOCKSTEP-RESUME-001 AC1 and TEST-VSFLOCKSTEP-001 AC1.
+    /// 2026-11-23: prove the preservation check with independent good and lossy mock outputs before binding it.
+    /// </summary>
+    [Fact]
+    public void Publisher_ManifestPreservationMock_AcceptsAppendAndRejectsMetadataLoss()
+    {
+        var original = ManifestWithSuppliedFixture();
+        var mock = (JsonObject)original.DeepClone();
+        mock["fixtures"]!.AsArray().Add(new JsonObject { ["path"] = "fixtures/vic20.vsf" });
+        Assert.True(PreservesExistingManifest(original, mock));
+
+        foreach (var member in new[] { "framing", "readOrderSources", "modules" })
+        {
+            var incomplete = (JsonObject)mock.DeepClone();
+            incomplete.Remove(member);
+            Assert.False(PreservesExistingManifest(original, incomplete), $"Dropping {member} must fail.");
+        }
+        var incompleteFixture = (JsonObject)mock.DeepClone();
+        incompleteFixture["fixtures"]![0]!.AsObject().Remove("headerVariant");
+        Assert.False(PreservesExistingManifest(original, incompleteFixture));
+    }
+
+    /// <summary>
+    /// Use case: append an accepted VIC-20 fixture to the existing state-transfer manifest.
+    /// Acceptance: the publisher preserves reader metadata and the supplied fixture under PLAN-NATIVERESTORE-001
+    /// D5b/R17, supporting TR-VSFLOCKSTEP-RESUME-001 AC1 and TEST-VSFLOCKSTEP-001 AC1.
+    /// 2026-11-23: bind the preservation assertion to the real manifest writer and verify repeat publication.
+    /// </summary>
+    [Fact]
+    public void Publisher_PreservesUnknownManifestMembers()
+    {
+        const string fixtureId = "xvic-pal-unexpanded";
+        const string path = "fixtures/vic20.vsf";
+        string fixturePath = Path.Combine(_root, "vic20.vsf");
+        string manifestPath = Path.Combine(_root, "manifest.json");
+        var original = ManifestWithSuppliedFixture();
+        File.WriteAllText(manifestPath, original.ToJsonString());
+        var generator = new SnapshotFixtureGenerator(Runner(Trigger, Trigger), _allowlist);
+        string[] hosts = ["LAB-OMARCHY", "PAYTON-LEGION2"];
+        var runs = hosts.SelectMany(h => new[] { generator.Generate(Spec(h, "1")), generator.Generate(Spec(h, "2")) }).ToArray();
+        var classification = SnapshotFixtureClassifier.Classify(fixtureId, Trigger, runs, hosts);
+        var entry = new FixtureManifestEntry
+        {
+            Path = path, Sha256 = runs[0].CandidateSha256!, Length = runs[0].CandidateLength!.Value,
+            TriggerClock = Trigger, WriteClock = Trigger, Hosts = hosts,
+        };
+
+        Assert.True(FixturePublisher.Publish(classification, runs[0].CandidatePath!, fixturePath, manifestPath, entry).ManifestChanged);
+        string written = File.ReadAllText(manifestPath);
+        var updated = JsonNode.Parse(written)!.AsObject();
+        Assert.True(PreservesExistingManifest(original, updated), "Publication changed existing manifest metadata.");
+        var fixtures = updated["fixtures"]!.AsArray();
+        Assert.Equal(2, fixtures.Count);
+        Assert.Equal(path, fixtures[1]!["path"]!.GetValue<string>());
+        Assert.False(FixturePublisher.Publish(classification, runs[1].CandidatePath!, fixturePath, manifestPath, entry).ManifestChanged);
+        Assert.Equal(written, File.ReadAllText(manifestPath));
+    }
+
+    private static JsonObject ManifestWithSuppliedFixture() => new()
+    {
+        ["schemaVersion"] = 1,
+        ["framing"] = new JsonObject { ["currentHeaderBytes"] = 58 },
+        ["readOrderSources"] = new JsonObject { ["xvic"] = "vic20-snapshot.c" },
+        ["modules"] = new JsonArray(new JsonObject { ["name"] = "MAINCPU" }),
+        ["fixtures"] = new JsonArray(new JsonObject
+        {
+            ["path"] = "fixtures/supplied-c64.vsf",
+            ["headerVariant"] = "current",
+            ["modules"] = new JsonArray(JsonValue.Create("MAINCPU")),
+            ["romHashesSource"] = "supplied",
+        }),
+    };
+
+    private static bool PreservesExistingManifest(JsonObject original, JsonObject updated)
+        => original.Where(p => p.Key != "fixtures").All(p => JsonNode.DeepEquals(p.Value, updated[p.Key]))
+            && original["fixtures"]!.AsArray().All(expected =>
+                updated["fixtures"]!.AsArray().Any(actual => JsonNode.DeepEquals(expected, actual)));
 
     [Fact]
     public void CandidateReceipts_RoundTripThroughJson()

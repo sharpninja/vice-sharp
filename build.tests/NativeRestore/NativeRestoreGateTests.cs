@@ -17,6 +17,22 @@ public sealed class NativeRestoreGateTests : IDisposable
 
     public void Dispose() => Directory.Delete(_root, recursive: true);
 
+    /// <summary>
+    /// Use case: publish fixtures only after measuring both lab hosts.
+    /// Acceptance: PLAN-NATIVERESTORE-001 D5b/R17 requires two named hosts regardless of the receipts supplied.
+    /// 2026-11-23: check the default and reject overrides that omit either host or repeat just one.
+    /// </summary>
+    [Fact]
+    public void FixturePublication_RequiresBothLabHosts()
+    {
+        Assert.Equal(new[] { "LAB-OMARCHY", "PAYTON-LEGION2" },
+            global::Build.ResolveFixtureRequiredHosts(global::Build.DefaultFixtureRequiredHosts));
+        Assert.Equal(new[] { "PAYTON-LEGION2", "lab-omarchy" },
+            global::Build.ResolveFixtureRequiredHosts(" PAYTON-LEGION2 , lab-omarchy,LAb-OMARCHY "));
+        Assert.Throws<ArgumentException>(() => global::Build.ResolveFixtureRequiredHosts("LAB-OMARCHY,lab-omarchy"));
+        Assert.Throws<ArgumentException>(() => global::Build.ResolveFixtureRequiredHosts("PAYTON-LEGION2"));
+    }
+
     [Fact]
     public void OrdinaryTestFilter_ExcludesShimLegacyAndVsfSlice1Real_AndKeepsEveryEarlierExclusion()
     {
@@ -49,7 +65,7 @@ public sealed class NativeRestoreGateTests : IDisposable
     public void TrxOutcomes_ReportBlockedAsAThirdOutcome_AndNeverCountSkippedAsPassing()
     {
         var trx = WriteTrx("Vsf",
-            ("Resume_Pal", "Failed", "BLOCKED: BLOCKER-R12-XVIC-CHECKPOINT trigger 100000 write clock 100007"),
+            ("Resume_Pal", "Failed", "BLOCKED: BLOCKER-R12-XVIC-CHECKPOINT trigger 100002 write clock 100007"),
             ("Resume_Ntsc", "Failed", "Assert.Equal() Failure"),
             ("Legacy_V12", "Passed", null),
             ("Later", "NotExecuted", null),

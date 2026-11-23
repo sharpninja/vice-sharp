@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
@@ -25,6 +24,9 @@ partial class Build
     [Parameter("NativeSnapshotCompatibilityTest: the slice through which the real-bound VSF cases run. Only 1 is defined.")]
     readonly int NativeSnapshotThroughSlice;
 
+    [Parameter("NativeSnapshotFixtureContractTest: run only the independent manifest preservation mock and its negative controls.")]
+    readonly bool NativeSnapshotFixtureMocksOnly;
+
     [Parameter("GenerateNativeSnapshotFixtures: directory holding xvic-observer (and x64sc-observer). Default artifacts/immutable-vice/<commit>/bin-<host>.")]
     readonly string ObserverBinDirectory = null!;
 
@@ -37,8 +39,11 @@ partial class Build
     [Parameter("PublishNativeSnapshotFixtures: comma-separated candidate receipt directories of every host (the GenerateNativeSnapshotFixtures output of each).")]
     readonly string FixtureReceiptDirectories = null!;
 
+    [Parameter("PublishNativeSnapshotFixtures: comma-separated required hosts, including both LAB-OMARCHY and PAYTON-LEGION2.")]
+    readonly string FixtureRequiredHosts = DefaultFixtureRequiredHosts;
+
     const string PinnedViceCommit = "cc67418cba58e71d8e70fd353e9de47199ad2075";
-    const ulong LiteralCheckpointClock = 100_000;
+    internal const string DefaultFixtureRequiredHosts = "LAB-OMARCHY,PAYTON-LEGION2";
 
     static readonly string[] NativeSafeTestProjects =
     [
@@ -47,11 +52,15 @@ partial class Build
         "tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj",
     ];
 
-    /// <summary>The xvic fixtures of PLAN-VSFLOCKSTEP-001 Slice 1: id, model, published name, ROM files the launch loads.</summary>
-    static readonly (string Id, string Model, string FileName, string[] Roms)[] XvicFixtures =
+    /// <summary>
+    /// The Slice 1 xvic fixtures and their model-specific instruction-boundary checkpoint clocks.
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17: use the exact clocks from the Linux
+    /// 20261021T053000-phase-d-d5-linux/r17-probe-100002 receipts until two-host acceptance is measured.
+    /// </summary>
+    static readonly (string Id, string Model, string FileName, ulong Trigger, string[] Roms)[] XvicFixtures =
     [
-        ("xvic-pal-unexpanded", "vic20", "ready-xvic-pal-unexpanded.vsf", ["VIC20/basic-901486-01.bin", "VIC20/kernal.901486-07.bin", "VIC20/chargen-901460-03.bin"]),
-        ("xvic-ntsc-unexpanded", "vic20ntsc", "ready-xvic-ntsc-unexpanded.vsf", ["VIC20/basic-901486-01.bin", "VIC20/kernal.901486-06.bin", "VIC20/chargen-901460-03.bin"]),
+        ("xvic-pal-unexpanded", "vic20", "ready-xvic-pal-unexpanded.vsf", 100_002, ["VIC20/basic-901486-01.bin", "VIC20/kernal.901486-07.bin", "VIC20/chargen-901460-03.bin"]),
+        ("xvic-ntsc-unexpanded", "vic20ntsc", "ready-xvic-ntsc-unexpanded.vsf", 100_002, ["VIC20/basic-901486-01.bin", "VIC20/kernal.901486-06.bin", "VIC20/chargen-901460-03.bin"]),
     ];
 
     string HostTag => OperatingSystem.IsWindows() ? "windows" : OperatingSystem.IsMacOS() ? "macos" : "linux";
@@ -100,7 +109,7 @@ partial class Build
     }
 
     Target GenerateNativeSnapshotFixtures => _ => _
-        .Description("Per host: run xvic-observer twice per Slice 1 fixture with VICESHARP_SNAPSHOT_AT=100000:<candidate>, the ROM allowlist and -seed 1; write candidate receipts; BLOCKED when the write clock is not the literal 100,000 (R12)")
+        .Description("Per host: run xvic-observer twice per Slice 1 fixture at its approved instruction-boundary trigger, with the ROM allowlist and -seed 1. BLOCKED unless the write and MAINCPU clocks match the trigger (R17).")
         .DependsOn(Compile)
         .Executes(() =>
         {
@@ -112,7 +121,7 @@ partial class Build
             Directory.CreateDirectory(output);
             var blocked = new List<string>();
             var failed = new List<string>();
-            foreach (var (id, model, _, roms) in XvicFixtures)
+            foreach (var (id, model, _, trigger, roms) in XvicFixtures)
             {
                 for (var run = 1; run <= 2; run++)
                 {
@@ -120,7 +129,7 @@ partial class Build
                     var arguments = new List<string>
                     {
                         "generate", "--fixture-id", id, "--machine", "xvic", "--model", model, "--machine-arg", "-memory", "--machine-arg", "none",
-                        "--trigger", LiteralCheckpointClock.ToString(), "--observer", observer, "--data", data,
+                        "--trigger", trigger.ToString(System.Globalization.CultureInfo.InvariantCulture), "--observer", observer, "--data", data,
                         "--candidate", output / $"{id}-{host}-{run}.vsf", "--stderr", output / $"{id}-{host}-{run}.stderr", "--host", host, "--receipt", receipt,
                     };
                     foreach (var rom in roms) { arguments.Add("--rom"); arguments.Add(rom); }
@@ -143,24 +152,19 @@ partial class Build
         .Requires(() => FixtureReceiptDirectories)
         .Executes(() =>
         {
-            var directories = FixtureReceiptDirectories.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Select(Path.GetFullPath).ToArray();
+            var pathComparer = OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
+            var directories = FixtureReceiptDirectories.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Select(d => Path.TrimEndingDirectorySeparator(Path.GetFullPath(d))).Distinct(pathComparer).ToArray();
             var manifest = RootDirectory / "docs" / "requirements" / "oracles" / "vice-vsf-state-transfer-manifest.json";
             var fixtureDirectory = RootDirectory / "tests" / "ViceSharp.TestHarness" / "Fixtures" / "Vsf";
-            var hosts = new List<string>();
+            var hosts = ResolveFixtureRequiredHosts(FixtureRequiredHosts);
             var blocked = new List<string>();
-            foreach (var (id, _, fileName, _) in XvicFixtures)
+            foreach (var (id, _, fileName, trigger, _) in XvicFixtures)
             {
                 var receipts = directories.SelectMany(d => Directory.EnumerateFiles(d, $"{id}-*.candidate.json")).OrderBy(p => p, StringComparer.Ordinal).ToArray();
-                foreach (var receipt in receipts)
-                {
-                    // The host comes from the receipt itself (host names carry hyphens: LAB-OMARCHY, PAYTON-LEGION2).
-                    using var document = JsonDocument.Parse(File.ReadAllBytes(receipt));
-                    var hostName = document.RootElement.GetProperty("host").GetString()!;
-                    if (!hosts.Contains(hostName)) hosts.Add(hostName);
-                }
                 var classification = ArtifactsDirectory / "native-snapshot-fixtures" / RunStamp / $"{id}.classification.json";
                 var blockers = RootDirectory / "docs" / "requirements" / "oracles" / "vice-vsf-fixture-blockers.json";
-                var arguments = new List<string> { "classify", "--fixture-id", id, "--trigger", LiteralCheckpointClock.ToString(), "--out", classification, "--blockers", blockers };
+                var arguments = new List<string> { "classify", "--fixture-id", id, "--trigger", trigger.ToString(System.Globalization.CultureInfo.InvariantCulture), "--out", classification, "--blockers", blockers };
                 foreach (var r in receipts) { arguments.Add("--receipt"); arguments.Add(r); }
                 foreach (var h in hosts) { arguments.Add("--host"); arguments.Add(h); }
                 var exit = RunFixtureGenerator(arguments);
@@ -173,6 +177,19 @@ partial class Build
                 throw new InvalidOperationException($"BLOCKER-R12-XVIC-CHECKPOINT: not published: {string.Join(", ", blocked)} (hosts {string.Join(", ", hosts)})");
         });
 
+    /// <summary>
+    /// Resolves the required publication hosts independently of the input receipts.
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17: require both measured lab hosts even with an explicit override.
+    /// </summary>
+    internal static string[] ResolveFixtureRequiredHosts(string value)
+    {
+        var hosts = value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        if (!DefaultFixtureRequiredHosts.Split(',').All(host => hosts.Contains(host, StringComparer.OrdinalIgnoreCase)))
+            throw new ArgumentException($"Fixture publication requires both {DefaultFixtureRequiredHosts}.", nameof(value));
+        return hosts;
+    }
+
     int RunFixtureGenerator(IReadOnlyList<string> arguments)
     {
         var process = ProcessTasks.StartProcess(
@@ -183,6 +200,28 @@ partial class Build
         process.WaitForExit();
         return process.ExitCode;
     }
+
+    /// <summary>
+    /// Runs the focused managed fixture contracts without building or loading native VICE.
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17: retain a focused TRX for the fixture publication mock and binding.
+    /// </summary>
+    Target NativeSnapshotFixtureContractTest => _ => _
+        .Description("Run the managed snapshot fixture contract tests and retain their TRX")
+        .Executes(() =>
+        {
+            var project = RootDirectory / "tests" / "ViceSharp.VsfCompatibility.Tests" / "ViceSharp.VsfCompatibility.Tests.csproj";
+            var results = ResolvedTestResultsDirectory / "native-snapshot-contract";
+            var trx = results / "ViceSharp.VsfCompatibility.Tests.trx";
+            var filter = NativeSnapshotFixtureMocksOnly
+                ? "FullyQualifiedName~Publisher_ManifestPreservationMock"
+                : "FullyQualifiedName~SnapshotFixtureGeneratorImplementationTests";
+            Directory.CreateDirectory(results);
+            DotNetTest(s => s.SetProjectFile(project).SetConfiguration(Configuration).SetFilter(filter)
+                .SetResultsDirectory(results).SetLoggers("trx;LogFileName=ViceSharp.VsfCompatibility.Tests.trx"));
+            var (passing, reason) = TrxOutcomes.Evaluate(TrxOutcomes.Summarize([trx]));
+            if (!passing) throw new InvalidOperationException(reason);
+            Serilog.Log.Information("Snapshot fixture contract: {Result}", reason);
+        });
 
     Target NativeSnapshotCompatibilityTest => _ => _
         .Description("Cumulative real-bound VSF gate (Category=VsfSlice1Real over the three native-safe projects): BLOCKED cases are reported by identifier with the blocker, every outcome is listed, and anything but all-pass exits nonzero")
