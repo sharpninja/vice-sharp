@@ -200,8 +200,10 @@ public sealed class BasicBusAndSimpleRamTests
     /// though that device was never registered: any address it used to
     /// own falls through to the next handler or to open bus.
     /// Acceptance: A device that claimed every address returns its value
-    /// before unregister; after unregister, reads at the same addresses
-    /// return 0xFF (open bus default).
+    /// before unregister. After unregister, the bus retains the last driven byte
+    /// and stops dispatching reads and peeks to the removed device.
+    /// 2026-11-23, TR-BASELINE-CORRECTNESS-001 ac-01 and PLAN-NATIVERESTORE-001 D6/R18:
+    /// pin the open-bus latch to the VICE value after removing a driver.
     /// </summary>
     [Fact]
     public void BasicBus_Unregister_RemovesDeviceFromDispatch()
@@ -214,8 +216,10 @@ public sealed class BasicBusAndSimpleRamTests
 
         bus.UnregisterDevice(device);
 
-        Assert.Equal(0xFF, bus.Read(0x2000));
-        Assert.Equal(0xFF, bus.Peek(0x2000));
+        Assert.Equal(0x55, bus.Read(0x2000));
+        Assert.Equal(0x55, bus.Peek(0x2000));
+        Assert.Equal(1, device.ReadCount);
+        Assert.Equal(0, device.PeekCount);
     }
 
     /// <summary>
@@ -263,7 +267,10 @@ public sealed class BasicBusAndSimpleRamTests
     /// programs that scribble into unmapped windows do not crash the
     /// harness.
     /// Acceptance: <see cref="BasicBus.Write"/> to an unmapped address
-    /// returns normally and does not invoke any device Write.
+    /// returns normally and does not invoke any device Write. The next open-bus
+    /// read and peek observe the last CPU-driven byte.
+    /// 2026-11-23, TR-BASELINE-CORRECTNESS-001 ac-01 and PLAN-NATIVERESTORE-001 D6/R18:
+    /// preserve the latch from the unmapped store, matching VICE.
     /// </summary>
     [Fact]
     public void BasicBus_Write_ToUnmappedAddressIsSilentlyDropped()
@@ -276,7 +283,9 @@ public sealed class BasicBusAndSimpleRamTests
         bus.Write(0xC000, 0xBB);
 
         Assert.Equal(0, device.WriteCount);
-        Assert.Equal(0xFF, bus.Read(0x0000));
+        Assert.Equal(0xBB, bus.Read(0x0000));
+        Assert.Equal(0xBB, bus.Peek(0xC000));
+        Assert.Equal(0, device.ReadCount);
     }
 
     /// <summary>

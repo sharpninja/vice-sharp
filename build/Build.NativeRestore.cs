@@ -24,6 +24,9 @@ partial class Build
     [Parameter("NativeSnapshotCompatibilityTest: the slice through which the real-bound VSF cases run. Only 1 is defined.")]
     readonly int NativeSnapshotThroughSlice;
 
+    [Parameter("NativeRestoreRegressionTest: VSTest filter for the current Phase D managed regression group.")]
+    readonly string PhaseDRegressionFilter = null!;
+
     [Parameter("NativeSnapshotFixtureContractTest: run only the independent manifest preservation mock and its negative controls.")]
     readonly bool NativeSnapshotFixtureMocksOnly;
 
@@ -260,5 +263,38 @@ partial class Build
                 NativeSnapshotThroughSlice, summary.Total, summary.Passed, summary.Failed, summary.Blocked, summary.Skipped, summary.NotExecuted, reason);
             if (!passing)
                 throw new InvalidOperationException("NativeSnapshotCompatibilityTest is not passing: " + reason);
+        });
+
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D6/R18 and TR-BASELINE-CORRECTNESS-001 ac-01.
+    /// Runs a focused group under the ordinary selection and native-load audit, retaining its TRX.
+    /// </summary>
+    Target NativeRestoreRegressionTest => _ => _
+        .Description("Run an explicitly selected Phase D managed regression group and retain its TRX")
+        .DependsOn(Compile)
+        .Requires(() => PhaseDRegressionFilter)
+        .Executes(() =>
+        {
+            var results = ResolvedTestResultsDirectory;
+            var trx = results / "ViceSharp.TestHarness.trx";
+            var project = RootDirectory / "tests" / "ViceSharp.TestHarness" / "ViceSharp.TestHarness.csproj";
+            Directory.CreateDirectory(results);
+            var log = PrepareNativeLoadLog();
+            var romRoot = ResolveLocalRomRoot();
+            try
+            {
+                DotNetTest(s => s.SetProjectFile(project).SetConfiguration(Configuration)
+                    .SetNoRestore(true).SetNoBuild(true).SetFilter($"({PhaseDRegressionFilter})&{OrdinaryTestFilter}")
+                    .SetResultsDirectory(results).SetLoggers("trx;LogFileName=ViceSharp.TestHarness.trx")
+                    .SetProcessEnvironmentVariable("VICESHARP_NATIVE_LOAD_LOG", log)
+                    .When(_ => romRoot is not null, x => x.SetProcessEnvironmentVariable("VICESHARP_ROM_PATH", romRoot)));
+                var (passing, reason) = TrxOutcomes.Evaluate(TrxOutcomes.Summarize([trx]));
+                if (!passing) throw new InvalidOperationException(reason);
+                Serilog.Log.Information("Phase D focused regression gate: {Result}", reason);
+            }
+            finally
+            {
+                AssertNativeLoadLogEmpty(log);
+            }
         });
 }
