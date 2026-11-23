@@ -149,8 +149,10 @@ public sealed class Mos6510BrkTests
     /// three pushed bytes (P, PCL, PCH) and restore PC to the post-BRK
     /// location (BRK+2). The stack pointer must return to its pre-BRK
     /// value. RTI ignores the B flag in the popped status.
-    /// Acceptance: after BRK at $C000 and one RTI, PC equals $C002 and
-    /// S equals 0xFF (pre-BRK value).
+    /// Acceptance: after BRK at $C000 and one RTI, the first resumed
+    /// instruction fetch is at $C002, S is $FF, and INX executes.
+    /// 2026-11-23, FR-CPU-001 ac-01 and D6/R18: use the first fetch
+    /// after the unclocked VICE RTI JUMP as the return checkpoint.
     /// </summary>
     [Fact]
     public void Brk_RtiReturnsToInstructionAfterSignatureByte()
@@ -162,8 +164,9 @@ public sealed class Mos6510BrkTests
         cpu.PC = 0xC000;
         cpu.P = 0x20;
         bus.SetMemory(0xC000, 0x00); // BRK
-        bus.SetMemory(0xC001, 0x00); // signature byte
-        bus.SetMemory(0xC002, 0xEA); // NOP target of return (proves we landed here)
+        bus.SetMemory(0xC001, 0xCA); // signature byte would execute DEX if resumed here
+        bus.SetMemory(0xC002, 0xE8); // INX proves the return reached the first instruction
+        bus.SetMemory(0xC003, 0xEA); // leave an ordinary instruction after INX
         bus.SetMemory(0xFFFE, 0x00);
         bus.SetMemory(0xFFFF, 0x08);
         bus.SetMemory(0x0800, 0x40); // RTI as entire handler
@@ -173,12 +176,16 @@ public sealed class Mos6510BrkTests
         Assert.Equal(0x0800, cpu.PC); // sanity: handler entered
         Assert.Equal(0xFC, cpu.S);    // sanity: three bytes pushed
 
-        // Step through RTI (6 cycles) until back at $C002 boundary
-        StepUntilPcReaches(cpu, 0xC002, maxTicks: 32);
+        // VICE exports the RTI opcode PC on the last pull clock. It
+        // jumps and fetches the restored PC without an intervening clock.
+        StepUntilPcIsVisible(cpu, 0xC002, maxTicks: 16);
 
-        // Assert
         Assert.Equal(0xC002, cpu.PC);
         Assert.Equal(0xFF, cpu.S);
+        Assert.Equal(0x00, cpu.X);
+        for (var i = 0; i < 8 && cpu.X == 0; i++)
+            cpu.Tick();
+        Assert.Equal(0x01, cpu.X);
     }
 
     /// <summary>
@@ -200,15 +207,15 @@ public sealed class Mos6510BrkTests
     }
 
     /// <summary>
-    /// Tick the CPU directly until <paramref name="targetPc"/> is reached at an
-    /// instruction boundary, or fail the test on tick exhaustion.
+    /// FR-CPU-001, 2026-11-23, D6/R18. Observe the target's first
+    /// CPU-visible fetch after an unclocked return JUMP.
     /// </summary>
-    private static void StepUntilPcReaches(Mos6502 cpu, ushort targetPc, int maxTicks)
+    private static void StepUntilPcIsVisible(Mos6502 cpu, ushort targetPc, int maxTicks)
     {
         for (var i = 0; i < maxTicks; i++)
         {
             cpu.Tick();
-            if (cpu.PC == targetPc && cpu.IsInstructionBoundary)
+            if (cpu.PC == targetPc)
             {
                 return;
             }
