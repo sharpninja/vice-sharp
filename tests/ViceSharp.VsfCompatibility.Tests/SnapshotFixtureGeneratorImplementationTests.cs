@@ -83,10 +83,45 @@ public sealed class SnapshotFixtureGeneratorImplementationTests : IDisposable
         Assert.Equal(FixtureCandidate.FailedExit, other.ExitCode);
     }
 
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17. Use case: VICE sends Windows errors to its file logger.
+    /// Acceptance: a fresh run records its log path, accepts a proven cycle limit, and rejects an unproven exit code 1.
+    /// </summary>
+    [Fact]
+    public void LimitExit_RequiresEvidenceFromThisObserverRun()
+    {
+        var spec = Spec();
+        var simulatedLog = "Error - exit before the limit.";
+        var runner = new FakeRunner(request =>
+        {
+            var logPath = Assert.IsType<string>(request.ViceLogPath);
+            Assert.Equal(new[] { "-logfile", logPath }, request.Arguments.TakeLast(2));
+            Assert.False(File.Exists(logPath));
+            using (var log = new StreamWriter(File.Open(logPath, FileMode.CreateNew)))
+                log.WriteLine(simulatedLog);
+            var limitRecord = File.ReadAllText(logPath).Contains("cycle limit reached.", StringComparison.Ordinal);
+            File.WriteAllBytes(CandidatePathOf(request), SyntheticSnapshot(Trigger));
+            return new CommandResult(1, false, [$"VICE_SNAP,checkpoint,{Trigger},{Trigger}"], limitRecord);
+        });
+        var generator = new SnapshotFixtureGenerator(runner, _allowlist);
+        var missing = generator.Generate(spec);
+        Assert.Equal(FixtureCandidate.FailedExit, missing.ExitCode);
+
+        simulatedLog = "Error - cycle limit reached.";
+        var witnessed = generator.Generate(spec);
+        Assert.Equal(FixtureCandidate.AcceptedExit, witnessed.ExitCode);
+        Assert.NotEqual(runner.Requests[0].ViceLogPath, runner.Requests[1].ViceLogPath);
+        Assert.Contains(runner.Requests[1].ViceLogPath!, witnessed.Command, StringComparison.Ordinal);
+    }
+
     private SnapshotFixtureSpec Spec(string host = "LAB-OMARCHY", string run = "1", ulong trigger = Trigger) => new(
         "xvic-pal-unexpanded", "xvic", "vic20", ["-memory", "none"], trigger, _observer, _dataRoot, Roms,
         Path.Combine(_root, "candidates", $"{host}-{run}.vsf"), Path.Combine(_root, "candidates", $"{host}-{run}.stderr"), host);
 
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17. Use case: launch a fixture observer with auditable inputs.
+    /// Acceptance: the trace keeps the baseline machine options and includes the exact per-run VICE log path.
+    /// </summary>
     [Fact]
     public void Launch_UsesTheExactArgumentsAndTheCheckpointVariable_AndVerifiesRomsFirst()
     {
@@ -96,7 +131,10 @@ public sealed class SnapshotFixtureGeneratorImplementationTests : IDisposable
         Assert.Equal(_observer, request.FileName);
         // +logcolorize first: an option that logs while parsed ("-model c64", "-memory none") crashes the pinned
         // binaries in log.c 615 when colors are still enabled and stdout is a pipe (cause pinned 2026-10-21T05:57).
-        Assert.Equal(["-default", "+logcolorize", "-seed", "1", "-sounddev", "dummy", "-directory", _dataRoot, "-limitcycles", "150000", "-model", "vic20", "-memory", "none"], request.Arguments);
+        var logPath = Assert.IsType<string>(request.ViceLogPath);
+        Assert.StartsWith(Spec().StderrPath + ".", logPath, StringComparison.Ordinal);
+        Assert.EndsWith(".vice.log", logPath, StringComparison.Ordinal);
+        Assert.Equal(["-default", "+logcolorize", "-seed", "1", "-sounddev", "dummy", "-directory", _dataRoot, "-limitcycles", "150000", "-model", "vic20", "-memory", "none", "-logfile", logPath], request.Arguments);
         Assert.Equal($"{Trigger}:{Spec().CandidatePath}", request.Environment[SnapshotFixtureGenerator.CheckpointVariable]);
         Assert.Equal(Path.GetDirectoryName(_observer), request.WorkingDirectory);
         Assert.Equal(150_000UL, request.PermitCycles);   // the gated observer needs one permit per cycle up to the limit

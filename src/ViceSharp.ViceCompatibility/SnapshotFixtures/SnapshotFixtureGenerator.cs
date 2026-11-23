@@ -26,7 +26,7 @@ public sealed class SnapshotFixtureGenerator
     }
 
     /// <summary>
-    /// The exact observer command line: -default, +logcolorize first, -seed 1 (deterministic RAM init), -sounddev
+    /// The common observer options: -default, +logcolorize first, -seed 1 (deterministic RAM init), -sounddev
     /// dummy, the data root, the absolute cycle limit of trigger plus margin, then the model and the machine
     /// arguments last. Pinned cause (operator core analysis of the 2026-10-21T05:42 and 05:50 crashes, confirmed by
     /// rerun at 05:57 on LAB-OMARCHY): VICE processes options in order, and an option that logs while it is parsed
@@ -47,12 +47,17 @@ public sealed class SnapshotFixtureGenerator
         ];
     }
 
-    /// <summary>Runs one generation and classifies it; never throws for a launch defect, always returns a candidate.</summary>
+    /// <summary>
+    /// Runs one generation and classifies it.
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17. Records a dedicated VICE log path in each invocation so the
+    /// runner can check the normal exit without relying on stdout or a shared log from an earlier process.
+    /// </summary>
     public FixtureCandidate Generate(SnapshotFixtureSpec spec)
     {
         ArgumentNullException.ThrowIfNull(spec);
         var roms = RomAllowlist.Verify(spec.DataRoot, spec.RequiredRoms, _allowlist);
-        var arguments = BuildArguments(spec);
+        var viceLogPath = $"{Path.GetFullPath(spec.StderrPath)}.{Guid.NewGuid():N}.vice.log";
+        string[] arguments = [.. BuildArguments(spec), "-logfile", viceLogPath];
         var command = string.Join(' ', new[] { spec.ObserverPath }.Concat(arguments).Select(Quote));
         var baseline = new FixtureCandidate
         {
@@ -76,7 +81,8 @@ public sealed class SnapshotFixtureGenerator
         {
             [CheckpointVariable] = spec.Trigger.ToString(CultureInfo.InvariantCulture) + ":" + spec.CandidatePath,
         };
-        var request = new CommandRequest(spec.ObserverPath, arguments, Path.GetDirectoryName(Path.GetFullPath(spec.ObserverPath))!, environment, spec.StderrPath, checked(spec.Trigger + spec.LimitMargin));
+        var request = new CommandRequest(spec.ObserverPath, arguments, Path.GetDirectoryName(Path.GetFullPath(spec.ObserverPath))!,
+            environment, spec.StderrPath, checked(spec.Trigger + spec.LimitMargin)) { ViceLogPath = viceLogPath };
         var result = _runner.Run(request);
         baseline = Copy(baseline, c => { c.ProcessExitCode = result.ExitCode; c.TimedOut = result.TimedOut; c.LimitReached = result.LimitReached; c.SnapshotLines = result.SnapshotLines; });
 
@@ -108,7 +114,7 @@ public sealed class SnapshotFixtureGenerator
             return Block(baseline, $"{SnapshotFixtureClassifier.BlockerId}: the candidate's MAINCPU clock {mainCpuClock} differs from the trigger {spec.Trigger} (write clock {writeClock})");
         // The pinned VICE ends a -limitcycles run through its cycle-limit error path (mainc64cpu.c 813 to 816,
         // maincpu.c 640 to 643: "cycle limit reached." then exit), which reports exit code 1; that is the expected
-        // end of every generation run. Any other nonzero exit, or exit 1 without the limit message, is a failure.
+        // end of every generation run. Stdout or the fresh VICE log must prove that exit 1 came from the limit.
         var normalEnd = result.ExitCode == 0 || (result.ExitCode == 1 && result.LimitReached);
         if (!normalEnd)
             return Fail(baseline, $"the observer exited with code {result.ExitCode} after the checkpoint without reaching the cycle limit");

@@ -22,4 +22,11 @@ public sealed record CommandRequest(
     IReadOnlyDictionary<string, string> Environment,
     string StderrPath,
     ulong PermitCycles,
-    int TimeoutMilliseconds = 600_000);
+    int TimeoutMilliseconds = 600_000)
+{
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17. Fresh absolute VICE log path passed with <c>-logfile</c> so the
+    /// runner can verify the cycle-limit message when the observer does not write it to stdout.
+    /// </summary>
+    public string? ViceLogPath { get; init; }
+}

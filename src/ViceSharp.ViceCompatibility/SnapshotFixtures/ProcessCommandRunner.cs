@@ -6,9 +6,13 @@ namespace ViceSharp.ViceCompatibility.SnapshotFixtures;
 /// The production <see cref="ICommandRunner"/>: starts the observer with redirected streams, writes every stderr
 /// line to the request's stderr file, keeps the <c>VICE_SNAP</c> records, drains stdout, and stops the process
 /// when the wall-clock budget expires.
+/// 2026-11-23, PLAN-NATIVERESTORE-001 D5b/R17. Reserves the per-run VICE log before launch and accepts the
+/// pinned cycle-limit message from that file when the Windows observer leaves stdout empty.
 /// </summary>
 public sealed class ProcessCommandRunner : ICommandRunner
 {
+    private const string CycleLimitMessage = "cycle limit reached.";
+
     /// <inheritdoc />
     public CommandResult Run(CommandRequest request)
     {
@@ -28,6 +32,10 @@ public sealed class ProcessCommandRunner : ICommandRunner
 
         var snapshotLines = new List<string>();
         Directory.CreateDirectory(Path.GetDirectoryName(request.StderrPath)!);
+        if (request.ViceLogPath is { } logPath)
+        {
+            using var log = File.Open(logPath, FileMode.CreateNew, FileAccess.Write);
+        }
         using var stderrWriter = new StreamWriter(request.StderrPath, append: false);
         using var process = Process.Start(start) ?? throw new InvalidOperationException($"Could not start '{request.FileName}'.");
         var stdoutTask = process.StandardOutput.ReadToEndAsync();
@@ -68,7 +76,9 @@ public sealed class ProcessCommandRunner : ICommandRunner
         stderrWriter.Flush();
         var stdout = stdoutTask.Result;
         File.WriteAllText(request.StderrPath + ".stdout", stdout);
-        var limitReached = stdout.Contains("cycle limit reached.", StringComparison.Ordinal);
+        var limitReached = stdout.Contains(CycleLimitMessage, StringComparison.Ordinal) ||
+            (request.ViceLogPath is { } viceLogPath &&
+                File.ReadLines(viceLogPath).Any(line => line.Contains(CycleLimitMessage, StringComparison.Ordinal)));
         return new CommandResult(timedOut ? -1 : process.ExitCode, timedOut, snapshotLines, limitReached);
     }
 }
