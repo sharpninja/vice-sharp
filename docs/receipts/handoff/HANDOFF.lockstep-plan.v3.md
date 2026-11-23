@@ -2,7 +2,9 @@
 
 ## 2026-11-23 checkpoint
 
-Both hosts passed all 11 cumulative Slice 1 cases at `d6500e06` on `codex/vice-sharp-phase-d5b-legion2`, including stock MOS6569 and MOS8565 round trips. LEGION2 used SSH. The published VIC-20 fixtures and all eight original candidates retain their raw hashes. The D5 comparison excludes only the two unused VIA1 input-latch bytes for the pinned R17 cohorts. The fixture blocker is cleared in the fixture manifest inputs. D6 and the Phase D exit gates remain open. [Updated exit receipt](../native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-two-host-validation). The original October handoff follows.
+Both hosts validated `0ad940d0` on `codex/vice-sharp-phase-d5b-legion2`. Each passed all 11 cumulative Slice 1 cases, including stock MOS6569 and MOS8565 round trips, and all 21 named D6 regression cases in the ordinary run. LEGION2 used SSH. The published VIC-20 fixtures and all eight original candidates retain their raw hashes, and the comparison excludes only the two unused VIA1 input-latch bytes for the pinned R17 cohorts.
+
+Phase D still requires the R16 ordinary gate ruling. Linux ran 4,493 cases with 4,454 passes, 20 R9 failures, one additional 150% pacing failure and 18 cases not executed. Windows ran 4,493 cases with 4,459 passes, the 20 R9 failures and 14 cases not executed. The A05 evaluator also reported discovery changes on both hosts. Step 12 hostile validation and Phase E await an accepted exit. [Two-host exit receipt](../native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-exit-rerun-after-d6). The original October handoff follows.
 
 Written 2026-10-21T11:22 (local, America/Chicago, stamps measured) by Claude Code (claude-fable-5-1) as session OMAR-VICE# on LAB-OMARCHY, workspace `/home/sharpninja/github/vice-sharp`, branch `develop` at `cd3b2f9e` plus the commit that carries this file; amended 12:07 after LEGION2's D0 commits (`cd85bba0`, `f6a301bc`) were synced, section 6. Written because Payton stopped the session to preserve the week's usage: "Please commit and sync with LEGION2 and then push to origin after writing a new handoff and retiring any existing handoff."
 
