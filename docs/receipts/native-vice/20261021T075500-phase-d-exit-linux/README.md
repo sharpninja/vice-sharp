@@ -29,3 +29,14 @@ Session OMAR-VICE#, written 2026-10-21T07:55 after D5 part 2 (receipt `docs/rece
 ## Self-assessment
 
 Correctness 92 percent, accuracy 93 percent, completeness 85 percent for this host (as the D5 receipt states); the two-host completeness is 50 percent by construction while LEGION2 is held.
+
+## 2026-11-23 two-host validation
+
+This entry updates the October result. The dedicated branch validated D5 at `d6500e06d80cd3a6fc79ee309027f9ecb7d2f693`. `origin/develop` was verified at `ade393630191847ed2bd1d952a9da5bd59e92167`. The pinned VICE source was `cc67418cba58e71d8e70fd353e9de47199ad2075`. LEGION2 commands and receipt transfers used SSH.
+
+- The PAL and NTSC fixtures were published on the branch at `58c84ad9`. Each cohort contains two Linux and two Windows runs with trigger, write and MAINCPU clock 100,002. Both model comparisons passed with only the two unused VIA1 v2.2 input-latch bytes excluded. All eight original snapshots and raw hashes are retained. The two published fixture files are unmodified Linux candidates. The manifest pins PAL SHA-256 `20932DC3E8634F9024EA1E82D57B953CAAB7C796A912F0884E0516934EDF8014` and NTSC SHA-256 `338A26D1CD576BDED98E7C079E23345B3E82A38AC0A0737FBB41287A5D31AC41`. [Both fixture classifications and original candidates](../20261123T130148-phase-d-d5b-two-hosts/)
+- The first Windows Slice 1 run exposed a host setting. The anchored VICE profile had `[C64SC] VICIIModel=0` and the two C64 snapshots requested model `1`. The failing run retained both test outcomes. The revised stock VICE command selects the model read from the snapshot. Both MOS6569 (model `0`) and MOS8565 (model `1`) passed their native v1.4 write-and-resume cases on each host, along with the original v1.2 resume.
+- Both hosts ran `./build.ps1 NativeSnapshotCompatibilityTest --configuration Release --native-snapshot-through-slice 1`. The cumulative result was 11 passed, zero failed, blocked, skipped or not executed per host. The Linux TRX is under `artifacts/test-results/phase-d-vic2-slice1-linux-20261123/native-snapshot/ViceSharp.VsfCompatibility.Tests.trx` with SHA-256 `83EC9AD7DADA88869E41ECB94BE88AED1EC7B743CC36FF2734AB7CBED21C94FE`. The verified Windows copy is under `artifacts/test-results/phase-d-vic2-slice1-windows-20261123/both-variants/ViceSharp.VsfCompatibility.Tests.trx` with SHA-256 `D497CEF01B840FB622EC9AADE1818CFD4FEA1F1D3E35185AD109F4845140211D`. Both TRX files explicitly identify each tested variant.
+- LEGION2 restored the 12 tracked native paths and preserved its 2,527 untracked entries. The pinned build and subsequent equivalence and Slice 1 runs reproduced the same inventory. LEGION2's three equivalence cells produced 15 matching screenshots and gate and observation counts against the Linux receipts, 10 valid observer traces, and zero snapshot markers.
+
+D6 and the ordinary Phase D exit gates remain open. This entry records the measured D5 results.
