@@ -38,11 +38,19 @@ partial class Mos6502
         return (ushort)(lo | (hi << 8));
     }
 
+    /// <summary>
+    /// Executes a complete opcode through the instruction-at-a-time path.
+    /// 2026-11-23, FR-CPU-001 ac-01 and D6/R18: preserve the opcode
+    /// address across fetch for VICE's branch displacement base.
+    /// </summary>
+    /// <returns>The opcode's base cycle count.</returns>
     public int ExecuteInstruction()
     {
+        var instructionAddress = PC;
         byte opcode = Fetch();
         byte cycles = OpCycleCounts[opcode];
 
+        _instructionPC = instructionAddress;
         ExecuteOpcode(opcode);
 
         return cycles;
