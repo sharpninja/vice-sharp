@@ -15,6 +15,7 @@ using Xunit;
 public sealed class ThreadAffinityIntegrationTests
 {
     /// <summary>
+    /// TR-PLAT-001/ac-2, PLAN-NATIVERESTORE-001 R16 Windows host coverage.
     /// Use case: pinning the current thread applies the requested mask to the
     /// OS thread. Acceptance: TryPinCurrentThread succeeds on Windows and a
     /// second pin returns the first mask as the previous value; the original
@@ -40,6 +41,7 @@ public sealed class ThreadAffinityIntegrationTests
     }
 
     /// <summary>
+    /// TR-PLAT-001/ac-2, PLAN-NATIVERESTORE-001 R16 Windows host coverage.
     /// Use case: VICESHARP_EMU_CPU pins the pump's worker thread at start.
     /// Acceptance: with the variable set to core 1 the started pump reports
     /// the applied mask; with it unset the pump reports none.

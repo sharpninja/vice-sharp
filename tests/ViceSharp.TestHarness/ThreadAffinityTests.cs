@@ -14,6 +14,7 @@ using Xunit;
 public sealed class ThreadAffinityTests
 {
     /// <summary>
+    /// TR-PLAT-001/ac-2, PLAN-NATIVERESTORE-001 R16 portable test coverage.
     /// Use case: parse the env-var CPU index into an affinity mask.
     /// Acceptance: "13" maps to bit 13; null, blanks, non-numeric, negative,
     /// and indexes above 63 map to no mask.

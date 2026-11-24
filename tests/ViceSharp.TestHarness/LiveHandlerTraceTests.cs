@@ -20,6 +20,7 @@ public sealed class LiveHandlerTraceTests
     public LiveHandlerTraceTests(ITestOutputHelper output) => _out = output;
 
     /// <summary>
+    /// FR-MON-001/ac-01 and TEST-MON-001, R16 supplementary real-code evidence.
     /// Use case: exploratory trace - locate the C64MEM RAM image inside the retained
     /// Pieces-of-Light .vsf, follow the $0314/$0315 CINV vector, and disassemble the live
     /// (decrunched) IRQ handler with <c>Mos6502Disassembler</c>, proving the in-house
