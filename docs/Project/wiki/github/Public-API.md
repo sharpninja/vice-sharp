@@ -558,6 +558,8 @@ ListCapturesAsync(SessionRequest) -> CaptureSessionDto[]
 
 `GetCaptureCapabilities` advertises the ffmpeg containers (each `CaptureVideoFormatDto.RequiresFfmpeg = true`) only when an ffmpeg binary is located; muxed video and WAV sound additionally require a live audio device.
 
+Stopping an active WAV capture drains the writer and finalizes the WAV header before the RPC returns. The `StopCaptureResponse` contains the stopped capture session. Callers using `EmulatorRuntimeSession.EndAudioCapture()` directly receive the finalized PCM data byte count, excluding the WAV header.
+
 ---
 
 ## Monitor Interfaces

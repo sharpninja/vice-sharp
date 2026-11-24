@@ -1,0 +1,17 @@
+method: review.audit
+label: source-checkpoint
+timestampLocal: 2026-10-20T13:26:32
+primaryPersisted: false
+params:
+  timestampLocal: 2026-10-20T13:26:32
+  stage: source-checkpoint
+  content: 'Verified live native state 8 tracked modifications, 155 untracked. Exact grep reproduces 43 files and 5 Category files but misses SnapshotResumeSpikeTests plain Fact direct ViceNative users and xvic users. Independently parsed pinned ready-c64sc-truedrive.vsf SHA256 5C284F5C...: MAINCPU 1.2 clock 109163946 PC 22377, DRIVE8 2.0 length 24 hasTde=0, DRIVE9-11 hasTde=1. Pinned writer creates each DRIVE module unconditionally; final reader copies uninitialized clock arrays for any configured non-NONE unit when TDE fields were not read. R7 rejection deferred to Phase E conflicts with mandatory D5 resume proof unless resolved before the load. Findings remain under source verification.'
+  sourceType: Codex
+  model: gpt-6.1-sol
+  effort: max
+  sessionId: Codex-20261020T181838Z-hv-nativerestore-r2
+  requestId: req-20261020T181838Z-hv-nativerestore-r2
+  parentSessionId: ClaudeCode-20261020T015046Z-plugin-session
+  parentRequestId: req-20261020T172116Z-prompt-6c6d
+  primaryPersisted: false
+  disposition: QUEUED_ONLY_AUTHORIZED_FAILSAFE

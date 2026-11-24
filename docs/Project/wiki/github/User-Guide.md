@@ -18,7 +18,7 @@ cd vice-sharp
 dotnet build ViceSharp.slnx
 ```
 
-The build is `TreatWarningsAsErrors`. If you see SDK-version errors, re-check `dotnet --version`. Install the release native bundle before running native-backed tests. The source-native build path is being moved to a clean external materialization so `native/vice` remains byte-for-byte immutable; until that remediation lands, do not use the legacy patched build as parity evidence.
+The build treats warnings as errors. If you see SDK-version errors, re-check `dotnet --version`. For native snapshot validation, use the pinned observers built by `native/build-vice-observer.ps1` in a separate source directory. The [Phase D exit receipt](receipts/native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-phase-d-acceptance) records the validated Linux and Windows runs.
 
 Without the release bundle, Windows builds that touch native VICE invoke `native/build-vice-shim.ps1` and require MSYS2 at `C:\msys64`. That is a description of the legacy build path, not permission to mutate the immutable native reference or claim parity from a patched shim.
 
@@ -251,7 +251,7 @@ The Avalonia desktop UI exposes VICE-style speed controls:
 From the Avalonia desktop UI, the **Snapshot** menu exports emulator output:
 
 - **Save screenshot...** writes the current frame as PNG or BMP (chosen by the file extension).
-- **Record sound...** toggles a WAV recording of the SID output (start, then choose a file; pick the menu item again to stop).
+- **Record sound...** opens a file chooser to start a WAV recording of the SID output. Select the menu item again to stop. Stopping flushes queued samples and finalizes the WAV header before returning.
 - **Record video** offers three modes (toggle to start, pick again to stop):
   - **MP4 + sound** muxes H.264 video and AAC audio into an `.mp4` (also `.mkv` / `.avi` by extension). Requires `ffmpeg` on `PATH` (or set `VICESHARP_FFMPEG` to its full path).
   - **BMP sequence (all frames)** writes one numbered `frame_NNNNNN.bmp` per emulated frame into the chosen folder.

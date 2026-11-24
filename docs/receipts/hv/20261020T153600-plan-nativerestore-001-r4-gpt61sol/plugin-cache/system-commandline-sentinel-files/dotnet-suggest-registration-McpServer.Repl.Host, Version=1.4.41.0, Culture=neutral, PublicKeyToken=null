@@ -1,0 +1,6 @@
+Exception during registration:
+System.ComponentModel.Win32Exception (2): An error occurred trying to start process 'dotnet-suggest' with working directory '/home/sharpninja/github/vice-sharp'. No such file or directory
+   at System.Diagnostics.Process.ForkAndExecProcess(ProcessStartInfo startInfo, String resolvedFilename, String[] argv, String[] envp, String cwd, Boolean setCredentials, UInt32 userId, UInt32 groupId, UInt32[] groups, Int32& stdinFd, Int32& stdoutFd, Int32& stderrFd, Boolean usesTerminal, Boolean throwOnNoExec)
+   at System.Diagnostics.Process.StartCore(ProcessStartInfo startInfo)
+   at System.CommandLine.Invocation.Process.StartProcess(String command, String args, String workingDir, Action`1 stdOut, Action`1 stdErr, ValueTuple`2[] environmentVariables)
+   at System.CommandLine.Builder.CommandLineBuilderExtensions.<>c.<<RegisterWithDotnetSuggest>b__5_1>d.MoveNext()

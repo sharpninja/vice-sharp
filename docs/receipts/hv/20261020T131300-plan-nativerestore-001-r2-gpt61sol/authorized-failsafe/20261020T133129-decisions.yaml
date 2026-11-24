@@ -1,0 +1,17 @@
+method: review.audit
+label: decisions
+timestampLocal: 2026-10-20T13:31:29
+primaryPersisted: false
+params:
+  timestampLocal: 2026-10-20T13:31:29
+  stage: decisions
+  content: 'Decision: retain R1 B as the authorized inventory exit and R9 as an exact known-red-set exception, not a claim of a green full suite. Reason: operator approvals explicitly amend these gates. Decision: do not treat 43 token-matching files as a complete native-consumer denominator; actual direct ViceNative users outside it exist. Decision: H5 needs an immediate D0 blocker disposition because the required fixture already contains DRIVE8 TDE=0; naming a later Phase E rejection cannot satisfy earlier D5 resume. Decision: no native or full solution execution during this plan review; historical suite counts remain attributed to receipts. Trust failure remains unrepaired; audit evidence queued locally, not server persisted.'
+  sourceType: Codex
+  model: gpt-6.1-sol
+  effort: max
+  sessionId: Codex-20261020T181838Z-hv-nativerestore-r2
+  requestId: req-20261020T181838Z-hv-nativerestore-r2
+  parentSessionId: ClaudeCode-20261020T015046Z-plugin-session
+  parentRequestId: req-20261020T172116Z-prompt-6c6d
+  primaryPersisted: false
+  disposition: QUEUED_ONLY_AUTHORIZED_FAILSAFE
