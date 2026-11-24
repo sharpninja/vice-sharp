@@ -26,6 +26,7 @@
   - [VIC-20 vs VICE Implementation Audit](VIC20-vs-VICE-Audit)
   - [AI Code and Project Review (aiUnit)](AI-Review)
   - [Registry of Lore](Registry-of-Lore)
+  - [Native VICE Builds](Native-VICE-Builds)
 - Requirements
   - [Functional Requirements Overview](Functional-Requirements-Overview)
   - [Technical Requirements Overview](Technical-Requirements-Overview)

@@ -24,29 +24,6 @@ Scope: layer-1+
 - [ ] Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.
 - [ ] Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.
 
-## TR-ALLOC-001
-
-**Zero Managed Allocations Per Emulation Cycle on Hot Path** — The emulation hot path (the per-cycle execution of CPU, VIC-II, SID, and CIA ticks) shall produce zero managed heap allocations during steady-state operation. This eliminates GC pauses that would cause frame drops and audio glitches. All per-cycle data structures shall use value types (structs), stack allocation, or pre-allocated buffers.
-
-## Acceptance Criteria
-- A benchmark running 10 million emulation cycles reports zero `GC.GetAllocatedBytesForCurrentThread()` delta on the hot-path thread.
-- `dotnet-counters` monitoring during a 60-second emulation session shows zero Gen0 collections attributable to the emulation thread.
-- The `RunFramePerfProbe` benchmark (`tests/ViceSharp.Benchmarks/RunFramePerfProbe.cs`) asserts a zero `GC.GetAllocatedBytesForCurrentThread()` delta over the measured `RunFrame` window; the assertion is smoke-tested by `BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations` (TEST-PERF-RUNFRAME-001).
-- The PayloadArena reset occurs exactly once per frame and completes in under 100ns.
-- All event/message payloads in the pub/sub system are value types (per TR-PUBSUB-001).
-- No `new` keyword appears in hot-path code paths except for stack-allocated `Span<T>` or `stackalloc`.
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes)
-- [ ] BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark. (evidence: BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation)
-
-## TR-AOT-001
-
-**Full NativeAOT Compatibility with Zero Reflection on Hot Path** — All ViceSharp assemblies shall be fully compatible with .NET NativeAOT publication. This means no use of runtime reflection, `System.Reflection.Emit`, or dynamic code generation on the emulation hot path. All assemblies shall pass the NativeAOT trim analysis without warnings. Source generators shall be used where compile-time code generation is needed.
-**Status:** pending
-Scope: layer-1+
-
 ## TR-BASELINE-CORRECTNESS-001
 
 **Approved baseline regression repairs** — BasicBus unregister and unmapped-write tests preserve the intentional open-bus latch values 0x55 and 0xBB. Native-shim users follow the NativeVice collection convention.
@@ -112,8 +89,8 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
    - `DeterminismTest`: Runs only `Category=Determinism` (bit-exact replay checks).
    - `ParityTest`: Runs the lockstep/parity gates against VICE `x64sc`.
    - `RomFetch`: Fetches ROM data for local runs.
-   - `PackNuget` / `Pack`: Packs the `ViceSharp.Core` bundle (Abstractions, Chips, RomFetch, Core, Architectures in one package) plus 12 individual packages (SourceGen, Protocol, Monitor, Launcher, AdhocHelper, Host, Avalonia, Console, Host.MacOS/Android/iOS/Xbox); `ViceSharp.Console` and `ViceSharp.Avalonia` are dotnet tools. Package contents are verified before success.
-   - `PublishNuget`: Publishes the 13 v-tagged release packages to nuget.org.
+   - `PackNuget` / `Pack`: Packs the `ViceSharp.Core` bundle (Abstractions, Chips, RomFetch, Core and Architectures) and 14 individual packages, including `ViceSharp.Library.ViewModels` and `ViceSharp.RomM`. `ViceSharp.Console` and `ViceSharp.Avalonia` are .NET tools. The build verifies package contents.
+   - `PublishNuget`: Publishes the packages from the release tag to nuget.org.
    - `RunConsole` / `RunAvalonia`: Launch the CLI shell / desktop UI.
    - `PublishWiki`: Regenerates requirements wiki exports.
    - `PublishMsi` / `InstallMsi` / `PublishWinget`: Package and install the Avalonia desktop app (WiX MSI, winget manifest).
@@ -121,7 +98,7 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
    - `PackYay` outputs `PKGBUILD`, `.SRCINFO`, a SHA256-pinned `vicesharp-<version>-<arch>.tar.gz` payload, and `vicesharp-<version>-1-<arch>.pkg.tar.zst` beneath `artifacts/yay/<version>/<arch>/`. The package includes the desktop application, `vicesharp` launcher, desktop menu entry, icon, and license notices. ROM images are not bundled; missing default C64 firmware is acquired at desktop startup.
    - `PackYay` performs no package installation or AUR publication. Users may install the archive with `yay -U <package-path>` or build and install the generated recipe with `yay -Bi <recipe-directory>`.
    - `DeployUser`: Publishes a self-contained Release Linux desktop build and installs a new retained release below `$XDG_DATA_HOME/vicesharp/releases` (default `~/.local/share/vicesharp/releases`). It creates `~/.local/bin/vicesharp`, a user desktop entry and icon, then atomically switches the `current` release link. It runs as the normal user and invokes no package manager, sudo, system installation, or AUR publication.
-   - `DeployUser` requires an absolute data directory within the user's home, rejects root execution and unsafe symlink or unmanaged destinations, and validates the executable payload before activation. It preserves existing `ViceSharp` settings, firmware and RomM caches, retains earlier releases, and restores entrypoints if activation fails. The installed system package, if present, is not modified.
+   - `DeployUser` requires an absolute data path under the user's home and validates the executable payload before activation. Existing managed deployments can use user-owned `~/.local` and `~/.local/bin` directory links with trusted targets. The installer rejects root execution, unsafe links, and unmanaged destinations. It preserves existing `ViceSharp` settings, firmware and RomM caches, retains earlier releases, and restores entrypoints if activation fails. The installed system package, if present, is not modified.
    - `DeployYay`: Compatibility alias depending only on `DeployUser`. Existing deployment commands now use user space; `PackYay` remains the separate package-only target.
 
 5. **Versioning:**
@@ -130,21 +107,6 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
    - A `vX.Y.Z` release tag on HEAD overrides the pack version so published package versions equal the tag (e.g. `v1.0.2`, released 2026-07-08).
    - `PackYay`, `DeployUser` and `DeployYay` honor the shared `--package-version-override` parameter; otherwise they use the release tag on HEAD or the GitVersion-derived default. The Arch package release is `1`. Each user deployment gets a unique release directory, including same-version rebuilds.
    - The default branch is `main`; day-to-day work happens on `main` and feature branches.
-
-### Acceptance Criteria
-
-1. `./build.ps1 Compile` (or `nuke Compile`) succeeds locally.
-2. `nuke Test` and `nuke CiTest` run the test suite with the documented category filters and report results in a structured format (TRX).
-3. `nuke CiTest` (or `./build.ps1 CiTest`) runs the documented category filter locally. Historical Azure `VICE-Sharp-CI` numbers are not a live gate.
-4. A `v*` tag plus Nuke `PublishNuget` / `PublishGitHubRelease` packs and publishes packages versioned exactly to the tag. There is no live Azure release pipeline.
-5. NuGet packages are versioned correctly: the release tag version wins on tagged HEADs, GitVersion-derived versions apply otherwise.
-6. Build failures produce clear, actionable error messages with the failing target and step identified.
-7. On an Arch Linux `x86_64` or `aarch64` host, `./build.sh PackYay` or `./build.ps1 PackYay` produces the documented local artifacts for that architecture and version. It always packages an optimized Release self-contained Avalonia application, independently of the local default build configuration, and does not restore the whole solution.
-8. The Arch package's metadata declares native runtime dependencies and its payload includes an executable launcher, application binaries, desktop entry, icon, and license notices. The generated recipe verifies the payload's SHA256 checksum, and packaging preserves executable permissions and managed/native application files.
-9. `PackYay` leaves package installation and AUR publication to separate explicit actions. Building the package does not require root; the installed app runs without a system .NET SDK or runtime.
-10. `./build.sh DeployUser --package-version-override 1.3.3` (or the PowerShell equivalent or `DeployYay` compatibility alias) installs only within the current user's home. It requires no elevation or package manager, retains previous releases and user data, forwards launcher arguments correctly, and leaves an existing system installation unchanged.
-11. A failed update cannot activate an incomplete or non-executable payload. Previous entrypoints and the selected release remain usable after a pre-activation failure. Unsafe paths and unmanaged destinations fail with actionable errors instead of being overwritten.
-12. Tests of Nuke build code live in `build.tests/ViceSharp.Build.Tests.csproj` beside `build/`, outside `ViceSharp.slnx`, and run through `nuke BuildTest`. No product test project compiles or tests files from `build/`. `BuildTest` fails when it selects zero tests or any selected test does not pass, and host-specific cases are excluded by host filter, never skipped.
 
 ### Verification Method
 
@@ -171,19 +133,6 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 - The 2026-10-15 packaging and user-local deployment extensions are recorded here locally because the workspace MCP marker/session route is unavailable. Registration readback succeeds, but server configuration projection was denied access to `/opt/mcpserver/app/appsettings.yaml`; reconciliation and generated requirement export remain pending. Generated requirement exports are not edited manually.
 **Status:** in_progress
 Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] `./build.ps1 Compile` (or `nuke Compile`) succeeds locally.
-- [ ] `nuke Test` and `nuke CiTest` run the test suite with the documented category filters and report results in a structured format (TRX).
-- [ ] `nuke CiTest` (or `./build.ps1 CiTest`) runs the documented category filter locally. Historical Azure `VICE-Sharp-CI` numbers are not a live gate.
-- [ ] A `v*` tag plus Nuke `PublishNuget` / `PublishGitHubRelease` packs and publishes packages versioned exactly to the tag. There is no live Azure release pipeline.
-- [ ] NuGet packages are versioned correctly: the release tag version wins on tagged HEADs, GitVersion-derived versions apply otherwise.
-- [ ] Build failures produce clear, actionable error messages with the failing target and step identified.
-- [ ] On an Arch Linux `x86_64` or `aarch64` host, `./build.sh PackYay` or `./build.ps1 PackYay` produces the documented local artifacts for that architecture and version. It always packages an optimized Release self-contained Avalonia application, independently of the local default build configuration, and does not restore the whole solution.
-- [ ] The Arch package's metadata declares native runtime dependencies and its payload includes an executable launcher, application binaries, desktop entry, icon, and license notices. The generated recipe verifies the payload's SHA256 checksum, and packaging preserves executable permissions and managed/native application files.
-- [ ] `PackYay` leaves package installation and AUR publication to separate explicit actions. Building the package does not require root; the installed app runs without a system .NET SDK or runtime.
-- [ ] `./build.sh DeployUser --package-version-override 1.3.3` (or the PowerShell equivalent or `DeployYay` compatibility alias) installs only within the current user's home. It requires no elevation or package manager, retains previous releases and user data, forwards launcher arguments correctly, and leaves an existing system installation unchanged.
-- [ ] A failed update cannot activate an incomplete or non-executable payload. Previous entrypoints and the selected release remain usable after a pre-activation failure. Unsafe paths and unmanaged destinations fail with actionable errors instead of being overwritten.
-- [ ] Tests of Nuke build code live in `build.tests/ViceSharp.Build.Tests.csproj` beside `build/`, outside `ViceSharp.slnx`, and run through `nuke BuildTest`. No product test project compiles or tests files from `build/`. `BuildTest` fails when it selects zero tests or any selected test does not pass, and host-specific cases are excluded by host filter, never skipped.
 
 ## TR-CHIPSTATE-CAPTURE-001
 
@@ -198,7 +147,7 @@ Scope: layer-1+
 ## TR-COMPLETION-MANIFEST-001
 
 **Exhaustive approved-work completion evidence** — Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.
-Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.
+Retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps for each required run.
 Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.
 Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.
 Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.
@@ -206,7 +155,7 @@ Prove actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only valid
 
 ## Acceptance Criteria
 - **ac-01**: Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.
-- **ac-02**: Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.
+- **ac-02**: Retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps for each required run.
 - **ac-03**: Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.
 - **ac-04**: Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.
 - **ac-05**: Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.
@@ -216,7 +165,7 @@ Prove actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only valid
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.
-- [ ] Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.
+- [ ] Retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps for each required run.
 - [ ] Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.
 - [ ] Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.
 - [ ] Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.
@@ -251,13 +200,6 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] ICpu exposes a per-instance ExecutedCycles counter and TargetClockHz.
 - [ ] MachineState carries a per-CPU breakdown (id, executedCycles, targetHz) for host and peripheral CPUs.
-
-## TR-CTX-001
-
-**Resolve is pure/deterministic** — Resolve is pure/deterministic. Acceptance: verified by TEST-CTX-001.
-**Covered by:** FR: FR-CTX-001, FR-CTX-002, FR-CTX-003, FR-CTX-004, FR-GAMEPAD-009, FR-SYSBTN-002, FR-SYSBTN-003, FR-SYSBTN-007; TEST: TEST-CTX-001, TEST-GAMEPAD-002, TEST-SYSBTN-DEVICE
-**Status:** pending
-Scope: layer-1+
 
 ## TR-CYCLE-001
 
@@ -371,13 +313,6 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
-## TR-DRVLIFE-001
-
-**Drive attach/detach lifecycle** — Enabling a drive creates/starts the drive instance, registers it on the clock and connects it to the always-on IEC bus; disabling stops it, unregisters from the clock and disconnects from the bus.
-**Covered by:** FR: FR-DRVLED-001, FR-DRVTRUE-001, FR-IECLOAD-001; TEST: TEST-DRVLED-001, TEST-DRVTRUE-001, TEST-DRVLIFE-001, TEST-IECELEC-001, TEST-IECLOAD-001
-**Status:** pending
-Scope: layer-1+
-
 ## TR-DRV-PACE-001
 
 **Drive pacing via native 16.16 accumulator** — SystemCoordinator.SynchronizePeripheralSystemsToHost replaces the linear hostCycles*driveHz/hostRate target with native drivecpu.c:381-394 semantics: per peripheral (lastHostCycles, ulong cycleAccum); cycleAccum += syncFactor*delta; target += cycleAccum>>16; cycleAccum &= 0xFFFF; syncFactor = multiplier * floor(65536*driveHz/hostHz) per drivesync.c:41-57. The 1571 exposes a runtime clock multiplier (IDriveClockMultiplier, VIA1 PA bit 5) applied at the next sync; the 1581 runs at its fixed 2 MHz descriptor frequency. Reset re-anchors the accumulator to 0. Witness: managed pacer target equals native vice_drivecpu_get_clk at every 19,656-cycle sample.
@@ -387,40 +322,6 @@ Scope: layer-1+
 ## TR-DRV-WD1770-001
 
 **WD1770 FDC statement-for-statement port** — New chip directory src/ViceSharp.Chips/Fdc/. Wd1770.cs ports native wd1770.c exactly: commands/status (:68-140), state (:142-167), lazy catch-up Execute() microcode (:204-817) that runs only at register access (no per-cycle tick), store/read/peek (:821-922), reset (:931-941), SetSide/SetMotor/DiskChange (:983-996), register decode & 3. Constants: clock_frequency=2 always, is1772=0, dden=0 (no runtime setter in native). Timing: PREPARE=48, BYTE_RATE=64 drive-cycles/byte, SETTLING=60000, STEP_RATE table per :54-63. The IRQ output stays internal state (native never wires it to the drive CPU). POCO state mirroring the native snapshot list; IStatefulDevice; zero-allocation hot ops.
-**Status:** pending
-Scope: layer-1+
-
-## TR-GAMEPAD-001
-
-**Portable input lib, zero Windows.*** — Portable net10.0 lib, zero Windows.* reference, IsAotCompatible/TreatWarningsAsErrors clean. Acceptance: verified by TEST-GAMEPAD-001 / harness build.
-**Covered by:** FR: FR-GAMEPAD-009; TEST: TEST-CTX-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-GAMEPAD-002
-
-**XboxJoystickMapper pure, hysteresis threaded** — XboxJoystickMapper pure, no static mutable state/IO/clock, hysteresis threaded. Acceptance: verified by TEST-GAMEPAD-001.
-**Covered by:** FR: FR-GAMEPAD-001, FR-GAMEPAD-002, FR-GAMEPAD-003, FR-GAMEPAD-004, FR-GAMEPAD-005, FR-GAMEPAD-006; TEST: TEST-GAMEPAD-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-GAMEPAD-003
-
-**Explicit Joystick1/Joystick2 only** — Explicit InputPort.Joystick1/Joystick2 only, never PrimaryJoystick. Acceptance: verified by TEST-GAMEPAD-001.
-**Covered by:** FR: FR-GAMEPAD-007; TEST: TEST-GAMEPAD-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-GAMEPAD-004
-
-**Device add/remove drained inside Tick** — Device add/remove drained on the emulation thread inside Tick. Acceptance: verified by TEST-GAMEPAD-001.
-**Covered by:** FR: FR-GAMEPAD-008; TEST: TEST-GAMEPAD-001, TEST-GAMEPAD-002
-**Status:** pending
-Scope: layer-1+
-
-## TR-GAMEPAD-005
-
-**Delta emission only on change** — Delta emission only on change. Acceptance: verified by TEST-GAMEPAD-001.
 **Status:** pending
 Scope: layer-1+
 
@@ -509,70 +410,10 @@ Scope: layer-1+
 - [ ] IEC activity is derived from authoritative IEC line changes or an equivalent host-owned bus signal monitor.
 - [ ] Status polling does not mutate machine, drive, or bus state.
 
-## TR-IECDECODE-001
-
-**IEC protocol decoder** — Pure state machine over trace samples emitting decoded IEC events: ATN command frame, LISTEN/TALK + device, OPEN/secondary/channel, data bytes with EOI, turnaround, timeout/error.
-**Covered by:** FR: FR-IECMON-001; TEST: TEST-IECDECODE-001, TEST-IECMON-001, TEST-IECTRACE-001
-**Status:** pending
-Scope: layer-1+
-
 ## TR-IEC-EDGE-001
 
 **IEC bus ATN-response within 985-cycle spec window** — IecBus.Tick() asserts CLK and DATA low within 985 cycles (Tat=1ms at PAL 985,248Hz) of ATN falling edge. Releases both on ATN rising edge. VICE iecbus/iecbus.c:247-266.
 **Covered by:** FR: FR-ARCH-TRUEDRIVE-1541-002, FR-BACKFILL-MEDIA-001; TEST: TEST-DRV-MOTOR-001, TEST-IEC-TIMING-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-IECELEC-001
-
-**Faithful IEC serial electrical model with native parity** — CIA2 reads the live open-collector IEC bus through the C64 inverting buffers; idle DATA-low is supplied by the true-drive 1541 holding DATA. C64GS (no IEC) keeps disconnected->low. Idle reads match native ($47 normal C64 / $07 C64GS) and native CIA2-IO lockstep stays green.
-**Covered by:** FR: FR-DRVTRUE-001, FR-IECLOAD-001; TEST: TEST-DRVTRUE-001, TEST-DRVLIFE-001, TEST-IECELEC-001, TEST-IECLOAD-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-IECSPY-001
-
-**IInterSystemBus.Snapshot API** — IInterSystemBus exposes Snapshot() returning BusSnapshot (per-line level + pullers, talking endpoints, attached endpoints). Read-only. DONE.
-**Covered by:** FR: FR-IECSPY-001; TEST: TEST-IECSPY-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-IECTRACE-001
-
-**IEC trace recorder (edge + step marks)** — IecBusTraceRecorder subscribes to bus.LineChanged, cycle-stamps each edge from SystemClock plus a sample per step boundary, into a bounded ring; re-derives deterministically after rewind; inactive unless the monitor is open.
-**Covered by:** FR: FR-IECMON-001; TEST: TEST-IECDECODE-001, TEST-IECMON-001, TEST-IECTRACE-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-INPROC-001
-
-**Portable lib, no ASP.NET FrameworkReference** — Portable net10.0 lib, IsAotCompatible, no ASP.NET FrameworkReference. Acceptance: verified by TEST-INPROC-001.
-**Covered by:** FR: FR-INPROC-001; TEST: TEST-INPROC-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-INPROC-002
-
-**XboxManagedFrameGate zero P/Invoke, idempotent** — XboxManagedFrameGate zero P/Invoke, no aux timer thread, idempotent Start/Stop. Acceptance: verified by TEST-INPROC-003.
-**Status:** pending
-Scope: layer-1+
-
-## TR-INPROC-003
-
-**Pacing does not affect emulated cycle results** — Pacing does not affect emulated cycle results; deterministic advance bit-exact. Acceptance: verified by TEST-INPROC-002.
-**Covered by:** FR: FR-INPROC-002, FR-INPROC-003; TEST: TEST-INPROC-002
-**Status:** pending
-Scope: layer-1+
-
-## TR-INPROC-004
-
-**Single unpinned pump worker** — Single unpinned pump worker, VICESHARP_EMU_CPU unset -> AppliedWorkerAffinityMask==null. Acceptance: verified by TEST-INPROC-002.
-**Status:** pending
-Scope: layer-1+
-
-## TR-INPROC-005
-
-**One managed pacing gate; audio decoupled ring** — One managed pacing gate; audio decoupled via ring buffer, SubmitSamples non-blocking, Pause() unparks the worker (supersedes TR-XPACE; single gate). Acceptance: verified by TEST-INPROC-003, TEST-XAUDIO-004.
 **Status:** pending
 Scope: layer-1+
 
@@ -1068,12 +909,6 @@ Scope: layer-1+
 - [ ] No `PlatformNotSupportedException` is thrown during normal operation on any supported platform.
 - [ ] Linux audio tests use an injected device to verify PCM order, gain/mute, queue capacity, lifecycle interruption and failure without playing sound. A separate local smoke check verifies the actual installed library/device path. User-local installation never installs native system packages.
 
-## TR-PUBSUB-001
-
-**<50ns Publish, <100ns Deliver, 0 Allocations Per Frame** — The internal event/message bus used for inter-device communication (e.g., VIC-II asserting IRQ on the CPU, CIA timer underflow signaling the SID) shall achieve sub-100ns latency with zero managed heap allocations. This pub/sub system is the backbone of the emulation's device interconnect and fires hundreds of thousands of times per second.
-**Status:** pending
-Scope: layer-1+
-
 ## TR-PUBSUB-PERF-001
 
 **High-Performance Zero-Allocation Pub/Sub** — ViceSharp shall implement the internal Pub/Sub interconnect with fixed-capacity message storage, 64-byte inline payloads, a MessageKind discriminant, preallocated subscriber route arrays, synchronous publish/delivery, no boxing, and zero managed heap allocation on the steady-state hot path.
@@ -1092,12 +927,6 @@ Scope: layer-1+
 ## TR-QA-TESTSILENCE-001
 
 **Audio-producing tests self-mute the host process Windows audio session** — Test classes that drive the real WinMmAudioBackend (SidAudioWiring, WarpAudioDiscard, DemoWorkloadSpeedDiag, WinMmAudioThroughputDiag, ClockThroughputBenchmark) mute the current process Windows audio session (WASAPI ISimpleAudioVolume on the default session) for the duration of the class and restore the prior mute state on dispose, keeping a developer box silent during a run. Implemented with a raw function-pointer vtable COM helper, AOT and trim clean (no ComImport or reflection), that no-ops on non-Windows or headless hosts. Test infrastructure only; it changes nothing under test.
-**Status:** pending
-Scope: layer-1+
-
-## TR-REMOTECTRL-001
-
-**Embeddable RemoteControl server integration + vendored feed** — ViceSharp.Avalonia references SharpNinja.Avalonia.RemoteControl.Server (0.7.3), vendored into a repo-local NuGet feed (nuget-local/ + NuGet.config package source mapping) so restore is reproducible on Azure DevOps/CI without the sibling source repo. The Avalonia App builds a DI ServiceCollection, calls AddAvaloniaRemoteControl, registers an IRemoteControlRootProvider returning the desktop MainWindow, and attaches the host to the classic-desktop lifetime. Startup is gated behind VICESHARP_REMOTECONTROL_ENABLE and fails closed without a bearer token. Requires Avalonia >= 12.0.3 and Grpc >= 2.80.0 (central package versions bumped accordingly).
 **Status:** pending
 Scope: layer-1+
 
@@ -1163,13 +992,6 @@ Scope: layer-1+
 - [ ] Provision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service.
 - [ ] Fixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests.
 - [ ] Authenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests.
-
-## TR-REVEXEC-001
-
-**Frame-snapshot ring reverse execution** — A frame-granular snapshot ring keyed by cycle backs RewindCycle/RewindFrame: restore nearest snapshot <= target, re-run deterministically to target. Replaces the NotImplemented host stubs. Bounded memory.
-**Covered by:** FR: FR-REVEXEC-001; TEST: TEST-REVEXEC-001, TEST-SNAPFULL-001
-**Status:** pending
-Scope: layer-1+
 
 ## TR-ROMM-BOUNDARY-001
 
@@ -1301,20 +1123,6 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
-## TR-SIMD-001
-
-**SIMD-Accelerated Rendering and Audio with Generic Specialization for CPU Core** — Performance-critical rendering and audio processing paths shall use SIMD (Single Instruction, Multiple Data) intrinsics to process multiple pixels or audio samples in parallel. The CPU core shall use generic specialization (constrained generics with `where T : struct`) to allow the JIT compiler to generate specialized machine code for different CPU variants (6502, 6510, 8502) without virtual dispatch overhead.
-**Covered by:** FR: FR-CFG-003; TEST: TEST-CFG-001, TEST-CLI-LAUNCHER-001, TEST-HOST-001, TEST-X64SC-LOCKSTEP-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-SNAPFULL-001
-
-**Complete machine snapshot/restore with deterministic round-trip** — GetState()+restore capture all execution-affecting state (CPU incl. pending IRQ/NMI + pipeline, VIC sequencer, CIA timer pipelines + TOD, SID, PLA/processor port, memory, and the 1541 drive + IEC bus when present). Invariant: restore then run N cycles equals continuous run N (full MachineState + memory equality).
-**Covered by:** FR: FR-REVEXEC-001; TEST: TEST-REVEXEC-001, TEST-SNAPFULL-001
-**Status:** pending
-Scope: layer-1+
-
 ## TR-SNDREG-GATE-001
 
 **Sound back-pressure regulator in ViceEmulationGate** — IAudioChip exposes QueuedSampleCount and IsAudioTimingSource (Sid6581 overrides). ViceEmulationGate.EvaluateSound decides NotTimingSource/Advance/BackPressure; Tick applies warp->sound->vsync precedence and reports LastRegulator; HighWaterSamples is about 46 ms.
@@ -1414,34 +1222,6 @@ Scope: layer-1+
 - [ ] UI reads of emulation state never observe a partially-committed transaction.
 - [ ] The state window memory footprint is bounded: delta entries average under 256 bytes per frame; keyframe entries are under 128KB.
 
-## TR-SYSBTN-001
-
-**Portable lib, no WinRT/ASP.NET, zero reflection** — Portable lib (no WinRT/ASP.NET, IsAotCompatible, zero reflection). Acceptance: verified by TEST-SYSBTN-001.
-**Covered by:** FR: FR-SYSBTN-001; TEST: TEST-SYSBTN-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-SYSBTN-002
-
-**Edge-triggered activation (Press/Hold/Toggle)** — Edge-triggered activation (Press once/Hold paired/Toggle). Acceptance: verified by TEST-SYSBTN-001.
-**Covered by:** FR: FR-SYSBTN-001, FR-SYSBTN-005; TEST: TEST-SYSBTN-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-SYSBTN-003
-
-**Source-gen JsonSerializerContext persistence** — Source-gen JsonSerializerContext persistence, no reflection. Acceptance: verified by TEST-SYSBTN-003.
-**Covered by:** FR: FR-SYSBTN-008; TEST: TEST-SYSBTN-003
-**Status:** pending
-Scope: layer-1+
-
-## TR-SYSBTN-004
-
-**State-mutating dispatch marshaled to session lock** — State-mutating dispatch marshaled onto the session lock, not the input thread. Acceptance: verified by TEST-SYSBTN-002.
-**Covered by:** FR: FR-SYSBTN-004, FR-SYSBTN-006; TEST: TEST-SYSBTN-002
-**Status:** pending
-Scope: layer-1+
-
 ## TR-SYS-SCHED-001
 
 **Single-worker interleave scheduling with IEC bus-event sync** — One emulation worker interleaves systems with per-system deficit pacing and resynchronizes at InterSystemBus.LineChanged; lazy sync-on-IEC-access retained as the fine-grained backstop.
@@ -1512,27 +1292,6 @@ Scope: layer-1+
 - [ ] Retain legacy sense-dongle and CP Clock F83 semantics. Dongle enable and power-up assert sense, while its disable callback does not itself clear sense. RTC motor input drives inverted SDA, write input drives normalized SCL, and sense is asserted only when RTC data is high and motor-state is false. Cover repeated calls, all truth-table inputs and selected-device lifecycle without synthesizing datasette PLAY.
 - [ ] Apply FR-RUNTIME-TAPE-002 ac-08 to per-call-site device enable gating, tapeport dispatch, attachment and reset. Assert internal motor state independently of the UI reset indication and pin reset resources. The lifecycle matrix must include every retained-mode, pending-alarm, cancelled-stop/running-state and dispatch-routing case explicitly listed by FR-RUNTIME-TAPE-002 ac-08, including transient intermediate observations.
 
-## TR-TESTGATE-001
-
-**Category=Xbox tests are non-skipping** — Xbox off-console tests use plain [Fact]/[Theory] + [Trait("Category","Xbox")], never [ViceFact]/Assert.Skip, so Category=Xbox is genuinely non-skipping. Acceptance: verified by XboxTestConventionTests.
-**Covered by:** FR: FR-TESTGATE-002; TEST: TEST-TESTGATE-002
-**Status:** pending
-Scope: layer-1+
-
-## TR-TESTGATE-003
-
-**Documented gate command set** — The gate command set is dotnet build slnx + scoped dotnet test + dotnet publish AOT + a documented on-console checklist. Acceptance: verified by TEST-TESTGATE-009.
-**Covered by:** FR: FR-TESTGATE-001, FR-TESTGATE-003; TEST: TEST-TESTGATE-008, TEST-TESTGATE-009
-**Status:** pending
-Scope: layer-1+
-
-## TR-TESTGATE-004
-
-**Head validated by raw-file-read** — Head validated by raw-file-read (harness references the portable libs, not the head). Acceptance: verified by slice audit / TEST-TESTGATE-010.
-**Covered by:** FR: FR-TESTGATE-004; TEST: TEST-TESTGATE-010
-**Status:** pending
-Scope: layer-1+
-
 ## TR-TICKHIST-CAPTURE-001
 
 **Write-delta capture and reconstruction** — BasicBus publishes MemoryWriteEvent (pre-write byte, gated on a live subscriber); the CPU publishes instruction-completed events; one LockFreePubSub per machine is wired in ArchitectureBuilder and exposed via IMachine.PubSub. TickHistoryRecorder keeps a 100-deep ring bundling write-deltas per instruction; reconstruction reverse-applies later ticks' writes to the current paused RAM.
@@ -1573,12 +1332,6 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Refresh lists ticks newest-first; inspect while paused opens the debug screen
 - [ ] Inspect while running does not open the debug screen
-
-## TR-UIAXAML-001
-
-**All Avalonia views authored in AXAML + MVVM** — Every Avalonia view in ViceSharp.Avalonia is authored declaratively in AXAML with MVVM bindings (no imperative control-tree construction in code-behind), to ease maintenance. The shell window, the sidebar, each per-peripheral control, and the settings panel are AXAML UserControls/Windows bound to view models; code-behind is limited to InitializeComponent and thin glue.
-**Status:** pending
-Scope: layer-1+
 
 ## TR-UIAXAML-PICKER-001
 
@@ -1737,52 +1490,6 @@ Scope: layer-1+
 - [ ] ToStatusDto emits LimiterRatePercent 0 when LimiterEnabled is false.
 - [ ] GetStatus after warp reports EffectiveClockPercent greater than 150 in WarpModeTests and live RC dumps.
 
-## TR-XAUDIO-001
-
-**XAudio2 backend Native-AOT + AppContainer safe** — XAudio2 backend Native-AOT + AppContainer safe (no winmm/kernel32/reflection, DisableRuntimeMarshalling-compatible blittable interop). Acceptance: verified by TEST-XAUDIO-001/002.
-**Covered by:** FR: FR-XAUDIO-001, FR-XAUDIO-002, FR-XAV-001; TEST: TEST-XAUDIO-DEVICE, TEST-XAUDIO-001, TEST-XAUDIO-003
-**Status:** pending
-Scope: layer-1+
-
-## TR-XAUDIO-002
-
-**Audio decoupled via lock-free ring buffer** — Audio decoupled via lock-free ring buffer; SubmitSamples non-blocking; no audio-as-clock back-pressure; Pause unblocks. Acceptance: verified by TEST-XAUDIO-004.
-**Covered by:** FR: FR-XAUDIO-003; TEST: TEST-XAUDIO-004, TEST-XAUDIO-DEVICE
-**Status:** pending
-Scope: layer-1+
-
-## TR-XAUDIO-003
-
-**MasterAudioControl + AudioSampleConverter in Abstractions** — MasterAudioControl + AudioSampleConverter relocated to Abstractions, one master gain / one float->PCM16 shared by both backends, no behavior change. Acceptance: verified by TEST-XAUDIO-003, PortableAudioTypesLocationTests.
-**Covered by:** FR: FR-XAUDIO-002; TEST: TEST-XAUDIO-001, TEST-XAUDIO-003
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXAOT-001
-
-**Core+Host.InProcess graph links clean under AOT** — Core+Host.InProcess graph links clean under Native AOT, 0 IL2xxx/IL3xxx. Acceptance: verified by TEST-XBOXAOT-001.
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXAOT-002
-
-**MSIX manifest declares Windows.Xbox** — ViceSharpXboxUwp=true emits an MSIX whose manifest declares Windows.Xbox. Acceptance: verified by XboxManifestTests / device.
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXAOT-003
-
-**No shipped Xbox path invokes ViceNative/WinMm P/Invoke** — No shipped Xbox path invokes ViceNative/WinMm/winmm-kernel32 P/Invoke. Acceptance: verified by TEST-XBOXAOT-001.
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXCI-005
-
-**Nuke Xbox targets absent from CI/release YAMLs** — Nuke PublishXbox/DeployXbox/ValidateXbox exist and are absent from both CI/release YAMLs; ValidateXbox runs off-console. Acceptance: verified by TEST-XBOXCI-001.
-**Covered by:** FR: FR-XBOXGPL-006; TEST: TEST-XBOXGPL-001
-**Status:** pending
-Scope: layer-1+
-
 ## TR-XBOXGPL-BRAND-001
 
 **C= logo provenance and multi-surface attribution plumbing** — Branding assets under docs/xbox/store-screenshots must derive from the Wikimedia
@@ -1791,131 +1498,6 @@ centralized in THIRD_PARTY_NOTICES.md and AboutInfo.LogoAttributionText /
 LogoSourceUrl / LogoLicenseUrl, packed into NuGet via Directory.Build.props,
 mirrored in package README files, and bound on Xbox AboutPage and Avalonia About.
 **Covered by:** FR: FR-XBOXGPL-007; TEST: TEST-XBOXGPL-002
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXPKG-002
-
-**Conditional-TFM fallback + head-only UWP guarded** — ViceSharpXboxUwp conditional-TFM fallback + head-only UWP/XAML/manifest/MSIX guarded so a workload-less agent builds slnx. Acceptance: verified by TEST-XBOXPKG-001.
-**Covered by:** FR: FR-XBOXPKG-001, FR-XBOXPKG-003; TEST: TEST-XBOXPKG-001, TEST-XBOXPKG-003
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXTOPO-001
-
-**TFM-conditional fallback (default net10.0)** — TFM-conditional fallback (ViceSharpXboxUwp default false=net10.0) so slnx builds with no UWP workload. Acceptance: verified by TEST-XBOXTOPO-002.
-**Covered by:** FR: FR-XBOXTOPO-001; TEST: TEST-XBOXTOPO-001, TEST-XBOXTOPO-002
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXTOPO-002
-
-**Head references only core + Host.InProcess** — Head references only Abstractions/Core/Chips/Architectures + Host.InProcess (R2 amendment); bans Host/Avalonia/Protocol-Grpc/Monitor and Grpc.*/AspNetCore.*/Avalonia.*. Acceptance: verified by TEST-XBOXTOPO-001.
-**Covered by:** FR: FR-XBOXTOPO-001; TEST: TEST-XBOXTOPO-001, TEST-XBOXTOPO-002
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXTOPO-003
-
-**Desktop-intact regression guard** — Regression / desktop-intact guard: existing desktop + Host.Xbox scaffold + tests stay green. Acceptance: verified by TEST-TESTGATE-009.
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXUI-001
-
-**Explicit navigation stack independent of Frame journal** — Explicit navigation stack independent of the Frame journal; overlays tracked separately. Acceptance: verified by TEST-XBOXUI-001.
-**Covered by:** FR: FR-XBOXUI-001; TEST: TEST-XBOXUI-001, TEST-XBOXUI-003
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXUI-002
-
-**RequiresPointer=Never + XYFocus + safe-area margin** — RequiresPointer=Never shared style + explicit XYFocus from FocusMap + 90% safe-area root margin. Acceptance: verified by TEST-XBOXUI-002a/002b.
-**Covered by:** FR: FR-XBOXUI-002; TEST: TEST-XBOXUI-002a, TEST-XBOXUI-002b
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXUI-003
-
-**InputContext observer over single authority** — InputContext observer over the single XboxInputContext authority. Acceptance: verified by TEST-XBOXUI-003.
-**Covered by:** FR: FR-XBOXUI-003; TEST: TEST-XBOXUI-003
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXUI-004
-
-**VideoSurfaceHost + pull timer constructed once** — VideoSurfaceHost + pull timer constructed once at shell level, never disposed by navigation. Acceptance: verified by TEST-XBOXUI-004.
-**Covered by:** FR: FR-XBOXUI-004; TEST: TEST-XBOXUI-004
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXUI-005
-
-**SwapChainPanel + Win2D pull into pinned buffer** — SwapChainPanel + Win2D pull into a pinned buffer, nearest-neighbor into the TV-safe rect. Acceptance: verified by TEST-XBOXUI-005a/005b.
-**Covered by:** FR: FR-XBOXUI-005, FR-XVIDEO-002; TEST: TEST-XBOXUI-005a, TEST-XBOXUI-005b, TEST-XVIDEO-001, TEST-XVIDEO-002
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXUI-006
-
-**VirtualKeyboardLayout names from C64KeyboardMap** — VirtualKeyboardLayout names from the C64KeyboardMap alias set. Acceptance: verified by TEST-XBOXUI-006.
-**Covered by:** FR: FR-XBOXUI-006, FR-XKBD-001; TEST: TEST-XBOXUI-006, TEST-XKBD-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXUI-007
-
-**TR-MVVM-001 applied (Abstractions + Protocol)** — = TR-MVVM-001 applied (ViewModels reference Abstractions + Protocol). Acceptance: verified by TEST-XBOXUI-007.
-**Covered by:** FR: FR-XBOXUI-007; TEST: TEST-XBOXUI-007
-**Status:** pending
-Scope: layer-1+
-
-## TR-XBOXUI-008
-
-**Fixed disclosure strings from one constants file** — Fixed disclosure strings from one constants file. Acceptance: verified by TEST-XBOXUI-008.
-**Covered by:** FR: FR-XBOXUI-008; TEST: TEST-XBOXUI-008
-**Status:** pending
-Scope: layer-1+
-
-## TR-XKBD-001
-
-**RESTORE trigger is a distinct seam path** — The RESTORE trigger is a distinct seam path; determinism preserved (pushed through the same input seam), no change to per-cycle advance. Acceptance: verified by TEST-XKBD-001.
-**Covered by:** FR: FR-XKBD-001; TEST: TEST-XBOXUI-006, TEST-XKBD-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-XMVVM-001
-
-**Xbox ViewModels reference only Abstractions + Protocol** — Xbox ViewModels reference only Abstractions + Protocol; UWP APIs isolated behind the head. Acceptance: verified by TEST-XBOXUI-007, boundary tests.
-**Covered by:** FR: FR-XDEV-001, FR-XDEV-002, FR-XDEV-003, FR-XSET-001, FR-XSET-002, FR-XSET-003, FR-XSET-004; TEST: TEST-XSET-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-XPATH-001
-
-**Startup path bridge to AppContainer writable root** — Startup path bridge makes the unmodified ViceDataPathResolver resolve the AppContainer writable root; keymap writes land in LocalFolder. Acceptance: verified by TEST-XSET-001, XboxDataPathBridgeTests.
-**Covered by:** FR: FR-XROM-001, FR-XROM-002, FR-XROM-003; TEST: TEST-XSET-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-XPERSIST-001
-
-**Xbox prefs persist via ViceSettings INI** — Xbox prefs persist via the portable ViceSettings INI [ViceSharpXbox], not Avalonia SessionPersistence. Acceptance: verified by TEST-XSET-001, XboxUiStateStoreTests.
-**Covered by:** FR: FR-XSET-005; TEST: TEST-XSET-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-XSET-002
-
-**SettingsOptionCatalog single-sourced in Protocol** — SettingsOptionCatalog single-sourced in Protocol, byte-identical to desktop. Acceptance: verified by TEST-XSET-001, SettingsOptionCatalogTests.
-**Covered by:** FR: FR-XSET-001; TEST: TEST-XSET-001
-**Status:** pending
-Scope: layer-1+
-
-## TR-XVIDEO-001
-
-**Win2D SwapChainPanel pure read-only sink** — Win2D SwapChainPanel pure read-only sink, BGRA passthrough, zero per-frame allocation, FrameGeometry-sized. Acceptance: verified by TEST-XVIDEO-001/002.
-**Covered by:** FR: FR-XBOXUI-005, FR-XVIDEO-001, FR-XVIDEO-002; TEST: TEST-XBOXUI-005a, TEST-XBOXUI-005b, TEST-XVIDEO-001, TEST-XVIDEO-002, TEST-XVIDEO-DEVICE
 **Status:** pending
 Scope: layer-1+
 

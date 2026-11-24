@@ -301,19 +301,25 @@ Scope: layer-1+
 Each CIA has an 8-bit serial shift register that can transmit or receive data bit-by-bit, clocked by Timer A or an external clock. CIA2's serial port is used for the IEC serial bus connection to disk drives.
 
 ## Acceptance Criteria
-- The shift register at offset $0C shifts one bit per Timer A underflow (output mode) or external clock edge (input mode).
+
+- In output mode, each Timer A underflow advances one CNT half-cycle. The SP pin emits one bit on each falling CNT edge, so a full bit period takes two Timer A underflows. In input mode, the register shifts on each rising external CNT edge.
+
 - Direction is controlled by bit 6 of CRA: 0 = input, 1 = output.
+
 - After 8 bits are shifted, the SDR interrupt bit is set in the ICR.
-- In output mode, data written to the SDR register is loaded into the shift register on the next Timer A underflow.
-- In input mode, incoming bits are shifted in on each external clock edge.
+
+- An SDR write arms or queues transmission only when CRA already selects output mode. The idle byte starts shifting on the first Timer A underflow eligible after VICE's SDR write delay.
+
+- In input mode, incoming bits are shifted in on rising external CNT edges.
+
 - The serial data appears on the SP pin and the clock on the CNT pin.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] The shift register at offset $0C shifts one bit per Timer A underflow (output mode) or external clock edge (input mode).
+- [ ] In output mode, each Timer A underflow advances one CNT half-cycle. The SP pin emits one bit on each falling CNT edge, so a full bit period takes two Timer A underflows. In input mode, the register shifts on each rising external CNT edge.
 - [ ] Direction is controlled by bit 6 of CRA: 0 = input, 1 = output.
 - [ ] After 8 bits are shifted, the SDR interrupt bit is set in the ICR.
-- [ ] In output mode, data written to the SDR register is loaded into the shift register on the next Timer A underflow.
-- [ ] In input mode, incoming bits are shifted in on each external clock edge.
+- [ ] An SDR write arms or queues transmission only when CRA already selects output mode. The idle byte starts shifting on the first Timer A underflow eligible after VICE's SDR write delay.
+- [ ] In input mode, incoming bits are shifted in on rising external CNT edges.
 - [ ] The serial data appears on the SP pin and the clock on the CNT pin.
 
 ## FR-CIA-006 NMI Generation from CIA2

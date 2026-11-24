@@ -67,13 +67,8 @@ Retain traceability from every retired renderer/quarantine assertion to equivale
 
 ### TEST-BUILD-001
 
-The Nuke build tests in `build.tests/ViceSharp.Build.Tests.csproj` run through `BuildTest` on every host (PLAN-NUKETESTS-001). Traceability: TR-BUILD-001 ac-10, ac-11, ac-12; TR-PLAT-001 ac-8.
+Run the ordinary Nuke regression tests in build.tests/ViceSharp.Build.Tests.csproj through BuildTest. TR-BUILD-001 documents the build system and TR-PLAT-001 covers product validation across platforms.
 
-**Acceptance Criteria:**
-- [ ] The 13 user-local deployment cases pass on Linux through `BuildTest` and prove TR-BUILD-001 ac-10 and ac-11.
-- [ ] The completion-manifest cases pass on every host through `BuildTest`.
-- [ ] The placement guards of PLAN-NUKETESTS-001 step 2 pass.
-- [ ] The Windows `BuildTest` run selects no Linux-host case and reports the excluded count.
 
 
 ## TEST-CFG
@@ -134,14 +129,14 @@ VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`
 
 ### TEST-COMPLETION-001
 
-Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+The completion manifest and retained results account for every required project, category, workload and prerequisite.
 Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
 Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
 Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
 Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.
 
 ## Acceptance Criteria
-- **ac-01**: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+- **ac-01**: The completion manifest and retained results account for every required project, category, workload and prerequisite.
 - **ac-02**: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
 - **ac-03**: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
 - **ac-04**: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
@@ -149,7 +144,7 @@ Require final Astra agreement over combined diff, requirement evidence, owned-fi
 - **ac-06**: Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence.
 
 **Acceptance Criteria:**
-- [ ] Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+- [ ] The completion manifest and retained results account for every required project, category, workload and prerequisite.
 - [ ] Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
 - [ ] Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
 - [ ] Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
@@ -411,14 +406,6 @@ Facade + determinism gate (bit-exact TotalCycles across two runs) + explicit-por
 ### TEST-INPROC-003
 
 Gate zero-P/Invoke + inline-sleep-seam + no-thread-growth + Pause-unparks. Acceptance: no [DllImport]/[LibraryImport]; no new timer thread; Pause unparks.
-
-
-
-## TEST-INPROC-DEVICE
-
-### TEST-INPROC-DEVICE
-
-On-console boot throughput (>=100 frames/2s, unpinned, two emulation threads). Acceptance: sustained on-device throughput.
 
 
 
@@ -925,14 +912,6 @@ Source-gen round-trip + reset-to-defaults + remap. Acceptance: profile round-tri
 
 
 
-## TEST-SYSBTN-DEVICE
-
-### TEST-SYSBTN-DEVICE
-
-On-console button response (Menu/X/LT/A gating). Acceptance: system-button behaviors confirmed on device.
-
-
-
 ## TEST-SYSINDEP
 
 ### TEST-SYSINDEP-001
@@ -1303,14 +1282,6 @@ Non-blocking submit + Pause unparks worker (off-console). Acceptance: SubmitSamp
 
 
 
-## TEST-XAUDIO-DEVICE
-
-### TEST-XAUDIO-DEVICE
-
-On-console audio smoke. Acceptance: SID audible; mute silences; suspend/resume clean.
-
-
-
 ## TEST-XBOXAOT
 
 ### TEST-XBOXAOT-001
@@ -1382,16 +1353,6 @@ Default-props solution build needs no UWP workload. Acceptance: slnx build exit 
 NavigationViewModel push/GoBack stack correctness; overlays push no stack entry. Acceptance: Settings->DeviceSetup, GoBack twice -> Home in order.
 
 
-### TEST-XBOXUI-002a
-
-FocusMapBuilder BuildGrid(3,2) edges correct, top-edge Up null, no wrap.
-
-
-### TEST-XBOXUI-002b
-
-On-console focus-visual smoke. Acceptance: high-visibility focus in TV-safe rect.
-
-
 ### TEST-XBOXUI-003
 
 InputContext observer: quick menu -> non-Gameplay; closing with empty stack -> Gameplay.
@@ -1400,16 +1361,6 @@ InputContext observer: quick menu -> non-Gameplay; closing with empty stack -> G
 ### TEST-XBOXUI-004
 
 Simulated navigation/overlay toggles never stop/dispose the pull adapter.
-
-
-### TEST-XBOXUI-005a
-
-Cadence: 10 fires/200ms -> 10 pulls +/-1.
-
-
-### TEST-XBOXUI-005b
-
-VideoSurfacePureSink forbidden-identifier scan (no RunFrame/StepInstruction/Reset/SetJoystickState/SetKeyState).
 
 
 ### TEST-XBOXUI-006
@@ -1444,14 +1395,6 @@ Umbrella off-console suite (XboxDataPathBridgeTests, SettingsOptionCatalogTests,
 
 
 
-## TEST-XSET-DEVICE
-
-### TEST-XSET-DEVICE
-
-On-console first-run provisioning + persistence E2E. Acceptance: ROMs provisioned + boot to READY; setting persists across relaunch; d64 attach with drive-model selector.
-
-
-
 ## TEST-XVIDEO
 
 ### TEST-XVIDEO-001
@@ -1462,11 +1405,3 @@ Pure byte-exact copy + no-advance spy. Acceptance: 384x272 BGRA copy sized from 
 ### TEST-XVIDEO-002
 
 GC.GetAllocatedBytes delta==0 steady-state render tick. Acceptance: zero-allocation over steady-state window.
-
-
-
-## TEST-XVIDEO-DEVICE
-
-### TEST-XVIDEO-DEVICE
-
-On-console video smoke. Acceptance: image correct, letterboxed, no tear.

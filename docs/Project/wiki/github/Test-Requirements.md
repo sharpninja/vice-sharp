@@ -676,7 +676,7 @@ Retain traceability from every retired renderer/quarantine assertion to equivale
 
 ### Description
 
-Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+The completion manifest and retained results account for every required project, category, workload and prerequisite.
 Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
 Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
 Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
@@ -684,7 +684,7 @@ Require final Astra agreement over combined diff, requirement evidence, owned-fi
 
 ### Acceptance Criteria
 
-- **ac-01**: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+- **ac-01**: The completion manifest and retained results account for every required project, category, workload and prerequisite.
 - **ac-02**: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
 - **ac-03**: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
 - **ac-04**: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
