@@ -6,8 +6,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.Audio;
+using ViceSharp.Core;
+using ViceSharp.Core.Media;
 using ViceSharp.Host.Audio;
 using Xunit;
+using Xunit.Sdk;
 
 /// <summary>
 /// FR-SID-013 / TR-PLAT-001 / TEST-SID-001 / TR-QA-TESTSILENCE-001:
@@ -76,18 +80,58 @@ public sealed class LinuxSdlAudioBackendTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-SID-013, TR: TR-PLAT-001, TEST: TEST-SID-001.
+    /// Use case: Distinguish a successful dummy open from a device that can pace playback.
+    /// Acceptance: A dummy sink stays available, reports no audio timing and discards
+    /// fragments without filling a device queue. Positive playback keeps its bounded queue.
+    /// 2026-11-23, pin the VICE dummy-driver timing and write behavior.
+    /// </summary>
     [Fact]
     public void QueueDepthAndCapacity_FollowTheDeviceDrain()
     {
+        // Pinned VICE's dummy device opens successfully, is_timing_source is false,
+        // and dummy_write returns success without taking the submitted fragment.
+        var reference = new SilentPlaybackObservation(Available: true, TimingSource: false, Queued: 0, Writes: 0);
+        AssertSilentPlayback(reference);
+        Assert.ThrowsAny<XunitException>(() => AssertSilentPlayback(reference with { Available = false }));
+        Assert.ThrowsAny<XunitException>(() => AssertSilentPlayback(reference with { TimingSource = true }));
+        Assert.ThrowsAny<XunitException>(() => AssertSilentPlayback(reference with { Writes = 1 }));
+        Assert.ThrowsAny<XunitException>(() => AssertSilentPlayback(reference with { Queued = 256 }));
+
         var device = new FakeDevice();
         using var backend = LinuxSdlAudioBackend.TryCreate(() => device);
         Assert.NotNull(backend);
+        Assert.True(backend.IsTimingSource);
         backend.SubmitSamples(new float[256]);
         Assert.Equal(256, backend.QueuedSampleCount);
         Assert.Equal(LinuxSdlAudioBackend.QueueCapacitySamples - 256, backend.AvailableSampleCount);
         device.BufferedBytes = 128;
         Assert.Equal(64, backend.QueuedSampleCount);
         Assert.Equal(LinuxSdlAudioBackend.QueueCapacitySamples - 64, backend.AvailableSampleCount);
+
+        var dummyDevice = new FakeDevice { DriverName = "dummy", BufferedBytes = LinuxSdlAudioBackend.QueueCapacitySamples * 2 };
+        using var dummyBackend = LinuxSdlAudioBackend.TryCreate(() => dummyDevice);
+        Assert.NotNull(dummyBackend);
+        var tap = new CaptureAudioTap(dummyBackend);
+        var sid = new Sid6581(new BasicBus(), tap);
+        sid.ConfigureAudioClock(985_248);
+        tap.SubmitSamples(new float[256]);
+        var actual = new SilentPlaybackObservation(tap.IsAvailable, sid.IsAudioTimingSource,
+            tap.QueuedSampleCount, dummyDevice.Writes.Count);
+        AssertSilentPlayback(actual);
+        Assert.Equal(int.MaxValue, tap.AvailableSampleCount);
+        Assert.False(dummyDevice.QueueRead.IsSet);
+    }
+
+    private readonly record struct SilentPlaybackObservation(bool Available, bool TimingSource, int Queued, int Writes);
+
+    private static void AssertSilentPlayback(SilentPlaybackObservation observation)
+    {
+        Assert.True(observation.Available);
+        Assert.False(observation.TimingSource);
+        Assert.Equal(0, observation.Queued);
+        Assert.Equal(0, observation.Writes);
     }
 
     [Fact]
@@ -178,6 +222,7 @@ public sealed class LinuxSdlAudioBackendTests
         backend.SubmitSamples([1f]);
         backend.Pause(); backend.Resume(); backend.Stop();
         Assert.False(backend.IsAvailable);
+        Assert.False(backend.IsTimingSource);
         Assert.Equal(1, device.DisposeCount);
         Assert.Equal(0, backend.QueuedSampleCount);
         Assert.Equal(int.MaxValue, backend.AvailableSampleCount);
@@ -223,6 +268,7 @@ public sealed class LinuxSdlAudioBackendTests
         internal (int, int, int) OpenFormat;
         internal List<byte[]> Writes { get; } = [];
         internal ManualResetEventSlim QueueRead { get; } = new();
+        public string DriverName { get; init; } = "pipewire";
         public bool Open(int sampleRate, int channels, int fragmentSamples)
         {
             OpenFormat = (sampleRate, channels, fragmentSamples);

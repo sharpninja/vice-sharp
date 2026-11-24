@@ -10,11 +10,10 @@ namespace ViceSharp.TestHarness;
 /// <summary>
 /// FR/TR/TEST: FR-MONITOR-DISASM-001 / TR-MONITOR-DISASM-001 / TEST-MONITOR-DISASM-002.
 ///
-/// Exploratory: disassemble the LIVE (decrunched) IRQ handler of the Pieces-of-Light
-/// demo from a user-staged .vsf snapshot using vice#'s own Mos6502Disassembler -
-/// proving the in-house disassembler handles real, fully-decrunched demo code (the
-/// thing the partial stub could not). Skips when the snapshot is absent.
+/// Integration probe that disassembles the decrunched Pieces of Light IRQ handler
+/// from the retained snapshot with the managed disassembler.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class LiveHandlerTraceTests
 {
     private readonly ITestOutputHelper _out;
@@ -22,21 +21,20 @@ public sealed class LiveHandlerTraceTests
 
     /// <summary>
     /// FR: FR-MONITOR-DISASM-001, TR: TR-MONITOR-DISASM-001, TEST: TEST-MONITOR-DISASM-002.
-    /// Use case: exploratory trace - locate the C64MEM RAM image inside the user-staged
+    /// Use case: exploratory trace - locate the C64MEM RAM image inside the retained
     /// Pieces-of-Light .vsf, follow the $0314/$0315 CINV vector, and disassemble the live
     /// (decrunched) IRQ handler with <c>Mos6502Disassembler</c>, proving the in-house
     /// disassembler handles real demo code that the earlier partial stub could not.
     /// Acceptance: the C64MEM module is found in the snapshot (module walk throws
     /// otherwise) and the straight-line walk of up to 64 instructions from the vector
     /// decodes via OpcodeLength/Decode without desync or exception, stopping at RTI or
-    /// JMP; the listing and VIC registers are written to test output. Skips when the
-    /// staged snapshot is absent.
+    /// JMP; the listing and VIC registers are written to test output.
     /// </summary>
     [Fact]
     public void Trace_LiveIrqHandler_FromUserSnapshot()
     {
-        var path = @"F:\GitHub\vice-sharp\vice-snapshot-20260630171307.vsf";
-        if (!File.Exists(path)) { Assert.Skip("user snapshot not present"); return; }
+        var path = Path.Combine(AppContext.BaseDirectory, "Fixtures", "Vsf", "vice-snapshot-20260630171307.vsf");
+        Assert.True(File.Exists(path), $"Missing test fixture: {path}");
 
         var b = File.ReadAllBytes(path);
         int c64mem = FindModuleData(b, "C64MEM");

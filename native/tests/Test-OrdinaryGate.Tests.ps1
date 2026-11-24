@@ -8,12 +8,12 @@ BeforeAll {
     $script:Script = [IO.Path]::Combine($PSScriptRoot, '..', 'Test-OrdinaryGate.ps1')
 
     function Write-MockTrx {
-        param([string] $Directory, [string] $Assembly, [object[]] $Cases, [string] $RunOutcome = 'Completed', [int] $ExecutedOverride = -1)
+        param([string] $Directory, [string] $Assembly, [object[]] $Cases, [string] $RunOutcome = 'Completed', [int] $ExecutedOverride = -1, [string] $CodeBaseRoot = '/x/')
         $defs = @(); $results = @(); $i = 0
         foreach ($c in $Cases) {
             $i++
             $id = ('{0:D8}-0000-0000-0000-000000000000' -f $i)
-            $defs += ('<UnitTest name="{0}" id="{1}"><Execution id="{1}" /><TestMethod codeBase="/x/{2}.dll" className="{3}" name="{0}" /></UnitTest>' -f $c.method, $id, $Assembly, $c.className)
+            $defs += ('<UnitTest name="{0}" id="{1}"><Execution id="{1}" /><TestMethod codeBase="{4}{2}.dll" className="{3}" name="{0}" /></UnitTest>' -f $c.method, $id, $Assembly, $c.className, $CodeBaseRoot)
             $results += ('<UnitTestResult executionId="{0}" testId="{0}" testName="{1}" outcome="{2}" />' -f $id, $c.method, $c.outcome)
         }
         $total = $Cases.Count
@@ -90,6 +90,13 @@ Describe 'Test-OrdinaryGate' {
         @($r.emptyRuns) | Should -Contain '_HOST_2026-10-20_22_48_03_net10.0.trx'
     }
 
+    It 'identifies the test assembly from a Windows TRX on any evaluation host' {
+        $results = [IO.Path]::Combine($script:Root, 'results')
+        $contract = Get-MockCase -ClassName 'ViceSharp.VsfCompatibility.Tests.VsfSlice1PrerequisiteContractTests' -Method 'Contract_One'
+        Write-MockTrx -Directory $results -Assembly 'ViceSharp.VsfCompatibility.Tests' -Cases @($contract) -CodeBaseRoot 'F:\source\.worktrees\r16\bin\'
+        (Invoke-Gate -Root $script:Root) -join "`n" | Should -Match 'gate Pass'
+    }
+
     It 'rejects an equal-sized swapped failure set' {
         [IO.File]::WriteAllLines([IO.Path]::Combine($script:Root, 'known-red.txt'), @('ViceSharp.TestHarness.CpuInterruptTests.Red_One', 'ViceSharp.TestHarness.CpuInterruptTests.Red_Three'))
         { Invoke-Gate -Root $script:Root -ErrorAction Stop | Out-Null } | Should -Throw
@@ -111,6 +118,20 @@ Describe 'Test-OrdinaryGate' {
         Invoke-Gate -Root $script:Root -Extra @{ WriteIdentifiersPath = $ids } | Out-Null
         $lines = @(Get-Content -LiteralPath $ids); [IO.File]::WriteAllLines($ids, @($lines | Select-Object -Skip 1))
         { Invoke-Gate -Root $script:Root -Extra @{ RetainedIdentifiersPath = $ids } -ErrorAction Stop | Out-Null } | Should -Throw
+    }
+
+    It 'detects a missing case even when two cases share the same display name' {
+        $results = [IO.Path]::Combine($script:Root, 'results')
+        $contract = Get-MockCase -ClassName 'ViceSharp.VsfCompatibility.Tests.VsfSlice1PrerequisiteContractTests' -Method 'Contract_One'
+        Write-MockTrx -Directory $results -Assembly 'ViceSharp.VsfCompatibility.Tests' -Cases @($contract, $contract)
+        $ids = [IO.Path]::Combine($script:Root, 'identifiers.txt')
+        Invoke-Gate -Root $script:Root -Extra @{ WriteIdentifiersPath = $ids } | Out-Null
+        @(Get-Content -LiteralPath $ids).Count | Should -Be 6
+        Invoke-Gate -Root $script:Root -Extra @{ RetainedIdentifiersPath = $ids } | Out-Null
+        Write-MockTrx -Directory $results -Assembly 'ViceSharp.VsfCompatibility.Tests' -Cases @($contract)
+        { Invoke-Gate -Root $script:Root -Extra @{ RetainedIdentifiersPath = $ids } | Out-Null } | Should -Throw
+        $report = Get-Content -LiteralPath ([IO.Path]::Combine($script:Root, 'report.json')) -Raw | ConvertFrom-Json
+        $report.violations | Should -Contain 'discovery drift against the retained identifier list: 1 retained only, 0 current only'
     }
 
     It 'rejects a partial or aborted run and a skipped case' {

@@ -73,7 +73,10 @@ public sealed class RealC64Phi2AecTraceTests
         throw new InvalidOperationException("ViceSharp.slnx not found above " + AppContext.BaseDirectory);
     }
 
-    /// <summary>Committed x64sc traces: the D5 resume windows and head samples under docs/receipts/native-vice.</summary>
+    /// <summary>
+    /// PLAN-NATIVERESTORE-001 R16, 2026-11-23. List the retained x64sc traces with
+    /// a stable repository-relative display path on Linux and Windows.
+    /// </summary>
     public static IEnumerable<object[]> CommittedTraces()
     {
         var root = Path.Combine(RepoRoot(), "docs", "receipts", "native-vice");
@@ -82,7 +85,7 @@ public sealed class RealC64Phi2AecTraceTests
                      .Where(p => Path.GetFileName(p).Contains("x64sc", StringComparison.Ordinal) || Path.GetFileName(p).Contains("v12-resume", StringComparison.Ordinal) || Path.GetFileName(p).Contains("v14-roundtrip", StringComparison.Ordinal))
                      .Where(p => Path.GetFileName(p).Contains("window", StringComparison.Ordinal) || Path.GetFileName(p).Contains("obs", StringComparison.Ordinal))
                      .OrderBy(p => p, StringComparer.Ordinal))
-            yield return [Path.GetRelativePath(root, path)];
+            yield return [Path.GetRelativePath(root, path).Replace(Path.DirectorySeparatorChar, '/')];
     }
 
     /// <summary>

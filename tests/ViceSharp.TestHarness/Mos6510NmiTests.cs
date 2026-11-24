@@ -4,6 +4,7 @@ using ViceSharp.Abstractions;
 using ViceSharp.Chips.Cpu;
 using ViceSharp.Core;
 using Xunit;
+using Xunit.Sdk;
 
 /// <summary>
 /// FR/TR: FR-CPU (BACKFILL-CPU 6510 NMI vector + handling).
@@ -110,14 +111,11 @@ public sealed class Mos6510NmiTests
     }
 
     /// <summary>
-    /// FR/TR: FR-CPU (BACKFILL-CPU 6510 NMI / RTI round trip).
-    /// Use case: a minimal NMI handler that is just RTI must restore
-    /// the CPU to the exact state it was in pre-NMI: original PC, S
-    /// back to its pre-NMI value, and the original P value (modulo
-    /// the documented B-flag handling on the way out via RTI's pull).
-    /// Acceptance: after dispatching NMI and then executing one RTI
-    /// instruction (opcode 0x40), PC equals the pre-NMI PC and S
-    /// equals the pre-NMI S.
+    /// 2026-11-23, FR-CPU-003, TR-CYCLE-001, TEST-CPU-001 ac-11.
+    /// Use case: Execute an RTI-only NMI handler and compare the two observed
+    /// instruction boundaries to the source-derived x64sc checkpoints.
+    /// Acceptance: The handler starts at PC $0800 and S $FC. After RTI,
+    /// the interrupted program resumes at PC $0400 and S $FF.
     /// </summary>
     [Fact]
     public void Nmi_RtiReturnsCpuToPreNmiState()
@@ -135,16 +133,42 @@ public sealed class Mos6510NmiTests
 
         // Act - dispatch NMI then step until RTI completes
         cpu.Nmi();
-        Assert.Equal(0x0800, cpu.PC);   // sanity: handler entered
-        Assert.Equal(0xFC, cpu.S);      // sanity: three bytes pushed
+        var entry = (Pc: (int)cpu.PC, Stack: (int)cpu.S);
 
         // RTI is a 6-cycle instruction. Tick until back at an
         // instruction boundary with PC restored.
         StepUntilPcReaches(cpu, originalPc, maxTicks: 64);
 
         // Assert
-        Assert.Equal(originalPc, cpu.PC);
-        Assert.Equal(0xFF, cpu.S);
+        AssertNmiRtiCheckpoints(entry, (cpu.PC, cpu.S));
+    }
+
+    /// <summary>
+    /// 2026-11-23, FR-CPU-003, TR-CYCLE-001, TEST-CPU-001 ac-11.
+    /// Use case: Calibrate the measured NMI/RTI checkpoints against the pinned
+    /// x64sc NMI dispatch and RTI stack operations before binding to the CPU.
+    /// Acceptance: Independent correct checkpoints are accepted. An incorrect
+    /// PC or stack pointer at either boundary is rejected.
+    /// </summary>
+    [Fact]
+    public void NmiRtiCheckpointAssertions_AcceptViceStatesAndRejectWrongPcOrStack()
+    {
+        var entry = (Pc: 0x0800, Stack: 0xFC);
+        var resumed = (Pc: 0x0400, Stack: 0xFF);
+        AssertNmiRtiCheckpoints(entry, resumed);
+
+        Assert.ThrowsAny<XunitException>(() => AssertNmiRtiCheckpoints((0x0801, 0xFC), resumed));
+        Assert.ThrowsAny<XunitException>(() => AssertNmiRtiCheckpoints((0x0800, 0xFD), resumed));
+        Assert.ThrowsAny<XunitException>(() => AssertNmiRtiCheckpoints(entry, (0x0401, 0xFF)));
+        Assert.ThrowsAny<XunitException>(() => AssertNmiRtiCheckpoints(entry, (0x0400, 0xFE)));
+    }
+
+    private static void AssertNmiRtiCheckpoints((int Pc, int Stack) entry, (int Pc, int Stack) resumed)
+    {
+        Assert.Equal(0x0800, entry.Pc);
+        Assert.Equal(0xFC, entry.Stack);
+        Assert.Equal(0x0400, resumed.Pc);
+        Assert.Equal(0xFF, resumed.Stack);
     }
 
     /// <summary>

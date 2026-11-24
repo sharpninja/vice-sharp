@@ -103,8 +103,21 @@ sealed partial class Build : NukeBuild
     /// (ShimLegacy, rebound in Phases E and F; R6) and the real-bound VSF Slice 1 cases that only the
     /// cumulative NativeSnapshotCompatibilityTest target runs (VsfSlice1Real; N08).
     /// </summary>
-    internal const string OrdinaryTestFilter =
-        "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real";
+    internal static string OrdinaryTestFilter => OrdinaryTestFilterFor(OperatingSystem.IsWindows(), OperatingSystem.IsLinux());
+
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 R16/A05. Select ordinary cases for the
+    /// current OS and give opt-in diagnostics their own selection.
+    /// </summary>
+    internal static string OrdinaryTestFilterFor(bool isWindows, bool isLinux)
+    {
+        var filter = "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real&Category!=Diagnostic";
+        if (!isWindows)
+            filter += "&Host!=Windows";
+        if (!isLinux)
+            filter += "&Host!=Linux";
+        return filter;
+    }
 
     /// <summary>
     /// The ordinary local gate. PLAN-NATIVERESTORE-001 D2 (A05, N11, N16): one TRX per project is retained in the

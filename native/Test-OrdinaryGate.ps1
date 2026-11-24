@@ -43,7 +43,10 @@ foreach ($trx in $trxFiles) {
     }
     $assembly = $null
     $firstMethod = @(Select-Xml -Xml $doc -Namespace $ns -XPath '//t:TestMethod' | Select-Object -First 1)
-    if ($firstMethod.Count -gt 0) { $assembly = [IO.Path]::GetFileNameWithoutExtension($firstMethod[0].Node.codeBase) }
+    if ($firstMethod.Count -gt 0) {
+        # A retained TRX may have been produced on a different OS.
+        $assembly = [IO.Path]::GetFileNameWithoutExtension($firstMethod[0].Node.codeBase.Replace('\', '/'))
+    }
     if (-not $assembly) {
         # A TRX without any test definition comes from a project whose every case the filter excluded (for example
         # Category!=Integration over ViceSharp.Library.IntegrationTests); it names no assembly. Counted, not a violation.
@@ -115,15 +118,17 @@ foreach ($cc in $ContractClasses) {
     if ($hits.Count -eq 0) { $violations.Add("contract class $cc did not execute in the ordinary gate") }
 }
 
-$identifiers = @($cases | ForEach-Object { $_.project + '|' + $_.fullName + '|' + $_.displayName } | Sort-Object -Unique)
+[string[]] $identifiers = @($cases | ForEach-Object { $_.project + '|' + $_.fullName + '|' + $_.displayName })
+[Array]::Sort($identifiers, [StringComparer]::Ordinal)
 if ($WriteIdentifiersPath) {
     New-Item -ItemType Directory -Path (Split-Path -Parent $WriteIdentifiersPath) -Force | Out-Null
     [IO.File]::WriteAllLines($WriteIdentifiersPath, $identifiers)
 }
 if ($RetainedIdentifiersPath) {
-    $retained = @(Get-Content -LiteralPath $RetainedIdentifiersPath | Where-Object { $_ -ne '' } | Sort-Object -Unique)
-    $onlyRetained = @($retained | Where-Object { $identifiers -notcontains $_ })
-    $onlyCurrent = @($identifiers | Where-Object { $retained -notcontains $_ })
+    $retained = @(Get-Content -LiteralPath $RetainedIdentifiersPath | Where-Object { $_ -ne '' })
+    $diff = @(Compare-Object -ReferenceObject $retained -DifferenceObject $identifiers -CaseSensitive)
+    $onlyRetained = @($diff | Where-Object SideIndicator -EQ '<=')
+    $onlyCurrent = @($diff | Where-Object SideIndicator -EQ '=>')
     if ($onlyRetained.Count -gt 0 -or $onlyCurrent.Count -gt 0) {
         $violations.Add('discovery drift against the retained identifier list: ' + $onlyRetained.Count + ' retained only, ' + $onlyCurrent.Count + ' current only')
     }

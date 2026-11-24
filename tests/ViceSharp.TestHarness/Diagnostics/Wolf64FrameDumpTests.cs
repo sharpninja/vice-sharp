@@ -15,19 +15,21 @@ using Xunit;
 /// Diagnostic dump: autostart wolf64.d64, capture a ViceSharp frame for
 /// comparison against x64sc. Not a pixel-equality gate.
 /// </summary>
+[Trait("Category", "Diagnostic")]
 public sealed class Wolf64FrameDumpTests
 {
-    private const string DiskPath = @"F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\wolf64.d64";
+    private static readonly string DiskPath =
+        Path.Combine(AppContext.BaseDirectory, "Fixtures", "D64", "wolf64.d64");
 
     [Fact]
     public async Task DumpAutostartFrame_WritesBmpAndVicRegs()
     {
-        if (!File.Exists(DiskPath))
-            Assert.Skip($"missing {DiskPath}");
+        Assert.True(File.Exists(DiskPath), $"Missing test fixture: {DiskPath}");
         var outDir = Path.Combine(
             FindRepoRoot(),
-            "validation-output",
-            "wolf64-frame-diff-20260915");
+            "TestResults",
+            "wolf64-frame-dump",
+            Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(outDir);
         var bmpPath = Path.Combine(outDir, "vicesharp-wolf64.bmp");
         var txtPath = Path.Combine(outDir, "vicesharp-wolf64-regs.txt");

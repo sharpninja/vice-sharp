@@ -12,6 +12,8 @@ using Xunit;
 /// 44100 samples per emulated second, so the backend's accept rate IS the
 /// emulation speed ceiling whenever audio back-pressure engages.
 /// </summary>
+[Trait("Category", "Integration")]
+[Trait("Host", "Windows")]
 public sealed class WinMmAudioThroughputDiagTests : IClassFixture<Audio.WindowsAudioSessionMute>
 {
     /// <summary>
@@ -25,8 +27,6 @@ public sealed class WinMmAudioThroughputDiagTests : IClassFixture<Audio.WindowsA
     [SupportedOSPlatform("windows")]
     public void WinMm_Backend_Accepts_Samples_At_Device_Rate()
     {
-        Assert.SkipUnless(OperatingSystem.IsWindows(), "WinMM is Windows-only.");
-
         using var backend = new WinMmAudioBackend();
         var fragment = new float[256];
         for (int i = 0; i < fragment.Length; i++)

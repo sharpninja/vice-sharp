@@ -18,6 +18,7 @@ public sealed class LinuxSdlAudioBackend : IAudioBackend, IDisposable
     private const int BytesPerSample = 2;
     private readonly object _lock = new();
     private readonly ILinuxAudioDevice _device;
+    private readonly bool _discardOutput;
     private readonly byte[] _scratch = new byte[FragmentSamples * BytesPerSample];
     private readonly TimeSpan _stallTimeout;
     private bool _available = true;
@@ -28,6 +29,7 @@ public sealed class LinuxSdlAudioBackend : IAudioBackend, IDisposable
     private LinuxSdlAudioBackend(ILinuxAudioDevice device, TimeSpan stallTimeout)
     {
         _device = device;
+        _discardOutput = string.Equals(device.DriverName, "dummy", StringComparison.Ordinal);
         _stallTimeout = stallTimeout;
     }
 
@@ -57,13 +59,19 @@ public sealed class LinuxSdlAudioBackend : IAudioBackend, IDisposable
     /// <summary>False after a device error, a bounded queue stall, or disposal.</summary>
     public bool IsAvailable { get { lock (_lock) return _available; } }
 
+    /// <summary>
+    /// 2026-11-23, FR-SID-013 / FR-SNDREG-001. Like VICE's dummy sound driver,
+    /// SDL dummy discards playback and leaves emulation paced by the host clock.
+    /// </summary>
+    public bool IsTimingSource => !_discardOutput && IsAvailable;
+
     /// <inheritdoc/>
     public void SubmitSamples(ReadOnlySpan<float> samples)
     {
         int generation;
         lock (_lock)
         {
-            if (!_available || _paused || samples.IsEmpty)
+            if (!_available || _discardOutput || _paused || samples.IsEmpty)
                 return;
             generation = _generation;
         }
@@ -127,7 +135,7 @@ public sealed class LinuxSdlAudioBackend : IAudioBackend, IDisposable
         {
             lock (_lock)
             {
-                if (!_available) return 0;
+                if (!_available || _discardOutput) return 0;
                 try { return ReadQueuedSamples(); }
                 catch (Exception error) { Disable(error.Message); return 0; }
             }
@@ -141,7 +149,7 @@ public sealed class LinuxSdlAudioBackend : IAudioBackend, IDisposable
         {
             lock (_lock)
             {
-                if (!_available) return int.MaxValue;
+                if (!_available || _discardOutput) return int.MaxValue;
                 if (_paused) return 0;
                 try { return Math.Max(0, QueueCapacitySamples - ReadQueuedSamples()); }
                 catch (Exception error) { Disable(error.Message); return int.MaxValue; }
@@ -214,6 +222,7 @@ public sealed class LinuxSdlAudioBackend : IAudioBackend, IDisposable
 internal interface ILinuxAudioDevice : IDisposable
 {
     bool Open(int sampleRate, int channels, int fragmentSamples);
+    string? DriverName { get; }
     int QueuedBytes { get; }
     bool Queue(ReadOnlySpan<byte> pcm);
     void SetPaused(bool paused);

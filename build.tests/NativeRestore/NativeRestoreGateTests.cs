@@ -44,8 +44,19 @@ public sealed class NativeRestoreGateTests : IDisposable
         Assert.Contains("Category!=ParityPending", terms);
         Assert.Contains("Category!=ParityLegacy", terms);
         Assert.Contains("Category!=Integration", terms);
+        Assert.Contains("Category!=Diagnostic", terms);
         Assert.DoesNotContain(terms, t => t.Contains("VsfSlice1Contract", StringComparison.Ordinal));
         Assert.Equal(terms.Length, terms.Distinct().Count());
+    }
+
+    [Theory]
+    [InlineData(true, false, "Host!=Linux", "Host!=Windows")]
+    [InlineData(false, true, "Host!=Windows", "Host!=Linux")]
+    public void OrdinaryTestFilter_SelectsOnlyTheCurrentHost(bool windows, bool linux, string required, string excluded)
+    {
+        var terms = global::Build.OrdinaryTestFilterFor(windows, linux).Split('&');
+        Assert.Contains(required, terms);
+        Assert.DoesNotContain(excluded, terms);
     }
 
     private string WriteTrx(string name, params (string Method, string Outcome, string? Message)[] cases)

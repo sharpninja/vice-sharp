@@ -14,10 +14,11 @@ using Xunit;
 /// production composition - Avalonia UI, in-process gRPC host, live WinMM
 /// audio, persisted user settings - which no headless probe reproduces.
 /// </summary>
+[Trait("Category", "Diagnostic")]
 public sealed class LiveDeployedAppSpeedProbeTests
 {
-    private const string DemoDiskPath =
-        @"C:\Users\kingd\AppData\Local\Temp\ViceSharp\media\ce70ddf059e9474681016cdaa3772082-pieces_of_light.d64";
+    private static readonly string DemoDiskPath =
+        Path.Combine(AppContext.BaseDirectory, "Fixtures", "D64", "pieces_of_light.d64");
 
     /// <summary>
     /// FR: FR-C64-Boot, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-07.
@@ -38,7 +39,7 @@ public sealed class LiveDeployedAppSpeedProbeTests
             "ViceSharp",
             "debug-attach.json");
         Assert.SkipUnless(File.Exists(attachPath), "No running deployed app (debug-attach.json absent).");
-        Assert.SkipUnless(File.Exists(DemoDiskPath), "Pieces of Light d64 not present.");
+        Assert.True(File.Exists(DemoDiskPath), $"Missing test fixture: {DemoDiskPath}");
 
         var ct = TestContext.Current.CancellationToken;
 

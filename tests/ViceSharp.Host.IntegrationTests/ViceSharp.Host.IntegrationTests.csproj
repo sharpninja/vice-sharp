@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/ViceSharp.Host.InProcess/ViceSharp.Host.InProcess.csproj" />
+    <ProjectReference Include="../../src/ViceSharp.Monitor/ViceSharp.Monitor.csproj" />
+    <ProjectReference Include="../../src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../ViceSharp.TestHarness/Audio/WindowsAudioSessionMute.cs" Link="Audio/WindowsAudioSessionMute.cs" />
+    <Compile Include="../ViceSharp.TestHarness/WinMmAudioThroughputDiagTests.cs" Link="WinMmAudioThroughputDiagTests.cs" />
+    <Compile Include="../ViceSharp.TestHarness/LiveHandlerTraceTests.cs" Link="LiveHandlerTraceTests.cs" />
+    <None Include="../../vice-snapshot-20260630171307.vsf"
+          Link="Fixtures/Vsf/vice-snapshot-20260630171307.vsf" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

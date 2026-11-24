@@ -132,14 +132,15 @@ public sealed class FrCfg003AcceptanceTests
     /// Use case: A captured frame carries enough palette metadata to
     /// reproduce the colors.
     /// Acceptance: A ViceSharp.Core.Media frame type exposes a palette id.
+    /// 2026-11-23, dispose the capture writer before removing its scratch files.
     /// </summary>
     [Fact]
     public void CapturedFrames_IncludePaletteMetadata()
     {
         var directory = Path.Combine(Path.GetTempPath(), "vicesharp-frame-meta-" + Guid.NewGuid().ToString("N"));
-        using var capture = new FrameSequenceCapture(directory);
         try
         {
+            using var capture = new FrameSequenceCapture(directory);
             capture.PaletteId = "custom";
             capture.CaptureFrame(new byte[8 * 8 * 4], 8, 8);
 
@@ -147,7 +148,8 @@ public sealed class FrCfg003AcceptanceTests
         }
         finally
         {
-            Directory.Delete(directory, recursive: true);
+            if (Directory.Exists(directory))
+                Directory.Delete(directory, recursive: true);
         }
     }
 

@@ -103,7 +103,7 @@ public sealed class ObservationTraceValidationTests
         Assert.StartsWith("Missing:Clock", missingClock.FirstOtherError);
     }
 
-    public static IEnumerable<object[]> TraceFiles
+    public static IEnumerable<object?[]> TraceFiles
     {
         get
         {
@@ -121,17 +121,24 @@ public sealed class ObservationTraceValidationTests
                 var files = Directory.GetFiles(dir, "*.stderr").OrderBy(f => f, StringComparer.Ordinal).ToArray();
                 if (files.Length > 0) return files.Select(f => new object[] { f });
             }
-            var sample = Path.Combine(AppContext.BaseDirectory, "obs-trace-sample.stderr");
-            File.WriteAllText(sample, Sample);
-            return [[sample]];
+            return [[null]];
         }
     }
 
-    /// <summary>Real traces: no malformed or framing fault, no missing field other than idle PHI2 data, no sequence fault; counts retained.</summary>
+    /// <summary>
+    /// PLAN-NATIVERESTORE-001 R16, 2026-11-23. Use a stable display identity for
+    /// the built-in sample and validate external traces at their supplied paths.
+    /// Both paths retain counts and reject framing, field and sequence errors.
+    /// </summary>
     [Theory]
     [MemberData(nameof(TraceFiles))]
-    public void Trace_file_validates_and_its_summary_is_retained(string file)
+    public void Trace_file_validates_and_its_summary_is_retained(string? file)
     {
+        if (file is null)
+        {
+            file = Path.Combine(AppContext.BaseDirectory, "obs-trace-sample.stderr");
+            File.WriteAllText(file, Sample);
+        }
         var summary = Validate(file, File.ReadLines(file));
         File.WriteAllText(file + ".obs-validation.json", JsonSerializer.Serialize(summary, new JsonSerializerOptions { WriteIndented = true }));
         Assert.True(summary.ObsLines > 0, "no VICE_OBS lines in " + file);

@@ -12,6 +12,7 @@ using Xunit;
 /// fast-forward rate, via the app's own EffectiveClockPercent. Diagnostic for
 /// TR-AUDIO-SPEED-001 ("actual speed must scale with the limiter").
 /// </summary>
+[Trait("Category", "Diagnostic")]
 public sealed class LiveLimiterBandProbeTests
 {
     /// <summary>

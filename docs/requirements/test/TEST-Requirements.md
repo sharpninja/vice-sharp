@@ -25,6 +25,10 @@ These test requirements define the verification conditions used to validate Func
 
 CPU instruction, timing, interrupt, and port behavior is verified with unit tests and VICE/Lorenz-style reference comparisons.
 
+### Acceptance Criteria
+
+- **ac-11 (C64 NMI/RTI round trip; FR-CPU-003):** At VICE cc67418cba58e71d8e70fd353e9de47199ad2075, x64sc uses mainc64cpu.c with 6510dtvcore.c DO_INTERRUPT and RTI. With an uncontended NMI serviced at PC $0400 and S $FF, RAM visible at the vectors (HIRAM low), vector bytes at $FFFA/$FFFB equal to $00/$08, and only RTI ($40) at $0800, the instruction boundary at the NMI handler has PC $0800 and S $FC. At the next instruction boundary after that RTI, PC is $0400 and S is $FF. Exercise the same assertion against independent expected checkpoints and reject correct-PC/wrong-stack and correct-stack/wrong-PC checkpoints at both boundaries.
+
 ### Traceability
 
 - **Related FR Area(s):** FR-CPU
@@ -75,6 +79,8 @@ Raster timing, display modes, sprites, collisions, badlines, borders, FLI/AFLI, 
 Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external input, and multi-SID behavior are verified with deterministic audio/register tests.
 
 For Linux host output, fake-device regressions verify platform selection, opt-out/headless silence, ordered PCM conversion, master volume/mute, bounded queues, pause/resume/stop/disposal, and missing or failed devices. Device loss must stop audio-driven pacing without changing SID synthesis. Unit tests do not open a real Linux audio device; installed-device smoke evidence is retained separately.
+
+Pinned VICE's dummy driver is available, discards live writes, and supplies no playback timing. With the Linux test sink active, pacing at 50% and 150% uses the host clock. A timing-capable sink retains playback back-pressure and receives the corresponding 44.1 kHz cadence. Pace measurements pair wall timestamps and emulated cycle counts at both boundaries.
 
 ### Traceability
 

@@ -65,8 +65,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="LiveHandlerTraceTests.cs;WinMmAudioThroughputDiagTests.cs" />
     <None Update="Fixtures\D64\*.d64" CopyToOutputDirectory="PreserveNewest" />
     <None Update="Fixtures\Vsf\*.vsf" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../validation-output/wolf64-frame-diff-20260915/wolf64.d64"
+          Link="Fixtures/D64/wolf64.d64" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

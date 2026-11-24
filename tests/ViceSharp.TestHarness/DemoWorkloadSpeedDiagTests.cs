@@ -14,10 +14,11 @@ using Xunit;
 /// the READY prompt, so the achievable core rate here is the honest ceiling
 /// the deployed app lives under.
 /// </summary>
+[Trait("Category", "Diagnostic")]
 public sealed class DemoWorkloadSpeedDiagTests : IClassFixture<Audio.WindowsAudioSessionMute>
 {
-    private const string DemoDiskPath =
-        @"C:\Users\kingd\AppData\Local\Temp\ViceSharp\media\ce70ddf059e9474681016cdaa3772082-pieces_of_light.d64";
+    private static readonly string DemoDiskPath =
+        Path.Combine(AppContext.BaseDirectory, "Fixtures", "D64", "pieces_of_light.d64");
 
     /// <summary>
     /// FR: FR-C64-Boot, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-05.
@@ -80,7 +81,7 @@ public sealed class DemoWorkloadSpeedDiagTests : IClassFixture<Audio.WindowsAudi
 
     private static (EmulatorRuntimeRegistry Registry, EmulatorRuntimeSession Session, EmulationPumpService Pump) CreateDemoPipeline()
     {
-        Assert.SkipUnless(File.Exists(DemoDiskPath), "Pieces of Light d64 not present on this machine.");
+        Assert.True(File.Exists(DemoDiskPath), $"Missing test fixture: {DemoDiskPath}");
 
         var registry = new EmulatorRuntimeRegistry();
         var factory = new DefaultEmulatorRuntimeFactory();

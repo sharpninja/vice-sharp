@@ -19,6 +19,11 @@ internal sealed unsafe partial class SdlQueuedAudioDevice : ILinuxAudioDevice
     private uint _device;
     private bool _initialized;
 
+    /// <summary>
+    /// 2026-11-23, TR-PLAT-001. The selected SDL driver after audio has opened.
+    /// </summary>
+    public string? DriverName => Marshal.PtrToStringUTF8(SDL_GetCurrentAudioDriver());
+
     public bool Open(int sampleRate, int channels, int fragmentSamples)
     {
         if (!OperatingSystem.IsLinux()) return false;
@@ -101,6 +106,7 @@ internal sealed unsafe partial class SdlQueuedAudioDevice : ILinuxAudioDevice
     }
 
     [LibraryImport(Library)] private static partial int SDL_InitSubSystem(uint flags);
+    [LibraryImport(Library)] private static partial IntPtr SDL_GetCurrentAudioDriver();
     [LibraryImport(Library)] private static partial void SDL_QuitSubSystem(uint flags);
     [LibraryImport(Library)] private static partial uint SDL_OpenAudioDevice(IntPtr device, int capture,
         in AudioSpec desired, out AudioSpec obtained, int allowedChanges);
