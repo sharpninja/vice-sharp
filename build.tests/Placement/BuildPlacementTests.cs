@@ -74,8 +74,8 @@ public sealed class BuildPlacementTests
             ? 1
             : m.GetCustomAttributes<InlineDataAttribute>().Count());
 
-        Assert.Equal(6, testMethods.Length);
-        Assert.Equal(13, cases);
+        Assert.Equal(7, testMethods.Length);
+        Assert.Equal(14, cases);
     }
 
     private static bool HasLinuxHostTrait(MemberInfo member) => member.GetCustomAttributesData()

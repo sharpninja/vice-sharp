@@ -8,7 +8,6 @@ This guide walks a new user from a fresh clone to a running C64 with a true-driv
 
 - **[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** compatible with [global.json](../global.json), currently 10.0.301 or a later 10.0 feature band. Verify with `dotnet --version`.
 - **Git**.
-- **Native VICE bundle for Windows x64** for native-backed execution. Download `vice-sharp-native-win-x64.zip` from [GitHub Releases](https://github.com/sharpninja/vice-sharp/releases), extract it at the repository root, and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Source-native rebuilding is under immutable-oracle remediation; the current legacy build script still applies a patch and must not be used as VICE parity evidence.
 
 ### Clone and build
 
@@ -18,17 +17,13 @@ cd vice-sharp
 dotnet build ViceSharp.slnx
 ```
 
-The build treats warnings as errors. If you see SDK-version errors, re-check `dotnet --version`. For native snapshot validation, use the pinned observers built by `native/build-vice-observer.ps1` in a separate source directory. The [Phase D exit receipt](receipts/native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-phase-d-acceptance) records the validated Linux and Windows runs.
-
-Without the release bundle, Windows builds that touch native VICE invoke `native/build-vice-shim.ps1` and require MSYS2 at `C:\msys64`. That is a description of the legacy build path, not permission to mutate the immutable native reference or claim parity from a patched shim.
-
-Linux and macOS builds compile the managed test harness without invoking the Windows-only native oracle build. The hosted shim currently uses Win32 APIs; native parity validation requires Windows and its native prerequisites. Explicitly requesting the `BuildNative` target on another platform reports this limitation as an error. No test categories or assertions are disabled by this build distinction.
+The build treats warnings as errors. If you see SDK-version errors, re-check `dotnet --version`. The managed application builds without a native VICE bundle. For native snapshot validation on Linux or Windows, use the pinned `x64sc-observer` and `xvic-observer` programs. See the [native observer build guide](../native/README-native-build.md) and the [Phase D exit receipt](receipts/native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-phase-d-acceptance).
 
 ### Linux installation for your user
 
-From the repository, run `./build.sh DeployUser` or `./build.ps1 DeployUser`, then launch `~/.local/bin/vicesharp` or the ViceSharp desktop entry. This installs a self-contained Release build inside your home directory and requires no `sudo`, `yay`, or system package installation. `DeployYay` is a compatibility alias for `DeployUser`; `PackYay` remains a separate package-only target.
+From the repository, run `./build.sh DeployUser` or `./build.ps1 DeployUser`, then launch `~/.local/bin/vicesharp` or the ViceSharp desktop entry. This installs a self-contained Release build for your user without elevation or a package manager. `DeployYay` is a compatibility alias for `DeployUser`. `PackYay` builds an Arch package separately.
 
-The default application directory is `~/.local/share/vicesharp`, with retained versioned releases and a `current` symlink. `XDG_DATA_HOME` can replace `~/.local/share` when it is an absolute path inside your home. Existing user data under `ViceSharp` and any system package remain intact. If `/usr/bin/vicesharp` is also installed, put `~/.local/bin` earlier in `PATH` and verify `command -v vicesharp`, or use the absolute user launcher. The desktop entry selects the user launcher without relying on shell `PATH`. See [Linux installation](../README.md#linux-install-for-your-user) for the complete layout and requirements.
+The default application directory is `~/.local/share/vicesharp`, with retained versioned releases and a `current` symlink. `XDG_DATA_HOME` can replace `~/.local/share` when it is an absolute path under your home. Existing managed installations can upgrade through user-owned `~/.local` and `~/.local/bin` links with trusted directory targets. If `/usr/bin/vicesharp` is also installed, put `~/.local/bin` earlier in `PATH` and verify `command -v vicesharp`, or use the absolute user launcher. The desktop entry selects the user launcher without relying on shell `PATH`. See [Linux installation](../README.md#linux-install-for-your-user) for the complete layout and requirements.
 
 ### First-run verification
 
@@ -292,7 +287,7 @@ grpcurl -plaintext -d "{}" $attach.endpoint vice_sharp.v1.DiagnosticsService/Get
 
 **Drive sits idle / `PC` never moves** - true-drive emulation may be off. In YAML, set `fidelity: TrueDevice` (the launcher library's `+truedrive` flag maps to the same setting). The CPU on a buffered drive doesn't run by design.
 
-**`Native VICE failed to create a machine`** - the native adapter could not allocate a VICE instance. On Windows this is usually disk pressure or a missing native bundle. Free space and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Do not use the current legacy source-build script as parity evidence while immutable-oracle remediation is open; it still applies a patch under `native/vice`.
+**`Native VICE failed to create a machine`** appears in legacy hosted-shim tests or benchmarks when their native adapter cannot create a VICE instance. For current parity checks, follow the [native observer build guide](../native/README-native-build.md).
 
 **`SetDriveTrueEmulation` returns non-zero** - VICE rejected the resource set. The most common cause is an out-of-range unit number; valid units are 8..11.
 

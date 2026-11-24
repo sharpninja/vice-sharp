@@ -26,7 +26,7 @@ Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compati
 
 ## Install
 
-The current line is **v1.4.0** (GitVersion `next-version`; NuGet + MSI / winget packaging). Published nuget.org / winget packages may lag until the next release tag.
+The current release is **v1.4.0**. The [GitHub release](https://github.com/sharpninja/vice-sharp/releases/tag/v1.4.0) includes the Windows MSI and NuGet packages.
 
 ```pwsh
 # Desktop UI as a dotnet global tool (command: vicesharp)
@@ -43,7 +43,7 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
 
 ### Linux: install for your user
 
-Run Nuke `DeployUser` as your regular user on Linux with a .NET SDK compatible with [global.json](global.json) (currently 10.0.301 or a later 10.0 feature band). It publishes a self-contained Release build for `x86_64` or `aarch64` and installs the app, launcher, desktop entry, and icon inside your home directory.
+Run Nuke `DeployUser` as your regular user on Linux with a .NET SDK compatible with [global.json](global.json) (currently 10.0.301 or a later 10.0 feature band). It publishes a self-contained Release build for `x86_64` or `aarch64` and installs the app, launcher, desktop entry, and icon for that user.
 
 ```bash
 ./build.sh DeployUser
@@ -52,7 +52,7 @@ Run Nuke `DeployUser` as your regular user on Linux with a .NET SDK compatible w
 
 The PowerShell equivalent is `./build.ps1 DeployUser`. `DeployYay` is a compatibility alias for the same user-local deployment; it does not invoke `yay`, `pacman`, or `sudo`.
 
-Application releases live under `~/.local/share/vicesharp/releases/<version>-<unique>/`; the `current` symlink selects the active release. The launcher is `~/.local/bin/vicesharp`, and the desktop entry is `~/.local/share/applications/vicesharp.desktop`. If `XDG_DATA_HOME` is set, it replaces `~/.local/share` and must be an absolute path inside your home. Installation rejects root execution and symlinked or unmanaged destination conflicts. Older releases and existing `ViceSharp` user data are preserved.
+Application releases live under `~/.local/share/vicesharp/releases/<version>-<unique>/`; the `current` symlink selects the active release. The launcher is `~/.local/bin/vicesharp`, and the desktop entry is `~/.local/share/applications/vicesharp.desktop`. If `XDG_DATA_HOME` is set, it replaces `~/.local/share` and must be an absolute path inside your home. Existing managed installations can be updated through user-owned `~/.local` and `~/.local/bin` directory symlinks with trusted targets. Installation rejects root execution, unsafe links, and unmanaged destination conflicts. Older releases and existing `ViceSharp` user data are preserved.
 
 An existing system package remains installed. Put `~/.local/bin` before `/usr/bin` in your shell's `PATH` to select the user deployment with `vicesharp`; check with `command -v vicesharp`, or invoke `~/.local/bin/vicesharp` directly. The desktop entry selects the absolute user launcher independently of shell `PATH`.
 
@@ -135,7 +135,7 @@ build.cmd Compile     # Windows
 | `RommDesktopTest` | Run the managed Heads/Library desktop checks without the native harness; `--romm-contract-mocks` selects the contract mock gate |
 | `RunConsole` | Run the console reference shell |
 | `RunAvalonia` | Run the Avalonia desktop UI |
-| `DeployUser` | Publish Release and install the Linux desktop app in the current user's home |
+| `DeployUser` | Publish and activate a user-local Linux desktop release |
 | `DeployYay` | Compatibility alias for `DeployUser` |
 | `PackYay` | Build an Arch package without installing it |
 | `PublishWiki` | Legacy wiki target. Do not use it for requirements regeneration until it is migrated from direct REST to the supported MCP plugin `workflow.requirements.generateDocument` path. |

@@ -78,6 +78,44 @@ public sealed class UserLocalDeploymentTests
         Assert.Equal(second.ReleasePath, new DirectoryInfo(paths.Current).ResolveLinkTarget(true)!.FullName);
     }
 
+    /// <summary>
+    /// Verifies that a managed desktop can upgrade after the user relocates the standard local directories.
+    /// </summary>
+    [Fact]
+    public async Task Update_ThroughOwnedLocalDirectoryLinks_ActivatesTheReleaseAndRetainsThePreviousOne()
+    {
+        if (!OperatingSystem.IsLinux())
+            throw new PlatformNotSupportedException();
+        var fixture = Fixture.Create();
+        var paths = UserLocalDeployment.CreatePaths(fixture.Home, null, false);
+        var first = UserLocalDeployment.Install(fixture.Payload, fixture.Icon, "1.2.3", paths);
+        string local = Path.Combine(fixture.Home, ".local");
+        string externalLocal = Path.Combine(fixture.Root, "external-local");
+        string externalBin = Path.Combine(fixture.Root, "external-bin");
+        string binAlias = Path.Combine(fixture.Home, "tools");
+        Directory.Move(local, externalLocal);
+        Directory.Move(Path.Combine(externalLocal, "bin"), externalBin);
+        Directory.CreateSymbolicLink(binAlias, externalBin);
+        Directory.CreateSymbolicLink(local, externalLocal);
+        Directory.CreateSymbolicLink(Path.Combine(externalLocal, "bin"), binAlias);
+        fixture.SetPayloadGeneration("second");
+
+        var mode = File.GetUnixFileMode(externalLocal);
+        File.SetUnixFileMode(externalLocal, mode | UnixFileMode.OtherWrite);
+        Assert.Throws<InvalidOperationException>(() => UserLocalDeployment.Install(fixture.Payload, fixture.Icon, "1.2.4", paths));
+        Assert.Equal(first.ReleasePath, new DirectoryInfo(paths.Current).ResolveLinkTarget(false)!.FullName);
+        File.SetUnixFileMode(externalLocal, mode);
+
+        var second = UserLocalDeployment.Install(fixture.Payload, fixture.Icon, "1.2.4", paths);
+
+        Assert.Equal(externalLocal, new DirectoryInfo(local).LinkTarget);
+        Assert.Equal(binAlias, new DirectoryInfo(Path.Combine(local, "bin")).LinkTarget);
+        Assert.Equal(externalBin, new DirectoryInfo(binAlias).LinkTarget);
+        Assert.Equal(second.ReleasePath, new DirectoryInfo(paths.Current).ResolveLinkTarget(false)!.FullName);
+        Assert.True(Directory.Exists(first.ReleasePath));
+        Assert.Equal(new[] { "second" }, await Launch(paths.Launcher, [], fixture.Root));
+    }
+
     [Fact]
     public async Task LateFailure_RestoresEntrypointsAndKeepsPreviousReleaseUsable()
     {

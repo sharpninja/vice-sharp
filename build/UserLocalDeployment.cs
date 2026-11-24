@@ -34,6 +34,23 @@ internal static class UserLocalDeployment
     private static extern int Rename([MarshalAs(UnmanagedType.LPUTF8Str)] string source,
         [MarshalAs(UnmanagedType.LPUTF8Str)] string destination);
 
+    private const int AtCurrentDirectory = -100;
+    private const int AtSymlinkNoFollow = 0x100;
+    private const uint StatxOwnerAndMode = 0xA;
+
+    // Linux's statx ABI has a fixed layout across supported architectures.
+    [StructLayout(LayoutKind.Explicit, Size = 256)]
+    private struct FileOwnership
+    {
+        [FieldOffset(0)] internal uint Mask;
+        [FieldOffset(20)] internal uint UserId;
+        [FieldOffset(28)] internal ushort Mode;
+    }
+
+    [DllImport("libc", EntryPoint = "statx", SetLastError = true)]
+    private static extern int Statx(int directory, [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        int flags, uint mask, out FileOwnership ownership);
+
     internal static UserDeploymentPaths ForCurrentUser()
     {
         if (!OperatingSystem.IsLinux())
@@ -59,6 +76,7 @@ internal static class UserLocalDeployment
     /// <summary>
     /// Copies into a new retained release, publishes managed desktop files, then atomically
     /// switches current. Failed activation restores prior entrypoints; releases are never deleted.
+    /// 2026-11-24: Existing managed installs can follow owned links at .local and .local/bin.
     /// </summary>
     internal static UserDeploymentResult Install(string payload, string icon, string version,
         UserDeploymentPaths paths, Action? beforeActivation = null)
@@ -71,9 +89,10 @@ internal static class UserLocalDeployment
             throw new InvalidOperationException("DeployUser requires a numeric X.Y.Z version.");
         payload = AbsolutePath(payload);
         icon = AbsolutePath(icon);
-        if (Within(paths.InstallRoot, payload) || Within(payload, paths.InstallRoot))
+        var directoryLinks = ValidateTargets(paths);
+        string resolvedRoot = ResolveManagedPath(paths.InstallRoot, directoryLinks);
+        if (Within(resolvedRoot, payload) || Within(payload, resolvedRoot))
             throw new InvalidOperationException("The publish payload and installed releases must be separate directories.");
-        ValidateTargets(paths);
         var entries = ValidatePayload(payload);
         NoLinks(icon);
         if (!File.Exists(icon) || new FileInfo(icon).Length == 0)
@@ -85,7 +104,10 @@ internal static class UserLocalDeployment
             File.WriteAllText(ownership, Marker + "\n");
         using var deploymentLock = new FileStream(Path.Combine(paths.InstallRoot, ".deploy.lock"),
             FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        ValidateTargets(paths);
+        var activeLinks = ValidateTargets(paths);
+        if (directoryLinks.Count != activeLinks.Count || directoryLinks.Any(link =>
+                !activeLinks.TryGetValue(link.Key, out var target) || target != link.Value))
+            throw new InvalidOperationException("DeployUser directory links changed while acquiring the deployment lock.");
         Directory.CreateDirectory(paths.Releases);
         string unique = Guid.NewGuid().ToString("N");
         string staging = Path.Combine(paths.Releases, ".staging-" + unique);
@@ -103,7 +125,7 @@ internal static class UserLocalDeployment
                 File.SetUnixFileMode(destination, File.GetUnixFileMode(source));
             }
         }
-        ValidatePayload(staging);
+        ValidatePayload(ResolveManagedPath(staging, activeLinks));
         string release = Path.Combine(paths.Releases, version + "-" + unique);
         Directory.Move(staging, release);
 
@@ -153,7 +175,7 @@ internal static class UserLocalDeployment
     private static bool Within(string path, string root) => path == root
         || path.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.Ordinal);
 
-    private static void NoLinks(string path)
+    private static void NoLinks(string path, IReadOnlyDictionary<string, string>? directoryLinks = null)
     {
         for (string? current = path; current is not null; current = Path.GetDirectoryName(current))
         {
@@ -161,29 +183,106 @@ internal static class UserLocalDeployment
             try { attributes = File.GetAttributes(current); }
             catch (FileNotFoundException) { continue; }
             catch (DirectoryNotFoundException) { continue; }
-            if ((attributes & FileAttributes.ReparsePoint) != 0)
+            if ((attributes & FileAttributes.ReparsePoint) != 0 && directoryLinks?.ContainsKey(current) != true)
                 throw new InvalidOperationException($"DeployUser refuses symbolic-link paths: {current}");
         }
     }
 
-    private static void ValidateTargets(UserDeploymentPaths paths)
+    /// <summary>
+    /// Resolves the two conventional directory links when an existing managed install has been relocated.
+    /// 2026-11-24: Require owned links and private, trusted directory targets before allowing an upgrade.
+    /// </summary>
+    private static Dictionary<string, string> ManagedDirectoryLinks(UserDeploymentPaths paths)
     {
+        NoLinks(paths.UserHome);
+        var links = new Dictionary<string, string>(StringComparer.Ordinal);
+        string local = Path.Combine(paths.UserHome, ".local");
+        uint userId = GetEffectiveUserId();
+        foreach (string logical in new[] { local, Path.Combine(local, "bin") })
+        {
+            string physical = ResolveManagedPath(logical, links);
+            var info = new DirectoryInfo(physical);
+            if (info.LinkTarget is null)
+                continue;
+
+            links.Add(logical, ResolveOwnedDirectoryLink(info, userId));
+        }
+        return links;
+    }
+
+    /// <summary>
+    /// Verifies each hop and the final directory without trusting aliases from other accounts.
+    /// 2026-11-24: Support a launcher directory reached through a second user-owned link.
+    /// </summary>
+    private static string ResolveOwnedDirectoryLink(DirectoryInfo info, uint userId)
+    {
+        var visited = new HashSet<string>(StringComparer.Ordinal);
+        while (info.LinkTarget is not null)
+        {
+            string parent = info.Parent!.FullName;
+            NoLinks(parent);
+            CheckDirectoryOwners(parent, userId);
+            if (!visited.Add(info.FullName) || ReadOwnership(info.FullName).UserId != userId)
+                throw new InvalidOperationException($"DeployUser refuses an unowned or cyclic directory link: {info.FullName}");
+            info = new DirectoryInfo(info.ResolveLinkTarget(false)!.FullName);
+        }
+
+        NoLinks(info.FullName);
+        if (!info.Exists || ReadOwnership(info.FullName).UserId != userId)
+            throw new InvalidOperationException($"DeployUser requires a user-owned directory target: {info.FullName}");
+        CheckDirectoryOwners(info.FullName, userId);
+        return info.FullName;
+    }
+
+    private static FileOwnership ReadOwnership(string path)
+    {
+        if (Statx(AtCurrentDirectory, path, AtSymlinkNoFollow, StatxOwnerAndMode, out var owner) != 0
+            || (owner.Mask & StatxOwnerAndMode) != StatxOwnerAndMode)
+            throw new InvalidOperationException($"DeployUser could not verify path ownership: {path}");
+        return owner;
+    }
+
+    private static void CheckDirectoryOwners(string path, uint userId)
+    {
+        for (string? current = path; current is not null; current = Path.GetDirectoryName(current))
+        {
+            var ownership = ReadOwnership(current);
+            uint owner = ownership.UserId;
+            var mode = (UnixFileMode)ownership.Mode;
+            bool shared = (mode & (UnixFileMode.GroupWrite | UnixFileMode.OtherWrite)) != 0;
+            bool stickyRoot = owner == 0 && (mode & UnixFileMode.StickyBit) != 0;
+            if ((owner != userId && owner != 0) || (shared && !stickyRoot))
+                throw new InvalidOperationException($"DeployUser refuses an untrusted directory on the link path: {current}");
+        }
+    }
+
+    private static string ResolveManagedPath(string path, IReadOnlyDictionary<string, string> links)
+    {
+        foreach (var link in links.OrderByDescending(link => link.Key.Length))
+            if (Within(path, link.Key))
+                return link.Value + path[link.Key.Length..];
+        return path;
+    }
+
+    private static Dictionary<string, string> ValidateTargets(UserDeploymentPaths paths)
+    {
+        var links = ManagedDirectoryLinks(paths);
         foreach (string directory in new[] { paths.UserHome, paths.InstallRoot, paths.Releases,
                      Path.GetDirectoryName(paths.Launcher)!, Path.GetDirectoryName(paths.Desktop)!, Path.GetDirectoryName(paths.Icon)! })
         {
-            NoLinks(directory);
+            NoLinks(directory, links);
             if (File.Exists(directory))
                 throw new InvalidOperationException($"A file blocks the deployment directory: {directory}");
         }
         string ownership = Path.Combine(paths.InstallRoot, ".managed-by-deploy-user");
-        NoLinks(ownership);
-        NoLinks(Path.Combine(paths.InstallRoot, ".deploy.lock"));
-        if (Directory.Exists(paths.InstallRoot)
+        NoLinks(ownership, links);
+        NoLinks(Path.Combine(paths.InstallRoot, ".deploy.lock"), links);
+        if ((links.Count > 0 || Directory.Exists(paths.InstallRoot))
             && (!File.Exists(ownership) || File.ReadAllText(ownership).Trim() != Marker))
             throw new InvalidOperationException($"DeployUser refuses an unmanaged installation directory: {paths.InstallRoot}");
         foreach (string file in new[] { paths.Launcher, paths.Desktop, paths.Icon })
         {
-            NoLinks(file);
+            NoLinks(file, links);
             if (Directory.Exists(file) || (File.Exists(file) && !File.ReadAllText(file).Contains(Marker, StringComparison.Ordinal)))
                 throw new InvalidOperationException($"DeployUser refuses to replace an unmanaged entrypoint: {file}");
         }
@@ -193,10 +292,11 @@ internal static class UserLocalDeployment
             var target = current.ResolveLinkTarget(false);
             if (target is null || Path.GetDirectoryName(target.FullName) != paths.Releases || !Directory.Exists(target.FullName))
                 throw new InvalidOperationException("The current release link must select an existing managed release.");
-            NoLinks(target.FullName);
+            NoLinks(target.FullName, links);
         }
         else if (Directory.Exists(paths.Current) || File.Exists(paths.Current))
             throw new InvalidOperationException("DeployUser refuses to replace an unmanaged current path.");
+        return links;
     }
 
     private static List<string> ValidatePayload(string payload)

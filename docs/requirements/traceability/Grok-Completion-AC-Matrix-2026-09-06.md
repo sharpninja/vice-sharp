@@ -169,7 +169,7 @@ Required evidence: Exhaustive discovered-case partitioning; all required command
 ### TR-COMPLETION-MANIFEST-001
 
 - **TR-COMPLETION-MANIFEST-001/ac-01**: Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload. Evidence: pending in executable scope above.
-- **TR-COMPLETION-MANIFEST-001/ac-02**: Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps. Evidence: pending in executable scope above.
+- **TR-COMPLETION-MANIFEST-001/ac-02**: Retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps for each required run. Evidence: pending in executable scope above.
 - **TR-COMPLETION-MANIFEST-001/ac-03**: Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check. Evidence: pending in executable scope above.
 - **TR-COMPLETION-MANIFEST-001/ac-04**: Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart. Evidence: pending in executable scope above.
 - **TR-COMPLETION-MANIFEST-001/ac-05**: Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM. Evidence: pending in executable scope above.
@@ -177,7 +177,7 @@ Required evidence: Exhaustive discovered-case partitioning; all required command
 
 ### TEST-COMPLETION-001
 
-- **TEST-COMPLETION-001/ac-01**: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run. Evidence: pending in executable scope above.
+- **TEST-COMPLETION-001/ac-01**: The completion manifest and retained results account for every required project, category, workload and prerequisite. Evidence: pending in executable scope above.
 - **TEST-COMPLETION-001/ac-02**: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence. Evidence: pending in executable scope above.
 - **TEST-COMPLETION-001/ac-03**: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state. Evidence: pending in executable scope above.
 - **TEST-COMPLETION-001/ac-04**: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion. Evidence: pending in executable scope above.
