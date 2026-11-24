@@ -6,14 +6,15 @@ using ViceSharp.Host.Services;
 using Xunit;
 
 /// <summary>
-/// Windows integration coverage for TR-HOST-AFFINITY-001 using real OS threads.
+/// Exercises opt-in CPU affinity on real Windows threads in the
+/// PLAN-NATIVERESTORE-001 R16 host lane (TR-PLAT-001/ac-2).
+/// 2026-11-23: identify the Windows integration criteria for the existing tests.
 /// </summary>
 [Trait("Category", "Integration")]
 [Trait("Host", "Windows")]
 public sealed class ThreadAffinityIntegrationTests
 {
     /// <summary>
-    /// FR: FR-C64-Boot, TR: TR-HOST-AFFINITY-001, TEST: TEST-HOST-AFFINITY-02.
     /// Use case: pinning the current thread applies the requested mask to the
     /// OS thread. Acceptance: TryPinCurrentThread succeeds on Windows and a
     /// second pin returns the first mask as the previous value; the original
@@ -39,7 +40,6 @@ public sealed class ThreadAffinityIntegrationTests
     }
 
     /// <summary>
-    /// FR: FR-C64-Boot, TR: TR-HOST-AFFINITY-001, TEST: TEST-HOST-AFFINITY-03.
     /// Use case: VICESHARP_EMU_CPU pins the pump's worker thread at start.
     /// Acceptance: with the variable set to core 1 the started pump reports
     /// the applied mask; with it unset the pump reports none.

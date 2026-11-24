@@ -8,10 +8,10 @@ using Xunit;
 namespace ViceSharp.TestHarness;
 
 /// <summary>
-/// FR/TR/TEST: FR-MONITOR-DISASM-001 / TR-MONITOR-DISASM-001 / TEST-MONITOR-DISASM-002.
-///
 /// Integration probe that disassembles the decrunched Pieces of Light IRQ handler
 /// from the retained snapshot with the managed disassembler.
+/// 2026-11-23: retain the portable R16 host-lane probe as supplementary
+/// real-code evidence for FR-MON-001/ac-01 and TEST-MON-001.
 /// </summary>
 [Trait("Category", "Integration")]
 public sealed class LiveHandlerTraceTests
@@ -20,7 +20,6 @@ public sealed class LiveHandlerTraceTests
     public LiveHandlerTraceTests(ITestOutputHelper output) => _out = output;
 
     /// <summary>
-    /// FR: FR-MONITOR-DISASM-001, TR: TR-MONITOR-DISASM-001, TEST: TEST-MONITOR-DISASM-002.
     /// Use case: exploratory trace - locate the C64MEM RAM image inside the retained
     /// Pieces-of-Light .vsf, follow the $0314/$0315 CINV vector, and disassemble the live
     /// (decrunched) IRQ handler with <c>Mos6502Disassembler</c>, proving the in-house

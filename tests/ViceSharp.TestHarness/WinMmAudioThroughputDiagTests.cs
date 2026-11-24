@@ -17,7 +17,8 @@ using Xunit;
 public sealed class WinMmAudioThroughputDiagTests : IClassFixture<Audio.WindowsAudioSessionMute>
 {
     /// <summary>
-    /// FR: FR-Audio-SID, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-01.
+    /// 2026-11-23: supply Windows device-rate evidence for TR-PLAT-001/ac-4
+    /// and FR-SID-013/ac-1 in the PLAN-NATIVERESTORE-001 R16 host lane.
     /// Use case: the audio ring must accept samples at the device drain rate
     /// (44100/s) so audio back-pressure paces emulation at 100 percent, not
     /// below. Acceptance: sustained accept rate over 3 seconds is at least

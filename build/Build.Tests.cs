@@ -7,9 +7,10 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 partial class Build
 {
     /// <summary>
-    /// Runs the host integration checks for TR-HOST-AFFINITY-001, TR-AUDIO-PACE-001,
-    /// FR-CFG-002, and TEST-MONITOR-DISASM-002. Selects only the current host's
-    /// platform-specific cases and the portable snapshot check.
+    /// Runs the PLAN-NATIVERESTORE-001 R16 host integration lane for
+    /// TR-PLAT-001/ac-2. Selects the current host's platform-specific cases
+    /// and the portable snapshot check, retains the TRX and requires each case to pass.
+    /// 2026-11-23: document the approved host selection and evidence criteria.
     /// </summary>
     Target HostIntegrationTest => _ => _
         .Description("Run ViceSharp host integration tests for the current OS and retain the TRX")

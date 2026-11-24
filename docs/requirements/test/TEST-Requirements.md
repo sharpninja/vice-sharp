@@ -80,12 +80,13 @@ Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external inpu
 
 For Linux host output, fake-device regressions verify platform selection, opt-out/headless silence, ordered PCM conversion, master volume/mute, bounded queues, pause/resume/stop/disposal, and missing or failed devices. Device loss must stop audio-driven pacing without changing SID synthesis. Unit tests do not open a real Linux audio device; installed-device smoke evidence is retained separately.
 
-Pinned VICE's dummy driver is available, discards live writes, and supplies no playback timing. With the Linux test sink active, pacing at 50% and 150% uses the host clock. A timing-capable sink retains playback back-pressure and receives the corresponding 44.1 kHz cadence. Pace measurements pair wall timestamps and emulated cycle counts at both boundaries.
+- **`ac-linux-dummy-pacing`**. Pinned VICE's dummy driver is available, discards live writes, and supplies no playback timing. With the Linux test sink active, pacing at 50% and 150% uses the host clock. A timing-capable sink retains playback back-pressure and receives the corresponding 44.1 kHz cadence. Pace measurements pair wall timestamps and emulated cycle counts at both boundaries.
 
 ### Traceability
 
 - **Related FR Area(s):** FR-SID
 - **Linux output mappings:** FR-SID-013, TR-PLAT-001; `LinuxSdlAudioBackendTests` and `ViceGateSoundRegulatorTests`.
+- **Pacing evidence:** `LinuxSdlAudioBackendTests.QueueDepthAndCapacity_FollowTheDeviceDrain`, `ViceGateSoundRegulatorTests`, `SidLiveSamplingTests.Warp_ChangesCadenceNotSynthesis`, and `WarpAudioDiscardTests.AppPipeline_LiveAudio_Paces_To_Limiter_Rate`. [Phase D exit receipt](../../receipts/native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-exit-rerun-after-sdl-dummy-timing-fix)
 
 ---
 

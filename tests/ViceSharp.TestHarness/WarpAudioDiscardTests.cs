@@ -112,11 +112,11 @@ public sealed class WarpAudioDiscardTests : IClassFixture<Audio.WindowsAudioSess
     }
 
     /// <summary>
-    /// FR: FR-Audio-SID, TR: TR-AUDIO-SPEED-001, TEST: TEST-AUDIO-PACE-11.
     /// Use case: pace the application with audio enabled. VICE lets a clocked
     /// playback device control the rate and uses the host clock for its dummy sink.
-    /// 2026-11-23, FR-SNDREG-001: assert the regulator and sample time with cycles.
-    /// Acceptance: (diagnostic) a 150 percent limiter measures 135-170
+    /// 2026-11-23: assert regulator selection for TR-SNDREG-GATE-001/ac-2
+    /// and measure cycles against elapsed time for TEST-SID-001/ac-linux-dummy-pacing.
+    /// Acceptance: R16 retains this assertion in the ordinary gate. A 150 percent limiter measures 135-170
     /// percent and a 50 percent limiter measures 40-60 percent over 4
     /// seconds each.
     /// </summary>

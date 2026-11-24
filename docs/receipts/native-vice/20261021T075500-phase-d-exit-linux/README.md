@@ -77,3 +77,13 @@ Pinned VICE advertises its dummy sink as a non-timing device, discards writes th
 - The preserved VICE inventories matched by path, hash and length. Linux retained 155 entries and LEGION2 retained 2,527 entries, with both pinned at `cc67418cba58e71d8e70fd353e9de47199ad2075`. The Windows result archive was copied over SSH and verified at SHA-256 `19F68522FE4E14B039EC25377F77C386F169A54956B3492F1362931AA4CD0565`.
 
 The two-host technical gates pass under the approved A05 criteria. Step 12 independent review and the Phase E transition remain pending.
+
+## 2026-11-23 first independent review and traceability corrections
+
+The review of `42f8edcb` on PAYTON-LEGION2 returned **DISAGREE** with accuracy 96, completeness 99, 20 PASS, three FAIL, and zero UNKNOWN. Task 4 returned DISAGREE at 96/96. The reviewer recorded the complete verdict in MCP session `Codex-20261124T014145Z-plugin-session`, request `req-20261124T014240Z-prompt-9412`. The request and byte-complete response are retained under `TestResults/20261123T193700-phase-d-step12-legion2/`. Their SHA-256 values are `BD76AB720622F5F22F512AADD44E632B4BE22A7C8768230F75AB401FABF361F3` and `A9DF964D74EF36502A3ACFC63679A3349D00A4718ACA2EDE4E3083A65363F68C`.
+
+- **F01** cited a different process's runtime receipt. The review response begins with thread ID `01a20b32-d9c3-75a0-a679-c837232dbff7`. The LEGION2 rollout with that exact ID has three `turn_context` records, all `gpt-5.6-sol` at `max`. The original verdict is retained as written.
+- **F02** identified stale text in the LEGION2 MCP store and the exported technical requirements. The two approved `TR-VSFLOCKSTEP-RESUME-001` criteria now match the canonical Markdown on both hosts. The MCP-generated technical requirements projection has the same real v1.2 and v1.4 cohort, synthetic v1.3 coverage, and `native/build-vice-observer.ps1` reference.
+- **F03** identified invalid IDs in the host integration and pacing test documentation. The corrected comments name the approved R16 host lane and existing canonical records for the behavior each test exercises. Both MCP stores retain `TEST-SID-001/ac-linux-dummy-pacing` with the exact pinned-`dummy` behavior and the earlier criteria intact.
+
+Step 12 still requires a passing independent review of these corrections. Task 5 remains open for Phase E.
