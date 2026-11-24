@@ -217,9 +217,12 @@ Desktop packaging verification checks every vendored C64 `.vkm` file in the inst
 
 Screenshot, video, audio, synchronized capture, and format selection behavior are verified through capture metadata and round-trip output tests.
 
+- **`ac-wav-finalization-byte-count`**. Stopping a WAV capture after a settings restart drains queued PCM and returns the final byte count recorded in the RIFF data chunk. Exercise a blocked PCM writer so an early count of zero is rejected even when the final header contains the full sample count. Reject a stale header independently of the returned count.
+
 ### Traceability
 
 - **Related FR Area(s):** FR-MED
+- **WAV finalization:** `FR-MED-003` ac-1 and ac-6, `TR-SETTINGS-TXN-001` ac-02, `SettingsRestartLifecycleTests.Restart_PreservesFactoryAudioTapAndWarpPolicy`.
 
 ---
 

@@ -673,6 +673,8 @@ public sealed class EmulatorRuntimeSession
     /// RIFF/data sizes, and closes the output stream. Returns the number of PCM
     /// data bytes written (0 when none was active). The blocking dispose (writer
     /// join) runs OFF <c>_captureSync</c>.
+    /// 2026-11-23, FR-MED-003 ac-1 and ac-6 / TEST-MED-001 ac-wav-finalization-byte-count: read the data size after
+    /// draining queued PCM so the return value matches the finalized WAV header.
     /// </summary>
     public long EndAudioCapture()
     {
@@ -683,10 +685,15 @@ public sealed class EmulatorRuntimeSession
             (recorder, stream) = DetachAudioLocked();
         }
 
-        var written = recorder is WavAudioRecorder wav ? wav.DataBytesWritten : 0;
-        recorder?.Dispose();   // off-lock: Stop() flushes + joins the writer
-        stream?.Dispose();
-        return written;
+        try
+        {
+            recorder?.Dispose();
+            return recorder is WavAudioRecorder wav ? wav.DataBytesWritten : 0;
+        }
+        finally
+        {
+            stream?.Dispose();
+        }
     }
 
     // Detaches the active audio recorder + stream under _captureSync, returning them

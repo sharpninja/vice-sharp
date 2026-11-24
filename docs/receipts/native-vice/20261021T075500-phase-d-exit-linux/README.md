@@ -87,3 +87,11 @@ The review of `42f8edcb` on PAYTON-LEGION2 returned **DISAGREE** with accuracy 9
 - **F03** identified invalid IDs in the host integration and pacing test documentation. The corrected comments name the approved R16 host lane and existing canonical records for the behavior each test exercises. Both MCP stores retain `TEST-SID-001/ac-linux-dummy-pacing` with the exact pinned-`dummy` behavior and the earlier criteria intact.
 
 Step 12 still requires a passing independent review of these corrections. Task 5 remains open for Phase E.
+
+## 2026-11-23 WAV finalization discovered by the exit rerun
+
+The LEGION2 A05 run at `c09d21d3` had one failure outside R9. `SettingsRestartLifecycleTests.Restart_PreservesFactoryAudioTapAndWarpPolicy` received zero bytes from `EndAudioCapture` after submitting four. Its raw TRX and log remain in `F:/GitHub/vice-sharp/.worktrees/rc-d-c09d21d3/TestResults/phase-d-review-followup-windows-c09d21d3/`.
+
+`EndAudioCapture` read `WavAudioRecorder.DataBytesWritten` before disposal joined the writer. It now drains the writer before reading the final data size and closes the stream even if disposal fails. This brings the returned byte count into agreement with the WAV data header. `FR-MED-003` ac-1 and ac-6 and `TEST-MED-001/ac-wav-finalization-byte-count` cover the existing behavior.
+
+The mock gate passed 1/1 before the runtime edit. It rejected the zero returned count and the stale header independently. It retained its TRX, log, and exact test patch in `TestResults/phase-d-wav-finalization-mock-20261123/`. The bound gate passed 18/18 in `TestResults/phase-d-wav-finalization-bound-20261123/` and required the stop call to wait for the blocked write before reporting the final data size.

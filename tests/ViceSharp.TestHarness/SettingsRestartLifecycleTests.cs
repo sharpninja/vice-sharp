@@ -20,11 +20,13 @@ using Xunit;
 public sealed class SettingsRestartLifecycleTests
 {
     /// <summary>
-    /// TR-SETTINGS-TXN-001 ac-02 / FR-CFG-008 / FR-MED-003.
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-CFG-008 / FR-MED-003 ac-1 and ac-6 / TEST-MED-001.
+    /// TEST-MED-001 ac-wav-finalization-byte-count.
     /// Use case: Restart a rig using factory audio with a recording tap and a warp
     /// policy.
     /// Acceptance: The replacement keeps the tap and can suspend and resume live
-    /// playback.
+    /// playback. Stopping a recording waits for queued PCM and returns the finalized WAV data size.
+    /// 2026-11-23: hold the PCM writer until finalization waits for it to catch early byte counts.
     /// </summary>
     [Fact]
     public async Task Restart_PreservesFactoryAudioTapAndWarpPolicy()
@@ -46,11 +48,41 @@ public sealed class SettingsRestartLifecycleTests
         Assert.True(playback.Paused);
         replacement.SetLimiter(100, true);
         Assert.False(playback.Paused);
-        using var output = new MemoryStream();
-        replacement.BeginAudioCapture("after-restart", new WavAudioRecorder(output), output);
+        using var output = new GatedWavStream();
+        using var recorder = new WavAudioRecorder(output);
+        replacement.BeginAudioCapture("after-restart", recorder, output);
         tap.SubmitSamples([0.25f, -0.25f]);
-        Assert.Equal(4, replacement.EndAudioCapture());
-        Assert.Equal(4u, BinaryPrimitives.ReadUInt32LittleEndian(output.ToArray().AsSpan(40)));
+
+        var completed = new TaskCompletionSource<long>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var stopThread = new Thread(() =>
+        {
+            try { completed.SetResult(replacement.EndAudioCapture()); }
+            catch (Exception error) { completed.SetException(error); }
+        }) { IsBackground = true };
+        var cancellationToken = TestContext.Current.CancellationToken;
+        bool waitedForWriter;
+        try
+        {
+            await output.PcmWriteStarted.WaitAsync(TimeSpan.FromSeconds(5), cancellationToken);
+            stopThread.Start();
+            waitedForWriter = SpinWait.SpinUntil(
+                () => (stopThread.ThreadState & ThreadState.WaitSleepJoin) != 0,
+                TimeSpan.FromSeconds(5));
+        }
+        finally
+        {
+            output.ReleasePcmWrite();
+        }
+
+        var returnedBytes = await completed.Task.WaitAsync(TimeSpan.FromSeconds(5), cancellationToken);
+        Assert.True(waitedForWriter, "Capture finalization must wait for the queued PCM write.");
+        AssertFinalizedAudio(returnedBytes, output.ToArray());
+    }
+
+    private static void AssertFinalizedAudio(long returnedBytes, byte[] output)
+    {
+        Assert.Equal(4, returnedBytes);
+        Assert.Equal(4u, BinaryPrimitives.ReadUInt32LittleEndian(output.AsSpan(40)));
     }
 
     /// <summary>
@@ -359,6 +391,28 @@ public sealed class SettingsRestartLifecycleTests
         public void Pause() => Paused = true;
         public void Resume() => Paused = false;
         public void Stop() { }
+    }
+
+    /// <summary>FR-MED-003 ac-6: controls when the queued PCM write reaches the WAV stream.</summary>
+    private sealed class GatedWavStream : MemoryStream
+    {
+        private readonly TaskCompletionSource _started = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        private readonly TaskCompletionSource _release = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public Task PcmWriteStarted => _started.Task;
+
+        public void ReleasePcmWrite() => _release.TrySetResult();
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            if (Position == WavAudioRecorder.HeaderSize)
+            {
+                _started.TrySetResult();
+                _release.Task.WaitAsync(TimeSpan.FromSeconds(10)).GetAwaiter().GetResult();
+            }
+
+            base.Write(buffer, offset, count);
+        }
     }
 
     private sealed class TrackingStream : MemoryStream
