@@ -1,0 +1,170 @@
+[
+  {
+    "body": "The emulation core shall operate at sub-cycle granularity, modeling the two phases of the system clock (PHI1 and PHI2) and the bus ownership arbitration between the CPU and VIC-II. This level of accuracy is required to correctly emulate cycle-exact tricks used by C64 demos and games. The reference implementation for correctness is VICE x64sc (the cycle-exact VICE variant).\n\n## Acceptance Criteria\n- All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.\n- The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle.\n- CIA timer countdown occurs at the correct bus phase (PHI2 falling edge).\n- CPU memory accesses occur only during PHI2 when AEC is asserted.\n- The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).\n- The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.\n- Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp",
+    "scopeStartLayerKey": "layer-1",
+    "id": "TR-CYCLE-001",
+    "acceptanceCriteria": [
+      {
+        "id": "ac-01",
+        "text": "All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-02",
+        "text": "The VIC-II's DMA steal pattern (badlines, sprites) matches VICE x64sc cycle-by-cycle.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-03",
+        "text": "CIA timer countdown occurs at the correct bus phase (PHI2 falling edge).",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-04",
+        "text": "CPU memory accesses occur only during PHI2 when AEC is asserted.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-05",
+        "text": "The Lorenz test suite passes at 100% (same pass rate as VICE x64sc).",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-06",
+        "text": "The VICE cycle-exact test programs (e.g., those in the VICE test suite repository) produce identical output.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-07",
+        "text": "Raster effects that depend on sub-cycle timing (FLI, AGSP, sprite stretching) work correctly.",
+        "isSatisfied": false
+      }
+    ],
+    "status": "pending",
+    "title": "Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior",
+    "priority": "high"
+  },
+  {
+    "body": "The native/vice gitlink is a read-only behavioral oracle. All stepping, tracing, snapshot, bus-event, and lifecycle integration must be implemented by external wrappers, launchers, link-time interposition, or public VICE interfaces that leave the pinned target source and semantics unchanged.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp",
+    "notes": "No patch application or direct source edit under native/vice is permitted.",
+    "scopeStartLayerKey": "layer-1",
+    "id": "TR-VICE-ORACLE-001",
+    "acceptanceCriteria": [
+      {
+        "id": "ac-01",
+        "text": "The native oracle preflight fails before validation when any tracked file under native/vice differs from the pinned gitlink commit.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-02",
+        "text": "Wrapper builds and tests do not edit, generate source into, or apply patches to tracked native/vice paths.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-03",
+        "text": "Required CPU bus events, timing, snapshots, and lifecycle observations come from real immutable VICE execution through external wrapper mechanisms; PeekBus, PC-derived values, and fabricated events are forbidden.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-04",
+        "text": "Each oracle receipt records the native/vice commit, wrapper version or hash, clean-target proof, command, and zero-failure/zero-skip result for the claimed scope.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-05",
+        "text": "A missing wrapper capability is an explicit blocker and cannot be remediated by modifying native/vice.",
+        "isSatisfied": false
+      }
+    ],
+    "status": "pending",
+    "title": "Read-only native VICE oracle boundary",
+    "priority": "critical"
+  },
+  {
+    "body": "An external compatibility adapter outside `native/vice` shall normalize legacy x64sc `MAINCPU` v1.2 and v1.3 modules for the pinned, unmodified VICE reader while current v1.4 modules remain byte-identical. The wrapper shall align the VIC-II model before `machine_read_snapshot` and normalize wrapper-reported `snapshot_last_error` after a successful read. No part of this compatibility path may edit, patch, generate into, or behaviorally change `native/vice`.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp",
+    "scopeStartLayerKey": "layer-1",
+    "id": "TR-VSFLOCKSTEP-RESUME-001",
+    "acceptanceCriteria": [
+      {
+        "id": "tr-vsflockstep-resume-001-ac-1",
+        "text": "An external compatibility adapter outside `native/vice` loads a validated `MAINCPU` v1.2 module by inserting the absent v1.3 `ane_log_level` and `lxa_log_level` fields and absent v1.4 `maincpu_jammed` field with the pinned immutable VICE defaults before `maincpu_ba_low_flags`, updates the inclusive module length, preserves every following byte and module, handles v1.3 by inserting only `maincpu_jammed`, and passes current v1.4 through byte-for-byte. Malformed or unsupported layouts fail closed. External v1.2 and v1.3 fixtures plus a current v1.4 native round-trip prove resume behavior with zero failed, zero skipped, and zero aborted prerequisites.",
+        "isSatisfied": false
+      },
+      {
+        "id": "tr-vsflockstep-resume-001-ac-2",
+        "text": "native/build-vice-shim.ps1 materializes the pinned VICE commit into a separate initially clean source root outside native/vice, follows the pinned VICE Team build instructions there (including required in-source build generation, explicitly approved 2026-10-08), and links only external wrapper translation units stored outside the submodule. Pre-build and post-build commit, tracked status and a complete inventory of original upstream source bytes must match exactly. Record all generated/build files separately with paths, hashes and producing commands; those artifacts are permitted only in the separate materialization/output roots and may not replace or modify original upstream source files. Any patch application, generated file or source mutation under native/vice fails the build. native/patches/vice-shim-runtime.patch is diagnostic legacy evidence only and is never applied.",
+        "isSatisfied": false
+      }
+    ],
+    "status": "pending",
+    "title": "Backward-compatible snapshot module read and VIC-II model alignment",
+    "priority": "high"
+  },
+  {
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "/home/sharpninja/github/vice-sharp",
+    "notes": "Covers FR-VICE-001 and TR-VICE-ORACLE-001.",
+    "acceptanceCriteria": [
+      {
+        "id": "ac-01",
+        "text": "A clean-target preflight passes for the pinned native/vice commit and a simulated dirty-target fixture is rejected before parity execution.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-02",
+        "text": "The wrapper integration test proves no tracked native/vice file changes across build and execution.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-03",
+        "text": "Oracle receipts prove native commit identity, clean tracked source, wrapper provenance, exact commands, and failed 0 skipped 0 for the claimed gate.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-04",
+        "text": "When a required real bus or timing observation is unavailable, the test fails at that first missing observation and does not substitute PeekBus, PC inference, fabricated data, or a modified native build.",
+        "isSatisfied": false
+      }
+    ],
+    "id": "TEST-VICE-001",
+    "condition": "Verify that every native parity oracle uses the pinned unmodified VICE target and that wrapper-only integration fails closed when required target observations are unavailable.",
+    "status": "pending",
+    "title": "Immutable native VICE oracle integrity gates",
+    "priority": "critical"
+  },
+  {
+    "body": "ViceSharp shall conform managed emulator behavior to a pinned, unmodified native VICE revision. Native VICE source and oracle behavior shall never be changed to make ViceSharp pass; observation and control integrations must be implemented as wrappers outside native/vice.",
+    "workspaceId": "/home/sharpninja/github/vice-sharp",
+    "notes": "Operator directive 2026-10-03: VICE native is the immutable target. Wrappers are allowed; modifying VICE is forbidden.",
+    "scopeStartLayerKey": "layer-1",
+    "id": "FR-VICE-001",
+    "acceptanceCriteria": [
+      {
+        "id": "ac-01",
+        "text": "Every parity or lockstep acceptance run identifies the pinned native/vice commit and proves no tracked native/vice file differs from that commit before or after the run.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-02",
+        "text": "Emulator-behavior corrections are made in managed ViceSharp; native integration code may wrap or observe VICE only from outside native/vice and may not alter target source or behavior.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-03",
+        "text": "Oracle binaries used as acceptance evidence are built from the pinned unmodified VICE target; evidence from a patched or behavior-modified VICE build is rejected.",
+        "isSatisfied": false
+      },
+      {
+        "id": "ac-04",
+        "text": "When an external wrapper cannot obtain a required observation from immutable VICE, the parity gate fails closed and reports the missing observation instead of inferring data or changing VICE.",
+        "isSatisfied": false
+      }
+    ],
+    "status": "pending",
+    "title": "Immutable native VICE behavioral target",
+    "priority": "critical"
+  }
+]

@@ -1,0 +1,4 @@
+UserPromptSubmit required-memory injection.user-prompt-submit injects explicit None and keeps going when memory fetch fails
+REPL session-log persistence bridge.submits the canonical SubmitAsync snapshot and accepts a durable result
+REPL session-log persistence bridge.reports the core failsafe path when close completes in degraded mode
+Resolve-ReplWorkspaceDirectory precedence.falls back to MCP_WORKSPACE_PATH when the current directory has no marker

@@ -12,6 +12,7 @@ using Xunit;
     /// at the kernal reset vector, and multi-cycle step advances PC/cycle. Managed
     /// dual-machine determinism remains the interim accuracy gate.
 /// </summary>
+[Collection("NativeVice")]
 public sealed class Vic20LockstepScaffoldTests
 {
     /// <summary>
@@ -21,6 +22,7 @@ public sealed class Vic20LockstepScaffoldTests
     [InlineData("vic20")]
     [InlineData("vic20ntsc")]
     [InlineData("xvic")]
+    [Trait("Category", "ShimLegacy")]
     public void NativeShim_CreatesVic20Models_WhenXvicOraclePresent(string modelSelector)
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -36,6 +38,7 @@ public sealed class Vic20LockstepScaffoldTests
     /// N1 precursor: native step advances master cycle when oracle is present.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_StepAdvancesCycle_WhenOraclePresent()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -71,6 +74,7 @@ public sealed class Vic20LockstepScaffoldTests
     /// N1: short native vs managed CPU lockstep (PC + A) after equal cycle counts.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent()
     {
         XvicOraclePrerequisites.ValidateCurrent();

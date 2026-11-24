@@ -1,0 +1,22 @@
+{
+  "timestampLocal": "2026-10-20T18:42:09",
+  "sessionId": "Codex-20261020T230558Z-hv-nativerestore-r7",
+  "requestId": "req-20261020T230558Z-hv-nativerestore-r7",
+  "chunkSizeChars": 4000,
+  "artifacts": [
+    {
+      "name": "verdict.md",
+      "sha256": "8E36FE96DF037CAB1E56DFE2ACFBE22AB5764773E1B7B5C95C894334E118C9F9",
+      "bytes": 50006,
+      "chars": 50006,
+      "chunkCount": 13
+    },
+    {
+      "name": "verdict.json",
+      "sha256": "81420D0C92C5881F784AB8007026301DF658F0FA64B262CD4C13BFEBEF2C9220",
+      "bytes": 69612,
+      "chars": 69612,
+      "chunkCount": 18
+    }
+  ]
+}

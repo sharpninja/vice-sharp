@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261019T194454Z-5ec2
+  result:
+    id: TEST-IEC-TIMING-001
+    title: 'IecTimingTests: ATN response within spec window (5 tests)'
+    description: After setting IecBus.Atn=false and calling Tick() up to 985 times, Clock==false and Data==false. After ATN release and Tick() up to 985 times, both return true. 5 pass.
+    status: pending
+    priority: medium
+    area: IEC
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T19:44:55.4733386+00:00
+    updatedAt: 2026-10-19T19:44:55.4734338+00:00
+  deprecated: true
+
+---
+

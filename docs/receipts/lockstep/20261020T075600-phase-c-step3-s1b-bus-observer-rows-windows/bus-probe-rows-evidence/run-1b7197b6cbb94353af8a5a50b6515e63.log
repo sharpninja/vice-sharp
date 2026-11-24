@@ -1,0 +1,12 @@
+2026-10-20T07:56:34.2668485-05:00
+Executable: F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\bus-probe-rows-evidence\bus-probe-rows.exe
+Arguments: init | translate:4660
+ExitCode: 0
+TimedOut: False
+STDOUT:
+init,0
+layout,32
+repatch,16448,1
+translate,0,1,8189,1
+
+STDERR:

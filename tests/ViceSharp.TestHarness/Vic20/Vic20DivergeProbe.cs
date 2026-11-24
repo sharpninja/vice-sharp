@@ -29,6 +29,7 @@ public sealed class Vic20DivergeProbe
     /// Fails closed when any pinned oracle prerequisite is absent or stale.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void EveryCycle_CpuRegs_Match_FocusedWindow()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -43,6 +44,7 @@ public sealed class Vic20DivergeProbe
     /// so the default Vic20 filter stays fast.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void EveryCycle_CpuRegs_Match_TwoSecondPal()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -59,6 +61,7 @@ public sealed class Vic20DivergeProbe
     /// (wall ~30-90s; keep off default filters).
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void EveryCycle_CpuRegs_Match_TenSecondPal()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -74,6 +77,7 @@ public sealed class Vic20DivergeProbe
     /// Long every-cycle probe (~10s NTSC). Skips unless VICESHARP_LOCKSTEP_10S=1.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void EveryCycle_CpuRegs_Match_TenSecondNtsc()
     {
         XvicOraclePrerequisites.ValidateCurrent();

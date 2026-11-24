@@ -1,0 +1,43 @@
+LEGION2 independent verification of OMAR-VICE# R0 mirror on LAB-OMARCHY, run 2026-10-19T16:33:30
+Fetched (SFTP, read-only via Get-LabMirrorReceipts.ps1):
+  apply/022-list-fr.response.yaml bytes=451163 sha256=F6BA879FEBE27BB24F0F06D4F0F057DB57DABB542835116FC14F4CE975739680
+  apply/023-list-tr.response.yaml bytes=178481 sha256=D614F92840A553E8460CBC9F5E1EB3E011C6FD8E49E26898AF6D28021FF8C90A
+  apply/024-list-test.response.yaml bytes=150481 sha256=985F59592F18B4B980C2FB909ECDC44F859CC58B0ABEE18859582E47CDCA6B08
+  apply/025-readback-mapping-FR-BACKFILL-MEDIA-001.response.yaml bytes=375 sha256=8BB7DD45A116002015C3A713B97FAB2358CD7A30DB91568E32601DE5A4E6240B
+  apply/026-readback-mapping-FR-RUNTIME-TAPE-002.response.yaml bytes=278 sha256=E48DFAC5154075036B45460039400A4514ADD37867270B1376E9C8C270C2CAAD
+  apply/027-readback-mapping-FR-TAP-001.response.yaml bytes=337 sha256=16C8D6E6E8E379437C30B87F7B838E9490A4BD430F380E7744769278DE2509CE
+  apply/028-readback-mapping-FR-TAP-002.response.yaml bytes=263 sha256=A895C18BC6F6E9C988D5F17FC1331946E762E0403F54C0B59DEA30B00CD1AE21
+  apply/029-readback-mapping-FR-TAP-003.response.yaml bytes=263 sha256=340C5878CFE9EA381FFF6F83CBE39853BDA7BC150D0BE77676C2D4A2EF206552
+  apply/030-readback-mapping-FR-TAP-004.response.yaml bytes=337 sha256=F5951DA891BE296EFA7F27C593A14A086DB11FBD270799294D23FF54D19C79A2
+  apply/031-readback-mapping-FR-TAP-005.response.yaml bytes=263 sha256=6A45C8C378CDDF0AAF4C5B70B5EA6FCC2D3AA88EC0693B2596176C018BAE3B2D
+  apply/032-readback-mapping-FR-CPU-004.response.yaml bytes=241 sha256=8331348D6E794A8B1165FFEFF6AA47048DA3CCA715EB84D725F1A5F3EA13E01E
+  apply/033-readback-mapping-FR-PRF-003.response.yaml bytes=239 sha256=F8514A5EA6FCE07714FA4788FBDF800E6C275453530843C281A712E66A8CF107
+Compare-LabMirrorReadback.ps1 (real):
+equal record FR-RUNTIME-TAPE-002 (8 fields)
+equal record TR-TAP-EDGE-001 (9 fields)
+equal record TR-TAPE-EDGE-001 (9 fields)
+equal record TEST-TAPE-RAMP-001 (9 fields)
+equal record TEST-TAPE-SENSE-001 (9 fields)
+equal record FR-TAP-001 (8 fields)
+equal record FR-TAP-002 (8 fields)
+equal record FR-TAP-003 (8 fields)
+equal record FR-TAP-004 (8 fields)
+equal record TEST-TAP-001 (9 fields)
+equal record FR-BACKFILL-MEDIA-001 (8 fields)
+equal record FR-CPU-004 (8 fields)
+equal record FR-PRF-003 (8 fields)
+equal record FR-TAP-005 (8 fields)
+equal record TEST-CPU-001 (9 fields)
+equal record TEST-PRF-001 (9 fields)
+equal row FR-BACKFILL-MEDIA-001 (tr 4, test 4)
+equal row FR-RUNTIME-TAPE-002 (tr 2, test 2)
+equal row FR-TAP-001 (tr 3, test 4)
+equal row FR-TAP-002 (tr 2, test 2)
+equal row FR-TAP-003 (tr 2, test 2)
+equal row FR-TAP-004 (tr 3, test 4)
+equal row FR-TAP-005 (tr 2, test 2)
+equal row FR-CPU-004 (tr 1, test 2)
+equal row FR-PRF-003 (tr 1, test 2)
+total: records 16, rows 9, differences 0
+exit=0
+Negative control (FR-TAP-001 title altered, FR-BACKFILL-MEDIA-001 first trId dropped in a scratch copy of the LEGION2 readback): DIFF record FR-TAP-001: title; DIFF row FR-BACKFILL-MEDIA-001: trIds; differences 2; exit=1

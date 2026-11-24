@@ -1,0 +1,9 @@
+request:
+  trIds:
+  - TR-CYCLE-001
+  - TR-TAP-EDGE-001
+  testIds:
+  - TEST-TAP-001
+  - TEST-X64SC-LOCKSTEP-001
+frId: FR-TAP-005
+

@@ -23,6 +23,7 @@ public sealed class C64ColorRamPlaNativeTests
     ///   $C5. Banking I/O back in does not show $05 (the would-be clobber).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void RamOnlyPla_D800Store_MatchesNativeRamPeek()
     {
         using var validator = new LockstepValidator();
@@ -54,6 +55,7 @@ public sealed class C64ColorRamPlaNativeTests
     ///   at $A000-$BF3F (bitmap) and $D800-$DBE7 (color RAM).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Wolf64Disk_ReportsFirstMismatchCycle()
     {
         var enabled = Environment.GetEnvironmentVariable("VICESHARP_WOLF64_LOCKSTEP");
@@ -126,6 +128,7 @@ public sealed class C64ColorRamPlaNativeTests
     ///   CIA1 Timer A equals native GetCiaState.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Wolf64Disk_Cia1TimerA_MatchesNativeAfter20000Cycles()
     {
         var dir = Path.Combine(FindRepoRoot(), "validation-output", "wolf64-frame-diff-20260915");
@@ -165,6 +168,7 @@ public sealed class C64ColorRamPlaNativeTests
     ///   native GetCiaState from cycle 2,050,000 through 2,093,300.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Wolf64Disk_Cia1TimerA_MatchesNativeThroughIrqWindow()
     {
         var enabled = Environment.GetEnvironmentVariable("VICESHARP_WOLF64_LOCKSTEP");

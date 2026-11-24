@@ -183,10 +183,11 @@ public sealed class MediaServiceHostTests
     }
 
     /// <summary>
-    /// FR-DRVTRUE-001 / FR-IECLOAD-001: attaching a T64 converts its first program to D64.
-    /// The attachment DTO must retain a readable D64 path after the old session is removed,
-    /// because True Drive recreation reopens that path rather than the in-memory payload.
-    /// Preserve the source archive, display name, read-only flag, and extracted program bytes.
+    /// FR-DRVTRUE-001 / FR-IECLOAD-001.
+    /// Use case: Attach a T64 whose first program is converted to a D64 for the True
+    /// Drive rig.
+    /// Acceptance: The attachment has a readable D64 path after session removal and
+    /// preserves the source archive, name, read-only flag, and program bytes.
     /// </summary>
     [Theory]
     [InlineData(MediaSlot.Drive8, false)]
@@ -263,8 +264,9 @@ public sealed class MediaServiceHostTests
     }
 
     /// <summary>
-    /// FR-DRVTRUE-001 / FR-IECLOAD-001: a normal D64 keeps its original path and bytes,
-    /// so adding durable T64 conversion does not redirect ordinary disk attachments.
+    /// FR-DRVTRUE-001 / FR-IECLOAD-001.
+    /// Use case: Attach an ordinary D64 through the shared media path.
+    /// Acceptance: Its original path and bytes are preserved.
     /// </summary>
     [Fact]
     public async Task AttachMediaAsync_D64_PreservesOriginalPathAndBytes()
@@ -296,8 +298,9 @@ public sealed class MediaServiceHostTests
     }
 
     /// <summary>
-    /// FR-DRVTRUE-001 / FR-IECLOAD-001: malformed T64 data is rejected without creating
-    /// an attachment or modifying the source file, whether its directory or data offset is invalid.
+    /// FR-DRVTRUE-001 / FR-IECLOAD-001.
+    /// Use case: Attach a T64 with an invalid directory or data offset.
+    /// Acceptance: The error leaves the attachment state and source file unchanged.
     /// </summary>
     [Theory]
     [InlineData(true)]

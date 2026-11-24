@@ -1,0 +1,10 @@
+{
+  "dialogItems": [
+    {
+      "timestamp": "2026-10-20T18:07:24.2407241-05:00",
+      "role": "model",
+      "content": "Class 1 plan review. Profile loaded in full. All 41 supplied input pins match before analysis. Subject is revision 7; references in the brief to revision 4 and round 3b are stale. Current review reconciles all round 6 IDs and inherited IDs. Credential marker was not read or emitted. Own turn primary-persisted; queue drain disabled.",
+      "category": "observation"
+    }
+  ]
+}

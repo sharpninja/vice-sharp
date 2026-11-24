@@ -1,0 +1,20 @@
+type: error
+payload:
+  requestId: req-20261019T194221Z-9bf2
+  code: not_found
+  message: TEST 'TEST-NOPE-999' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getTest
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+Exception: C:\Users\kingd\.claude\plugins\cache\mcpserver-local\mcpserver\1.119.0\lib\Invoke-McpPlugin.ps1:314
+Line |
+ 314 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20261019T194221Z-9bf2   code: not_found   message: TEST 'TEST-NOPE-999' not
+     | found.   retryable: false   details:     methodName: workflow.requirements.getTest     exceptionType: McpServer.Client.McpNotFoundException     reason:
+     | not_found  ---
+

@@ -1,0 +1,527 @@
+{
+  "at": "2026-10-19T19:54:37",
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "turns": 112,
+  "historical": [
+    {
+      "requestId": "req-20261008T135637Z-prompt-5be7",
+      "found": 1,
+      "status": "completed",
+      "actionTypes": [
+        "file_edit",
+        "validation"
+      ],
+      "designDecisionActions": 0
+    },
+    {
+      "requestId": "req-20261008T142219Z-prompt-bc0b",
+      "found": 1,
+      "status": "completed",
+      "actionTypes": [
+        "context_recovery",
+        "documentation",
+        "validation"
+      ],
+      "designDecisionActions": 0
+    },
+    {
+      "requestId": "req-20261008T151514Z-prompt-9817",
+      "found": 1,
+      "status": "completed",
+      "actionTypes": [
+        "context",
+        "documentation",
+        "validation"
+      ],
+      "designDecisionActions": 0
+    },
+    {
+      "requestId": "req-20261008T161608Z-prompt-c06c",
+      "found": 1,
+      "status": "completed",
+      "actionTypes": [
+        "context",
+        "file_edit",
+        "validation",
+        "web_reference"
+      ],
+      "designDecisionActions": 0
+    }
+  ],
+  "decisionCarrierTurns": [
+    {
+      "requestId": "req-20261007T135720Z-turn-866a",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261007T152228Z-turn-4119",
+      "status": "canceled",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261007T155427Z-turn-49f4",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261007T161320Z-turn-f544",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261007T165321Z-turn-1c18",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261007T213226Z-prompt-8b0b",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261007T215226Z-prompt-a59e",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261007T215402Z-prompt-fa3b",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T120018Z-prompt-cac1",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T130922Z-prompt-cbc6",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T133146Z-prompt-1e6c",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T172748Z-prompt-d3fd",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T175952Z-prompt-f7fb",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T181223Z-prompt-3ff5",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T184031Z-prompt-336a",
+      "status": "completed",
+      "designDecisionActions": 12,
+      "citingHistoricalTurns": 11,
+      "citesAny": [
+        "req-20261008T135637Z-prompt-5be7",
+        "req-20261008T142219Z-prompt-bc0b",
+        "req-20261008T151514Z-prompt-9817",
+        "req-20261008T161608Z-prompt-c06c"
+      ]
+    },
+    {
+      "requestId": "req-20261008T185607Z-prompt-9c0d",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T190255Z-prompt-b8db",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T191836Z-prompt-faf5",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T193152Z-prompt-658a",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T194908Z-prompt-7723",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T200326Z-prompt-15d9",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T201951Z-prompt-ab18",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T203336Z-prompt-1ac9",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T204420Z-prompt-bbf1",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T205618Z-prompt-4940",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T210814Z-prompt-0879",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T211058Z-prompt-371f",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261008T211217Z-prompt-e5a4",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261009T064558Z-prompt-f89c",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261009T072013Z-full-goal-blocked-audit",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261009T190241Z-prompt-6646",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261010T205827Z-running-server-missing-vice-workspace",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261010T211205Z-tape-amendment-hv",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261010T212659Z-approved-work-audit",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261010T213044Z-hv-quota-blocked-audit",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T005547Z-resume-opus-after-reset",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T010327Z-resumed-hv-blocker-check",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T010437Z-third-resumed-hv-blocker",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T114444Z-midnight-retry-readback",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T114744Z-tape-proposal-remediation",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T121027Z-tape-state-remediation",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T122210Z-tape-state-exact-delta",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T124551Z-capacitor-guard-remediation",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T125413Z-midnight-retry-deduplication",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T132127Z-midnight-retry-duplicate-check",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T134459Z-midnight-receipt-confirmation",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T134740Z-media-contract-verification",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T140753Z-remaining-tape-contracts",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T141924Z-tape-recording-wiring-contract",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T144742Z-midnight-hv-dedup",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T145109Z-tape-test-disposition",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T151842Z-r0-approval-readiness",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T153926Z-tape-observer-contract",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T155254Z-tape-observer-audit",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T162005Z-midnight-review-dedup",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T162438Z-goal-handoff-reconcile",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T164636Z-adjacent-test-disposition",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T172112Z-r0-consolidated-hv",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T174526Z-preserve-review-until-retry",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261011T182350Z-pause-after-current-hv",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261014T021233Z-remediate-two-hv-failures",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261015T044536Z-delayed-review-wait-reply",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261016T141918Z-handoff-commit-sync",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261016T145329Z-turn-6291",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261016T150502Z-turn-2379",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261016T172317Z-turn-0d59",
+      "status": "completed",
+      "designDecisionActions": 2,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    },
+    {
+      "requestId": "req-20261016T174044Z-turn-b376",
+      "status": "completed",
+      "designDecisionActions": 1,
+      "citingHistoricalTurns": 0,
+      "citesAny": []
+    }
+  ]
+}

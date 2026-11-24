@@ -1,0 +1,12 @@
+{
+  "requestId": "req-20261020T235529Z-nativerestore-r8",
+  "dialogItems": [
+    {
+      "order": 115,
+      "timestamp": "2026-10-20T19:26:08.3326461-05:00",
+      "role": "model",
+      "category": "observation",
+      "content": "{\"kind\":\"hv-full-content-r8\",\"artifact\":\"verdict.md\",\"sequence\":15,\"total\":15,\"artifactSha256\":\"4B1D17E4FDA8AA1C33D4D081FCE4FF6FC1DB5BA90104F286F3D72D6A2EC6933E\",\"content\":\"profile read all1 global profile files in full and was reloaded after compaction; the marker was left exclusively to the plugin. Linux PowerShell routing followed the explicit profile exception. The plugin requires UTC-shaped session/request IDs; user-facing reports use measured local time. Its generic codex header is not independent proof of the exact model; request.jsonl pins the authorized model/effort. Two historical default-root queued records were left untouched, with drain disabled throughout. One initial read-only helper had a singular-noun analyzer warning, corrected before further use; another local audit display initially projected dictionary keys as null and was corrected. Neither changed external state or verdict evidence. No commit, push, move, native build or native-source/materialization write occurred.\\n\"}"
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "timestampLocal": "2026-10-20T19:30:10",
+  "nativeInventoryUnchanged": true,
+  "nativeEntryCountBefore": 163,
+  "nativeEntryCountAfter": 163,
+  "headUnchanged": true,
+  "pins": [
+    {
+      "path": "docs/plans/PLAN-NATIVERESTORE-001.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/verdict.json",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol/verdict.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-untracked-paths.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/PLAN-OBSERVER-001.md",
+      "matches": true
+    },
+    {
+      "path": "docs/plans/PLAN-VSFLOCKSTEP-001.md",
+      "matches": true
+    },
+    {
+      "path": "docs/requirements/technical/TR-Native-Vice-Snapshot.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/README.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.2.vsf",
+      "matches": true
+    },
+    {
+      "path": "tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.4.vsf",
+      "matches": true
+    },
+    {
+      "path": "src/ViceSharp.Core/ViceNative.cs",
+      "matches": true
+    },
+    {
+      "path": "src/ViceSharp.Abstractions/IViceNative.cs",
+      "matches": true
+    },
+    {
+      "path": "src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs",
+      "matches": true
+    },
+    {
+      "path": "native/Vice.Native.proj",
+      "matches": true
+    },
+    {
+      "path": ".gitmodules",
+      "matches": true
+    },
+    {
+      "path": "native/build-vice-observer.ps1",
+      "matches": true
+    },
+    {
+      "path": "tools/immutable-vice/Invoke-ObserverEquivalence.ps1",
+      "matches": true
+    },
+    {
+      "path": "tools/immutable-vice/clock-observer-x64sc.c",
+      "matches": true
+    },
+    {
+      "path": "tools/immutable-vice/bus-adapter.c",
+      "matches": true
+    },
+    {
+      "path": "tools/immutable-vice/clock-gate.c",
+      "matches": true
+    },
+    {
+      "path": "tools/immutable-vice/obs-emitter.c",
+      "matches": true
+    },
+    {
+      "path": "build/Build.cs",
+      "matches": true
+    },
+    {
+      "path": "ViceSharp.slnx",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/prompt.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/SELF-REVIEW.md",
+      "matches": true
+    }
+  ],
+  "driftCount": 0,
+  "sourceChecks": [
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/interrupt.h",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/6510core.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/6510dtvcore.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/machine.h",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/autostart.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/c64/c64-snapshot.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/vic20/vic20-snapshot.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/mainc64cpu.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/mainviccpu.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/mos6510.h",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/monitor/monitor.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/monitor/mon_parse.y",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/monitor/mon_lex.l",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/initcmdline.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/drive/drive-snapshot.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/drive/rotation.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/drive/drive-resources.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/iecbus/iecbus.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/resources.h",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/interrupt.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/event.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/c64/c64.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/vic20/vic20.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/c64/c64cpusc.c",
+      "matches": true,
+      "pinnedBlobMatch": true
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src/snapshot.h",
+      "matches": true,
+      "pinnedBlobMatch": true
+    }
+  ],
+  "sourceDriftCount": 0,
+  "diffCheckExit": 0
+}

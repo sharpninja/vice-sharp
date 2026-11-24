@@ -320,6 +320,8 @@ Exit:
 
 ### Slice 1: Make VSF prerequisites, immutable builds, and legacy resume non-skippable
 
+Amendment of 2026-10-20 (PLAN-NATIVERESTORE-001 step D1, recorded here so the obligations keep their names): the pinned, unmodified VICE replaces the retired shim DLL for both directions (R2 A, R8: "libraries built from the pinned commit" means the x64sc and xvic observer binaries of `native/build-vice-observer.ps1`; native resume runs through `x64sc-observer -autostart <fixture>.vsf` with the R10 launch precondition; native snapshot writing runs through the checkpoint unit `tools/immutable-vice/snapshot-checkpoint.c` armed by `VICESHARP_SNAPSHOT_AT=<trigger>:<path>`, which registers one trap through the pinned public API at the trigger clock); the fixed-cycle xvic fixtures at 100,000 cycles are accepted only when the write clock measured in the trap callback is exactly 100,000 on both hosts (operator ruling R12, twice: "exact cycle N required", "literal 100,000 only"), otherwise `BLOCKER-R12-XVIC-CHECKPOINT` is reported and the dependent cases stay BLOCKED; the real-resume inputs of `TR-VSFLOCKSTEP-RESUME-001` AC1 are external v1.2 and v1.4 (operator ruling R15, verbatim "change to v1.2 and v1.4", applied through the requirements wrapper), while the synthetic v1.2, v1.3 and v1.4 byte cases of the mock gate below stay as they are; the test families keep their names with the mock-bound form under `Category=VsfSlice1Contract` and the real-bound form under `Category=VsfSlice1Real`.
+
 Tests first:
 
 - `NativeViceSnapshotPrerequisiteTests.C64AndVic20Libraries_AreBuiltFromPinnedViceCommit`
@@ -344,11 +346,12 @@ Smallest change: add mandatory fixture provisioning, hashes, the state-transfer 
 Validation:
 
 ```pwsh
-& .\native\build-vice-shim.ps1
-& .\native\build-vice-shim-xvic.ps1
+pwsh -NoProfile -NonInteractive -File .\native\build-vice-observer.ps1 -Machine both
 .\build.ps1 GenerateNativeSnapshotFixtures --configuration Release
 .\build.ps1 NativeSnapshotCompatibilityTest --configuration Release --native-snapshot-through-slice 1
 ```
+
+(The two shim builders named here before 2026-10-20 were retired under PLAN-NATIVERESTORE-001 R2 A and R3 A; the observer builder is the only native builder.)
 
 ### Slice 2: Move existing C64 VSF staging into production
 

@@ -1,0 +1,40 @@
+type: result
+payload:
+  requestId: req-20261019T212413Z-8a98
+  result:
+    id: TEST-TAP-001
+    title: Tape format, machine I/O, peripherals, audio and loader contracts
+    description: Retain all existing datasette motor, TAP parsing, pulse timing, tape write and turbo-loader coverage, and explicitly map both historical meanings of TR-TAP-EDGE-001/TR-TAPE-EDGE-001. Unit assertions first discriminate independent correct/wrong mocks in a green suite, then remain unchanged for real managed/native providers and named workload gates.
+    status: pending
+    priority: medium
+    area: TAP
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-01
+      text: Cover FR-TAP-001 motor control/timing and FR-RUNTIME-TAPE-002 command/sense/motor/write behavior, including pending-alarm stop, fast wind, DDR-only transitions, both RECORD/motor orders, failures and lifecycle. Reuse TEST-TAPE-RAMP-001 and TEST-TAPE-SENSE-001 cases without omitting them from cumulative gates.
+      isSatisfied: false
+    - id: ac-02
+      text: Cover all FR-TAP-002 and TR-TAP-EDGE-001 decoder/header/clock/version scenarios, with separate block-decoder and live-datasette assertions. Reject v0 extension consumption, universal halfwave conversion, incorrect truncation, mismatch rejection and clock-domain conflation.
+      isSatisfied: false
+    - id: ac-03
+      text: Cover FR-TAP-003 and FR-TAP-005 pulse boundaries, CBM and TurboTape pilot/header paths, standard load/checksum outcomes and every already-required named turbo format (Novaload, Biturbo, Turbotape, Cyberload, Pavloda), half/full-wave and changing-speed workloads. Pin actual fixtures and firmware; missing fixture, oracle or observation is a failure, never an invented successful loader result.
+      isSatisfied: false
+    - id: ac-04
+      text: Cover retained public motor-state/mount/eject obligations, native tape-audio behavior and machine-visible SAVE/reload/new-existing-append results. Wrong API state, audio samples, persisted bytes, position or failure effects must be rejected by independent negative controls.
+      isSatisfied: false
+    - id: ac-05
+      text: Cover sense dongle enable/disable/power-up and CP Clock F83 motor/SDA/write/SCL/sense cases from TR-TAPE-EDGE-001 ac-06, with device selection and no-datasette cases.
+      isSatisfied: false
+    - id: ac-06
+      text: For every AC-mapped case, valid independent scripted mock responses pass all assertions. Deliberately wrong value, missing/extra/duplicate/reordered observation, wrong clock/side effect and failure-versus-success response must be rejected as an expected negative control within a passing native-safe suite. No failing suite or production-derived expected value qualifies. Pin fresh-process identity or the complete ordered prelude, including the attach-time full-image scan and any prior ports/devices; ordinary reset, detach or VSF reload must not be assumed to clear unrepresented process state. Record initial last-write line/clock, C64 previous-port output statics and SX-64 capacitors, VIA previous outputs, wobble phase/rounding remainder, azimuth RNG/remainder, audio ring/phase state and RTC persistent context/host-time inputs wherever observable. Timing-baseline fixtures explicitly disable wobble/tuning/azimuth; separate mandatory non-neutral fixtures exercise those resources and retained state with pinned native arithmetic/platform and RNG history. Neutral baseline success does not waive non-neutral behavior. RTC transactions pin persistent RAM/registers/offset, time source (including centiseconds), timezone and call order; halted seconds alone do not prove a deterministic RTC. If a required native input or observation cannot be fixed or captured without changing VICE, that case remains blocked, not skipped or satisfied. Native VSF remains the canonical snapshot format and its real interoperability gates remain mandatory.
+      isSatisfied: false
+    - id: ac-07
+      text: Bind the same inputs/assertions to real managed/native providers, retain exact identities and first divergence, run full applicable current-plus-prior suites with zero failed/skipped/aborted cases, and obtain AGREE at accuracy/completeness at least 98 with zero FAIL/UNKNOWN before satisfaction. Preserve all original xvic/x64sc/VSF and later start-approval gates.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:24:13.8392372+00:00
+    updatedAt: 2026-10-19T21:24:13.8393324+00:00
+  deprecated: true
+
+---
+

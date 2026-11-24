@@ -1,0 +1,178 @@
+{
+  "Host": "linux",
+  "Sha": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "DataDirectory": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data",
+  "Machines": [
+    "xvic",
+    "x64sc"
+  ],
+  "Cycles": [
+    100000
+  ],
+  "StockBinaries": [
+    {
+      "Machine": "xvic",
+      "Sha256": "3AB55079B17456BBF3CF4F17DC8E4DCB8DAA86E27AFBAC958F06A824B6760255"
+    },
+    {
+      "Machine": "x64sc",
+      "Sha256": "DDB2B8759170EAE7E6CF967B5F657B068772E07B9897A6233182A5B99D48977E"
+    }
+  ],
+  "ObserverBinaries": [
+    {
+      "Machine": "xvic",
+      "Sha256": "C0137FD57A56CD710C9893AB45821DC137AEA04C0A7EFE594E2D1FB5A56D20A7"
+    },
+    {
+      "Machine": "x64sc",
+      "Sha256": "BCA41CA739FF250AF2CB1387BA8E8EB83ACCE54C15AC91DF3ADDB5CAB806008D"
+    }
+  ],
+  "Runs": [
+    {
+      "Label": "stock",
+      "Machine": "xvic",
+      "Cycles": 100000,
+      "Executable": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/build-linux/src/xvic",
+      "ExitCode": 1,
+      "ScreenshotSha256": "EC7D9617BAF8D007DD78BB67FED8F599AFFDE6D5B9629EA7161F7DFCA5E25AE1",
+      "StdoutSha256": "1AD45F01F4F2A0B94686916FD88E8DAF288532D5C41C87C24657A907E5BAF307",
+      "StderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "GateLines": 0,
+      "AccessLines": 0,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 0,
+      "RepatchLines": 0,
+      "ExtraLines": 0,
+      "ObsLines": 0,
+      "StopLines": 0
+    },
+    {
+      "Label": "withheld",
+      "Machine": "xvic",
+      "Cycles": 100000,
+      "Executable": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/bin-linux/xvic-observer",
+      "ExitCode": 1,
+      "ScreenshotSha256": "EC7D9617BAF8D007DD78BB67FED8F599AFFDE6D5B9629EA7161F7DFCA5E25AE1",
+      "StdoutSha256": "F5E7C1C893C7E15F8AC912CA8F3A2C0F685CB1136CE410065FF81123AE01CF2B",
+      "StderrSha256": "0DCFAA59CF8A9E4E6B7286BDD108DF2B0F2E4E9002D2BB698497282C3DF5E8D4",
+      "GateLines": 99998,
+      "AccessLines": 100002,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 9465,
+      "RepatchLines": 29,
+      "ExtraLines": 4,
+      "ObsLines": 199996,
+      "StopLines": 0
+    },
+    {
+      "Label": "keep",
+      "Machine": "xvic",
+      "Cycles": 100000,
+      "Executable": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/bin-linux/xvic-observer",
+      "ExitCode": 1,
+      "ScreenshotSha256": "EC7D9617BAF8D007DD78BB67FED8F599AFFDE6D5B9629EA7161F7DFCA5E25AE1",
+      "StdoutSha256": "A7A95C40BC16E5ED7031A7CED645E79FCD5E0A77D6CBF07DC90BEC886DF415EB",
+      "StderrSha256": "3FA3D407154C1F5B7AC3972F34B46A07BF34935A370314F845B7ECE61CFDF8BC",
+      "GateLines": 99998,
+      "AccessLines": 47815,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 14,
+      "RepatchLines": 29,
+      "ExtraLines": 2,
+      "ObsLines": 199996,
+      "StopLines": 0
+    },
+    {
+      "Label": "stock",
+      "Machine": "x64sc",
+      "Cycles": 100000,
+      "Executable": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/build-linux/src/x64sc",
+      "ExitCode": 1,
+      "ScreenshotSha256": "5283DAEF3E770A05C35725A67FD2A2AE318B5A37D1C64A556357473CC8D9E794",
+      "StdoutSha256": "EC3E3565FC17B3BF8FD8F9A123C127D2418EB0915C1375B3C0EE9E860F57F963",
+      "StderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "GateLines": 0,
+      "AccessLines": 0,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 0,
+      "RepatchLines": 0,
+      "ExtraLines": 0,
+      "ObsLines": 0,
+      "StopLines": 0
+    },
+    {
+      "Label": "withheld",
+      "Machine": "x64sc",
+      "Cycles": 100000,
+      "Executable": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/bin-linux/x64sc-observer",
+      "ExitCode": 1,
+      "ScreenshotSha256": "5283DAEF3E770A05C35725A67FD2A2AE318B5A37D1C64A556357473CC8D9E794",
+      "StdoutSha256": "9144815C87FF9C314BCDF8E8B50E2EAF9A9C66495E8D7697226B268B604EE59C",
+      "StderrSha256": "4690F541784EC0CA7EF2FF0B5788251E94BDF13FD67AC147E628777884A7AAFF",
+      "GateLines": 99999,
+      "AccessLines": 100001,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 2164,
+      "RepatchLines": 4,
+      "ExtraLines": 2,
+      "ObsLines": 199998,
+      "StopLines": 0
+    },
+    {
+      "Label": "keep",
+      "Machine": "x64sc",
+      "Cycles": 100000,
+      "Executable": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/bin-linux/x64sc-observer",
+      "ExitCode": 1,
+      "ScreenshotSha256": "5283DAEF3E770A05C35725A67FD2A2AE318B5A37D1C64A556357473CC8D9E794",
+      "StdoutSha256": "D4DC134D5CED491719535EFC339EFABAE5E9931F6580476E028E154DE081A18F",
+      "StderrSha256": "7373CAA31A9824E7632A244F0D067ED0412A7459CA92806FA7D6FD661283BB18",
+      "GateLines": 99999,
+      "AccessLines": 43503,
+      "AccessMissingKind": 0,
+      "MissingOrForeign": 0,
+      "TranslateLines": 7,
+      "RepatchLines": 4,
+      "ExtraLines": 1,
+      "ObsLines": 199998,
+      "StopLines": 0
+    }
+  ],
+  "Comparisons": [
+    {
+      "Machine": "xvic",
+      "Cycles": 100000,
+      "Comparison": {
+        "KeepAccessLines": 47815,
+        "KeepLinesAbsentFromWithheld": 0,
+        "FirstAbsentLine": null,
+        "GateSequencesIdentical": true,
+        "WithheldClockGaps": 0,
+        "WithheldClockResets": 1
+      }
+    },
+    {
+      "Machine": "x64sc",
+      "Cycles": 100000,
+      "Comparison": {
+        "KeepAccessLines": 43503,
+        "KeepLinesAbsentFromWithheld": 0,
+        "FirstAbsentLine": null,
+        "GateSequencesIdentical": true,
+        "WithheldClockGaps": 0,
+        "WithheldClockResets": 0
+      }
+    }
+  ],
+  "ObsValidationExit": 0,
+  "ObsValidationLog": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/equivalence-linux/20261021T065500-phase-d-d5-final/both-100000/obs-validation.log",
+  "Findings": [],
+  "Equivalent": true
+}

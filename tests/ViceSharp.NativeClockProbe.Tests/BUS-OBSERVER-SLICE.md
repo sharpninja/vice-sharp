@@ -1,0 +1,27 @@
+# Bus observer contract (Phase C step 3, PLAN-OBSERVER-001 slice S1)
+
+Scope: the external wrapper that records every CPU bus access of the immutable VICE oracle without touching VICE source (option B, ruled by Payton 2026-10-20T07:33, handoff D14). Mock first; the C wrapper `tools/immutable-vice/bus-observer.c` binds to the same fixtures through a VICE-shaped double, never VICE itself. Serves FR-VICE-001 AC4, TR-VICE-ORACLE-001 AC3 and AC5, TEST-VICE-001 AC4. Source citations are to the materialized commit `cc67418c` (receipt `docs/receipts/lockstep/20261019T205400-phase-c-step3-registration-audit-linux/`).
+
+## Rules under test
+
+1. Capture: after the real table rebuild (`mem_initialize_memory`) returns, every entry of the rows the live read and write pointers resolve to is replaced in place by a trampoline that records `kind, address, data, clock` and calls the saved original. Rows are VICE's own static arrays; the pointers are never replaced (they are reassigned intra-object, `vic20mem.c` 539 to 554, `c64memsc.c` 169 to 184).
+2. Timing: nothing is patched while the real rebuild runs, because `c64memsc.c` 613 to 736 compares entries by identity during it. The double counts trampolines present at the end of its real rebuild and reports `init,<count>`; the only correct value is 0.
+3. Fast path withheld: the wrapped `mem_mmu_translate` returns limit 0 and base null so every fetch takes the table route; the event carries the override and what the real call returned (`translate,<limit>,<baseNulled 0|1>,<realLimit>,<realBaseNonNull 0|1>`, so `translate,0,1,8189,1` against the double), never a fabricated real result.
+4. Dummy accesses: VICE reaches them through `_mem_read_tab_ptr_dummy` and `_mem_write_tab_ptr_dummy` (`maincpu.c` 171 to 187), which alias the real rows. The wrapper re-points the two dummy pointers at its own trampoline rows after each rebuild and in the per-cycle hook; while they alias the real rows the kind is unknowable and the access is reported with kind `missing`, never guessed.
+5. Rescan: the per-cycle hook (reached from `vice_sharp_observe_clock`, ahead of the gate record) emits the cycle's accesses, then rescans the known rows: each unpatched entry is reported as `missing,<read|write>,<page>` and re-patched; a live pointer outside the known rows is reported as `foreign,<read|write>` every cycle it is live; `repatch,<entries>,<dummyRepointed>` is emitted only when something changed; then `cycle,<clock>`.
+
+## Event lines
+
+`init,<n>` (double), `layout,<rows>` (32-row shape only; 0 is the fail-closed fallback to the live row), `repatch,<entries>,<0|1>`, `access,<read|write|dummy-read|dummy-write|missing>,<address>,<data>,<clock>`, `translate,<limit>,<baseNulled>,<realLimit>,<realBaseNonNull>`, `missing,<read|write>,<page>`, `foreign,<read|write>`, `cycle,<clock>`. Decimal, positional, one `\n` per line.
+
+## Slice S1b: the x64sc 32-row layout (`BusObserverRowsContractTests`)
+
+The rows are `mem_read_tab[32][0x101]` and `mem_write_tab` (`c64memsc.c` 110 to 111), the current row is `mem_read_tab[mem_config]` and `mem_get_current_bank_config()` is global (222). After each rebuild the wrapper proves the layout twice through the global `mem_read_tab_set` (751): the live row is the current configuration's row, and the stride between rows is 0x101 entries; on success it patches all 32 rows (`layout,32`, `repatch,16448,1`), on failure it reports `layout,0` and patches only the live row, so other rows surface as `foreign` every cycle they are live. Trampolines select the saved original by the current configuration, so dummy accesses after a banking change go through the new configuration's handlers (LEGION2 hazard review 2026-10-20T07:49). The per-cycle rescan covers the current row; a row rewritten while not current is reported `missing` on the first hook after it becomes current.
+
+## Slice S1c: the watch rows as allowed delegates (LEGION2 proposal 2026-10-20T07:53)
+
+With the monitor's watch flag 1 the real pointers legitimately point at the single static watch row per table, which delegates to the data rows (`vic20mem.c` 274 to 284; `c64memsc.c` 150 to 162). The wrapper learns the watch rows without touching monitor state: after the real rebuild (which ends with an intra-object toggle, `vic20mem.c` 523) and in the wrapped `mem_toggle_watchpoints` (reached by the monitor through the function pointer assigned at `maincpu.c` 395, a cross-object reference), a real pointer that differs from the dummy pointer is the watch row. The wrapped toggle also re-points the dummy pointers at once and emits `watch,<flag>`. Fixtures: `watch-toggle` (no `foreign`, kinds stay `read`), `watch-flag1-after-rebuild` (learned from the pointers, no `foreign`), `foreign-row` (a row that is neither known nor the watch row is still `foreign` every cycle); lenient variants inserting `foreign` into the watch fixtures or dropping it from the foreign fixture are rejected.
+
+## Mock gate (`BusObserverContractTests`)
+
+10 fixtures (empty, init-only, read, fetch, write-and-dummy, translate, rebuild-at-runtime, rewrite-outside-init, dummy-alias, watch-toggle); per fixture the correct mock passes and every single-event corruption is rejected (wrong kind, wrong detail, dropped, duplicated, reordered), plus wrong exit code, null results, an extra event and a mutated input; six lenient variants of the fail-closed rules are rejected explicitly; a coverage guard fixes the event vocabulary.

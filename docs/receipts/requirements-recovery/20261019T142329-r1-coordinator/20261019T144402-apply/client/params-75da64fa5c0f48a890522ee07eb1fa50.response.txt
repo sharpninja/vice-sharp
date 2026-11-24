@@ -1,0 +1,14 @@
+type: result
+payload:
+  requestId: req-20261019T194623Z-02ef
+  result:
+    frId: FR-CPU-004
+    trIds:
+    - TR-CYCLE-001
+    testIds:
+    - TEST-CPU-001
+    - TEST-X64SC-LOCKSTEP-001
+    workspaceId: F:\GitHub\vice-sharp
+
+---
+

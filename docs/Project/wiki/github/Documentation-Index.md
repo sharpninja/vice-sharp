@@ -25,6 +25,7 @@ Microsoft Store and Xbox/UWP were removed from product scope (`PLAN-XBOXUWP-END-
 ## Reference
 
 - [RomM desktop validation](testing/RomM-Desktop.md) - mock-first contract checks, production-bound Heads/Library suites, Windows exclusions and retained evidence
+- [Phase D exit receipt](receipts/native-vice/20261021T075500-phase-d-exit-linux/README.md) - ordinary, host integration, and cumulative Slice 1 results on Linux and Windows
 
 - [ROMs.md](ROMs.md) - Legal ROM options, environment variable setup
 - [ROL.md](ROL.md) - Registry of Lore (122+ entries)
@@ -37,6 +38,7 @@ Microsoft Store and Xbox/UWP were removed from product scope (`PLAN-XBOXUWP-END-
 - [Iteration-Roadmap.md](Iteration-Roadmap.md) - roadmap plus bounded historical evidence; broad C64/VIC-20 completion is reopened pending the current parity audit
 - [plans/PLAN-VICE-IMMUTABLE-001.md](plans/PLAN-VICE-IMMUTABLE-001.md) - restore the immutable native VICE oracle boundary and move integration into external wrappers
 - [plans/PLAN-VSFLOCKSTEP-001.md](plans/PLAN-VSFLOCKSTEP-001.md) - make native VICE `.vsf` the canonical product snapshot format and prove deterministic x64sc/xvic resume
+- [plans/PLAN-NATIVERESTORE-001.md](plans/PLAN-NATIVERESTORE-001.md) - preserve and restore pinned native VICE, validate Slice 1, and evaluate each host's approved ordinary discovery baseline
 
 The current plans are the controlling forward-looking documents. Historical iteration plans and receipts remain evidence for their named slices only; they are not proof of whole-machine parity or current release completion.
 

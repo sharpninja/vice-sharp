@@ -1,0 +1,52 @@
+type: result
+payload:
+  requestId: req-20261019T212013Z-551f
+  result:
+    id: FR-TAP-005
+    title: Turbo Tape Loader Compatibility
+    description: >-
+      Many commercial C64 programs used turbo tape loaders that employ faster pulse encoding than the standard Commodore format. The emulator shall support turbo loaders by providing accurate tape read timing down to individual clock cycles.
+
+
+      ## Acceptance Criteria
+
+      - Turbo loaders using shorter pulses than the standard Commodore format, including the existing approximately-160-cycle workload obligation, function correctly with the same pinned C64 firmware, tape fixture, resources and initial state as native VICE. Do not impose 160 cycles as a parser minimum or normalize pulse widths to hardware estimates; cover representable values below, at and above 160 with separately asserted block-decoder units and native live scheduling/interrupt traces.
+
+      - Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully. For each named C64 format, retain identified fixture and firmware hashes, resources, initial state, load entry/operation sequence, expected loaded bytes and machine-visible completion/failure observations. Native and managed results must both satisfy successful loading and match; two equal failures do not satisfy this criterion. A missing fixture, oracle capability or completion observation leaves the corresponding format unsatisfied, not waived.
+
+      - Custom pulse encoding schemes are supported through accurate pulse-level emulation. Pin custom-stream bytes and their format-specific expected loading/output behavior independently of the managed implementation; compare ordered native and managed tape/interrupt/timer observations without converting the input into a recognized standard loader or normalizing its pulse widths. Include malformed/truncated and boundary fixtures with explicit expected outcomes.
+
+      - For C64 tape workloads, reproduce the exact native ordered CIA1 FLAG invocation, interrupt/timer state and clock observations at the approved observation boundary, with pinned main-CPU clock, alarm scheduled/dispatch clocks and callback offset. Do not interpret the former one-system-clock wording as permission for a one-cycle divergence. Include same-clock ordering and pending interrupt state, with missing, extra, duplicated and shifted events rejected. VIC-20 VIA2 CA1 parity remains separately mandatory under FR-RUNTIME-TAPE-002 and FR-TAP-003; CIA FLAG terminology does not substitute for it.
+
+      - Half-wave and full-wave loader detection workloads both work correctly against pinned native VICE. Keep file/block TAP-v2 pairing (including each truncated half) distinct from live playback, which follows selected-machine tape behavior rather than applying a universal two-to-one conversion. Preserve fixture-specific ordered pulses, direction/phase, timer and load outcomes under separately pinned media version/system/video tags and machine resources.
+
+      - Multi-speed loaders that change pulse rates mid-load are supported. Use a single pinned workload with an explicit sequence of rate transitions and assert the whole load result plus ordered native-equivalent pulse, timer and interrupt observations across every transition; disconnected constant-speed subtests do not prove the mid-load behavior. Run each required PAL/NTSC profile with pinned headers and preserve native scaling or lack of scaling.
+    status: pending
+    priority: low
+    area: TAP
+    acceptanceCriteria:
+    - id: ac-01
+      text: Turbo loaders using shorter pulses than the standard Commodore format, including the existing approximately-160-cycle workload obligation, function correctly with the same pinned C64 firmware, tape fixture, resources and initial state as native VICE. Do not impose 160 cycles as a parser minimum or normalize pulse widths to hardware estimates; cover representable values below, at and above 160 with separately asserted block-decoder units and native live scheduling/interrupt traces.
+      isSatisfied: false
+    - id: ac-02
+      text: Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully. For each named C64 format, retain identified fixture and firmware hashes, resources, initial state, load entry/operation sequence, expected loaded bytes and machine-visible completion/failure observations. Native and managed results must both satisfy successful loading and match; two equal failures do not satisfy this criterion. A missing fixture, oracle capability or completion observation leaves the corresponding format unsatisfied, not waived.
+      isSatisfied: false
+    - id: ac-03
+      text: Custom pulse encoding schemes are supported through accurate pulse-level emulation. Pin custom-stream bytes and their format-specific expected loading/output behavior independently of the managed implementation; compare ordered native and managed tape/interrupt/timer observations without converting the input into a recognized standard loader or normalizing its pulse widths. Include malformed/truncated and boundary fixtures with explicit expected outcomes.
+      isSatisfied: false
+    - id: ac-04
+      text: For C64 tape workloads, reproduce the exact native ordered CIA1 FLAG invocation, interrupt/timer state and clock observations at the approved observation boundary, with pinned main-CPU clock, alarm scheduled/dispatch clocks and callback offset. Do not interpret the former one-system-clock wording as permission for a one-cycle divergence. Include same-clock ordering and pending interrupt state, with missing, extra, duplicated and shifted events rejected. VIC-20 VIA2 CA1 parity remains separately mandatory under FR-RUNTIME-TAPE-002 and FR-TAP-003; CIA FLAG terminology does not substitute for it.
+      isSatisfied: false
+    - id: ac-05
+      text: Half-wave and full-wave loader detection workloads both work correctly against pinned native VICE. Keep file/block TAP-v2 pairing (including each truncated half) distinct from live playback, which follows selected-machine tape behavior rather than applying a universal two-to-one conversion. Preserve fixture-specific ordered pulses, direction/phase, timer and load outcomes under separately pinned media version/system/video tags and machine resources.
+      isSatisfied: false
+    - id: ac-06
+      text: Multi-speed loaders that change pulse rates mid-load are supported. Use a single pinned workload with an explicit sequence of rate transitions and assert the whole load result plus ordered native-equivalent pulse, timer and interrupt observations across every transition; disconnected constant-speed subtests do not prove the mid-load behavior. Run each required PAL/NTSC profile with pinned headers and preserve native scaling or lack of scaling.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:20:14.4902072+00:00
+    updatedAt: 2026-10-19T21:20:14.4902944+00:00
+  deprecated: true
+
+---
+

@@ -1,0 +1,13 @@
+2026-10-20T08:22:21.4737959-05:00
+Toolchain: F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-probe-x64sc-evidence\clock-probe-x64sc.exe
+Executable: F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-probe-x64sc-evidence\clock-probe-x64sc.exe
+Arguments: 7 | 11 | 1
+Environment: 
+ExitCode: 0
+TimedOut: False
+STDOUT:
+real,7,1
+observe,11,1
+end,11,1
+
+STDERR:

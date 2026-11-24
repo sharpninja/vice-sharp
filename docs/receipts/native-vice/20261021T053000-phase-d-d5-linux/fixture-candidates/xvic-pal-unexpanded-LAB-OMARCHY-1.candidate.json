@@ -1,0 +1,52 @@
+{
+  "fixtureId": "xvic-pal-unexpanded",
+  "host": "LAB-OMARCHY",
+  "machine": "xvic",
+  "model": "vic20",
+  "trigger": 100000,
+  "writeClock": 100002,
+  "writerResult": 0,
+  "mainCpuClock": null,
+  "candidatePath": "/home/sharpninja/github/vice-sharp/artifacts/native-snapshot-fixtures/20261021T055800-phase-d-d5-r3/xvic-pal-unexpanded-LAB-OMARCHY-1.vsf",
+  "candidateSha256": "20932DC3E8634F9024EA1E82D57B953CAAB7C796A912F0884E0516934EDF8014",
+  "candidateLength": 1051671,
+  "command": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/bin-linux/xvic-observer -default \u002Blogcolorize -seed 1 -sounddev dummy -directory /home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data -limitcycles 150000 -model vic20 -memory none",
+  "roms": [
+    {
+      "relativePath": "VIC20/basic-901486-01.bin",
+      "sha256": "8BE2D882E0EEB1C6923A43660236EA69D43CA8A3BD0613B1B6C910601584FBED",
+      "expected": "8BE2D882E0EEB1C6923A43660236EA69D43CA8A3BD0613B1B6C910601584FBED",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "relativePath": "VIC20/kernal.901486-07.bin",
+      "sha256": "FF6D1416B91A71F5240A5BB8ADC9FDC1B955374C48322CA47B3E436334F168FB",
+      "expected": "FF6D1416B91A71F5240A5BB8ADC9FDC1B955374C48322CA47B3E436334F168FB",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "relativePath": "VIC20/chargen-901460-03.bin",
+      "sha256": "BDA280726CFE069CA70EF5E2F2D95A29F69D3950C859A12E6979464963FCF502",
+      "expected": "BDA280726CFE069CA70EF5E2F2D95A29F69D3950C859A12E6979464963FCF502",
+      "ok": true,
+      "reason": "ok"
+    }
+  ],
+  "observerSha256": "06903BF880189BF197EE46A8DD71054679CF4469EAF9F7B096AFB094AC078EEA",
+  "processExitCode": 1,
+  "timedOut": false,
+  "limitReached": true,
+  "snapshotLines": [
+    "VICE_SNAP,checkpoint,100000,100002"
+  ],
+  "exitCode": 3,
+  "blockedIds": [
+    "xvic-pal-unexpanded"
+  ],
+  "reason": "BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed",
+  "acceptedFixtureChanged": false,
+  "manifestChanged": false,
+  "outcome": "blocked"
+}

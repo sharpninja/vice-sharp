@@ -1,0 +1,2428 @@
+{
+  "inventoryPath": "/home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261020T211402-phase-d-preservation-linux/shim-consumer-inventory.json",
+  "inventoryConsumers": 241,
+  "counts": {
+    "tagged": 0,
+    "relocated": 241,
+    "alreadyTagged": 0,
+    "notFound": 0,
+    "ambiguous": 0,
+    "filesWritten": 50
+  },
+  "tagged": [],
+  "relocated": [
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "class": "LockstepDriveValidationTests",
+      "method": "TrueDriveEmulation_RejectsOutOfRangeUnits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 148,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "class": "LockstepDriveValidationTests",
+      "method": "TrueDriveEmulation_RoundTrips_Per_Unit",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 131,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "class": "LockstepDriveValidationTests",
+      "method": "TrueDriveEmulation_EnabledOnUnit8_DriveCpuAdvances",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 109,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "class": "LockstepDriveValidationTests",
+      "method": "DriveAccessors_ValidUnit_DoNotThrow",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 83,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "class": "LockstepDriveValidationTests",
+      "method": "DriveAccessors_OutOfRangeUnit_ReturnZero",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 60,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "class": "LockstepDriveValidationTests",
+      "method": "GetDrivePc_IsCallable_WithoutCrashing",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 44,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "class": "C64ColorRamPlaNativeTests",
+      "method": "Wolf64Disk_Cia1TimerA_MatchesNativeThroughIrqWindow",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 170,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "class": "C64ColorRamPlaNativeTests",
+      "method": "Wolf64Disk_Cia1TimerA_MatchesNativeAfter20000Cycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 130,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "class": "C64ColorRamPlaNativeTests",
+      "method": "Wolf64Disk_ReportsFirstMismatchCycle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 57,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "class": "C64ColorRamPlaNativeTests",
+      "method": "RamOnlyPla_D800Store_MatchesNativeRamPeek",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 25,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64MachineProfileTests.cs",
+      "class": "C64MachineProfileTests",
+      "method": "NativeVice_DefaultCreateSelectsPalBreadboxModel",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 548,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64MachineProfileTests.cs",
+      "class": "C64MachineProfileTests",
+      "method": "NativeVice_CreatesAndResetsEveryManagedX64ScAlias",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 518,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+      "class": "C64VkmKeyboardTests",
+      "method": "SelectedVkmMap_CiaMatrixScanMatchesNativeX64Sc",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 180,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/CaptureRunLogUtilityTests.cs",
+      "class": "CaptureRunLogUtilityTests",
+      "method": "CaptureBaselineRunLog_FromEnvironment",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 30,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/CpuValidationTests.cs",
+      "class": "CpuValidationTests",
+      "method": "BootstrapTrace_First12Cycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 69,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/CpuValidationTests.cs",
+      "class": "CpuValidationTests",
+      "method": "First64Cycles_MatchVICE",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 46,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/CpuValidationTests.cs",
+      "class": "CpuValidationTests",
+      "method": "Reset_StateMatchesVICE",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 28,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "class": "LockstepValidationTests",
+      "method": "First100000_Cia1TimerA_MatchesNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 125,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "class": "LockstepValidationTests",
+      "method": "First100000CyclesMatch",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 107,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "class": "LockstepValidationTests",
+      "method": "First10000_Cia1TimerA_MatchesNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 85,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "class": "LockstepValidationTests",
+      "method": "First10000CyclesMatch",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 65,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "class": "LockstepValidationTests",
+      "method": "First100CyclesMatch",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 44,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "class": "LockstepValidationTests",
+      "method": "ResetStateMatches",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 24,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/LockstepValidatorKernalCloseTests.cs",
+      "class": "LockstepValidatorKernalCloseTests",
+      "method": "ResolveKernalJumpTarget_FollowsC64CloseIndirectVector",
+      "attribute": "Fact",
+      "reason": "transitive",
+      "via": "LockstepValidator",
+      "line": 15,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "class": "NativeResidueDiagTests",
+      "method": "FreshMachine_DriveAttachDetachClocks_AreZero_AfterResidue",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 181,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "class": "NativeResidueDiagTests",
+      "method": "FreshMachine_DriveCycleAccum_IsZero_AfterResidue",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 135,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "class": "NativeResidueDiagTests",
+      "method": "FreshMachine_PostActivityResetTrace_IsIdentical_AfterSnapshotResume",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 86,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "class": "NativeResidueDiagTests",
+      "method": "FreshMachine_BootState_IsIdentical_AfterSnapshotResume",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 42,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarGroundTruthTests.cs",
+      "class": "RasterBarGroundTruthTests",
+      "method": "GroundTruth_RasterBarSchedule_FromUserSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 59,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+      "class": "RasterBarLockstepTests",
+      "method": "StaD020_CycleLevel_StealState_VsVice_FromSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 269,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+      "class": "RasterBarLockstepTests",
+      "method": "RasterLoop_PerInstructionCycles_MatchVice_FromSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 166,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+      "class": "RasterBarLockstepTests",
+      "method": "RasterBarSchedule_Managed_MatchesVice_FromSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 53,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarRendererTests.cs",
+      "class": "RasterBarRendererTests",
+      "method": "DemoBars_ReplayedViceTimeline_ManagedRendererMatchesVicePerLineBorder",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 303,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/RasterBarRendererTests.cs",
+      "class": "RasterBarRendererTests",
+      "method": "DemoBars_ManagedRenderedFrame_AlignsWithViceBorderColoursPerLine",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 209,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+      "class": "Sid8580VariantParityTests",
+      "method": "CombinedWaveforms_8580_OutputLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 251,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+      "class": "Sid8580VariantParityTests",
+      "method": "SampleFast_1CycleWriteDelay_LockstepVsOracle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 142,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "class": "SidBatchedClockParityTests",
+      "method": "WritePipelinePrologue_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 216,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "class": "SidBatchedClockParityTests",
+      "method": "OscMsbToggleSubStepping_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 194,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "class": "SidBatchedClockParityTests",
+      "method": "ExtFilterWiring_PerCycleOutputLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 154,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "class": "SidBatchedClockParityTests",
+      "method": "ExtFilterClockDeltaT_DeltaTFlt8_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 98,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacWaveZeroLevel_Scaled12Bit",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 1236,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacRawOsc3VsDacVoiceOutput_Diverge",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 1177,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacRoundHalfUp_MaxEntryIs0xFFF",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 1151,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDac8580CorrectTermination_MonotonicLowBits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 1125,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDac6581MissingTermination_Bit0EqualsBit1",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 1098,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacVoSuperpositionAndRounding_MonotonicFor8580",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 1062,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacPerBitVoltageAlgorithm_Boundaries",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 1033,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacMosfetLeakage_6581Higher",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 997,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacBuiltWithCorrectParams_6581vs8580",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 958,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WavePath12Bit_Sawtooth_ix_A00",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 908,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "WaveDacOutputUsesModelDac_Sawtooth_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 852,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveVerbatimRomTable_ST_MultiplePositions",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 778,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveSRWriteback_NoisePST",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 740,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveSawAccWriteback_ST_postIx800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 700,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoisePulse8580Formula_NPST_8580_ix800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 645,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoisePulse6581Formula_NPT_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 607,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoisePulseRouting_NPS_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 568,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveRingMsbMaskFormula_ArmedWhenNoSaw",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 528,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveRingIndexMsbSubstitution_PT_ring",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 491,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoNoiseGating_PS_pw0",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 455,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveNoPulseGating_PT_pw0",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 421,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveGatingFormula_ST_ix800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 387,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveDistinct6581vs8580Tables_ST_ix7F8",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 334,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveUsesRomNotAnalyticAnd_PST_ix800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 297,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveSawtoothFormula_PS_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 262,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveTriangleFormula_ST_ix7F8",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 229,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveSubTableMap_PT_ix400",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 193,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "class": "SidCombinedDacresDivergentParityTests",
+      "method": "CombinedWaveTableSelector_ST_ix800",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 158,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "Env3Read_LatchesBus",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 459,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "Osc3Read_LatchesBus",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 425,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "Reset_ClearsBusValueAndTtl",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 403,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "DataBusTtl6581_Is0x1D00",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 366,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "BusAging_NCycles_EquivalentToBatchedDecrement",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 341,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "BusAging_OneCycleDecrement_ZeroesAtTtlExpiry",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 309,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "WriteOnlyRegisterRead_ReturnsSharedBusValue",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 268,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "ReadOf19Through1C_SetsBusAndReturnsBusValue",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 229,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "AnyWrite_SetsBusValueAndTtl_MatchingOracle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 190,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "PotReads_Constant0xFF_AcrossWritesAndCycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 146,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "PotY_Returns0xFFAndLatchesBus",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 113,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "PotX_Read_LatchesBusValueAndTtl",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 82,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "class": "SidDatabusPotDivergentParityTests",
+      "method": "PotX_Returns0xFF_MatchingOracle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 51,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+      "class": "SidEngineClockingProbeTests",
+      "method": "Probe_NativeReSidInternalStateAdvancesOnStep",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 38,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEngineParityTests.cs",
+      "class": "SidEngineParityTests",
+      "method": "ManagedEnvelopeMatchesNativeReSid_CycleExact",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 107,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEngineParityTests.cs",
+      "class": "SidEngineParityTests",
+      "method": "ManagedOscillatorMatchesNativeReSid_CycleExact",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 55,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "class": "SidEnvDivergentParityTests",
+      "method": "BusValue_AgesByExactlyTheElapsedClockedCycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 554,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "class": "SidEnvDivergentParityTests",
+      "method": "PerCycleClockChain_RunsPipelinedWriteAndBusAgingStages",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 410,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "class": "SidEnvDivergentParityTests",
+      "method": "PowerUp_SeedsEnvelopeCounter0xAAAndReleasesExactlyAsReSid",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 292,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "class": "SidEnvDivergentParityTests",
+      "method": "EnvelopeReset_PreservesEnvelopeCounterExactlyAsReSid",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 210,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "class": "SidExactOracleTests",
+      "method": "ExactRead_Env3MatchesExportedEnvelopeCounter",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 168,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "class": "SidExactOracleTests",
+      "method": "ExactClock_IsDeterministicAcrossInstances",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 127,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "class": "SidExactOracleTests",
+      "method": "ExactClock_AttackStepSpacing_MatchesSingleCyclePipeline",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 78,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "class": "SidExactOracleTests",
+      "method": "ExactClock_AccumulatorFollowsClosedForm",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 38,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "ExtFiltSubStepping_DeltaTFlt8_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 998,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "FilterClockSubStepping_DeltaTFlt3_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 977,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "ExtFiltClockedPerPhi2_VlpEvolves",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 862,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "FilterClockedPerPhi2_StateEvolvesEachTick",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 839,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "class": "SidFilter6581DivergentParityTests",
+      "method": "FilterSubStepping_DeltaTFlt3_BatchedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 580,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "class": "SidFilter8580DivergentParityTests",
+      "method": "PerCycleOrder_8580_ExtFilterOutputLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 287,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "class": "SidFilter8580DivergentParityTests",
+      "method": "SolveIntegrate8580_LpProgram_FilterProbeLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 264,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "class": "SidFilter8580DivergentParityTests",
+      "method": "SetW0_8580_CutoffSweep_FilterProbeLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 238,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "SingleCycleManagedMatchesOracleForTypicalFrequency",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 902,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoisePlusCombinedWaveform_DecaysToZeroLockup",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 838,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "CombinedWaveform_NoiseOutputAndedWithWaveformOutput",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 785,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "CombinedWaveform_WritesOutputBackIntoShiftRegister",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 735,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "TestBit_ResetFadeConstants6581Are35000And1000",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 685,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "TestHeld_FadesShiftRegisterViaShiftregBitfade",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 637,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "TestFalling_ClocksShiftRegisterOnceWithNotBit17",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 580,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "TestRising_DoesNotResetShiftRegister",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 525,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "ZeroedShiftRegisterStaysLockedWithoutReseed",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 456,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "PowerOnSeedIs0x7FFFFe",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 413,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoNoiseMaskPassesSawtoothThroughUnaltered",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 353,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoiseOsc3ReadsCorrect12BitTaps",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 290,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoiseSrIsPerVoiceNotShared",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 232,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoiseSrFreeRunsWithoutNoiseWaveformSelected",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 178,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "class": "SidNoiseDivergentParityTests",
+      "method": "NoiseSrClocksWithTwoCyclePipelineDelay",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 106,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+      "class": "SidOutputAmplifyParityTests",
+      "method": "Output_CompositeLockstepAndAmplifiedFloat",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 41,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Volume_DigiPlayback_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 195,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Voice1_HardSync_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 166,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Voice1_AdsrSweep_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 139,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Voice1_TriangleSaw_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 114,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "class": "SidPcmEquivalencyTests",
+      "method": "Voice1_Triangle_GateOn_AgreesWithNative",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 89,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "class": "SidResampleDivergentParityTests",
+      "method": "SampleResample_KaiserFir_BufferedLockstep_BothModels",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 99,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "class": "SidResampleDivergentParityTests",
+      "method": "SampleInterpolate_BufferedLockstep",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 83,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "class": "SidResampleDivergentParityTests",
+      "method": "SampleFast_BatchedClock_BufferedLockstep_BothModels",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 66,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "TestBit_ShiftRegisterIsPerVoiceNotShared",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 640,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "TestBitFalling_ClocksShiftRegisterOnceWithInvertedBit17",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 579,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "TestBitRising_FlushesShiftPipelineToZero",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 527,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "TestBitRising_ArmsSlowShiftRegisterResetOf35000Cycles",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 482,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "HardSync_SameCycleSyncSourceSpecialCaseSuppressesDestSync",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 221,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "class": "SidSyncRingTestbitDivergentParityTests",
+      "method": "HardSync_FiresOnRisingEdgeOfSourceMsb",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 162,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "class": "SidWaveCoreDivergentParityTests",
+      "method": "Osc3_Waveform0ReadsFloatingDacFadeOfLastSelectedOutput",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 386,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "class": "SidWaveCoreDivergentParityTests",
+      "method": "Reset_PreservesAccumulatorExactly",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 318,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "class": "SidWaveCoreDivergentParityTests",
+      "method": "Accumulator_PowersUpWithEvenBitsHigh0x555555",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 270,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "class": "SidWaveCoreDivergentParityTests",
+      "method": "Accumulator_StoredValueIsMaskedTo24Bits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 218,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "class": "SidWaveOsc3DivergentParityTests",
+      "method": "Osc3_NoiseReadsNoiseOutputTopBits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 309,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "class": "SidWaveOsc3DivergentParityTests",
+      "method": "Osc3_PulseOnlyReadsRailsNotARamp",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 241,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "class": "SidWaveOsc3DivergentParityTests",
+      "method": "Osc3_IsWaveformDependentNotPhaseDependent",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 176,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "class": "SidWaveOsc3DivergentParityTests",
+      "method": "Osc3_ReturnsSelectedTriangleWaveformOutputTopBits",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 116,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+      "class": "SnapshotResumeSpikeTests",
+      "method": "Spike_ShimRoundTripResume_MeasuresLockstepDepth",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 138,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+      "class": "SnapshotResumeSpikeTests",
+      "method": "ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 88,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+      "class": "SnapshotResumeSpikeTests",
+      "method": "Spike_ExternalX64ScVsf_LoadDiagnostic",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 47,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "class": "SnapshotRunLogParityTests",
+      "method": "RunFromSnapshot_WithVideoCapture_ProducesMuxedVideoAndAudioStreams",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 368,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "class": "SnapshotRunLogParityTests",
+      "method": "RunFromSnapshot_ReadyFixture_HoldsLockstepZeroDivergence",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 316,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "class": "SnapshotRunLogParityTests",
+      "method": "SaveNativeRunLog_ReadyFixture_ManagedMatchesAllEntries",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 202,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "class": "SnapshotRunLogParityTests",
+      "method": "SnapshotRun_MatchesViceRunLog",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 103,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "class": "Vic20DivergeProbe",
+      "method": "EveryCycle_CpuRegs_Match_TenSecondNtsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 79,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "class": "Vic20DivergeProbe",
+      "method": "EveryCycle_CpuRegs_Match_TenSecondPal",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 63,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "class": "Vic20DivergeProbe",
+      "method": "EveryCycle_CpuRegs_Match_TwoSecondPal",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 46,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "class": "Vic20DivergeProbe",
+      "method": "EveryCycle_CpuRegs_Match_FocusedWindow",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 31,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+      "class": "Vic20LockstepScaffoldTests",
+      "method": "NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 75,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+      "class": "Vic20LockstepScaffoldTests",
+      "method": "NativeXvic_StepAdvancesCycle_WhenOraclePresent",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 39,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+      "class": "Vic20LockstepScaffoldTests",
+      "method": "NativeShim_CreatesVic20Models_WhenXvicOraclePresent",
+      "attribute": "Theory",
+      "reason": "direct",
+      "via": null,
+      "line": 20,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs",
+      "class": "Vic20NativeAudioExportTests",
+      "method": "RenderVic20Samples_AfterReset_ReturnsSamples",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 14,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "class": "Vic20NativeLockstepTests",
+      "method": "LockstepValidator_AcceptsVic20Model_WhenOraclePresent",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 214,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_VicRasterAdvances_AndMatchesManaged",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 181,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_Managed_VicI_Regs_Lockstep",
+      "attribute": "Theory",
+      "reason": "direct",
+      "via": null,
+      "line": 130,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_Managed_DualVia_ControlRegs_Lockstep",
+      "attribute": "Theory",
+      "reason": "direct",
+      "via": null,
+      "line": 97,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_Managed_PMatches_ThroughCmpAbsX",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 69,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "class": "Vic20NativeLockstepTests",
+      "method": "NativeXvic_Managed_CpuRegs_Lockstep",
+      "attribute": "Theory",
+      "reason": "direct",
+      "via": null,
+      "line": 40,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+      "class": "Vic20PixelFrameTests",
+      "method": "CaptureFrameIndices_DimensionsMatchBgra",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 95,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+      "class": "Vic20PixelFrameTests",
+      "method": "ManagedAndNative_FrameGeometry_MatchAfterBoot",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 55,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+      "class": "Vic20PixelFrameTests",
+      "method": "CaptureVisibleFrame_AfterBoot_ReturnsPalNormalCanvas",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 22,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "class": "Vic20PixelLockstep",
+      "method": "Bgra_ReadyNtsc_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 202,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "class": "Vic20PixelLockstep",
+      "method": "Bgra_BusyPal_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 146,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "class": "Vic20PixelLockstep",
+      "method": "Bgra_ReadyPal_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 70,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "class": "Vic20PixelLockstep",
+      "method": "Index_BusyPal_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 54,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "class": "Vic20PixelLockstep",
+      "method": "Index_ReadyNtsc_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 29,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "class": "Vic20PixelLockstep",
+      "method": "Index_ReadyPal_SequenceEqual",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 20,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs",
+      "class": "Vic20PixelLockstepDiag",
+      "method": "Dump_ReadyPal_IndexHistogram",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 13,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs",
+      "class": "Vic20SnapshotRoundTripTests",
+      "method": "Unexpanded_ManagedBlob_ResumeLockstep_Short",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 69,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+      "class": "Vic20SoundLockstep",
+      "method": "Tone_MatchesXvic",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 110,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+      "class": "Vic20SoundLockstep",
+      "method": "Silence_MatchesXvic",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 87,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "class": "Vic20VideoLockstep",
+      "method": "EveryCycle_VicI_VideoState_Match_FocusedWindow_Ntsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 56,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "class": "Vic20VideoLockstep",
+      "method": "EveryCycle_VicI_VideoState_Match_2k_Ntsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 45,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "class": "Vic20VideoLockstep",
+      "method": "EveryCycle_VicI_VideoState_Match_2k",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 34,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "class": "Vic20VideoLockstep",
+      "method": "EveryCycle_VicI_VideoState_Match_FocusedWindow",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 20,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "class": "Vic20WorkloadLockstep",
+      "method": "EveryCycle_Workload_Match_TwoSecondNtsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 60,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "class": "Vic20WorkloadLockstep",
+      "method": "EveryCycle_Workload_Match_TwoSecondPal",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 45,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "class": "Vic20WorkloadLockstep",
+      "method": "EveryCycle_Workload_Match_FocusedNtsc",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 34,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "class": "Vic20WorkloadLockstep",
+      "method": "EveryCycle_Workload_Match_FocusedPal",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 24,
+      "rebind": "Phase F (VIC-20 xvic observer rebind, repair pair 4)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode11Pipe_MidLineEcmChange_IsPerCell_NotWholeLine",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 529,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode16Pipe2_McmTwoStagePipe_UpdatesOneCycleLate",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 499,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode11Pipe_8565_WholeCellUpdate_AfterPixel7",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 469,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode11Pipe_6569_FallingEdgeEcm_AndedAtPixel6_ClearsEcm",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 439,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Vmode11Pipe_6569_RisingEdgeEcm_OredInAtPixel4",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 414,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8_FullLine_MidLineBgChange_RingDelay_OldValueAtPixel0",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 355,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "MonitorColorStore_ImmediatelyUpdatesCregs_AndLastColorReg",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 329,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DbufOffset_IncrementsBy8PerCycle_ResetsAtLineStart",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 297,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "UpdateCregs_TransfersLastColorReg_AndResetsChipPending_AfterCycle",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 270,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8565_GreyDot_Pixel0Forced0x0F_WhenPixelBuffer0EqualsLastColorReg",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 224,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8565_NoRingDelay_PendingWrite_AffectsPixel0Immediately",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 190,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors6569_OnePixelRingDelay_PendingWrite_AffectsPixel1Not0",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 148,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8_AppliesPendingColorWrite_ToCregs_AtCycleStart",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 120,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "DrawColors8_ResolvesSymbolicCode_ViaCregs_NotLiveRegister",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 87,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "class": "VicColorDisplayModeDivergentParityTests",
+      "method": "Cregs_InitializedToIdentityLower16_ZeroForRest_AfterReset",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 60,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "class": "VicExactFrameOracleTests",
+      "method": "CaptureVisibleFrame_RealPath_MatchesIndexIdentity",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 137,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "class": "VicExactFrameOracleTests",
+      "method": "CaptureIndices_Deterministic_AcrossInstances",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 101,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "class": "VicExactFrameOracleTests",
+      "method": "CaptureIndices_ReadyScreen_GeometryAndIndexDomainExact",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 64,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+      "class": "VicIiBootFrameOracleParityTests",
+      "method": "Boot_Frame_Indices_Match_Vice_Oracle_Bit_Exact",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 36,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+      "class": "VicIiCheckpointTests",
+      "method": "Native_ScreenRamPattern_SurvivesOneFullPalFrame_VicDmaIsReadOnly",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 174,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+      "class": "VicIiCheckpointTests",
+      "method": "Native_ScreenRam_ImmediateReadBackMatchesWrite",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 126,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_VisibleFrame_FullBuffer_DisplayMode_InvalidEcm_Match",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 756,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_InvalidEcm_PriorityBufferAtRaster_MockContractValidated",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 701,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_FliAFLI_BadlineTiming_ForcedEveryLine_FliBugWindow_Checkpoint_Match",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 630,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_VisibleFrame_DisplayMode_InvalidEcm_Checkpoint_Match",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 495,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_InvalidEcm_PriorityCollision_HiddenBit_Match",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 166,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "class": "VicIIRegisterReadbackNativeTests",
+      "method": "NativeVsManaged_RegisterReadback_FixedBits_Unused_CollisionIgnore_Match",
+      "attribute": "Fact",
+      "reason": "direct",
+      "via": null,
+      "line": 58,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+      "class": "VicIISpriteDmaNativeCheckpointTests",
+      "method": "Sprite3DmaWindow_NativeAndManagedBothActive_ModelSpecificCycleTable",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 118,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiValidationTests.cs",
+      "class": "VicIiValidationTests",
+      "method": "FirstTwoScanlines_MatchVICE",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 50,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/VicIiValidationTests.cs",
+      "class": "VicIiValidationTests",
+      "method": "Reset_StateMatchesVICE",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 31,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ResetAfterActivityMatchesNative_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 1179,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ChipRegisterCheckpointsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 1137,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ChipRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 1088,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ViciiRasterTimingMatchesNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 1052,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ConnectedCia2IoWritesAndReadsMatchNative_ForC64Family",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 1012,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "AbsentCia2IoReadsMatchNative_ForUltimax",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 969,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ViciiRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 931,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ViciiRasterTimingMatchesNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 890,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "SelectedRamWindowsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 864,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "SelectedRamWindowsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 832,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileFramesMatch_ForC64GsWithDeterministicGameSystemCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 807,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileFrameMatches_ForC64GsWithDeterministicGameSystemCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 783,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileScanlinesMatch_ForC64GsWithDeterministicGameSystemCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 760,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileScanlineMatches_ForC64GsWithDeterministicGameSystemCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 737,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileFramesMatch_ForUltimaxWithDeterministicCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 712,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileFrameMatches_ForUltimaxWithDeterministicCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 688,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileScanlinesMatch_ForUltimaxWithDeterministicCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 664,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileScanlineMatches_ForUltimaxWithDeterministicCartridge",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 640,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileFramesMatch_ForStandardCartridgeAutostart",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 613,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileFrameMatches_ForStandardCartridgeAutostart",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 586,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "D64Attach_BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 517,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 465,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal",
+      "attribute": "ViceFact",
+      "reason": "attribute",
+      "via": null,
+      "line": 425,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTenProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 378,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 354,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "HeldSpace_FirstProfileFrameMatches_ForEveryKeyboardEnabledNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 297,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "D64Attach_FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 247,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 223,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstTwoProfileScanlinesMatch_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 200,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "FirstProfileScanlineMatches_ForEveryDeterministicNoCartridgeX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 178,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    },
+    {
+      "file": "ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "class": "X64ScVariantLockstepTests",
+      "method": "ResetStateMatches_ForEveryRequiredX64ScVariant",
+      "attribute": "ViceTheory",
+      "reason": "attribute",
+      "via": null,
+      "line": 158,
+      "rebind": "Phase E (C64 x64sc observer rebind)"
+    }
+  ],
+  "alreadyTagged": [],
+  "notFound": [],
+  "ambiguous": []
+}

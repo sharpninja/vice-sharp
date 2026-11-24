@@ -40,6 +40,7 @@ public sealed class NativeResidueDiagTests
     /// failure the message names the exact residue fields.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void FreshMachine_BootState_IsIdentical_AfterSnapshotResume()
     {
         var vsf = Array.Find(SnapshotCandidates, File.Exists);
@@ -83,6 +84,7 @@ public sealed class NativeResidueDiagTests
     /// message names the first divergent checkpoint and field.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void FreshMachine_PostActivityResetTrace_IsIdentical_AfterSnapshotResume()
     {
         var vsf = Array.Find(SnapshotCandidates, File.Exists);
@@ -131,6 +133,7 @@ public sealed class NativeResidueDiagTests
     /// through), GREEN after.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void FreshMachine_DriveCycleAccum_IsZero_AfterResidue()
     {
         const ulong Poison = 0x1234;
@@ -176,6 +179,7 @@ public sealed class NativeResidueDiagTests
     /// poison steps first prove the scratch drive carried nonzero clocks.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void FreshMachine_DriveAttachDetachClocks_AreZero_AfterResidue()
     {
         // Phase 1: attach/detach value persistence across a machine boundary.

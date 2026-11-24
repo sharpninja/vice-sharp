@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-19T20:27:35",
+  "source": "F:\\GitHub\\vice-sharp\\artifacts\\immutable-vice\\cc67418cba58e71d8e70fd353e9de47199ad2075\\source",
+  "head": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "coreAutocrlf": "false",
+  "trackedListedByGit": 3847,
+  "trackedPresentOnDisk": 3847,
+  "trackedDifferingFromHead": 0,
+  "tracked": {
+    "List": "tracked-files.txt",
+    "Files": 3847,
+    "Bytes": 48968247.0,
+    "ListSha256": "1C178033A308CCB3E08B1CD28349D3FDB72DB3F4D84A9C40210B45760201019C"
+  },
+  "allFiles": {
+    "List": "all-files.txt",
+    "Files": 6662,
+    "Bytes": 254417461.0,
+    "ListSha256": "1132F7A1741F9A294EA005202CF025389541CFCED78BF55E8FBC2D88CAA0C770"
+  },
+  "generatedOrUntracked": 2815,
+  "gitattributesRules": []
+}

@@ -20,6 +20,7 @@ public sealed class Vic20PixelFrameTests
     public const int BootCycles = 2_000_000;
 
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void CaptureVisibleFrame_AfterBoot_ReturnsPalNormalCanvas()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -52,6 +53,7 @@ public sealed class Vic20PixelFrameTests
     }
 
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void ManagedAndNative_FrameGeometry_MatchAfterBoot()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -91,6 +93,7 @@ public sealed class Vic20PixelFrameTests
     }
 
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void CaptureFrameIndices_DimensionsMatchBgra()
     {
         XvicOraclePrerequisites.ValidateCurrent();

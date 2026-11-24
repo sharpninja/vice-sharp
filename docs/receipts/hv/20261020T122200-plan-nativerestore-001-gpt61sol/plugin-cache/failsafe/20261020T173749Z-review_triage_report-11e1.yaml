@@ -1,0 +1,28 @@
+method: workflow.triage.report
+label: review_triage_report
+timestamp: 20261020T173749Z
+params:
+  severity: high
+  expectedBehavior: Supported plugin verifies trust, opens an isolated reviewer session, and persists a parent-linked review turn.
+  workspacePath: /home/sharpninja/github/vice-sharp
+  observedBehavior: No own session or review turn opened; initial overlong process-local temp path caused Unix socket length errors, subsequent default-temp launch reports Permission denied. Network restriction is a possible cause, not verified.
+  title: Codex review bootstrap cannot establish health nonce in restricted review process
+  tags:
+    - Codex
+    - hostile-review
+    - bootstrap
+    - PLAN-NATIVERESTORE-001
+  parentRequestId: req-20261020T172116Z-prompt-6c6d
+  dedupeKey: hv-nativerestore-codex-restricted-bootstrap-20261020
+  component: mcpserver-codex-plugin/bootstrap
+  reproductionHints: Use the exact requested supported wrapper/root in this reviewer sandbox with an isolated CacheRoot and MCP_FAILSAFE_DRAIN_DISABLED=1.
+  affectedPaths:
+    - /home/sharpninja/github/mcpserver-codex-plugin/lib/session-start.ps1
+    - /home/sharpninja/github/mcpserver-codex-plugin/lib/marker-resolver.ps1
+  evidence:
+    - mcp-bootstrap.txt
+    - mcp-bootstrap-second.txt
+    - mcp-trust-diagnosis.json
+  reporterAgent: Codex
+  summary: Supported plugin session-start returned MCP_UNTRUSTED and Status hasSession=false. Local plugin Test-MarkerSignature returns true. Health nonce could not be established. No settings, hooks, queues, historical sessions, or environment repaired.
+  parentSessionId: ClaudeCode-20261020T015046Z-plugin-session

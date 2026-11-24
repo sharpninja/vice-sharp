@@ -1,0 +1,9 @@
+{
+  "timestampLocal": "2026-10-20T14:13:59",
+  "operation": "Open",
+  "method": "workflow.sessionlog.openSession",
+  "output": "type: result\npayload:\n  result:\n    code: unchanged\n    retryable: false\n    persisted: false\n    degraded: false\n    queued: false\n    method: workflow.sessionlog.openSession\n    agent: Codex\n    sessionId: Codex-20261020T191342Z-nativerestore-r3\n    requestId: \"\"\n    failsafePath: \"\"\n    message: workflow.sessionlog.openSession completed without a remote persistence receipt.\n    childStderr: \"\"\n",
+  "error": null,
+  "reviewerSessionId": "Codex-20261020T191342Z-nativerestore-r3",
+  "reviewerRequestId": "req-20261020T191342Z-nativerestore-r3"
+}

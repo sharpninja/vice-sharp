@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a4f5b21e-f31c-4335-8e0b-f8907d79973c" name="@LAB-OMARCHY 2026-10-19 11:54:41" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-19T11:54:41.3037829-05:00" queuing="2026-10-19T11:54:41.3037830-05:00" start="2026-10-19T11:54:39.9330613-05:00" finish="2026-10-19T11:54:41.3401186-05:00" />
+  <TestSettings name="default" id="26e67c9c-91d9-4ca1-828e-7135f35e8897">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-10-19_11_54_41" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="669f01aa-84a8-499c-b098-0245c421ff9b" testId="6952609d-adf7-a1ef-83b1-f859826980ea" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.SolutionRule_AcceptsSolutionWithoutBuildTestsProject" computerName="LAB-OMARCHY" duration="00:00:00.0014663" startTime="2026-10-19T11:54:41.1834546-05:00" endTime="2026-10-19T11:54:41.1850023-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="669f01aa-84a8-499c-b098-0245c421ff9b" />
+    <UnitTestResult executionId="386a4795-012b-45d2-bac5-8d3fe8094a99" testId="05a6500b-1f0f-fbec-73d7-64bea53d2892" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.CompileRule_RejectsBackslashLinkIntoBuild" computerName="LAB-OMARCHY" duration="00:00:00.0086190" startTime="2026-10-19T11:54:41.1939176-05:00" endTime="2026-10-19T11:54:41.2025848-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="386a4795-012b-45d2-bac5-8d3fe8094a99" />
+    <UnitTestResult executionId="f5406fc0-cc95-4556-8e32-6ed124f82bb0" testId="d79477e2-8433-af2a-ce12-e8d47acbea4c" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.SolutionRule_RejectsSolutionListingBuildTestsProject(listed: &quot;build.tests\\ViceSharp.Build.Tests.csproj&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0002973" startTime="2026-10-19T11:54:41.1929227-05:00" endTime="2026-10-19T11:54:41.1932688-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5406fc0-cc95-4556-8e32-6ed124f82bb0" />
+    <UnitTestResult executionId="1173e6b9-c448-44ae-a88e-185d34c7dbf5" testId="c35ccf08-899d-1b72-957a-a3bdcf4984d5" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_AcceptsCorrectFake" computerName="LAB-OMARCHY" duration="00:00:00.0003209" startTime="2026-10-19T11:54:41.1883644-05:00" endTime="2026-10-19T11:54:41.1887039-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1173e6b9-c448-44ae-a88e-185d34c7dbf5" />
+    <UnitTestResult executionId="d0b00cf2-3a2c-442d-85da-5006447b8168" testId="127835fe-0758-a122-a0a3-8224736ffc1f" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.SolutionRule_RejectsSolutionListingBuildTestsProject(listed: &quot;./build.tests/ViceSharp.Build.Tests.csproj&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0005499" startTime="2026-10-19T11:54:41.1919126-05:00" endTime="2026-10-19T11:54:41.1925059-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0b00cf2-3a2c-442d-85da-5006447b8168" />
+    <UnitTestResult executionId="212139ea-7467-48a9-bad4-e2f22665e161" testId="8090b966-058d-2273-9266-a5fb50fa812e" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: null, onOther: null)" computerName="LAB-OMARCHY" duration="00:00:00.0000391" startTime="2026-10-19T11:54:41.1876761-05:00" endTime="2026-10-19T11:54:41.1877338-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="212139ea-7467-48a9-bad4-e2f22665e161" />
+    <UnitTestResult executionId="8bc1d573-8088-4468-92ea-90d3e625185c" testId="349b8932-e817-2ea5-1abb-a5af5b95be39" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: &quot;&quot;, onOther: &quot;&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0002217" startTime="2026-10-19T11:54:41.1869114-05:00" endTime="2026-10-19T11:54:41.1871530-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8bc1d573-8088-4468-92ea-90d3e625185c" />
+    <UnitTestResult executionId="3a8f7ccd-e431-4f01-a3d5-959e789c14ec" testId="54b95ebc-4227-5f29-ccfe-d6b076815586" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.SolutionRule_RejectsSolutionListingBuildTestsProject(listed: &quot;build.tests/ViceSharp.Build.Tests.csproj&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0003992" startTime="2026-10-19T11:54:41.1890379-05:00" endTime="2026-10-19T11:54:41.1894567-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a8f7ccd-e431-4f01-a3d5-959e789c14ec" />
+    <UnitTestResult executionId="d7b584ce-23f1-4d37-9f14-7966b1378300" testId="3d6f9c5d-05b2-7adb-d707-ee9b1404910d" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.CompileRule_RejectsForwardSlashLinkIntoBuild" computerName="LAB-OMARCHY" duration="00:00:00.0008953" startTime="2026-10-19T11:54:41.2062769-05:00" endTime="2026-10-19T11:54:41.2071983-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d7b584ce-23f1-4d37-9f14-7966b1378300" />
+    <UnitTestResult executionId="59337065-58f3-466c-b1d2-0fc255f5d2d6" testId="4ea3425b-8288-3ac3-3857-2fbc761fdd4c" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.ProjectDiscovery_SkipsBinAndObj" computerName="LAB-OMARCHY" duration="00:00:00.0022789" startTime="2026-10-19T11:54:41.2036370-05:00" endTime="2026-10-19T11:54:41.2059479-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="59337065-58f3-466c-b1d2-0fc255f5d2d6" />
+    <UnitTestResult executionId="9b55633a-bc95-442c-91b8-625257bc1832" testId="955621db-d3e2-7bb1-725c-49e793b812dc" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: null, onOther: &quot;Host!=Linux&amp;Category!=Slow&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0000455" startTime="2026-10-19T11:54:41.1879495-05:00" endTime="2026-10-19T11:54:41.1880146-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9b55633a-bc95-442c-91b8-625257bc1832" />
+    <UnitTestResult executionId="9bfd781a-7e55-48de-9fda-f2c6336a17bc" testId="c0a82626-982e-65a4-3e4e-76895cb55e0a" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.CompileRule_AcceptsProjectWithoutBuildLinks" computerName="LAB-OMARCHY" duration="00:00:00.0003487" startTime="2026-10-19T11:54:41.2029889-05:00" endTime="2026-10-19T11:54:41.2033669-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9bfd781a-7e55-48de-9fda-f2c6336a17bc" />
+    <UnitTestResult executionId="bd682017-ddc2-4d8a-b4ad-f93a23173a96" testId="282eafbf-ef47-0dff-9b86-ecac026c8eaf" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: &quot;Host!=Linux&quot;, onOther: &quot;Host!=Linux&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0005162" startTime="2026-10-19T11:54:41.1861339-05:00" endTime="2026-10-19T11:54:41.1866811-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bd682017-ddc2-4d8a-b4ad-f93a23173a96" />
+    <UnitTestResult executionId="e954467e-12ce-4a2e-92a0-ddb63ccdd339" testId="9bba8166-8257-ab80-f562-1b5adcd446c1" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: null, onOther: &quot;Host=Linux&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0000450" startTime="2026-10-19T11:54:41.1873774-05:00" endTime="2026-10-19T11:54:41.1874573-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e954467e-12ce-4a2e-92a0-ddb63ccdd339" />
+    <UnitTestResult executionId="3722d3df-aed6-4a44-89e6-630325d09397" testId="2ddea6bf-e823-64f2-9949-49717abe668e" testName="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.CompileRule_IgnoresSiblingFolderWithBuildPrefix" computerName="LAB-OMARCHY" duration="00:00:00.0264595" startTime="2026-10-19T11:54:41.1426197-05:00" endTime="2026-10-19T11:54:41.1776113-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3722d3df-aed6-4a44-89e6-630325d09397" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.SolutionRule_RejectsSolutionListingBuildTestsProject(listed: &quot;./build.tests/ViceSharp.Build.Tests.csproj&quot;)" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="127835fe-0758-a122-a0a3-8224736ffc1f">
+      <Execution id="d0b00cf2-3a2c-442d-85da-5006447b8168" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="SolutionRule_RejectsSolutionListingBuildTestsProject" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: null, onOther: null)" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="8090b966-058d-2273-9266-a5fb50fa812e">
+      <Execution id="212139ea-7467-48a9-bad4-e2f22665e161" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="FilterContract_RejectsWrongFakes" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: &quot;&quot;, onOther: &quot;&quot;)" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="349b8932-e817-2ea5-1abb-a5af5b95be39">
+      <Execution id="8bc1d573-8088-4468-92ea-90d3e625185c" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="FilterContract_RejectsWrongFakes" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: null, onOther: &quot;Host=Linux&quot;)" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="9bba8166-8257-ab80-f562-1b5adcd446c1">
+      <Execution id="e954467e-12ce-4a2e-92a0-ddb63ccdd339" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="FilterContract_RejectsWrongFakes" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.CompileRule_AcceptsProjectWithoutBuildLinks" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="c0a82626-982e-65a4-3e4e-76895cb55e0a">
+      <Execution id="9bfd781a-7e55-48de-9fda-f2c6336a17bc" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="CompileRule_AcceptsProjectWithoutBuildLinks" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: null, onOther: &quot;Host!=Linux&amp;Category!=Slow&quot;)" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="955621db-d3e2-7bb1-725c-49e793b812dc">
+      <Execution id="9b55633a-bc95-442c-91b8-625257bc1832" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="FilterContract_RejectsWrongFakes" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.SolutionRule_AcceptsSolutionWithoutBuildTestsProject" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="6952609d-adf7-a1ef-83b1-f859826980ea">
+      <Execution id="669f01aa-84a8-499c-b098-0245c421ff9b" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="SolutionRule_AcceptsSolutionWithoutBuildTestsProject" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.CompileRule_IgnoresSiblingFolderWithBuildPrefix" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="2ddea6bf-e823-64f2-9949-49717abe668e">
+      <Execution id="3722d3df-aed6-4a44-89e6-630325d09397" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="CompileRule_IgnoresSiblingFolderWithBuildPrefix" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.ProjectDiscovery_SkipsBinAndObj" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="4ea3425b-8288-3ac3-3857-2fbc761fdd4c">
+      <Execution id="59337065-58f3-466c-b1d2-0fc255f5d2d6" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="ProjectDiscovery_SkipsBinAndObj" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.CompileRule_RejectsBackslashLinkIntoBuild" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="05a6500b-1f0f-fbec-73d7-64bea53d2892">
+      <Execution id="386a4795-012b-45d2-bac5-8d3fe8094a99" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="CompileRule_RejectsBackslashLinkIntoBuild" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.CompileRule_RejectsForwardSlashLinkIntoBuild" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="3d6f9c5d-05b2-7adb-d707-ee9b1404910d">
+      <Execution id="d7b584ce-23f1-4d37-9f14-7966b1378300" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="CompileRule_RejectsForwardSlashLinkIntoBuild" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.SolutionRule_RejectsSolutionListingBuildTestsProject(listed: &quot;build.tests\\ViceSharp.Build.Tests.csproj&quot;)" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="d79477e2-8433-af2a-ce12-e8d47acbea4c">
+      <Execution id="f5406fc0-cc95-4556-8e32-6ed124f82bb0" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="SolutionRule_RejectsSolutionListingBuildTestsProject" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_RejectsWrongFakes(onLinux: &quot;Host!=Linux&quot;, onOther: &quot;Host!=Linux&quot;)" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="282eafbf-ef47-0dff-9b86-ecac026c8eaf">
+      <Execution id="bd682017-ddc2-4d8a-b4ad-f93a23173a96" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="FilterContract_RejectsWrongFakes" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.FilterContract_AcceptsCorrectFake" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="c35ccf08-899d-1b72-957a-a3bdcf4984d5">
+      <Execution id="1173e6b9-c448-44ae-a88e-185d34c7dbf5" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="FilterContract_AcceptsCorrectFake" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests.SolutionRule_RejectsSolutionListingBuildTestsProject(listed: &quot;build.tests/ViceSharp.Build.Tests.csproj&quot;)" storage="/home/sharpninja/github/vice-sharp/build.tests/bin/release/net10.0/vicesharp.build.tests.dll" id="54b95ebc-4227-5f29-ccfe-d6b076815586">
+      <Execution id="3a8f7ccd-e431-4f01-a3d5-959e789c14ec" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests" name="SolutionRule_RejectsSolutionListingBuildTestsProject" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6952609d-adf7-a1ef-83b1-f859826980ea" executionId="669f01aa-84a8-499c-b098-0245c421ff9b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="05a6500b-1f0f-fbec-73d7-64bea53d2892" executionId="386a4795-012b-45d2-bac5-8d3fe8094a99" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d79477e2-8433-af2a-ce12-e8d47acbea4c" executionId="f5406fc0-cc95-4556-8e32-6ed124f82bb0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c35ccf08-899d-1b72-957a-a3bdcf4984d5" executionId="1173e6b9-c448-44ae-a88e-185d34c7dbf5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="127835fe-0758-a122-a0a3-8224736ffc1f" executionId="d0b00cf2-3a2c-442d-85da-5006447b8168" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8090b966-058d-2273-9266-a5fb50fa812e" executionId="212139ea-7467-48a9-bad4-e2f22665e161" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="349b8932-e817-2ea5-1abb-a5af5b95be39" executionId="8bc1d573-8088-4468-92ea-90d3e625185c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="54b95ebc-4227-5f29-ccfe-d6b076815586" executionId="3a8f7ccd-e431-4f01-a3d5-959e789c14ec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3d6f9c5d-05b2-7adb-d707-ee9b1404910d" executionId="d7b584ce-23f1-4d37-9f14-7966b1378300" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ea3425b-8288-3ac3-3857-2fbc761fdd4c" executionId="59337065-58f3-466c-b1d2-0fc255f5d2d6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="955621db-d3e2-7bb1-725c-49e793b812dc" executionId="9b55633a-bc95-442c-91b8-625257bc1832" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c0a82626-982e-65a4-3e4e-76895cb55e0a" executionId="9bfd781a-7e55-48de-9fda-f2c6336a17bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="282eafbf-ef47-0dff-9b86-ecac026c8eaf" executionId="bd682017-ddc2-4d8a-b4ad-f93a23173a96" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9bba8166-8257-ab80-f562-1b5adcd446c1" executionId="e954467e-12ce-4a2e-92a0-ddb63ccdd339" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2ddea6bf-e823-64f2-9949-49717abe668e" executionId="3722d3df-aed6-4a44-89e6-630325d09397" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="15" executed="15" passed="15" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)
+[xUnit.net 00:00:00.19]   Discovering: ViceSharp.Build.Tests
+[xUnit.net 00:00:00.46]   Discovered:  ViceSharp.Build.Tests
+[xUnit.net 00:00:00.69]   Starting:    ViceSharp.Build.Tests
+[xUnit.net 00:00:00.86]   Finished:    ViceSharp.Build.Tests (ID = '5fc4773b2705fb61f5955e49d239b105161d65773394c75630707553fa3056aa')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

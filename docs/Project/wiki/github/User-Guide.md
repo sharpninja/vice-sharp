@@ -8,7 +8,6 @@ This guide walks a new user from a fresh clone to a running C64 with a true-driv
 
 - **[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** compatible with [global.json](../global.json), currently 10.0.301 or a later 10.0 feature band. Verify with `dotnet --version`.
 - **Git**.
-- **Native VICE bundle for Windows x64** for native-backed execution. Download `vice-sharp-native-win-x64.zip` from [GitHub Releases](https://github.com/sharpninja/vice-sharp/releases), extract it at the repository root, and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Source-native rebuilding is under immutable-oracle remediation; the current legacy build script still applies a patch and must not be used as VICE parity evidence.
 
 ### Clone and build
 
@@ -18,17 +17,13 @@ cd vice-sharp
 dotnet build ViceSharp.slnx
 ```
 
-The build is `TreatWarningsAsErrors`. If you see SDK-version errors, re-check `dotnet --version`. Install the release native bundle before running native-backed tests. The source-native build path is being moved to a clean external materialization so `native/vice` remains byte-for-byte immutable; until that remediation lands, do not use the legacy patched build as parity evidence.
-
-Without the release bundle, Windows builds that touch native VICE invoke `native/build-vice-shim.ps1` and require MSYS2 at `C:\msys64`. That is a description of the legacy build path, not permission to mutate the immutable native reference or claim parity from a patched shim.
-
-Linux and macOS builds compile the managed test harness without invoking the Windows-only native oracle build. The hosted shim currently uses Win32 APIs; native parity validation requires Windows and its native prerequisites. Explicitly requesting the `BuildNative` target on another platform reports this limitation as an error. No test categories or assertions are disabled by this build distinction.
+The build treats warnings as errors. If you see SDK-version errors, re-check `dotnet --version`. The managed application builds without a native VICE bundle. For native snapshot validation on Linux or Windows, use the pinned `x64sc-observer` and `xvic-observer` programs. See the [native observer build guide](../native/README-native-build.md) and the [Phase D exit receipt](receipts/native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-phase-d-acceptance).
 
 ### Linux installation for your user
 
-From the repository, run `./build.sh DeployUser` or `./build.ps1 DeployUser`, then launch `~/.local/bin/vicesharp` or the ViceSharp desktop entry. This installs a self-contained Release build inside your home directory and requires no `sudo`, `yay`, or system package installation. `DeployYay` is a compatibility alias for `DeployUser`; `PackYay` remains a separate package-only target.
+From the repository, run `./build.sh DeployUser` or `./build.ps1 DeployUser`, then launch `~/.local/bin/vicesharp` or the ViceSharp desktop entry. This installs a self-contained Release build for your user without elevation or a package manager. `DeployYay` is a compatibility alias for `DeployUser`. `PackYay` builds an Arch package separately.
 
-The default application directory is `~/.local/share/vicesharp`, with retained versioned releases and a `current` symlink. `XDG_DATA_HOME` can replace `~/.local/share` when it is an absolute path inside your home. Existing user data under `ViceSharp` and any system package remain intact. If `/usr/bin/vicesharp` is also installed, put `~/.local/bin` earlier in `PATH` and verify `command -v vicesharp`, or use the absolute user launcher. The desktop entry selects the user launcher without relying on shell `PATH`. See [Linux installation](../README.md#linux-install-for-your-user) for the complete layout and requirements.
+The default application directory is `~/.local/share/vicesharp`, with retained versioned releases and a `current` symlink. `XDG_DATA_HOME` can replace `~/.local/share` when it is an absolute path under your home. Existing managed installations can upgrade through user-owned `~/.local` and `~/.local/bin` links with trusted directory targets. If `/usr/bin/vicesharp` is also installed, put `~/.local/bin` earlier in `PATH` and verify `command -v vicesharp`, or use the absolute user launcher. The desktop entry selects the user launcher without relying on shell `PATH`. See [Linux installation](../README.md#linux-install-for-your-user) for the complete layout and requirements.
 
 ### First-run verification
 
@@ -225,7 +220,7 @@ This matrix is the practical current-code view. Historical receipts prove only t
 | 1541 drive (true-drive: 6502 + VIA1 + VIA2 + IEC) | Bounded | IEC, head step, motor, D64 sector reads/writes, and stream commit are wired; drive-CPU lockstep and full KERNAL load validation remain Phase 1 work. |
 | CIA1 / CIA2 timers, TOD, ports | Working | Full solution test passes. |
 | SID hard sync + ring modulation | Working | Voice i syncs from voice ((i+2) % 3); triangle XOR with sync-source MSB. |
-| SID audio backend wiring | Windows and Linux desktop output | The Avalonia desktop app enables WinMM on Windows and SDL2 queued audio on Linux (`libSDL2-2.0.so.0` required). It sets `VICESHARP_AUDIO=1` at startup; set `VICESHARP_AUDIO=0` to force silence. Headless and test hosts stay silent unless explicitly enabled. Library consumers pass an `IAudioBackend` to `Sid6581(IBus, IAudioBackend?)` to receive 256-sample batches. macOS live output remains pending. |
+| SID audio backend wiring | Windows and Linux desktop output | The Avalonia desktop app enables WinMM on Windows and SDL2 queued audio on Linux (`libSDL2-2.0.so.0` required). It sets `VICESHARP_AUDIO=1` at startup. Set `VICESHARP_AUDIO=0` to force silence. Headless hosts are silent by default, and Linux tests use SDL dummy when they open a backend. The dummy sink discards playback and uses host-clock pacing. Library consumers pass an `IAudioBackend` to `Sid6581(IBus, IAudioBackend?)` to receive 256-sample batches. macOS live output remains pending. |
 | Standard 8K / 16K cartridge mapping (raw + CRT) | Working | Image normalises to ROML/ROMH and drives the live C64 memory map with GAME/EXROM behaviour; broader mapper families are post-MVP. |
 | Tape (TAP pulse reads) | Bounded | TAP pulse stream, CIA1 FLAG integration, builder wiring, rewind, and seek are present; spin-up/spin-down timing and record state remain Phase 1 work. |
 | Snapshot save/load | Canonical format pending | The product host currently emits `vice-sharp.machine-snapshot.v2` for C64 and `vice-sharp.runtime-snapshot.v1` for non-C64. Managed VSF staging exists in the test harness, but normal public and desktop paths do not yet save/load canonical native VICE `.vsf`; full state transfer and deterministic x64sc/xvic resume remain required. |
@@ -251,7 +246,7 @@ The Avalonia desktop UI exposes VICE-style speed controls:
 From the Avalonia desktop UI, the **Snapshot** menu exports emulator output:
 
 - **Save screenshot...** writes the current frame as PNG or BMP (chosen by the file extension).
-- **Record sound...** toggles a WAV recording of the SID output (start, then choose a file; pick the menu item again to stop).
+- **Record sound...** opens a file chooser to start a WAV recording of the SID output. Select the menu item again to stop. Stopping flushes queued samples and finalizes the WAV header before returning.
 - **Record video** offers three modes (toggle to start, pick again to stop):
   - **MP4 + sound** muxes H.264 video and AAC audio into an `.mp4` (also `.mkv` / `.avi` by extension). Requires `ffmpeg` on `PATH` (or set `VICESHARP_FFMPEG` to its full path).
   - **BMP sequence (all frames)** writes one numbered `frame_NNNNNN.bmp` per emulated frame into the chosen folder.
@@ -292,7 +287,7 @@ grpcurl -plaintext -d "{}" $attach.endpoint vice_sharp.v1.DiagnosticsService/Get
 
 **Drive sits idle / `PC` never moves** - true-drive emulation may be off. In YAML, set `fidelity: TrueDevice` (the launcher library's `+truedrive` flag maps to the same setting). The CPU on a buffered drive doesn't run by design.
 
-**`Native VICE failed to create a machine`** - the native adapter could not allocate a VICE instance. On Windows this is usually disk pressure or a missing native bundle. Free space and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Do not use the current legacy source-build script as parity evidence while immutable-oracle remediation is open; it still applies a patch under `native/vice`.
+**`Native VICE failed to create a machine`** appears in legacy hosted-shim tests or benchmarks when their native adapter cannot create a VICE instance. For current parity checks, follow the [native observer build guide](../native/README-native-build.md).
 
 **`SetDriveTrueEmulation` returns non-zero** - VICE rejected the resource set. The most common cause is an out-of-range unit number; valid units are 8..11.
 

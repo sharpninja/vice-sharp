@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="78dd548a-127d-43d6-9a93-a09e702f58b1" name="SYSTEM@PAYTON-LEGION2 2026-10-20 08:12:22" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-20T08:12:22.4684550-05:00" queuing="2026-10-20T08:12:22.4684553-05:00" start="2026-10-20T08:12:20.5470937-05:00" finish="2026-10-20T08:12:23.2905018-05:00" />
+  <TestSettings name="default" id="f27ef10e-db33-468d-a4fb-536b49515fe8">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-10-20_08_12_22" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="8957e40b-8001-4a50-854a-0eea97219965" testId="9397effd-386a-f082-8f3a-2451b7bf432c" testName="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: &quot;continue-then-quit&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0165073" startTime="2026-10-20T08:12:23.1914679-05:00" endTime="2026-10-20T08:12:23.2080355-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8957e40b-8001-4a50-854a-0eea97219965" />
+    <UnitTestResult executionId="b2360307-7070-444b-9877-c3c0e4b9711e" testId="89917b45-dd59-d8c2-563c-5dd7a4401c3d" testName="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests.Correct_mock_passes_and_wrong_observations_are_rejected(name: &quot;continue-both&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0990888" startTime="2026-10-20T08:12:21.7636390-05:00" endTime="2026-10-20T08:12:21.8720284-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b2360307-7070-444b-9877-c3c0e4b9711e" />
+    <UnitTestResult executionId="63b0b5a0-83d6-4623-a302-87d6715f38ab" testId="b2e0cfdd-7204-34df-95f4-23bde068989d" testName="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests.Correct_mock_passes_and_wrong_observations_are_rejected(name: &quot;continue-then-quit&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0003657" startTime="2026-10-20T08:12:21.8792830-05:00" endTime="2026-10-20T08:12:21.8796889-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="63b0b5a0-83d6-4623-a302-87d6715f38ab" />
+    <UnitTestResult executionId="290564d4-8883-437c-9ac4-fa7a2b28c225" testId="9ad28768-8ab3-3a59-9e9e-084236e280b8" testName="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests.Correct_mock_passes_and_wrong_observations_are_rejected(name: &quot;eof-first&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0023845" startTime="2026-10-20T08:12:21.8765062-05:00" endTime="2026-10-20T08:12:21.8789903-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="290564d4-8883-437c-9ac4-fa7a2b28c225" />
+    <UnitTestResult executionId="7ee68b79-aa06-4c7f-ba0b-ed9e87f3b6e2" testId="d94d5482-f192-fd1c-009c-f1ed69fd40c0" testName="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: &quot;continue-both&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0208262" startTime="2026-10-20T08:12:23.1701905-05:00" endTime="2026-10-20T08:12:23.1910824-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ee68b79-aa06-4c7f-ba0b-ed9e87f3b6e2" />
+    <UnitTestResult executionId="e188ba3e-9e47-4d7a-999a-68725103cbc5" testId="d0a6c668-7375-4bd9-74f9-0f20ab917a7a" testName="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests.Correct_mock_passes_and_wrong_observations_are_rejected(name: &quot;broken-stderr&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0001362" startTime="2026-10-20T08:12:21.8798840-05:00" endTime="2026-10-20T08:12:21.8800457-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e188ba3e-9e47-4d7a-999a-68725103cbc5" />
+    <UnitTestResult executionId="b81114cf-a5a5-4c72-8b9a-c05f3fd60d54" testId="286e11b4-88e9-fb70-048b-072a6b827d0e" testName="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: &quot;eof-first&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0160585" startTime="2026-10-20T08:12:23.2084141-05:00" endTime="2026-10-20T08:12:23.2245577-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b81114cf-a5a5-4c72-8b9a-c05f3fd60d54" />
+    <UnitTestResult executionId="282b36be-bf22-48b7-a280-9bdfb3a12630" testId="1f5d1e35-63b7-8ec9-3e6d-d0bcb36101aa" testName="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: &quot;broken-stderr&quot;)" computerName="PAYTON-LEGION2" duration="00:00:01.3859554" startTime="2026-10-20T08:12:21.7636408-05:00" endTime="2026-10-20T08:12:23.1693104-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="282b36be-bf22-48b7-a280-9bdfb3a12630">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Item not found in collection&#xD;
+Collection: [72]&#xD;
+Not found:  65</Message>
+          <StackTrace>   at ViceSharp.NativeClockProbe.Tests.BusAdapterFixtures.AssertAdapter(IBusAdapterProbe probe, String name) in F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\BusAdapterContractTests.cs:line 52&#xD;
+   at ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\BusAdapterContractTests.cs:line 141&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests.Correct_mock_passes_and_wrong_observations_are_rejected(name: &quot;eof-first&quot;)" storage="f:\github\vice-sharp\tests\vicesharp.nativeclockprobe.tests\bin\release\net10.0\vicesharp.nativeclockprobe.tests.dll" id="9ad28768-8ab3-3a59-9e9e-084236e280b8">
+      <Execution id="290564d4-8883-437c-9ac4-fa7a2b28c225" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests" name="Correct_mock_passes_and_wrong_observations_are_rejected" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: &quot;continue-both&quot;)" storage="f:\github\vice-sharp\tests\vicesharp.nativeclockprobe.tests\bin\release\net10.0\vicesharp.nativeclockprobe.tests.dll" id="d94d5482-f192-fd1c-009c-f1ed69fd40c0">
+      <Execution id="7ee68b79-aa06-4c7f-ba0b-ed9e87f3b6e2" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests" name="Real_adapter_on_real_pipes_matches_the_contract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: &quot;broken-stderr&quot;)" storage="f:\github\vice-sharp\tests\vicesharp.nativeclockprobe.tests\bin\release\net10.0\vicesharp.nativeclockprobe.tests.dll" id="1f5d1e35-63b7-8ec9-3e6d-d0bcb36101aa">
+      <Execution id="282b36be-bf22-48b7-a280-9bdfb3a12630" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests" name="Real_adapter_on_real_pipes_matches_the_contract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests.Correct_mock_passes_and_wrong_observations_are_rejected(name: &quot;continue-both&quot;)" storage="f:\github\vice-sharp\tests\vicesharp.nativeclockprobe.tests\bin\release\net10.0\vicesharp.nativeclockprobe.tests.dll" id="89917b45-dd59-d8c2-563c-5dd7a4401c3d">
+      <Execution id="b2360307-7070-444b-9877-c3c0e4b9711e" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests" name="Correct_mock_passes_and_wrong_observations_are_rejected" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: &quot;eof-first&quot;)" storage="f:\github\vice-sharp\tests\vicesharp.nativeclockprobe.tests\bin\release\net10.0\vicesharp.nativeclockprobe.tests.dll" id="286e11b4-88e9-fb70-048b-072a6b827d0e">
+      <Execution id="b81114cf-a5a5-4c72-8b9a-c05f3fd60d54" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests" name="Real_adapter_on_real_pipes_matches_the_contract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: &quot;continue-then-quit&quot;)" storage="f:\github\vice-sharp\tests\vicesharp.nativeclockprobe.tests\bin\release\net10.0\vicesharp.nativeclockprobe.tests.dll" id="9397effd-386a-f082-8f3a-2451b7bf432c">
+      <Execution id="8957e40b-8001-4a50-854a-0eea97219965" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests" name="Real_adapter_on_real_pipes_matches_the_contract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests.Correct_mock_passes_and_wrong_observations_are_rejected(name: &quot;broken-stderr&quot;)" storage="f:\github\vice-sharp\tests\vicesharp.nativeclockprobe.tests\bin\release\net10.0\vicesharp.nativeclockprobe.tests.dll" id="d0a6c668-7375-4bd9-74f9-0f20ab917a7a">
+      <Execution id="e188ba3e-9e47-4d7a-999a-68725103cbc5" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests" name="Correct_mock_passes_and_wrong_observations_are_rejected" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests.Correct_mock_passes_and_wrong_observations_are_rejected(name: &quot;continue-then-quit&quot;)" storage="f:\github\vice-sharp\tests\vicesharp.nativeclockprobe.tests\bin\release\net10.0\vicesharp.nativeclockprobe.tests.dll" id="b2e0cfdd-7204-34df-95f4-23bde068989d">
+      <Execution id="63b0b5a0-83d6-4623-a302-87d6715f38ab" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.NativeClockProbe.Tests.BusAdapterContractTests" name="Correct_mock_passes_and_wrong_observations_are_rejected" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="9397effd-386a-f082-8f3a-2451b7bf432c" executionId="8957e40b-8001-4a50-854a-0eea97219965" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="89917b45-dd59-d8c2-563c-5dd7a4401c3d" executionId="b2360307-7070-444b-9877-c3c0e4b9711e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2e0cfdd-7204-34df-95f4-23bde068989d" executionId="63b0b5a0-83d6-4623-a302-87d6715f38ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ad28768-8ab3-3a59-9e9e-084236e280b8" executionId="290564d4-8883-437c-9ac4-fa7a2b28c225" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d94d5482-f192-fd1c-009c-f1ed69fd40c0" executionId="7ee68b79-aa06-4c7f-ba0b-ed9e87f3b6e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d0a6c668-7375-4bd9-74f9-0f20ab917a7a" executionId="e188ba3e-9e47-4d7a-999a-68725103cbc5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="286e11b4-88e9-fb70-048b-072a6b827d0e" executionId="b81114cf-a5a5-4c72-8b9a-c05f3fd60d54" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f5d1e35-63b7-8ec9-3e6d-d0bcb36101aa" executionId="282b36be-bf22-48b7-a280-9bdfb3a12630" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="8" executed="8" passed="7" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.20]   Discovering: ViceSharp.NativeClockProbe.Tests&#xD;
+[xUnit.net 00:00:00.51]   Discovered:  ViceSharp.NativeClockProbe.Tests&#xD;
+[xUnit.net 00:00:00.73]   Starting:    ViceSharp.NativeClockProbe.Tests&#xD;
+[xUnit.net 00:00:02.20]       Assert.Contains() Failure: Item not found in collection&#xD;
+[xUnit.net 00:00:02.20]       Collection: [72]&#xD;
+[xUnit.net 00:00:02.20]       Not found:  65&#xD;
+[xUnit.net 00:00:02.20]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.20]         F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\BusAdapterContractTests.cs(52,0): at ViceSharp.NativeClockProbe.Tests.BusAdapterFixtures.AssertAdapter(IBusAdapterProbe probe, String name)&#xD;
+[xUnit.net 00:00:02.20]         F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\BusAdapterContractTests.cs(141,0): at ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(String name)&#xD;
+[xUnit.net 00:00:02.20]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:02.20]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:02.26]   Finished:    ViceSharp.NativeClockProbe.Tests (ID = '82f8a5565b4ed08f65a4fc76fd4e36f41824f01a33e5ced983dee1f2bd8fad66')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-20T08:12:23.1747442-05:00">
+        <Text>[xUnit.net 00:00:02.20]     ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: "broken-stderr") [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

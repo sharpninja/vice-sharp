@@ -1,0 +1,35 @@
+{
+  "timestampLocal": "2026-10-20T19:30:07",
+  "scripts": [
+    {
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/Review-Audit.ps1",
+      "parseErrors": [],
+      "findings": []
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/Review-Evidence.ps1",
+      "parseErrors": [],
+      "findings": []
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/Review-Log.ps1",
+      "parseErrors": [],
+      "findings": []
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/Review-Plugin.ps1",
+      "parseErrors": [],
+      "findings": []
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/Review-Read.ps1",
+      "parseErrors": [],
+      "findings": []
+    },
+    {
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/Review-Verdict.ps1",
+      "parseErrors": [],
+      "findings": []
+    }
+  ]
+}

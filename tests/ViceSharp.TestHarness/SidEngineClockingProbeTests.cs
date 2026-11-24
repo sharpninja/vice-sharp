@@ -36,6 +36,7 @@ public sealed class SidEngineClockingProbeTests
     /// the native shim is unavailable.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Probe_NativeReSidInternalStateAdvancesOnStep()
     {
         if (!ViceNative.IsAvailable)

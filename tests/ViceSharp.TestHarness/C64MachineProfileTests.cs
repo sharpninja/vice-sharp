@@ -517,6 +517,7 @@ public sealed class C64MachineProfileTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredProfileAliases))]
+    [Trait("Category", "ShimLegacy")]
     public void NativeVice_CreatesAndResetsEveryManagedX64ScAlias(string alias, string expectedId)
     {
         var native = ViceNative.CreateModel(alias);
@@ -545,6 +546,7 @@ public sealed class C64MachineProfileTests
     /// across a native reset.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeVice_DefaultCreateSelectsPalBreadboxModel()
     {
         var native = ViceNative.Create();

@@ -102,6 +102,7 @@ public sealed class SnapshotRunLogParityTests
     /// </summary>
     [ViceTheory(SkipTestWithoutData = true)]
     [MemberData(nameof(DiscoverCases))]
+    [Trait("Category", "ShimLegacy")]
     public void SnapshotRun_MatchesViceRunLog(string snapshotPath, string runLogPath)
     {
         var expected = CpuRunLog.Load(runLogPath);
@@ -199,6 +200,7 @@ public sealed class SnapshotRunLogParityTests
     /// fixture is absent.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void SaveNativeRunLog_ReadyFixture_ManagedMatchesAllEntries()
     {
         var vsf = LocateFixturePath("Vsf", ReadyFixtureName);
@@ -312,6 +314,7 @@ public sealed class SnapshotRunLogParityTests
     /// shim or the READY fixture is absent.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void RunFromSnapshot_ReadyFixture_HoldsLockstepZeroDivergence()
     {
         var vsf = LocateFixturePath("Vsf", ReadyFixtureName);
@@ -363,6 +366,7 @@ public sealed class SnapshotRunLogParityTests
     /// ffmpeg, the shim, or the READY fixture is absent.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void RunFromSnapshot_WithVideoCapture_ProducesMuxedVideoAndAudioStreams()
     {
         var ffmpeg = FfmpegLocator.Locate();

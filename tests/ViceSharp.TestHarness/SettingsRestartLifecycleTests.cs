@@ -19,7 +19,15 @@ using Xunit;
 /// </summary>
 public sealed class SettingsRestartLifecycleTests
 {
-    /// <summary>Restarted sessions can still record and suspend/resume their live output.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-CFG-008 / FR-MED-003 ac-1 and ac-6 / TEST-MED-001.
+    /// TEST-MED-001 ac-wav-finalization-byte-count.
+    /// Use case: Restart a rig using factory audio with a recording tap and a warp
+    /// policy.
+    /// Acceptance: The replacement keeps the tap and can suspend and resume live
+    /// playback. Stopping a recording waits for queued PCM and returns the finalized WAV data size.
+    /// 2026-11-23: hold the PCM writer until finalization waits for it to catch early byte counts.
+    /// </summary>
     [Fact]
     public async Task Restart_PreservesFactoryAudioTapAndWarpPolicy()
     {
@@ -40,14 +48,49 @@ public sealed class SettingsRestartLifecycleTests
         Assert.True(playback.Paused);
         replacement.SetLimiter(100, true);
         Assert.False(playback.Paused);
-        using var output = new MemoryStream();
-        replacement.BeginAudioCapture("after-restart", new WavAudioRecorder(output), output);
+        using var output = new GatedWavStream();
+        using var recorder = new WavAudioRecorder(output);
+        replacement.BeginAudioCapture("after-restart", recorder, output);
         tap.SubmitSamples([0.25f, -0.25f]);
-        Assert.Equal(4, replacement.EndAudioCapture());
-        Assert.Equal(4u, BinaryPrimitives.ReadUInt32LittleEndian(output.ToArray().AsSpan(40)));
+
+        var completed = new TaskCompletionSource<long>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var stopThread = new Thread(() =>
+        {
+            try { completed.SetResult(replacement.EndAudioCapture()); }
+            catch (Exception error) { completed.SetException(error); }
+        }) { IsBackground = true };
+        var cancellationToken = TestContext.Current.CancellationToken;
+        bool waitedForWriter;
+        try
+        {
+            await output.PcmWriteStarted.WaitAsync(TimeSpan.FromSeconds(5), cancellationToken);
+            stopThread.Start();
+            waitedForWriter = SpinWait.SpinUntil(
+                () => (stopThread.ThreadState & ThreadState.WaitSleepJoin) != 0,
+                TimeSpan.FromSeconds(5));
+        }
+        finally
+        {
+            output.ReleasePcmWrite();
+        }
+
+        var returnedBytes = await completed.Task.WaitAsync(TimeSpan.FromSeconds(5), cancellationToken);
+        Assert.True(waitedForWriter, "Capture finalization must wait for the queued PCM write.");
+        AssertFinalizedAudio(returnedBytes, output.ToArray());
     }
 
-    /// <summary>Normal pacing after a restart resumes the shared leaf paused by old warp/fast-forward.</summary>
+    private static void AssertFinalizedAudio(long returnedBytes, byte[] output)
+    {
+        Assert.Equal(4, returnedBytes);
+        Assert.Equal(4u, BinaryPrimitives.ReadUInt32LittleEndian(output.AsSpan(40)));
+    }
+
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-CFG-008.
+    /// Use case: Restart with settings that return a suspended shared audio backend to
+    /// normal pacing.
+    /// Acceptance: The shared backend resumes after settings are applied.
+    /// </summary>
     [Theory]
     [InlineData(100, false)]
     [InlineData(250, true)]
@@ -72,7 +115,12 @@ public sealed class SettingsRestartLifecycleTests
         Assert.False(playback.Paused);
     }
 
-    /// <summary>The actual 1541 unit and current inserted/ejected disk survive C64 restarts.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-DRVTRUE-001.
+    /// Use case: Restart a C64 with a 1541 configured as unit 8 or 9.
+    /// Acceptance: The replacement retains the unit and disk state, including an ejected
+    /// disk.
+    /// </summary>
     [Theory]
     [InlineData(8, false)]
     [InlineData(9, false)]
@@ -135,7 +183,11 @@ public sealed class SettingsRestartLifecycleTests
         // Retain generated inputs for diagnosis; no user ROM or game image is copied.
     }
 
-    /// <summary>Profiles without a C64 IEC connection do not request an incompatible true-drive rig.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-DRVTRUE-001.
+    /// Use case: Restart from C64 True Drive into a model without the C64 IEC connection.
+    /// Acceptance: The request for the replacement drops the incompatible drive.
+    /// </summary>
     [Theory]
     [InlineData("minimal")]
     [InlineData("ultimax")]
@@ -156,7 +208,12 @@ public sealed class SettingsRestartLifecycleTests
         Assert.Empty(factory.Request.TrueDriveDiskImagePath);
     }
 
-    /// <summary>Capture finalization precedes the registry notification and patches WAV sizes.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 / FR-MED-003.
+    /// Use case: Restart with active captures.
+    /// Acceptance: Finalization precedes registry notification and patches the WAV
+    /// lengths.
+    /// </summary>
     [Fact]
     public async Task Restart_FinalizesCapturesBeforeReplacement()
     {
@@ -189,7 +246,11 @@ public sealed class SettingsRestartLifecycleTests
         finally { current.EndAllCaptures(); }
     }
 
-    /// <summary>A failing video finalizer still closes WAV output and leaves the old session reachable.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-03 / FR-MED-003.
+    /// Use case: A video capture finalizer fails during a settings restart.
+    /// Acceptance: WAV output still closes and the existing session remains reachable.
+    /// </summary>
     [Fact]
     public async Task Restart_CaptureFailureKeepsOldSessionAndClosesOtherCaptures()
     {
@@ -219,7 +280,11 @@ public sealed class SettingsRestartLifecycleTests
         Assert.Equal(2u, BinaryPrimitives.ReadUInt32LittleEndian(output.ToArray().AsSpan(40)));
     }
 
-    /// <summary>Construction failure does not stop captures belonging to the unchanged session.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-03 / FR-MED-003.
+    /// Use case: Replacement construction fails while the existing session records.
+    /// Acceptance: The old session and its captures remain active.
+    /// </summary>
     [Theory]
     [InlineData("invalid-operation")]
     [InlineData("io")]
@@ -253,7 +318,12 @@ public sealed class SettingsRestartLifecycleTests
         finally { current.EndAllCaptures(); }
     }
 
-    /// <summary>Reopening an externally changed/removed disk fails visibly without abandoning the live rig.</summary>
+    /// <summary>
+    /// TR-SETTINGS-TXN-001 ac-02 and ac-03 / FR-DRVTRUE-001.
+    /// Use case: Restart attempts to reopen an externally changed or deleted attached
+    /// disk.
+    /// Acceptance: The error is visible and the existing rig remains active.
+    /// </summary>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -323,6 +393,28 @@ public sealed class SettingsRestartLifecycleTests
         public void Stop() { }
     }
 
+    /// <summary>FR-MED-003 ac-6: controls when the queued PCM write reaches the WAV stream.</summary>
+    private sealed class GatedWavStream : MemoryStream
+    {
+        private readonly TaskCompletionSource _started = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        private readonly TaskCompletionSource _release = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public Task PcmWriteStarted => _started.Task;
+
+        public void ReleasePcmWrite() => _release.TrySetResult();
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            if (Position == WavAudioRecorder.HeaderSize)
+            {
+                _started.TrySetResult();
+                _release.Task.WaitAsync(TimeSpan.FromSeconds(10)).GetAwaiter().GetResult();
+            }
+
+            base.Write(buffer, offset, count);
+        }
+    }
+
     private sealed class TrackingStream : MemoryStream
     {
         public bool Disposed { get; private set; }
@@ -334,6 +426,8 @@ public sealed class SettingsRestartLifecycleTests
         public bool Disposed { get; private set; }
         public bool ThrowOnDispose { get; init; }
         public int FrameCount => 0;
+        /// <summary>FR-CFG-003: palette id stamped onto accepted frames; mirrors the production sinks.</summary>
+        public string PaletteId { get; set; } = "vice";
         public void CaptureFrame(ReadOnlySpan<byte> bgra, int width, int height) { }
         public void Dispose()
         {

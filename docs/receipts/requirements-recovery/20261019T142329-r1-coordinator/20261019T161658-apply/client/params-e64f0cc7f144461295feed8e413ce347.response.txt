@@ -1,0 +1,18 @@
+type: result
+payload:
+  requestId: req-20261019T212053Z-2089
+  result:
+    frId: FR-TAP-004
+    trIds:
+    - TR-CYCLE-001
+    - TR-TAP-EDGE-001
+    - TR-TAPE-EDGE-001
+    testIds:
+    - TEST-TAP-001
+    - TEST-TAPE-RAMP-001
+    - TEST-TAPE-SENSE-001
+    - TEST-X64SC-LOCKSTEP-001
+    workspaceId: F:\GitHub\vice-sharp
+
+---
+

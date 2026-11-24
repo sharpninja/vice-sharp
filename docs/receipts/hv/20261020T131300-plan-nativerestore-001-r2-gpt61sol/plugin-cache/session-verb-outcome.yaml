@@ -1,0 +1,12 @@
+code: rejected
+retryable: false
+persisted: false
+degraded: false
+queued: false
+method: workflow.sessionlog.completeTurn
+agent: ""
+sessionId: ""
+requestId: req-20261020T181838Z-hv-nativerestore-r2
+failsafePath: ""
+message: workflow.sessionlog.completeTurn completed without a remote persistence receipt.
+childStderr: ""

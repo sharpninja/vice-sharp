@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="21" errors="0" failures="0" not-run="8" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="15:04:42">
+  <environment cwd="F:\GitHub\McpServer\.worktrees\plugin-params-file-20261019" user-domain="" user="SYSTEM" os-version="10.0.26200" nunit-version="2.5.8.0" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" clr-version="10.0.13" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="0.2394" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\.worktrees\plugin-params-file-20261019\plugins\core\test-fixtures\pester\ReplParamsTransfer.Tests.ps1" executed="True" result="Success" success="True" time="0.2394" asserts="0" description="F:\GitHub\McpServer\.worktrees\plugin-params-file-20261019\plugins\core\test-fixtures\pester\ReplParamsTransfer.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Params transfer assertions discriminate (mock gate)" executed="True" result="Success" success="True" time="0.1788" asserts="0" description="Params transfer assertions discriminate (mock gate)">
+            <results>
+              <test-case description="C1 accepts a -ParamsPath transfer" name="Params transfer assertions discriminate (mock gate).C1 accepts a -ParamsPath transfer" time="0.0187" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C1 rejects -ParamsYaml with the text" name="Params transfer assertions discriminate (mock gate).C1 rejects -ParamsYaml with the text" time="0.004" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C1 rejects the text under another switch name" name="Params transfer assertions discriminate (mock gate).C1 rejects the text under another switch name" time="0.0058" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C1 rejects a short payload passed inline" name="Params transfer assertions discriminate (mock gate).C1 rejects a short payload passed inline" time="0.0036" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C1 rejects non-empty params without -ParamsPath" name="Params transfer assertions discriminate (mock gate).C1 rejects non-empty params without -ParamsPath" time="0.0038" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C2 accepts an exact file" name="Params transfer assertions discriminate (mock gate).C2 accepts an exact file" time="0.0377" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C2 rejects a BOM" name="Params transfer assertions discriminate (mock gate).C2 rejects a BOM" time="0.0097" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C2 rejects normalized line endings" name="Params transfer assertions discriminate (mock gate).C2 rejects normalized line endings" time="0.012" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C2 rejects truncation" name="Params transfer assertions discriminate (mock gate).C2 rejects truncation" time="0.0084" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C2 rejects a lossy encoding" name="Params transfer assertions discriminate (mock gate).C2 rejects a lossy encoding" time="0.0121" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C2 rejects a leftover file" name="Params transfer assertions discriminate (mock gate).C2 rejects a leftover file" time="0.0058" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C2 accepts a removed file" name="Params transfer assertions discriminate (mock gate).C2 accepts a removed file" time="0.0051" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C3 accepts no transfer for empty params" name="Params transfer assertions discriminate (mock gate).C3 accepts no transfer for empty params" time="0.0066" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C3 rejects a file for empty params" name="Params transfer assertions discriminate (mock gate).C3 rejects a file for empty params" time="0.0043" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C4 accepts an envelope carrying the value" name="Params transfer assertions discriminate (mock gate).C4 accepts an envelope carrying the value" time="0.0114" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C4 rejects a truncated envelope value" name="Params transfer assertions discriminate (mock gate).C4 rejects a truncated envelope value" time="0.0057" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C4 rejects a missing envelope" name="Params transfer assertions discriminate (mock gate).C4 rejects a missing envelope" time="0.0043" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="C6 lint ignores in-process calls and file transfer" name="Params transfer assertions discriminate (mock gate).C6 lint ignores in-process calls and file transfer" time="0.0026" asserts="0" success="True" result="Success" executed="True" />
+              <test-suite type="ParameterizedTest" name="Params transfer assertions discriminate (mock gate).C6 lint finds &lt;Name&gt;" executed="True" result="Success" success="True" time="0.0083" asserts="0" description="C6 lint finds &lt;Name&gt;">
+                <results>
+                  <test-case description="C6 lint finds wrapper -Arguments" name="Params transfer assertions discriminate (mock gate).C6 lint finds wrapper -Arguments" time="0.0049" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C6 lint finds ArgumentList loop" name="Params transfer assertions discriminate (mock gate).C6 lint finds ArgumentList loop" time="0.0018" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C6 lint finds ArgumentList.Add" name="Params transfer assertions discriminate (mock gate).C6 lint finds ArgumentList.Add" time="0.0016" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

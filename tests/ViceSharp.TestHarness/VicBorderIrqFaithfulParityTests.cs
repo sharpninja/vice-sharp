@@ -42,10 +42,12 @@ public sealed class VicBorderIrqFaithfulParityTests
     private const ushort UnusedD02F = 0xD02F;
     private const ushort UnusedD03F = 0xD03F;
 
-    private static Mos6569 BuildVic(out IInterruptLine irq)
+    /// <summary>Constructs the selected PAL model for the register and timing parity cases.</summary>
+    private static Mos6569 BuildVic(out IInterruptLine irq, bool use8565 = false)
     {
         irq = new InterruptLine(InterruptType.Irq);
-        return new Mos6569(new BasicBus(), irq);
+        var bus = new BasicBus();
+        return use8565 ? new Mos8565(bus, irq) : new Mos6569(bus, irq);
     }
 
     private static void Advance(Mos6569 vic, int cycles)
@@ -743,20 +745,29 @@ public sealed class VicBorderIrqFaithfulParityTests
     /// Use case: busy-wait raster polling loops read the current raster
     /// position from $D012.
     /// Acceptance: after writing compare value $40, $D012 reads $00 on line 0,
-    /// $81 on line $081, and $34 on line $134 (low byte of 308).
+    /// $81 on line $081, and $34 on line $134 once the first cycle
+    /// advances the VICE CPU-visible line.
+    /// 2026-11-23, TEST-VIC-REGISTERS-08 and D6/R18: verify reads on
+    /// both sides of that transition for the PAL 6569 and 8565.
     /// </summary>
-    [Fact]
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
     [ParityAc("TEST-VIC-REGISTERS-08", ParityTag.Faithful)]
-    public void Registers_D012Read_ReturnsLiveRasterLowByte()
+    public void Registers_D012Read_ReturnsLiveRasterLowByte(bool use8565)
     {
-        var vic = BuildVic(out _);
+        var vic = BuildVic(out _, use8565);
         vic.Write(RasterCompareLow, 0x40);
         Assert.Equal(0x00, vic.Read(RasterCompareLow));
 
         AdvanceTo(vic, 0x81, 0);
+        Assert.Equal(0x80, vic.Read(RasterCompareLow));
+        vic.Tick();
         Assert.Equal(0x81, vic.Read(RasterCompareLow));
 
         AdvanceTo(vic, 308, 0);
+        Assert.Equal(0x33, vic.Read(RasterCompareLow));
+        vic.Tick();
         Assert.Equal(0x34, vic.Read(RasterCompareLow));
     }
 

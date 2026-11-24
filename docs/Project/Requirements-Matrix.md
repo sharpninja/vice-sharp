@@ -1,4 +1,4 @@
-# Requirements Matrix (MCP Server)
+# Requirements Matrix (QBrain.AI)
 
 Traceability policy: see `Requirements-Traceability-Policy.md`.
 
@@ -539,3 +539,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-XVIDEO-001 | Tracked | Testing-Requirements.md |
 | TEST-XVIDEO-002 | Tracked | Testing-Requirements.md |
 | TEST-XVIDEO-DEVICE | Tracked | Testing-Requirements.md |
+| TEST-BUILD-001 | Tracked | Testing-Requirements.md |
+| TEST-ROMM-LAUNCH-001 | Tracked | Testing-Requirements.md |

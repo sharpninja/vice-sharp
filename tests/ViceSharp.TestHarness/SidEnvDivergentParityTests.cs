@@ -209,6 +209,7 @@ public sealed class SidEnvDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-ENV-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void EnvelopeReset_PreservesEnvelopeCounterExactlyAsReSid()
     {
         // Native oracle: walk voice 3 to counter 0x40, then reset.
@@ -290,6 +291,7 @@ public sealed class SidEnvDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-ENV-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PowerUp_SeedsEnvelopeCounter0xAAAndReleasesExactlyAsReSid()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -407,6 +409,7 @@ public sealed class SidEnvDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-CLOCK-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PerCycleClockChain_RunsPipelinedWriteAndBusAgingStages()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -550,6 +553,7 @@ public sealed class SidEnvDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-CLOCK-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void BusValue_AgesByExactlyTheElapsedClockedCycles()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

@@ -160,8 +160,10 @@ public sealed class DatasetteCia1FlagTests
     /// the IMR enable, the latch still happens (polled mode) but no
     /// IRQ fires.
     /// Acceptance: After enabling IMR bit 4 ($90 to $DC0D), ticking
-    /// the binding long enough to consume the first pulse drives the
-    /// IRQ line asserted. The ICR read returns $90 (IR master + FLG).
+    /// the binding and CIA consumes the first pulse. The next CIA clock
+    /// asserts IRQ, and reading ICR returns $90 (IR master + FLG).
+    /// 2026-11-23, FR-TAP-003 and FR-CIA-007, D6/R18: clock the CIA's
+    /// delayed FLAG assertion as in VICE ciacore_async_interrupt.
     /// </summary>
     [Fact]
     public void MotorOnPlayPressed_WithImrEnabled_AssertsIrq()
@@ -175,11 +177,18 @@ public sealed class DatasetteCia1FlagTests
 
         cia.Write(0xDC0D, 0x90);
 
-        // 32 cycles consumes the first pulse (4 * 8).
+        // 32 cycles consumes the first pulse (4 * 8), after the CIA
+        // has already ticked on the cycle carrying the edge.
         for (var i = 0; i < 32; i++)
+        {
+            cia.Tick();
             binding.Tick();
+        }
 
+        irq.IsAsserted.Should().BeFalse("the FLAG edge schedules IRQ delivery");
+        cia.Tick();
         irq.IsAsserted.Should().BeTrue("with IMR bit 4 enabled, pulse-driven FLAG must assert IRQ");
         cia.Read(0xDC0D).Should().Be(0x90, "ICR returns IR master bit plus FLG bit");
+        irq.IsAsserted.Should().BeFalse("reading ICR acknowledges the interrupt");
     }
 }

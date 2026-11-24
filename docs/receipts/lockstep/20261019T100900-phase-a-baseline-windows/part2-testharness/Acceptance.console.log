@@ -1,0 +1,6 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+Results File: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T100900-phase-a-baseline-windows\part2-testharness\Acceptance.trx
+
+Passed!  - Failed:     0, Passed:   210, Skipped:     0, Total:   210, Duration: 14 s - ViceSharp.TestHarness.dll (net10.0)

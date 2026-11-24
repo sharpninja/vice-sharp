@@ -1,0 +1,7 @@
+Cline v2 on PAYTON-LEGION2: independent verification of the 19:08 reinstall (Install-ClineV2Legion2.ps1, receipt cline-v2-reinstall-legion2.json), run by LEG-VICE# 2026-10-19T19:26.
+Authority: Payton, 19:23: "Allow a one-time npm install and build for mcpserver-cline-v2-plugin at ee63577a, then reinstall Cline v2 with a tar backup first."
+Found at 19:24: the install had already been replaced at 19:08:12 by another run (backup tar 978532A8..., 62 entries, receipt hashesMatch true).
+Backup check: tar SHA256 unchanged (978532A8); extracted to scratch: .version 1.118.0, Invoke-McpPlugin 70EA9B5C, repl-invoke 615BCB13, 45 files. The old 1.118.0 copy is retained in the tar.
+Independent build: git archive ee63577a to scratch; npm ci exit 0 (523 packages); npm run build (tsc) exit 0; npm test (jest) exit 0: Test Suites 4 passed of 4, Tests 27 passed of 27.
+Compare installed package vs independent build (tests/ and node_modules/ excluded): 57 vs 57 files, 0 only-in-build, 0 only-installed, 0 content differences (SHA256 per file); dist 12 vs 12.
+Installed lib hashes: Invoke-McpPlugin AF6D1E5B, repl-invoke 93AE956E (the published fix). No further replacement made: it would be a no-op.

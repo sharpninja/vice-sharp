@@ -1,24 +1,26 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
-using ViceSharp.Core.FlashCarts;
+using ViceSharp.Abstractions;
+using ViceSharp.Host.Services;
 
 namespace ViceSharp.Avalonia.Views;
 
 /// <summary>
 /// FR-FLASHCART-001: desktop UI for building FE3 / Ultimem / Mega-Cart flash images.
+/// 2026-11-23, TR-MVVM-001 and D6/R18: use the host-composed builder contract.
 /// </summary>
 public partial class FlashCartBuilderView : UserControl
 {
+    /// <summary>Initializes the picker and its host-composed builder.</summary>
     public FlashCartBuilderView()
     {
         InitializeComponent();
-        DataContext ??= new FlashCartImageBuilderViewModel(new AvaloniaFlashBuilderFileIo());
+        DataContext ??= FlashCartBuilderComposition.Create();
         if (this.FindControl<ComboBox>("ProfileBox") is { } box && ViewModel is not null)
         {
             box.SelectedItem = ViewModel.Profiles.FirstOrDefault(p => p.Id == ViewModel.SelectedProfileId)
@@ -26,15 +28,17 @@ public partial class FlashCartBuilderView : UserControl
         }
     }
 
-    public FlashCartImageBuilderViewModel? ViewModel => DataContext as FlashCartImageBuilderViewModel;
+    /// <summary>Returns the builder exposed through the desktop view boundary.</summary>
+    public IFlashCartImageBuilder? ViewModel => DataContext as IFlashCartImageBuilder;
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     public event EventHandler? CloseRequested;
 
+    /// <summary>TR-MVVM-001, 2026-11-23. Forwards the selected profile ID to the builder.</summary>
     private void OnProfileChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (sender is ComboBox { SelectedItem: IFlashCartProfile profile } && ViewModel is not null)
+        if (sender is ComboBox { SelectedItem: IFlashCartBuilderProfile profile } && ViewModel is not null)
             ViewModel.SelectedProfileId = profile.Id;
     }
 
@@ -106,10 +110,4 @@ public partial class FlashCartBuilderView : UserControl
 
     private void OnClose(object? sender, RoutedEventArgs e)
         => CloseRequested?.Invoke(this, EventArgs.Empty);
-}
-
-internal sealed class AvaloniaFlashBuilderFileIo : IFlashBuilderFileIo
-{
-    public Task WriteAllBytesAsync(string path, byte[] data, CancellationToken cancellationToken = default)
-        => File.WriteAllBytesAsync(path, data, cancellationToken);
 }

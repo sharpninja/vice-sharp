@@ -1,0 +1,218 @@
+{
+  "timestampLocal": "2026-10-20T15:47:16",
+  "path": "tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+  "bytes": 190854,
+  "sha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+  "moduleCount": 24,
+  "end": 190854,
+  "modules": [
+    {
+      "name": "MAINCPU",
+      "major": 1,
+      "minor": 2,
+      "offset": 58,
+      "totalSize": 113,
+      "payloadLength": 91,
+      "clock": 109163946,
+      "pc": 22377,
+      "p": 160,
+      "a": 194,
+      "x": 2,
+      "y": 0,
+      "sp": 250
+    },
+    {
+      "name": "C64MEM",
+      "major": 0,
+      "minor": 1,
+      "offset": 171,
+      "totalSize": 65577,
+      "payloadLength": 65555
+    },
+    {
+      "name": "C64CART",
+      "major": 0,
+      "minor": 1,
+      "offset": 65748,
+      "totalSize": 23,
+      "payloadLength": 1
+    },
+    {
+      "name": "CIA1",
+      "major": 2,
+      "minor": 5,
+      "offset": 65771,
+      "totalSize": 99,
+      "payloadLength": 77
+    },
+    {
+      "name": "CIA2",
+      "major": 2,
+      "minor": 5,
+      "offset": 65870,
+      "totalSize": 99,
+      "payloadLength": 77
+    },
+    {
+      "name": "SID",
+      "major": 1,
+      "minor": 5,
+      "offset": 65969,
+      "totalSize": 58,
+      "payloadLength": 36
+    },
+    {
+      "name": "SIDEXTENDED",
+      "major": 1,
+      "minor": 4,
+      "offset": 66027,
+      "totalSize": 155,
+      "payloadLength": 133
+    },
+    {
+      "name": "VDRIVEIMAGE8",
+      "major": 2,
+      "minor": 0,
+      "offset": 66182,
+      "totalSize": 22,
+      "payloadLength": 0
+    },
+    {
+      "name": "DRIVE8",
+      "major": 2,
+      "minor": 0,
+      "offset": 66204,
+      "totalSize": 24,
+      "payloadLength": 2,
+      "hasTde": 0,
+      "hasDrives": 1
+    },
+    {
+      "name": "DRIVE9",
+      "major": 2,
+      "minor": 0,
+      "offset": 66228,
+      "totalSize": 167,
+      "payloadLength": 145,
+      "hasTde": 1,
+      "hasDrives": 1
+    },
+    {
+      "name": "DRIVE10",
+      "major": 2,
+      "minor": 0,
+      "offset": 66395,
+      "totalSize": 167,
+      "payloadLength": 145,
+      "hasTde": 1,
+      "hasDrives": 1
+    },
+    {
+      "name": "DRIVE11",
+      "major": 2,
+      "minor": 0,
+      "offset": 66562,
+      "totalSize": 167,
+      "payloadLength": 145,
+      "hasTde": 1,
+      "hasDrives": 1
+    },
+    {
+      "name": "FSDRIVE",
+      "major": 0,
+      "minor": 0,
+      "offset": 66729,
+      "totalSize": 280,
+      "payloadLength": 258
+    },
+    {
+      "name": "VIC-II",
+      "major": 1,
+      "minor": 3,
+      "offset": 67009,
+      "totalSize": 123437,
+      "payloadLength": 123415,
+      "viciiModel": 1
+    },
+    {
+      "name": "GLUE",
+      "major": 1,
+      "minor": 0,
+      "offset": 190446,
+      "totalSize": 25,
+      "payloadLength": 3
+    },
+    {
+      "name": "C64MEMHACKS",
+      "major": 0,
+      "minor": 0,
+      "offset": 190471,
+      "totalSize": 23,
+      "payloadLength": 1
+    },
+    {
+      "name": "TAPEPORT",
+      "major": 1,
+      "minor": 0,
+      "offset": 190494,
+      "totalSize": 24,
+      "payloadLength": 2
+    },
+    {
+      "name": "DATASETTE",
+      "major": 1,
+      "minor": 5,
+      "offset": 190518,
+      "totalSize": 100,
+      "payloadLength": 78
+    },
+    {
+      "name": "KEYBOARD",
+      "major": 1,
+      "minor": 1,
+      "offset": 190618,
+      "totalSize": 118,
+      "payloadLength": 96
+    },
+    {
+      "name": "JOYPORT0",
+      "major": 0,
+      "minor": 0,
+      "offset": 190736,
+      "totalSize": 23,
+      "payloadLength": 1
+    },
+    {
+      "name": "JOYSTICK0",
+      "major": 1,
+      "minor": 2,
+      "offset": 190759,
+      "totalSize": 24,
+      "payloadLength": 2
+    },
+    {
+      "name": "JOYPORT1",
+      "major": 0,
+      "minor": 0,
+      "offset": 190783,
+      "totalSize": 23,
+      "payloadLength": 1
+    },
+    {
+      "name": "JOYSTICK1",
+      "major": 1,
+      "minor": 2,
+      "offset": 190806,
+      "totalSize": 24,
+      "payloadLength": 2
+    },
+    {
+      "name": "USERPORT",
+      "major": 1,
+      "minor": 0,
+      "offset": 190830,
+      "totalSize": 24,
+      "payloadLength": 2
+    }
+  ]
+}

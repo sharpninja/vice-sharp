@@ -1,0 +1,427 @@
+{
+  "assembledAt": "2026-10-19T20:13:33",
+  "files": [
+    {
+      "path": "focused-linux/console.log",
+      "sha256": "4BC79C2B90313498B40F6C51FA61CBA35237F9FA6D633A5D24DE95AFC5D65D30",
+      "bytes": 731,
+      "source": "/home/sharpninja/codex-dispatch/phase-c-step2-20261019/legion2-harness-focused/console.log"
+    },
+    {
+      "path": "focused-linux/native-inventory-after.txt",
+      "sha256": "A31D0C086A9A36D12581BA290351D06EE7E43D6D9E8C22C66E7F9A70DC1A94BD",
+      "bytes": 5359,
+      "source": "/home/sharpninja/codex-dispatch/phase-c-step2-20261019/legion2-harness-focused/native-inventory-after.txt"
+    },
+    {
+      "path": "focused-linux/native-inventory-before.txt",
+      "sha256": "A31D0C086A9A36D12581BA290351D06EE7E43D6D9E8C22C66E7F9A70DC1A94BD",
+      "bytes": 5359,
+      "source": "/home/sharpninja/codex-dispatch/phase-c-step2-20261019/legion2-harness-focused/native-inventory-before.txt"
+    },
+    {
+      "path": "focused-linux/stdio-focused-linux.trx",
+      "sha256": "08E0B000EBAA7476206E06B6C3491AED08DD8B8BF74C69052623CEE8EEDCBE8F",
+      "bytes": 76053,
+      "source": "/home/sharpninja/codex-dispatch/phase-c-step2-20261019/legion2-harness-focused/stdio-focused-linux.trx"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/compile.log",
+      "sha256": "22C33074DC3FB4C8353599AA08CA38D14FDD161FB510066DDAB2BD137A94319B",
+      "bytes": 817,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/compile.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-0d01d127d2a44e10848c39f53a351285.log",
+      "sha256": "B837D67D3339C94B4568B5B796071C5C068874E2D1BC7B7FF3FA793432DBC866",
+      "bytes": 391,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-0d01d127d2a44e10848c39f53a351285.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-178ae27141a7495ca08b96f86aa27e23.log",
+      "sha256": "6DCF5463FA4995F0C7734124C1D301F1A5B1D36AC1D4C9868A1D434349FA5E33",
+      "bytes": 431,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-178ae27141a7495ca08b96f86aa27e23.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-1ded79614a3844809ed889bcf0ae126c.log",
+      "sha256": "2BBA32B63713F507FA73DE1CE7379487A8F3A0F5260FDC1E571D4927726870DB",
+      "bytes": 431,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-1ded79614a3844809ed889bcf0ae126c.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-1f9716dc92f44630803c67f4e2a67b96.log",
+      "sha256": "B3C84D6349C10B6C70E7CF7034DF964D4AB5D696D7B4B1CE1CCDFDB0EE214DE2",
+      "bytes": 485,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-1f9716dc92f44630803c67f4e2a67b96.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-20752ca6753b4caab95058b5d7c9ba60.log",
+      "sha256": "4163DAC40956D6D92818ACA5A71BC245F85169F2D596EB3A4B79F855051CE0E8",
+      "bytes": 485,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-20752ca6753b4caab95058b5d7c9ba60.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-2c249433bb6841f0bc30e40d8d901d40.log",
+      "sha256": "1AB0BB821A8314CF3FBD9A49F4DFAC38E516F1277CB4BC314C3EAB8EF3DE18D7",
+      "bytes": 450,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-2c249433bb6841f0bc30e40d8d901d40.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-2da22fe8c5f043e38fd0f1422219a2d7.log",
+      "sha256": "A59507329DD7421CB6A5B1CDD5D17B545B1283C1B9B4667C85C58299A19B1A52",
+      "bytes": 468,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-2da22fe8c5f043e38fd0f1422219a2d7.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-32fcf7083198487ca80fdee9940a4b11.log",
+      "sha256": "49A7EAFE7FFD397DCD8A624F0AC7B4DC3231560DA3D794D99413AFA2C76A1E2C",
+      "bytes": 391,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-32fcf7083198487ca80fdee9940a4b11.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-3316a38a9671410aa4a08d88f8b41520.log",
+      "sha256": "5EC44AA7F312A0429F3734E1152DD5190486CDC2AE34F4F65E6C3ADC755701C7",
+      "bytes": 390,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-3316a38a9671410aa4a08d88f8b41520.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-34362fef14e146fcbe629ebd7ce27ef0.log",
+      "sha256": "55C610290C7439CAD2C9966037BB2FBC03800EF5C76E0E59173370F4A9E29DFD",
+      "bytes": 467,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-34362fef14e146fcbe629ebd7ce27ef0.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-3e0becb144fc4e878e08322d91442925.log",
+      "sha256": "8F77266FAA36665D1E052CF2C9E4CDDE66207B1F2612B3BB626B7027754746D8",
+      "bytes": 431,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-3e0becb144fc4e878e08322d91442925.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-41f86df3da7c42eb81c5edc3162e61a9.log",
+      "sha256": "CDE55CC78E7701F434EE42F07AA78F8649A902574D0EA729D9E2CAF58815F181",
+      "bytes": 448,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-41f86df3da7c42eb81c5edc3162e61a9.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-5549821bc8274846ba5d98a9fd048b7d.log",
+      "sha256": "205685AE5B4FA589534DB0FFC03FCFC80856C257E06A99B6875EA65795A60F54",
+      "bytes": 448,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-5549821bc8274846ba5d98a9fd048b7d.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-5c1e73fc692d4a32926d6698b3d296f8.log",
+      "sha256": "5E56630853AEDF39EF154C091EA22A1B1F67018BB79A182AC2F4536BF3F87A12",
+      "bytes": 485,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-5c1e73fc692d4a32926d6698b3d296f8.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-67aa1b7fdb5d4fdf8d2761e16acd1608.log",
+      "sha256": "F7735D440C2C417AE67506F76E3CD4E807D4F6CE8EC14D194C39A0801A54893F",
+      "bytes": 451,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-67aa1b7fdb5d4fdf8d2761e16acd1608.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-67bd7a53047d4d0abe8e8fc31adb7356.log",
+      "sha256": "C6FE42BF59B887CDFE5DCDDBD277495A8EE560FB3B824E686B459FF07F2BE507",
+      "bytes": 467,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-67bd7a53047d4d0abe8e8fc31adb7356.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-6a588454b83644ecb21fdb6f328fb57e.log",
+      "sha256": "0D8258F12CA21A5CB2CE0F8447DB3EDE06D3086E0D6AC9BA273533D5506D84B3",
+      "bytes": 485,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-6a588454b83644ecb21fdb6f328fb57e.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-74f7cffa67ad45e3bc088f36771ac8f2.log",
+      "sha256": "13A38409B964B2B49E95559A4360D7EB3CEA26CA83494D64F4EC672B84D05EA6",
+      "bytes": 451,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-74f7cffa67ad45e3bc088f36771ac8f2.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-7a677601d4cd412f892d0c93485170e0.log",
+      "sha256": "8CE412D0FF690B670B2AC28FBD08747056AC3A566B39079E944CD7D6F0C21376",
+      "bytes": 432,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-7a677601d4cd412f892d0c93485170e0.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-813bf8175587482da3ab201e19b5f145.log",
+      "sha256": "4D5CD934B74E6EA97E71E618144A9C4CBCE5045E4B9A385E3DF64A2F2A3A3E0C",
+      "bytes": 468,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-813bf8175587482da3ab201e19b5f145.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-878922e1cee642b3a74c358db0483b7e.log",
+      "sha256": "653DD0B5F7C762858958BBD8DB3A61D8B8780CACDF2F075E018DEAF5901BF3D7",
+      "bytes": 432,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-878922e1cee642b3a74c358db0483b7e.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-8bc844f30ca9400bae356d035964e090.log",
+      "sha256": "379D4257388943B603D9CB3ABFA59644F5246D4FC25895B549D338064D5A9A6B",
+      "bytes": 450,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-8bc844f30ca9400bae356d035964e090.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-8eb21f3f584a46518676cbbbc91ee917.log",
+      "sha256": "863B9B60FB863048DD2C3E9D828E0A51E6E72608F3BC1EFD74C1FB0ED9DAB565",
+      "bytes": 486,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-8eb21f3f584a46518676cbbbc91ee917.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-911e060226ea42d18c9cd28afc1b6bd9.log",
+      "sha256": "C3936EFD539A4BD8849B536E22F1118481C703A90478CC1BF121A954A5764872",
+      "bytes": 431,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-911e060226ea42d18c9cd28afc1b6bd9.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-9369d9266dd84fd094de9ab86ace5d84.log",
+      "sha256": "A9BDD7EBBB5025EA1294A3572BA7C5CA03ED5B7AE19407CF6DBC73C7FD4A693E",
+      "bytes": 467,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-9369d9266dd84fd094de9ab86ace5d84.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-a16de90ba3ab42a7a352eccf9fbc2973.log",
+      "sha256": "D32DD762158050C522C6C20CD4DC59509DDDB349FDF22A79547C84CAF0CDC1A1",
+      "bytes": 486,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-a16de90ba3ab42a7a352eccf9fbc2973.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-a456484d901c437d8dd54dc40f6aacd9.log",
+      "sha256": "C3F9E6ED03D880EFB6A755CA9123D58B0E33EAB592E0B2CC6C382CF976535787",
+      "bytes": 468,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-a456484d901c437d8dd54dc40f6aacd9.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-a53a85492d564d20b757c540457ecd8a.log",
+      "sha256": "FE47488DE7C932D52E2C7AE99170AAE90C56A8C9400CCB4F23E7CB1B369DCBA1",
+      "bytes": 467,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-a53a85492d564d20b757c540457ecd8a.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-ab35fbb3e8434fccaa615458099c2663.log",
+      "sha256": "CB706A4404FE78065A4C30C1BD538CC8AB8C97A3BE8DFEDDCBB04402623210BC",
+      "bytes": 390,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-ab35fbb3e8434fccaa615458099c2663.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-afa26d9e8c584eb499f112959741549a.log",
+      "sha256": "FAA78FBEF4728AF66AD9812938734BFD7AD27483A952CC7DB212C7D247E01860",
+      "bytes": 392,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-afa26d9e8c584eb499f112959741549a.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-b635dbf7c0c6432584e5caa2b5f04e6b.log",
+      "sha256": "CA2E7930EAC13C61A8E7F58AD085D16AC01C0A18C6D987DE9FEEE423E8E07FF5",
+      "bytes": 485,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-b635dbf7c0c6432584e5caa2b5f04e6b.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-ba37e235759e4f39a02a51b9510a7836.log",
+      "sha256": "6625730589840DCD5C52739C5269E869E9A4B618C6275F96DE5916DC8F3E75EF",
+      "bytes": 468,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-ba37e235759e4f39a02a51b9510a7836.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-ca66811af36a432cae966cc6ad3b6750.log",
+      "sha256": "D52CE3ABEF3FC2DA751120B5427B3CE456BBE6BF83176270315CFBBEA8AF7A6D",
+      "bytes": 466,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-ca66811af36a432cae966cc6ad3b6750.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-d562d414171b4152996e9d7be05c6d20.log",
+      "sha256": "CB5955CD6EF569AC8CCAC0B04B2C66F329608D6D5972D1C2BE5486496E96B6C3",
+      "bytes": 468,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-d562d414171b4152996e9d7be05c6d20.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-dce8d8646c2949cb939cb9b177481661.log",
+      "sha256": "3F5C6EFB1B2A63075D440F3EE539D34A6C69ECC7EC40D65A4EA6B4F7D2A7E51B",
+      "bytes": 485,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-dce8d8646c2949cb939cb9b177481661.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-e6be59dad082465385e513eb711b13b7.log",
+      "sha256": "1B4A23F9E4177E49ACA77D2D3D5D56F2FB20C136441FCB5FDB8BE781B155FD50",
+      "bytes": 392,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-e6be59dad082465385e513eb711b13b7.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-ef2806c5d6de4566871cbda4a4fdd932.log",
+      "sha256": "04D87EB32B6B3C6D7A2DC46E7794624F0FE8F2F3B98EB34A8E6E9D8E237C95C9",
+      "bytes": 468,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-ef2806c5d6de4566871cbda4a4fdd932.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-scripted-evidence/run-f83f55cc15e24605999cf6320fea5a8f.log",
+      "sha256": "E5E2F5924EB1C7FDB4CE19D30E14A7848EB91C5663D24F933E1DC7F9568D7DEE",
+      "bytes": 466,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-scripted-evidence/run-f83f55cc15e24605999cf6320fea5a8f.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/compile.log",
+      "sha256": "F7C38C68E5DC0883BB14E2019A455B192373AE9FB6C6DE308B8633C5A714D6C0",
+      "bytes": 675,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/compile.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/real-run-13d1632d9fd84fc2be823910e1d73661.log",
+      "sha256": "FFCDEDA124F6766DC116834B169865A21623992385129726BFAADA94A4866EA4",
+      "bytes": 380,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/real-run-13d1632d9fd84fc2be823910e1d73661.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/real-run-1915249a5ad342399a13fa642ddaf14d.log",
+      "sha256": "8C84B9ACC5768F7070B29AE09C4E816FA8EB0D801DF6B5B077723303D7482919",
+      "bytes": 343,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/real-run-1915249a5ad342399a13fa642ddaf14d.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/real-run-1a6a18b8be9844ce8e112cafa34ac379.log",
+      "sha256": "5C45C29B5F0C697B7AC2C1593D7E0B1421F8EC9299E52088DF9C2432885F9082",
+      "bytes": 362,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/real-run-1a6a18b8be9844ce8e112cafa34ac379.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/real-run-e503642f2fb04d8fb148088327a0f56a.log",
+      "sha256": "DD025AB258B58862623C9DC968D0DE515AE5D7D3A4DF67EEEF875955857FF75C",
+      "bytes": 343,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/real-run-e503642f2fb04d8fb148088327a0f56a.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/real-run-f54b1560631d4470b51d6cb2276b5333.log",
+      "sha256": "B6239C7D27AC5FE98567F41CDD4A673C73E787AD37D3C564D59B286FA25EE5E1",
+      "bytes": 380,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/real-run-f54b1560631d4470b51d6cb2276b5333.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/real-run-fbce5de7d58244f9837e325ce3044841.log",
+      "sha256": "D775CA24A0A58A7862A5F928585647F89203509DCD16D9C8B4DCC47CC9D7FB40",
+      "bytes": 362,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/real-run-fbce5de7d58244f9837e325ce3044841.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/real-stdio-observations.log",
+      "sha256": "65D2A9D7128960876E58EFDC1ED8A6F9C0B1F19722F1442C215150855D649758",
+      "bytes": 1526,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/real-stdio-observations.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/run-0ad47f68f39440898e7b3c9adcfbe604.log",
+      "sha256": "A5AD8991911A2DA82399F8A8C13F391294E0E132F2B611CFC91214AE55271B13",
+      "bytes": 249,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/run-0ad47f68f39440898e7b3c9adcfbe604.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/run-5a7ec170da3c43dbbaf73d3fe025f139.log",
+      "sha256": "7590309D191043A513339287E81B43F3C022DB2CBD5397EFF056D7C97FFDD38F",
+      "bytes": 249,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/run-5a7ec170da3c43dbbaf73d3fe025f139.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/run-a0f823a8deb34f48a12166331d21899c.log",
+      "sha256": "D5F4628FB5FD2FC15CA96778464469F02BC38FF22CE6ABC3DD329EC4548505E0",
+      "bytes": 249,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/run-a0f823a8deb34f48a12166331d21899c.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/run-ad0397f8fad643b990f79d8063520a5a.log",
+      "sha256": "79F000F9B1C633BB0B8A8241519E6D226B23C56EB4D703750F88C3E270A00751",
+      "bytes": 249,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/run-ad0397f8fad643b990f79d8063520a5a.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/run-be2092f1b67e4c638245a557cc165dab.log",
+      "sha256": "A83ACCB555DDE0A9D82EF9C6E29B5A2B515BEE4F56AD3811D3E98DE21B9D65CA",
+      "bytes": 249,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/run-be2092f1b67e4c638245a557cc165dab.log"
+    },
+    {
+      "path": "c-evidence/stdio-adapter-real-evidence/run-d5199dc336f84742b4949c4406fe9bdd.log",
+      "sha256": "E58CACA1117EB17988CEEC7A1844CDECDFEF58BC031B3742D7D7C26233BADCBB",
+      "bytes": 249,
+      "source": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/run-d5199dc336f84742b4949c4406fe9bdd.log"
+    }
+  ],
+  "preservedDraft": {
+    "root": "/home/sharpninja/codex-dispatch/phase-c-step2-20261019/omarchy-draft",
+    "files": [
+      {
+        "path": "tests/ViceSharp.NativeClockProbe.Tests/StdioAdapterImplementationTests.cs",
+        "sha256": "9CB16FC5295D32554C30B24A9B1D2FD2330EA1F76227B22CF15E0287E919B19E",
+        "bytes": 8630
+      },
+      {
+        "path": "tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj",
+        "sha256": "8D11392DF68647558624490626B2A5E14051C1A31AD1A9091742CEF3E5140BDA",
+        "bytes": 1037
+      },
+      {
+        "path": "tests/ViceSharp.NativeClockProbe.Tests/Fixtures/stdio-driver.c",
+        "sha256": "99A3C4894D0361D018DFD6DD7FD82C103AE2D74570A98A4E1D03D8388B17DC49",
+        "bytes": 3718
+      },
+      {
+        "path": "tests/ViceSharp.NativeClockProbe.Tests/Fixtures/stdio-real-driver.c",
+        "sha256": "CD4D78AC0B1EFEF7E83B19E42106E727B54946DF562539F881E53942E94A497C",
+        "bytes": 1236
+      },
+      {
+        "path": "tools/immutable-vice/gate-observer.c",
+        "sha256": "9E9DFB8A920C6766F372675E442B336C1B46A0B0A44581085ACBE05936437BD5",
+        "bytes": 1175
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/native-inventory-after.txt",
+        "sha256": "A31D0C086A9A36D12581BA290351D06EE7E43D6D9E8C22C66E7F9A70DC1A94BD",
+        "bytes": 5359
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/native-inventory-before.txt",
+        "sha256": "A31D0C086A9A36D12581BA290351D06EE7E43D6D9E8C22C66E7F9A70DC1A94BD",
+        "bytes": 5359
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/NativeClockProbe.console.log",
+        "sha256": "413A456EB470BD7F0E583F52301F43E7AA65D4C38F1264E21246CCD7FEBAA16D",
+        "bytes": 755
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/NativeClockProbe.trx",
+        "sha256": "948104FBEC6F83C5DF1A19FF74B169851B531BCD0C8AC20AF9E5B5BDBC668A50",
+        "bytes": 228831
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/OracleContract.console.log",
+        "sha256": "3379E33829DA707193ACD0C9714D2E9E393F2E4E644238FACC93C066F8503B19",
+        "bytes": 741
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/OracleContract.trx",
+        "sha256": "98EB53E706D43C370D082F95EADB6C28104BE5D98B58901BABEBB0BDB1991789",
+        "bytes": 224729
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/run.log",
+        "sha256": "509790A8293FC60A1B8B6A31798FD23A59387AD13241102D8F0A57C9386D930B",
+        "bytes": 2095
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/summary.json",
+        "sha256": "F27BBF18357A0A0C521F367E8FDB49ABAB86845F5034A5533C76A55C1EDB9E75",
+        "bytes": 728
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/VsfCompatibility.console.log",
+        "sha256": "43590390F0745C2FA7EBBDE453234BB1DCA469D67C79F8ADA833067B901C789C",
+        "bytes": 904
+      },
+      {
+        "path": "docs/receipts/lockstep/20261019T200803-phase-c-step2-native-safe-linux/VsfCompatibility.trx",
+        "sha256": "405477A3F7FE4AE8B5B6A0326B3E7C8D272BDEF96B64CED1001D47155279A9E0",
+        "bytes": 317259
+      }
+    ]
+  }
+}

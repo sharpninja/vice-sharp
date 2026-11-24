@@ -1,0 +1,18 @@
+type: result
+payload:
+  requestId: req-20261019T211724Z-1b38
+  result:
+    id: FR-BACKFILL-MEDIA-001
+    title: Media devices (D64, tape) I/O functional parity
+    description: D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.
+    status: pending
+    priority: medium
+    area: BACKFILL
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:17:25.1943138+00:00
+    updatedAt: 2026-10-19T21:17:25.1943995+00:00
+  deprecated: true
+
+---
+

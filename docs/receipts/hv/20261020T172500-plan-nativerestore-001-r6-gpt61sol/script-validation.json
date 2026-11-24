@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/Review.ps1",
+    "parserErrors": 0,
+    "analyzerWarningsErrors": 0,
+    "findings": [],
+    "sha256": "B4F1199872737BE95E3380CCDA576D5B5304E7E8AFA43F45764E8FDADC27C0DC"
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/Evidence.ps1",
+    "parserErrors": 0,
+    "analyzerWarningsErrors": 0,
+    "findings": [],
+    "sha256": "FFD25D63387CC381908169AF085860F14B2FF47E5954BFAE14932DD2D8462D6F"
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/Write-HvVerdict.ps1",
+    "parserErrors": 0,
+    "analyzerWarningsErrors": 0,
+    "findings": [],
+    "sha256": "EC8E1BAB75272918AD535E6E8C8BD7F72B77DEAEDF01DB560DE46E4645B4304D"
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/Finalize-ReviewEvidence.ps1",
+    "parserErrors": 0,
+    "analyzerWarningsErrors": 0,
+    "findings": [],
+    "sha256": "70886AF7E15B67A5DE9BCEC531852F5D38D8F1A21F49A5FC91AA73AB3BDD1478"
+  },
+  {
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/Save-ReviewPersistence.ps1",
+    "parserErrors": 0,
+    "analyzerWarningsErrors": 0,
+    "findings": [],
+    "sha256": "DCC54A7A51AED30F8334E42C501C5AE31BA288710EBE4CCBEBEE9768E7B3FBA3"
+  }
+]

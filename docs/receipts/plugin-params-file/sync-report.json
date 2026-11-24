@@ -1,0 +1,105 @@
+[
+  {
+    "repo": "mcpserver-claude-code-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.120.0",
+    "versionTo": "1.121.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-claude-code-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "versionFiles": [
+      ".claude-plugin/plugin.json",
+      ".codex-plugin/plugin.json"
+    ]
+  },
+  {
+    "repo": "mcpserver-codex-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.120.0",
+    "versionTo": "1.121.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-codex-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "versionFiles": [
+      ".codex-plugin/plugin.json"
+    ]
+  },
+  {
+    "repo": "mcpserver-cline-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.120.0",
+    "versionTo": "1.121.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-cline-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "versionFiles": [
+      "package.json"
+    ]
+  },
+  {
+    "repo": "mcpserver-cline-v2-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.120.0",
+    "versionTo": "1.121.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-cline-v2-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "versionFiles": [
+      "package.json"
+    ]
+  },
+  {
+    "repo": "mcpserver-copilot-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.120.0",
+    "versionTo": "1.121.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-copilot-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "versionFiles": [
+      "plugin.json"
+    ]
+  },
+  {
+    "repo": "mcpserver-grok-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.120.0",
+    "versionTo": "1.121.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-grok-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "versionFiles": [
+      ".claude-plugin/plugin.json",
+      ".codex-plugin/plugin.json",
+      ".grok-plugin/plugin.json"
+    ]
+  },
+  {
+    "repo": "mcpserver-opencode-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.120.0",
+    "versionTo": "1.121.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-opencode-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "versionFiles": [
+      "package.json"
+    ]
+  },
+  {
+    "repo": "mcpserver-grok-bot-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.118.0",
+    "versionTo": "1.119.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-grok-bot-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "forkMerged": [
+      "Invoke-McpPlugin.ps1",
+      "plugin-hook.ps1",
+      "repl-invoke.ps1",
+      "agent-runtime-header.ps1",
+      "plugin-env.ps1",
+      "resolve-cache-dir.ps1"
+    ],
+    "versionFiles": [
+      ".claude-plugin/plugin.json",
+      ".codex-plugin/plugin.json",
+      ".grok-plugin/plugin.json"
+    ]
+  },
+  {
+    "repo": "mcpserver-claude-cowork-plugin",
+    "core": "8768de8a",
+    "versionFrom": "1.120.0",
+    "versionTo": "1.121.0",
+    "sync": "synced 18 core files into F:\\GitHub\\mcpserver-claude-cowork-plugin\\.worktrees\\params-file-20261019/lib (core 8768de8a)",
+    "versionFiles": [
+      ".claude-plugin/plugin.json"
+    ]
+  }
+]

@@ -115,6 +115,7 @@ public sealed class SidWaveOsc3DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Osc3_ReturnsSelectedTriangleWaveformOutputTopBits()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -174,6 +175,7 @@ public sealed class SidWaveOsc3DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Osc3_IsWaveformDependentNotPhaseDependent()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -238,6 +240,7 @@ public sealed class SidWaveOsc3DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Osc3_PulseOnlyReadsRailsNotARamp()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -305,6 +308,7 @@ public sealed class SidWaveOsc3DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Osc3_NoiseReadsNoiseOutputTopBits()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

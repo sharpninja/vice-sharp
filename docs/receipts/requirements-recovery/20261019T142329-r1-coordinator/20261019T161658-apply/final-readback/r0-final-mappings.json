@@ -1,0 +1,118 @@
+[
+  {
+    "frId": "FR-BACKFILL-MEDIA-001",
+    "trIds": [
+      "TR-DRV-EDGE-001",
+      "TR-IEC-EDGE-001",
+      "TR-TAP-EDGE-001",
+      "TR-TAPE-EDGE-001"
+    ],
+    "testIds": [
+      "TEST-DRV-MOTOR-001",
+      "TEST-IEC-TIMING-001",
+      "TEST-TAPE-RAMP-001",
+      "TEST-TAPE-SENSE-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  },
+  {
+    "frId": "FR-RUNTIME-TAPE-002",
+    "trIds": [
+      "TR-TAP-EDGE-001",
+      "TR-TAPE-EDGE-001"
+    ],
+    "testIds": [
+      "TEST-TAPE-RAMP-001",
+      "TEST-TAPE-SENSE-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  },
+  {
+    "frId": "FR-TAP-001",
+    "trIds": [
+      "TR-CYCLE-001",
+      "TR-TAP-EDGE-001",
+      "TR-TAPE-EDGE-001"
+    ],
+    "testIds": [
+      "TEST-TAP-001",
+      "TEST-TAPE-RAMP-001",
+      "TEST-TAPE-SENSE-001",
+      "TEST-X64SC-LOCKSTEP-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  },
+  {
+    "frId": "FR-TAP-002",
+    "trIds": [
+      "TR-CYCLE-001",
+      "TR-TAP-EDGE-001"
+    ],
+    "testIds": [
+      "TEST-TAP-001",
+      "TEST-X64SC-LOCKSTEP-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  },
+  {
+    "frId": "FR-TAP-003",
+    "trIds": [
+      "TR-CYCLE-001",
+      "TR-TAP-EDGE-001"
+    ],
+    "testIds": [
+      "TEST-TAP-001",
+      "TEST-X64SC-LOCKSTEP-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  },
+  {
+    "frId": "FR-TAP-004",
+    "trIds": [
+      "TR-CYCLE-001",
+      "TR-TAP-EDGE-001",
+      "TR-TAPE-EDGE-001"
+    ],
+    "testIds": [
+      "TEST-TAP-001",
+      "TEST-TAPE-RAMP-001",
+      "TEST-TAPE-SENSE-001",
+      "TEST-X64SC-LOCKSTEP-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  },
+  {
+    "frId": "FR-TAP-005",
+    "trIds": [
+      "TR-CYCLE-001",
+      "TR-TAP-EDGE-001"
+    ],
+    "testIds": [
+      "TEST-TAP-001",
+      "TEST-X64SC-LOCKSTEP-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  },
+  {
+    "frId": "FR-CPU-004",
+    "trIds": [
+      "TR-CYCLE-001"
+    ],
+    "testIds": [
+      "TEST-CPU-001",
+      "TEST-X64SC-LOCKSTEP-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  },
+  {
+    "frId": "FR-PRF-003",
+    "trIds": [
+      "TR-DET-001"
+    ],
+    "testIds": [
+      "TEST-PRF-001",
+      "TEST-X64SC-LOCKSTEP-001"
+    ],
+    "workspaceId": "F:\\GitHub\\vice-sharp"
+  }
+]

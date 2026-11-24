@@ -1,0 +1,8 @@
+2026-10-20T07:48:41.5264016-05:00
+Executable: C:\msys64\mingw64\bin\gcc.exe
+Arguments: -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | -Wl,--wrap=vic_cycle | -Wl,--wrap=mem_initialize_memory | -Wl,--wrap=mem_mmu_translate | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\bus-driver.c | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\native-bus-double.c | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\clock-observer.c | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\bus-observer.c | -o | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\bus-probe-evidence\bus-probe.exe
+ExitCode: 0
+TimedOut: False
+STDOUT:
+
+STDERR:

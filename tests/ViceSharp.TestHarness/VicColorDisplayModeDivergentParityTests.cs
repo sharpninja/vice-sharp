@@ -59,6 +59,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Cregs_InitializedToIdentityLower16_ZeroForRest_AfterReset()
     {
         var vic = BuildVic();
@@ -85,6 +86,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void DrawColors8_ResolvesSymbolicCode_ViaCregs_NotLiveRegister()
     {
         var vic = BuildVic(gbuf: 0x00); // all background (hires, px=0 -> code 0x21)
@@ -117,6 +119,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void DrawColors8_AppliesPendingColorWrite_ToCregs_AtCycleStart()
     {
         var vic = BuildVic();
@@ -144,6 +147,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void DrawColors6569_OnePixelRingDelay_PendingWrite_AffectsPixel1Not0()
     {
         var vic = BuildVic(gbuf: 0x00); // all background pixels
@@ -185,6 +189,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void DrawColors8565_NoRingDelay_PendingWrite_AffectsPixel0Immediately()
     {
         var vic = BuildVic8565(gbuf: 0x00); // 8565, all background
@@ -218,6 +223,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void DrawColors8565_GreyDot_Pixel0Forced0x0F_WhenPixelBuffer0EqualsLastColorReg()
     {
         // 8565: after a vis_en cycle, pixel_buffer[i] = render_buffer[i] for each i.
@@ -263,6 +269,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void UpdateCregs_TransfersLastColorReg_AndResetsChipPending_AfterCycle()
     {
         var vic = BuildVic();
@@ -289,6 +296,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void DbufOffset_IncrementsBy8PerCycle_ResetsAtLineStart()
     {
         var vic = BuildVic();
@@ -320,6 +328,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void MonitorColorStore_ImmediatelyUpdatesCregs_AndLastColorReg()
     {
         var vic = BuildVic();
@@ -345,6 +354,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DRAW-COLOR-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void DrawColors8_FullLine_MidLineBgChange_RingDelay_OldValueAtPixel0()
     {
         var vic = BuildVic(gbuf: 0x00); // all background pixels
@@ -403,6 +413,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Vmode11Pipe_6569_RisingEdgeEcm_OredInAtPixel4()
     {
         var vic = BuildVic();
@@ -427,6 +438,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Vmode11Pipe_6569_FallingEdgeEcm_AndedAtPixel6_ClearsEcm()
     {
         var vic = BuildVic();
@@ -456,6 +468,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Vmode11Pipe_8565_WholeCellUpdate_AfterPixel7()
     {
         var vic = BuildVic8565();
@@ -485,6 +498,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Vmode16Pipe2_McmTwoStagePipe_UpdatesOneCycleLate()
     {
         var vic = BuildVic();
@@ -514,6 +528,7 @@ public sealed class VicColorDisplayModeDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-VIC-DISPLAYMODE-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Vmode11Pipe_MidLineEcmChange_IsPerCell_NotWholeLine()
     {
         var vic = BuildVic();

@@ -1,0 +1,603 @@
+{
+  "comparedAt": "2026-10-19T14:21:33",
+  "beforeDir": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-audit\\20261019T115841-d8-status-accuracy-dryrun-v2",
+  "afterDir": "F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-audit\\20261019T142043-d8-postapply-export",
+  "excludedVolatile": [
+    "createdAt",
+    "updatedAt"
+  ],
+  "counts": {
+    "fr": {
+      "before": 235,
+      "after": 235,
+      "identical": 219,
+      "changedAsPlanned": 16
+    },
+    "tr": {
+      "before": 139,
+      "after": 139,
+      "identical": 110,
+      "changedAsPlanned": 29
+    },
+    "test": {
+      "before": 143,
+      "after": 143,
+      "identical": 125,
+      "changedAsPlanned": 18
+    }
+  },
+  "mappingRowsEqualExcludingVolatile": true,
+  "mappingRows": {
+    "before": 755,
+    "after": 755
+  },
+  "expectedDiffs": 94,
+  "unexpectedDiffs": 0,
+  "unexpected": [],
+  "expected": [
+    {
+      "kind": "fr",
+      "id": "FR-ARCH-TRUEDRIVE-1541-002",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-BACKFILL-MEDIA-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-BACKFILL-VIDEO-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-CHIPSTATE-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-CHIPSTATE-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-PACESEL-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-PACESEL-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-PERF-RUNFRAME-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-PERF-RUNFRAME-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-PUBSUB-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-PUBSUB-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-SID-014",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-SIDAUDIO-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-SIDAUDIO-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-SIDEBARUI-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-SNDREG-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-SNDREG-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-TICKHIST-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-TICKHIST-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-VIC-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-VIC-008",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-VIC20-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-XBOXGPL-007",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-XBOXGPL-007",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-ALLOC-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-ALLOC-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-CHIPSTATE-CAPTURE-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-CHIPSTATE-CAPTURE-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-CORE-CYCLE-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-CORE-CYCLE-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-CORE-DET-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-CORE-DET-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-DEPS-202607-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-DRV-EDGE-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-IEC-EDGE-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-PACESEL-STRAT-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-PACESEL-STRAT-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-PERF-ALLOC-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-PERF-ALLOC-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-PERF-AOT-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-PERF-AOT-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-PUBSUB-PERF-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-PUBSUB-PERF-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-SID-EDGE-004",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-SID-ORACLE-002",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-SID-RESAMPLE-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-SIDAUDIO-CLOCK-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-SIDAUDIO-CLOCK-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-SIDEBARUI-LAYOUT-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-SNDREG-GATE-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-SNDREG-GATE-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-TICKHIST-CAPTURE-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-TICKHIST-CAPTURE-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-TICKHIST-PERF-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-TICKHIST-PERF-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-TICKHIST-RPC-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-TICKHIST-RPC-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-TICKHIST-UI-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-TICKHIST-UI-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC-EDGE-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC-EDGE-002",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC-EDGE-003",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC-EDGE-004",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC-EDGE-005",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC-EDGE-006",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC20-PIXEL-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-XBOXGPL-BRAND-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-CHIPSTATE-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-CHIPSTATE-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-DEPS-202607-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-DEPS-202607-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-DRV-MOTOR-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-IEC-TIMING-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-NATIVERESIDUE-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-PACESEL-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-PACESEL-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-PERF-RUNFRAME-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-PERF-RUNFRAME-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-PUBSUB-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-PUBSUB-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-SID-002",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-SIDAUDIO-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-SIDAUDIO-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-SIDEBARUI-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-SNDREG-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-SNDREG-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-TICKHIST-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-TICKHIST-001",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-TICKHIST-002",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-TICKHIST-002",
+      "field": "status",
+      "detail": "completed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-VIC-CHECKPOINT-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-VIC-RC-001",
+      "field": "status",
+      "detail": "closed -> pending"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-VIC20-001",
+      "field": "acceptanceCriteria",
+      "detail": "isSatisfied cleared only"
+    },
+    {
+      "kind": "test",
+      "id": "TEST-XBOXGPL-002",
+      "field": "status",
+      "detail": "completed -> pending"
+    }
+  ]
+}

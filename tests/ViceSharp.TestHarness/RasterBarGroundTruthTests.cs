@@ -57,6 +57,7 @@ public sealed class RasterBarGroundTruthTests
     /// Skips when the shim or the staged .vsf is absent.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void GroundTruth_RasterBarSchedule_FromUserSnapshot()
     {
         if (!ViceNative.IsAvailable)
@@ -147,106 +148,6 @@ public sealed class RasterBarGroundTruthTests
         // the snapshot did not resume into the live demo state (the real failure to
         // surface), not a passing no-op.
         Assert.NotEmpty(samples);
-    }
-
-    /// <summary>
-    /// FR: FR-VICII-RASTER-001, TR: TR-LOCKSTEP-VSF-001, TEST: TEST-RASTERBAR-GT-002.
-    /// Use case: settle whether the demo segment is driven by one raster IRQ or by
-    /// raster + CIA-timer IRQ ("two different IRQ sources") by decoding the IRQ topology
-    /// directly from the staged .vsf chip modules (VIC-II, CIA1, CIA2) - no shim
-    /// required - scoping exactly which chip state the managed lockstep must inject.
-    /// Acceptance: the CIA1 module is present and decodable from the snapshot (its
-    /// timer/ICR/CRA/CRB fields plus armed-IRQ flags are reported and written to
-    /// artifacts/rastercmp/irq-topology.txt); the large version-specific VIC-II blob is
-    /// reported as shim-read only, not hand-parsed. Skips when the staged .vsf is absent.
-    /// </summary>
-    [Fact]
-    public void IrqTopology_FromUserSnapshot_ReportsArmedSources()
-    {
-        var vsf = Array.Find(SnapshotCandidates, File.Exists);
-        if (vsf is null)
-        {
-            Assert.Skip("Staged demo .vsf snapshot not present.");
-            return;
-        }
-
-        var b = File.ReadAllBytes(vsf);
-
-        var lines = new List<string>
-        {
-            $"# IRQ topology from {Path.GetFileName(vsf)}",
-        };
-
-        // VIC-II: in this x64sc (VICE 3.x) build the VIC-II snapshot module is a
-        // large, version-specific blob (~123 KB, raster cache included), so the
-        // historical fixed register offset documented in vicii-snapshot.c is NOT
-        // reliable here. VIC register extraction for the managed lockstep is done
-        // via a shim accessor (vicii.regs[]) rather than hand-parsed. Raster-IRQ
-        // activity is instead proven empirically by
-        // GroundTruth_RasterBarSchedule_FromUserSnapshot, which shows the $1229
-        // handler acking $D019 and painting the bar staircase at raster positions.
-        var vic = TryFindModuleData(b, "VIC-II");
-        lines.Add(vic < 0
-            ? "VIC-II: module not present"
-            : $"VIC-II: module present (dataStart={vic}); registers read via shim accessor, not hand-parsed");
-
-        // --- CIA1 / CIA2 modules (binary order per ciacore snapshot). ---
-        foreach (var name in new[] { "CIA1", "CIA2" })
-        {
-            int off = TryFindModuleData(b, name);
-            if (off < 0)
-            {
-                lines.Add($"{name}: module not present");
-                continue;
-            }
-
-            int taCur = b[off + 4] | (b[off + 5] << 8);
-            int tbCur = b[off + 6] | (b[off + 7] << 8);
-            byte icrMask = b[off + 13];
-            byte cra = b[off + 14];
-            byte crb = b[off + 15];
-            int taLatch = b[off + 16] | (b[off + 17] << 8);
-            int tbLatch = b[off + 18] | (b[off + 19] << 8);
-            byte icrData = b[off + 20];
-            bool taIrqArmed = (icrMask & 0x01) != 0 && (cra & 0x01) != 0;
-            bool tbIrqArmed = (icrMask & 0x02) != 0 && (crb & 0x01) != 0;
-            lines.Add(
-                $"{name}: ICRmask={icrMask:X2} ICRdata={icrData:X2} CRA={cra:X2} CRB={crb:X2} " +
-                $"TAcur={taCur} TAlatch={taLatch} TBcur={tbCur} TBlatch={tbLatch} " +
-                $"timerA_irqArmed={taIrqArmed} timerB_irqArmed={tbIrqArmed}");
-        }
-
-        foreach (var l in lines)
-            _output.WriteLine(l);
-        TryWriteArtifact("irq-topology.txt", lines);
-
-        // Reliable invariant: the C64 CIA1 module must be present and decodable; the
-        // CIA layout is compact and stable (unlike the large VIC-II blob), so this is
-        // honest evidence the snapshot's interrupt-controller state was parsed.
-        Assert.True(TryFindModuleData(b, "CIA1") >= 0, "CIA1 module must be present in the snapshot.");
-    }
-
-    private static int TryFindModuleData(byte[] b, string name)
-    {
-        try { return FindModuleData(b, name); }
-        catch (InvalidOperationException) { return -1; }
-    }
-
-    private static int FindModuleData(byte[] b, string name)
-    {
-        var pos = 58; // file header is 58 bytes
-        while (pos + 22 <= b.Length)
-        {
-            var moduleName = System.Text.Encoding.ASCII.GetString(b, pos, 16).TrimEnd('\0', ' ');
-            var size = BitConverter.ToUInt32(b, pos + 18);
-            if (moduleName == name)
-                return pos + 22;
-            if (size < 22 || pos + (int)size > b.Length)
-                break;
-            pos += (int)size;
-        }
-
-        throw new InvalidOperationException($"Module '{name}' not found in snapshot.");
     }
 
     private void TryWriteArtifact(string fileName, IEnumerable<string> lines)

@@ -1,0 +1,44 @@
+type: result
+payload:
+  requestId: req-20261021T000430Z-dfb7
+  result:
+    id: TEST-SNP-002
+    title: Native VICE Snapshot Compatibility Gates
+    description: 'Prove native VICE .vsf as the canonical ViceSharp snapshot format using the existing managed resume bridge after productionization and completion: default public and desktop snapshot paths, native x64sc/xvic read and write, complete managed state transfer, bidirectional round trips, 100000-cycle lockstep, transactionality, corruption handling, and mandatory non-skipped prerequisites.'
+    status: pending
+    priority: critical
+    area: SNP
+    testType: unit
+    notes: No skipped test counts as proof. UWP/Xbox are outside this target scope. Proprietary snapshot payloads are not accepted as peer or default snapshot formats.
+    acceptanceCriteria:
+    - id: ac-01
+      text: Load mandatory x64sc and xvic .vsf fixtures through the managed production path and compare every supported module field with the native VICE oracle.
+      isSatisfied: false
+    - id: ac-02
+      text: Save C64 and VIC-20 state from ViceSharp as .vsf, load the files in x64sc and xvic, and prove matching represented state.
+      isSatisfied: false
+    - id: ac-03
+      text: Run VICE-to-ViceSharp-to-VICE and ViceSharp-to-VICE-to-ViceSharp round trips and prove all supported module fields survive.
+      isSatisfied: false
+    - id: ac-04
+      text: From each restored C64 and VIC-20 checkpoint, run at least 100000 cycles in lockstep and fail at the first CPU, bus, video, timer, interrupt, or mapped-memory divergence.
+      isSatisfied: false
+    - id: ac-05
+      text: Accept pinned-reader-compatible 58-byte current and 37-byte legacy VICE headers; walk 22-byte module headers with little-endian inclusive total lengths to exact EOF; reject wrong machine, unsupported versions, invalid/missing/duplicate mandatory modules, truncated framing, invalid or overflowing lengths, trailing bytes, and corruption rejected by structure or native VICE without visible mutation. Do not claim arbitrary bit-flip detection because VSF has no general checksum.
+      isSatisfied: false
+    - id: ac-06
+      text: Treat both shims, the pinned VICE commit, exact MSYS2 MINGW64 tool paths, exact ROM-hash allowlist, and fixture/state-transfer manifests as mandatory prerequisites. Missing or stale prerequisites fail Category=NativeViceSnapshot with zero skipped tests.
+      isSatisfied: false
+    - id: ac-07
+      text: Verify CaptureSnapshot, Avalonia .vsf file save/load, quick save/load, and ten named slots use native VSF by default; unsupported hosts return unavailable without fallback. Only generated protobuf ImportLegacySnapshot accepts the two proprietary formats, normal restore rejects them, and no capture emits them. UWP/Xbox implementation is not changed or claimed complete.
+      isSatisfied: false
+    - id: ac-08
+      text: Build and inspect the local win-x64 publish and MSI for both shims, the recursively verified loose PE closure staged after publish and before WiX, VICE license/source-offer files, and no ROMs; install locally and pass default C64/VIC-20 native-VSF capture/restore smoke from the installed app.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T00:04:31.8468092+00:00
+    updatedAt: 2026-10-21T00:04:31.8469367+00:00
+  deprecated: true
+
+---
+

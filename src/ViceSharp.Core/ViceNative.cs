@@ -33,18 +33,40 @@ public static unsafe partial class ViceNative
         NativeLibrary.SetDllImportResolver(typeof(ViceNative).Assembly, ResolveLibraryCombined);
     }
 
+    /// <summary>
+    /// Runs this type's static constructor (the combined resolver installation) when called from
+    /// <see cref="ViceNativeXvic"/>, so an xvic-first process also resolves through the audited resolver instead of
+    /// the runtime's unaudited default probing (PLAN-NATIVERESTORE-001 D2 load detector; found by the xvic-first
+    /// fresh-process control).
+    /// </summary>
+    internal static void EnsureResolverInstalled()
+    {
+    }
+
     private static IntPtr ResolveLibraryCombined(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
+        // PLAN-NATIVERESTORE-001 D2 load detector: every outcome of this resolver is recorded when
+        // VICESHARP_NATIVE_LOAD_LOG is set (NativeLoadAudit); nothing here runs on a per-cycle path.
         if (string.Equals(libraryName, LibraryName, StringComparison.Ordinal))
         {
             var path = ResolvedLibraryPath.Value;
-            return path is null ? IntPtr.Zero : LoadNativeWithSiblingSearch(path);
+            if (path is null)
+            {
+                NativeLoadAudit.Record(LibraryName, null, NativeLoadAudit.Fallback);
+                return IntPtr.Zero;
+            }
+            return LoadNativeWithSiblingSearch(LibraryName, path);
         }
 
-        if (string.Equals(libraryName, "vice_xvic", StringComparison.Ordinal))
+        if (string.Equals(libraryName, ViceNativeXvic.LibraryName, StringComparison.Ordinal))
         {
             var path = ViceNativeXvic.ResolvedPath;
-            return path is null ? IntPtr.Zero : LoadNativeWithSiblingSearch(path);
+            if (path is null)
+            {
+                NativeLoadAudit.Record(ViceNativeXvic.LibraryName, null, NativeLoadAudit.Fallback);
+                return IntPtr.Zero;
+            }
+            return LoadNativeWithSiblingSearch(ViceNativeXvic.LibraryName, path);
         }
 
         return IntPtr.Zero;
@@ -55,18 +77,25 @@ public static unsafe partial class ViceNative
     /// in the same directory are found. Plain <see cref="NativeLibrary.Load(string)"/>
     /// often fails with 0x8007007E when those deps are not on PATH.
     /// </summary>
-    private static IntPtr LoadNativeWithSiblingSearch(string fullPath)
+    private static IntPtr LoadNativeWithSiblingSearch(string libraryName, string fullPath)
     {
         var dir = Path.GetDirectoryName(fullPath);
-        if (!string.IsNullOrEmpty(dir))
+        if (!string.IsNullOrEmpty(dir) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             NativeMethods.SetDllDirectory(dir);
         try
         {
-            return NativeLibrary.Load(fullPath);
+            var handle = NativeLibrary.Load(fullPath);
+            NativeLoadAudit.Record(libraryName, fullPath, NativeLoadAudit.Loaded);
+            return handle;
+        }
+        catch (Exception e) when (e is DllNotFoundException or BadImageFormatException)
+        {
+            NativeLoadAudit.Record(libraryName, fullPath, NativeLoadAudit.Failed);
+            throw;
         }
         finally
         {
-            if (!string.IsNullOrEmpty(dir))
+            if (!string.IsNullOrEmpty(dir) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 NativeMethods.SetDllDirectory(null!);
         }
     }
@@ -636,10 +665,17 @@ public static unsafe partial class ViceNative
 
     private static string? FindLibraryPath()
     {
+        // Evaluated once through ResolvedLibraryPath; this is the probe behind IsAvailable, AvailabilityMessage
+        // and CreateInstance, so it is recorded by the D2 load detector (round 7 N24).
+        string? result = null;
         foreach (var candidatePath in EnumerateCandidateLibraryPaths())
-            return TryCreateRelocatedRuntime(candidatePath, out var relocatedPath) ? relocatedPath : candidatePath;
+        {
+            result = TryCreateRelocatedRuntime(candidatePath, out var relocatedPath) ? relocatedPath : candidatePath;
+            break;
+        }
 
-        return null;
+        NativeLoadAudit.Record(LibraryName, result, result is null ? NativeLoadAudit.Unresolved : NativeLoadAudit.Resolved);
+        return result;
     }
 
     private static IEnumerable<string> EnumerateCandidateLibraryPaths()

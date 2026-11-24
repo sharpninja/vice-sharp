@@ -1,0 +1,82 @@
+{
+  "timestampLocal": "2026-10-20T13:42:08",
+  "reviewerSessionId": "Codex-20261020T181838Z-hv-nativerestore-r2",
+  "reviewerRequestId": "req-20261020T181838Z-hv-nativerestore-r2",
+  "parentSessionId": "ClaudeCode-20261020T015046Z-plugin-session",
+  "parentRequestId": "req-20261020T172116Z-prompt-6c6d",
+  "primaryPersisted": false,
+  "PrimaryReadback": false,
+  "primaryCompletedStateProved": false,
+  "persistenceDisposition": "QUEUED ONLY. The supported primary and triage routes failed; local complete content is retained. No server-completed state is claimed.",
+  "errorSignature": "MCP_UNTRUSTED: marker refresh failed before REPL request: MCP_UNTRUSTED: Health check failed - Permission denied",
+  "triageAttemptCount": 1,
+  "completionAttempt": [
+    {
+      "timestampLocal": "2026-10-20T13:42:06",
+      "operation": "Invoke",
+      "method": "workflow.sessionlog.completeTurn",
+      "output": "Plugin command failed with exit code 1.\ntype: result\npayload:\n  result:\n    code: rejected\n    retryable: false\n    persisted: false\n    degraded: false\n    queued: false\n    method: workflow.sessionlog.completeTurn\n    agent: \"\"\n    sessionId: \"\"\n    requestId: req-20261020T181838Z-hv-nativerestore-r2\n    failsafePath: \"\"\n    message: workflow.sessionlog.completeTurn completed without a remote persistence receipt.\n    childStderr: \"\"\n\n"
+    }
+  ],
+  "historyAttempts": [
+    {
+      "timestampLocal": "2026-10-20T13:33:30",
+      "operation": "History",
+      "method": "workflow.sessionlog.queryHistory",
+      "output": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  code: internal_server_error\n  message: 'MCP_UNTRUSTED: marker refresh failed before REPL request'\n  retryable: false\n  details:\n    method: workflow.sessionlog.queryHistory\n\n"
+    },
+    {
+      "timestampLocal": "2026-10-20T13:42:07",
+      "operation": "History",
+      "method": "workflow.sessionlog.queryHistory",
+      "output": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  code: internal_server_error\n  message: 'MCP_UNTRUSTED: marker refresh failed before REPL request'\n  retryable: false\n  details:\n    method: workflow.sessionlog.queryHistory\n\n"
+    }
+  ],
+  "fullContentReadback": {
+    "chunkHashesMatch": true,
+    "proseChunksExact": true,
+    "jsonChunksExact": true,
+    "turnProseExact": true,
+    "turnJsonExact": true,
+    "yamlProseExact": true,
+    "yamlJsonExact": true,
+    "yamlResponseExact": true
+  },
+  "normalization": "verdict.md and verdict.json are UTF-8 without BOM with LF. JSON chunks, rich JSON turn and supported-helper YAML readback reproduce the original content exactly. No CRLF/LF content normalization was needed; serialized container line endings are not included in document-content hashes.",
+  "proseFile": {
+    "reassembledSha256": "EFBFB76A57ED827FD846D8F3C0EAC675C903BCB7142508245E025451E44BF5B8",
+    "sha256": "EFBFB76A57ED827FD846D8F3C0EAC675C903BCB7142508245E025451E44BF5B8",
+    "bytes": 32523,
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/verdict.md"
+  },
+  "jsonFile": {
+    "reassembledSha256": "F7C22A6F6FB44F17B99C2F39454762E883C46680D4F9E695765C78D461091EE9",
+    "sha256": "F7C22A6F6FB44F17B99C2F39454762E883C46680D4F9E695765C78D461091EE9",
+    "bytes": 36684,
+    "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/verdict.json"
+  },
+  "fallbackFiles": [
+    {
+      "sha256": "C7E139C556D39109888C6D893C09BB3A179E826AE48DA34EAFE96E8D8972E1EC",
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/review-turn.failsafe.json"
+    },
+    {
+      "sha256": "DD2584BB39D857869E8809BAB00481F61658BEF518D5CF1DE65FEB740BAD3C78",
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/authorized-failsafe/full-review-turn.yaml"
+    },
+    {
+      "sha256": "8290782F64625B40F23EB3E4864622C51F5961F15DC84FDA1562E8D320013F58",
+      "path": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T131300-plan-nativerestore-001-r2-gpt61sol/verdict-chunks.json"
+    }
+  ],
+  "findingCount": 30,
+  "scores": {
+    "accuracyPercent": 92,
+    "completenessPercent": 84
+  },
+  "authorization": "Current request authorizes full-content failsafe only after genuine primary failure including failed supported triage; both are retained in logging-attempts.jsonl.",
+  "noTrustRepair": true,
+  "historicalQueueReplayCount": 0,
+  "historicalTurnCancellationCount": 0,
+  "nextAction": "Later authorized supported persistence and primary full-content/completed-state readback, or an explicit operator waiver. These local packages must not be replayed automatically."
+}

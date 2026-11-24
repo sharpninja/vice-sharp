@@ -1,0 +1,16 @@
+type: result
+payload:
+  requestId: req-20261020T204616Z-3c90
+  result:
+    items:
+    - frId: FR-VICE-001
+      trId: TR-VICE-ORACLE-001
+      createdAt: 2026-10-20T20:46:18.0809766+00:00
+    - frId: FR-VICE-001
+      testId: TEST-VICE-001
+      createdAt: 2026-10-20T20:46:18.0816030+00:00
+    totalCount: 2
+  deprecated: true
+
+---
+

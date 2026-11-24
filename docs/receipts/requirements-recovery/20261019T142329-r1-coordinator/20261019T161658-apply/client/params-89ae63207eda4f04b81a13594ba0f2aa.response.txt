@@ -1,0 +1,42 @@
+type: result
+payload:
+  requestId: req-20261019T212102Z-7600
+  result:
+    id: FR-RUNTIME-TAPE-002
+    title: Datasette motor ramp + sense line + record mode
+    description: Datasette transport, tape sense, motor scheduling, machine wiring and recording shall reproduce pinned immutable VICE for identical machine, board, resource, media, control and clock state. Preserve separate motor input, native running state, scheduled alarm time and actual callback time. Machine wiring belongs in machine adapters. Native quirks are target behavior; managed pulse-buffer success is not parity.
+    status: pending
+    priority: medium
+    area: RUNTIME
+    acceptanceCriteria:
+    - id: ac-01
+      text: From known STOP, cover STOP, START, FORWARD, REWIND and RECORD with absent, read-only and writable images. Match accepted mode and sense. Absent-image and read-only-image RECORD do not change mode or sense; accepted writable RECORD asserts sense when the datasette is enabled.
+      isSatisfied: false
+    - id: ac-02
+      text: Match C64 CPU port $0001 input bit 4 and VIC-20 VIA1 port A input bit 6, including DDR/output masking. Separately match C64 CIA1 FLAG and VIC-20 VIA2 CA1 pulse routing; sense is not an interrupt pulse.
+      isSatisfied: false
+    - id: ac-03
+      text: 'A stopped motor with no pending alarm schedules the ordinary startup callback at current clock plus 32000; retain an existing alarm as VICE does. FORWARD/REWIND commands schedule their 1000-cycle alarm independently of motor-running state, including motor-on before and after that alarm dispatch. Compare ordered scheduled and actual events, not a pulse-duration getter. Also cover START while the motor is already running, with absent, read-only and writable media, with no pending alarm and with an existing pending alarm. The command reaches the start helper after resetting the gap: install t+32000 only when no alarm is pending, otherwise preserve the existing alarm; match attached-image seek, current-clock write-clock seeding and write-bit zeroing, including clock zero. Contrast START with running-motor FORWARD/REWIND, whose earlier t+1000 alarm survives the helper, and preserve any stop deadline that the command does not clear.'
+      isSatisfied: false
+    - id: ac-04
+      text: Motor-off on a running motor sets a stop deadline of current clock plus 32000 without immediate stopping or replacing an already pending alarm. Actual stopping occurs when a datasette callback observes the deadline reached. Cover callbacks before, at and beyond the deadline, active read rescheduling, STOP with a retained later alarm, repeated off preserving the deadline, and motor-on cancellation even after the deadline but before stop execution. A stopped motor starts again through the native pending-alarm rule. Explicitly include motor-on before the stop deadline and at the deadline before callback dispatch, preserving the already-running motor, pending alarm and write state while clearing the stop deadline; neither case starts a new ramp.
+      isSatisfied: false
+    - id: ac-05
+      text: Recording eligibility follows attached image, accepted RECORD mode, the native running-motor flag and qualifying zero-to-nonzero write-line transition. The running flag is set immediately on motor-on and retained until the delayed-stop callback. Cover writes during startup and pending stop, no writes after executed stop, rejected RECORD, repeated/opposite edges, and retained write-line updates even while ineligible.
+      isSatisfied: false
+    - id: ac-06
+      text: Match emitted TAP bytes, last-write clock/line, remainder, image position/size/dirty state, counters and failure/STOP effects for RECORD-before-motor and motor-before-RECORD, same/future-clock first edges, short gaps 0/6/7/8/2046/2047, long gaps at and above 24-bit boundaries, TAP v0/v1/v2 output paths, and first/partial/failed writes. Preserve the native first-gap and truncation behavior. Include the pinned stream-cursor versus logical-position command-order and buffer-boundary contract in FR-TAP-004 ac-04; retained buffered-read state is part of the initial condition.
+      isSatisfied: false
+    - id: ac-07
+      text: 'Match machine motor/write outputs: C64 DDR-masked bit-5 active-low motor and bit-3 write; VIC-20 changed PCR raw bit-1 motor and effective VIA2 PB3 write including DDRB-induced edges. Cover SX-64 disconnection, repeated writes and input/output direction changes without substituting intended hardware behavior for pinned code.'
+      isSatisfied: false
+    - id: ac-08
+      text: 'Match enabled/disabled datasette sense/flux forwarding, tapeport device dispatch, attach/detach, resource-controlled CPU reset and retained state. Assert internal state separately from UI motor display. Preserve pending alarms, gap state and sense exactly as pinned VICE, including no universal tapeport-active suppression of every signal. Enumerate attachment with a new STOP-mode image while an old read alarm is pending; internal reset selects the new image mode, so do not automatically remove that alarm. Enumerate reset/attachment during delayed stop: motor_stop_clk clears while the native motor-running flag is retained, independently of UI motor-off display. Enumerate detach and no-image reset with previously retained START/FORWARD/REWIND notape_mode, including helper calls, scheduled alarms and transient sense before attachment clears it. Compare ordered transitions, not only final values. Pin DatasetteResetWithCPU, autostart reset handling and event-playback/network routing; exercise their alternate paths rather than assume every public control request reaches the internal command handler.'
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:21:02.7647553+00:00
+    updatedAt: 2026-10-19T21:21:02.7648435+00:00
+  deprecated: true
+
+---
+

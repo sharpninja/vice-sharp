@@ -1,0 +1,54 @@
+captured 2026-10-19T11:54:03
+command: dotnet build tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --nologo -p:ViceNativeProject=F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj -v:diag
+exit: 0
+full log (not retained in repo): C:\Users\kingd\AppData\Local\Temp\claude\F--GitHub-vice-sharp\05d77bd8-b1d9-43a7-a560-b48e04db0612\scratchpad\build-diag.log, sha256 DC666C2809B812DB915E2C6D2863AD2810C1649CEA7B6B02BBDEE115047CFEBE, bytes 158516696
+native inventory unchanged across build: True
+matching lines:
+L1: C:\Program Files\dotnet\sdk\10.0.402\MSBuild.exe --nologo --property:ViceNativeProject=F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj --property:Configuration=Release --property:NuGetInteractive=false --restoreProperty:ViceNativeProject=F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj --restoreProperty:Configuration=Release --restoreProperty:NuGetInteractive=false --restoreProperty:EnableDefaultCompileItems=false --restoreProperty:EnableDefaultEmbeddedResourceItems=false --restoreProperty:EnableDefaultNoneItems=false --verbosity:m --verbosity:diag -consoleloggerparameters:Summary -distributedlogger:Microsoft.DotNet.Cli.Commands.MSBuild.MSBuildLogger,C:\Program Files\dotnet\sdk\10.0.402\dotnet.dll*Microsoft.DotNet.Cli.Commands.MSBuild.MSBuildForwardingLogger,C:\Program Files\dotnet\sdk\10.0.402\dotnet.dll -maxcpucount -restore -tlp:default=auto tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj
+L16: Command line arguments = "C:\Program Files\dotnet\sdk\10.0.402\MSBuild.exe -maxcpucount --verbosity:m -tlp:default=auto --property:ViceNativeProject=F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj --property:Configuration=Release --property:NuGetInteractive=false --restoreProperty:ViceNativeProject=F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj --restoreProperty:Configuration=Release --restoreProperty:NuGetInteractive=false --restoreProperty:EnableDefaultCompileItems=false --restoreProperty:EnableDefaultEmbeddedResourceItems=false --restoreProperty:EnableDefaultNoneItems=false --verbosity:diag --nologo tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -consoleloggerparameters:Summary -restore -distributedlogger:Microsoft.DotNet.Cli.Commands.MSBuild.MSBuildLogger,C:\Program Files\dotnet\sdk\10.0.402\dotnet.dll*Microsoft.DotNet.Cli.Commands.MSBuild.MSBuildForwardingLogger,C:\Program Files\dotnet\sdk\10.0.402\dotnet.dll"
+L44: The "ViceNativeProject" property is a global property, and cannot be modified.
+L1269: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L3171: The "ViceNativeProject" property is a global property, and cannot be modified.
+L4392: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L7709: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L14323: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L17102: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L19882: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L22666: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L25531: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L28563: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L31361: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L34351: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L37171: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L40050: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L42905: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L45703: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L48482: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L51694: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L55724: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L58791: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L61601: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L64451: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L67299: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L315812: The "ViceNativeProject" property is a global property, and cannot be modified.
+L317120: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L338886: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L341744: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L345060: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L347949: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L351245: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L354198: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L357139: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L360492: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L363464: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L366611: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L369660: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L372982: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L376894: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L380746: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L385875: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L431763: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L434607: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L437437: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L440311: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj
+L444129: ViceNativeProject = F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj

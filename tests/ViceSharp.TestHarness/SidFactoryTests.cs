@@ -53,9 +53,11 @@ public sealed class SidFactoryTests
     /// FR: FR-SID-CLOCK, TR: TR-SID-ORACLE-001, TEST: TEST-SID-WIRING-P0-02.
     /// Use case: live-audio emission must engage only when a real backend
     /// exists (headless/test hosts stay timing-clean and silent).
-    /// Acceptance: with no backend the created SID reports
-    /// IsAudioTimingSource false; with a backend it reports true (the factory
-    /// called ConfigureAudioClock with the master clock).
+    /// Acceptance: with no backend or an unavailable backend the SID reports
+    /// IsAudioTimingSource false. With an available playback backend that
+    /// supplies timing, the factory configures the SID as a timing source.
+    /// 2026-11-23, FR-SID-CLOCK, TR-SID-ORACLE-001, TEST-SID-WIRING-P0-02 and
+    /// PLAN-NATIVERESTORE-001 D6/R18: supply backend availability explicitly.
     /// </summary>
     [Fact]
     public void Create_ConfiguresAudioClockOnlyWithBackend()
@@ -66,7 +68,13 @@ public sealed class SidFactoryTests
         Assert.False(silent.IsAudioTimingSource);
 
         var backend = Substitute.For<IAudioBackend>();
+        backend.IsAvailable.Returns(true);
+        backend.IsTimingSource.Returns(true);
         var audible = SidFactory.Create(bus, profile: null, backend, PalMasterClockHz);
         Assert.True(audible.IsAudioTimingSource);
+        backend.IsTimingSource.Returns(false);
+        Assert.False(audible.IsAudioTimingSource);
+        backend.IsAvailable.Returns(false);
+        Assert.False(audible.IsAudioTimingSource);
     }
 }

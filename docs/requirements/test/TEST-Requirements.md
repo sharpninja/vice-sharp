@@ -25,6 +25,10 @@ These test requirements define the verification conditions used to validate Func
 
 CPU instruction, timing, interrupt, and port behavior is verified with unit tests and VICE/Lorenz-style reference comparisons.
 
+### Acceptance Criteria
+
+- **ac-11 (C64 NMI/RTI round trip; FR-CPU-003):** At VICE cc67418cba58e71d8e70fd353e9de47199ad2075, x64sc uses mainc64cpu.c with 6510dtvcore.c DO_INTERRUPT and RTI. With an uncontended NMI serviced at PC $0400 and S $FF, RAM visible at the vectors (HIRAM low), vector bytes at $FFFA/$FFFB equal to $00/$08, and only RTI ($40) at $0800, the instruction boundary at the NMI handler has PC $0800 and S $FC. At the next instruction boundary after that RTI, PC is $0400 and S is $FF. Exercise the same assertion against independent expected checkpoints and reject correct-PC/wrong-stack and correct-stack/wrong-PC checkpoints at both boundaries.
+
 ### Traceability
 
 - **Related FR Area(s):** FR-CPU
@@ -76,10 +80,13 @@ Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external inpu
 
 For Linux host output, fake-device regressions verify platform selection, opt-out/headless silence, ordered PCM conversion, master volume/mute, bounded queues, pause/resume/stop/disposal, and missing or failed devices. Device loss must stop audio-driven pacing without changing SID synthesis. Unit tests do not open a real Linux audio device; installed-device smoke evidence is retained separately.
 
+- **`ac-linux-dummy-pacing`**. Pinned VICE's dummy driver is available, discards live writes, and supplies no playback timing. With the Linux test sink active, pacing at 50% and 150% uses the host clock. A timing-capable sink retains playback back-pressure and receives the corresponding 44.1 kHz cadence. Pace measurements pair wall timestamps and emulated cycle counts at both boundaries.
+
 ### Traceability
 
 - **Related FR Area(s):** FR-SID
 - **Linux output mappings:** FR-SID-013, TR-PLAT-001; `LinuxSdlAudioBackendTests` and `ViceGateSoundRegulatorTests`.
+- **Pacing evidence:** `LinuxSdlAudioBackendTests.QueueDepthAndCapacity_FollowTheDeviceDrain`, `ViceGateSoundRegulatorTests`, `SidLiveSamplingTests.Warp_ChangesCadenceNotSynthesis`, and `WarpAudioDiscardTests.AppPipeline_LiveAudio_Paces_To_Limiter_Rate`. [Phase D exit receipt](../../receipts/native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-exit-rerun-after-sdl-dummy-timing-fix)
 
 ---
 
@@ -210,9 +217,12 @@ Desktop packaging verification checks every vendored C64 `.vkm` file in the inst
 
 Screenshot, video, audio, synchronized capture, and format selection behavior are verified through capture metadata and round-trip output tests.
 
+- **`ac-wav-finalization-byte-count`**. Stopping a WAV capture after a settings restart drains queued PCM and returns the final byte count recorded in the RIFF data chunk. Exercise a blocked PCM writer so an early count of zero is rejected even when the final header contains the full sample count. Reject a stale header independently of the returned count.
+
 ### Traceability
 
 - **Related FR Area(s):** FR-MED
+- **WAV finalization:** `FR-MED-003` ac-1 and ac-6, `TR-SETTINGS-TXN-001` ac-02, `SettingsRestartLifecycleTests.Restart_PreservesFactoryAudioTapAndWarpPolicy`.
 
 ---
 
@@ -666,7 +676,7 @@ Retain traceability from every retired renderer/quarantine assertion to equivale
 
 ### Description
 
-Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+The completion manifest and retained results account for every required project, category, workload and prerequisite.
 Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
 Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
 Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
@@ -674,7 +684,7 @@ Require final Astra agreement over combined diff, requirement evidence, owned-fi
 
 ### Acceptance Criteria
 
-- **ac-01**: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+- **ac-01**: The completion manifest and retained results account for every required project, category, workload and prerequisite.
 - **ac-02**: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
 - **ac-03**: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
 - **ac-04**: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.

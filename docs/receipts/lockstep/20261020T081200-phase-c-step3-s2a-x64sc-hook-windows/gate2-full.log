@@ -1,0 +1,16 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.49]     ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: "broken-stderr") [FAIL]
+  Failed ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(name: "broken-stderr") [1 s]
+  Error Message:
+   Assert.Contains() Failure: Item not found in collection
+Collection: [72]
+Not found:  65
+  Stack Trace:
+     at ViceSharp.NativeClockProbe.Tests.BusAdapterFixtures.AssertAdapter(IBusAdapterProbe probe, String name) in F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\BusAdapterContractTests.cs:line 52
+   at ViceSharp.NativeClockProbe.Tests.BusAdapterRealProcessTests.Real_adapter_on_real_pipes_matches_the_contract(String name) in F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\BusAdapterContractTests.cs:line 141
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+Results File: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261020T081200-phase-c-step3-s2a-x64sc-hook-windows\gate2-full.trx
+
+Failed!  - Failed:     1, Passed:   228, Skipped:     0, Total:   229, Duration: 1 s - ViceSharp.NativeClockProbe.Tests.dll (net10.0)

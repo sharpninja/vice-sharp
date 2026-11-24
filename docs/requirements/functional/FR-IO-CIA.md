@@ -155,15 +155,16 @@ Each CIA has an 8-bit serial shift register that can transmit or receive data bi
 
 ### Acceptance Criteria
 
-1. The shift register at offset $0C shifts one bit per Timer A underflow (output mode) or external clock edge (input mode).
+1. In output mode, each Timer A underflow advances one CNT half-cycle. The SP pin emits one bit on each falling CNT edge, so a full bit period takes two Timer A underflows. In input mode, the register shifts on each rising external CNT edge.
 2. Direction is controlled by bit 6 of CRA: 0 = input, 1 = output.
 3. After 8 bits are shifted, the SDR interrupt bit is set in the ICR.
-4. In output mode, data written to the SDR register is loaded into the shift register on the next Timer A underflow.
-5. In input mode, incoming bits are shifted in on each external clock edge.
+4. An SDR write arms or queues transmission only when CRA already selects output mode. The idle byte starts shifting on the first Timer A underflow eligible after VICE's SDR write delay.
+5. In input mode, incoming bits are shifted in on rising external CNT edges.
 6. The serial data appears on the SP pin and the clock on the CNT pin.
 
 ### Source References
 
+- `native/vice/vice/src/core/ciacore.c`: `CIA_SDR` write, `ciacore_intsdr`, and `ciacore_set_cnt` for the pinned VICE serial behavior.
 - `native/vice/vice/doc/CIA-README.txt`: CIA timer/alarm behavior.
 - `native/vice/vice/doc/vice.texi`: keyboard, joystick, IEC, and machine-feature behavior involving CIA ports.
 

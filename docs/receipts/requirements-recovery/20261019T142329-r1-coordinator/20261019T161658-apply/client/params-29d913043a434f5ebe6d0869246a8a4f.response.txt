@@ -1,0 +1,31 @@
+type: result
+payload:
+  requestId: req-20261019T211814Z-731f
+  result:
+    id: TR-TAP-EDGE-001
+    title: Datasette sense line and record mode
+    description: Model accepted VICE transport state and image eligibility before deriving tape sense or recording eligibility. Preserve the distinction between device sense state, each machine input port, and tape read-pulse interrupt wiring. Recording consumes ordered clocked write-line transitions and retains the native gap, image-position, and write-failure behavior through the managed adapter.
+    status: pending
+    priority: medium
+    area: TAP
+    subarea: EDGE
+    acceptanceCriteria:
+    - id: ac-01
+      text: Use the FR-RUNTIME-TAPE-002 ac-01 media/control matrix to assert accepted mode, sense state, and unchanged state for ignored RECORD commands; do not treat an unconstrained RecordPressed flag as proof that RECORD was accepted.
+      isSatisfied: false
+    - id: ac-02
+      text: Use FR-RUNTIME-TAPE-002 ac-02 observations to assert the C64 CPU-port and VIC-20 VIA1 input bits for both data-direction settings; separately assert pulse routing to C64 CIA1 FLAG and VIC-20 VIA2 CA1.
+      isSatisfied: false
+    - id: ac-03
+      text: Use the same recording eligibility traces as FR-RUNTIME-TAPE-002 ac-05. Assert emitted writes and absence of writes as well as updated last-write-line state, including input transitions while recording is ineligible.
+      isSatisfied: false
+    - id: ac-04
+      text: Use the same recording byte/error traces as FR-RUNTIME-TAPE-002 ac-06. Preserve the pinned native first-write handling and encoded gap behavior, including known native quirks, without patching VICE or replacing expected values with managed output.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:18:15.5646258+00:00
+    updatedAt: 2026-10-19T21:18:15.5647117+00:00
+  deprecated: true
+
+---
+

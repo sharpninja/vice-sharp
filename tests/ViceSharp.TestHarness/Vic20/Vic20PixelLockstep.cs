@@ -18,6 +18,7 @@ public sealed class Vic20PixelLockstep
 
     /// <summary>TEST-VIC20-001 / AC-PX-02: READY PAL index SequenceEqual.</summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Index_ReadyPal_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -26,6 +27,7 @@ public sealed class Vic20PixelLockstep
 
     /// <summary>AC-PX-03: READY NTSC index SequenceEqual.</summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Index_ReadyNtsc_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -50,6 +52,7 @@ public sealed class Vic20PixelLockstep
 
     /// <summary>AC-PX-04: busy screen PAL — border color reg poke then index equal.</summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Index_BusyPal_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -65,6 +68,7 @@ public sealed class Vic20PixelLockstep
     /// Acceptance: Failed=0 for this fact when xvic is available.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Bgra_ReadyPal_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -140,6 +144,7 @@ public sealed class Vic20PixelLockstep
     /// Acceptance: Failed=0 when xvic is available.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Bgra_BusyPal_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -195,6 +200,7 @@ public sealed class Vic20PixelLockstep
     /// Acceptance: Failed=0 when xvic is available.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Bgra_ReadyNtsc_SequenceEqual()
     {
         XvicOraclePrerequisites.ValidateCurrent();

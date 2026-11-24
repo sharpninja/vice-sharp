@@ -1,0 +1,400 @@
+{
+  "rawSemanticPattern": "ViceNative\\.|ViceNativeXvic|ViceNativeBridge|IViceNative|XvicOraclePrerequisites",
+  "rawSemanticFileCount": 56,
+  "rawTokenFileCount": 43,
+  "rawTokenWithCategoryCount": 5,
+  "files": [
+    {
+      "path": "tests/ViceSharp.Benchmarks/NativeViceBaseline.cs",
+      "plainFact": false,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/C64MachineProfileTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/CpuValidationTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/RasterBarRendererTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": true,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/RasterBarGroundTruthTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+      "plainFact": false,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEngineParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs",
+      "plainFact": false,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisiteTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceMachineValidationFixture.cs",
+      "plainFact": false,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiValidationTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+      "plainFact": false,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+      "plainFact": false,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Xbox/XboxTestConventionTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": true,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "plainFact": true,
+      "viceAttribute": true,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs",
+      "plainFact": false,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": false
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceNativeBridge.cs",
+      "plainFact": false,
+      "viceAttribute": false,
+      "category": false,
+      "tokenSetIncludes": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Xbox/XboxAotLinkTests.cs",
+      "plainFact": true,
+      "viceAttribute": false,
+      "category": true,
+      "tokenSetIncludes": false
+    }
+  ]
+}

@@ -67,6 +67,7 @@ public sealed class Vic20SnapshotRoundTripTests
     /// only if native was also reset and re-run to same cycle (deterministic).
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Unexpanded_ManagedBlob_ResumeLockstep_Short()
     {
         XvicOraclePrerequisites.ValidateCurrent();

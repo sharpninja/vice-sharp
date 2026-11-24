@@ -1,0 +1,38 @@
+2026-10-19T14:27:33 HEAD: 6fb84afcc1ab980c4b40525efe23324183a3c8f4
+2026-10-19T14:27:33 working tree:  M build/Build.Romm.cs |  M build/_build.csproj |  M docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md |  M docs/testing/RomM-Desktop.md |  D tests/ViceSharp.Library.Tests/CompletionTestManifestTests.cs |  D tests/ViceSharp.Library.Tests/Packaging/UserLocalDeploymentTests.cs |  M tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj |  M tests/ViceSharp.TestHarness/SettingsRestartLifecycleTests.cs |  M tests/packaging/Verify-DeployYay.ps1 | ?? build.tests/ | ?? build/Build.Tests.cs | ?? build/BuildTestFilter.cs | ?? docs/plans/PLAN-NUKETESTS-001.md | ?? docs/receipts/lockstep/ | ?? docs/receipts/nuke-tests/
+2026-10-19T14:27:33 dotnet test /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj -c Release --nologo --logger trx;LogFileName=ViceSharp.Library.Tests.trx --results-directory /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T142733-library-final-linux
+2026-10-19T14:27:39 exit 0
+2026-10-19T14:27:39 ViceSharp.Library.Tests: total 124, passed 124, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Adapter.RomMGatewayAuthTests: total 2, passed 2, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Adapter.RomMGatewayBrowseTests: total 3, passed 3, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Adapter.RomMGatewayCollectionsTests: total 5, passed 5, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Adapter.RomMGatewayDetailTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Adapter.RomMGatewayDownloadTests: total 5, passed 5, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Adapter.RomMJsonContextTests: total 2, passed 2, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Boundary.LibraryViewModelsBoundaryTests: total 3, passed 3, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Browse.GameGrouperTests: total 4, passed 4, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Browse.LibraryBrowseViewModelTests: total 26, passed 26, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Collections.CollectionsViewModelTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Collections.RomDetailViewModelTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Connection.FileRecentsStoreTests: total 2, passed 2, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Connection.FileRomMConnectionStoreTests: total 5, passed 5, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Connection.LibraryConnectionViewModelTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Connection.LinuxSecretServiceRomMConnectionStoreTests: total 10, passed 10, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Connection.RomMAuthRefreshTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Connection.RomMPairingTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Connection.RomMServerLocatorTests: total 4, passed 4, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Covers.CoverCacheTests: total 3, passed 3, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Covers.RomMCoverImageSourceTests: total 2, passed 2, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Csdb.BridgeCsdbGatewayTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Csdb.CsdbDiscoveryViewModelTests: total 3, passed 3, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Csdb.CsdbGatewaySelectionTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Csdb.LocalCsdbGatewayTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Discovery.RomMBridgeConnectionSourceTests: total 3, passed 3, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Discovery.RomMDiscoveryTests: total 3, passed 3, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Machine.CurrentMachineSlugTests: total 9, passed 9, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Media.MediaExtensionMapTests: total 14, passed 14, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Packaging.DirectoryPackagesTests: total 2, passed 2, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Packaging.NuGetConfigTests: total 1, passed 1, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Packaging.PackageMetadataTests: total 2, passed 2, failed 0, skipped 0
+2026-10-19T14:27:40    ViceSharp.Library.Tests.Threading.LibraryObservableObjectTests: total 2, passed 2, failed 0, skipped 0
+2026-10-19T14:27:40 receipt: /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T142733-library-final-linux

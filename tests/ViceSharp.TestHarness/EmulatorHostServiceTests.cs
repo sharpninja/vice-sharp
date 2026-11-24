@@ -27,8 +27,10 @@ using Xunit;
 public sealed class EmulatorHostServiceTests
 {
     /// <summary>
-    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: malformed or missing TrueDrive media returns its
-    /// actionable validation error, registers no broken session, and permits an empty-rig retry.
+    /// FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001.
+    /// Use case: Create a True Drive rig with malformed or missing media.
+    /// Acceptance: The host reports the reason, registers no broken session, and accepts
+    /// an empty-rig retry.
     /// </summary>
     [Theory]
     [InlineData(false)]
@@ -67,7 +69,11 @@ public sealed class EmulatorHostServiceTests
         }
     }
 
-    /// <summary>FR-DRVTRUE-001: expected media I/O and validation exceptions retain their reason over RPC.</summary>
+    /// <summary>
+    /// FR-DRVTRUE-001.
+    /// Use case: Media creation raises a known argument, I/O, or access error.
+    /// Acceptance: The RPC returns InvalidArgument with the original reason.
+    /// </summary>
     [Theory]
     [InlineData("Argument")]
     [InlineData("IO")]
@@ -92,7 +98,11 @@ public sealed class EmulatorHostServiceTests
         Assert.Empty(registry.Snapshot());
     }
 
-    /// <summary>FR-DRVTRUE-001: unrelated factory defects must not be relabeled as bad user media.</summary>
+    /// <summary>
+    /// FR-DRVTRUE-001.
+    /// Use case: The media factory encounters an unexpected implementation error.
+    /// Acceptance: The exception propagates with its original reason.
+    /// </summary>
     [Fact]
     public async Task CreateSessionAsync_UnexpectedFactoryFailure_RemainsException()
     {

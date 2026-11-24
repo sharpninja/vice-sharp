@@ -30,6 +30,7 @@ navigation:
   - document: audit-vic20-vs-vice
   - document: ai-review
   - document: registry-of-lore
+  - document: native-vice-build
   title: Architecture
   path: Architecture
 - children:
@@ -57,6 +58,7 @@ navigation:
 - children:
   - document: plan-vice-immutable
   - document: plan-vsf-lockstep
+  - document: plan-native-restore
   title: Current Plans
   path: Current-Plans
 documents:
@@ -282,6 +284,12 @@ documents:
   platforms:
   - github
   id: plan-vsf-lockstep
+- title: Phase D Native VICE Restoration and Validation
+  source: docs/plans/PLAN-NATIVERESTORE-001.md
+  target: Plan-Phase-D-Native-VICE-Restoration.md
+  platforms:
+  - github
+  id: plan-native-restore
 - title: RomM Library
   source: src/ViceSharp.RomM/README.md
   target: RomM-Library.md
@@ -306,5 +314,11 @@ documents:
   target: Documentation-Index.md
   platforms:
   - github
+- title: Native VICE Builds
+  source: native/README-native-build.md
+  target: Native-VICE-Builds.md
+  platforms:
+  - github
+  id: native-vice-build
 home:
   document: home

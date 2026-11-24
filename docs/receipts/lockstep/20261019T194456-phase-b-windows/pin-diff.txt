@@ -1,0 +1,49 @@
+Pin diff of the 826 original inputs against the current tree. at=2026-10-19T19:45:37 head=b660bee9ffa5f80a2c45caa29cde8b62b5751529 since=2026-10-08T14:35:38-05:00 inputs=826 unchanged=813 changed=13 missing=0 changedSinceOct8Revalidation=5 inRepo=825
+
+F:\GitHub\vice-sharp\AGENTS-README-FIRST.yaml [changed, also changed since the Oct 8 revalidation] original 3A13AA1CA3A6 -> current AEA917C3656A
+    working tree differs from HEAD: untracked
+    no commit since the packet touched it (change predates the packet or is uncommitted)
+F:\GitHub\vice-sharp\docs\receipts\hv\20261008T073800-0500-phase1-oracle-contracts-opus.reviewer-progress.jsonl [changed, same as the Oct 8 revalidation] original 8062CD9396A7 -> current EC0D02A875E0
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\binary-runtime\README.md [changed, same as the Oct 8 revalidation] original 6C823247BFA1 -> current 4B3248B94F45
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\clock-runtime\README.md [changed, same as the Oct 8 revalidation] original E78BCE107820 -> current 05CDA7597462
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\gate-runtime\gate-observer.c [changed, same as the Oct 8 revalidation] original F3BFC89E125B -> current 9E9DFB8A920C
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\docs\receipts\native-vice\20261008T082100-0500-phase2-feasibility\gate-runtime\README.md [changed, same as the Oct 8 revalidation] original B057DDED56B7 -> current EFCD7BA2544B
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\docs\requirements\test\TEST-Requirements.md [changed, also changed since the Oct 8 revalidation] original 982130856C33 -> current DB9AB7F0C3AA
+    working tree differs from HEAD: False
+    commit fa259f22 2026-10-16T09:49 chore(sync): merge origin main into the preserved checkpoint
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+    commit ed7c2e60 2026-10-15T19:26 fix(linux): restore ROM launches and desktop audio
+F:\GitHub\vice-sharp\HANDOFF.md [changed, also changed since the Oct 8 revalidation] original 983DD1F9E9E2 -> current F778A27EF3FE
+    working tree differs from HEAD: False
+    commit 92214889 2026-10-16T12:38 docs: refresh RomM guides and export requirements wiki
+    commit 76bacc3d 2026-10-16T12:19 Document completed RomM integration and worktree retirement
+    commit 8a5ca856 2026-10-16T12:16 Integrate non-Xbox RomM desktop library work
+    commit fa259f22 2026-10-16T09:49 chore(sync): merge origin main into the preserved checkpoint
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+    commit 6530196f 2026-10-16T09:25 fix: resolve PR7 runtime and desktop regressions
+    commit ed7c2e60 2026-10-15T19:26 fix(linux): restore ROM launches and desktop audio
+F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\GATE-SLICE.md [changed, same as the Oct 8 revalidation] original F07C0E3C7A77 -> current 0A8787761A75
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\ContractAssertions.cs [changed, also changed since the Oct 8 revalidation] original 7043EE1A93DB -> current 0D026E462113
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\OracleContractTests.cs [changed, same as the Oct 8 revalidation] original 3D7272B4C271 -> current C10940A59A87
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\README.md [changed, also changed since the Oct 8 revalidation] original 7F07A4275D0F -> current 4C9FA6E12D86
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff
+F:\GitHub\vice-sharp\tests\ViceSharp.VsfCompatibility.Tests\BINARY-MONITOR-SLICE.md [changed, same as the Oct 8 revalidation] original 1A07A9E0C999 -> current A901E04AC57D
+    working tree differs from HEAD: False
+    commit c01e6d32 2026-10-16T09:41 chore(checkpoint): preserve ViceSharp work and detailed handoff

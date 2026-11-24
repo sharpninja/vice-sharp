@@ -1,0 +1,15 @@
+type: result
+payload:
+  result:
+    code: lost
+    retryable: false
+    persisted: false
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.completeTurn
+    agent: ""
+    sessionId: ""
+    requestId: ""
+    failsafePath: ""
+    message: workflow.sessionlog.completeTurn requires current-turn.yaml in '/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.
+    childStderr: workflow.sessionlog.completeTurn requires current-turn.yaml in '/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.

@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261019T194424Z-4387
+  result:
+    id: TEST-TAP-001
+    title: Tape and Datasette Tests
+    description: Datasette motor, TAP parsing, pulse timing, write behavior, and turbo loader compatibility are verified with unit and timing tests.
+    status: pending
+    priority: medium
+    area: TAP
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T19:44:25.1893102+00:00
+    updatedAt: 2026-10-19T19:44:25.1894029+00:00
+  deprecated: true
+
+---
+

@@ -237,6 +237,7 @@ public sealed class SidFilter8580DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-8580-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SetW0_8580_CutoffSweep_FilterProbeLockstep()
     {
         AssertFilter8580LockstepVsOracle(
@@ -262,6 +263,7 @@ public sealed class SidFilter8580DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-8580-11", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SolveIntegrate8580_LpProgram_FilterProbeLockstep()
     {
         AssertFilter8580LockstepVsOracle(
@@ -284,6 +286,7 @@ public sealed class SidFilter8580DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-8580-12", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PerCycleOrder_8580_ExtFilterOutputLockstep()
     {
         AssertFilter8580LockstepVsOracle(

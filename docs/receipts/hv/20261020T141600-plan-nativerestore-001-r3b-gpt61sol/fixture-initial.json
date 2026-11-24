@@ -1,0 +1,192 @@
+{
+  "path": "/home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+  "bytes": 190854,
+  "sha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+  "parsedEnd": 190854,
+  "modules": [
+    {
+      "name": "MAINCPU",
+      "offset": 58,
+      "length": 113,
+      "major": 1,
+      "minor": 2,
+      "clock": 109163946,
+      "A": 194,
+      "X": 2,
+      "Y": 0,
+      "SP": 250,
+      "PC": 22377,
+      "P": 160,
+      "payloadHex": "AAB5810600000000C20200FA6957A0CD00000000000000456F8106000000000000000000000000766F81060000000000000000000000000000000000000000000000000000000008000000B3420000000000000F5D270600000000"
+    },
+    {
+      "name": "C64MEM",
+      "offset": 171,
+      "length": 65577,
+      "major": 0,
+      "minor": 1
+    },
+    {
+      "name": "C64CART",
+      "offset": 65748,
+      "length": 23,
+      "major": 0,
+      "minor": 1
+    },
+    {
+      "name": "CIA1",
+      "offset": 65771,
+      "length": 99,
+      "major": 2,
+      "minor": 5
+    },
+    {
+      "name": "CIA2",
+      "offset": 65870,
+      "length": 99,
+      "major": 2,
+      "minor": 5
+    },
+    {
+      "name": "SID",
+      "offset": 65969,
+      "length": 58,
+      "major": 1,
+      "minor": 5
+    },
+    {
+      "name": "SIDEXTENDED",
+      "offset": 66027,
+      "length": 155,
+      "major": 1,
+      "minor": 4
+    },
+    {
+      "name": "VDRIVEIMAGE8",
+      "offset": 66182,
+      "length": 22,
+      "major": 2,
+      "minor": 0
+    },
+    {
+      "name": "DRIVE8",
+      "offset": 66204,
+      "length": 24,
+      "major": 2,
+      "minor": 0,
+      "hasTde": 0,
+      "hasDrives": 1
+    },
+    {
+      "name": "DRIVE9",
+      "offset": 66228,
+      "length": 167,
+      "major": 2,
+      "minor": 0,
+      "hasTde": 1,
+      "hasDrives": 1
+    },
+    {
+      "name": "DRIVE10",
+      "offset": 66395,
+      "length": 167,
+      "major": 2,
+      "minor": 0,
+      "hasTde": 1,
+      "hasDrives": 1
+    },
+    {
+      "name": "DRIVE11",
+      "offset": 66562,
+      "length": 167,
+      "major": 2,
+      "minor": 0,
+      "hasTde": 1,
+      "hasDrives": 1
+    },
+    {
+      "name": "FSDRIVE",
+      "offset": 66729,
+      "length": 280,
+      "major": 0,
+      "minor": 0
+    },
+    {
+      "name": "VIC-II",
+      "offset": 67009,
+      "length": 123437,
+      "major": 1,
+      "minor": 3
+    },
+    {
+      "name": "GLUE",
+      "offset": 190446,
+      "length": 25,
+      "major": 1,
+      "minor": 0
+    },
+    {
+      "name": "C64MEMHACKS",
+      "offset": 190471,
+      "length": 23,
+      "major": 0,
+      "minor": 0
+    },
+    {
+      "name": "TAPEPORT",
+      "offset": 190494,
+      "length": 24,
+      "major": 1,
+      "minor": 0
+    },
+    {
+      "name": "DATASETTE",
+      "offset": 190518,
+      "length": 100,
+      "major": 1,
+      "minor": 5
+    },
+    {
+      "name": "KEYBOARD",
+      "offset": 190618,
+      "length": 118,
+      "major": 1,
+      "minor": 1
+    },
+    {
+      "name": "JOYPORT0",
+      "offset": 190736,
+      "length": 23,
+      "major": 0,
+      "minor": 0
+    },
+    {
+      "name": "JOYSTICK0",
+      "offset": 190759,
+      "length": 24,
+      "major": 1,
+      "minor": 2
+    },
+    {
+      "name": "JOYPORT1",
+      "offset": 190783,
+      "length": 23,
+      "major": 0,
+      "minor": 0
+    },
+    {
+      "name": "JOYSTICK1",
+      "offset": 190806,
+      "length": 24,
+      "major": 1,
+      "minor": 2
+    },
+    {
+      "name": "USERPORT",
+      "offset": 190830,
+      "length": 24,
+      "major": 1,
+      "minor": 0
+    }
+  ]
+}

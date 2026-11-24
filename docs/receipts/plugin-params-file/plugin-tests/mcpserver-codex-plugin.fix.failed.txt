@@ -1,0 +1,6 @@
+Codex UserPromptSubmit required-memory injection.user-prompt-submit injects explicit None and keeps going when memory fetch fails
+Increment A process manifest and exact policy contract.rejects forged or incomplete unmanaged assignment provenance
+REPL session-log persistence bridge.submits the canonical SubmitAsync snapshot and accepts a durable result
+REPL session-log persistence bridge.reports the core failsafe path when close completes in degraded mode
+REPL session-log persistence bridge.retains query text and turn metadata when beginTurn is queued
+Resolve-ReplWorkspaceDirectory precedence.falls back to MCP_WORKSPACE_PATH when the current directory has no marker

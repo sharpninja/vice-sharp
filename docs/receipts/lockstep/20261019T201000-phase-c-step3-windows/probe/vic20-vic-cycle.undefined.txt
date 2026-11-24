@@ -1,0 +1,11 @@
+maincpu_clk
+mem_ram
+vfli_ram
+vflimod_enabled
+vic
+vic_raster_draw_handler
+vic_trigger_light_pen_internal
+vic20_v_bus_last_data
+vic20_v_bus_last_high
+vic20_vflihack_userport
+vic20memrom_chargen_rom

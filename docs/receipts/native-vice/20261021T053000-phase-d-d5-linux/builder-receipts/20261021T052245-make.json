@@ -1,0 +1,16 @@
+{
+  "Stage": "Make",
+  "ExitCode": 0,
+  "Command": "make -C src/lib -j16 V=1 && make -C src/arch/shared -j16 V=1 && make -C src/core -j16 V=1 && make -C src -j16 V=1 x64sc xvic",
+  "LinkLinesFound": [
+    "x64sc",
+    "xvic"
+  ],
+  "LinkLineSource": {
+    "x64sc": "captured",
+    "xvic": "captured"
+  },
+  "Log": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/receipts-linux/make.log",
+  "LinkLines": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/receipts-linux/stock-link-lines.json",
+  "LinkObjects": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/receipts-linux/stock-link-objects.json"
+}

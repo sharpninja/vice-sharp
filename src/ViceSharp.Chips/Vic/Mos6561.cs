@@ -253,7 +253,8 @@ public sealed class Mos6561 : IVideoChip, IAudioChip, IAddressSpace, IInterruptS
     public int QueuedSampleCount => _audioBackend?.QueuedSampleCount ?? 0;
     public int AvailableSampleCount => _audioBackend?.AvailableSampleCount ?? int.MaxValue;
     public int AudioFragmentSampleCount => _audioSampleBuffer.Length;
-    public bool IsAudioTimingSource => _audioBackend is { IsAvailable: true };
+    /// <summary>2026-11-23, FR-SNDREG-001. Playback can pace VIC-20 emulation only with a timing-capable sink.</summary>
+    public bool IsAudioTimingSource => _audioBackend is { IsTimingSource: true };
 
     public float GenerateSample() => _lastAudioSample / 32768.0f;
 

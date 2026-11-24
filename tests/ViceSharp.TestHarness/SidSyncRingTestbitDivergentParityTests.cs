@@ -161,6 +161,7 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-SYNC-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void HardSync_FiresOnRisingEdgeOfSourceMsb()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -219,6 +220,7 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-SYNC-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void HardSync_SameCycleSyncSourceSpecialCaseSuppressesDestSync()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -479,6 +481,7 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-TESTBIT-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBitRising_ArmsSlowShiftRegisterResetOf35000Cycles()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -523,6 +526,7 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-TESTBIT-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBitRising_FlushesShiftPipelineToZero()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -574,6 +578,7 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-TESTBIT-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBitFalling_ClocksShiftRegisterOnceWithInvertedBit17()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -634,6 +639,7 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-TESTBIT-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBit_ShiftRegisterIsPerVoiceNotShared()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

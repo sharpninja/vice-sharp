@@ -1,0 +1,5 @@
+dialogItems:
+  - timestamp: 2026-10-20T01:15:12.5349817Z
+    role: model
+    content: Dense-session smoke dialog item; marker dense-smoke-marker-20261019T201504
+    category: observation

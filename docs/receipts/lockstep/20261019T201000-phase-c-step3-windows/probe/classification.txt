@@ -1,0 +1,27 @@
+nm: GNU nm (GNU Binutils) 2.45.1
+vic20\vic20cpu.o: sha256 6F54B7CC158F437B2D5F8EC9F4A46C9568E334954C434821851498009949F7CD, 71 undefined, 113 defined
+c64\c64cpusc.o: sha256 AA7F8318266FB55C9A00AB16A7083A3C84BE48A10DDE9A465D4D715CDCC51AB0, 79 undefined, 121 defined
+vic20\vic-cycle.o: sha256 66A558C5F0DF716C5C3B22993FBE45A946576A7FC71E0E941895CE5952456A70, 11 undefined, 35 defined
+viciisc\vicii-cycle.o: sha256 12D69199742271EDA8D043F76047B2E979C1893EE06F4ADDFE57BE2140AB3146, 20 undefined, 31 defined
+xvic.exe: sha256 C01442BC1F15DD8C7006FABE0D35DFA9707664A3120DD1FA014A51EEB481B92C
+x64sc.exe: sha256 B3ED5F3AC6B2DC05D084E63CF1406B516EB3EEF456B59154B9AD287123F87AEF
+
+  cpu : vic20\vic20cpu.o
+  perCycleHookCalledFromCpu : vic_cycle=True
+  clockGlobal : maincpu_clk=True
+  interruptStatusGlobal : maincpu_int_status=True
+  baLowFlagsGlobal : maincpu_ba_low_flags=False
+  stealCyclesCall : vicii_steal_cycles=False
+  memoryDispatchIsDataTables : _mem_read_tab_ptr=True _mem_write_tab_ptr=True dummy-read=True dummy-write=True
+  memmapAccessorsAreLocal : memmap_mem_read defined-in-object=True memmap_mem_store defined-in-object=True
+  fastFetchBase : bank_base defined-in-object=True; mem_mmu_translate called=True
+
+  cpu : c64\c64cpusc.o
+  perCycleHookCalledFromCpu : vicii_cycle=True
+  clockGlobal : maincpu_clk=True
+  interruptStatusGlobal : maincpu_int_status=True
+  baLowFlagsGlobal : maincpu_ba_low_flags=True
+  stealCyclesCall : vicii_steal_cycles=True
+  memoryDispatchIsDataTables : _mem_read_tab_ptr=True _mem_write_tab_ptr=True dummy-read=True dummy-write=True
+  memmapAccessorsAreLocal : memmap_mem_read defined-in-object=True memmap_mem_store defined-in-object=True
+  fastFetchBase : bank_base defined-in-object=True; mem_mmu_translate called=True

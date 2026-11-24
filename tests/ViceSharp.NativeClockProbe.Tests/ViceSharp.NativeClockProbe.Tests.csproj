@@ -13,5 +13,16 @@
     <None Include="../../tools/immutable-vice/clock-observer.c" Link="Fixtures/clock-observer.c" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tools/immutable-vice/clock-gate.c" Link="Fixtures/clock-gate.c" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tools/immutable-vice/clock-gate.h" Link="Fixtures/clock-gate.h" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/gate-observer.c" Link="Fixtures/gate-observer.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/bus-observer.c" Link="Fixtures/bus-observer.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/bus-adapter.c" Link="Fixtures/bus-adapter.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/clock-observer-x64sc.c" Link="Fixtures/clock-observer-x64sc.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/obs-emitter.c" Link="Fixtures/obs-emitter.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/obs-emitter.h" Link="Fixtures/obs-emitter.h" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/obs-fields.h" Link="Fixtures/obs-fields.h" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/snapshot-observer.c" Link="Fixtures/snapshot-observer.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/snapshot-observer.h" Link="Fixtures/snapshot-observer.h" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/immutable-vice/snapshot-checkpoint.c" Link="Fixtures/snapshot-checkpoint.c" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Fixtures/*.h" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

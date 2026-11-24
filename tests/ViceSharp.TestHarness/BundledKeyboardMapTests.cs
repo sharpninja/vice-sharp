@@ -11,9 +11,11 @@ using Xunit;
 public sealed class BundledKeyboardMapTests
 {
     /// <summary>
-    /// Use case: A fresh desktop installation has downloaded ROMs but no external
-    /// VICE installation or user keymaps. Acceptance: the host enumerates every
-    /// shipped C64 map from the application directory, including alternate layouts.
+    /// FR-INP-006.
+    /// Use case: A fresh desktop installation has downloaded ROMs and no external VICE
+    /// installation or user keymaps.
+    /// Acceptance: The host lists the shipped C64 maps from the application directory,
+    /// including alternate layouts.
     /// </summary>
     [Fact]
     public async Task ListKeyboardMapsAsync_NoExternalVice_ListsBundledMaps()

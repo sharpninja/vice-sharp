@@ -117,6 +117,7 @@ public sealed class VicIISpriteDmaNativeCheckpointTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(NonPalAndExtendedModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void Sprite3DmaWindow_NativeAndManagedBothActive_ModelSpecificCycleTable(string modelSelector)
     {
         // ============================================================

@@ -124,6 +124,7 @@ public sealed class VicIiCheckpointTests
     /// VICE vicii-fetch.c:135-166 (c-access reads, no write side-effect).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Native_ScreenRam_ImmediateReadBackMatchesWrite()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -171,6 +172,7 @@ public sealed class VicIiCheckpointTests
     /// VICE vicii-fetch.c:135-166, vicii-cycle.c:541-548.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Native_ScreenRamPattern_SurvivesOneFullPalFrame_VicDmaIsReadOnly()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

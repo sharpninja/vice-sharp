@@ -1,0 +1,144 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> /home/sharpninja/github/vice-sharp/build/bin/Release/_build.dll
+  ViceSharp.Build.Tests -> /home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll
+Test run for /home/sharpninja/github/vice-sharp/build.tests/bin/Release/net10.0/ViceSharp.Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+WARNING: Overwriting results file: /home/sharpninja/github/vice-sharp/TestResults/user-local-deploy/installer-verified.trx
+Results File: /home/sharpninja/github/vice-sharp/TestResults/user-local-deploy/installer-verified.trx
+
+Passed!  - Failed:     0, Passed:    13, Skipped:     0, Total:    13, Duration: 160 ms - ViceSharp.Build.Tests.dll (net10.0)
+Targets (with their direct dependencies):
+
+  CiGitHub             -> Clean, Restore, Compile, Test, DeterminismTest
+    Full GitHub Actions CI pipeline
+  CiAzure              -> Clean, Restore, Compile, Test, DeterminismTest
+    Full Azure DevOps CI pipeline
+  Commit              
+    Stage changes and create a git commit
+  SyncAzure           
+    Retired: Azure DevOps is not used. Do not push azure.
+  SyncGithub          
+    Push current branch to origin (GitHub; primary for CI/release)
+  RebuildAzure        
+    Trigger a full rebuild on Azure DevOps pipeline (no commit)
+  RebuildGithub       
+    Trigger a full rebuild on GitHub Actions (no commit)
+  Clean               
+  Restore             
+  Compile (default)    -> Restore
+  GitCommit            -> Compile
+  Test                 -> Compile
+  CiTest              
+  DeterminismTest      -> Compile
+  ParityTest           -> Compile
+  PackNuget            -> Compile
+  PublishNuget        
+  RomFetch            
+  Pack                 -> Compile
+  RunConsole           -> Compile
+  RunAvalonia          -> Compile
+  PublishWiki         
+  PublishGitHubRelease
+    Create/update the GitHub release for the HEAD vX.Y.Z tag with the MSI + NuGet packages.
+  DeployXboxLocal     
+  ValidateStorePackage
+  PublishMsi           -> Restore
+  InstallMsi           -> PublishMsi
+  PublishWinget        -> PublishGitHubRelease
+  PublishChocolatey    -> PublishGitHubRelease
+  PublishScoop         -> PublishGitHubRelease
+  PublishXbox         
+    DEV-PC/MANUAL (never CI): publish the ViceSharp.Xbox head as a Release Native-AOT MSIX. Requires the windows-app / UWP workload.
+  DeployXbox          
+    DEV-PC/MANUAL (never CI): sideload the ViceSharp.Xbox MSIX to a Dev-Mode console via WinAppDeployCmd. Params: --xbox-console-ip, --xbox-pairing-pin, [--xbox-msix-path].
+  ValidateXbox         -> Compile
+    OFF-CONSOLE, workload-free Xbox gate (plain net10.0 agent): solution build + Category=Xbox tests + Native-AOT link of the ViceSharpXboxUwp=false fallback head.
+  RommDesktopTest     
+    Build and test managed RomM desktop/library projects without the native harness
+  BuildTest           
+    Run the Nuke build tests (build.tests) with host selection; every selected test must pass
+  PackYay             
+    Create a self-contained Release desktop package for Arch Linux/yay.
+  DeployUser          
+    Build and install a self-contained Linux desktop release in user space only.
+  DeployYay            -> DeployUser
+    Compatibility alias for DeployUser; installs only in the current user's home.
+
+Parameters:
+
+  --commit-message              Commit message for the Commit target.
+  --configuration               Configuration to build - Default is 'Debug'
+                                (local) or 'Release' (server).
+  --force-rebuild               Force a full rebuild (skip incremental caches).
+  --github-repo                 owner/name of the GitHub mirror used for
+                                releases (gh --repo).
+  --msi-allow-debug             Allow packaging a Debug-configuration MSI
+                                (unoptimized emulator; ~10x slower). Values:
+                                auto, true, false. Default auto (false).
+  --msi-aot-enabled             Publish the MSI payload with native AOT instead
+                                of the standard ReadyToRun+single-file+trimmed
+                                JIT publish. Values: auto, true, false. Default
+                                auto (false).
+  --msi-enable-debug-grpc       Enable both debug gRPC surfaces in the installed
+                                MSI environment. Values: auto, true, false.
+                                Default auto (true for Debug, false otherwise).
+  --msi-remote-control-port     Loopback port installed for the Avalonia
+                                RemoteControl debug gRPC surface when
+                                --msi-enable-debug-grpc is true.
+  --msi-remote-control-token    Bearer token installed for the Avalonia
+                                RemoteControl debug gRPC surface when
+                                --msi-enable-debug-grpc is true.
+  --msi-runtime-identifier      Runtime identifier for the desktop publish that
+                                feeds PublishMsi. Default win-x64.
+  --msi-version-override        Override the MSI/winget ProductVersion. Default:
+                                GitVersion
+                                {Major}.{Minor}.{CommitsSinceVersionSource}.
+  --nuget-source                NuGet feed for PublishNuget. Default nuget.org
+                                v3.
+  --package-version-override    Override the NuGet/Arch package version.
+                                Default: release tag or GitVersion
+                                {Major}.{Minor}.{CommitsSinceVersionSource}
+                                (same scheme as the MSI).
+  --publish-dry-run             Dry-run every publish target: do the local work
+                                (pack/build/hash/manifest) but skip every
+                                outward action (git tag push, GitHub release,
+                                nuget.org push, winget/choco/scoop submit) and
+                                log what would run.
+  --romm-contract-mocks         Run the RomM desktop contract mock gate before
+                                implementation.
+  --store-package-path          Store package
+                                (.msixupload/.appxupload/.msix/.appx) for
+                                ValidateStorePackage. When omitted, the newest
+                                upload package under src/ViceSharp.Xbox is used.
+  --winget-package-id           Winget package identifier
+                                (publisher.identifier). Default
+                                sharpninja.ViceSharp.
+  --xbox-console-ip             DeployXbox: the Dev-Mode console IP (or
+                                host:port) passed to WinAppDeployCmd -ip.
+  --xbox-deploy-configuration   UWP configuration for DeployXboxLocal:
+                                Release-UWP (default) or Debug-UWP.
+  --xbox-launch                 Launch the app after DeployXboxLocal refreshes
+                                the layout. Default: true.
+  --xbox-msix-path              DeployXbox: override the MSIX to sideload.
+                                Default: the newest .msix under the
+                                ViceSharp.Xbox build output.
+  --xbox-pairing-pin            DeployXbox: the Dev-Mode pairing PIN passed to
+                                WinAppDeployCmd -pin.
+
+  --continue                    Indicates to continue a previously failed build
+                                attempt.
+  --help                        Shows the help text for this build assembly.
+  --host                        Host for execution. Default is 'automatic'.
+  --no-logo                     Disables displaying the NUKE logo.
+  --plan                        Shows the execution plan (HTML).
+  --profile                     Defines the profiles to load.
+  --root                        Root directory during build execution.
+  --skip                        List of targets to be skipped. Empty list skips
+                                all dependencies.
+  --target                      List of targets to be invoked. Default is
+                                'Compile'.
+  --verbosity                   Logging verbosity during build execution.
+                                Default is 'Normal'.
+
+PASS: 13 installer tests; zero failures/skips; actual desktop launch verified; DeployYay delegates only to DeployUser. No installation performed.

@@ -1,0 +1,1012 @@
+method: client.SessionLog.SubmitAsync
+label: review_final
+timestamp: 20261020T174553Z
+params:
+  sessionLog:
+    sessionId: Codex-20261020T173749Z-hv-plan-nativerestore-001
+    status: completed
+    lastUpdated: 2026-10-20T12:45:53.180-05:00
+    model: gpt-6.1-sol
+    turnCount: 1
+    started: 2026-10-20T12:37:49.7610000-05:00
+    sourceType: Codex
+    title: Hostile review of native restoration Phase D plan
+    turns:
+      - requestId: req-20261020T173749Z-turn-5e79
+        interpretation: Independent hostile plan review before execution; complete full-content offline fallback only after genuine primary and triage failures.
+        planFile: docs/plans/PLAN-NATIVERESTORE-001.md
+        response: |
+          2026-10-20T12:43:57.619-05:00 - DISAGREE: PLAN-NATIVERESTORE-001 before execution.
+
+          Accuracy 85%; completeness 70%. PASS 7, FAIL 12, UNKNOWN 2, ADD-AC 3. Neither score meets the 98% acceptance threshold. Phase D is not approved by this review.
+
+          Holistic judgments of the submitted plan, not test pass rates: factual baseline/preservation and operator rulings are substantially correct, but consumer exclusions, hunk coverage and requirement evidence are materially overstated. Execution readiness is lower because the Windows target, full-suite phase dependency, restoration safety and real snapshot/AC4 exits are unresolved. The review also has separate credential-handling and primary-persistence defects. Neither score reaches 98.
+
+          Reviewer: Codex, gpt-6.1-sol, max. Parent: ClaudeCode-20261020T015046Z-plugin-session / req-20261020T172116Z-prompt-6c6d. Reviewer queue IDs: Codex-20261020T173749Z-hv-plan-nativerestore-001 / req-20261020T173749Z-turn-5e79. These IDs were allocated by plugin helpers after bootstrap failed; they do not establish a primary session or completed turn.
+
+          Request: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/request.jsonl. Response: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/response.jsonl. Full structured counterpart: verdict.json. Persistence proof and its limitations: verdict.persistence.json.
+
+          Classification: class 1, plan review before execution. The full profile and all 397 marker lines were read. All 17 submitted input pins matched before analysis. Read-only git and source inspection verified the tracked native state. No native build, full solution build, dotnet test, native mutation, nested reviewer, commit or push ran. Historical test counts remain attributed to their receipts, not claimed as reviewer reruns. No artifacts/immutable-vice path was changed or built.
+
+          P01 PASS [info, review-inputs] - All 17 entries. input-pins.json
+          Evidence: Every pinned file was SHA256-rehashed and its byte length compared before subject analysis. All 17 matched, including plan D96E9860..., patch 90604E39..., and SELF-REVIEW 8FF62752....
+          Assessment: The review addresses the exact submitted artifact, not a reconstructed plan.
+          Correction / acceptance outcome: Retain these pins and disclose any change before another round.
+
+          P02 PASS [info, plan] - Starting tracked state. docs/plans/PLAN-NATIVERESTORE-001.md: 7
+          Evidence: state-before.json: develop dca4a6239cab0515498941f2469ee42115e77f3d; gitlink and native HEAD cc67418cba58e71d8e70fd353e9de47199ad2075; 8 specified tracked modifications, 222 insertions, 8 deletions; no staged native diff. Native git dir is the absolute equivalent of .git/modules/native/vice.
+          Assessment: The SHA, tracked file list, diff totals, and local exclude location agree with live read-only git evidence.
+          Correction / acceptance outcome: Keep fresh per-host measurements at D0; the separate untracked-count defect is F01.
+
+          P03 PASS [info, plan] - R1 B and R4. docs/plans/PLAN-NATIVERESTORE-001.md: 29
+          Evidence: Sections 3 and 4 explicitly choose .gitmodules ignore=untracked, retain all untracked paths, and replace the original empty submodule-status exit with equality to the classified D0 inventory. Handoff v2 line 266 records the operator choosing this amendment.
+          Assessment: The submodule itself may still show untracked files. That is authorized, and does not justify demanding info/exclude or deletion.
+          Correction / acceptance outcome: Preserve this policy. Remove contradictory leftover exclude-file work under F11.
+
+          P04 PASS [info, plan] - D3 timing and plan-review authority. docs/plans/PLAN-NATIVERESTORE-001.md: 53
+          Evidence: The plan defers implementation done-state HV and status changes to sequence step 12. The current request explicitly supplies the 12:21 ruling that plans still receive hostile review. No implementation step is claimed executed here.
+          Assessment: This review is authorized. D3 does not create an HV-before-code-complete deadlock for this plan review, and postpones done-state review rather than waiving substantive gates.
+          Correction / acceptance outcome: Keep the distinction between plan approval, execution evidence, and final done-state acceptance explicit.
+
+          P05 PASS [info, plan] - D-pre receipts. docs/plans/PLAN-NATIVERESTORE-001.md: 44
+          Evidence: Linux desktop-install README lines 13-24 and Windows 20261020T121000 desktop-install README lines 7-25 record Nuke deployment/install of version 1.3.111, ProductVersion commit 2c8d60284229b9fedc2d50f840153b9e8d8cbcbf, binary hashes and successful command outputs. Windows InstallMsi depends on PublishMsi.
+          Assessment: Both recorded installations use the approved Nuke route and the same commit. Neither receipt claims a GUI launch. This review did not independently inspect either installed application.
+          Correction / acceptance outcome: D-pre must still identify the accepted build at execution entry; see A02.
+
+          P06 PASS [info, plan] - Bounded Phase C builder and observation evidence. docs/plans/PLAN-NATIVERESTORE-001.md: 12
+          Evidence: The S2b receipt and builder source place work/build/bin outputs under artifacts/immutable-vice/<sha>, outside native/vice. S4 receipt lines 20-28 reports Linux 100k/1M and display-on 4M observations, equivalence checks, hashes and stolen-cycle counts. Handoff v2 lines 263 and 267 records Windows six-stage build and 1M results, with Windows 4M deferred.
+          Assessment: There is evidence for external building, cycle control, and bounded observer traces. It proves neither a replacement DLL ABI nor snapshot resume or managed parity.
+          Correction / acceptance outcome: Keep those limits attached to any Phase C reuse; F04, F05 and F10 address overclaims.
+
+          P07 PASS [info, plan] - Authorized preservation and narrow restoration intent. docs/plans/PLAN-NATIVERESTORE-001.md: 50
+          Evidence: D0 copies modified tracked files and injected source into per-host receipts; D4 requires a committed preservation receipt and individual checkout paths; reset --hard and clean are prohibited; untracked files remain. Oct 4 receipt patch and header hashes verify, and its inventory has 2,527 entries.
+          Assessment: This reconciles restoration with copy/hash/retain and the amendment superseding removal of classified generated paths. R2/R3 expressly authorize retirement of the named legacy builders outside the submodule.
+          Correction / acceptance outcome: Add the drift and interruption outcomes in F07 before any destructive checkout.
+
+          F01 FAIL [medium, plan] - Observed starting state. docs/plans/PLAN-NATIVERESTORE-001.md: 8
+          Evidence: git -C native/vice status --porcelain=v1 -uall yields 163 entries: 8 tracked modifications and 155 untracked paths. The plan says 135 untracked. Handoff v2 line 174 also records 155.
+          Assessment: A preservation plan cannot describe an incomplete source inventory as measured fact. The difference is 20 paths, not a changed input pin.
+          Correction / acceptance outcome: Correct the baseline to 155 and make D0 enumerate hidden paths and ordinary paths completely, with explicit counts and classifications on each host.
+
+          F02 FAIL [high, plan] - D2 Windows build integration. docs/plans/PLAN-NATIVERESTORE-001.md: 48
+          Evidence: ViceSharp.TestHarness.csproj lines 10 and 68-72 names Vice.Native.proj and invokes its BuildNative target on Windows whenever the project exists. D2 removes that target; the alternative of removing the project is conditional on no references, but this reference exists.
+          Assessment: The stated target-removal branch leaves an MSBuild call to a nonexistent target, so the Windows solution build cannot satisfy D2 as written. The plan measured only build/*.cs and omitted this caller.
+          Correction / acceptance outcome: Make the harness property/target/call disposition an explicit D2 edit, update the blast radius, and prove Windows and Linux managed builds no longer invoke the retired native path. Do not rebuild the dirty shim.
+
+          F03 FAIL [high, plan] - Shim consumers and D2/D5 denominator. docs/plans/PLAN-NATIVERESTORE-001.md: 59
+          Evidence: rg -l ViceNativeBridge tests finds 31 C# files, including helpers. CpuValidationTests lines 7-8/28-67, SidExactOracleTests lines 17-18/38 onward, and C64VkmKeyboardTests lines 180-219 contain native tests with no excluded Category. Build.cs line 112 excludes only Determinism, AiReview, ParityPending, ParityLegacy and Integration. ViceFactAttribute lines 15-16 and ViceTheoryAttribute lines 15-16 skip when the library is absent.
+          Assessment: The claim that every affected test is already excluded is false. Removing availability yields selected skips, or failures in unconditional consumers. Retiring a builder also does not make an existing dirty DLL disappear; the retained runtime resolver can still select it.
+          Correction / acceptance outcome: Inventory direct and indirect x64/xvic consumers and stale binary resolution, define each authorized disposition and Phase E/F owner, and lock an explicit gate denominator with zero required skips. Do not count a retained patched DLL as immutable evidence or silently broaden exclusions.
+
+          F04 FAIL [high, plan] - Per-hunk classification. docs/plans/PLAN-NATIVERESTORE-001.md: 21
+          Evidence: The Oct 4 patch lines 53-66 zero-initializes drive attach/detach clock arrays; lines 74-96 resets cycle_accum on non-snapshot drive resets. X64ScSnapshotCompatibility.cs lines 32-88 only validates the VSF envelope and inserts missing MAINCPU fields, preserving other module bytes. Patch lines 466-503 also changes VIC sound divide/index behavior, while lines 178-212 contains a MAINCPU version-read hunk absent from the classification.
+          Assessment: The drive changes are behavior/reset corrections, not normalization already rehomed by 199 adapter tests. The sound file also contains more than probes. The claimed complete disposition and the all-needs-served inference are unsupported.
+          Correction / acceptance outcome: D0/D3 must classify every hunk by actual behavior, identify the existing MAINCPU adapter coverage precisely, and explicitly reject native corrections or name approved managed follow-up requirements. An uncovered required behavior is a blocker before D4, not proof supplied by the 199-test count.
+
+          F05 FAIL [high, plan] - D1/D5 VSF Slice 1 and Phase C S5 handoff. docs/plans/PLAN-NATIVERESTORE-001.md: 51
+          Evidence: PLAN-OBSERVER-001 line 30 defers a real snapshot MAINCPU clock/register cross-check to Phase D. PLAN-VSFLOCKSTEP-001 lines 321-350 includes legacy native resume, current native round-trip, fixtures, state manifest and cumulative NativeSnapshotCompatibilityTest. The subject names only builder/prerequisite test families and reruns observer traces plus managed suites. An observer executable does not supply the vice_x64/vice_xvic DLL ABI.
+          Assessment: D5 drops the real snapshot obligation and much of the VSF Slice 1 folded into Phase D, without an approved replacement capability or a precise handoff. Pure byte-adapter success does not prove native resume.
+          Correction / acceptance outcome: Give each existing Slice 1/S5 obligation an owning D step, immutable execution path, named test and retained evidence, including the real cross-check. If its scheduling or interface changes, amend the relevant approved plan explicitly; R2 retirement alone does not waive snapshot ACs.
+
+          F06 FAIL [high, plan] - D2/D5 full-suite gate dependency. docs/plans/PLAN-NATIVERESTORE-001.md: 48
+          Evidence: D2 requires Nuke Test green and D5/Exit requires the full managed/applicable suite green. Handoff v2 line 239 records 20 CPU/NMI/visible-PC failures, assigned to Phase E; Phase E entry in handoff v1 line 119 requires Phase D accepted. CpuInterruptTests and CpuVisiblePcTimingTests have no excluded Category, so the current Test filter selects them. No product changes occur in 2c8d6028..review HEAD.
+          Assessment: The plan requires Phase E-owned repairs to pass before Phase E may start, while calling Phase D cleanup only. D3 changes review timing, not this substantive green gate.
+          Correction / acceptance outcome: Resolve this dependency in the plan before execution. Identify the exact full applicable suite and approved phase ownership/order; otherwise record the gate as blocked. Do not silently filter failures or treat a diagnostic baseline as green.
+
+          F07 FAIL [high, plan] - D0-to-D4 drift and interruption safety. docs/plans/PLAN-NATIVERESTORE-001.md: 50
+          Evidence: D4 rehashes preserved copies before and after checkout, but does not require the live delta to still match those copies before overwriting it. It gives no observable resume rule after some paths were reverted. checkout -- <path> restores the index version, while the final git diff checks only unstaged changes.
+          Assessment: A post-D0 edit, unexpected staged change, or interrupted restoration can be overwritten or misinterpreted despite the old preservation copies still hashing correctly. This is an unsafe gap, not merely an optional additional AC.
+          Correction / acceptance outcome: D4 AC: before each authorized overwrite, every affected path and index state must match its preserved approved state or the pinned already-restored state; anything else stops without overwrite. On interruption, identify completed versus untouched paths from verified bytes and resume only approved remaining paths. Test changed-live-delta, staged drift, partial completion and missing/corrupt receipt controls against a mock tree first.
+
+          F08 FAIL [high, plan] - D2/D5 inventory bracket. docs/plans/PLAN-NATIVERESTORE-001.md: 48
+          Evidence: The bracket is stated as unchanged git status and equal untracked inventory with no new or deleted entries. D0 hashes modified tracked files and injected source; it does not state a byte/hash baseline for every retained generated file. git status does not show content changes to an existing untracked file, and a tracked file can remain M after further edits.
+          Assessment: A build overwriting an existing native/vice file can satisfy these comparisons. That cannot prove the rule that no build writes into the submodule, even though R1 B correctly permits retained untracked paths.
+          Correction / acceptance outcome: D2/D5 AC: the retained native tree has identical relevant bytes and path set across builds/runs, apart from the separately authorized D4 tracked restoration. Use a complete hash/length inventory or equivalent observable write protection, with an existing-path overwrite negative control, and stop on any discrepancy.
+
+          F09 FAIL [medium, plan] - Script preconditions and mocks-first tooling. docs/plans/PLAN-NATIVERESTORE-001.md: 51
+          Evidence: native/build-vice-observer.ps1 line 26 and Invoke-ObserverEquivalence.ps1 line 20 use CmdletBinding() without SupportsShouldProcess or a WhatIf parameter. Both immediately create output directories. D5 calls them as existing six-stage tooling; D0 only specifies WhatIf for the new preservation script.
+          Assessment: The mandatory dry-run cannot be executed against these canonical scripts as written. Calling a behavior change tooling does not waive the explicit mocks-first and analyzer requirements.
+          Correction / acceptance outcome: Assign D1/D2 ownership for compliant preview behavior and its discriminating mock contract before modification, then analyzer-check and dry-run every state-changing script before D5. An approved existing native toolchain shell is not itself a PowerShell-language violation.
+
+          F10 FAIL [high, plan] - D5/Exit TR-CYCLE-001 AC4 and original Phase D exit. docs/plans/PLAN-NATIVERESTORE-001.md: 60
+          Evidence: TR-Cycle-Accuracy.md line 44 requires CPU accesses only during PHI2 with AEC asserted. ObservationTraceValidationTests lines 130-141 asserts decoding, sequence and record counts, not managed access gating. Handoff v1 line 115 explicitly requires REAL-C64-PHI2-AEC-001 and comparator XMLDoc correction; neither appears in the subject exit. R1 B amends retained untracked status and D3 amends HV timing.
+          Assessment: S4c trace validity is useful native evidence but does not serve the complete AC4 claim. The two specified amendments do not authorize silently deleting unrelated exit items.
+          Correction / acceptance outcome: Restore a named real AC4 gate and comparator documentation task with owning steps, mocks-first assertions and real evidence, or obtain an explicit plan amendment assigning the obligation to its proper phase. Keep A1/A2 and the operator-approved AEC applicability/derivation intact.
+
+          F11 FAIL [medium, plan] - Propagation and requirements references. docs/plans/PLAN-NATIVERESTORE-001.md: 57
+          Evidence: The blast radius still lists a new vice-build-output.exclude, two new PowerShell scripts and three shell scripts, and line 58 discusses the local exclude as reversible. R1 B explicitly says no exclude file/script; R2/R3 names two shell launchers and one PowerShell builder. TR-VSFLOCKSTEP-RESUME-001 AC2 still names build-vice-shim.ps1, and VSF Slice 1 validation calls both retiring builders.
+          Assessment: The self-review propagation claim misses contradictory executable instructions and an incorrect edit inventory. The plan does not assign reconciliation of the canonical builder reference and active dependent commands.
+          Correction / acceptance outcome: Make R1 B/R2 A the single current disposition, enumerate exact D2 files including the harness caller, and assign canonical requirement/plan reference updates through supported MCP/generation paths. Preserve semantics; any actual AC reduction requires its own approved requirement plan.
+
+          R01 FAIL [high, review-process] - Marker read during reviewer bootstrap. response.jsonl
+          Evidence: The reviewer redacted key-value header forms but missed the marker query-string credential example, exposing a credential in tool output. The error was disclosed during the run. The credential is intentionally not reproduced here.
+          Assessment: This violated the explicit no-credential-printing instruction. It is this reviewer process failure, not an implementer plan defect.
+          Correction / acceptance outcome: Retain the raw stream privately and produce a verified redacted copy before sharing. Do not commit or publish the raw response. No credential rotation or environment repair is performed or implied by this review.
+
+          U01 UNKNOWN [high, review-process] - Primary session-log persistence and completion. mcp-triage-failure.json
+          Evidence: Plugin 1.121.0 was read from its own manifest. Local marker signature passed, but session-start returned MCP_UNTRUSTED/no-session. beginTurn was rejected with no sessionId; supported triage failed with Health check failed - Permission denied. Offline IDs were then allocated by plugin helpers and failsafe snapshots retained under the authorized exception.
+          Assessment: No primary reviewer session/turn, primary full-content readback, or completed-state history proof exists. A local queue readback cannot be presented as server persistence.
+          Correction / acceptance outcome: Treat this review as queued-only and incomplete for acceptance. A later authorized supported-plugin persistence and primary full-content/history readback must establish the required audit trail; do not replay historical queues or repair shared settings during this round.
+
+          U02 UNKNOWN [medium, requirements] - Effective requirements and TODO readback. AGENTS-README-FIRST.yaml
+          Evidence: The canonical FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001, TR-VSFLOCKSTEP-RESUME-001 and TR-CYCLE-001 documents and immutable matrix were read. Supported primary trust failed before an effective-layer or current TODO query could be made.
+          Assessment: Existing documented FR/TR/TEST/AC links are inspectable, but current store mappings, layers and PLAN-VICEORACLE-001 tasks 4/5 cannot be independently attested from projections alone.
+          Correction / acceptance outcome: Use the active supported plugin to read effective requirements and TODO state once trust is available; reconcile exact mappings and pending statuses before implementation or a done claim.
+
+          A01 ADD-AC [medium, plan] - D0 different LEGION2 delta. docs/plans/PLAN-NATIVERESTORE-001.md: 46
+          Evidence: D0 measures and compares the current Windows patch with Oct 4 and Linux, while section 2 makes a hunk neither covered nor rejected a blocker. It does not specify the acceptance outcome for an explained difference versus an unexplained one.
+          Assessment: Different hosts need not have byte-identical dirty deltas. The comparison should yield an explicit disposition rather than equating every difference with failure.
+          Correction / acceptance outcome: D0 AC, DeltaComparison_ClassifiesEveryCurrentHunk: all current hunks are preserved and individually mapped to an approved disposition; an explained host difference is listed, while any unclassified or required-uncovered hunk blocks D4. Prove missing-hunk and wrong-host negative controls.
+
+          A02 ADD-AC [medium, plan] - D-pre and D0 entry release. docs/plans/PLAN-NATIVERESTORE-001.md: 44
+          Evidence: Both deployment receipts name 2c8d6028; review HEAD is dca4a623. Handoff v2 line 267 records Windows 1M results, Windows 4M deferred, and the later instruction to wait for the next operator instruction. This request authorizes review only.
+          Assessment: A plan approval or a remote report must not implicitly release an implementation hold or silently redefine latest installed build.
+          Correction / acceptance outcome: D-pre/D0 AC, EntryEvidence_BindsBothHostsAndExplicitRelease: record the accepted desktop commit/version on each host, exact Windows trace matrix including deferred 4M ownership, and the operator instruction releasing implementation. Until then D0 remains unexecuted. This is an operational entry check, not a new product requirement.
+
+          A03 ADD-AC [medium, plan] - D4/D5 rollback outcome. docs/plans/PLAN-NATIVERESTORE-001.md: 58
+          Evidence: The plan says the delta is recoverable from receipts, but its no-source-edit boundary does not authorize a later automatic reapplication of the old native patch when D5 fails.
+          Assessment: Recoverable evidence and authority to mutate the reference are different. The safe stopped state should be observable on both hosts.
+          Correction / acceptance outcome: D4/D5 AC, PostRestoreFailure_StopsWithPreservedEvidence: on a later gate failure, stop before Phase E, retain all originals/receipts, report each host and path state, and leave verified restored source pinned. No automatic dirty-patch reapply or untracked deletion; any such recovery needs the operator-scoped authority. Test failure after the first host and after both hosts.
+
+          What-if coverage: LEGION2 delta differs from Oct 4 (A01/F04); uncovered drive hunk (F04, blocks restoration); unexpected live/staged delta or interruption mid-revert (F07); shim consumer outside exclusions or retained dirty binary (F03); same-path build overwrite under native/vice (F08); own dirty status with R1 B (P03); failed post-restore gate and both-host partial completion (A03). The full-suite phase-order deadlock is F06. The tooling/mocks/dry-run conflict is F09. Never-move versus classified-path removal is resolved by D4/R4, not by deleting retained artifacts. Plan HV versus D3 is resolved by the explicit 12:21 ruling, P04.
+
+          Requirement coverage: existing FR-VICE-001 -> TR-VICE-ORACLE-001 -> TEST-VICE-001 supplies the integrity chain. TR-VSFLOCKSTEP-RESUME-001 AC2 maps to D1/D2/D5 but its retiring command/reference and complete snapshot Slice 1 remain unreconciled (F05/F11). TEST-VICE-001 AC1/AC2 map to clean preflight and unchanged build/runtime source (P02/F07/F08). TR-CYCLE-001 AC4 is not satisfied by S4c trace formatting (F10). PLAN-VICEORACLE-001 tasks 4/5 and effective-layer mappings could not be read from the primary store (U02). No new requirement or AC was written to MCP or canonical documents; suggested ACs are review findings only.
+
+          Persistence and reviewer deviations: the supported Codex root is version 1.121.0; the marker advertises 1.120.0. Signature verification succeeded locally; health nonce verification failed with Permission denied, so there is no primary turn or history proof. The primary begin and supported triage failures authorize the full-content local failsafe exception. Its records are queued, not persisted; no queues were replayed and no hooks, shared settings or environment were repaired. The initial reviewer-specific temp override caused an overlong Unix socket path and was removed from this reviewer helper; the retry still failed with Permission denied. Initial profile/marker reads used inline PowerShell before the analyzed file-based helper was established. The marker redaction failure is R01; the raw response must remain private and be redacted before sharing.
+
+          {
+            "OverallVerdict": "DISAGREE",
+            "accuracyPercent": 85,
+            "completenessPercent": 70,
+            "scoreBasis": "Holistic judgments of the submitted plan, not test pass rates: factual baseline/preservation and operator rulings are substantially correct, but consumer exclusions, hunk coverage and requirement evidence are materially overstated. Execution readiness is lower because the Windows target, full-suite phase dependency, restoration safety and real snapshot/AC4 exits are unresolved. The review also has separate credential-handling and primary-persistence defects. Neither score reaches 98.",
+            "passCount": 7,
+            "failCount": 12,
+            "unknownCount": 2,
+            "addAcCount": 3,
+            "findings": [
+              {
+                "id": "P01",
+                "status": "PASS",
+                "severity": "info",
+                "scope": "review-inputs",
+                "file": "input-pins.json",
+                "section": "All 17 entries",
+                "evidence": "Every pinned file was SHA256-rehashed and its byte length compared before subject analysis. All 17 matched, including plan D96E9860..., patch 90604E39..., and SELF-REVIEW 8FF62752....",
+                "rationale": "The review addresses the exact submitted artifact, not a reconstructed plan.",
+                "correction": "Retain these pins and disclose any change before another round."
+              },
+              {
+                "id": "P02",
+                "status": "PASS",
+                "severity": "info",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 7,
+                "section": "Starting tracked state",
+                "evidence": "state-before.json: develop dca4a6239cab0515498941f2469ee42115e77f3d; gitlink and native HEAD cc67418cba58e71d8e70fd353e9de47199ad2075; 8 specified tracked modifications, 222 insertions, 8 deletions; no staged native diff. Native git dir is the absolute equivalent of .git/modules/native/vice.",
+                "rationale": "The SHA, tracked file list, diff totals, and local exclude location agree with live read-only git evidence.",
+                "correction": "Keep fresh per-host measurements at D0; the separate untracked-count defect is F01."
+              },
+              {
+                "id": "P03",
+                "status": "PASS",
+                "severity": "info",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 29,
+                "section": "R1 B and R4",
+                "evidence": "Sections 3 and 4 explicitly choose .gitmodules ignore=untracked, retain all untracked paths, and replace the original empty submodule-status exit with equality to the classified D0 inventory. Handoff v2 line 266 records the operator choosing this amendment.",
+                "rationale": "The submodule itself may still show untracked files. That is authorized, and does not justify demanding info/exclude or deletion.",
+                "correction": "Preserve this policy. Remove contradictory leftover exclude-file work under F11."
+              },
+              {
+                "id": "P04",
+                "status": "PASS",
+                "severity": "info",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 53,
+                "section": "D3 timing and plan-review authority",
+                "evidence": "The plan defers implementation done-state HV and status changes to sequence step 12. The current request explicitly supplies the 12:21 ruling that plans still receive hostile review. No implementation step is claimed executed here.",
+                "rationale": "This review is authorized. D3 does not create an HV-before-code-complete deadlock for this plan review, and postpones done-state review rather than waiving substantive gates.",
+                "correction": "Keep the distinction between plan approval, execution evidence, and final done-state acceptance explicit."
+              },
+              {
+                "id": "P05",
+                "status": "PASS",
+                "severity": "info",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 44,
+                "section": "D-pre receipts",
+                "evidence": "Linux desktop-install README lines 13-24 and Windows 20261020T121000 desktop-install README lines 7-25 record Nuke deployment/install of version 1.3.111, ProductVersion commit 2c8d60284229b9fedc2d50f840153b9e8d8cbcbf, binary hashes and successful command outputs. Windows InstallMsi depends on PublishMsi.",
+                "rationale": "Both recorded installations use the approved Nuke route and the same commit. Neither receipt claims a GUI launch. This review did not independently inspect either installed application.",
+                "correction": "D-pre must still identify the accepted build at execution entry; see A02."
+              },
+              {
+                "id": "P06",
+                "status": "PASS",
+                "severity": "info",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 12,
+                "section": "Bounded Phase C builder and observation evidence",
+                "evidence": "The S2b receipt and builder source place work/build/bin outputs under artifacts/immutable-vice/<sha>, outside native/vice. S4 receipt lines 20-28 reports Linux 100k/1M and display-on 4M observations, equivalence checks, hashes and stolen-cycle counts. Handoff v2 lines 263 and 267 records Windows six-stage build and 1M results, with Windows 4M deferred.",
+                "rationale": "There is evidence for external building, cycle control, and bounded observer traces. It proves neither a replacement DLL ABI nor snapshot resume or managed parity.",
+                "correction": "Keep those limits attached to any Phase C reuse; F04, F05 and F10 address overclaims."
+              },
+              {
+                "id": "P07",
+                "status": "PASS",
+                "severity": "info",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 50,
+                "section": "Authorized preservation and narrow restoration intent",
+                "evidence": "D0 copies modified tracked files and injected source into per-host receipts; D4 requires a committed preservation receipt and individual checkout paths; reset --hard and clean are prohibited; untracked files remain. Oct 4 receipt patch and header hashes verify, and its inventory has 2,527 entries.",
+                "rationale": "This reconciles restoration with copy/hash/retain and the amendment superseding removal of classified generated paths. R2/R3 expressly authorize retirement of the named legacy builders outside the submodule.",
+                "correction": "Add the drift and interruption outcomes in F07 before any destructive checkout."
+              },
+              {
+                "id": "F01",
+                "status": "FAIL",
+                "severity": "medium",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 8,
+                "section": "Observed starting state",
+                "evidence": "git -C native/vice status --porcelain=v1 -uall yields 163 entries: 8 tracked modifications and 155 untracked paths. The plan says 135 untracked. Handoff v2 line 174 also records 155.",
+                "rationale": "A preservation plan cannot describe an incomplete source inventory as measured fact. The difference is 20 paths, not a changed input pin.",
+                "correction": "Correct the baseline to 155 and make D0 enumerate hidden paths and ordinary paths completely, with explicit counts and classifications on each host."
+              },
+              {
+                "id": "F02",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 48,
+                "section": "D2 Windows build integration",
+                "evidence": "ViceSharp.TestHarness.csproj lines 10 and 68-72 names Vice.Native.proj and invokes its BuildNative target on Windows whenever the project exists. D2 removes that target; the alternative of removing the project is conditional on no references, but this reference exists.",
+                "rationale": "The stated target-removal branch leaves an MSBuild call to a nonexistent target, so the Windows solution build cannot satisfy D2 as written. The plan measured only build/*.cs and omitted this caller.",
+                "correction": "Make the harness property/target/call disposition an explicit D2 edit, update the blast radius, and prove Windows and Linux managed builds no longer invoke the retired native path. Do not rebuild the dirty shim."
+              },
+              {
+                "id": "F03",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 59,
+                "section": "Shim consumers and D2/D5 denominator",
+                "evidence": "rg -l ViceNativeBridge tests finds 31 C# files, including helpers. CpuValidationTests lines 7-8/28-67, SidExactOracleTests lines 17-18/38 onward, and C64VkmKeyboardTests lines 180-219 contain native tests with no excluded Category. Build.cs line 112 excludes only Determinism, AiReview, ParityPending, ParityLegacy and Integration. ViceFactAttribute lines 15-16 and ViceTheoryAttribute lines 15-16 skip when the library is absent.",
+                "rationale": "The claim that every affected test is already excluded is false. Removing availability yields selected skips, or failures in unconditional consumers. Retiring a builder also does not make an existing dirty DLL disappear; the retained runtime resolver can still select it.",
+                "correction": "Inventory direct and indirect x64/xvic consumers and stale binary resolution, define each authorized disposition and Phase E/F owner, and lock an explicit gate denominator with zero required skips. Do not count a retained patched DLL as immutable evidence or silently broaden exclusions."
+              },
+              {
+                "id": "F04",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 21,
+                "section": "Per-hunk classification",
+                "evidence": "The Oct 4 patch lines 53-66 zero-initializes drive attach/detach clock arrays; lines 74-96 resets cycle_accum on non-snapshot drive resets. X64ScSnapshotCompatibility.cs lines 32-88 only validates the VSF envelope and inserts missing MAINCPU fields, preserving other module bytes. Patch lines 466-503 also changes VIC sound divide/index behavior, while lines 178-212 contains a MAINCPU version-read hunk absent from the classification.",
+                "rationale": "The drive changes are behavior/reset corrections, not normalization already rehomed by 199 adapter tests. The sound file also contains more than probes. The claimed complete disposition and the all-needs-served inference are unsupported.",
+                "correction": "D0/D3 must classify every hunk by actual behavior, identify the existing MAINCPU adapter coverage precisely, and explicitly reject native corrections or name approved managed follow-up requirements. An uncovered required behavior is a blocker before D4, not proof supplied by the 199-test count."
+              },
+              {
+                "id": "F05",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 51,
+                "section": "D1/D5 VSF Slice 1 and Phase C S5 handoff",
+                "evidence": "PLAN-OBSERVER-001 line 30 defers a real snapshot MAINCPU clock/register cross-check to Phase D. PLAN-VSFLOCKSTEP-001 lines 321-350 includes legacy native resume, current native round-trip, fixtures, state manifest and cumulative NativeSnapshotCompatibilityTest. The subject names only builder/prerequisite test families and reruns observer traces plus managed suites. An observer executable does not supply the vice_x64/vice_xvic DLL ABI.",
+                "rationale": "D5 drops the real snapshot obligation and much of the VSF Slice 1 folded into Phase D, without an approved replacement capability or a precise handoff. Pure byte-adapter success does not prove native resume.",
+                "correction": "Give each existing Slice 1/S5 obligation an owning D step, immutable execution path, named test and retained evidence, including the real cross-check. If its scheduling or interface changes, amend the relevant approved plan explicitly; R2 retirement alone does not waive snapshot ACs."
+              },
+              {
+                "id": "F06",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 48,
+                "section": "D2/D5 full-suite gate dependency",
+                "evidence": "D2 requires Nuke Test green and D5/Exit requires the full managed/applicable suite green. Handoff v2 line 239 records 20 CPU/NMI/visible-PC failures, assigned to Phase E; Phase E entry in handoff v1 line 119 requires Phase D accepted. CpuInterruptTests and CpuVisiblePcTimingTests have no excluded Category, so the current Test filter selects them. No product changes occur in 2c8d6028..review HEAD.",
+                "rationale": "The plan requires Phase E-owned repairs to pass before Phase E may start, while calling Phase D cleanup only. D3 changes review timing, not this substantive green gate.",
+                "correction": "Resolve this dependency in the plan before execution. Identify the exact full applicable suite and approved phase ownership/order; otherwise record the gate as blocked. Do not silently filter failures or treat a diagnostic baseline as green."
+              },
+              {
+                "id": "F07",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 50,
+                "section": "D0-to-D4 drift and interruption safety",
+                "evidence": "D4 rehashes preserved copies before and after checkout, but does not require the live delta to still match those copies before overwriting it. It gives no observable resume rule after some paths were reverted. checkout -- <path> restores the index version, while the final git diff checks only unstaged changes.",
+                "rationale": "A post-D0 edit, unexpected staged change, or interrupted restoration can be overwritten or misinterpreted despite the old preservation copies still hashing correctly. This is an unsafe gap, not merely an optional additional AC.",
+                "correction": "D4 AC: before each authorized overwrite, every affected path and index state must match its preserved approved state or the pinned already-restored state; anything else stops without overwrite. On interruption, identify completed versus untouched paths from verified bytes and resume only approved remaining paths. Test changed-live-delta, staged drift, partial completion and missing/corrupt receipt controls against a mock tree first."
+              },
+              {
+                "id": "F08",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 48,
+                "section": "D2/D5 inventory bracket",
+                "evidence": "The bracket is stated as unchanged git status and equal untracked inventory with no new or deleted entries. D0 hashes modified tracked files and injected source; it does not state a byte/hash baseline for every retained generated file. git status does not show content changes to an existing untracked file, and a tracked file can remain M after further edits.",
+                "rationale": "A build overwriting an existing native/vice file can satisfy these comparisons. That cannot prove the rule that no build writes into the submodule, even though R1 B correctly permits retained untracked paths.",
+                "correction": "D2/D5 AC: the retained native tree has identical relevant bytes and path set across builds/runs, apart from the separately authorized D4 tracked restoration. Use a complete hash/length inventory or equivalent observable write protection, with an existing-path overwrite negative control, and stop on any discrepancy."
+              },
+              {
+                "id": "F09",
+                "status": "FAIL",
+                "severity": "medium",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 51,
+                "section": "Script preconditions and mocks-first tooling",
+                "evidence": "native/build-vice-observer.ps1 line 26 and Invoke-ObserverEquivalence.ps1 line 20 use CmdletBinding() without SupportsShouldProcess or a WhatIf parameter. Both immediately create output directories. D5 calls them as existing six-stage tooling; D0 only specifies WhatIf for the new preservation script.",
+                "rationale": "The mandatory dry-run cannot be executed against these canonical scripts as written. Calling a behavior change tooling does not waive the explicit mocks-first and analyzer requirements.",
+                "correction": "Assign D1/D2 ownership for compliant preview behavior and its discriminating mock contract before modification, then analyzer-check and dry-run every state-changing script before D5. An approved existing native toolchain shell is not itself a PowerShell-language violation."
+              },
+              {
+                "id": "F10",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 60,
+                "section": "D5/Exit TR-CYCLE-001 AC4 and original Phase D exit",
+                "evidence": "TR-Cycle-Accuracy.md line 44 requires CPU accesses only during PHI2 with AEC asserted. ObservationTraceValidationTests lines 130-141 asserts decoding, sequence and record counts, not managed access gating. Handoff v1 line 115 explicitly requires REAL-C64-PHI2-AEC-001 and comparator XMLDoc correction; neither appears in the subject exit. R1 B amends retained untracked status and D3 amends HV timing.",
+                "rationale": "S4c trace validity is useful native evidence but does not serve the complete AC4 claim. The two specified amendments do not authorize silently deleting unrelated exit items.",
+                "correction": "Restore a named real AC4 gate and comparator documentation task with owning steps, mocks-first assertions and real evidence, or obtain an explicit plan amendment assigning the obligation to its proper phase. Keep A1/A2 and the operator-approved AEC applicability/derivation intact."
+              },
+              {
+                "id": "F11",
+                "status": "FAIL",
+                "severity": "medium",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 57,
+                "section": "Propagation and requirements references",
+                "evidence": "The blast radius still lists a new vice-build-output.exclude, two new PowerShell scripts and three shell scripts, and line 58 discusses the local exclude as reversible. R1 B explicitly says no exclude file/script; R2/R3 names two shell launchers and one PowerShell builder. TR-VSFLOCKSTEP-RESUME-001 AC2 still names build-vice-shim.ps1, and VSF Slice 1 validation calls both retiring builders.",
+                "rationale": "The self-review propagation claim misses contradictory executable instructions and an incorrect edit inventory. The plan does not assign reconciliation of the canonical builder reference and active dependent commands.",
+                "correction": "Make R1 B/R2 A the single current disposition, enumerate exact D2 files including the harness caller, and assign canonical requirement/plan reference updates through supported MCP/generation paths. Preserve semantics; any actual AC reduction requires its own approved requirement plan."
+              },
+              {
+                "id": "R01",
+                "status": "FAIL",
+                "severity": "high",
+                "scope": "review-process",
+                "file": "response.jsonl",
+                "section": "Marker read during reviewer bootstrap",
+                "evidence": "The reviewer redacted key-value header forms but missed the marker query-string credential example, exposing a credential in tool output. The error was disclosed during the run. The credential is intentionally not reproduced here.",
+                "rationale": "This violated the explicit no-credential-printing instruction. It is this reviewer process failure, not an implementer plan defect.",
+                "correction": "Retain the raw stream privately and produce a verified redacted copy before sharing. Do not commit or publish the raw response. No credential rotation or environment repair is performed or implied by this review."
+              },
+              {
+                "id": "U01",
+                "status": "UNKNOWN",
+                "severity": "high",
+                "scope": "review-process",
+                "file": "mcp-triage-failure.json",
+                "section": "Primary session-log persistence and completion",
+                "evidence": "Plugin 1.121.0 was read from its own manifest. Local marker signature passed, but session-start returned MCP_UNTRUSTED/no-session. beginTurn was rejected with no sessionId; supported triage failed with Health check failed - Permission denied. Offline IDs were then allocated by plugin helpers and failsafe snapshots retained under the authorized exception.",
+                "rationale": "No primary reviewer session/turn, primary full-content readback, or completed-state history proof exists. A local queue readback cannot be presented as server persistence.",
+                "correction": "Treat this review as queued-only and incomplete for acceptance. A later authorized supported-plugin persistence and primary full-content/history readback must establish the required audit trail; do not replay historical queues or repair shared settings during this round."
+              },
+              {
+                "id": "U02",
+                "status": "UNKNOWN",
+                "severity": "medium",
+                "scope": "requirements",
+                "file": "AGENTS-README-FIRST.yaml",
+                "section": "Effective requirements and TODO readback",
+                "evidence": "The canonical FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001, TR-VSFLOCKSTEP-RESUME-001 and TR-CYCLE-001 documents and immutable matrix were read. Supported primary trust failed before an effective-layer or current TODO query could be made.",
+                "rationale": "Existing documented FR/TR/TEST/AC links are inspectable, but current store mappings, layers and PLAN-VICEORACLE-001 tasks 4/5 cannot be independently attested from projections alone.",
+                "correction": "Use the active supported plugin to read effective requirements and TODO state once trust is available; reconcile exact mappings and pending statuses before implementation or a done claim."
+              },
+              {
+                "id": "A01",
+                "status": "ADD-AC",
+                "severity": "medium",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 46,
+                "section": "D0 different LEGION2 delta",
+                "evidence": "D0 measures and compares the current Windows patch with Oct 4 and Linux, while section 2 makes a hunk neither covered nor rejected a blocker. It does not specify the acceptance outcome for an explained difference versus an unexplained one.",
+                "rationale": "Different hosts need not have byte-identical dirty deltas. The comparison should yield an explicit disposition rather than equating every difference with failure.",
+                "correction": "D0 AC, DeltaComparison_ClassifiesEveryCurrentHunk: all current hunks are preserved and individually mapped to an approved disposition; an explained host difference is listed, while any unclassified or required-uncovered hunk blocks D4. Prove missing-hunk and wrong-host negative controls."
+              },
+              {
+                "id": "A02",
+                "status": "ADD-AC",
+                "severity": "medium",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 44,
+                "section": "D-pre and D0 entry release",
+                "evidence": "Both deployment receipts name 2c8d6028; review HEAD is dca4a623. Handoff v2 line 267 records Windows 1M results, Windows 4M deferred, and the later instruction to wait for the next operator instruction. This request authorizes review only.",
+                "rationale": "A plan approval or a remote report must not implicitly release an implementation hold or silently redefine latest installed build.",
+                "correction": "D-pre/D0 AC, EntryEvidence_BindsBothHostsAndExplicitRelease: record the accepted desktop commit/version on each host, exact Windows trace matrix including deferred 4M ownership, and the operator instruction releasing implementation. Until then D0 remains unexecuted. This is an operational entry check, not a new product requirement."
+              },
+              {
+                "id": "A03",
+                "status": "ADD-AC",
+                "severity": "medium",
+                "scope": "plan",
+                "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                "line": 58,
+                "section": "D4/D5 rollback outcome",
+                "evidence": "The plan says the delta is recoverable from receipts, but its no-source-edit boundary does not authorize a later automatic reapplication of the old native patch when D5 fails.",
+                "rationale": "Recoverable evidence and authority to mutate the reference are different. The safe stopped state should be observable on both hosts.",
+                "correction": "D4/D5 AC, PostRestoreFailure_StopsWithPreservedEvidence: on a later gate failure, stop before Phase E, retain all originals/receipts, report each host and path state, and leave verified restored source pinned. No automatic dirty-patch reapply or untracked deletion; any such recovery needs the operator-scoped authority. Test failure after the first host and after both hosts."
+              }
+            ],
+            "reviewerAgent": "Codex",
+            "reviewerModel": "gpt-6.1-sol",
+            "reviewerEffort": "max",
+            "reviewerSessionId": "Codex-20261020T173749Z-hv-plan-nativerestore-001",
+            "reviewerRequestId": "req-20261020T173749Z-turn-5e79",
+            "reviewerIdentityDisposition": "Allocated by supported plugin helpers for the offline queue. No primary session or turn exists.",
+            "parentSessionId": "ClaudeCode-20261020T015046Z-plugin-session",
+            "parentRequestId": "req-20261020T172116Z-prompt-6c6d",
+            "requestPath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/request.jsonl",
+            "responsePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/response.jsonl",
+            "timestampLocal": "2026-10-20T12:43:57.619-05:00",
+            "classification": "Class 1: independent project-implementation plan review before execution",
+            "profileRead": {
+              "skill": "/home/sharpninja/.codex/skills/add-profile/SKILL.md",
+              "readInFull": true,
+              "count": 1,
+              "files": [
+                "/home/sharpninja/.claude/profile/PROFILE-MERGED.md"
+              ]
+            },
+            "markerRead": {
+              "credentialRedactionCompliant": false,
+              "readInFull": true,
+              "finding": "R01",
+              "lines": 397
+            },
+            "execution": {
+              "nestedReviewers": 0,
+              "note": "Source review and read-only git/rg evidence. No implementation step executed; no build/test pass claim is made.",
+              "nativeMutations": 0,
+              "fullSolutionBuilds": 0,
+              "dotnetTestRuns": 0,
+              "pushes": 0,
+              "nativeBuilds": 0,
+              "commits": 0
+            },
+            "evidencePaths": [
+              "state-before.json",
+              "source-assertions.json",
+              "mcp-bootstrap.txt",
+              "mcp-bootstrap-second.txt",
+              "mcp-trust-diagnosis.json",
+              "mcp-triage-failure.json",
+              "reviewer-identity.json"
+            ],
+            "persistenceDisposition": "QUEUED ONLY after primary and triage failures. No primary completed-state or full-content readback proof."
+          }
+        todoId: PLAN-NATIVERESTORE-001
+        timestamp: 2026-10-20T12:45:53.180-05:00
+        queryTitle: Hostile review of native restoration Phase D plan
+        queryText: |
+          # Hostile validation: PLAN-NATIVERESTORE-001 (Phase D plan) before execution
+
+          You are the independent hostile reviewer for this round: GPT-6.1-Sol at reasoning effort max through the Codex CLI on LAB-OMARCHY, workspace /home/sharpninja/github/vice-sharp, branch develop. The implementer is a Claude session (claude-fable-5-1-high@ClaudeCode); you are a different agent family by the operator's rule. This is a review of a plan before any of its steps execute; nothing under native/vice has changed, and nothing may change during your review.
+
+          FIRST: run the add-profile skill exactly as its SKILL.md says (read every non-skill *.md under /home/sharpninja/.claude/profile in full; currently PROFILE-MERGED.md), then read the ENTIRE AGENTS-README-FIRST.yaml at the workspace root, every line, without printing credentials or API keys. Bootstrap your own supported plugin (mcpserver-codex-plugin, the marker's agent_plugins contract, root /home/sharpninja/github/mcpserver-codex-plugin; verify with Invoke-CodexMcpPlugin.ps1 -Command Status) and open your own review session-log turn through it, titled with a short summary of this request, linked to the parent ids in this directory's request.jsonl (parentSessionId, parentRequestId). Do not repair hooks or environment, do not replay queues, do not cancel historical turns, do not invoke nested reviewers, do not substitute the model. There are no time or turn bounds on this review.
+
+          MANDATORY live progress: before analysis and at meaningful checkpoints, emit a TEXT JSON object into your output with timestampLocal (a measured sortable local date and time, never estimated), numeric completionPercent and etaSeconds (null only if genuinely unknown). These are your own reports, not deadlines; do not backfill them at the end.
+
+          Operator rulings verbatim (treat as acceptance criteria): D4 (2026-10-19): native restoration approved; "Build artifacts are not code dirt. They should be gitignored."; "restore native/vice means revert the tracked modifications after preserving them, and exclude the build output through git ignore rules instead of deleting it". D3: "No HV until your current scope of work is complete and passes 98/98 holistic self-assessment", clarified "This is a remediation/cleanup phase, not new code"; on 2026-10-20T12:21 the operator stated that plans are hostile-validated under the standing rules, which is why this round exists. 2026-10-20T10:40: "Wait for the Windows trace results first" before Phase D step 1. 10:53: "Before beginning phase D implementation, ensure both omarchy and legion2 have latest desktop build installed via nuke." 10:57 answers: R1 "B: .gitmodules ignore = untracked only"; R2 and R3 "A: retire it now"; R4 "Yes, exclude and keep"; R5 "Yes, add in D2". 12:09: "Hold until LEGION2 reports". Standing rules: never move a file (copy, verify by hash, retain the original until the operator clears deletion); never force-push; PowerShell only, no Python, no Node; every script analyzer-checked and dry-run with -WhatIf; BDPv4 mocks first for every behavior change; VICE is immutable (never edit, patch, generate into, clean or restore native/vice outside this plan's approved steps).
+
+          Read end to end, rehashing every pin in input-pins.json before you start and disclosing any drift: docs/plans/PLAN-NATIVERESTORE-001.md (the subject), docs/receipts/handoff/HANDOFF.lockstep-plan.md section 4 Phase D, docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md sections 4 and 11, docs/plans/PLAN-VICE-IMMUTABLE-001.md (Phase 0 and Phase 3), docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md and its patch, docs/plans/PLAN-OBSERVER-001.md with docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md and 20261020T094000-phase-c-step3-s4-observations-linux/README.md (what Phase C rehomed), native/Vice.Native.proj, .gitmodules, native/build-vice-observer.ps1, build/Build.cs (the Test target filter), ViceSharp.slnx, this directory's SELF-REVIEW.md. Verify the plan's state claims yourself: git -C native/vice status --short --untracked-files=no, git -C native/vice diff --stat, git submodule status, the submodule's git dir, the consumers of vice_x64.dll under tests (grep ViceNativeBridge), the projects that reference Vice.Native.proj. Read-only on everything outside this receipt directory; you may run read-only git and grep commands and managed dotnet test commands on the three native-safe projects; never build the full solution, never build native code, never touch native/vice or artifacts/immutable-vice.
+
+          Mandatory attack surfaces (profile 7.2): (1) every claim in the plan (state counts, file lists, dispositions, what Phase C proved, the exit gate amendment under R1 B); (2) workspace rules (honesty, receipts, MCP-only storage, PowerShell only, no Python, never move a file, VICE immutable); (3) requirements: the plan is class 1; check it maps to existing FR, TR, TEST and AC (TR-VSFLOCKSTEP-RESUME-001 AC2, TEST-VICE-001 AC1 and AC2, TR-CYCLE-001 AC4, PLAN-VICEORACLE-001 tasks 4 and 5) and names no requirement change without a plan; (4) the plan holistically: definition of done, blockers, amendments, the immutable Phase 3 exit gate as amended by R1 B and D3, phase dependencies (D-pre, D0 to D5, Phase E hand-offs), rollback, both machines. Run the what-if pass per criterion (crash or interruption mid-revert, a LEGION2 delta that differs from the Oct 4 patch, a drive-snapshot hunk the VSF adapter does not cover, a shim consumer outside the excluded categories, a build writing into native/vice after D2, the submodule's own dirty status under R1 B). Chain rules to find deadlocks (never-move-a-file against the immutable Phase 3 "remove only classified paths"; BDPv4 against tooling scripts; HV-before-done against D3). Where the plan does not state an observable outcome, propose a valid AC with the step that owns it; adding a valid AC is a finding of kind "add AC", not a FAIL by itself unless the gap makes a step unsafe.
+
+          Save verdict.md, verdict.json and verdict.persistence.json in THIS directory (docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/). Required JSON fields: OverallVerdict (AGREE or DISAGREE), accuracyPercent, completenessPercent, passCount, failCount, unknownCount, findings (id, status PASS or FAIL or UNKNOWN or ADD-AC, severity, file and line or section, evidence, rationale, correction), reviewerAgent, reviewerModel, reviewerEffort, reviewerSessionId, reviewerRequestId, requestPath, responsePath. Persist the COMPLETE prose and JSON verdict, every finding and both scores, in your own session-log turn (ordered small chunks if the wrapper's argument limits require it; read back, reassemble, compare hashes, disclose any CRLF/LF normalization), complete the turn and prove its completed state with a history query; write that proof into verdict.persistence.json. A full-content failsafe is authorized only after a genuine primary failure including a failed triage submission; label queued versus persisted. End with the whole verdict in your output stream. OverallVerdict is AGREE only if every applicable surface passes and both scores are at least 98; do not inflate scores; a sub-98 score is DISAGREE even with zero FAIL. No commit, no push, no edit outside this directory.
+        tokenCount: 0
+        status: completed
+        tags:
+          - hostile-review
+          - class-1
+          - effort-max
+          - PLAN-NATIVERESTORE-001
+          - queued-not-persisted
+        processingDialog:
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: Markdown
+            order: 1
+            content: |-
+              2026-10-20T12:43:57.619-05:00 - DISAGREE: PLAN-NATIVERESTORE-001 before execution.
+
+              Accuracy 85%; completeness 70%. PASS 7, FAIL 12, UNKNOWN 2, ADD-AC 3. Neither score meets the 98% acceptance threshold. Phase D is not approved by this review.
+
+              Holistic judgments of the submitted plan, not test pass rates: factual baseline/preservation and operator rulings are substantially correct, but consumer exclusions, hunk coverage and requirement evidence are materially overstated. Execution readiness is lower because the Windows target, full-suite phase dependency, restoration safety and real snapshot/AC4 exits are unresolved. The review also has separate credential-handling and primary-persistence defects. Neither score reaches 98.
+
+              Reviewer: Codex, gpt-6.1-sol, max. Parent: ClaudeCode-20261020T015046Z-plugin-session / req-20261020T172116Z-prompt-6c6d. Reviewer queue IDs: Codex-20261020T173749Z-hv-plan-nativerestore-001 / req-20261020T173749Z-turn-5e79. These IDs were allocated by plugin helpers after bootstrap failed; they do not establish a primary session or completed turn.
+
+              Request: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/request.jsonl. Response: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/response.jsonl. Full structured counterpart: verdict.json. Persistence proof and its limitations: verdict.persistence.json.
+
+              Classification: class 1, plan review before execution. The full profile and all 397 marker lines were read. All 17 submitted input pins matched before analysis. Read-only git and source inspection verified the tracked native state. No native build, full solution build, dotnet test, native mutation, nested reviewer, commit or push ran. Historical test counts remain attributed to their receipts, not claimed as reviewer reruns. No artifacts/immutable-vice path was changed or built.
+
+              P01 PASS [info, review-inputs] - All 17 entries. input-pins.json
+              Evidence: Every pinned file was SHA256-rehashed and its byte length compared before subject analysis. All 17 matched, including plan D96E9860..., patch 90604E39..., and SELF-REVIEW 8FF62752....
+              Assessment: The review addresses the exact submitted artifact, not a reconstructed plan.
+              Correction / acceptance outcome: Retain these pins and disclose any change before another round.
+
+              P02 PASS [info, plan] - Starting tracked state. docs/plans/PLAN-NATIVERESTORE-001.md: 7
+              Evidence: state-before.json: develop dca4a6239cab0515498941f2469ee42115e77f3d; gitlink and native HEAD cc67418cba58e71d8e70fd353e9de47199ad2075; 8 specified tracked modifications, 222 insertions, 8 deletions; no staged native diff. Native git dir is the absolute equivalent of .git/modules/native/vice.
+              Assessment: The SHA, tracked file list, diff totals, and local exclude location agree with live read-only git evidence.
+              Correction / acceptance outcome: Keep fresh per-host measurements at D0; the separate untracked-count defect is F01.
+
+              P03 PASS [info, plan] - R1 B and R4. docs/plans/PLAN-NATIVERESTORE-001.md: 29
+              Evidence: Sections 3 and 4 explicitly choose .gitmodules ignore=untracked, retain all untracked paths, and replace the original empty submodule-status exit with equality to the classified D0 inventory. Handoff v2 line 266 records the operator choosing this amendment.
+              Assessment: The submodule itself may still show untracked files. That is authorized, and does not justify demanding info/exclude or deletion.
+              Correction / acceptance outcome: Preserve this policy. Remove contradictory leftover exclude-file work under F11.
+
+              P04 PASS [info, plan] - D3 timing and plan-review authority. docs/plans/PLAN-NATIVERESTORE-001.md: 53
+              Evidence: The plan defers implementation done-state HV and status changes to sequence step 12. The current request explicitly supplies the 12:21 ruling that plans still receive hostile review. No implementation step is claimed executed here.
+              Assessment: This review is authorized. D3 does not create an HV-before-code-complete deadlock for this plan review, and postpones done-state review rather than waiving substantive gates.
+              Correction / acceptance outcome: Keep the distinction between plan approval, execution evidence, and final done-state acceptance explicit.
+
+              P05 PASS [info, plan] - D-pre receipts. docs/plans/PLAN-NATIVERESTORE-001.md: 44
+              Evidence: Linux desktop-install README lines 13-24 and Windows 20261020T121000 desktop-install README lines 7-25 record Nuke deployment/install of version 1.3.111, ProductVersion commit 2c8d60284229b9fedc2d50f840153b9e8d8cbcbf, binary hashes and successful command outputs. Windows InstallMsi depends on PublishMsi.
+              Assessment: Both recorded installations use the approved Nuke route and the same commit. Neither receipt claims a GUI launch. This review did not independently inspect either installed application.
+              Correction / acceptance outcome: D-pre must still identify the accepted build at execution entry; see A02.
+
+              P06 PASS [info, plan] - Bounded Phase C builder and observation evidence. docs/plans/PLAN-NATIVERESTORE-001.md: 12
+              Evidence: The S2b receipt and builder source place work/build/bin outputs under artifacts/immutable-vice/<sha>, outside native/vice. S4 receipt lines 20-28 reports Linux 100k/1M and display-on 4M observations, equivalence checks, hashes and stolen-cycle counts. Handoff v2 lines 263 and 267 records Windows six-stage build and 1M results, with Windows 4M deferred.
+              Assessment: There is evidence for external building, cycle control, and bounded observer traces. It proves neither a replacement DLL ABI nor snapshot resume or managed parity.
+              Correction / acceptance outcome: Keep those limits attached to any Phase C reuse; F04, F05 and F10 address overclaims.
+
+              P07 PASS [info, plan] - Authorized preservation and narrow restoration intent. docs/plans/PLAN-NATIVERESTORE-001.md: 50
+              Evidence: D0 copies modified tracked files and injected source into per-host receipts; D4 requires a committed preservati
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: Markdown
+            order: 2
+            content: |-
+              on receipt and individual checkout paths; reset --hard and clean are prohibited; untracked files remain. Oct 4 receipt patch and header hashes verify, and its inventory has 2,527 entries.
+              Assessment: This reconciles restoration with copy/hash/retain and the amendment superseding removal of classified generated paths. R2/R3 expressly authorize retirement of the named legacy builders outside the submodule.
+              Correction / acceptance outcome: Add the drift and interruption outcomes in F07 before any destructive checkout.
+
+              F01 FAIL [medium, plan] - Observed starting state. docs/plans/PLAN-NATIVERESTORE-001.md: 8
+              Evidence: git -C native/vice status --porcelain=v1 -uall yields 163 entries: 8 tracked modifications and 155 untracked paths. The plan says 135 untracked. Handoff v2 line 174 also records 155.
+              Assessment: A preservation plan cannot describe an incomplete source inventory as measured fact. The difference is 20 paths, not a changed input pin.
+              Correction / acceptance outcome: Correct the baseline to 155 and make D0 enumerate hidden paths and ordinary paths completely, with explicit counts and classifications on each host.
+
+              F02 FAIL [high, plan] - D2 Windows build integration. docs/plans/PLAN-NATIVERESTORE-001.md: 48
+              Evidence: ViceSharp.TestHarness.csproj lines 10 and 68-72 names Vice.Native.proj and invokes its BuildNative target on Windows whenever the project exists. D2 removes that target; the alternative of removing the project is conditional on no references, but this reference exists.
+              Assessment: The stated target-removal branch leaves an MSBuild call to a nonexistent target, so the Windows solution build cannot satisfy D2 as written. The plan measured only build/*.cs and omitted this caller.
+              Correction / acceptance outcome: Make the harness property/target/call disposition an explicit D2 edit, update the blast radius, and prove Windows and Linux managed builds no longer invoke the retired native path. Do not rebuild the dirty shim.
+
+              F03 FAIL [high, plan] - Shim consumers and D2/D5 denominator. docs/plans/PLAN-NATIVERESTORE-001.md: 59
+              Evidence: rg -l ViceNativeBridge tests finds 31 C# files, including helpers. CpuValidationTests lines 7-8/28-67, SidExactOracleTests lines 17-18/38 onward, and C64VkmKeyboardTests lines 180-219 contain native tests with no excluded Category. Build.cs line 112 excludes only Determinism, AiReview, ParityPending, ParityLegacy and Integration. ViceFactAttribute lines 15-16 and ViceTheoryAttribute lines 15-16 skip when the library is absent.
+              Assessment: The claim that every affected test is already excluded is false. Removing availability yields selected skips, or failures in unconditional consumers. Retiring a builder also does not make an existing dirty DLL disappear; the retained runtime resolver can still select it.
+              Correction / acceptance outcome: Inventory direct and indirect x64/xvic consumers and stale binary resolution, define each authorized disposition and Phase E/F owner, and lock an explicit gate denominator with zero required skips. Do not count a retained patched DLL as immutable evidence or silently broaden exclusions.
+
+              F04 FAIL [high, plan] - Per-hunk classification. docs/plans/PLAN-NATIVERESTORE-001.md: 21
+              Evidence: The Oct 4 patch lines 53-66 zero-initializes drive attach/detach clock arrays; lines 74-96 resets cycle_accum on non-snapshot drive resets. X64ScSnapshotCompatibility.cs lines 32-88 only validates the VSF envelope and inserts missing MAINCPU fields, preserving other module bytes. Patch lines 466-503 also changes VIC sound divide/index behavior, while lines 178-212 contains a MAINCPU version-read hunk absent from the classification.
+              Assessment: The drive changes are behavior/reset corrections, not normalization already rehomed by 199 adapter tests. The sound file also contains more than probes. The claimed complete disposition and the all-needs-served inference are unsupported.
+              Correction / acceptance outcome: D0/D3 must classify every hunk by actual behavior, identify the existing MAINCPU adapter coverage precisely, and explicitly reject native corrections or name approved managed follow-up requirements. An uncovered required behavior is a blocker before D4, not proof supplied by the 199-test count.
+
+              F05 FAIL [high, plan] - D1/D5 VSF Slice 1 and Phase C S5 handoff. docs/plans/PLAN-NATIVERESTORE-001.md: 51
+              Evidence: PLAN-OBSERVER-001 line 30 defers a real snapshot MAINCPU clock/register cross-check to Phase D. PLAN-VSFLOCKSTEP-001 lines 321-350 includes legacy native resume, current native round-trip, fixtures, state manifest and cumulative NativeSnapshotCompatibilityTest. The subject names only builder/prerequisite test families and reruns observer traces plus managed suites. An observer executable does not supply the vice_x64/vice_xvic DLL ABI.
+              Assessment: D5 drops the real snapshot obligation and much of the VSF Slice 1 folded into Phase D, without an approved replacement capability or a precise handoff. Pure byte-adapter success does not prove native resume.
+              Correction / acceptance outcome: Give each existing Slice 1/S5 obligation an owning D step, immutable execution path, named test and retained evidence, including the real cross-check. If its scheduling or interface changes, amend the relevant approved plan explicitly; R2 retirement alone does not waive snapshot ACs.
+
+              F06 FAIL [high, plan] - D2/D5 full-suite gate dependency. docs/plans/PLAN-NATIVERESTORE-001.md: 48
+              Evidence: D2 requires Nuke Test green and D5/Exit requires the full managed/applicable suite green. Handoff v2 line 239 records 20 CPU/NMI/visible-PC failures, assigned to Phase E; Phase E entry in handoff v1 line 119 requires Phase D accepted. CpuInterruptTests and CpuVisiblePcTimingTests have no excluded Category, so the current Test filter selects them. No product changes occur in 2c8d6028..review HEAD.
+              Assessment: The plan requires Phase E-owned repairs to pass before Phase E may start, while calling Phase D cleanup only. D3 changes review timing, not this s
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: Markdown
+            order: 3
+            content: "ubstantive green gate.\nCorrection / acceptance outcome: Resolve this dependency in the plan before execution. Identify the exact full applicable suite and approved phase ownership/order; otherwise record the gate as blocked. Do not silently filter failures or treat a diagnostic baseline as green.\n\nF07 FAIL [high, plan] - D0-to-D4 drift and interruption safety. docs/plans/PLAN-NATIVERESTORE-001.md: 50\nEvidence: D4 rehashes preserved copies before and after checkout, but does not require the live delta to still match those copies before overwriting it. It gives no observable resume rule after some paths were reverted. checkout -- <path> restores the index version, while the final git diff checks only unstaged changes.\nAssessment: A post-D0 edit, unexpected staged change, or interrupted restoration can be overwritten or misinterpreted despite the old preservation copies still hashing correctly. This is an unsafe gap, not merely an optional additional AC.\nCorrection / acceptance outcome: D4 AC: before each authorized overwrite, every affected path and index state must match its preserved approved state or the pinned already-restored state; anything else stops without overwrite. On interruption, identify completed versus untouched paths from verified bytes and resume only approved remaining paths. Test changed-live-delta, staged drift, partial completion and missing/corrupt receipt controls against a mock tree first.\n\nF08 FAIL [high, plan] - D2/D5 inventory bracket. docs/plans/PLAN-NATIVERESTORE-001.md: 48\nEvidence: The bracket is stated as unchanged git status and equal untracked inventory with no new or deleted entries. D0 hashes modified tracked files and injected source; it does not state a byte/hash baseline for every retained generated file. git status does not show content changes to an existing untracked file, and a tracked file can remain M after further edits.\nAssessment: A build overwriting an existing native/vice file can satisfy these comparisons. That cannot prove the rule that no build writes into the submodule, even though R1 B correctly permits retained untracked paths.\nCorrection / acceptance outcome: D2/D5 AC: the retained native tree has identical relevant bytes and path set across builds/runs, apart from the separately authorized D4 tracked restoration. Use a complete hash/length inventory or equivalent observable write protection, with an existing-path overwrite negative control, and stop on any discrepancy.\n\nF09 FAIL [medium, plan] - Script preconditions and mocks-first tooling. docs/plans/PLAN-NATIVERESTORE-001.md: 51\nEvidence: native/build-vice-observer.ps1 line 26 and Invoke-ObserverEquivalence.ps1 line 20 use CmdletBinding() without SupportsShouldProcess or a WhatIf parameter. Both immediately create output directories. D5 calls them as existing six-stage tooling; D0 only specifies WhatIf for the new preservation script.\nAssessment: The mandatory dry-run cannot be executed against these canonical scripts as written. Calling a behavior change tooling does not waive the explicit mocks-first and analyzer requirements.\nCorrection / acceptance outcome: Assign D1/D2 ownership for compliant preview behavior and its discriminating mock contract before modification, then analyzer-check and dry-run every state-changing script before D5. An approved existing native toolchain shell is not itself a PowerShell-language violation.\n\nF10 FAIL [high, plan] - D5/Exit TR-CYCLE-001 AC4 and original Phase D exit. docs/plans/PLAN-NATIVERESTORE-001.md: 60\nEvidence: TR-Cycle-Accuracy.md line 44 requires CPU accesses only during PHI2 with AEC asserted. ObservationTraceValidationTests lines 130-141 asserts decoding, sequence and record counts, not managed access gating. Handoff v1 line 115 explicitly requires REAL-C64-PHI2-AEC-001 and comparator XMLDoc correction; neither appears in the subject exit. R1 B amends retained untracked status and D3 amends HV timing.\nAssessment: S4c trace validity is useful native evidence but does not serve the complete AC4 claim. The two specified amendments do not authorize silently deleting unrelated exit items.\nCorrection / acceptance outcome: Restore a named real AC4 gate and comparator documentation task with owning steps, mocks-first assertions and real evidence, or obtain an explicit plan amendment assigning the obligation to its proper phase. Keep A1/A2 and the operator-approved AEC applicability/derivation intact.\n\nF11 FAIL [medium, plan] - Propagation and requirements references. docs/plans/PLAN-NATIVERESTORE-001.md: 57\nEvidence: The blast radius still lists a new vice-build-output.exclude, two new PowerShell scripts and three shell scripts, and line 58 discusses the local exclude as reversible. R1 B explicitly says no exclude file/script; R2/R3 names two shell launchers and one PowerShell builder. TR-VSFLOCKSTEP-RESUME-001 AC2 still names build-vice-shim.ps1, and VSF Slice 1 validation calls both retiring builders.\nAssessment: The self-review propagation claim misses contradictory executable instructions and an incorrect edit inventory. The plan does not assign reconciliation of the canonical builder reference and active dependent commands.\nCorrection / acceptance outcome: Make R1 B/R2 A the single current disposition, enumerate exact D2 files including the harness caller, and assign canonical requirement/plan reference updates through supported MCP/generation paths. Preserve semantics; any actual AC reduction requires its own approved requirement plan.\n\nR01 FAIL [high, review-process] - Marker read during reviewer bootstrap. response.jsonl\nEvidence: The reviewer redacted key-value header forms but missed the marker query-string credential example, exposing a credential in tool output. The error was disclosed during the run. The credential is intentionally not reproduced here.\nAssessment: This violated the explicit no-credential-printing instruction. It is this reviewer process failure, not an implementer plan defect.\nCorrection / acceptance outcome: "
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: Markdown
+            order: 4
+            content: |-
+              Retain the raw stream privately and produce a verified redacted copy before sharing. Do not commit or publish the raw response. No credential rotation or environment repair is performed or implied by this review.
+
+              U01 UNKNOWN [high, review-process] - Primary session-log persistence and completion. mcp-triage-failure.json
+              Evidence: Plugin 1.121.0 was read from its own manifest. Local marker signature passed, but session-start returned MCP_UNTRUSTED/no-session. beginTurn was rejected with no sessionId; supported triage failed with Health check failed - Permission denied. Offline IDs were then allocated by plugin helpers and failsafe snapshots retained under the authorized exception.
+              Assessment: No primary reviewer session/turn, primary full-content readback, or completed-state history proof exists. A local queue readback cannot be presented as server persistence.
+              Correction / acceptance outcome: Treat this review as queued-only and incomplete for acceptance. A later authorized supported-plugin persistence and primary full-content/history readback must establish the required audit trail; do not replay historical queues or repair shared settings during this round.
+
+              U02 UNKNOWN [medium, requirements] - Effective requirements and TODO readback. AGENTS-README-FIRST.yaml
+              Evidence: The canonical FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001, TR-VSFLOCKSTEP-RESUME-001 and TR-CYCLE-001 documents and immutable matrix were read. Supported primary trust failed before an effective-layer or current TODO query could be made.
+              Assessment: Existing documented FR/TR/TEST/AC links are inspectable, but current store mappings, layers and PLAN-VICEORACLE-001 tasks 4/5 cannot be independently attested from projections alone.
+              Correction / acceptance outcome: Use the active supported plugin to read effective requirements and TODO state once trust is available; reconcile exact mappings and pending statuses before implementation or a done claim.
+
+              A01 ADD-AC [medium, plan] - D0 different LEGION2 delta. docs/plans/PLAN-NATIVERESTORE-001.md: 46
+              Evidence: D0 measures and compares the current Windows patch with Oct 4 and Linux, while section 2 makes a hunk neither covered nor rejected a blocker. It does not specify the acceptance outcome for an explained difference versus an unexplained one.
+              Assessment: Different hosts need not have byte-identical dirty deltas. The comparison should yield an explicit disposition rather than equating every difference with failure.
+              Correction / acceptance outcome: D0 AC, DeltaComparison_ClassifiesEveryCurrentHunk: all current hunks are preserved and individually mapped to an approved disposition; an explained host difference is listed, while any unclassified or required-uncovered hunk blocks D4. Prove missing-hunk and wrong-host negative controls.
+
+              A02 ADD-AC [medium, plan] - D-pre and D0 entry release. docs/plans/PLAN-NATIVERESTORE-001.md: 44
+              Evidence: Both deployment receipts name 2c8d6028; review HEAD is dca4a623. Handoff v2 line 267 records Windows 1M results, Windows 4M deferred, and the later instruction to wait for the next operator instruction. This request authorizes review only.
+              Assessment: A plan approval or a remote report must not implicitly release an implementation hold or silently redefine latest installed build.
+              Correction / acceptance outcome: D-pre/D0 AC, EntryEvidence_BindsBothHostsAndExplicitRelease: record the accepted desktop commit/version on each host, exact Windows trace matrix including deferred 4M ownership, and the operator instruction releasing implementation. Until then D0 remains unexecuted. This is an operational entry check, not a new product requirement.
+
+              A03 ADD-AC [medium, plan] - D4/D5 rollback outcome. docs/plans/PLAN-NATIVERESTORE-001.md: 58
+              Evidence: The plan says the delta is recoverable from receipts, but its no-source-edit boundary does not authorize a later automatic reapplication of the old native patch when D5 fails.
+              Assessment: Recoverable evidence and authority to mutate the reference are different. The safe stopped state should be observable on both hosts.
+              Correction / acceptance outcome: D4/D5 AC, PostRestoreFailure_StopsWithPreservedEvidence: on a later gate failure, stop before Phase E, retain all originals/receipts, report each host and path state, and leave verified restored source pinned. No automatic dirty-patch reapply or untracked deletion; any such recovery needs the operator-scoped authority. Test failure after the first host and after both hosts.
+
+              What-if coverage: LEGION2 delta differs from Oct 4 (A01/F04); uncovered drive hunk (F04, blocks restoration); unexpected live/staged delta or interruption mid-revert (F07); shim consumer outside exclusions or retained dirty binary (F03); same-path build overwrite under native/vice (F08); own dirty status with R1 B (P03); failed post-restore gate and both-host partial completion (A03). The full-suite phase-order deadlock is F06. The tooling/mocks/dry-run conflict is F09. Never-move versus classified-path removal is resolved by D4/R4, not by deleting retained artifacts. Plan HV versus D3 is resolved by the explicit 12:21 ruling, P04.
+
+              Requirement coverage: existing FR-VICE-001 -> TR-VICE-ORACLE-001 -> TEST-VICE-001 supplies the integrity chain. TR-VSFLOCKSTEP-RESUME-001 AC2 maps to D1/D2/D5 but its retiring command/reference and complete snapshot Slice 1 remain unreconciled (F05/F11). TEST-VICE-001 AC1/AC2 map to clean preflight and unchanged build/runtime source (P02/F07/F08). TR-CYCLE-001 AC4 is not satisfied by S4c trace formatting (F10). PLAN-VICEORACLE-001 tasks 4/5 and effective-layer mappings could not be read from the primary store (U02). No new requirement or AC was written to MCP or canonical documents; suggested ACs are review findings only.
+
+              Persistence and reviewer deviations: the supported Codex root is version 1.121.0; the marker advertises 1.120.0. Signature verification succeeded locally; health nonce verification failed with Permission denied, so there is no primary tur
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: Markdown
+            order: 5
+            content: |
+              n or history proof. The primary begin and supported triage failures authorize the full-content local failsafe exception. Its records are queued, not persisted; no queues were replayed and no hooks, shared settings or environment were repaired. The initial reviewer-specific temp override caused an overlong Unix socket path and was removed from this reviewer helper; the retry still failed with Permission denied. Initial profile/marker reads used inline PowerShell before the analyzed file-based helper was established. The marker redaction failure is R01; the raw response must remain private and be redacted before sharing.
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: JSON
+            order: 6
+            content: |-
+              {
+                "OverallVerdict": "DISAGREE",
+                "accuracyPercent": 85,
+                "completenessPercent": 70,
+                "scoreBasis": "Holistic judgments of the submitted plan, not test pass rates: factual baseline/preservation and operator rulings are substantially correct, but consumer exclusions, hunk coverage and requirement evidence are materially overstated. Execution readiness is lower because the Windows target, full-suite phase dependency, restoration safety and real snapshot/AC4 exits are unresolved. The review also has separate credential-handling and primary-persistence defects. Neither score reaches 98.",
+                "passCount": 7,
+                "failCount": 12,
+                "unknownCount": 2,
+                "addAcCount": 3,
+                "findings": [
+                  {
+                    "id": "P01",
+                    "status": "PASS",
+                    "severity": "info",
+                    "scope": "review-inputs",
+                    "file": "input-pins.json",
+                    "section": "All 17 entries",
+                    "evidence": "Every pinned file was SHA256-rehashed and its byte length compared before subject analysis. All 17 matched, including plan D96E9860..., patch 90604E39..., and SELF-REVIEW 8FF62752....",
+                    "rationale": "The review addresses the exact submitted artifact, not a reconstructed plan.",
+                    "correction": "Retain these pins and disclose any change before another round."
+                  },
+                  {
+                    "id": "P02",
+                    "status": "PASS",
+                    "severity": "info",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 7,
+                    "section": "Starting tracked state",
+                    "evidence": "state-before.json: develop dca4a6239cab0515498941f2469ee42115e77f3d; gitlink and native HEAD cc67418cba58e71d8e70fd353e9de47199ad2075; 8 specified tracked modifications, 222 insertions, 8 deletions; no staged native diff. Native git dir is the absolute equivalent of .git/modules/native/vice.",
+                    "rationale": "The SHA, tracked file list, diff totals, and local exclude location agree with live read-only git evidence.",
+                    "correction": "Keep fresh per-host measurements at D0; the separate untracked-count defect is F01."
+                  },
+                  {
+                    "id": "P03",
+                    "status": "PASS",
+                    "severity": "info",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 29,
+                    "section": "R1 B and R4",
+                    "evidence": "Sections 3 and 4 explicitly choose .gitmodules ignore=untracked, retain all untracked paths, and replace the original empty submodule-status exit with equality to the classified D0 inventory. Handoff v2 line 266 records the operator choosing this amendment.",
+                    "rationale": "The submodule itself may still show untracked files. That is authorized, and does not justify demanding info/exclude or deletion.",
+                    "correction": "Preserve this policy. Remove contradictory leftover exclude-file work under F11."
+                  },
+                  {
+                    "id": "P04",
+                    "status": "PASS",
+                    "severity": "info",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 53,
+                    "section": "D3 timing and plan-review authority",
+                    "evidence": "The plan defers implementation done-state HV and status changes to sequence step 12. The current request explicitly supplies the 12:21 ruling that plans still receive hostile review. No implementation step is claimed executed here.",
+                    "rationale": "This review is authorized. D3 does not create an HV-before-code-complete deadlock for this plan review, and postpones done-state review rather than waiving substantive gates.",
+                    "correction": "Keep the distinction between plan approval, execution evidence, and final done-state acceptance explicit."
+                  },
+                  {
+                    "id": "P05",
+                    "status": "PASS",
+                    "severity": "info",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 44,
+                    "section": "D-pre receipts",
+                    "evidence": "Linux desktop-install README lines 13-24 and Windows 20261020T121000 desktop-install README lines 7-25 record Nuke deployment/install of version 1.3.111, ProductVersion commit 2c8d60284229b9fedc2d50f840153b9e8d8cbcbf, binary hashes and successful command outputs. Windows InstallMsi depends on PublishMsi.",
+                    "rationale": "Both recorded installations use the approved Nuke route and the same commit. Neither receipt claims a GUI launch. This review did not independently inspect either installed application.",
+                    "correction": "D-pre must still identify the accepted build at execution entry; see A02."
+                  },
+                  {
+                    "id": "P06",
+                    "status": "PASS",
+                    "severity": "info",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 12,
+                    "section": "Bounded Phase C builder and observation evidence",
+                    "evidence": "The S2b receipt and builder source place work/build/bin outputs under artifacts/immutable-vice/<sha>, outside native/vice. S4 receipt lines 20-28 reports Linux 100k/1M and display-on 4M observations, equivalence checks, hashes and stolen-cycle counts. Handoff v2 lines 263 and 267 records Windows six-stage build and 1M results, with Windows 4M deferred.",
+                    "rationale": "There is evidence for external building, cycle control, and bounded observer traces. It proves neither a replacement DLL ABI nor snapshot resume or managed parity.",
+                    "correction": "Keep those limits attached to any Phase C reuse; F04, F05 and F10 address overclaims."
+                  },
+                  {
+                    "id": "P07",
+                    "status": "PASS",
+                    "severity": "info",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 50,
+                    "section": "Authorized preservation and narrow restoration intent",
+                    "evidence": "D0 copies modified tracked files and injected source into per-host receipts; D4 requires a committed preservation receipt and individual checkout paths; reset --hard and clean are prohibited; untracked files remain. Oct 4 receipt patch and header hashes verify, and its inventory has 2,527 entries.",
+                    "rationale": "This reconciles restoration with copy/hash/retain and the amendment super
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: JSON
+            order: 7
+            content: |-
+              seding removal of classified generated paths. R2/R3 expressly authorize retirement of the named legacy builders outside the submodule.",
+                    "correction": "Add the drift and interruption outcomes in F07 before any destructive checkout."
+                  },
+                  {
+                    "id": "F01",
+                    "status": "FAIL",
+                    "severity": "medium",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 8,
+                    "section": "Observed starting state",
+                    "evidence": "git -C native/vice status --porcelain=v1 -uall yields 163 entries: 8 tracked modifications and 155 untracked paths. The plan says 135 untracked. Handoff v2 line 174 also records 155.",
+                    "rationale": "A preservation plan cannot describe an incomplete source inventory as measured fact. The difference is 20 paths, not a changed input pin.",
+                    "correction": "Correct the baseline to 155 and make D0 enumerate hidden paths and ordinary paths completely, with explicit counts and classifications on each host."
+                  },
+                  {
+                    "id": "F02",
+                    "status": "FAIL",
+                    "severity": "high",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 48,
+                    "section": "D2 Windows build integration",
+                    "evidence": "ViceSharp.TestHarness.csproj lines 10 and 68-72 names Vice.Native.proj and invokes its BuildNative target on Windows whenever the project exists. D2 removes that target; the alternative of removing the project is conditional on no references, but this reference exists.",
+                    "rationale": "The stated target-removal branch leaves an MSBuild call to a nonexistent target, so the Windows solution build cannot satisfy D2 as written. The plan measured only build/*.cs and omitted this caller.",
+                    "correction": "Make the harness property/target/call disposition an explicit D2 edit, update the blast radius, and prove Windows and Linux managed builds no longer invoke the retired native path. Do not rebuild the dirty shim."
+                  },
+                  {
+                    "id": "F03",
+                    "status": "FAIL",
+                    "severity": "high",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 59,
+                    "section": "Shim consumers and D2/D5 denominator",
+                    "evidence": "rg -l ViceNativeBridge tests finds 31 C# files, including helpers. CpuValidationTests lines 7-8/28-67, SidExactOracleTests lines 17-18/38 onward, and C64VkmKeyboardTests lines 180-219 contain native tests with no excluded Category. Build.cs line 112 excludes only Determinism, AiReview, ParityPending, ParityLegacy and Integration. ViceFactAttribute lines 15-16 and ViceTheoryAttribute lines 15-16 skip when the library is absent.",
+                    "rationale": "The claim that every affected test is already excluded is false. Removing availability yields selected skips, or failures in unconditional consumers. Retiring a builder also does not make an existing dirty DLL disappear; the retained runtime resolver can still select it.",
+                    "correction": "Inventory direct and indirect x64/xvic consumers and stale binary resolution, define each authorized disposition and Phase E/F owner, and lock an explicit gate denominator with zero required skips. Do not count a retained patched DLL as immutable evidence or silently broaden exclusions."
+                  },
+                  {
+                    "id": "F04",
+                    "status": "FAIL",
+                    "severity": "high",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 21,
+                    "section": "Per-hunk classification",
+                    "evidence": "The Oct 4 patch lines 53-66 zero-initializes drive attach/detach clock arrays; lines 74-96 resets cycle_accum on non-snapshot drive resets. X64ScSnapshotCompatibility.cs lines 32-88 only validates the VSF envelope and inserts missing MAINCPU fields, preserving other module bytes. Patch lines 466-503 also changes VIC sound divide/index behavior, while lines 178-212 contains a MAINCPU version-read hunk absent from the classification.",
+                    "rationale": "The drive changes are behavior/reset corrections, not normalization already rehomed by 199 adapter tests. The sound file also contains more than probes. The claimed complete disposition and the all-needs-served inference are unsupported.",
+                    "correction": "D0/D3 must classify every hunk by actual behavior, identify the existing MAINCPU adapter coverage precisely, and explicitly reject native corrections or name approved managed follow-up requirements. An uncovered required behavior is a blocker before D4, not proof supplied by the 199-test count."
+                  },
+                  {
+                    "id": "F05",
+                    "status": "FAIL",
+                    "severity": "high",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 51,
+                    "section": "D1/D5 VSF Slice 1 and Phase C S5 handoff",
+                    "evidence": "PLAN-OBSERVER-001 line 30 defers a real snapshot MAINCPU clock/register cross-check to Phase D. PLAN-VSFLOCKSTEP-001 lines 321-350 includes legacy native resume, current native round-trip, fixtures, state manifest and cumulative NativeSnapshotCompatibilityTest. The subject names only builder/prerequisite test families and reruns observer traces plus managed suites. An observer executable does not supply the vice_x64/vice_xvic DLL ABI.",
+                    "rationale": "D5 drops the real snapshot obligation and much of the VSF Slice 1 folded into Phase D, without an approved replacement capability or a precise handoff. Pure byte-adapter success does not prove native resume.",
+                    "correction": "Give each existing Slice 1/S5 obligation an owning D step, immutable execution path, named test and retained evidence, including the real cross-check. If its scheduling or interface changes, amend the relevant approved plan explicitly; R2 retirement alone does not waive snapshot ACs."
+                  },
+                  {
+                    "id": "F06",
+                    "status": "FAIL",
+                    "severity": "high",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 48,
+                    "section": "D2/D5 full-suite gate dependency",
+                    "evidence": "D
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: JSON
+            order: 8
+            content: "2 requires Nuke Test green and D5/Exit requires the full managed/applicable suite green. Handoff v2 line 239 records 20 CPU/NMI/visible-PC failures, assigned to Phase E; Phase E entry in handoff v1 line 119 requires Phase D accepted. CpuInterruptTests and CpuVisiblePcTimingTests have no excluded Category, so the current Test filter selects them. No product changes occur in 2c8d6028..review HEAD.\",\n      \"rationale\": \"The plan requires Phase E-owned repairs to pass before Phase E may start, while calling Phase D cleanup only. D3 changes review timing, not this substantive green gate.\",\n      \"correction\": \"Resolve this dependency in the plan before execution. Identify the exact full applicable suite and approved phase ownership/order; otherwise record the gate as blocked. Do not silently filter failures or treat a diagnostic baseline as green.\"\n    },\n    {\n      \"id\": \"F07\",\n      \"status\": \"FAIL\",\n      \"severity\": \"high\",\n      \"scope\": \"plan\",\n      \"file\": \"docs/plans/PLAN-NATIVERESTORE-001.md\",\n      \"line\": 50,\n      \"section\": \"D0-to-D4 drift and interruption safety\",\n      \"evidence\": \"D4 rehashes preserved copies before and after checkout, but does not require the live delta to still match those copies before overwriting it. It gives no observable resume rule after some paths were reverted. checkout -- <path> restores the index version, while the final git diff checks only unstaged changes.\",\n      \"rationale\": \"A post-D0 edit, unexpected staged change, or interrupted restoration can be overwritten or misinterpreted despite the old preservation copies still hashing correctly. This is an unsafe gap, not merely an optional additional AC.\",\n      \"correction\": \"D4 AC: before each authorized overwrite, every affected path and index state must match its preserved approved state or the pinned already-restored state; anything else stops without overwrite. On interruption, identify completed versus untouched paths from verified bytes and resume only approved remaining paths. Test changed-live-delta, staged drift, partial completion and missing/corrupt receipt controls against a mock tree first.\"\n    },\n    {\n      \"id\": \"F08\",\n      \"status\": \"FAIL\",\n      \"severity\": \"high\",\n      \"scope\": \"plan\",\n      \"file\": \"docs/plans/PLAN-NATIVERESTORE-001.md\",\n      \"line\": 48,\n      \"section\": \"D2/D5 inventory bracket\",\n      \"evidence\": \"The bracket is stated as unchanged git status and equal untracked inventory with no new or deleted entries. D0 hashes modified tracked files and injected source; it does not state a byte/hash baseline for every retained generated file. git status does not show content changes to an existing untracked file, and a tracked file can remain M after further edits.\",\n      \"rationale\": \"A build overwriting an existing native/vice file can satisfy these comparisons. That cannot prove the rule that no build writes into the submodule, even though R1 B correctly permits retained untracked paths.\",\n      \"correction\": \"D2/D5 AC: the retained native tree has identical relevant bytes and path set across builds/runs, apart from the separately authorized D4 tracked restoration. Use a complete hash/length inventory or equivalent observable write protection, with an existing-path overwrite negative control, and stop on any discrepancy.\"\n    },\n    {\n      \"id\": \"F09\",\n      \"status\": \"FAIL\",\n      \"severity\": \"medium\",\n      \"scope\": \"plan\",\n      \"file\": \"docs/plans/PLAN-NATIVERESTORE-001.md\",\n      \"line\": 51,\n      \"section\": \"Script preconditions and mocks-first tooling\",\n      \"evidence\": \"native/build-vice-observer.ps1 line 26 and Invoke-ObserverEquivalence.ps1 line 20 use CmdletBinding() without SupportsShouldProcess or a WhatIf parameter. Both immediately create output directories. D5 calls them as existing six-stage tooling; D0 only specifies WhatIf for the new preservation script.\",\n      \"rationale\": \"The mandatory dry-run cannot be executed against these canonical scripts as written. Calling a behavior change tooling does not waive the explicit mocks-first and analyzer requirements.\",\n      \"correction\": \"Assign D1/D2 ownership for compliant preview behavior and its discriminating mock contract before modification, then analyzer-check and dry-run every state-changing script before D5. An approved existing native toolchain shell is not itself a PowerShell-language violation.\"\n    },\n    {\n      \"id\": \"F10\",\n      \"status\": \"FAIL\",\n      \"severity\": \"high\",\n      \"scope\": \"plan\",\n      \"file\": \"docs/plans/PLAN-NATIVERESTORE-001.md\",\n      \"line\": 60,\n      \"section\": \"D5/Exit TR-CYCLE-001 AC4 and original Phase D exit\",\n      \"evidence\": \"TR-Cycle-Accuracy.md line 44 requires CPU accesses only during PHI2 with AEC asserted. ObservationTraceValidationTests lines 130-141 asserts decoding, sequence and record counts, not managed access gating. Handoff v1 line 115 explicitly requires REAL-C64-PHI2-AEC-001 and comparator XMLDoc correction; neither appears in the subject exit. R1 B amends retained untracked status and D3 amends HV timing.\",\n      \"rationale\": \"S4c trace validity is useful native evidence but does not serve the complete AC4 claim. The two specified amendments do not authorize silently deleting unrelated exit items.\",\n      \"correction\": \"Restore a named real AC4 gate and comparator documentation task with owning steps, mocks-first assertions and real evidence, or obtain an explicit plan amendment assigning the obligation to its proper phase. Keep A1/A2 and the operator-approved AEC applicability/derivation intact.\"\n    },\n    {\n      \"id\": \"F11\",\n      \"status\": \"FAIL\",\n      \"severity\": \"medium\",\n      \"scope\": \"plan\",\n      \"file\": \"docs/plans/PLAN-NATIVERESTORE-001.md\",\n      \"line\": 57,\n      \"section\": \"Propagation and requirements references\",\n      \"evidence\": \"The blast radius still lists a new vice-build-output.exclude, two new PowerShell scripts and three shell scripts, and line 58 discusses the local exclude as reversible. R1 B explicitly says no "
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: JSON
+            order: 9
+            content: |-
+              exclude file/script; R2/R3 names two shell launchers and one PowerShell builder. TR-VSFLOCKSTEP-RESUME-001 AC2 still names build-vice-shim.ps1, and VSF Slice 1 validation calls both retiring builders.",
+                    "rationale": "The self-review propagation claim misses contradictory executable instructions and an incorrect edit inventory. The plan does not assign reconciliation of the canonical builder reference and active dependent commands.",
+                    "correction": "Make R1 B/R2 A the single current disposition, enumerate exact D2 files including the harness caller, and assign canonical requirement/plan reference updates through supported MCP/generation paths. Preserve semantics; any actual AC reduction requires its own approved requirement plan."
+                  },
+                  {
+                    "id": "R01",
+                    "status": "FAIL",
+                    "severity": "high",
+                    "scope": "review-process",
+                    "file": "response.jsonl",
+                    "section": "Marker read during reviewer bootstrap",
+                    "evidence": "The reviewer redacted key-value header forms but missed the marker query-string credential example, exposing a credential in tool output. The error was disclosed during the run. The credential is intentionally not reproduced here.",
+                    "rationale": "This violated the explicit no-credential-printing instruction. It is this reviewer process failure, not an implementer plan defect.",
+                    "correction": "Retain the raw stream privately and produce a verified redacted copy before sharing. Do not commit or publish the raw response. No credential rotation or environment repair is performed or implied by this review."
+                  },
+                  {
+                    "id": "U01",
+                    "status": "UNKNOWN",
+                    "severity": "high",
+                    "scope": "review-process",
+                    "file": "mcp-triage-failure.json",
+                    "section": "Primary session-log persistence and completion",
+                    "evidence": "Plugin 1.121.0 was read from its own manifest. Local marker signature passed, but session-start returned MCP_UNTRUSTED/no-session. beginTurn was rejected with no sessionId; supported triage failed with Health check failed - Permission denied. Offline IDs were then allocated by plugin helpers and failsafe snapshots retained under the authorized exception.",
+                    "rationale": "No primary reviewer session/turn, primary full-content readback, or completed-state history proof exists. A local queue readback cannot be presented as server persistence.",
+                    "correction": "Treat this review as queued-only and incomplete for acceptance. A later authorized supported-plugin persistence and primary full-content/history readback must establish the required audit trail; do not replay historical queues or repair shared settings during this round."
+                  },
+                  {
+                    "id": "U02",
+                    "status": "UNKNOWN",
+                    "severity": "medium",
+                    "scope": "requirements",
+                    "file": "AGENTS-README-FIRST.yaml",
+                    "section": "Effective requirements and TODO readback",
+                    "evidence": "The canonical FR-VICE-001, TR-VICE-ORACLE-001, TEST-VICE-001, TR-VSFLOCKSTEP-RESUME-001 and TR-CYCLE-001 documents and immutable matrix were read. Supported primary trust failed before an effective-layer or current TODO query could be made.",
+                    "rationale": "Existing documented FR/TR/TEST/AC links are inspectable, but current store mappings, layers and PLAN-VICEORACLE-001 tasks 4/5 cannot be independently attested from projections alone.",
+                    "correction": "Use the active supported plugin to read effective requirements and TODO state once trust is available; reconcile exact mappings and pending statuses before implementation or a done claim."
+                  },
+                  {
+                    "id": "A01",
+                    "status": "ADD-AC",
+                    "severity": "medium",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 46,
+                    "section": "D0 different LEGION2 delta",
+                    "evidence": "D0 measures and compares the current Windows patch with Oct 4 and Linux, while section 2 makes a hunk neither covered nor rejected a blocker. It does not specify the acceptance outcome for an explained difference versus an unexplained one.",
+                    "rationale": "Different hosts need not have byte-identical dirty deltas. The comparison should yield an explicit disposition rather than equating every difference with failure.",
+                    "correction": "D0 AC, DeltaComparison_ClassifiesEveryCurrentHunk: all current hunks are preserved and individually mapped to an approved disposition; an explained host difference is listed, while any unclassified or required-uncovered hunk blocks D4. Prove missing-hunk and wrong-host negative controls."
+                  },
+                  {
+                    "id": "A02",
+                    "status": "ADD-AC",
+                    "severity": "medium",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 44,
+                    "section": "D-pre and D0 entry release",
+                    "evidence": "Both deployment receipts name 2c8d6028; review HEAD is dca4a623. Handoff v2 line 267 records Windows 1M results, Windows 4M deferred, and the later instruction to wait for the next operator instruction. This request authorizes review only.",
+                    "rationale": "A plan approval or a remote report must not implicitly release an implementation hold or silently redefine latest installed build.",
+                    "correction": "D-pre/D0 AC, EntryEvidence_BindsBothHostsAndExplicitRelease: record the accepted desktop commit/version on each host, exact Windows trace matrix including deferred 4M ownership, and the operator instruction releasing implementation. Until then D0 remains unexecuted. This is an operational entry check, not a new product requirement."
+                  },
+                  {
+                    "id": "A03",
+                    "status": "ADD-AC",
+                    "severity": "medium",
+                    "scope": "plan",
+                    "file": "docs/plans/PLAN-NATIVERESTORE-001.md",
+                    "line": 58,
+                    "section": "D4/D5 rollback outcome",
+                    "evidence": "The plan says the delta is recoverable from receipts, but its no-source-edit boundary does not authorize a later automatic reapplication of the old native patch when D5 fails.",
+                    "ra
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: JSON
+            order: 10
+            content: |
+              tionale": "Recoverable evidence and authority to mutate the reference are different. The safe stopped state should be observable on both hosts.",
+                    "correction": "D4/D5 AC, PostRestoreFailure_StopsWithPreservedEvidence: on a later gate failure, stop before Phase E, retain all originals/receipts, report each host and path state, and leave verified restored source pinned. No automatic dirty-patch reapply or untracked deletion; any such recovery needs the operator-scoped authority. Test failure after the first host and after both hosts."
+                  }
+                ],
+                "reviewerAgent": "Codex",
+                "reviewerModel": "gpt-6.1-sol",
+                "reviewerEffort": "max",
+                "reviewerSessionId": "Codex-20261020T173749Z-hv-plan-nativerestore-001",
+                "reviewerRequestId": "req-20261020T173749Z-turn-5e79",
+                "reviewerIdentityDisposition": "Allocated by supported plugin helpers for the offline queue. No primary session or turn exists.",
+                "parentSessionId": "ClaudeCode-20261020T015046Z-plugin-session",
+                "parentRequestId": "req-20261020T172116Z-prompt-6c6d",
+                "requestPath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/request.jsonl",
+                "responsePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/response.jsonl",
+                "timestampLocal": "2026-10-20T12:43:57.619-05:00",
+                "classification": "Class 1: independent project-implementation plan review before execution",
+                "profileRead": {
+                  "skill": "/home/sharpninja/.codex/skills/add-profile/SKILL.md",
+                  "readInFull": true,
+                  "count": 1,
+                  "files": [
+                    "/home/sharpninja/.claude/profile/PROFILE-MERGED.md"
+                  ]
+                },
+                "markerRead": {
+                  "credentialRedactionCompliant": false,
+                  "readInFull": true,
+                  "finding": "R01",
+                  "lines": 397
+                },
+                "execution": {
+                  "nestedReviewers": 0,
+                  "note": "Source review and read-only git/rg evidence. No implementation step executed; no build/test pass claim is made.",
+                  "nativeMutations": 0,
+                  "fullSolutionBuilds": 0,
+                  "dotnetTestRuns": 0,
+                  "pushes": 0,
+                  "nativeBuilds": 0,
+                  "commits": 0
+                },
+                "evidencePaths": [
+                  "state-before.json",
+                  "source-assertions.json",
+                  "mcp-bootstrap.txt",
+                  "mcp-bootstrap-second.txt",
+                  "mcp-trust-diagnosis.json",
+                  "mcp-triage-failure.json",
+                  "reviewer-identity.json"
+                ],
+                "persistenceDisposition": "QUEUED ONLY after primary and triage failures. No primary completed-state or full-content readback proof."
+              }
+            category: observation
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: Decision
+            order: 11
+            content: This is a class-1 plan review, not authorization to execute Phase D. R1 B and D3 amend only their specified gates. No done-state change is permitted by this review.
+            category: decision
+          - role: model
+            timestamp: 2026-10-20T12:45:53.180-05:00
+            documentKind: Decision
+            order: 12
+            content: Primary bootstrap and triage failed with health Permission denied. Retain full content through the explicitly authorized supported-plugin failsafe; never label it persisted or completed on the server.
+            category: decision
+        contextList:
+          - parentSessionId=ClaudeCode-20261020T015046Z-plugin-session
+          - parentRequestId=req-20261020T172116Z-prompt-6c6d
+          - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/request.jsonl
+          - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/response.jsonl
+        filesModified:
+          - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/verdict.md
+          - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/verdict.json
+        actions:
+          - status: completed
+            filePath: docs/plans/PLAN-NATIVERESTORE-001.md
+            order: 1
+            type: design_decision
+            description: This is a class-1 plan review, not authorization to execute Phase D. R1 B and D3 amend only their specified gates. No done-state change is permitted by this review.
+          - status: completed
+            filePath: /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/mcp-triage-failure.json
+            order: 2
+            type: design_decision
+            description: Primary bootstrap and triage failed with health Permission denied. Retain full content through the explicitly authorized supported-plugin failsafe; never label it persisted or completed on the server.
+        model: gpt-6.1-sol

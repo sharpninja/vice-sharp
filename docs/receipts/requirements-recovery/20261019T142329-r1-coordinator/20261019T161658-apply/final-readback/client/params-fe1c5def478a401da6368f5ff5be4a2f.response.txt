@@ -1,0 +1,31 @@
+type: result
+payload:
+  requestId: req-20261019T212427Z-bcb2
+  result:
+    id: TEST-PRF-001
+    title: Machine Profile Tests
+    description: C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for required devices, ROMs, clocks, and address maps.
+    status: pending
+    priority: medium
+    area: PRF
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-01
+      text: These added criteria cover only FR-PRF-003/ac-02 and ac-04. Other obligations under this TEST condition, including FR-PRF-001, FR-PRF-002 and FR-PRF-004 through FR-PRF-008, are not covered by these criteria and remain unsatisfied until their own required evidence is accepted. Validate assertions first against independent correct mocks and deliberately corrupt mock responses rejected inside a green harness; then bind the same inputs, expected results and assertions to real managed and immutable native providers. Unknown native observations block real acceptance. Retain input, seed/history, source/binary/ROM/resource hashes and full receipts. For FR-PRF-003/ac-02, Sx64_PortOutputs_AreDisconnected crosses DATA/DDR bits 3,4,5 and direction transitions for SX-64 and C64 control boards. Assert SX-64 never forwards motor, write or sense-out to a cassette device, including repeated and changed effective outputs; its CPU reads still obey DATA, DDR and independently established retained-charge state. Reject C64 forwarding on SX-64, globally disconnecting C64, or hardcoding all SX input bits high or low.
+      isSatisfied: false
+    - id: ac-02
+      text: These added criteria cover only FR-PRF-003/ac-02 and ac-04. Other obligations under this TEST condition, including FR-PRF-001, FR-PRF-002 and FR-PRF-004 through FR-PRF-008, are not covered by these criteria and remain unsatisfied until their own required evidence is accepted. Validate assertions first against independent correct mocks and deliberately corrupt mock responses rejected inside a green harness; then bind the same inputs, expected results and assertions to real managed and immutable native providers. Unknown native observations block real acceptance. Retain input, seed/history, source/binary/ROM/resource hashes and full receipts. For FR-PRF-003/ac-04, Sx64_InputCapacitors_ResetAndIndependentBits exercises each bit 3,4,5 separately and mixed masks with different captured 0/1 values. Assert output reads use normal port data, input reads use the corresponding retained data_set_bit, expiry clears only eligible expired charge/flags, and reset clears charge and flags without inventing deadline clearing. Reject shared state between pins, output charge overlay, resurrection after reset and dropped unrelated read bits.
+      isSatisfied: false
+    - id: ac-03
+      text: These added criteria cover only FR-PRF-003/ac-02 and ac-04. Other obligations under this TEST condition, including FR-PRF-001, FR-PRF-002 and FR-PRF-004 through FR-PRF-008, are not covered by these criteria and remain unsatisfied until their own required evidence is accepted. Validate assertions first against independent correct mocks and deliberately corrupt mock responses rejected inside a green harness; then bind the same inputs, expected results and assertions to real managed and immutable native providers. Unknown native observations block real acceptance. Retain input, seed/history, source/binary/ROM/resource hashes and full receipts. For FR-PRF-003/ac-04, Sx64_InputCapacitors_StrictFalloffBoundary tests each bit with an independently chosen deadline D at clocks D-1, D, D+1; only deadline < currentClock expires on $0001 read. Cover repeated reads, no-read gaps, output-mode reads and $0000-only reads. Assert DATA-read expiry side effects even for output pins but no charge overlay there; DDR reads do not expire charge. Reject <=, eager/host-clock expiry, input-only expiry and DDR-read discharge.
+      isSatisfied: false
+    - id: ac-04
+      text: These added criteria cover only FR-PRF-003/ac-02 and ac-04. Other obligations under this TEST condition, including FR-PRF-001, FR-PRF-002 and FR-PRF-004 through FR-PRF-008, are not covered by these criteria and remain unsatisfied until their own required evidence is accepted. Validate assertions first against independent correct mocks and deliberately corrupt mock responses rejected inside a green harness; then bind the same inputs, expected results and assertions to real managed and immutable native providers. Unknown native observations block real acceptance. Retain input, seed/history, source/binary/ROM/resource hashes and full receipts. For FR-PRF-003/ac-04, Sx64_InputCapacitors_DeadlineSelection uses clock10 with independently scripted inclusive jitter endpoints 0 and300000 to produce deadlines1500010 and1800010 for bits3/4/5. DATA writes while output, including same-value and zero writes, and DDR output-to-input transitions capture data and consume independent draws. Other DDR transitions or DATA writes while input do not. Cross-check C64_Capacitor_RngConsumptionOrder and ResetAndClockWrap assertions for SX bit order, sparse masks, uint64 wrap and prior global RNG history; reject one shared draw, exclusive endpoints, wrong1500000-cycle base, omitted repeated writes and invented native endpoint seeds.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:24:27.6853171+00:00
+    updatedAt: 2026-10-19T21:24:27.6854126+00:00
+  deprecated: true
+
+---
+

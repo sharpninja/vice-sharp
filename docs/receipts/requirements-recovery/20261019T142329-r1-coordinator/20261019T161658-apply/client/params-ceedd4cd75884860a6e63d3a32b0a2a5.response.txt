@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261019T211923Z-9b15
+  result:
+    id: TEST-CPU-001
+    title: CPU Execution Reference Tests
+    description: CPU instruction, timing, interrupt, and port behavior is verified with unit tests and VICE/Lorenz-style reference comparisons.
+    status: pending
+    priority: medium
+    area: CPU
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:19:24.1718406+00:00
+    updatedAt: 2026-10-19T21:19:24.1719246+00:00
+  deprecated: true
+
+---
+

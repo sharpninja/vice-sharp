@@ -30,10 +30,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     public int AudioFragmentSampleCount => _sampleBuffer.Length;
 
     /// <summary>
-    /// True while the attached playback backend is available AND <see cref="ConfigureAudioClock"/> has run
+    /// True while the attached playback backend can pace emulation and <see cref="ConfigureAudioClock"/> has run
     /// (so the SID is streaming samples and can be the emulation timing source).
     /// </summary>
-    public bool IsAudioTimingSource => _audioBackend is { IsAvailable: true } && _liveAudioArmed;
+    public bool IsAudioTimingSource => _audioBackend is { IsTimingSource: true } && _liveAudioArmed;
 
     // Waveform types
     public enum Waveform { Triangle = 0x04, Sawtooth = 0x08, Pulse = 0x40, Noise = 0x80, None = 0x00 }

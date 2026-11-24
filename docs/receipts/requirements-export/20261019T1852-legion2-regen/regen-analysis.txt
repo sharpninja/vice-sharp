@@ -1,0 +1,23 @@
+Functional-Requirements.md: sha 8BB4C803 bytes 324935 sameAsBeforeRegen True; section ids 235 -> 235; changed 25 (today 15, earlier 10); duplicate-heading ids 10
+  today:   FR-BACKFILL-MEDIA-001(changed) FR-CHIPSTATE-001(changed) FR-CPU-004(changed) FR-PACESEL-001(changed) FR-PUBSUB-001(changed) FR-RUNTIME-TAPE-002(changed) FR-SIDAUDIO-001(changed) FR-SIDEBARUI-001(changed) FR-SNDREG-001(changed) FR-TAP-001(changed) FR-TAP-002(changed) FR-TAP-003(changed) FR-TAP-004(changed) FR-TICKHIST-001(changed) FR-XBOXGPL-007(changed)
+  earlier: FR-CFG-002(changed) FR-INP-006(changed) FR-MED-002(changed) FR-MED-003(changed) FR-ROMM-LAUNCH-001(changed) FR-SID-013(changed) FR-SNP-001(changed) FR-SNP-002(changed) FR-UI-003(changed) FR-VIC20-002(changed)
+  duplicate headings: FR-CFG-002(+1) FR-INP-006(+1) FR-MED-002(+1) FR-MED-003(+1) FR-ROMM-LAUNCH-001(+1) FR-SID-013(+1) FR-SNP-001(+1) FR-SNP-002(+1) FR-UI-003(+1) FR-VIC20-002(+1)
+Requirements-Matrix.md: sha 32AD2951 bytes 31552 sameAsBeforeRegen True; section ids 0 -> 0; changed 0 (today 0, earlier 0); duplicate-heading ids 0
+Technical-Requirements.md: sha 5736D907 bytes 167001 sameAsBeforeRegen True; section ids 139 -> 139; changed 41 (today 31, earlier 10); duplicate-heading ids 0
+  today:   TR-BUILD-001(changed) TR-CHIPSTATE-CAPTURE-001(changed) TR-CORE-CYCLE-001(changed) TR-CORE-DET-001(changed) TR-DEPS-202607-001(changed) TR-DRV-EDGE-001(changed) TR-IEC-EDGE-001(changed) TR-PACESEL-STRAT-001(changed) TR-PERF-ALLOC-001(changed) TR-PERF-AOT-001(changed) TR-PUBSUB-PERF-001(changed) TR-SID-EDGE-004(changed) TR-SID-ORACLE-002(changed) TR-SID-RESAMPLE-001(changed) TR-SIDAUDIO-CLOCK-001(changed) TR-SIDEBARUI-LAYOUT-001(changed) TR-SNDREG-GATE-001(changed) TR-TAP-EDGE-001(changed) TR-TAPE-EDGE-001(changed) TR-TICKHIST-CAPTURE-001(changed) TR-TICKHIST-PERF-001(changed) TR-TICKHIST-RPC-001(changed) TR-TICKHIST-UI-001(changed) TR-VIC-EDGE-001(changed) TR-VIC-EDGE-002(changed) TR-VIC-EDGE-003(changed) TR-VIC-EDGE-004(changed) TR-VIC-EDGE-005(changed) TR-VIC-EDGE-006(changed) TR-VIC20-PIXEL-001(changed) TR-XBOXGPL-BRAND-001(changed)
+  earlier: TR-DET-001(changed) TR-HOST-DIAG-002(changed) TR-HOST-DIAG-003(changed) TR-INPUT-VKM-001(changed) TR-LIB-001(changed) TR-MEDIA-001(changed) TR-MVVM-001(changed) TR-PLAT-001(changed) TR-ROMM-SEC-001(changed) TR-STATE-001(changed)
+Testing-Requirements.md: sha 66E9F655 bytes 95876 sameAsBeforeRegen True; section ids 0 -> 0; changed 0 (today 0, earlier 0); duplicate-heading ids 0
+TR-per-FR-Mapping.md: sha 6F2F9C60 bytes 18619 sameAsBeforeRegen True; section ids 0 -> 0; changed 0 (today 0, earlier 0); duplicate-heading ids 0
+
+Line-level ids (files without per-id ## sections; ids found on +/- lines of git diff -U0 9221488):
+Testing-Requirements.md: ids on changed lines 30 (today 12, earlier/cross-ref 18)
+  today:   FR-CPU-004 FR-PRF-003 FR-RUNTIME-TAPE-002 FR-TAP-001 FR-TAP-002 FR-TAP-003 FR-TAP-005 TEST-TAPE-RAMP-001 TEST-TAPE-SENSE-001 TR-BUILD-001 TR-TAP-EDGE-001 TR-TAPE-EDGE-001
+  earlier/cross-ref: FR-CPU-001 FR-CPU-002 FR-CPU-003 FR-CPU-005 FR-INP-006 FR-PRF-001 FR-PRF-002 FR-PRF-004 FR-PRF-008 TEST-CFG-001 TEST-INPUT-001 TEST-MED-001 TEST-ROMM-LAUNCH-001 TEST-ROMM-SEC-001 TEST-SID-001 TEST-SNP-001 TEST-UISET-001 TR-INPUT-VKM-001
+TR-per-FR-Mapping.md: ids on changed lines 51 (today 18, earlier/cross-ref 33)
+  today:   FR-BACKFILL-MEDIA-001 FR-TAP-001 FR-TAP-002 FR-TAP-003 FR-TAP-004 FR-TAP-005 TEST-DRV-MOTOR-001 TEST-IEC-TIMING-001 TEST-SID-002 TEST-TAP-001 TEST-TAPE-RAMP-001 TEST-TAPE-SENSE-001 TR-DRV-EDGE-001 TR-IEC-EDGE-001 TR-SID-EDGE-004 TR-TAP-EDGE-001 TR-TAPE-EDGE-001 TR-VIC20-PIXEL-001
+  earlier/cross-ref: FR-ROMM-LAUNCH-001 FR-SID-013 FR-SNP-001 FR-SNP-002 FR-UI-003 FR-VIC20-002 TEST-BASELINE-CORRECTNESS-001 TEST-GRPC-001 TEST-REMOTE-INTEGRATION-001 TEST-ROMM-LAUNCH-001 TEST-ROMM-SEC-001 TEST-SID-001 TEST-SNP-001 TEST-UI-001 TEST-UI-DIAG-001 TEST-UISET-001 TEST-UISET-002 TEST-X64SC-LOCKSTEP-001 TR-BASELINE-CORRECTNESS-001 TR-CYCLE-001 TR-DET-001 TR-GRPC-BOUNDARY-001 TR-HOST-DIAG-002 TR-HOST-DIAG-003 TR-LIB-001 TR-MVVM-001 TR-PLAT-001 TR-REMOTE-INTEGRATION-001 TR-ROMM-SEC-001 TR-SETTINGS-TXN-001 TR-STATE-001 TR-UI-SHELL-001 TR-UIAXAML-VIEWS-001
+Requirements-Matrix.md: ids on changed lines 2 (today 1, earlier/cross-ref 1)
+  today:   TEST-BUILD-001
+  earlier/cross-ref: TEST-ROMM-LAUNCH-001
+
+Duplicate headings: all 10 FR duplicate-heading ids are the 10 FR "earlier" changes. Cause is store content, not the generator: each record title was shortened (e.g. FR-MED-002 "Video Recording") and its description starts with an embedded copy of the old rendered section ("## FR-MED-002: Video Recording" ... "**Title:** Video Recording (MP4 via FFmpeg)"), so the export renders a second heading.

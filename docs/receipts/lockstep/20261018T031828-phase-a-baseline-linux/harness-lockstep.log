@@ -1,0 +1,441 @@
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.68]     ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle [FAIL]
+[xUnit.net 00:00:02.71]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle [14 ms]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs:line 23
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc [6 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 32779
+Actual:   32776
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.StaAbsAfterTakenBcsRolA_WriteSample_ExportsNextPc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1238
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.73]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 76
+Actual:   31
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.LdaIndYAfterTakenBcsClc_DataRead_ShowsLoadedA() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1282
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.74]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks [FAIL]
+[xUnit.net 00:00:02.74]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags [FAIL]
+[xUnit.net 00:00:02.74]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks [< 1 ms]
+  Error Message:
+   wait-loop irq_delay delta=12 (want 11: 9 host CLK + 2 collapsed zp FETCH)
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.WaitLoopIteration_IrqPending_CountsThirteenViceClocks() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2476
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 32780
+Actual:   32777
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.CmpAbsAfterTakenBccLdaAbs_LastClk_ExportsNextPcAndFlags() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 995
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough [< 1 ms]
+  Error Message:
+   Wolf64 2142610 BMI dummy INC_PC; PC=$800F cyc=1 trail=0 full=True nonOvlF=True nonOvlR=True
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxThenTakenBmi_Cycle1_ExportsFallthrough() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2781
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.74]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 2
+Actual:   1
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.AbsoluteStoreThenImmediateLoad_SecondFetchCompletesLoad() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 4866
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.75]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 248
+Actual:   249
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Rts_DebugCycleTwo_HasCompletedLowBytePull() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 188
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.76]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 2
+Actual:   1
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBneThenLdaImm_SecondFetch_HoldsPreOpAAndOpcodePc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 4953
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.77]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX [FAIL]
+[xUnit.net 00:00:02.77]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY [FAIL]
+[xUnit.net 00:00:02.77]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 255
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TaxAfterNotTakenBne_LastClk_ExportsNextPcAndX() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2729
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 43
+Actual:   42
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterPla_LastClk_ExportsNextPcAndY() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2682
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 32778
+Actual:   32776
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.CpyImmAfterTakenBcsIny_LastClk_ExportsNextPcAndFlags() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 1042
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.78]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 44
+Actual:   43
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.InyAfterFusedCpyImm_LastClk_ExportsNextPcAndY() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 2636
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.79]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 7
+Actual:   76
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.SbcAbsYAfterSec_NoBranchLag_LastClk_FusesAluAndNextPc() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 5571
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.80]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 248
+Actual:   247
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_ReturnAddressPushTimingMatchesHostedVice() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 103
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.82]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 2
+Actual:   1
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.TakenBne_StolenFetch_Cycle1_ExportsFallThrough() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 5742
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.82]     ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner [FAIL]
+  Failed ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 1
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuVisiblePcTimingTests.Jsr_FinalOperandRead_CanBeHeldByExternalBusOwner() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs:line 81
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.84]     ViceSharp.TestHarness.LockstepValidationTests.ResetStateMatches [SKIP]
+[xUnit.net 00:00:02.84]     ViceSharp.TestHarness.LockstepValidationTests.First10000CyclesMatch [SKIP]
+[xUnit.net 00:00:02.84]     ViceSharp.TestHarness.LockstepValidationTests.First10000_Cia1TimerA_MatchesNative [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.LockstepValidationTests.First100000CyclesMatch [SKIP]
+  Skipped ViceSharp.TestHarness.LockstepValidationTests.ResetStateMatches [1 ms]
+  Skipped ViceSharp.TestHarness.LockstepValidationTests.First10000CyclesMatch [1 ms]
+  Skipped ViceSharp.TestHarness.LockstepValidationTests.First10000_Cia1TimerA_MatchesNative [1 ms]
+  Skipped ViceSharp.TestHarness.LockstepValidationTests.First100000CyclesMatch [1 ms]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.LockstepValidationTests.First100000_Cia1TimerA_MatchesNative [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.LockstepValidationTests.First100CyclesMatch [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.X64ScVariantLockstepTests.ViciiRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileScanlineMatches_ForEveryDeterministicNoCartridgeX64ScVariant [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.X64ScVariantLockstepTests.ViciiRasterTimingMatchesNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.X64ScVariantLockstepTests.ChipRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileFramesMatch_ForStandardCartridgeAutostart [SKIP]
+[xUnit.net 00:00:02.85]     ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedRamWindowsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant [SKIP]
+  Skipped ViceSharp.TestHarness.LockstepValidationTests.First100000_Cia1TimerA_MatchesNative [1 ms]
+  Skipped ViceSharp.TestHarness.LockstepValidationTests.First100CyclesMatch [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.ViciiRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileScanlineMatches_ForEveryDeterministicNoCartridgeX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.ViciiRasterTimingMatchesNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.ChipRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileFramesMatch_ForStandardCartridgeAutostart [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedRamWindowsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant [1 ms]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileFramesMatch_ForC64GsWithDeterministicGameSystemCartridge [SKIP]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileFramesMatch_ForUltimaxWithDeterministicCartridge [SKIP]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTenProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant [SKIP]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileScanlineMatches_ForUltimaxWithDeterministicCartridge [SKIP]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileScanlinesMatch_ForEveryDeterministicNoCartridgeX64ScVariant [SKIP]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.ResetStateMatches_ForEveryRequiredX64ScVariant [SKIP]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.ConnectedCia2IoWritesAndReadsMatchNative_ForC64Family [SKIP]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.ResetAfterActivityMatchesNative_ForEveryRequiredX64ScVariant [SKIP]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileFramesMatch_ForC64GsWithDeterministicGameSystemCartridge [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileFramesMatch_ForUltimaxWithDeterministicCartridge [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTenProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileScanlineMatches_ForUltimaxWithDeterministicCartridge [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileScanlinesMatch_ForEveryDeterministicNoCartridgeX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.ResetStateMatches_ForEveryRequiredX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.ConnectedCia2IoWritesAndReadsMatchNative_ForC64Family [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.ResetAfterActivityMatchesNative_ForEveryRequiredX64ScVariant [1 ms]
+[xUnit.net 00:00:02.91]     ViceSharp.TestHarness.X64ScVariantLockstepTests.ViciiRasterTimingMatchesNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.D64Attach_FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.D64Attach_BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.HeldSpace_FirstProfileFrameMatches_ForEveryKeyboardEnabledNoCartridgeX64ScVariant [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant [SKIP]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.ViciiRasterTimingMatchesNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.D64Attach_FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.D64Attach_BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.HeldSpace_FirstProfileFrameMatches_ForEveryKeyboardEnabledNoCartridgeX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant [1 ms]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileFrameMatches_ForC64GsWithDeterministicGameSystemCartridge [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileScanlinesMatch_ForUltimaxWithDeterministicCartridge [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileFrameMatches_ForUltimaxWithDeterministicCartridge [SKIP]
+[xUnit.net 00:00:02.92]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileScanlinesMatch_ForC64GsWithDeterministicGameSystemCartridge [SKIP]
+[xUnit.net 00:00:02.93]     ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedRamWindowsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant [SKIP]
+[xUnit.net 00:00:02.93]     ViceSharp.TestHarness.X64ScVariantLockstepTests.AbsentCia2IoReadsMatchNative_ForUltimax [SKIP]
+[xUnit.net 00:00:02.93]     ViceSharp.TestHarness.X64ScVariantLockstepTests.ChipRegisterCheckpointsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant [SKIP]
+[xUnit.net 00:00:02.93]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileFrameMatches_ForStandardCartridgeAutostart [SKIP]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileFrameMatches_ForC64GsWithDeterministicGameSystemCartridge [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileScanlinesMatch_ForUltimaxWithDeterministicCartridge [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileFrameMatches_ForUltimaxWithDeterministicCartridge [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstTwoProfileScanlinesMatch_ForC64GsWithDeterministicGameSystemCartridge [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedRamWindowsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.AbsentCia2IoReadsMatchNative_ForUltimax [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.ChipRegisterCheckpointsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant [1 ms]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileFrameMatches_ForStandardCartridgeAutostart [1 ms]
+[xUnit.net 00:00:02.93]     ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileScanlineMatches_ForC64GsWithDeterministicGameSystemCartridge [SKIP]
+[xUnit.net 00:00:02.96]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64) [FAIL]
+[xUnit.net 00:00:02.97]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256) [FAIL]
+[xUnit.net 00:00:02.97]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024) [FAIL]
+[xUnit.net 00:00:02.97]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [FAIL]
+[xUnit.net 00:00:02.97]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 5000) [FAIL]
+[xUnit.net 00:00:02.97]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 1024) [FAIL]
+[xUnit.net 00:00:02.97]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [FAIL]
+[xUnit.net 00:00:02.98]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 5000) [FAIL]
+  Skipped ViceSharp.TestHarness.X64ScVariantLockstepTests.FirstProfileScanlineMatches_ForC64GsWithDeterministicGameSystemCartridge [1 ms]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64) [32 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 101
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 101
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 101
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 5000) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 1024) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 5000) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:02.98]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [FAIL]
+[xUnit.net 00:00:02.98]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 1024) [FAIL]
+[xUnit.net 00:00:02.98]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [FAIL]
+[xUnit.net 00:00:02.98]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 64) [FAIL]
+[xUnit.net 00:00:02.98]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [FAIL]
+[xUnit.net 00:00:02.99]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256) [FAIL]
+[xUnit.net 00:00:02.99]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 5000) [FAIL]
+[xUnit.net 00:00:02.99]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [FAIL]
+[xUnit.net 00:00:02.99]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 1024) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 44
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 64) [1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 134
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 134
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 134
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 5000) [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Int32 cycles) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 134
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 212
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 71
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:02.99]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged [< 1 ms]
+  Error Message:
+   System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\xvic.exe'.
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.RequireFile(String path, String label) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 249
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCore(String manifestPath, String nativeLibraryPath, String romRoot, String workloadProgram) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 63
+   at ViceSharp.TestHarness.Vic20.XvicOraclePrerequisites.ValidateCurrent() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs:line 36
+   at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs:line 180
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261018T031828-phase-a-baseline-linux/harness-lockstep.trx
+
+Failed!  - Failed:    35, Passed:   136, Skipped:    37, Total:   208, Duration: 343 ms - ViceSharp.TestHarness.dll (net10.0)

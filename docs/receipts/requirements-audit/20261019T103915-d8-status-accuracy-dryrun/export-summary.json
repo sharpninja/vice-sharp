@@ -1,0 +1,31 @@
+{
+  "exportedAt": "2026-10-19T10:39:16",
+  "machine": "PAYTON-LEGION2",
+  "pluginRoot": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0",
+  "types": {
+    "fr": {
+      "method": "workflow.requirements.listFr",
+      "items": 235,
+      "totalCount": 235,
+      "rawSha256": "36D8D67B644395D5A970ABA1FFC2DD91988045080AC7CE2254C6A3EDC874348C"
+    },
+    "tr": {
+      "method": "workflow.requirements.listTr",
+      "items": 139,
+      "totalCount": 139,
+      "rawSha256": "7335CAB14C6E7B082E058257AF12FE312EB33E8ADBFD5D35D4760690252121A2"
+    },
+    "test": {
+      "method": "workflow.requirements.listTest",
+      "items": 143,
+      "totalCount": 143,
+      "rawSha256": "17787A4F73181B0EED21FEB90CA020ADA5D61FBC9C22E6894F45A64A27D8D570"
+    },
+    "mapping": {
+      "method": "workflow.requirements.listMappings",
+      "items": 755,
+      "totalCount": 755,
+      "rawSha256": "8F918957EC6ABAC21544EB38C455EFE83C4336805995EDBA31D7C27F54FD7066"
+    }
+  }
+}

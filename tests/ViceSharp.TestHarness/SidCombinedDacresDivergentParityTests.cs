@@ -157,6 +157,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveTableSelector_ST_ix800()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -191,6 +192,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveSubTableMap_PT_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -226,6 +228,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveTriangleFormula_ST_ix7F8()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -258,6 +261,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveSawtoothFormula_PS_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -292,6 +296,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveUsesRomNotAnalyticAnd_PST_ix800()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -328,6 +333,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveDistinct6581vs8580Tables_ST_ix7F8()
     {
         // No oracle: two independent managed chip instances.
@@ -380,6 +386,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveGatingFormula_ST_ix800()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -413,6 +420,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoPulseGating_PT_pw0()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -446,6 +454,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoNoiseGating_PS_pw0()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -481,6 +490,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveRingIndexMsbSubstitution_PT_ring()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -517,6 +527,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-11", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveRingMsbMaskFormula_ArmedWhenNoSaw()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -556,6 +567,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-12", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoisePulseRouting_NPS_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -594,6 +606,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-13", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoisePulse6581Formula_NPT_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -631,6 +644,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-14", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveNoisePulse8580Formula_NPST_8580_ix800()
     {
         // No oracle: two independent managed chip instances at ix=0x7F8 (PST, pw=0).
@@ -685,6 +699,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-15", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveSawAccWriteback_ST_postIx800()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -724,6 +739,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-16", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveSRWriteback_NoisePST()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -761,6 +777,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-COMBINED-17", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveVerbatimRomTable_ST_MultiplePositions()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -834,6 +851,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacOutputUsesModelDac_Sawtooth_ix400()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -889,6 +907,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WavePath12Bit_Sawtooth_ix_A00()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -938,6 +957,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacBuiltWithCorrectParams_6581vs8580()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -976,6 +996,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacMosfetLeakage_6581Higher()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1011,6 +1032,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacPerBitVoltageAlgorithm_Boundaries()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1039,6 +1061,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacVoSuperpositionAndRounding_MonotonicFor8580()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1074,6 +1097,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDac6581MissingTermination_Bit0EqualsBit1()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1100,6 +1124,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDac8580CorrectTermination_MonotonicLowBits()
     {
         ushort[] dac8580 = Sid6581.BuildEnvelopeDacTable(12, 2.00, term: true);
@@ -1125,6 +1150,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacRoundHalfUp_MaxEntryIs0xFFF()
     {
         ushort[] dac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
@@ -1150,6 +1176,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacRawOsc3VsDacVoiceOutput_Diverge()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -1208,6 +1235,7 @@ public sealed class SidCombinedDacresDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-DACRES-11", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WaveDacWaveZeroLevel_Scaled12Bit()
     {
         var sid6581 = BuildSid6581();

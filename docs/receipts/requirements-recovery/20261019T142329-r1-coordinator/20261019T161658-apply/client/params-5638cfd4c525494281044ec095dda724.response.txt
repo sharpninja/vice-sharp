@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261019T211745Z-07ac
+  result:
+    id: TR-IEC-EDGE-001
+    title: IEC bus ATN-response within 985-cycle spec window
+    description: IecBus.Tick() asserts CLK and DATA low within 985 cycles (Tat=1ms at PAL 985,248Hz) of ATN falling edge. Releases both on ATN rising edge. VICE iecbus/iecbus.c:247-266.
+    status: pending
+    priority: high
+    area: IEC
+    subarea: EDGE
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:17:45.8932540+00:00
+    updatedAt: 2026-10-19T21:17:45.8933386+00:00
+  deprecated: true
+
+---
+

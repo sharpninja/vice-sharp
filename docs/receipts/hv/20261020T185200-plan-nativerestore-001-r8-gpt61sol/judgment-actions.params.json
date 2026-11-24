@@ -1,0 +1,49 @@
+{
+  "requestId": "req-20261020T235529Z-nativerestore-r8",
+  "actions": [
+    {
+      "order": 1,
+      "type": "design_decision",
+      "status": "completed",
+      "description": "Judge revision 8 as a class-1 plan before execution. The request retains stale revision-4 labels; all 41 content pins match the live revision-8 subject. Preserve actual revision-4 dispositions separately from the original round-4 receipt rather than relabeling historical findings."
+    },
+    {
+      "order": 2,
+      "type": "design_decision",
+      "status": "completed",
+      "description": "The original N19 defect was global export timing exclusivity. R12 now uses the actual chosen trap boundary and write clock; BRK remains an internal post-fetch export, and event.c independently proves snapshot writing from a trap callback. Treat surviving section-1 universal checkpoint wording and section-7 metadata overstatement as a low-severity editorial ADD-AC, without inventing a checkpoint safety gap."
+    },
+    {
+      "order": 3,
+      "type": "design_decision",
+      "status": "completed",
+      "description": "Honor R12 literally: only trigger 100000 and actual write/MAINCPU clock 100000 on both hosts can accept xvic fixtures. The named nonpassing BLOCKED exit holds Phase E and all done-states while independent D cases continue with separate denominators. Do not treat that plan contract as an executed native acceptance."
+    },
+    {
+      "order": 4,
+      "type": "design_decision",
+      "status": "completed",
+      "description": "R15 explicitly amends real AC1 inputs to 1.2 and 1.4 in D1 through the wrapper. Keep the synthetic 1.3 matrix, AC2 integrity semantics, and managed TR-CYCLE-001 AC4/task-5 acceptance pending."
+    },
+    {
+      "order": 5,
+      "type": "design_decision",
+      "status": "completed",
+      "description": "Add a nonblocking D1/D5 control for every nonzero native snapshot-writer result, including positive 1 from the xvic IEEE488 failure path. Existing write-failure/publication isolation gates already fail closed; this sharpens their mocks rather than authorizing any immutable-source change."
+    },
+    {
+      "order": 6,
+      "type": "validation",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/TestResults/vic20-comparator.trx",
+      "description": "Allowed Release TestHarness filter FullyQualifiedName~Vic20HalfCycleComparatorTests completed: total/executed 1, passed 0, failed 1, skipped 0, exit 1; assertion at fixture line 23 proves HalfCycleState absent. Retained TRX, VSTest diagnostics and stdout/stderr. No Phase D implementation or native build ran."
+    },
+    {
+      "order": 7,
+      "type": "create",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T185200-plan-nativerestore-001-r8-gpt61sol/finding-history.json",
+      "description": "Authored review-only PowerShell helpers and evidence exclusively in this receipt directory. Recounted 43 token candidates, 5 categorized, 56 semantic candidates; inspected all 20 historical patch hunks and 2527 preserved paths; 25 materialized source blobs match pinned Git objects."
+    }
+  ]
+}

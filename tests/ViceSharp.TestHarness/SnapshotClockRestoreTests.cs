@@ -15,7 +15,12 @@ using Xunit;
 /// </summary>
 public sealed class SnapshotClockRestoreTests
 {
-    /// <summary>Capture, advance and restore must rewind both status and the next master tick.</summary>
+    /// <summary>
+    /// FR-SNP-001 / FR-SNP-002.
+    /// Use case: Capture a running machine, advance, then restore.
+    /// Acceptance: Status and the master clock rewind, and the next tick follows the
+    /// restored position.
+    /// </summary>
     [Fact]
     public async Task CaptureAdvanceRestore_RewindsMasterClockAndStatus()
     {
@@ -35,7 +40,11 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(38, session.Machine.Clock.TotalCycles);
     }
 
-    /// <summary>Actual counter phases survive capture even when devices were registered after cycle zero.</summary>
+    /// <summary>
+    /// FR-SNP-002 / FR-SNP-003.
+    /// Use case: Save a clock with slower devices registered after cycle zero.
+    /// Acceptance: Restoring replays both devices' divider phases.
+    /// </summary>
     [Fact]
     public async Task CaptureAdvanceRestore_ReplaysBothSlowDevicePhases()
     {
@@ -60,7 +69,11 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(expected, events);
     }
 
-    /// <summary>A DTO cycle outside the signed clock range is rejected before RAM or clock changes.</summary>
+    /// <summary>
+    /// FR-SNP-002.
+    /// Use case: Restore requests a DTO cycle beyond the signed clock range.
+    /// Acceptance: The request is rejected before RAM or clock mutation.
+    /// </summary>
     [Fact]
     public async Task Restore_UnrepresentableCycle_LeavesMachineUnchanged()
     {
@@ -78,7 +91,12 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(0x99, session.Machine.Bus.Peek(0x4000));
     }
 
-    /// <summary>Legacy v2 bytes remain loadable; cycle rebasing explicitly reports its missing timing state.</summary>
+    /// <summary>
+    /// FR-SNP-002.
+    /// Use case: Load a version-2 snapshot without full transient clock data.
+    /// Acceptance: The cycle is rebased and the result warns that timing restoration is
+    /// best effort.
+    /// </summary>
     [Fact]
     public async Task Restore_LegacyV2_RebasesCycleWithBestEffortWarning()
     {
@@ -96,7 +114,11 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(38, session.Machine.Clock.TotalCycles);
     }
 
-    /// <summary>Malformed clock data and mismatched DTO metadata cannot partially restore chip state.</summary>
+    /// <summary>
+    /// FR-SNP-002.
+    /// Use case: Restore input has malformed clock state or mismatched DTO metadata.
+    /// Acceptance: RAM, CPU, and clock state are unchanged.
+    /// </summary>
     [Theory]
     [InlineData("truncated")]
     [InlineData("trailing")]
@@ -134,7 +156,11 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(0x99, session.Machine.Bus.Peek(0x4000));
     }
 
-    /// <summary>Coordinated snapshots restore every clock, including a peripheral with a different frequency.</summary>
+    /// <summary>
+    /// FR-SNP-001 / FR-SNP-002.
+    /// Use case: Capture and restore a machine with a separately clocked peripheral.
+    /// Acceptance: Both coordinated clocks rewind to their captured positions.
+    /// </summary>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -172,7 +198,11 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(38 * peripheral.Clock.FrequencyHz / host.Clock.FrequencyHz, peripheral.Clock.TotalCycles);
     }
 
-    /// <summary>Real C64+1541 factory wiring restores clock bytes for both units and their coordinator.</summary>
+    /// <summary>
+    /// FR-SNP-001 / FR-SNP-002.
+    /// Use case: Capture a factory-wired C64 with a real 1541 on unit 8 or 9.
+    /// Acceptance: The master, drive, and coordinator clock bytes round-trip.
+    /// </summary>
     [Theory]
     [InlineData(8)]
     [InlineData(9)]
@@ -200,7 +230,12 @@ public sealed class SnapshotClockRestoreTests
         Assert.All(rig.Coordinator.Systems, system => Assert.True(system.Clock.TotalCycles > 37));
     }
 
-    /// <summary>Changing a drive's address rejects all clock/chip mutation, even when frequencies match.</summary>
+    /// <summary>
+    /// FR-SNP-002.
+    /// Use case: Restore a drive snapshot on a different unit with the same clock
+    /// frequency.
+    /// Acceptance: The restore is rejected before machine or drive state mutates.
+    /// </summary>
     [Fact]
     public async Task TrueDrive_WrongUnit_RejectsBeforeMutation()
     {
@@ -226,7 +261,12 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(0x99, target.Machine.Bus.Peek(0x4000));
     }
 
-    /// <summary>Malformed binary string lengths return InvalidArgument before restoring RAM or any clock.</summary>
+    /// <summary>
+    /// FR-SNP-002.
+    /// Use case: Restore a drive snapshot containing malformed binary identity lengths.
+    /// Acceptance: The result is InvalidArgument and RAM and all clocks retain their old
+    /// state.
+    /// </summary>
     [Fact]
     public async Task TrueDrive_MalformedIdentityLength_ReturnsInvalidArgumentWithoutMutation()
     {
@@ -253,7 +293,11 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(0x99, session.Machine.Bus.Peek(0x4000));
     }
 
-    /// <summary>Pending NMI, IRQ delay and unconsumed line edges replay identically on an independently constructed clock.</summary>
+    /// <summary>
+    /// FR-SNP-002 / FR-SNP-003.
+    /// Use case: Transfer pending interrupts and line state to an independent clock.
+    /// Acceptance: NMI, IRQ delay, and unconsumed line edges replay identically.
+    /// </summary>
     [Fact]
     public void ClockSnapshot_RestoresInterruptTimingAndPhysicalLines()
     {
@@ -280,7 +324,13 @@ public sealed class SnapshotClockRestoreTests
         Assert.Equal(expected, Trace(restored.Clock, restored.Cpu, 32));
     }
 
-    /// <summary>Legacy import discards stale edge latches and starts fixed divisor phases from the restored origin.</summary>
+    /// <summary>
+    /// FR-SNP-002.
+    /// Use case: Load a legacy cycle position while the clock has pending transient
+    /// state.
+    /// Acceptance: Stale edges clear, divisor phases restart at the restored origin, and
+    /// devices retain their state.
+    /// </summary>
     [Fact]
     public void LegacyClockPosition_ReinitializesTransientTimingWithoutResettingDevices()
     {

@@ -28,10 +28,8 @@ partial class Build
                         .SetConfiguration(Configuration)
                         .SetResultsDirectory(results)
                         .SetLoggers($"trx;LogFileName={project}.trx")
-                        // Operator-approved Windows scope: retain all RomM tests. These 13
-                        // deployment cases explicitly require Linux, and are retained unchanged.
-                        .When(_ => !RommContractMocks && OperatingSystem.IsWindows() && project == "ViceSharp.Library.Tests",
-                            x => x.SetFilter("FullyQualifiedName!~ViceSharp.Library.Tests.Packaging.UserLocalDeploymentTests"))
+                        // PLAN-NUKETESTS-001: the Linux-only deployment cases moved to build.tests
+                        // (target BuildTest), so the Library tests need no host filter here.
                         .When(_ => RommContractMocks, x => x.SetFilter("FullyQualifiedName~RommDesktopContractTests")));
                     var document = System.Xml.Linq.XDocument.Load(results / $"{project}.trx");
                     var counters = document.Descendants().Single(x => x.Name.LocalName == "Counters");

@@ -29,10 +29,12 @@ public sealed class VicIID011ControlTests
     private const ushort ScreenControl1 = 0xD011;
     private const ushort RasterCompareLow = 0xD012;
 
-    private static Mos6569 BuildVic()
+    /// <summary>Constructs the selected PAL model for the control-register cases.</summary>
+    private static Mos6569 BuildVic(bool use8565 = false)
     {
         var irq = new InterruptLine(InterruptType.Irq);
-        return new Mos6569(new BasicBus(), irq);
+        var bus = new BasicBus();
+        return use8565 ? new Mos8565(bus, irq) : new Mos6569(bus, irq);
     }
 
     private static void AdvanceTo(Mos6569 vic, ushort rasterLine, byte rasterCycle)
@@ -106,13 +108,17 @@ public sealed class VicIID011ControlTests
     /// happened in between.
     /// Acceptance: After Write $D011 = $80 (compare bit 8 = 1) with
     /// VIC at line 0, Read $D011 bit 7 = 0 (current line 0, bit 8 = 0).
-    /// After advancing to raster line $100 (bit 8 = 1), Read $D011
-    /// bit 7 = 1 regardless of the previously latched compare value.
+    /// At the start of line $100, the CPU still sees line $0FF.
+    /// After ticking the transition, Read $D011 bit 7 = 1.
+    /// 2026-11-23, TEST-VIC-001 and D6/R18: cover the cycle boundary
+    /// on the PAL 6569 and 8565.
     /// </summary>
-    [Fact]
-    public void D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch(bool use8565)
     {
-        var vic = BuildVic();
+        var vic = BuildVic(use8565);
 
         // Latch compare bit 8 = 1 via $D011 bit 7 write.
         vic.Write(ScreenControl1, 0x80);
@@ -122,8 +128,12 @@ public sealed class VicIID011ControlTests
         var atLineZero = vic.Read(ScreenControl1);
         Assert.Equal(0x00, atLineZero & 0x80);
 
-        // Advance to line $100 (raster line 256 -> bit 8 = 1).
+        // Use the opposite compare bit to prove the high raster read
+        // comes from the CPU-visible line.
+        vic.Write(ScreenControl1, 0x00);
         AdvanceTo(vic, 0x100, 0);
+        Assert.Equal(0x00, vic.Read(ScreenControl1) & 0x80);
+        vic.Tick();
         var atLineHigh = vic.Read(ScreenControl1);
         Assert.Equal(0x80, atLineHigh & 0x80);
     }

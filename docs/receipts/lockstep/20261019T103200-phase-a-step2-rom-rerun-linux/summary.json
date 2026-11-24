@@ -1,0 +1,49 @@
+{
+  "stamp": "20261019T103200",
+  "romRoot": "/home/sharpninja/github/vice-sharp/native/vice/vice/data",
+  "results": [
+    {
+      "run": "harness-acceptance-romroot",
+      "filter": "FullyQualifiedName~AcceptanceTests",
+      "exitCode": 0,
+      "total": 210,
+      "passed": 210,
+      "failed": 0,
+      "skipped": 0,
+      "failedNames": []
+    },
+    {
+      "run": "harness-vic20-romroot",
+      "filter": "FullyQualifiedName~Vic20NativeLockstepTests|FullyQualifiedName~Vic20HalfCycleComparatorTests",
+      "exitCode": 1,
+      "total": 19,
+      "passed": 0,
+      "failed": 19,
+      "skipped": 0,
+      "failedNames": [
+        "ViceSharp.TestHarness.Vic20.Vic20HalfCycleComparatorTests.RegistersMatch_BusAddressDiffers_ReportsExactHalfCycle",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: \"vic20\", cycles: 1024)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: \"vic20\", cycles: 256)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: \"vic20\", cycles: 4096)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: \"vic20\", cycles: 5000)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: \"vic20\", cycles: 64)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: \"vic20ntsc\", cycles: 1024)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: \"vic20ntsc\", cycles: 256)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: \"vic20ntsc\", cycles: 5000)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 5000)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 64)",
+        "ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged"
+      ],
+      "firstFailureMessage": "System.InvalidOperationException : Required xvic executable is missing: '/home/sharpninja/github/vice-sharp/docs/requirements/oracles/C:\\Users\\kingd\\AppData\\Local\\Microsoft\\WinGet\\Packages\\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\\GTK3VICE-3.10-win64\\bin\\xvic.exe'."
+    }
+  ],
+  "nativeInventoryUnchanged": true,
+  "finishedAt": "2026-10-19T10:29:49"
+}

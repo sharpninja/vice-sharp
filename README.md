@@ -26,7 +26,7 @@ Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compati
 
 ## Install
 
-The current line is **v1.3.3** (GitVersion `next-version`; NuGet + MSI / winget packaging). Published nuget.org / winget packages may lag until the next release tag.
+The current release is **v1.4.0**. The [GitHub release](https://github.com/sharpninja/vice-sharp/releases/tag/v1.4.0) includes the Windows MSI and NuGet packages.
 
 ```pwsh
 # Desktop UI as a dotnet global tool (command: vicesharp)
@@ -43,7 +43,7 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
 
 ### Linux: install for your user
 
-Run Nuke `DeployUser` as your regular user on Linux with a .NET SDK compatible with [global.json](global.json) (currently 10.0.301 or a later 10.0 feature band). It publishes a self-contained Release build for `x86_64` or `aarch64` and installs the app, launcher, desktop entry, and icon inside your home directory.
+Run Nuke `DeployUser` as your regular user on Linux with a .NET SDK compatible with [global.json](global.json) (currently 10.0.301 or a later 10.0 feature band). It publishes a self-contained Release build for `x86_64` or `aarch64` and installs the app, launcher, desktop entry, and icon for that user.
 
 ```bash
 ./build.sh DeployUser
@@ -52,7 +52,7 @@ Run Nuke `DeployUser` as your regular user on Linux with a .NET SDK compatible w
 
 The PowerShell equivalent is `./build.ps1 DeployUser`. `DeployYay` is a compatibility alias for the same user-local deployment; it does not invoke `yay`, `pacman`, or `sudo`.
 
-Application releases live under `~/.local/share/vicesharp/releases/<version>-<unique>/`; the `current` symlink selects the active release. The launcher is `~/.local/bin/vicesharp`, and the desktop entry is `~/.local/share/applications/vicesharp.desktop`. If `XDG_DATA_HOME` is set, it replaces `~/.local/share` and must be an absolute path inside your home. Installation rejects root execution and symlinked or unmanaged destination conflicts. Older releases and existing `ViceSharp` user data are preserved.
+Application releases live under `~/.local/share/vicesharp/releases/<version>-<unique>/`; the `current` symlink selects the active release. The launcher is `~/.local/bin/vicesharp`, and the desktop entry is `~/.local/share/applications/vicesharp.desktop`. If `XDG_DATA_HOME` is set, it replaces `~/.local/share` and must be an absolute path inside your home. Existing managed installations can be updated through user-owned `~/.local` and `~/.local/bin` directory symlinks with trusted targets. Installation rejects root execution, unsafe links, and unmanaged destination conflicts. Older releases and existing `ViceSharp` user data are preserved.
 
 An existing system package remains installed. Put `~/.local/bin` before `/usr/bin` in your shell's `PATH` to select the user deployment with `vicesharp`; check with `command -v vicesharp`, or invoke `~/.local/bin/vicesharp` directly. The desktop entry selects the absolute user launcher independently of shell `PATH`.
 
@@ -60,7 +60,7 @@ The app includes C64 GTK3 and SDL keyboard layouts under `data/C64` in its relea
 
 Saving RomM credentials on Linux requires the optional `libsecret` package (which provides `secret-tool`) and a running, unlocked Secret Service keyring, such as GNOME Keyring or KWallet with Secret Service support enabled.
 
-Linux audio uses the SDL2 shared library (`libSDL2-2.0.so.0`, also provided by Arch's `sdl2-compat`) and the current user's audio service/device. `DeployUser` does not install system dependencies. The desktop enables sound by default; `VICESHARP_AUDIO=0` disables it. Headless and test hosts remain silent unless explicitly enabled. The C64 BASIC READY screen is normally silent; use a program that produces sound to check playback.
+Linux audio uses the SDL2 shared library (`libSDL2-2.0.so.0`, also provided by Arch's `sdl2-compat`) and the current user's audio service/device. `DeployUser` leaves system dependencies to the host. The desktop enables sound by default. Set `VICESHARP_AUDIO=0` to disable it. Headless hosts are silent by default. Linux tests that exercise SDL use its silent dummy driver, which discards playback and leaves pacing to the host clock. The C64 BASIC READY screen is normally silent. Use a program that produces sound to check playback.
 
 On first local desktop launch, missing default C64 ROMs are downloaded from the VICE GitHub mirror, hash-verified, and cached under `~/.local/share/ViceSharp/roms` (or `$XDG_DATA_HOME/ViceSharp/roms`). Set `VICESHARP_ROM_PATH` or `VICE_DATA_PATH` to prefer an existing ROM set; see [docs/ROMs.md](docs/ROMs.md). ROMs are not bundled. See the [RomM library guide](docs/USER-GUIDE.md#6c-romm-library) for connecting a server and attaching downloaded games, including T64 archives.
 
@@ -79,20 +79,20 @@ Both targets accept `--package-version-override X.Y.Z`; when omitted, they use t
 
 ## Status
 
-> Status audited 2026-10-04. Native VICE is the immutable behavioral oracle. Historical lockstep receipts remain valid only for the exact models, checkpoints, cycle budgets, and fields they name. They do not establish whole-machine or release-wide parity.
+> Status audited 2026-11-23. Native VICE is the immutable behavioral oracle. Lockstep and snapshot receipts establish parity for the exact models, checkpoints, cycle budgets, and fields they record. Whole-machine parity remains open.
 
 - **C64:** Bounded x64sc lockstep and checkpoint suites exist, including historical 100,000-cycle and multi-frame receipts. Full classic VICE behavior and edge-case parity are being re-audited against active FR/TR/TEST acceptance criteria.
 - **VIC-20:** Historical PAL and NTSC 10-second A/X/Y/S/P/PC receipts exist, plus scoped video, cartridge, flash, and audio tests. Full xvic parity is not yet accepted. Follow [PLAN-VICE-IMMUTABLE-001](docs/plans/PLAN-VICE-IMMUTABLE-001.md) and [PLAN-VSFLOCKSTEP-001](docs/plans/PLAN-VSFLOCKSTEP-001.md).
 - **Snapshots:** The current host routes C64 snapshots through `vice-sharp.machine-snapshot.v2` and non-C64 snapshots through `vice-sharp.runtime-snapshot.v1`. Managed VSF staging already exists in the test harness, but normal public and desktop save/load paths do not yet use canonical native VICE `.vsf`. Proprietary formats are not a substitute for the required VICE format.
-- **Native boundary:** The checked-in `native/vice` revision is the immutable reference. Remediation moves build, observation, stepping, compatibility, and snapshot integration into external wrappers. No parity result may depend on modifying native VICE.
+- **Native boundary:** The checked-in `native/vice` revision is the immutable reference. Phase D was accepted after Linux and Windows verified the pinned observers and all 11 Slice 1 cases, including C64 snapshots from MOS6569 and MOS8565. See the [Phase D plan](docs/plans/PLAN-NATIVERESTORE-001.md) and [two-host exit receipt](docs/receipts/native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-phase-d-acceptance).
 - **VIC-20 settings:** The current Avalonia working tree binds VIC-20 memory and expansion sections to `IsVic20Selected`, and the ViewModel raises visibility changes when the selected profile changes or settings load.
 - **Product scope:** Avalonia desktop and Console are supported product shells. Microsoft Store and Xbox/UWP are cancelled legacy source, not current targets.
 
 ## Verification evidence
 
-Use exact receipts and acceptance tests, not percentage dashboards, to judge parity. Durable historical VIC-20 receipts are indexed in [docs/README.md](docs/README.md#lockstep-receipts-durable). Current remediation gates and their required zero-failed, zero-skipped evidence are defined in the two plans above.
+Use exact receipts and acceptance tests to judge parity. The [documentation index](docs/README.md#lockstep-receipts-durable) lists historical VIC-20 receipts. The Phase D ordinary gate requires exact expected case identities, zero skips, and only the 20 approved R9 failures on each host. The [cumulative Slice 1 gate](docs/plans/PLAN-NATIVERESTORE-001.md) checks real immutable VICE snapshot cases separately.
 
-The 2026-10-04 traceability audit found 235 canonical IDs, 149 referenced in source/tests, 86 canonical IDs without source/test references, and 1,011 noncanonical IDs in source/tests. This is an open remediation baseline, not a green gate.
+The 2026-11-23 traceability audit found 240 canonical IDs, with 165 referenced in source or tests and 75 awaiting references. It also found 1,005 noncanonical IDs. These counts describe the open traceability backlog.
 
 ## Machine roadmap
 
@@ -128,12 +128,14 @@ build.cmd Compile     # Windows
 | `Clean` | Remove bin/obj/artifacts |
 | `Restore` | Restore NuGet packages |
 | `Compile` | Build with TreatWarningsAsErrors |
-| `Test` | Run tests with filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration` (separate determinism, paid AI, quarantined parity, and external integration gates) |
+| `Test` | Run the current host's ordinary suite and retain TRX results. [Phase D A05](docs/plans/PLAN-NATIVERESTORE-001.md) verifies the host's approved baseline. |
+| `HostIntegrationTest` | Run the matching host integration cases and retain their TRX. |
+| `NativeSnapshotCompatibilityTest --native-snapshot-through-slice 1` | Run the cumulative native VICE snapshot gate with the pinned observers. |
 | `DeterminismTest` | Run determinism verification tests |
 | `RommDesktopTest` | Run the managed Heads/Library desktop checks without the native harness; `--romm-contract-mocks` selects the contract mock gate |
 | `RunConsole` | Run the console reference shell |
 | `RunAvalonia` | Run the Avalonia desktop UI |
-| `DeployUser` | Publish Release and install the Linux desktop app in the current user's home |
+| `DeployUser` | Publish and activate a user-local Linux desktop release |
 | `DeployYay` | Compatibility alias for `DeployUser` |
 | `PackYay` | Build an Arch package without installing it |
 | `PublishWiki` | Legacy wiki target. Do not use it for requirements regeneration until it is migrated from direct REST to the supported MCP plugin `workflow.requirements.generateDocument` path. |

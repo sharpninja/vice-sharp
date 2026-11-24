@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "github",
-  "generatedAtUtc": "2026-10-16T17:33:50.2395265+00:00",
+  "generatedAtUtc": "2026-11-24T17:51:05.3911797+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -40,9 +40,11 @@
     "TR-Host-Prg.md",
     "Plan-Immutable-Native-VICE.md",
     "Plan-Native-VICE-VSF-Lockstep.md",
+    "Plan-Phase-D-Native-VICE-Restoration.md",
     "RomM-Library.md",
     "Avalonia-Desktop.md",
     "RomM-Desktop-Validation.md",
-    "Documentation-Index.md"
+    "Documentation-Index.md",
+    "Native-VICE-Builds.md"
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "stage": "Checkpoint",
+  "queuePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T122200-plan-nativerestore-001-gpt61sol/plugin-cache/failsafe/20261020T173840Z-review_checkpoint-aeb3.yaml",
+  "queueSha256": "2E4BDF649BAA19FFA9513B12C602C01812753F9C2BD5CF0636FC1393B1F348A8",
+  "queued": true,
+  "persisted": false,
+  "primaryReadback": false,
+  "localReadbackMatches": true,
+  "crlfLfNormalizationApplied": false,
+  "reviewerSessionId": "Codex-20261020T173749Z-hv-plan-nativerestore-001",
+  "reviewerRequestId": "req-20261020T173749Z-turn-5e79",
+  "timestampLocal": "2026-10-20T12:38:40.785-05:00"
+}

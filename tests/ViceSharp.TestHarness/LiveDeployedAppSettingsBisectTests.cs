@@ -13,6 +13,7 @@ using Xunit;
 /// app's own EffectiveClockPercent, to isolate which knob carries the slowdown
 /// in the REAL composition.
 /// </summary>
+[Trait("Category", "Diagnostic")]
 public sealed class LiveDeployedAppSettingsBisectTests
 {
     /// <summary>

@@ -1,0 +1,30 @@
+2026-10-19T10:31:39 dotnet: C:\Program Files\dotnet\dotnet.exe
+2026-10-19T10:31:39 dotnet --version: 10.0.402
+2026-10-19T10:31:39 HEAD: d00e8c5584d0031b3637c649335964f8d5225da0
+2026-10-19T10:31:39 branch: develop
+2026-10-19T10:31:39 gitlink: cc67418cba58e71d8e70fd353e9de47199ad2075
+2026-10-19T10:31:40 native-inventory-before.txt: 2539 entries (12 tracked changes, 2527 untracked), sha256 C7848A24867CD60C49FE6088692A6E4565240868C89D811F806B429CDB3CBFC5
+2026-10-19T10:31:40 dotnet build F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release -p:ViceNativeProject=F:\GitHub\vice-sharp\native\__vice-native-disabled-phase-a__.proj -v:detailed
+2026-10-19T10:31:56 build exit 0; BuildViceNative skip line present: False; Vice.Native.proj mentioned in build log: False
+2026-10-19T10:31:56 build: Build succeeded.
+2026-10-19T10:31:56 build: 1 Warning(s)
+2026-10-19T10:31:56 build: 0 Error(s)
+2026-10-19T10:31:56 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-build --blame-hang-timeout 30m --filter "FullyQualifiedName~CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch|FullyQualifiedName~CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode|FullyQualifiedName~CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch|FullyQualifiedName~Mos6510NmiTests.Nmi_IsEdgeTriggered_HoldingLineDoesNotRefire|FullyQualifiedName~Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState" --logger trx;LogFileName=CpuNmiFive.trx
+2026-10-19T10:32:01 CpuNmiFive: exit 1, total 5, executed 5, passed 1, failed 4, skipped 0
+2026-10-19T10:32:01 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-build --blame-hang-timeout 30m --filter "Category=Determinism" --logger trx;LogFileName=Determinism.trx
+2026-10-19T10:32:04 Determinism: exit 0, total 5, executed 5, passed 5, failed 0, skipped 0
+2026-10-19T10:32:04 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-build --blame-hang-timeout 30m --filter "FullyQualifiedName~AcceptanceTests" --logger trx;LogFileName=Acceptance.trx
+2026-10-19T10:32:23 Acceptance: exit 0, total 210, executed 210, passed 210, failed 0, skipped 0
+2026-10-19T10:32:23 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-build --blame-hang-timeout 30m --filter "FullyQualifiedName~LockstepValidationTests" --logger trx;LogFileName=LockstepValidationTests.trx
+2026-10-19T10:32:30 LockstepValidationTests: exit 0, total 6, executed 6, passed 6, failed 0, skipped 0
+2026-10-19T10:32:30 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-build --blame-hang-timeout 30m --filter "FullyQualifiedName~Vic20NativeLockstepTests" --logger trx;LogFileName=Vic20NativeLockstepTests.trx
+2026-10-19T11:23:31 Vic20NativeLockstepTests: exit 1, total 4, executed 4, passed 3, failed 1, skipped 0
+2026-10-19T11:23:31 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-build --blame-hang-timeout 30m --filter "FullyQualifiedName~Vic20HalfCycleComparatorTests" --logger trx;LogFileName=Vic20HalfCycleComparatorTests.trx
+2026-10-19T11:23:34 Vic20HalfCycleComparatorTests: exit 1, total 1, executed 1, passed 0, failed 1, skipped 0
+2026-10-19T11:23:34 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-build --blame-hang-timeout 30m --filter "FullyQualifiedName~CpuVisiblePcTimingTests" --logger trx;LogFileName=CpuVisiblePcTimingTests.trx
+2026-10-19T11:23:38 CpuVisiblePcTimingTests: exit 1, total 148, executed 148, passed 132, failed 16, skipped 0
+2026-10-19T11:23:38 dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-build --blame-hang-timeout 30m --filter "FullyQualifiedName~X64ScVariantLockstepTests" --logger trx;LogFileName=X64ScVariantLockstepTests.trx
+2026-10-19T11:27:02 X64ScVariantLockstepTests: exit 1, total 307, executed 306, passed 292, failed 14, skipped 0
+2026-10-19T11:27:03 native-inventory-after.txt: 2539 entries (12 tracked changes, 2527 untracked), sha256 C7848A24867CD60C49FE6088692A6E4565240868C89D811F806B429CDB3CBFC5
+2026-10-19T11:27:03 native inventory unchanged: True
+2026-10-19T11:27:03 receipt: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T100900-phase-a-baseline-windows\part2-testharness

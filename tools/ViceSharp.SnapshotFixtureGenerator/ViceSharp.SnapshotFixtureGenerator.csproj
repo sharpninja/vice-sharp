@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- PLAN-NATIVERESTORE-001 D2 (F05, R12): the console shell over ViceSharp.ViceCompatibility.SnapshotFixtures.
+       Launches the observer binaries with VICESHARP_SNAPSHOT_AT, the pinned ROM allowlist and -seed 1, verifies the
+       literal checkpoint clock, writes candidate receipts, classifies across hosts and publishes accepted fixtures
+       with their manifest entries. It references no native library. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <RootNamespace>ViceSharp.SnapshotFixtureGeneratorTool</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/ViceSharp.ViceCompatibility/ViceSharp.ViceCompatibility.csproj" />
+  </ItemGroup>
+
+</Project>

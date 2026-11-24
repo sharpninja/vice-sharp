@@ -1,0 +1,14 @@
+type: result
+payload:
+  requestId: req-20261019T194615Z-379a
+  result:
+    frId: FR-TAP-005
+    trIds:
+    - TR-CYCLE-001
+    testIds:
+    - TEST-TAP-001
+    - TEST-X64SC-LOCKSTEP-001
+    workspaceId: F:\GitHub\vice-sharp
+
+---
+

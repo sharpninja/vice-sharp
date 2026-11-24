@@ -1,0 +1,10 @@
+{
+  "timestampLocal": "2026-10-20T12:47:27.195-05:00",
+  "completeResponseStream": false,
+  "sourceIsLivePrefix": true,
+  "rawPrefixChars": 1294033,
+  "credentialOccurrencesRedacted": 1,
+  "knownCredentialOccurrencesRemaining": 0,
+  "redactedPrefixSha256": "99311471E6C0A60378CD62DB2C89EAE6790A068095EE378558CB39965FAB7063",
+  "instruction": "Raw response remains private and retained. Parent must redact the completed stream before sharing; this prefix is not a complete stream."
+}

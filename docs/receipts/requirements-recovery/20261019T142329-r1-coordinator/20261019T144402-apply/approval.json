@@ -1,0 +1,23 @@
+{
+  "PacketSha256": "63386E9251185B101F53E9257CDA9270025A68006B83F243314E6E299A55D702",
+  "RecordCount": 16,
+  "MappingRowCount": 9,
+  "LockedDecision2DepartureAccepted": true,
+  "ApprovedBy": "Payton Byrd",
+  "ApprovalQuotes": [
+    "Yes (D2: the exact 16-record, 9-row candidate; no idempotency key; exclusive-writer window), relayed by vice-sharp-b1 2026-10-19T10:56",
+    "Stop asking for confirmation unless what I said is wrong",
+    "You have full r/w permissions in my lab to do your assigned work"
+  ],
+  "WriterWindow": {
+    "StartLocal": "2026-10-19T14:44:02",
+    "ExpiryLocal": "2026-10-19T15:14:02",
+    "Scope": "LEGION2 requirement store: the 16 packet records and the 9 mapping rows",
+    "Writers": [
+      "ClaudeCode-20261019T152439Z-plugin-session (this session): sole writer",
+      "vice-sharp-b1 (LAB-OMARCHY): acknowledged no LEGION2 writes at 2026-10-19T14:37 until R0-done report",
+      "Codex app-server/exec-server PIDs 24396/24764 (cloud exec-server since 2026-10-17T07:26, no child task; last vice-sharp Codex state 2026-10-16T12:45): inferred idle",
+      "Grok Bot and Claude desktop apps: no vice-sharp MCP activity since 2026-10-16: inferred idle"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "startedAt": "2026-10-19T19:08:11",
+  "stage": "C:\\Users\\kingd\\AppData\\Local\\Temp\\cline-v2-stage-20261019T190811",
+  "stageFiles": 57,
+  "version": "1.121.0",
+  "backup": {
+    "tar": "C:\\Users\\kingd\\.cline\\plugin-backups\\mcpserver-cline-v2-plugin-3c1e3e547a6c-20261019T190811.tar",
+    "sha256": "978532A86C83F6DA6A33B756005959C1C5961B99380D9BEFE68E15CA9CF3609C",
+    "entries": 62,
+    "oldVersion": "1.118.0"
+  },
+  "fileListMatchesStage": true,
+  "invokeSha": "AF6D1E5B686E88DE53C280EB1D7A9B10711201362614AF08C58B49C9118A0830",
+  "replSha": "93AE956EEECB13D2561621A69C88D86A1CDE32026F81445761D75536BA4EE90E",
+  "hashesMatch": true,
+  "wrapperPackageJsonUnchanged": true,
+  "finishedAt": "2026-10-19T19:08:12"
+}

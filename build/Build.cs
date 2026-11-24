@@ -94,22 +94,64 @@ sealed partial class Build : NukeBuild
             Git("commit -m \"wip: $(Get-Date -Format 'yyyy-MM-dd HH:mm')\"");
         });
 
+    /// <summary>
+    /// The one selector of the ordinary gates (Test and CiTest; PLAN-NATIVERESTORE-001 D2, round 6 N20).
+    /// Excludes Determinism (its own target), the slow, host-bound, non-deterministic aiUnit AI reviews
+    /// (AiReview target), the quarantined not-yet-remediated parity ACs (ParityPending, admitted per slice as
+    /// they flip green: PLAN-VICEPARITY-001), the legacy renderer tests awaiting per-cycle replacement
+    /// (ParityLegacy, deleted as V-slices land), Integration, the tests bound to the retired shim DLL
+    /// (ShimLegacy, rebound in Phases E and F; R6) and the real-bound VSF Slice 1 cases that only the
+    /// cumulative NativeSnapshotCompatibilityTest target runs (VsfSlice1Real; N08).
+    /// </summary>
+    internal static string OrdinaryTestFilter => OrdinaryTestFilterFor(OperatingSystem.IsWindows(), OperatingSystem.IsLinux());
+
+    /// <summary>
+    /// 2026-11-23, PLAN-NATIVERESTORE-001 R16/A05. Select ordinary cases for the
+    /// current OS and give opt-in diagnostics their own selection.
+    /// </summary>
+    internal static string OrdinaryTestFilterFor(bool isWindows, bool isLinux)
+    {
+        var filter = "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real&Category!=Diagnostic";
+        if (!isWindows)
+            filter += "&Host!=Windows";
+        if (!isLinux)
+            filter += "&Host!=Linux";
+        return filter;
+    }
+
+    /// <summary>
+    /// The ordinary local gate. PLAN-NATIVERESTORE-001 D2 (A05, N11, N16): one TRX per project is retained in the
+    /// results directory, and VICESHARP_NATIVE_LOAD_LOG names a file created empty before the test process starts
+    /// (so the audit interval covers discovery) that must still exist and be empty afterwards.
+    /// </summary>
     Target Test => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
-            DotNetTest(s => s
-                .SetProjectFile(Solution)
-                .SetConfiguration(Configuration)
-                .SetNoRestore(true)
-                .SetNoBuild(true)
-                // Exclude Determinism (its own target), the slow, host-bound,
-                // non-deterministic aiUnit AI reviews (AiReview target), the
-                // quarantined not-yet-remediated parity ACs (ParityPending,
-                // admitted per slice as they flip green: PLAN-VICEPARITY-001),
-                // and the legacy renderer tests awaiting per-cycle replacement
-                // (ParityLegacy, deleted as V-slices land).
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration"));
+            var results = ResolvedTestResultsDirectory;
+            Directory.CreateDirectory(results);
+            var log = PrepareNativeLoadLog();
+            // The vendored VICE data tree of the submodule is the local ROM root when the machine sets none
+            // (the Phase A step 2 rerun of 2026-10-19 established this: docs/receipts/lockstep/20261019T103200-...).
+            var romRoot = ResolveLocalRomRoot();
+            Serilog.Log.Information("Test: results {Results}, native load log {Log}, ROM root {RomRoot}, filter {Filter}", results, log, romRoot ?? "(machine default)", OrdinaryTestFilter);
+            try
+            {
+                DotNetTest(s => s
+                    .SetProjectFile(Solution)
+                    .SetConfiguration(Configuration)
+                    .SetNoRestore(true)
+                    .SetNoBuild(true)
+                    .SetFilter(OrdinaryTestFilter)
+                    .SetResultsDirectory(results)
+                    .SetLoggers("trx")
+                    .SetProcessEnvironmentVariable("VICESHARP_NATIVE_LOAD_LOG", log)
+                    .When(_ => romRoot is not null, x => x.SetProcessEnvironmentVariable("VICESHARP_ROM_PATH", romRoot)));
+            }
+            finally
+            {
+                AssertNativeLoadLogEmpty(log);
+            }
         });
 
     /// <summary>
@@ -137,7 +179,7 @@ sealed partial class Build : NukeBuild
             DotNetTest(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration")
+                .SetFilter(OrdinaryTestFilter)
                 .When(_ => romRoot is not null, x => x
                     .SetProcessEnvironmentVariable("VICESHARP_ROM_PATH", romRoot)));
         });

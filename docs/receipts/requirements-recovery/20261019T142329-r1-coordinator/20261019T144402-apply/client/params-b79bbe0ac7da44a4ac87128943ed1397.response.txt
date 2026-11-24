@@ -1,0 +1,52 @@
+type: result
+payload:
+  requestId: req-20261019T194701Z-aa9b
+  result:
+    id: FR-PRF-003
+    title: Commodore SX-64 Machine Profile
+    description: >-
+      The SX-64 is a portable C64 with a built-in 1541 disk drive and a 5" color monitor. It lacks a cassette port and has a different KERNAL ROM (no tape routines, different screen colors on startup).
+
+
+      ## Acceptance Criteria
+
+      - KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).
+
+      - No cassette port: tape-related I/O port bits behave differently (cassette sense always reads "no tape").
+
+      - Built-in 1541 drive: device 8 is always present.
+
+      - The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.
+
+      - All other hardware is identical to the C64 NMOS profile.
+
+      - Selectable via `IMachineProfile.LoadProfile("sx64")`.
+    status: pending
+    priority: medium
+    area: PRF
+    acceptanceCriteria:
+    - id: ac-01
+      text: 'KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).'
+      isSatisfied: false
+    - id: ac-02
+      text: 'No cassette port: tape-related I/O port bits behave differently (cassette sense always reads "no tape").'
+      isSatisfied: false
+    - id: ac-03
+      text: 'Built-in 1541 drive: device 8 is always present.'
+      isSatisfied: false
+    - id: ac-04
+      text: The 6510 I/O port bit 4 (cassette sense) is permanently pulled high.
+      isSatisfied: false
+    - id: ac-05
+      text: All other hardware is identical to the C64 NMOS profile.
+      isSatisfied: false
+    - id: ac-06
+      text: Selectable via `IMachineProfile.LoadProfile("sx64")`.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T19:47:02.1494817+00:00
+    updatedAt: 2026-10-19T19:47:02.1495718+00:00
+  deprecated: true
+
+---
+

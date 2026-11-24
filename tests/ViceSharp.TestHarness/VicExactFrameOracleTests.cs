@@ -62,6 +62,7 @@ public sealed class VicExactFrameOracleTests
     /// (border + screen background at READY).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void CaptureIndices_ReadyScreen_GeometryAndIndexDomainExact()
     {
         var machine = CreateReadyMachine();
@@ -98,6 +99,7 @@ public sealed class VicExactFrameOracleTests
     /// index captures (delta 0 across all 104448 pixels).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void CaptureIndices_Deterministic_AcrossInstances()
     {
         static byte[] Capture()
@@ -133,6 +135,7 @@ public sealed class VicExactFrameOracleTests
     /// with different indices have different BGRA values.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void CaptureVisibleFrame_RealPath_MatchesIndexIdentity()
     {
         var machine = CreateReadyMachine();

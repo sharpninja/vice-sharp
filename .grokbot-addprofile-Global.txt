@@ -1,0 +1,613 @@
+type: result
+payload:
+  requestId: req-20261111T144325Z-bfb9
+  result:
+    items:
+    - id: MEMORY-BESTPRACTICE-001
+      category: BESTPRACTICE
+      scope: Global
+      text: >-
+        # Best practices: engineering rules for every agent on both lab machines
+
+
+        One rule set, consolidated on 2026-11-06 at the operator's request from eight earlier Global memories of the two lab stores (listed under "Sources"). The operator's words are quoted under "Sources" at the end. It applies to all agents on both lab machines, LAB-OMARCHY and PAYTON-LEGION2, and across workspaces.
+
+
+        ## 1. Code documentation: every code change
+
+
+        1.1. Every code change carries proper XML documentation that describes the affected code.
+
+
+        1.2. That documentation includes a dated change log entry listing the associated canonical requirement ids and descriptive acceptance-criterion ids, plus what changed and why.
+
+
+        1.3. Maintain purpose, behavior, parameters, returns and exceptions, as applicable.
+
+
+        1.4. Preserve earlier change log entries.
+
+
+        1.5. Verify every id against the canonical workspace records. Do not invent traceability or imply acceptance.
+
+
+        1.6. Where XML documentation is unsupported, use the language's native documentation comments with equivalent dated requirement, acceptance-criterion and change fields.
+
+
+        1.7. This is source documentation, not a request for per-PR release notes or an unrelated retrospective sweep.
+
+
+        1.8. Workspace guidance and examples: AGENTS.md and .cursor/rules/code-documentation-traceability.mdc.
+
+
+        ## 2. Test runs: targeted after an edit, full gate set once at phase exit
+
+
+        2.1. After an edit, a BDPv4 mock gate or binding runs only the changed test classes, through the Nuke target TestGroups (TR-MCP-NUKE-020), never raw dotnet test.
+
+
+        2.2. The command: ./build.ps1 TestGroups --test-groups "<test project>:<Class>[,<Class>...]" ["<project>:<Class>..." ...] --test-run-id <run id>
+
+
+        2.3. TestGroups writes one TRX per project under TestResults/<run id>/groups/<project>/<project>.trx.
+
+
+        2.4. It selects the named classes whatever their category, but excludes cases tagged for the other platform (Platform!=Windows on Linux, Platform!=Linux on Windows).
+
+
+        2.5. It fails on an unknown project, a group that selects no case, a named class that ran no case, or any failed or skipped case.
+
+
+        2.6. The full gate set (Nuke Test, MigrationIntegrationTests, Build.Tests and ValidateTraceability, on both hosts) runs once, at the final head, to validate phase exit before hostile validation.
+
+
+        2.7. If a gate then fails: fix it, test the fix through TestGroups, and run the full gate set once more at the new head.
+
+
+        2.8. In McpServer, TestGroups is on branch fix/unit-suite-green-20261019 (PR 87) until that pull request merges into develop.
+
+
+        ## 3. Windows paths
+
+
+        3.1. Use forward slashes in Windows paths (for example F:/GitHub/vice-sharp and C:/msys64/usr/bin/bash.exe), including paths handed to MSYS2 tools such as gcc, and in scripts, configs and generated build or link arguments.
+
+
+        ## 4. Unit tests and integration tests
+
+
+        4.1. Unit tests and integration tests live in separate projects and are correctly tagged.
+
+
+        4.2. Unit tests exercise code in isolation, using controlled mocks or fakes as needed.
+
+
+        4.3. Any test that depends on the environment is an integration test, and is never classified or run as a unit test.
+
+
+        4.4. Apply this distinction to test-project ownership, category tags, Nuke groups and gates, and reported test evidence, across workspaces.
+
+
+        4.5. Preserve BDPv4's green, discriminating mock gates before production changes.
+
+
+        ## 5. Emulators
+
+
+        5.1. When the work that needs an emulator is complete, shut the emulator down to a known state and freeze it.
+
+
+        5.2. Restore it from that frozen state only when active work needs it.
+
+
+        5.3. Never leave an emulator running idle and consuming resources after its work is complete.
+
+
+        ## 6. Git worktrees
+
+
+        6.1. Create git worktrees inside the owning repository's workspace directory, never as sibling directories beside it. Example: TruckMate worktrees belong under F:/GitHub/TruckMate/.worktrees/<name>. This applies to every repository.
+
+
+        ## 7. NuGet warnings
+
+
+        7.1. NuGet warnings may never be ignored.
+
+
+        7.2. Do not suppress NU1902, NU1903 or any other NuGet warning, downgrade an enforced warning gate, disable NuGet audit, or use a local or bootstrap exception to bypass them.
+
+
+        7.3. Repair the dependency issue within the authorized scope, or report the exact affected dependency and the scope decision it needs.
+
+
+        7.4. The operator explicitly rejected a local-only advisory warning override for the pinned FeatureFlags tool bootstrap.
+
+
+        ## 8. Mistakes and accountability
+
+
+        8.1. Acknowledge your mistakes, state the rule you broke, and account for the wasted usage and time.
+
+
+        8.2. State the specific action and its consequence.
+
+
+        8.3. Give measured usage and elapsed time when available, and keep measured facts apart from estimates and unavailable figures.
+
+
+        ## Sources
+
+
+        - Rule 1: operator instruction of 2026-11-02, as recorded in the LAB-OMARCHY store's MEMORY-FACT-008 version 1.
+
+        - Rule 2: MEMORY-PROCESS-012 version 2 (set up 2026-11-02 for all agents on both lab machines; version 2 added TR-MCP-NUKE-020 AC-4 and AC-5). Operator, 2026-10-27T21:46 local, verbatim: "Stop running full test suites after one edit.  Test what you changed and save full suite execution for validatin that its time to exit the phase and run HV." Operator, 2026-11-02, verbatim: "Use dedicated targets or an integration target that accepts an array of tests groups to run."
+
+        - Rule 3: MEMORY-PROCEDURE-005 version 1. Operator (Payton), 2026-10-20 08:19, verbatim: "The lab rules are to use foreward slashes on Windows."
+
+        - Rule 4: operator directive of 2026-11-05, as recorded in the PAYTON-LEGION2 store's MEMORY-FACT-008 version 1.
+
+        - Rule 5: operator global directive of 2026-11-05, as recorded in the PAYTON-LEGION2 store's MEMORY-FACT-009 version 1.
+
+        - Rule 6: operator directive of 2026-11-01, as recorded in the PAYTON-LEGION2 store's MEMORY-PREFERENCE-008 version 1.
+
+        - Rule 7: operator directive of 2026-11-03, as recorded in the PAYTON-LEGION2 store's MEMORY-PROCESS-013 version 1.
+
+        - Rule 8: operator global rule of 2026-11-05, as recorded in the PAYTON-LEGION2 store's MEMORY-PROCESS-014 version 1.
+
+        - The consolidation: operator, 2026-11-06, verbatim, replying to each of rules 1 to 3 in the LAB-OMARCHY memory list: "Add to a consolidated best practices global memory."; and to each of rules 4 to 8 in the PAYTON-LEGION2 memory list: "Add to the combined best practices."
+
+        ## 9. Scope control and verification rigor
+
+
+        9.1. Scope creep means adding requirements or product behavior the operator did not request or approve.
+
+
+        9.2. Thoroughness is not scope creep. Within approved requirements, make tests, negative controls, validation, evidence, metadata, documentation, and review artifacts thorough, thoughtful, precise, accurate, internally consistent, and clean in both function and form.
+
+
+        9.3. Add or strengthen verification when it materially proves the approved behavior or exposes defects in an in-scope project artifact. Do not turn testing rigor into an unapproved product requirement.
+
+
+        9.4. Do not use scope control as an excuse to leave a known defect in an in-scope project artifact. Repair the defect or present the specific requirement decision the operator owns.
+
+
+        ## Source
+
+
+        - Operator guidance of 2026-11-07: "There is a difference between scope creep and being thorough, precise and accurate. I do not want scope creep, which is where you add requirements I didn't ask for. I do want thorough and thoughtful testing." The operator directed that this be cleaned up as general guidance and added to the best-practices Global memory on both lab stores.
+      version: 3
+      createdAtUtc:
+        dateTime: 2026-11-06T17:42:21.0671280
+        utcDateTime: 2026-11-06T17:42:21.0671280Z
+        localDateTime: 2026-11-06T11:42:21.0671280-06:00
+        date: 2026-11-06T00:00:00.0000000
+        day: 6
+        dayOfWeek: Friday
+        dayOfYear: 310
+        hour: 17
+        millisecond: 67
+        microsecond: 128
+        nanosecond: 0
+        minute: 42
+        month: 11
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 21
+        ticks: 639295837410671280
+        utcTicks: 639295837410671280
+        timeOfDay: 17:42:21.0671280
+        year: 2026
+      updatedAtUtc:
+        dateTime: 2026-11-07T17:07:13.6489435
+        utcDateTime: 2026-11-07T17:07:13.6489435Z
+        localDateTime: 2026-11-07T11:07:13.6489435-06:00
+        date: 2026-11-07T00:00:00.0000000
+        day: 7
+        dayOfWeek: Saturday
+        dayOfYear: 311
+        hour: 17
+        millisecond: 648
+        microsecond: 943
+        nanosecond: 500
+        minute: 7
+        month: 11
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 13
+        ticks: 639296680336489435
+        utcTicks: 639296680336489435
+        timeOfDay: 17:07:13.6489435
+        year: 2026
+      updatedBy: Codex
+    - id: MEMORY-FACT-007
+      category: PREFERENCE
+      scope: Global
+      text: Use Scoop as the primary source for open source tools.
+      version: 1
+      createdAtUtc: &o0
+        dateTime: 2026-10-29T17:37:26.7109888
+        utcDateTime: 2026-10-29T17:37:26.7109888Z
+        localDateTime: 2026-10-29T12:37:26.7109888-05:00
+        date: 2026-10-29T00:00:00.0000000
+        day: 29
+        dayOfWeek: Thursday
+        dayOfYear: 302
+        hour: 17
+        millisecond: 710
+        microsecond: 988
+        nanosecond: 800
+        minute: 37
+        month: 10
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 26
+        ticks: 639288922467109888
+        utcTicks: 639288922467109888
+        timeOfDay: 17:37:26.7109888
+        year: 2026
+      updatedAtUtc: *o0
+      updatedBy: sync
+    - id: MEMORY-FACT-009
+      category: FACT
+      scope: Global
+      text: 'Operator standing instruction,2026-11-03: "Please keep working.  If I give you a side quest, please return to your regular tasks afterwards." A side quest does not cancel or replace the existing primary task unless the operator explicitly says so. After completing it, return to the already-authorized primary work without another permission request, preserving its original scope and real approval/acceptance gates. An explicit stop, pause or replacement instruction still governs.'
+      version: 1
+      createdAtUtc: &o1
+        dateTime: 2026-11-03T20:53:54.7671790
+        utcDateTime: 2026-11-03T20:53:54.7671790Z
+        localDateTime: 2026-11-03T14:53:54.7671790-06:00
+        date: 2026-11-03T00:00:00.0000000
+        day: 3
+        dayOfWeek: Tuesday
+        dayOfYear: 307
+        hour: 20
+        millisecond: 767
+        microsecond: 179
+        nanosecond: 0
+        minute: 53
+        month: 11
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 54
+        ticks: 639293360347671790
+        utcTicks: 639293360347671790
+        timeOfDay: 20:53:54.7671790
+        year: 2026
+      updatedAtUtc: *o1
+    - id: MEMORY-HV-001
+      category: HV
+      scope: Global
+      text: >-
+        # HV rules: hostile-validation rules for every agent and every HV round
+
+
+        One rule set, merged on 2026-11-06 from MEMORY-PROCESS-010 (version 2) and MEMORY-PROCESS-013 (version 1), reformatted and refined at the operator's request. The operator's words are quoted under "Sources" at the end. "Task" means one task of the plan under review (in McpServer, one implementation task of the plan's TODO). "Change under review" means the commits or edits the HV round reviews. A requirement is "in flux" when a change under review adds, changes or implements it.
+
+
+        ## 1. Verdicts and scores
+
+
+        1.1. Every HV round returns an overall verdict, AGREE or DISAGREE, with an accuracy score and a completeness score. The overall verdict is AGREE only when both scores are 98 or more.
+
+
+        1.2. Every HV round also returns a verdict for each task it adjudicates (rule 3.2): AGREE or DISAGREE, with that task's own accuracy and completeness scores. A task's AGREE needs both of its scores at 98 or more.
+
+
+        1.3. The per-task verdicts are the operator's own gates. They are not extra approval gates added by an agent.
+
+
+        ## 2. Marking tasks completed, and regressions
+
+
+        2.1. A task that clears its own HV AGREE is marked completed in the plan and in its TODO, through the agent's plugin. The completion cites that round's request JSONL, its response JSONL and the session-log turn that holds the verdict.
+
+
+        2.2. A task without its own AGREE stays open, whatever the overall verdict.
+
+
+        2.3. A completed task is not adjudicated again as an incomplete task. It is checked only for regression, when rule 3.3 selects it. A regression is any finding that would invalidate a completed task. A task with a regression is reopened, because no done state may stand while a failure is outstanding, and it stays open until a later round clears it again.
+
+
+        2.4. Every regression is called out in the review summary, by task, with the finding and the requirement it touches.
+
+
+        2.5. Per-task verdicts keep each round tied to the plan's tasks, which helps against scope creep.
+
+
+        ## 3. Review scope: the requirements matrix
+
+
+        3.1. The reviewer builds and keeps, and returns with its verdict, a matrix of: the requirements of each task, and the requirements of each change under review. The matrix shows which requirements are in flux and which tasks share them.
+
+
+        3.2. An open task with at least one requirement in flux is adjudicated in full and gets its own verdict and scores (rule 1.2).
+
+
+        3.3. A completed task that shares a requirement in flux gets regression attention only (rule 2.3). Its result is either "no regression" or a regression finding.
+
+
+        3.4. A task with no requirement being adjudicated in this round is not reviewed, unless the operator requests a holistic review. This holds for open tasks as well as completed ones: an open task out of scope stays open for that round. For example, an HV midway through a plan, such as a phase gate, still sees requirements and tasks of other phases; they are out of scope for that review. The matrix still lists them, marked out of scope.
+
+
+        ## 4. What every HV request contains
+
+
+        4.1. Every task of the plan under review, each with a fixed number and its state (open or completed), and the changes under review.
+
+
+        4.2. The requirement to return the matrix (rule 3.1), a verdict and both scores for each task adjudicated in full (rule 3.2), a regression result for each task selected for regression (rule 3.3), and the regressions called out in the summary (rule 2.4).
+
+
+        4.3. Rule 6 (infrastructure failures), stated explicitly.
+
+
+        4.4. Complete paired request and response JSONL, and the complete verdict artifacts, are kept for every round.
+
+
+        ## 5. Interpreting findings
+
+
+        5.1. Reason about the context and the underlying failure pattern of each finding. Do not merely patch the cited line or satisfy the reviewer's wording.
+
+
+        5.2. Understand the affected user outcome and the claim the evidence is meant to support.
+
+
+        5.3. Verify each finding against authoritative sources.
+
+
+        5.4. Examine related instances and the end-to-end chain among requirements, design, implementation, tests, evidence, documentation, publication and actual deployment, as applicable.
+
+
+        5.5. Check whether a proposed fix and its tests address the underlying class of failure without introducing new gaps.
+
+
+        5.6. Keep observed facts apart from inference, unverified claims and unresolved decisions.
+
+
+        5.7. Preserve full review receipts, and report every FAIL and every UNKNOWN.
+
+
+        5.8. Apply the existing plan and review rules. Do not invent additional approval gates, and do not treat passing a replacement check as proof of the user outcome.
+
+
+        ## 6. Infrastructure failures
+
+
+        6.1. Infrastructure failures have no bearing on HV AGREE when sufficient review evidence is present. Judge the requested product, plan, requirements, code, tests and retained evidence on their merits.
+
+
+        6.2. MCP availability, live memory-loading failures, triage submission, session-log persistence or readback, and other infrastructure failures must not by themselves force DISAGREE, lower a score or block acceptance when the needed evidence is otherwise available.
+
+
+        6.3. Record infrastructure failures separately, as operational issues. Use the supported failsafe and retry persistence without delaying the substantive verdict.
+
+
+        6.4. If a failure actually prevents access to evidence needed for a specific criterion, name that missing evidence and the affected criterion honestly. Never invent a PASS or an AGREE.
+
+
+        6.5. Rule 6 supersedes older profile or template rules that made infrastructure persistence or live memory loading a prerequisite for HV AGREE.
+
+
+        ## Sources
+
+
+        - Rules 5.1 to 5.8: operator instruction of 2026-10-29, as recorded in MEMORY-PROCESS-010 version 1.
+
+        - Rule 6: operator directive of 2026-11-02, as recorded in MEMORY-PROCESS-013 version 1.
+
+        - Rules 1.2, 1.3, 2.1, 2.2, 2.5 and 4.1: operator, 2026-11-06 10:33 local, verbatim: "OK, let's refine HV then.  HV will now apply an AGREE and 98/98 score for each task in the plan in addition to the overall agree 98/98 grade.  As a task clears HV Agree, it gets marked completed in the plan.  This can help scope creep.  HV should also detect when it finds something that would invalidate a completed task in the plan."
+
+        - Rules 2.3, 2.4 and 3: operator, 2026-11-06 about 11:05 local, verbatim, replying to the earlier rule on completed tasks: "All Regressions must be called out in the review summary."; and replying to the earlier rule on request contents: "Tasks that have already achieved Agree should only be validated against regression, not completely adjudicated as an incomplete task.  Reviewer should maintain a matrix of reqs per task, reqs per change being reviewed, and completed tasks that shared an in-flux requirement should receive attention for regression.  Tasks with no reqs being adjudicated for the HV should not be reviewed unless a holistic review is requested by the operator."; and confirming that an open task out of scope is not reviewed (rule 3.4): "This is correct.  An HV mid way through a plan, such as a phase gate, will still see reqs and tasks that are out of scope the of the HV review for a specific phase."
+
+        - The merge and format: operator, 2026-11-06, verbatim: "I belive there is already a global memory for HV process.  Please merge this into that global memory.", then "Merge memory 13 into memory 10 and update the ID to indicate that it is for HV rules.", then "Please reformat as a single set of rules, formatted for clarity to both LLM and Humans."
+      version: 4
+      createdAtUtc:
+        dateTime: 2026-11-06T16:51:49.1396721
+        utcDateTime: 2026-11-06T16:51:49.1396721Z
+        localDateTime: 2026-11-06T10:51:49.1396721-06:00
+        date: 2026-11-06T00:00:00.0000000
+        day: 6
+        dayOfWeek: Friday
+        dayOfYear: 310
+        hour: 16
+        millisecond: 139
+        microsecond: 672
+        nanosecond: 100
+        minute: 51
+        month: 11
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 49
+        ticks: 639295807091396721
+        utcTicks: 639295807091396721
+        timeOfDay: 16:51:49.1396721
+        year: 2026
+      updatedAtUtc:
+        dateTime: 2026-11-06T17:14:41.7801407
+        utcDateTime: 2026-11-06T17:14:41.7801407Z
+        localDateTime: 2026-11-06T11:14:41.7801407-06:00
+        date: 2026-11-06T00:00:00.0000000
+        day: 6
+        dayOfWeek: Friday
+        dayOfYear: 310
+        hour: 17
+        millisecond: 780
+        microsecond: 140
+        nanosecond: 700
+        minute: 14
+        month: 11
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 41
+        ticks: 639295820817801407
+        utcTicks: 639295820817801407
+        timeOfDay: 17:14:41.7801407
+        year: 2026
+      updatedBy: ClaudeCode
+    - id: MEMORY-INFRA-001
+      category: INFRA
+      scope: Global
+      text: "Lab SSH access, updated after verified key rotation on 2026-11-01T20:23:13-06:00. LAB-OMARCHY to PAYTON-LEGION2: use ssh PAYTON-LEGION2 or ssh LEGION2 as sharpninja. The existing aliases now use /home/sharpninja/.ssh/id_ed25519_legion2_20261101T193447. Windows login remains kingd; its administrator public authorization is in C:/ProgramData/ssh/administrators_authorized_keys. Windows to Linux: the LAB-OMARCHY alias uses user sharpninja and replacement key C:/Users/kingd/.ssh/id_ed25519_lab_omarchy_20261101T193447; its host address is the verified lab address 10.42.0.214. Headless Windows verification used C:/Program Files/Git/usr/bin/ssh.exe. The Windows-system OpenSSH 9.5 client stalled before connection setup in this SSH-hosted run; that observation does not establish behavior in other sessions. Router access from LAB-OMARCHY: use ssh pi-router (also pi-router.lab or 10.42.0.1); the new alias selects /home/sharpninja/.ssh/pi3-bridge-ed25519_20261101T201252, user pi, and the existing pinned pi3-bridge-known_hosts file. In all three directions, each replacement worked alone before revocation; the old public authorization was then removed, the old key was rejected, and the replacement still worked. Original private files remain retained but are no longer authorized at these destinations. Do not reuse the retired id_ed25519_legion2, id_ed25519_lab_omarchy, or pi3-bridge-ed25519 identities for new connections. No private-key contents were manually inspected or copied; native SSH utilities used keys for authentication. Never print or log private-key contents or passwords. Samba passwords have not been rotated yet: Linux OS administrator authentication and the operator's decision about replacing the Windows Microsoft-account sharing credential remain pending."
+      version: 2
+      createdAtUtc:
+        dateTime: 2026-10-19T21:40:15.7411224
+        utcDateTime: 2026-10-19T21:40:15.7411224Z
+        localDateTime: 2026-10-19T16:40:15.7411224-05:00
+        date: 2026-10-19T00:00:00.0000000
+        day: 19
+        dayOfWeek: Monday
+        dayOfYear: 292
+        hour: 21
+        millisecond: 741
+        microsecond: 122
+        nanosecond: 400
+        minute: 40
+        month: 10
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 15
+        ticks: 639280428157411224
+        utcTicks: 639280428157411224
+        timeOfDay: 21:40:15.7411224
+        year: 2026
+      updatedAtUtc:
+        dateTime: 2026-11-02T02:23:15.3651978
+        utcDateTime: 2026-11-02T02:23:15.3651978Z
+        localDateTime: 2026-11-01T20:23:15.3651978-06:00
+        date: 2026-11-02T00:00:00.0000000
+        day: 2
+        dayOfWeek: Monday
+        dayOfYear: 306
+        hour: 2
+        millisecond: 365
+        microsecond: 197
+        nanosecond: 800
+        minute: 23
+        month: 11
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 15
+        ticks: 639291829953651978
+        utcTicks: 639291829953651978
+        timeOfDay: 02:23:15.3651978
+        year: 2026
+      updatedBy: Codex
+    - id: MEMORY-PROCEDURE-007
+      category: PROCEDURE
+      scope: Global
+      text: 'Operator directive, 2026-10-22: Never write server status into handoff documents, including current availability, health, offline claims, outages, or previous server failures. Do not infer live server availability from a handoff after resume or compaction. When availability matters, use fresh live evidence through the active agent plugin. Keep timestamped operational observations and incident evidence in MCP session logs and dedicated receipts rather than handoffs. This rule applies across workspaces and agents.'
+      version: 1
+      createdAtUtc: &o2
+        dateTime: 2026-10-29T17:37:26.9243743
+        utcDateTime: 2026-10-29T17:37:26.9243743Z
+        localDateTime: 2026-10-29T12:37:26.9243743-05:00
+        date: 2026-10-29T00:00:00.0000000
+        day: 29
+        dayOfWeek: Thursday
+        dayOfYear: 302
+        hour: 17
+        millisecond: 924
+        microsecond: 374
+        nanosecond: 300
+        minute: 37
+        month: 10
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 26
+        ticks: 639288922469243743
+        utcTicks: 639288922469243743
+        timeOfDay: 17:37:26.9243743
+        year: 2026
+      updatedAtUtc: *o2
+      updatedBy: sync
+    - id: MEMORY-PROCEDURE-008
+      category: PROCEDURE
+      scope: Global
+      text: >
+        Locating source across machines over the network (set up 2026-10-20). LAB-OMARCHY and PAYTON-LEGION2 share their GitHub source roots over SMB on a direct wired link (10.42.0.0/24). LAB-OMARCHY is 10.42.0.214 with local source at /home/sharpninja/github. PAYTON-LEGION2 is 10.42.0.143 with local source at F:\github. Both export that root as SMB share "github". From LAB-OMARCHY, LEGION2 source is at /mnt/legion2-github (cifs mount of //10.42.0.143/github, user kingd), persistent across reboots via an /etc/fstab entry with x-systemd.automount, nofail and _netdev, credentials in /etc/samba/cred-legion2 (root-only); if LEGION2 is offline at boot, OMARCHY still boots and the share mounts on first access. From PAYTON-LEGION2, LAB-OMARCHY source is at O:\ (persistent mapping of \\10.42.0.214\github, Samba user sharpninja), also reachable as \\10.42.0.214\github. Example: vice-sharp is /home/sharpninja/github/vice-sharp and O:\vice-sharp on LEGION2; F:\github\vice-sharp and /mnt/legion2-github/vice-sharp on OMARCHY. Prefer IP addresses: the name LAB-OMARCHY resolves to 10.42.0.214 on LEGION2. Never store passwords in memory or print the credentials file.
+      version: 1
+      createdAtUtc: &o3
+        dateTime: 2026-11-06T18:04:34.0158462
+        utcDateTime: 2026-11-06T18:04:34.0158462Z
+        localDateTime: 2026-11-06T12:04:34.0158462-06:00
+        date: 2026-11-06T00:00:00.0000000
+        day: 6
+        dayOfWeek: Friday
+        dayOfYear: 310
+        hour: 18
+        millisecond: 15
+        microsecond: 846
+        nanosecond: 200
+        minute: 4
+        month: 11
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 34
+        ticks: 639295850740158462
+        utcTicks: 639295850740158462
+        timeOfDay: 18:04:34.0158462
+        year: 2026
+      updatedAtUtc: *o3
+      updatedBy: ClaudeCode
+    - id: MEMORY-PROCEDURE-009
+      category: PROCEDURE
+      scope: Global
+      text: 'Operator directive, 2026-11-09: Never block active work on timestamp-guard or timestamp-formatting failures. Correct the formatting immediately and continue the active task.'
+      version: 1
+      createdAtUtc: &o4
+        dateTime: 2026-11-09T19:49:39.9318029
+        utcDateTime: 2026-11-09T19:49:39.9318029Z
+        localDateTime: 2026-11-09T13:49:39.9318029-06:00
+        date: 2026-11-09T00:00:00.0000000
+        day: 9
+        dayOfWeek: Monday
+        dayOfYear: 313
+        hour: 19
+        millisecond: 931
+        microsecond: 802
+        nanosecond: 900
+        minute: 49
+        month: 11
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 39
+        ticks: 639298505799318029
+        utcTicks: 639298505799318029
+        timeOfDay: 19:49:39.9318029
+        year: 2026
+      updatedAtUtc: *o4
+    - id: MEMORY-PROCESS-009
+      category: PROCESS
+      scope: Global
+      text: "Do not gate on Azure-related errors (set up 2026-10-21). Operator, 2026-10-21T06:54:47 local, verbatim: \"Azure is no longer in the picture.  Create a global memory not to gate on azure related errors.\" Azure is out of the picture for every workspace and agent: Azure DevOps (remotes, repos, wiki), Azure Pipelines, and any Azure-specific path or export (for example the requirements wiki export's \"azure/Architecture\" cleanup rejection, triage-report-a6927fca10364155ab9992506e1abc9c). An error that comes from Azure or an Azure-specific path is never a gate, blocker, stop condition, done-state condition or hostile-validation finding. If one appears, record it once as information and continue the work."
+      version: 1
+      createdAtUtc: &o5
+        dateTime: 2026-10-21T11:58:36.5361589
+        utcDateTime: 2026-10-21T11:58:36.5361589Z
+        localDateTime: 2026-10-21T06:58:36.5361589-05:00
+        date: 2026-10-21T00:00:00.0000000
+        day: 21
+        dayOfWeek: Wednesday
+        dayOfYear: 294
+        hour: 11
+        millisecond: 536
+        microsecond: 158
+        nanosecond: 900
+        minute: 58
+        month: 10
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 36
+        ticks: 639281807165361589
+        utcTicks: 639281807165361589
+        timeOfDay: 11:58:36.5361589
+        year: 2026
+      updatedAtUtc: *o5
+      updatedBy: ClaudeCode
+    totalCount: 9
+  deprecated: true
+
+---
+

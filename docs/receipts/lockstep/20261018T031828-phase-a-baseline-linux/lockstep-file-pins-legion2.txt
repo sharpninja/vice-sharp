@@ -1,0 +1,24 @@
+HEAD d00e8c5 develop
+298458C24FAA1A7A   2050 tests/ViceSharp.TestHarness/LockstepValidator.cs
+A81CA731F90D7608    148 tests/ViceSharp.TestHarness/LockstepValidationTests.cs
+99A56995DD6A604A    230 tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs
+4E96D5803FAB27D2     91 tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs
+3E327CC85FE49E6A   7983 tests/ViceSharp.TestHarness/CpuVisiblePcTimingTests.cs
+0CD909121EB3DBEB   1923 tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs
+native:  porcelain=0
+fatal: detected dubious ownership in repository at 'F:/GitHub/vice-sharp/native/vice'
+'F:/GitHub/vice-sharp/native/vice/.git' is owned by:
+	PAYTON-LEGION2/kingd (S-1-5-21-3617676308-3098392272-2605596663-1001)
+but the current user is:
+	PAYTON-LEGION2/lab-wsman (S-1-5-21-3617676308-3098392272-2605596663-1021)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory F:/GitHub/vice-sharp/native/vice
+fatal: detected dubious ownership in repository at 'F:/GitHub/vice-sharp/native/vice'
+'F:/GitHub/vice-sharp/native/vice/.git' is owned by:
+	PAYTON-LEGION2/kingd (S-1-5-21-3617676308-3098392272-2605596663-1001)
+but the current user is:
+	PAYTON-LEGION2/lab-wsman (S-1-5-21-3617676308-3098392272-2605596663-1021)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory F:/GitHub/vice-sharp/native/vice

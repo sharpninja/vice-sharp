@@ -157,6 +157,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void ResetStateMatches_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         using var validator = new LockstepValidator(modelSelector);
@@ -176,6 +177,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void FirstProfileScanlineMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
     {
         var cycles = C64MachineProfiles.Resolve(modelSelector).CyclesPerLine;
@@ -197,6 +199,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTwoProfileScanlinesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
     {
         var cycles = C64MachineProfiles.Resolve(modelSelector).CyclesPerLine * 2;
@@ -219,6 +222,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -242,6 +246,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void D64Attach_FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -291,6 +296,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void HeldSpace_FirstProfileFrameMatches_ForEveryKeyboardEnabledNoCartridgeX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -347,6 +353,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTwoProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -370,6 +377,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTenProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -415,6 +423,7 @@ public sealed class X64ScVariantLockstepTests
     /// this environment.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal()
     {
         var selectedD64Path = ResolveSelectedD64Path();
@@ -455,6 +464,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -506,6 +516,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void D64Attach_BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -574,6 +585,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(StandardCartridgeAutostartCases))]
+    [Trait("Category", "ShimLegacy")]
     public void FirstProfileFrameMatches_ForStandardCartridgeAutostart(
         string modelSelector,
         CartridgeMappingMode mappingMode,
@@ -600,6 +612,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(StandardCartridgeAutostartCases))]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTwoProfileFramesMatch_ForStandardCartridgeAutostart(
         string modelSelector,
         CartridgeMappingMode mappingMode,
@@ -627,6 +640,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
+    [Trait("Category", "ShimLegacy")]
     public void FirstProfileScanlineMatches_ForUltimaxWithDeterministicCartridge(string modelSelector)
     {
         var cycles = C64MachineProfiles.Resolve(modelSelector).CyclesPerLine;
@@ -650,6 +664,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTwoProfileScanlinesMatch_ForUltimaxWithDeterministicCartridge(string modelSelector)
     {
         var cycles = C64MachineProfiles.Resolve(modelSelector).CyclesPerLine * 2;
@@ -673,6 +688,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
+    [Trait("Category", "ShimLegacy")]
     public void FirstProfileFrameMatches_ForUltimaxWithDeterministicCartridge(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -696,6 +712,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTwoProfileFramesMatch_ForUltimaxWithDeterministicCartridge(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -720,6 +737,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
+    [Trait("Category", "ShimLegacy")]
     public void FirstProfileScanlineMatches_ForC64GsWithDeterministicGameSystemCartridge(string modelSelector)
     {
         var cycles = C64MachineProfiles.Resolve(modelSelector).CyclesPerLine;
@@ -742,6 +760,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTwoProfileScanlinesMatch_ForC64GsWithDeterministicGameSystemCartridge(string modelSelector)
     {
         var cycles = C64MachineProfiles.Resolve(modelSelector).CyclesPerLine * 2;
@@ -764,6 +783,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
+    [Trait("Category", "ShimLegacy")]
     public void FirstProfileFrameMatches_ForC64GsWithDeterministicGameSystemCartridge(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -787,6 +807,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
+    [Trait("Category", "ShimLegacy")]
     public void FirstTwoProfileFramesMatch_ForC64GsWithDeterministicGameSystemCartridge(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -810,6 +831,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void SelectedRamWindowsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -841,6 +863,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void SelectedRamWindowsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -866,6 +889,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void ViciiRasterTimingMatchesNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -906,6 +930,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void ViciiRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -944,6 +969,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
+    [Trait("Category", "ShimLegacy")]
     public void AbsentCia2IoReadsMatchNative_ForUltimax(string modelSelector)
     {
         var machine = MachineTestFactory.CreateC64Machine(modelSelector);
@@ -986,6 +1012,7 @@ public sealed class X64ScVariantLockstepTests
     [ViceTheory]
     [InlineData("c64")]
     [InlineData("c64gs")]
+    [Trait("Category", "ShimLegacy")]
     public void ConnectedCia2IoWritesAndReadsMatchNative_ForC64Family(string modelSelector)
     {
         var machine = MachineTestFactory.CreateC64Machine(modelSelector);
@@ -1024,6 +1051,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void ViciiRasterTimingMatchesNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -1059,6 +1087,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void ChipRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -1107,6 +1136,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void ChipRegisterCheckpointsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);
@@ -1148,6 +1178,7 @@ public sealed class X64ScVariantLockstepTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
+    [Trait("Category", "ShimLegacy")]
     public void ResetAfterActivityMatchesNative_ForEveryRequiredX64ScVariant(string modelSelector)
     {
         var profile = C64MachineProfiles.Resolve(modelSelector);

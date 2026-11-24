@@ -1,0 +1,28 @@
+{
+  "stamp": "20261019T115300",
+  "total": 214,
+  "passed": 214,
+  "failed": 0,
+  "skipped": 0,
+  "classes": {
+    "ViceSharp.Library.Tests.Packaging.UserLocalDeploymentTests": {
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    },
+    "ViceSharp.Library.Tests.CompletionTestManifestTests": {
+      "total": 77,
+      "passed": 77,
+      "failed": 0,
+      "skipped": 0
+    },
+    "ViceSharp.Library.Tests.Packaging.PackageMetadataTests": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "failedNames": []
+}

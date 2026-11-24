@@ -1,0 +1,11 @@
+{
+  "stamp": "20261019T115815",
+  "label": "host-filter-simulation-linux",
+  "project": "build.tests/ViceSharp.Build.Tests.csproj",
+  "filter": "Host!=Linux",
+  "exitCode": 0,
+  "total": 96,
+  "passed": 96,
+  "failed": 0,
+  "skipped": 0
+}

@@ -50,6 +50,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-POT-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PotX_Returns0xFF_MatchingOracle()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -80,6 +81,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-POT-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PotX_Read_LatchesBusValueAndTtl()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -110,6 +112,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-POT-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PotY_Returns0xFFAndLatchesBus()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -142,6 +145,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-POT-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PotReads_Constant0xFF_AcrossWritesAndCycles()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -185,6 +189,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void AnyWrite_SetsBusValueAndTtl_MatchingOracle()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -223,6 +228,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void ReadOf19Through1C_SetsBusAndReturnsBusValue()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -261,6 +267,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WriteOnlyRegisterRead_ReturnsSharedBusValue()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -301,6 +308,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void BusAging_OneCycleDecrement_ZeroesAtTtlExpiry()
     {
         var sid = BuildSid();
@@ -332,6 +340,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void BusAging_NCycles_EquivalentToBatchedDecrement()
     {
         var sid = BuildSid();
@@ -356,6 +365,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void DataBusTtl6581_Is0x1D00()
     {
         var sid = BuildSid();
@@ -392,6 +402,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Reset_ClearsBusValueAndTtl()
     {
         var sid = BuildSid();
@@ -413,6 +424,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Osc3Read_LatchesBus()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -446,6 +458,7 @@ public sealed class SidDatabusPotDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Env3Read_LatchesBus()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

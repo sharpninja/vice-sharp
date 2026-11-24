@@ -1,0 +1,8 @@
+=== x64sc 4000000 cycles (07:12:59) ===
+stock     exit 1 gate 0 access 0 missingKind 0 missing/foreign 0 translate 0 stop 0 obs 0 extra 0 png 308BEE06176ECBB5CFAE3B6C52760BBB5A831C017A60A7EC69FFFFEAA5A5779F
+withheld  exit 1 gate 3999998 access 3891785 missingKind 0 missing/foreign 0 translate 187068 stop 0 obs 7999996 extra 2 png 308BEE06176ECBB5CFAE3B6C52760BBB5A831C017A60A7EC69FFFFEAA5A5779F
+keep      exit 1 gate 3999998 access 1479503 missingKind 0 missing/foreign 0 translate 204 stop 0 obs 7999996 extra 1 png 308BEE06176ECBB5CFAE3B6C52760BBB5A831C017A60A7EC69FFFFEAA5A5779F
+compare   keep access 1479503 absent-from-withheld 0 gate-identical True clock-gaps 0 resets 0
+obs validation: exit 0; Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 17 s - ViceSharp.NativeClockProbe.Tests.dll (net10.0)
+summary: /home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/equivalence-linux/20261021T065500-phase-d-d5-final/x64sc-4000000/equivalence.json
+equivalent: every check passed

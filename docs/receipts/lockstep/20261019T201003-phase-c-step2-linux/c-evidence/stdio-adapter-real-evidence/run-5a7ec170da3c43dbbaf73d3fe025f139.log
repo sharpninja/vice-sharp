@@ -1,0 +1,8 @@
+2026-10-19T20:08:18.5226588-05:00
+Executable: /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/stdio-adapter-real
+Arguments: 0 | 0
+ExitCode: 2
+TimedOut: False
+STDOUT:
+
+STDERR:

@@ -1,0 +1,15 @@
+2026-10-19T20:07:51.2091033-05:00
+Executable: /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/stdio-adapter-real-evidence/stdio-adapter-real
+Clock: 7
+Cycles: 1
+Stdin: 1 byte(s)
+CloseStderrAfterFirstRecord: False
+ExitCode: 0
+TimedOut: False
+NativeStdoutRetained: True
+STDOUT:
+NATIVE_STDOUT,cycle,0
+return,native,0
+
+STDERR:
+VICE_GATE,7

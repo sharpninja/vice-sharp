@@ -1,0 +1,276 @@
+  Determining projects to restore...
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Library.ViewModels/ViceSharp.Library.ViewModels.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.AdhocHelper/ViceSharp.AdhocHelper.csproj (in 739 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.RomM/ViceSharp.RomM.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Protocol/ViceSharp.Protocol.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Architectures/ViceSharp.Architectures.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Abstractions/ViceSharp.Abstractions.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Chips/ViceSharp.Chips.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Monitor/ViceSharp.Monitor.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Launcher/ViceSharp.Launcher.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Core/ViceSharp.Core.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Host/ViceSharp.Host.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.Benchmarks/ViceSharp.Benchmarks.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Console/ViceSharp.Console.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Host.MacOS/ViceSharp.Host.MacOS.csproj (in 740 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Xbox/ViceSharp.Xbox.csproj (in 734 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj (in 3 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Xbox.Input/ViceSharp.Xbox.Input.csproj (in 5 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Xbox.ViewModels/ViceSharp.Xbox.ViewModels.csproj (in 6 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj (in 770 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Host.InProcess/ViceSharp.Host.InProcess.csproj (in 9 ms).
+  Restored /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj (in 20 ms).
+  ViceSharp.Abstractions -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Abstractions/bin/Release/net10.0/ViceSharp.Abstractions.dll
+  ViceSharp.RomFetch -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.RomFetch/bin/Release/net10.0/ViceSharp.RomFetch.dll
+  ViceSharp.Chips -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Chips/bin/Release/net10.0/ViceSharp.Chips.dll
+  ViceSharp.Protocol -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Protocol/bin/Release/net10.0/ViceSharp.Protocol.dll
+  ViceSharp.Xbox.Input -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Xbox.Input/bin/Release/net10.0/ViceSharp.Xbox.Input.dll
+  ViceSharp.Library.ViewModels -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Library.ViewModels/bin/Release/net10.0/ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomM -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.RomM/bin/Release/net10.0/ViceSharp.RomM.dll
+  ViceSharp.Xbox.ViewModels -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Xbox.ViewModels/bin/Release/net10.0/ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Core -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Core/bin/Release/net10.0/ViceSharp.Core.dll
+  ViceSharp.Monitor -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Monitor/bin/Release/net10.0/ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Architectures/bin/Release/net10.0/ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Launcher/bin/Release/net10.0/ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.Benchmarks/bin/Release/net10.0/ViceSharp.Benchmarks.dll
+  ViceSharp.Host.InProcess -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Host.InProcess/bin/Release/net10.0/ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Console/bin/Release/net10.0/ViceSharp.Console.dll
+  ViceSharp.AdhocHelper -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.AdhocHelper/bin/Release/net10.0/ViceSharp.AdhocHelper.dll
+  ViceSharp.Xbox -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Xbox/bin/Release/net10.0/ViceSharp.Xbox.dll
+  ViceSharp.Host -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Host/bin/Release/net10.0/ViceSharp.Host.dll
+/home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Avalonia/Views/SettingsView.axaml(76,18,76,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [/home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj]
+  ViceSharp.Avalonia -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Avalonia/bin/Release/net10.0/ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/src/ViceSharp.Host.MacOS/bin/Release/net10.0/ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll
+  The native VICE oracle build is Windows-only; building the managed test harness.
+Test run for /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.30]     ViceSharp.TestHarness.XmlDocsConventionTests.TestMethods_HaveRequiredXmlDocs [FAIL]
+[xUnit.net 00:00:03.55]     ViceSharp.TestHarness.SidFactoryTests.Create_ConfiguresAudioClockOnlyWithBackend [FAIL]
+[xUnit.net 00:00:03.80]     ViceSharp.TestHarness.Mos6510BrkTests.Brk_RtiReturnsToInstructionAfterSignatureByte [FAIL]
+  Failed ViceSharp.TestHarness.XmlDocsConventionTests.TestMethods_HaveRequiredXmlDocs [112 ms]
+  Error Message:
+   QA-XMLDOCS-001: found 74 test method(s) missing required XMLDOCS tokens (FR-/TR-, 'Use case:', 'Acceptance:'); expected at most 0.
+Source dir scanned: /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/
+Sample violations:
+  - AttachPanelViewModelTests.cs::Launch_SyntheticT64_RecreatesTrueDriveAndQueuesAutostart
+  - AttachPanelViewModelTests.cs::AttachAsync_ConvertedT64_RecreatesFromD64AndRemembersSource
+  - AttachPanelViewModelTests.cs::Launch_MalformedAfterAttachment_ReturnsErrorAndAllowsRetry
+  - AttachPanelViewModelTests.cs::SelectedMachineProfile_Change_NotifiesVic20Visibility
+  - BundledKeyboardMapTests.cs::ListKeyboardMapsAsync_NoExternalVice_ListsBundledMaps
+  - CpuVisiblePcTimingTests.cs::StaAbsAtJsrTarget_ThirdFetchHoldsOpcodePcBeforeStore
+  - CpuVisiblePcTimingTests.cs::JsrAfterRts_Cycle3StillPeeksStack
+  - CpuVisiblePcTimingTests.cs::JsrAfterSoftDeferredImmediateLoad_Cycle3StillPeeksStack
+  - CpuVisiblePcTimingTests.cs::StaIndY_Rts_LdaImm_SecondFetchHoldsPreOpThenNextTickFetchesFollowingStaIndY
+  - CpuVisiblePcTimingTests.cs::StaIndYAfterLdaAbsXWithoutTrailingCheckpoint_Cycle4AdvancesPc
+  - CpuVisiblePcTimingTests.cs::StaIndYAfterImmediateLoadTrailingCheckpoint_Cycle4AdvancesPc
+  - CpuVisiblePcTimingTests.cs::InyAfterEarlyAdvancedStaIndY_LastClkCompletesTransfer
+  - CpuVisiblePcTimingTests.cs::StaIndYAfterFusedIny_Cycle4AdvancesPc
+  - CpuVisiblePcTimingTests.cs::HeldStaIndYAfterStagedStoreChain_DeyLastClkHoldsPreOp
+  - CpuVisiblePcTimingTests.cs::HeldStaIndY_DeyTakenBpl_IrqBetweenCpuClocks_DispatchesBeforeTargetJsr
+  - CpuVisiblePcTimingTests.cs::SoftDeferredTaxThenLdaImm_SecondFetchHoldsPreOpState
+  - CpuVisiblePcTimingTests.cs::ConsecutiveImmediateLoads_SecondFetchHoldsFollowingLoadPreOpState
+  - CpuVisiblePcTimingTests.cs::StoreThenImmediateLoad_SecondFetchHoldsPreOpState
+  - CpuVisiblePcTimingTests.cs::RtsAfterStaZp_TwoTrailingCheckpointsFirstPullVisibleAtCycle3
+  - CpuVisiblePcTimingTests.cs::ClcAfterLdaZp_OneTrailingCheckpointCompletesFlagUpdate
+  ... and 54 more
+  Stack Trace:
+     at ViceSharp.TestHarness.XmlDocsConventionTests.TestMethods_HaveRequiredXmlDocs() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs:line 90
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.SidFactoryTests.Create_ConfiguresAudioClockOnlyWithBackend [239 ms]
+  Error Message:
+   Assert.True() Failure
+Expected: True
+Actual:   False
+  Stack Trace:
+     at ViceSharp.TestHarness.SidFactoryTests.Create_ConfiguresAudioClockOnlyWithBackend() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/SidFactoryTests.cs:line 68
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Mos6510BrkTests.Brk_RtiReturnsToInstructionAfterSignatureByte [12 ms]
+  Error Message:
+   CPU did not reach PC=$C002 within 32 ticks (PC=$0800).
+  Stack Trace:
+     at ViceSharp.TestHarness.Mos6510BrkTests.StepUntilPcReaches(Mos6502 cpu, UInt16 targetPc, Int32 maxTicks) in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/Mos6510BrkTests.cs:line 217
+   at ViceSharp.TestHarness.Mos6510BrkTests.Brk_RtiReturnsToInstructionAfterSignatureByte() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/Mos6510BrkTests.cs:line 177
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:08.37]     ViceSharp.TestHarness.ProtocolHostIntegrationTests.GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient [FAIL]
+  Failed ViceSharp.TestHarness.ProtocolHostIntegrationTests.GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient [71 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "software"
+Actual:   "host"
+           ↑ (pos 0)
+  Stack Trace:
+     at ViceSharp.TestHarness.ProtocolHostIntegrationTests.GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/ProtocolHostIntegrationTests.cs:line 799
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:08.57]     ViceSharp.TestHarness.ProtocolHostIntegrationTests.SettingsService_ListsProfilesAndAppliesLiveLimiter [FAIL]
+  Failed ViceSharp.TestHarness.ProtocolHostIntegrationTests.SettingsService_ListsProfilesAndAppliesLiveLimiter [8 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "software"
+Actual:   "host"
+           ↑ (pos 0)
+  Stack Trace:
+     at ViceSharp.TestHarness.ProtocolHostIntegrationTests.SettingsService_ListsProfilesAndAppliesLiveLimiter() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/ProtocolHostIntegrationTests.cs:line 146
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:09.04]     ViceSharp.TestHarness.VicIiCoreTimingTests.SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu [FAIL]
+[xUnit.net 00:00:09.09]     ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_AssertsIrqWhenSdrMaskEnabled [FAIL]
+  Failed ViceSharp.TestHarness.VicIiCoreTimingTests.SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu [1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 0
+Actual:   1
+  Stack Trace:
+     at ViceSharp.TestHarness.VicIiCoreTimingTests.SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/VicIiCoreTimingTests.cs:line 296
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_AssertsIrqWhenSdrMaskEnabled [30 ms]
+  Error Message:
+   Expected irq.IsAsserted to be True because SDR-complete event must assert IRQ when IMR bit 3 is enabled, but found False.
+  Stack Trace:
+     at FluentAssertions.Primitives.BooleanAssertions`1.BeTrue(String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_AssertsIrqWhenSdrMaskEnabled() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/CiaSerialPortTests.cs:line 112
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:09.09]     ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3 [FAIL]
+[xUnit.net 00:00:09.13]     ViceSharp.TestHarness.NativeCollectionConventionTests.NativeBridgeTestClasses_DeclareNativeViceCollection [FAIL]
+  Failed ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3 [2 ms]
+  Error Message:
+   Expected value to be 8 because after 8 Timer A underflows in SP output mode, ICR bit 3 must latch, but found 0 (difference of -8).
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.CiaSerialPortTests.OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/CiaSerialPortTests.cs:line 76
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.NativeCollectionConventionTests.NativeBridgeTestClasses_DeclareNativeViceCollection [40 ms]
+  Error Message:
+   Native-bridge test classes missing [Collection("NativeVice")]:
+  - Vic20/Vic20LockstepScaffoldTests.cs
+  Stack Trace:
+     at ViceSharp.TestHarness.NativeCollectionConventionTests.NativeBridgeTestClasses_DeclareNativeViceCollection() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs:line 93
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:19.84]     ViceSharp.TestHarness.WarpAudioDiscardTests.AppPipeline_FastForward251_WithLiveAudio_Reaches_Target [FAIL]
+  Failed ViceSharp.TestHarness.WarpAudioDiscardTests.AppPipeline_FastForward251_WithLiveAudio_Reaches_Target [5 s]
+  Error Message:
+   DIAG fast-forward 251% pace = 162.2% of real time
+  Stack Trace:
+     at ViceSharp.TestHarness.WarpAudioDiscardTests.AppPipeline_FastForward251_WithLiveAudio_Reaches_Target() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/WarpAudioDiscardTests.cs:line 219
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:30.18]     ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Write_ToUnmappedAddressIsSilentlyDropped [FAIL]
+  Failed ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Write_ToUnmappedAddressIsSilentlyDropped [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 255
+Actual:   187
+  Stack Trace:
+     at ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Write_ToUnmappedAddressIsSilentlyDropped() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/BasicBusAndSimpleRamTests.cs:line 279
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:30.19]     ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Unregister_RemovesDeviceFromDispatch [FAIL]
+[xUnit.net 00:00:30.20]     ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests.MotorOnPlayPressed_WithImrEnabled_AssertsIrq [FAIL]
+  Failed ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Unregister_RemovesDeviceFromDispatch [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 255
+Actual:   85
+  Stack Trace:
+     at ViceSharp.TestHarness.BasicBusAndSimpleRamTests.BasicBus_Unregister_RemovesDeviceFromDispatch() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/BasicBusAndSimpleRamTests.cs:line 217
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests.MotorOnPlayPressed_WithImrEnabled_AssertsIrq [3 ms]
+  Error Message:
+   Expected irq.IsAsserted to be True because with IMR bit 4 enabled, pulse-driven FLAG must assert IRQ, but found False.
+  Stack Trace:
+     at FluentAssertions.Primitives.BooleanAssertions`1.BeTrue(String because, Object[] becauseArgs)
+   at ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests.MotorOnPlayPressed_WithImrEnabled_AssertsIrq() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/Tape/DatasetteCia1FlagTests.cs:line 182
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:30.22]     ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests.BranchNotTaken_StillConsumesTheOffsetByte [FAIL]
+[xUnit.net 00:00:30.22]     ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests.ResolveConfigDirectory_ExpandsEnvironmentVariables [FAIL]
+  Failed ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests.BranchNotTaken_StillConsumesTheOffsetByte [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 32770
+Actual:   32771
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests.BranchNotTaken_StillConsumesTheOffsetByte() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/CpuReadModifyWriteRegressionTests.cs:line 70
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests.ResolveConfigDirectory_ExpandsEnvironmentVariables [3 ms]
+  Error Message:
+   Assert.DoesNotContain() Failure: Sub-string found
+                                                   ↓ (pos 106)
+String: ···"eSharp.TestHarness/bin/Release/net10.0/%TEMP%/vice"
+Found:  "%"
+  Stack Trace:
+     at ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests.ResolveConfigDirectory_ExpandsEnvironmentVariables() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/Configuration/ViceConfigLocatorTests.cs:line 49
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:30.24]     ViceSharp.TestHarness.CpuInstructionCompletedEventTests.CompletedInstruction_PublishesOpcodeAndRegisters [FAIL]
+  Failed ViceSharp.TestHarness.CpuInstructionCompletedEventTests.CompletedInstruction_PublishesOpcodeAndRegisters [5 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 66
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuInstructionCompletedEventTests.CompletedInstruction_PublishesOpcodeAndRegisters() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/CpuInstructionCompletedEventTests.cs:line 51
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:30.30]     ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests.Registers_D012Read_ReturnsLiveRasterLowByte [FAIL]
+[xUnit.net 00:00:30.35]     ViceSharp.TestHarness.BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations [FAIL]
+  Failed ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests.Registers_D012Read_ReturnsLiveRasterLowByte [1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 129
+Actual:   128
+  Stack Trace:
+     at ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests.Registers_D012Read_ReturnsLiveRasterLowByte() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/VicBorderIrqFaithfulParityTests.cs:line 757
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations [52 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 0
+Actual:   4586808
+  Stack Trace:
+     at ViceSharp.TestHarness.BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/BenchmarksSmokeTests.cs:line 164
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:30.52]     ViceSharp.TestHarness.VicIID011ControlTests.D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch [FAIL]
+[xUnit.net 00:00:30.63]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly [FAIL]
+[xUnit.net 00:00:30.67]     ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals [FAIL]
+  Failed ViceSharp.TestHarness.VicIID011ControlTests.D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch [3 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 128
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.VicIID011ControlTests.D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/VicIID011ControlTests.cs:line 128
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.AvaloniaBoundaryTests.AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly [12 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 1000
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.AvaloniaBoundaryTests.AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/AvaloniaBoundaryTests.cs:line 274
+--- End of stack trace from previous location ---
+  Failed ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals [36 ms]
+  Error Message:
+   Assert.DoesNotContain() Failure: Sub-string found
+                                      ↓ (pos 324673)
+String: ···".Platform.Storage;\nusing ViceSharp.Core.FlashCarts"···
+Found:  "ViceSharp.Core"
+  Stack Trace:
+     at ViceSharp.TestHarness.AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals() in /home/sharpninja/codex-dispatch/worktrees/pre-d2-af62785c/tests/ViceSharp.TestHarness/AvaloniaBoundaryTests.cs:line 60
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261020T220000-phase-d-d2-linux/gate/pre-d2-af62785c/focused.trx
+
+Failed!  - Failed:    21, Passed:   136, Skipped:     0, Total:   157, Duration: 27 s - ViceSharp.TestHarness.dll (net10.0)

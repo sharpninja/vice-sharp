@@ -1,0 +1,20 @@
+{
+  "timestampLocal": "2026-10-20T17:14:28",
+  "scripts": [
+    "Confirm-ReviewArtifacts.ps1",
+    "Confirm-ReviewIntegrity.ps1",
+    "Inspect-PinnedSources.ps1",
+    "Inspect-ReviewEvidence.ps1",
+    "Inspect-ReviewState.ps1",
+    "Invoke-ReviewMcp.ps1",
+    "Launch-Review.ps1",
+    "Read-Review.ps1",
+    "Save-ReviewPersistence.ps1",
+    "Test-ReviewScripts.ps1",
+    "Write-ReviewVerdict.ps1"
+  ],
+  "parserErrorCount": 0,
+  "analyzerFindingCount": 0,
+  "parserErrors": [],
+  "analyzerFindings": []
+}

@@ -1,0 +1,174 @@
+{
+  "originals": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450",
+  "scopeDir": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-scope-legion2-20261019T201450",
+  "files": [
+    {
+      "name": "001-history-before.params.yaml",
+      "bytes": 42,
+      "sha256": "4A2EB70662E8235AD800529BCE79AA0AC70FF3994CBA7FCB1C5ADD29EDB3E431",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\001-history-before.params.yaml"
+    },
+    {
+      "name": "001-history-before.response.yaml",
+      "bytes": 243514,
+      "sha256": "C1023069CB86FEA1E2D81563CE4958CA3BFA3CE1B40551F461606066EF84AD10",
+      "inRepo": false,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\001-history-before.response.yaml"
+    },
+    {
+      "name": "002-begin.params.yaml",
+      "bytes": 277,
+      "sha256": "9D4CE67EABC643D076C055AC19EB3D7C57DA1D26971C79DF191FE4A7A1A0F97C",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\002-begin.params.yaml"
+    },
+    {
+      "name": "002-begin.response.yaml",
+      "bytes": 464,
+      "sha256": "C54F2304610800A829C16F87433F2C2B01A86E111DB2B5E7E13CA63147F692EC",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\002-begin.response.yaml"
+    },
+    {
+      "name": "003-appendDialog.params.yaml",
+      "bytes": 192,
+      "sha256": "E5C82559D76FDD46EAB9D73467AA8601242BBB4417C86113B7F126B6375D30F0",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\003-appendDialog.params.yaml"
+    },
+    {
+      "name": "003-appendDialog.response.yaml",
+      "bytes": 439,
+      "sha256": "B2E0A99550B58213C41238778F16BAC7CE90CC6431BE625CB916B867B157753F",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\003-appendDialog.response.yaml"
+    },
+    {
+      "name": "004-appendActions.params.yaml",
+      "bytes": 180,
+      "sha256": "2EBD8CEC202B3CEE5CF70246B532291FB0778DB5A5426C55549ED648D41DC69E",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\004-appendActions.params.yaml"
+    },
+    {
+      "name": "004-appendActions.response.yaml",
+      "bytes": 468,
+      "sha256": "D7DB3647C2C0887AD7F4B7825060B0B75416D2C6E37C9174436899F41E81C1D6",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\004-appendActions.response.yaml"
+    },
+    {
+      "name": "005-updateTurn.params.yaml",
+      "bytes": 91,
+      "sha256": "44A3710FE2FE341208D8F8C91AADCA3F28E4BC998A1F5E2838D461D179C6FDED",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\005-updateTurn.params.yaml"
+    },
+    {
+      "name": "005-updateTurn.response.yaml",
+      "bytes": 465,
+      "sha256": "EE56B1F98B84329F2FD6DD57D68BA9C8256822A778A9B698FBD6B31991239D44",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\005-updateTurn.response.yaml"
+    },
+    {
+      "name": "006-complete.params.yaml",
+      "bytes": 46,
+      "sha256": "9D95650814C78ADFAAE055EFCDCBC92D242CCE491E643EB8BAE43D36D101604B",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\006-complete.params.yaml"
+    },
+    {
+      "name": "006-complete.response.yaml",
+      "bytes": 467,
+      "sha256": "07EAF33D40D1C3636AF0D84F31275D3BF01174308E28933CB3B50547E76C7550",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\006-complete.response.yaml"
+    },
+    {
+      "name": "007-history-after.params.yaml",
+      "bytes": 42,
+      "sha256": "4A2EB70662E8235AD800529BCE79AA0AC70FF3994CBA7FCB1C5ADD29EDB3E431",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\007-history-after.params.yaml"
+    },
+    {
+      "name": "007-history-after.response.yaml",
+      "bytes": 243561,
+      "sha256": "A14815DDF4918970B6703492F3647E835A2A3E0952D556CE11C5FA907BA97D4C",
+      "inRepo": false,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\007-history-after.response.yaml"
+    },
+    {
+      "name": "008-readback-clientSessionLogGetTurnAsync.params.yaml",
+      "bytes": 119,
+      "sha256": "8C997772B9255EE4266F910960954666D4336C1962494D028B68FD1722F38909",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\008-readback-clientSessionLogGetTurnAsync.params.yaml"
+    },
+    {
+      "name": "008-readback-clientSessionLogGetTurnAsync.response.yaml",
+      "bytes": 726,
+      "sha256": "D7981B4608A04135CB2776AC7A0A9BF16502DA5BBA503C3A38555F83B63DC885",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\008-readback-clientSessionLogGetTurnAsync.response.yaml"
+    },
+    {
+      "name": "008-readback-clientSessionLogGetTurnAsync.stderr.txt",
+      "bytes": 1640,
+      "sha256": "F326FB7DD8BBE34CF9F6362D1DEA2D38F540C012B9FEBCC535FEF45AE1394CEC",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\008-readback-clientSessionLogGetTurnAsync.stderr.txt"
+    },
+    {
+      "name": "009-readback-clientSessionLogGetTurnDetailAsync.params.yaml",
+      "bytes": 119,
+      "sha256": "8C997772B9255EE4266F910960954666D4336C1962494D028B68FD1722F38909",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\009-readback-clientSessionLogGetTurnDetailAsync.params.yaml"
+    },
+    {
+      "name": "009-readback-clientSessionLogGetTurnDetailAsync.response.yaml",
+      "bytes": 738,
+      "sha256": "AD926B8D228F3831397FD1DB45A44DE70D212C7BE5830C868730D34E5BEE87C4",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\009-readback-clientSessionLogGetTurnDetailAsync.response.yaml"
+    },
+    {
+      "name": "009-readback-clientSessionLogGetTurnDetailAsync.stderr.txt",
+      "bytes": 1809,
+      "sha256": "1D374DB1981F37387D0C8389BBD3D85534F212ECC2CDB8562EFC00135B0209E1",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\009-readback-clientSessionLogGetTurnDetailAsync.stderr.txt"
+    },
+    {
+      "name": "010-readback-workflowsessionloggetTurn.params.yaml",
+      "bytes": 119,
+      "sha256": "8C997772B9255EE4266F910960954666D4336C1962494D028B68FD1722F38909",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\010-readback-workflowsessionloggetTurn.params.yaml"
+    },
+    {
+      "name": "010-readback-workflowsessionloggetTurn.response.yaml",
+      "bytes": 323,
+      "sha256": "9AB22C10299EC02B8389E2EBCE3BD3094212296B7AF66F84A78052DA8CFDBEFA",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\010-readback-workflowsessionloggetTurn.response.yaml"
+    },
+    {
+      "name": "010-readback-workflowsessionloggetTurn.stderr.txt",
+      "bytes": 965,
+      "sha256": "86DA01A36730BAB056E77B3CFDD15E48082AAF146DC12CF0CA6F918EA3565FB4",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\010-readback-workflowsessionloggetTurn.stderr.txt"
+    },
+    {
+      "name": "dense-session-smoke.json",
+      "bytes": 4716,
+      "sha256": "5F88CA3C2B822B06FBF101EAB913BA9F128D87994429A1BE7E781B8D5300EE94",
+      "inRepo": true,
+      "original": "C:\\Users\\kingd\\codex-dispatch\\dense-smoke-legion2-20261019T201450\\dense-session-smoke.json"
+    }
+  ]
+}

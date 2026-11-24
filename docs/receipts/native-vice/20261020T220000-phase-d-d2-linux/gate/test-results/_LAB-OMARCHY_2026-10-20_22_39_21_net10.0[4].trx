@@ -1,0 +1,470 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="b7aa46d3-be73-4db3-b224-ccc5f7a6ce08" name="@LAB-OMARCHY 2026-10-20 22:39:21" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-20T22:39:21.7653113-05:00" queuing="2026-10-20T22:39:21.7653114-05:00" start="2026-10-20T22:39:19.2927747-05:00" finish="2026-10-20T22:39:27.5210567-05:00" />
+  <TestSettings name="default" id="c256f60b-b4e4-4381-a958-072d46575180">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-10-20_22_39_21" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="88292349-e9c7-4c70-b7ab-4aa46dba8198" testId="77f445b8-3f81-3b86-81eb-319add043318" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.Cover_DetachingVisualCancelsPendingLoad" computerName="LAB-OMARCHY" duration="00:00:00.5276373" startTime="2026-10-20T22:39:21.7562578-05:00" endTime="2026-10-20T22:39:22.2842521-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="88292349-e9c7-4c70-b7ab-4aa46dba8198" />
+    <UnitTestResult executionId="4092fa9e-4fe0-41b7-bd2d-b5dabe380833" testId="436cf70f-9b67-c81a-7403-a921fb413edb" testName="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch(autostart: True, asynchronous: True)" computerName="LAB-OMARCHY" duration="00:00:00.0939967" startTime="2026-10-20T22:39:21.3382682-05:00" endTime="2026-10-20T22:39:21.4545728-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4092fa9e-4fe0-41b7-bd2d-b5dabe380833" />
+    <UnitTestResult executionId="3972c0cb-6519-458a-9261-4affd144e8d1" testId="6664a3d5-ff11-95b3-d202-42ee9ef051ad" testName="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests.RecentsRefreshFailure_PreservesLaunchSuccess_AndAllowsNextGame(autostart: True)" computerName="LAB-OMARCHY" duration="00:00:00.1005077" startTime="2026-10-20T22:39:21.3377585-05:00" endTime="2026-10-20T22:39:21.4542567-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3972c0cb-6519-458a-9261-4affd144e8d1" />
+    <UnitTestResult executionId="4935fea9-184e-45ff-8ebb-3f04eaeb5678" testId="55442254-fc34-d3be-8b60-74a8269fd4a4" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;collection-failure&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0072446" startTime="2026-10-20T22:39:27.1107627-05:00" endTime="2026-10-20T22:39:27.1180587-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4935fea9-184e-45ff-8ebb-3f04eaeb5678" />
+    <UnitTestResult executionId="fa79f6b2-0182-47d0-9c97-8ac70ddaf936" testId="b68bae4f-d94f-bfad-a12f-ceda2e8ea928" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;grid-resize&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.2467283" startTime="2026-10-20T22:39:25.0755437-05:00" endTime="2026-10-20T22:39:25.3223532-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fa79f6b2-0182-47d0-9c97-8ac70ddaf936">
+      <Output>
+        <StdOut>{"scenario":"grid-resize","provider":"production","observations":{"narrow":"3","wide":"21","last":"59","empty":"0"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="04421b8f-c7ad-4139-9f39-34389bdb3087" testId="6759086e-5377-9122-5527-f0db67cb8d55" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;tile-layout&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0048516" startTime="2026-10-20T22:39:27.2605834-05:00" endTime="2026-10-20T22:39:27.2655072-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="04421b8f-c7ad-4139-9f39-34389bdb3087" />
+    <UnitTestResult executionId="89410b4f-0d72-4cfc-845d-461a64ae78ba" testId="4f3da373-1ada-5030-90bd-8fefbb0b29c1" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;list-race&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1357457" startTime="2026-10-20T22:39:26.2250595-05:00" endTime="2026-10-20T22:39:26.3608823-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89410b4f-0d72-4cfc-845d-461a64ae78ba">
+      <Output>
+        <StdOut>{"scenario":"list-race","provider":"production","observations":{"members":"3","selectedTile":"null"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7a5f2816-07c3-45e7-883f-d3ee1e9ad6d8" testId="4a2e3e84-e363-4027-fe0e-ac033e90f000" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;loader-invalid&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1560120" startTime="2026-10-20T22:39:22.3274794-05:00" endTime="2026-10-20T22:39:22.4835661-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a5f2816-07c3-45e7-883f-d3ee1e9ad6d8">
+      <Output>
+        <StdOut>{"scenario":"loader-invalid","provider":"production","observations":{"rejected":"3","absolutePathRequests":"0"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="431cdd38-7944-4c3a-afc7-e5ab0fa39abe" testId="c3b52cb9-d358-d389-2d54-3e14dd58405f" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;collections&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0125107" startTime="2026-10-20T22:39:27.2704576-05:00" endTime="2026-10-20T22:39:27.2830233-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="431cdd38-7944-4c3a-afc7-e5ab0fa39abe" />
+    <UnitTestResult executionId="805da7b3-9ec1-4d56-a3cc-86f507aa0661" testId="46b2316d-fcc2-1f57-3472-bae3cc23179b" testName="ViceSharp.Heads.Tests.XboxGameLauncherTests.PayloadAttachAndBoot" computerName="LAB-OMARCHY" duration="00:00:00.1122326" startTime="2026-10-20T22:39:21.3382242-05:00" endTime="2026-10-20T22:39:21.4658245-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="805da7b3-9ec1-4d56-a3cc-86f507aa0661" />
+    <UnitTestResult executionId="7489b433-5062-4297-a617-503dacecf77c" testId="90c570cf-7b12-394f-b9e6-394075109811" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;collection-create&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0101221" startTime="2026-10-20T22:39:27.1411736-05:00" endTime="2026-10-20T22:39:27.1513459-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7489b433-5062-4297-a617-503dacecf77c" />
+    <UnitTestResult executionId="d83b4996-44b1-493d-8593-0d3749b28ded" testId="7a3ab52e-28eb-6553-cb94-72e2f757142d" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;credentials&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1688519" startTime="2026-10-20T22:39:24.9015205-05:00" endTime="2026-10-20T22:39:25.0704549-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d83b4996-44b1-493d-8593-0d3749b28ded">
+      <Output>
+        <StdOut>{"scenario":"credentials","provider":"production","observations":{"base":"http://127.0.0.1:9/","token":"contract-token","sameLoader":"True","replaced":"True","oldDisposed":"True"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="dd2811f5-a2bb-4ba3-9121-b2425108c510" testId="85c24531-da55-de10-7bac-229787193463" testName="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.RequestedCancellation_ReturnsCanceledOutcome_AndAllowsNextLaunch(autostart: True)" computerName="LAB-OMARCHY" duration="00:00:00.0103967" startTime="2026-10-20T22:39:21.4780483-05:00" endTime="2026-10-20T22:39:21.4885049-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd2811f5-a2bb-4ba3-9121-b2425108c510" />
+    <UnitTestResult executionId="c32ea79b-b892-4a5c-8322-ea837556b92f" testId="46c60f10-4ff1-81f2-0a64-ac70ecbe879e" testName="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch(autostart: True, asynchronous: False)" computerName="LAB-OMARCHY" duration="00:00:00.0001608" startTime="2026-10-20T22:39:21.4771640-05:00" endTime="2026-10-20T22:39:21.4773867-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c32ea79b-b892-4a5c-8322-ea837556b92f" />
+    <UnitTestResult executionId="3f10b467-b26c-4095-ab7b-86e7ae8a59ce" testId="c6d24145-7329-97b2-006d-9b766a3b3e1c" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;detail-guard&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1366436" startTime="2026-10-20T22:39:26.3668478-05:00" endTime="2026-10-20T22:39:26.5035628-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f10b467-b26c-4095-ab7b-86e7ae8a59ce">
+      <Output>
+        <StdOut>{"scenario":"detail-guard","provider":"production","observations":{"name":"","addCalls":"0"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b2e308ed-3a90-4ccd-b74f-2b9cd812095a" testId="2b519837-065e-b6fe-cfcc-d94e5ec6044f" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;grid-scroll-focus&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.2273086" startTime="2026-10-20T22:39:25.9922573-05:00" endTime="2026-10-20T22:39:26.2196419-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b2e308ed-3a90-4ccd-b74f-2b9cd812095a">
+      <Output>
+        <StdOut>{"scenario":"grid-scroll-focus","provider":"production","observations":{"unrealized":"True","focusRetained":"True","right":"4","visible":"True"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="186ed647-b85d-4ef2-b60c-5f32ad4d38a1" testId="233fec7a-876b-51c8-bebb-4afabcd5fba6" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;repeat-navigation&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.3488526" startTime="2026-10-20T22:39:24.1431089-05:00" endTime="2026-10-20T22:39:24.4920385-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="186ed647-b85d-4ef2-b60c-5f32ad4d38a1">
+      <Output>
+        <StdOut>{"scenario":"repeat-navigation","provider":"production","observations":{"tab":"1","visible":"1"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="84bcb0f0-f272-48e2-b8a4-3f7b20c13362" testId="c82c8fa5-1765-124d-e815-f25a1efd13d2" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;collection-failure&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1229779" startTime="2026-10-20T22:39:26.5086417-05:00" endTime="2026-10-20T22:39:26.6316831-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84bcb0f0-f272-48e2-b8a4-3f7b20c13362">
+      <Output>
+        <StdOut>{"scenario":"collection-failure","provider":"production","observations":{"status":"Library operation failed: synthetic create failure","enabled":"True","createCalls":"1"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8d29d236-2116-4937-be28-0de12b683a41" testId="158e92b0-c8b9-1db5-9e6e-4e056e1b3988" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;credentials&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0199090" startTime="2026-10-20T22:39:27.2395981-05:00" endTime="2026-10-20T22:39:27.2595908-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8d29d236-2116-4937-be28-0de12b683a41" />
+    <UnitTestResult executionId="0c05d3a7-072e-49cb-a732-60c059090050" testId="58bb3f55-ba3f-b6a8-276e-20cb049dc058" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;tab&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.2338736" startTime="2026-10-20T22:39:24.4983334-05:00" endTime="2026-10-20T22:39:24.7322892-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0c05d3a7-072e-49cb-a732-60c059090050">
+      <Output>
+        <StdOut>{"scenario":"tab","provider":"production","observations":{"selected":"3","primary":"4","attach":"True","sameLoader":"True","closedDisposed":"True"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="75b5fa79-a7b8-48f4-85c6-627122bc38d4" testId="17655416-1a1c-7a79-2fb7-0a9ecb108393" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.Cover_FailureShowsFallback_AndNextRequestWorks" computerName="LAB-OMARCHY" duration="00:00:00.0025667" startTime="2026-10-20T22:39:27.2974805-05:00" endTime="2026-10-20T22:39:27.3001346-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75b5fa79-a7b8-48f4-85c6-627122bc38d4" />
+    <UnitTestResult executionId="d446d068-c938-4f11-af6a-77d8d9f17510" testId="bef7cfce-b9a0-ad92-0191-d193e2a966b9" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;grid-keyboard&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0066988" startTime="2026-10-20T22:39:27.1984765-05:00" endTime="2026-10-20T22:39:27.2052433-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d446d068-c938-4f11-af6a-77d8d9f17510" />
+    <UnitTestResult executionId="006119f6-93de-4b46-b693-b4e59cf110ac" testId="0beede8d-0d0f-6054-e0b4-1cc7273d60a1" testName="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests.AttachFailure_UpdatesObservableStatus_AndAllowsNextGame(autostart: True)" computerName="LAB-OMARCHY" duration="00:00:00.0157666" startTime="2026-10-20T22:39:21.4589690-05:00" endTime="2026-10-20T22:39:21.4747982-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="006119f6-93de-4b46-b693-b4e59cf110ac" />
+    <UnitTestResult executionId="e6cabbf0-cf54-4ea0-a2d6-4e89e4aed764" testId="22d26fe9-599e-9d58-2ffa-aecbcea25f4d" testName="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch(autostart: False, asynchronous: False)" computerName="LAB-OMARCHY" duration="00:00:00.0037711" startTime="2026-10-20T22:39:21.4674796-05:00" endTime="2026-10-20T22:39:21.4713081-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e6cabbf0-cf54-4ea0-a2d6-4e89e4aed764" />
+    <UnitTestResult executionId="2201d207-4af9-497a-8910-18fb1a7aff99" testId="88d5ab4e-446e-d235-033b-5f318640f603" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.LayoutAssertions_RejectEveryMissingControlAndAction" computerName="LAB-OMARCHY" duration="00:00:00.0260907" startTime="2026-10-20T22:39:27.3433687-05:00" endTime="2026-10-20T22:39:27.3695181-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2201d207-4af9-497a-8910-18fb1a7aff99" />
+    <UnitTestResult executionId="d2fa6730-42cd-4dc4-a48c-d2b19b17b883" testId="8845e43d-d686-c21a-8590-7f9212220404" testName="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests.AttachFailure_UpdatesObservableStatus_AndAllowsNextGame(autostart: False)" computerName="LAB-OMARCHY" duration="00:00:00.0023109" startTime="2026-10-20T22:39:21.4752849-05:00" endTime="2026-10-20T22:39:21.4776314-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d2fa6730-42cd-4dc4-a48c-d2b19b17b883" />
+    <UnitTestResult executionId="00723279-001c-4b41-9afe-a9f0af2d3cdd" testId="b314ed5d-ff02-681f-f8d7-3953a8b0870a" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;loader-invalid&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0062793" startTime="2026-10-20T22:39:27.1911925-05:00" endTime="2026-10-20T22:39:27.1975632-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="00723279-001c-4b41-9afe-a9f0af2d3cdd" />
+    <UnitTestResult executionId="d6d2b8bf-85dc-4f38-ab24-7966cf2883a5" testId="4db43ed5-ba28-62c2-c8f6-6ab62a89ad21" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;grid-scroll-focus&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0109039" startTime="2026-10-20T22:39:27.2224305-05:00" endTime="2026-10-20T22:39:27.2333940-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d6d2b8bf-85dc-4f38-ab24-7966cf2883a5" />
+    <UnitTestResult executionId="7e9c1f5e-6986-4b78-9400-5077566c4087" testId="51e9249d-7544-0505-2083-0e7408859f6e" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;repeat-navigation&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0051571" startTime="2026-10-20T22:39:27.1855392-05:00" endTime="2026-10-20T22:39:27.1907517-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7e9c1f5e-6986-4b78-9400-5077566c4087" />
+    <UnitTestResult executionId="ae3e5ab3-7281-4e6d-8ed4-7a2bdba36222" testId="18105825-a9a0-0e56-6b4e-dbc952812f74" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;grid-keyboard&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.2276115" startTime="2026-10-20T22:39:26.6358912-05:00" endTime="2026-10-20T22:39:26.8635674-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ae3e5ab3-7281-4e6d-8ed4-7a2bdba36222">
+      <Output>
+        <StdOut>{"scenario":"grid-keyboard","provider":"production","observations":{"right":"1","end":"59","home":"0"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bc0d002d-e25c-4cb3-ae0d-04579b4b8845" testId="ab174d52-44a7-41c6-6a69-1f80db8392b7" testName="ViceSharp.Heads.Tests.XboxNavigationTests.Library_Routable(destination: Lists)" computerName="LAB-OMARCHY" duration="00:00:00.0000441" startTime="2026-10-20T22:39:21.4547090-05:00" endTime="2026-10-20T22:39:21.4547922-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc0d002d-e25c-4cb3-ae0d-04579b4b8845" />
+    <UnitTestResult executionId="dcd644db-4a9d-4db0-b15c-90082f8d410f" testId="5b184889-761b-c580-dd2b-e4c861e28f7c" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;tile-page-boundary&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1579521" startTime="2026-10-20T22:39:26.8710451-05:00" endTime="2026-10-20T22:39:27.0290752-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dcd644db-4a9d-4db0-b15c-90082f8d410f">
+      <Output>
+        <StdOut>{"scenario":"tile-page-boundary","provider":"production","observations":{"before":"60 variants","after":"120 variants","selected":"0"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="898b5514-72e2-495b-ba02-e8c0bab6e436" testId="4a8231a5-a595-1f7b-b4d7-515b8b6636f2" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;tile-layout&quot;)" computerName="LAB-OMARCHY" duration="00:00:01.3446376" startTime="2026-10-20T22:39:22.4884224-05:00" endTime="2026-10-20T22:39:23.8331456-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="898b5514-72e2-495b-ba02-e8c0bab6e436">
+      <Output>
+        <StdOut>{"scenario":"tile-layout","provider":"production","observations":{"normalFits":"True","longFits":"True"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d3c0af0d-6f93-46d8-a13f-65d73ba86dee" testId="770e5b1d-a34a-8b46-15a1-675bb68ef9ac" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;grid&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1705710" startTime="2026-10-20T22:39:25.3414530-05:00" endTime="2026-10-20T22:39:25.5121198-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d3c0af0d-6f93-46d8-a13f-65d73ba86dee">
+      <Output>
+        <StdOut>{"scenario":"grid","provider":"production","observations":{"initial":"9","paged":"9","items":"180","oldPending":"0","last":"179"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="89fb5753-d179-4099-9c89-cc621ee5f68a" testId="b504562f-357e-b024-8fb8-0dfb9b0a1de5" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;grid&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0108911" startTime="2026-10-20T22:39:27.1521132-05:00" endTime="2026-10-20T22:39:27.1630590-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89fb5753-d179-4099-9c89-cc621ee5f68a" />
+    <UnitTestResult executionId="14b01fab-8082-4982-9059-3d8d7f9058fc" testId="381842e6-f7b1-b911-bdfb-c556d0f233be" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.CoverAssertions_RejectStaleImageMissingCancellationAndUnexpectedImage" computerName="LAB-OMARCHY" duration="00:00:00.0229810" startTime="2026-10-20T22:39:27.3054773-05:00" endTime="2026-10-20T22:39:27.3287131-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14b01fab-8082-4982-9059-3d8d7f9058fc" />
+    <UnitTestResult executionId="b12ed549-f3d3-4f1e-aef4-9045a476899f" testId="034a8404-9954-b982-af62-72d4165b0d74" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;auto-connect&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0082448" startTime="2026-10-20T22:39:27.2834202-05:00" endTime="2026-10-20T22:39:27.2917326-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b12ed549-f3d3-4f1e-aef4-9045a476899f" />
+    <UnitTestResult executionId="6acf3e37-a357-4d6c-9d35-e14bf89e3c0b" testId="0d3a6e8a-2352-06c1-1a11-5ef8d91fa5e5" testName="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests.RecentsRefreshFailure_PreservesLaunchSuccess_AndAllowsNextGame(autostart: False)" computerName="LAB-OMARCHY" duration="00:00:00.0011561" startTime="2026-10-20T22:39:21.4547438-05:00" endTime="2026-10-20T22:39:21.4559518-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6acf3e37-a357-4d6c-9d35-e14bf89e3c0b" />
+    <UnitTestResult executionId="fb526e38-140d-4e7c-8e2d-361b91846190" testId="58f84551-5bcd-a0af-75d9-ede06155a6d6" testName="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.RequestedCancellation_ReturnsCanceledOutcome_AndAllowsNextLaunch(autostart: False)" computerName="LAB-OMARCHY" duration="00:00:00.0006065" startTime="2026-10-20T22:39:21.4891222-05:00" endTime="2026-10-20T22:39:21.4897948-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fb526e38-140d-4e7c-8e2d-361b91846190" />
+    <UnitTestResult executionId="59fceef3-e9ab-4cbb-b600-c4494261d178" testId="6429e607-b287-e401-afd8-76331487cb8d" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.Cover_ClearCancelsPending_AndStaleResultCannotReappear" computerName="LAB-OMARCHY" duration="00:00:00.0031982" startTime="2026-10-20T22:39:27.3742661-05:00" endTime="2026-10-20T22:39:27.3775380-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="59fceef3-e9ab-4cbb-b600-c4494261d178" />
+    <UnitTestResult executionId="0ebfe798-3754-4904-8b0d-7bbaa947b27a" testId="de44f6ac-49ac-03dc-566b-2ec23529bc24" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;delete-guard&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0046540" startTime="2026-10-20T22:39:27.2343001-05:00" endTime="2026-10-20T22:39:27.2390267-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0ebfe798-3754-4904-8b0d-7bbaa947b27a" />
+    <UnitTestResult executionId="620a230c-46e7-41d3-8469-1d0f82beb70e" testId="0d082611-e0c6-3b19-a6a4-042c26790d1d" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;tile-page-boundary&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0061099" startTime="2026-10-20T22:39:27.1789906-05:00" endTime="2026-10-20T22:39:27.1851634-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="620a230c-46e7-41d3-8469-1d0f82beb70e" />
+    <UnitTestResult executionId="65fdc34b-f7d7-4440-8a20-7b1167286d00" testId="081b2c36-f10c-c228-57d4-beaf55249a29" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;delete-guard&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1484629" startTime="2026-10-20T22:39:25.5190126-05:00" endTime="2026-10-20T22:39:25.6675464-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="65fdc34b-f7d7-4440-8a20-7b1167286d00">
+      <Output>
+        <StdOut>{"scenario":"delete-guard","provider":"production","observations":{"mismatchDeletes":"0","missingDeletes":"0"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f13b0309-4380-4242-9abd-588bbcac82bc" testId="5cde8396-98ff-d15c-6c9c-1036d81bedc0" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;auto-connect&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1801546" startTime="2026-10-20T22:39:25.6716030-05:00" endTime="2026-10-20T22:39:25.8518244-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f13b0309-4380-4242-9abd-588bbcac82bc">
+      <Output>
+        <StdOut>{"scenario":"auto-connect","provider":"production","observations":{"before":"0","after":"1","return":"1"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8eb22263-4b65-4ee9-9ee2-1cbfc5704d55" testId="2e187c72-db0d-0dfd-7ab4-3e009990c124" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;tiles&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0116229" startTime="2026-10-20T22:39:27.1184987-05:00" endTime="2026-10-20T22:39:27.1301736-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8eb22263-4b65-4ee9-9ee2-1cbfc5704d55" />
+    <UnitTestResult executionId="7dd88ef9-dbdd-415a-8dea-2ae2ab4b203a" testId="30586c22-ff39-6f16-470f-a4b108f15be3" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;grid-resize&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0786946" startTime="2026-10-20T22:39:27.0315716-05:00" endTime="2026-10-20T22:39:27.1103349-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7dd88ef9-dbdd-415a-8dea-2ae2ab4b203a" />
+    <UnitTestResult executionId="afab2776-8ec5-4b4a-82a5-8f80b91bfbba" testId="bbbec937-8899-2c0d-854d-329aafe08416" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.Detail_LastSelectionWins_WhenRequestsCompleteOutOfOrder" computerName="LAB-OMARCHY" duration="00:00:00.0131045" startTime="2026-10-20T22:39:27.3294781-05:00" endTime="2026-10-20T22:39:27.3426449-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="afab2776-8ec5-4b4a-82a5-8f80b91bfbba" />
+    <UnitTestResult executionId="5b155fbd-cd9d-4a41-81fb-ea6361244beb" testId="8765edc5-c293-ecb1-7613-384f47c08828" testName="ViceSharp.Heads.Tests.XboxNavigationTests.Library_Routable(destination: GameDetails)" computerName="LAB-OMARCHY" duration="00:00:00.0816076" startTime="2026-10-20T22:39:21.3382581-05:00" endTime="2026-10-20T22:39:21.4445992-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5b155fbd-cd9d-4a41-81fb-ea6361244beb" />
+    <UnitTestResult executionId="6aa4be02-21e8-4fd1-ba6e-9f0a54c66893" testId="93ce17c9-5860-8223-2efc-455575387c3e" testName="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.DelegatesToShell" computerName="LAB-OMARCHY" duration="00:00:00.0026894" startTime="2026-10-20T22:39:21.4909267-05:00" endTime="2026-10-20T22:39:21.4936856-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6aa4be02-21e8-4fd1-ba6e-9f0a54c66893" />
+    <UnitTestResult executionId="85364c3f-798d-4d6e-8870-a93177cbbbd1" testId="f027854f-3a8a-d0ba-6f4f-6917dcfff439" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;collections&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.2933231" startTime="2026-10-20T22:39:23.8443413-05:00" endTime="2026-10-20T22:39:24.1378787-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="85364c3f-798d-4d6e-8870-a93177cbbbd1">
+      <Output>
+        <StdOut>{"scenario":"collections","provider":"production","observations":{"tab":"1","visible":"1","selected":"1","members":"1,2","deleted":"1"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bafd771f-9fde-4b9f-ae26-bf88574bcebc" testId="f6a4fde6-c650-807b-792a-e97a2f8cb75b" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;tiles&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1549191" startTime="2026-10-20T22:39:24.7376730-05:00" endTime="2026-10-20T22:39:24.8926715-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bafd771f-9fde-4b9f-ae26-bf88574bcebc">
+      <Output>
+        <StdOut>{"scenario":"tiles","provider":"production","observations":{"title":"Grouped game","subtitle":"2 variants","primary":"2"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c2ff8421-8469-40bf-8b0e-dcb6d9becc90" testId="c07dfeb5-4053-0a40-85a9-e98d7399c638" testName="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch(autostart: False, asynchronous: True)" computerName="LAB-OMARCHY" duration="00:00:00.0020065" startTime="2026-10-20T22:39:21.4718731-05:00" endTime="2026-10-20T22:39:21.4739470-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2ff8421-8469-40bf-8b0e-dcb6d9becc90" />
+    <UnitTestResult executionId="8fdd5619-577d-488a-81e1-2cd13e68dfbd" testId="9dee7936-9678-f8fb-c189-1f0ffc332291" testName="ViceSharp.Heads.Tests.XboxNavigationTests.Library_Routable(destination: Library)" computerName="LAB-OMARCHY" duration="00:00:00.0004735" startTime="2026-10-20T22:39:21.4535801-05:00" endTime="2026-10-20T22:39:21.4542566-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8fdd5619-577d-488a-81e1-2cd13e68dfbd" />
+    <UnitTestResult executionId="f4e72a87-51f0-46b4-a8ce-3b02353b2c2b" testId="168a7ff9-ab8b-82da-e989-c3e4c19b2e66" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.Layout_PreservesNavigationAndConnectionActions" computerName="LAB-OMARCHY" duration="00:00:00.0041836" startTime="2026-10-20T22:39:27.3817438-05:00" endTime="2026-10-20T22:39:27.3860166-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4e72a87-51f0-46b4-a8ce-3b02353b2c2b" />
+    <UnitTestResult executionId="af7abc66-5432-4dd0-a044-2da3ee80866a" testId="ea6e06a0-e9f2-3286-87dc-8f30c0b51275" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;tab&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0096760" startTime="2026-10-20T22:39:27.1310550-05:00" endTime="2026-10-20T22:39:27.1407870-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af7abc66-5432-4dd0-a044-2da3ee80866a" />
+    <UnitTestResult executionId="a2e2380c-2987-48a1-8bf6-44e9c6ac900b" testId="48f7790c-757e-de93-0d58-4a37e42dd0f6" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;list-race&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0041063" startTime="2026-10-20T22:39:27.2658850-05:00" endTime="2026-10-20T22:39:27.2700480-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2e2380c-2987-48a1-8bf6-44e9c6ac900b" />
+    <UnitTestResult executionId="6d181a1e-eeee-4ba7-a446-7a246dcba513" testId="1d7184df-55e2-2137-aaab-6ccc95ed5d99" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;collection-create&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.1286022" startTime="2026-10-20T22:39:25.8582712-05:00" endTime="2026-10-20T22:39:25.9869376-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d181a1e-eeee-4ba7-a446-7a246dcba513">
+      <Output>
+        <StdOut>{"scenario":"collection-create","provider":"production","observations":{"text":"","enabled":"True","newName":"New collection","createCalls":"1"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9fd27fb2-6f08-4715-a852-527ef2e93d10" testId="13823cbf-db0b-d3a2-18bf-0a5e5877d37c" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.Cover_LastSelectionWins_EvenIfOldLoadIgnoresCancellation" computerName="LAB-OMARCHY" duration="00:00:00.0030019" startTime="2026-10-20T22:39:27.3901513-05:00" endTime="2026-10-20T22:39:27.3932331-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9fd27fb2-6f08-4715-a852-527ef2e93d10" />
+    <UnitTestResult executionId="1a7da572-1e75-45c1-9689-bd3b832a6289" testId="4b6eeb05-23cd-dee0-c0ac-e2999609b26f" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;loader&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0162333" startTime="2026-10-20T22:39:27.2056346-05:00" endTime="2026-10-20T22:39:27.2219261-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1a7da572-1e75-45c1-9689-bd3b832a6289" />
+    <UnitTestResult executionId="6fb21791-83fc-41c7-ab05-254cd13c2f92" testId="f7daa2ad-ac91-cf3d-c3af-ec9f1db05312" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;detail-guard&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0141253" startTime="2026-10-20T22:39:27.1634665-05:00" endTime="2026-10-20T22:39:27.1776433-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6fb21791-83fc-41c7-ab05-254cd13c2f92" />
+    <UnitTestResult executionId="5102caec-3e04-46cc-848d-6ace03bf8b42" testId="8eb25a8a-1e5b-c5d1-4080-108636f8fed0" testName="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;loader&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0083960" startTime="2026-10-20T22:39:25.3290930-05:00" endTime="2026-10-20T22:39:25.3375750-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5102caec-3e04-46cc-848d-6ace03bf8b42">
+      <Output>
+        <StdOut>{"scenario":"loader","provider":"production","observations":{"auth":"http://server.invalid/root/cover.png|Bearer contract-token","anon":"http://cdn.invalid/cover.png|","requests":"2","disposed":"2","malformed":"null","canceled":"null"}}</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;collection-create&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="90c570cf-7b12-394f-b9e6-394075109811">
+      <Execution id="7489b433-5062-4297-a617-503dacecf77c" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.Cover_LastSelectionWins_EvenIfOldLoadIgnoresCancellation" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="13823cbf-db0b-d3a2-18bf-0a5e5877d37c">
+      <Execution id="9fd27fb2-6f08-4715-a852-527ef2e93d10" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="Cover_LastSelectionWins_EvenIfOldLoadIgnoresCancellation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.XboxNavigationTests.Library_Routable(destination: Library)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="9dee7936-9678-f8fb-c189-1f0ffc332291">
+      <Execution id="8fdd5619-577d-488a-81e1-2cd13e68dfbd" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.XboxNavigationTests" name="Library_Routable" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.DelegatesToShell" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="93ce17c9-5860-8223-2efc-455575387c3e">
+      <Execution id="6aa4be02-21e8-4fd1-ba6e-9f0a54c66893" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests" name="DelegatesToShell" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;tile-page-boundary&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="5b184889-761b-c580-dd2b-e4c861e28f7c">
+      <Execution id="dcd644db-4a9d-4db0-b15c-90082f8d410f" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch(autostart: False, asynchronous: False)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="22d26fe9-599e-9d58-2ffa-aecbcea25f4d">
+      <Execution id="e6cabbf0-cf54-4ea0-a2d6-4e89e4aed764" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests" name="TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;repeat-navigation&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="51e9249d-7544-0505-2083-0e7408859f6e">
+      <Execution id="7e9c1f5e-6986-4b78-9400-5077566c4087" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;grid-resize&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="30586c22-ff39-6f16-470f-a4b108f15be3">
+      <Execution id="7dd88ef9-dbdd-415a-8dea-2ae2ab4b203a" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;collection-create&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="1d7184df-55e2-2137-aaab-6ccc95ed5d99">
+      <Execution id="6d181a1e-eeee-4ba7-a446-7a246dcba513" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;delete-guard&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="de44f6ac-49ac-03dc-566b-2ec23529bc24">
+      <Execution id="0ebfe798-3754-4904-8b0d-7bbaa947b27a" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;grid-resize&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="b68bae4f-d94f-bfad-a12f-ceda2e8ea928">
+      <Execution id="fa79f6b2-0182-47d0-9c97-8ac70ddaf936" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;tile-layout&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="4a8231a5-a595-1f7b-b4d7-515b8b6636f2">
+      <Execution id="898b5514-72e2-495b-ba02-e8c0bab6e436" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;tiles&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="f6a4fde6-c650-807b-792a-e97a2f8cb75b">
+      <Execution id="bafd771f-9fde-4b9f-ae26-bf88574bcebc" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.RequestedCancellation_ReturnsCanceledOutcome_AndAllowsNextLaunch(autostart: False)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="58f84551-5bcd-a0af-75d9-ede06155a6d6">
+      <Execution id="fb526e38-140d-4e7c-8e2d-361b91846190" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests" name="RequestedCancellation_ReturnsCanceledOutcome_AndAllowsNextLaunch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;tab&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="ea6e06a0-e9f2-3286-87dc-8f30c0b51275">
+      <Execution id="af7abc66-5432-4dd0-a044-2da3ee80866a" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch(autostart: True, asynchronous: True)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="436cf70f-9b67-c81a-7403-a921fb413edb">
+      <Execution id="4092fa9e-4fe0-41b7-bd2d-b5dabe380833" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests" name="TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;list-race&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="4f3da373-1ada-5030-90bd-8fefbb0b29c1">
+      <Execution id="89410b4f-0d72-4cfc-845d-461a64ae78ba" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;collections&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="c3b52cb9-d358-d389-2d54-3e14dd58405f">
+      <Execution id="431cdd38-7944-4c3a-afc7-e5ab0fa39abe" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;loader&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="8eb25a8a-1e5b-c5d1-4080-108636f8fed0">
+      <Execution id="5102caec-3e04-46cc-848d-6ace03bf8b42" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests.AttachFailure_UpdatesObservableStatus_AndAllowsNextGame(autostart: False)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="8845e43d-d686-c21a-8590-7f9212220404">
+      <Execution id="d2fa6730-42cd-4dc4-a48c-d2b19b17b883" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests" name="AttachFailure_UpdatesObservableStatus_AndAllowsNextGame" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.XboxGameLauncherTests.PayloadAttachAndBoot" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="46b2316d-fcc2-1f57-3472-bae3cc23179b">
+      <Execution id="805da7b3-9ec1-4d56-a3cc-86f507aa0661" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.XboxGameLauncherTests" name="PayloadAttachAndBoot" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;collection-failure&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="55442254-fc34-d3be-8b60-74a8269fd4a4">
+      <Execution id="4935fea9-184e-45ff-8ebb-3f04eaeb5678" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;credentials&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="7a3ab52e-28eb-6553-cb94-72e2f757142d">
+      <Execution id="d83b4996-44b1-493d-8593-0d3749b28ded" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;tile-page-boundary&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="0d082611-e0c6-3b19-a6a4-042c26790d1d">
+      <Execution id="620a230c-46e7-41d3-8469-1d0f82beb70e" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;tiles&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="2e187c72-db0d-0dfd-7ab4-3e009990c124">
+      <Execution id="8eb22263-4b65-4ee9-9ee2-1cbfc5704d55" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;detail-guard&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="c6d24145-7329-97b2-006d-9b766a3b3e1c">
+      <Execution id="3f10b467-b26c-4095-ab7b-86e7ae8a59ce" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests.RecentsRefreshFailure_PreservesLaunchSuccess_AndAllowsNextGame(autostart: False)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="0d3a6e8a-2352-06c1-1a11-5ef8d91fa5e5">
+      <Execution id="6acf3e37-a357-4d6c-9d35-e14bf89e3c0b" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests" name="RecentsRefreshFailure_PreservesLaunchSuccess_AndAllowsNextGame" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests.RecentsRefreshFailure_PreservesLaunchSuccess_AndAllowsNextGame(autostart: True)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="6664a3d5-ff11-95b3-d202-42ee9ef051ad">
+      <Execution id="3972c0cb-6519-458a-9261-4affd144e8d1" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests" name="RecentsRefreshFailure_PreservesLaunchSuccess_AndAllowsNextGame" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.XboxNavigationTests.Library_Routable(destination: Lists)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="ab174d52-44a7-41c6-6a69-1f80db8392b7">
+      <Execution id="bc0d002d-e25c-4cb3-ae0d-04579b4b8845" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.XboxNavigationTests" name="Library_Routable" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;delete-guard&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="081b2c36-f10c-c228-57d4-beaf55249a29">
+      <Execution id="65fdc34b-f7d7-4440-8a20-7b1167286d00" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.Cover_DetachingVisualCancelsPendingLoad" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="77f445b8-3f81-3b86-81eb-319add043318">
+      <Execution id="88292349-e9c7-4c70-b7ab-4aa46dba8198" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="Cover_DetachingVisualCancelsPendingLoad" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.XboxNavigationTests.Library_Routable(destination: GameDetails)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="8765edc5-c293-ecb1-7613-384f47c08828">
+      <Execution id="5b155fbd-cd9d-4a41-81fb-ea6361244beb" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.XboxNavigationTests" name="Library_Routable" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;list-race&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="48f7790c-757e-de93-0d58-4a37e42dd0f6">
+      <Execution id="a2e2380c-2987-48a1-8bf6-44e9c6ac900b" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;auto-connect&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="5cde8396-98ff-d15c-6c9c-1036d81bedc0">
+      <Execution id="f13b0309-4380-4242-9abd-588bbcac82bc" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;grid-scroll-focus&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="2b519837-065e-b6fe-cfcc-d94e5ec6044f">
+      <Execution id="b2e308ed-3a90-4ccd-b74f-2b9cd812095a" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.Detail_LastSelectionWins_WhenRequestsCompleteOutOfOrder" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="bbbec937-8899-2c0d-854d-329aafe08416">
+      <Execution id="afab2776-8ec5-4b4a-82a5-8f80b91bfbba" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="Detail_LastSelectionWins_WhenRequestsCompleteOutOfOrder" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;repeat-navigation&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="233fec7a-876b-51c8-bebb-4afabcd5fba6">
+      <Execution id="186ed647-b85d-4ef2-b60c-5f32ad4d38a1" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;credentials&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="158e92b0-c8b9-1db5-9e6e-4e056e1b3988">
+      <Execution id="8d29d236-2116-4937-be28-0de12b683a41" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch(autostart: True, asynchronous: False)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="46c60f10-4ff1-81f2-0a64-ac70ecbe879e">
+      <Execution id="c32ea79b-b892-4a5c-8322-ea837556b92f" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests" name="TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;tab&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="58bb3f55-ba3f-b6a8-276e-20cb049dc058">
+      <Execution id="0c05d3a7-072e-49cb-a732-60c059090050" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;collection-failure&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="c82c8fa5-1765-124d-e815-f25a1efd13d2">
+      <Execution id="84bcb0f0-f272-48e2-b8a4-3f7b20c13362" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;detail-guard&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="f7daa2ad-ac91-cf3d-c3af-ec9f1db05312">
+      <Execution id="6fb21791-83fc-41c7-ab05-254cd13c2f92" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;loader&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="4b6eeb05-23cd-dee0-c0ac-e2999609b26f">
+      <Execution id="1a7da572-1e75-45c1-9689-bd3b832a6289" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.Cover_FailureShowsFallback_AndNextRequestWorks" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="17655416-1a1c-7a79-2fb7-0a9ecb108393">
+      <Execution id="75b5fa79-a7b8-48f4-85c6-627122bc38d4" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="Cover_FailureShowsFallback_AndNextRequestWorks" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;auto-connect&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="034a8404-9954-b982-af62-72d4165b0d74">
+      <Execution id="b12ed549-f3d3-4f1e-aef4-9045a476899f" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;collections&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="f027854f-3a8a-d0ba-6f4f-6917dcfff439">
+      <Execution id="85364c3f-798d-4d6e-8870-a93177cbbbd1" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;tile-layout&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="6759086e-5377-9122-5527-f0db67cb8d55">
+      <Execution id="04421b8f-c7ad-4139-9f39-34389bdb3087" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;loader-invalid&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="b314ed5d-ff02-681f-f8d7-3953a8b0870a">
+      <Execution id="00723279-001c-4b41-9afe-a9f0af2d3cdd" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.Cover_ClearCancelsPending_AndStaleResultCannotReappear" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="6429e607-b287-e401-afd8-76331487cb8d">
+      <Execution id="59fceef3-e9ab-4cbb-b600-c4494261d178" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="Cover_ClearCancelsPending_AndStaleResultCannotReappear" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch(autostart: False, asynchronous: True)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="c07dfeb5-4053-0a40-85a9-e98d7399c638">
+      <Execution id="c2ff8421-8469-40bf-8b0e-dcb6d9becc90" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests" name="TargetFailure_ReturnsActionableOutcome_AndAllowsNextLaunch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.CoverAssertions_RejectStaleImageMissingCancellationAndUnexpectedImage" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="381842e6-f7b1-b911-bdfb-c556d0f233be">
+      <Execution id="14b01fab-8082-4982-9059-3d8d7f9058fc" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="CoverAssertions_RejectStaleImageMissingCancellationAndUnexpectedImage" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;grid-keyboard&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="18105825-a9a0-0e56-6b4e-dbc952812f74">
+      <Execution id="ae3e5ab3-7281-4e6d-8ed4-7a2bdba36222" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;grid&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="b504562f-357e-b024-8fb8-0dfb9b0a1de5">
+      <Execution id="89fb5753-d179-4099-9c89-cc621ee5f68a" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests.RequestedCancellation_ReturnsCanceledOutcome_AndAllowsNextLaunch(autostart: True)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="85c24531-da55-de10-7bac-229787193463">
+      <Execution id="dd2811f5-a2bb-4ba3-9121-b2425108c510" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.AvaloniaGameLauncherTests" name="RequestedCancellation_ReturnsCanceledOutcome_AndAllowsNextLaunch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.LayoutAssertions_RejectEveryMissingControlAndAction" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="88d5ab4e-446e-d235-033b-5f318640f603">
+      <Execution id="2201d207-4af9-497a-8910-18fb1a7aff99" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="LayoutAssertions_RejectEveryMissingControlAndAction" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;grid-keyboard&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="bef7cfce-b9a0-ad92-0191-d193e2a966b9">
+      <Execution id="d446d068-c938-4f11-af6a-77d8d9f17510" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;loader-invalid&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="4a2e3e84-e363-4027-fe0e-ac033e90f000">
+      <Execution id="7a5f2816-07c3-45e7-883f-d3ee1e9ad6d8" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.Layout_PreservesNavigationAndConnectionActions" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="168a7ff9-ab8b-82da-e989-c3e4c19b2e66">
+      <Execution id="f4e72a87-51f0-46b4-a8ce-3b02353b2c2b" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="Layout_PreservesNavigationAndConnectionActions" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests.AttachFailure_UpdatesObservableStatus_AndAllowsNextGame(autostart: True)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="0beede8d-0d0f-6054-e0b4-1cc7273d60a1">
+      <Execution id="006119f6-93de-4b46-b693-b4e59cf110ac" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RomMLibraryLaunchBoundaryTests" name="AttachFailure_UpdatesObservableStatus_AndAllowsNextGame" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.BehaviorAssertions_RejectEveryCorruptOrMissingObservation(scenario: &quot;grid-scroll-focus&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="4db43ed5-ba28-62c2-c8f6-6ab62a89ad21">
+      <Execution id="d6d2b8bf-85dc-4f38-ab24-7966cf2883a5" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="BehaviorAssertions_RejectEveryCorruptOrMissingObservation" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: &quot;grid&quot;)" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.heads.tests/bin/release/net10.0/vicesharp.heads.tests.dll" id="770e5b1d-a34a-8b46-15a1-675bb68ef9ac">
+      <Execution id="d3c0af0d-6f93-46d8-a13f-65d73ba86dee" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.Heads.Tests.RommDesktopContractTests" name="DesktopBehavior_MatchesContract" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="77f445b8-3f81-3b86-81eb-319add043318" executionId="88292349-e9c7-4c70-b7ab-4aa46dba8198" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="436cf70f-9b67-c81a-7403-a921fb413edb" executionId="4092fa9e-4fe0-41b7-bd2d-b5dabe380833" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6664a3d5-ff11-95b3-d202-42ee9ef051ad" executionId="3972c0cb-6519-458a-9261-4affd144e8d1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="55442254-fc34-d3be-8b60-74a8269fd4a4" executionId="4935fea9-184e-45ff-8ebb-3f04eaeb5678" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b68bae4f-d94f-bfad-a12f-ceda2e8ea928" executionId="fa79f6b2-0182-47d0-9c97-8ac70ddaf936" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6759086e-5377-9122-5527-f0db67cb8d55" executionId="04421b8f-c7ad-4139-9f39-34389bdb3087" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4f3da373-1ada-5030-90bd-8fefbb0b29c1" executionId="89410b4f-0d72-4cfc-845d-461a64ae78ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4a2e3e84-e363-4027-fe0e-ac033e90f000" executionId="7a5f2816-07c3-45e7-883f-d3ee1e9ad6d8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c3b52cb9-d358-d389-2d54-3e14dd58405f" executionId="431cdd38-7944-4c3a-afc7-e5ab0fa39abe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="46b2316d-fcc2-1f57-3472-bae3cc23179b" executionId="805da7b3-9ec1-4d56-a3cc-86f507aa0661" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="90c570cf-7b12-394f-b9e6-394075109811" executionId="7489b433-5062-4297-a617-503dacecf77c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7a3ab52e-28eb-6553-cb94-72e2f757142d" executionId="d83b4996-44b1-493d-8593-0d3749b28ded" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="85c24531-da55-de10-7bac-229787193463" executionId="dd2811f5-a2bb-4ba3-9121-b2425108c510" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="46c60f10-4ff1-81f2-0a64-ac70ecbe879e" executionId="c32ea79b-b892-4a5c-8322-ea837556b92f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6d24145-7329-97b2-006d-9b766a3b3e1c" executionId="3f10b467-b26c-4095-ab7b-86e7ae8a59ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2b519837-065e-b6fe-cfcc-d94e5ec6044f" executionId="b2e308ed-3a90-4ccd-b74f-2b9cd812095a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="233fec7a-876b-51c8-bebb-4afabcd5fba6" executionId="186ed647-b85d-4ef2-b60c-5f32ad4d38a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c82c8fa5-1765-124d-e815-f25a1efd13d2" executionId="84bcb0f0-f272-48e2-b8a4-3f7b20c13362" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="158e92b0-c8b9-1db5-9e6e-4e056e1b3988" executionId="8d29d236-2116-4937-be28-0de12b683a41" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="58bb3f55-ba3f-b6a8-276e-20cb049dc058" executionId="0c05d3a7-072e-49cb-a732-60c059090050" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17655416-1a1c-7a79-2fb7-0a9ecb108393" executionId="75b5fa79-a7b8-48f4-85c6-627122bc38d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bef7cfce-b9a0-ad92-0191-d193e2a966b9" executionId="d446d068-c938-4f11-af6a-77d8d9f17510" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0beede8d-0d0f-6054-e0b4-1cc7273d60a1" executionId="006119f6-93de-4b46-b693-b4e59cf110ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="22d26fe9-599e-9d58-2ffa-aecbcea25f4d" executionId="e6cabbf0-cf54-4ea0-a2d6-4e89e4aed764" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="88d5ab4e-446e-d235-033b-5f318640f603" executionId="2201d207-4af9-497a-8910-18fb1a7aff99" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8845e43d-d686-c21a-8590-7f9212220404" executionId="d2fa6730-42cd-4dc4-a48c-d2b19b17b883" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b314ed5d-ff02-681f-f8d7-3953a8b0870a" executionId="00723279-001c-4b41-9afe-a9f0af2d3cdd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4db43ed5-ba28-62c2-c8f6-6ab62a89ad21" executionId="d6d2b8bf-85dc-4f38-ab24-7966cf2883a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="51e9249d-7544-0505-2083-0e7408859f6e" executionId="7e9c1f5e-6986-4b78-9400-5077566c4087" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18105825-a9a0-0e56-6b4e-dbc952812f74" executionId="ae3e5ab3-7281-4e6d-8ed4-7a2bdba36222" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ab174d52-44a7-41c6-6a69-1f80db8392b7" executionId="bc0d002d-e25c-4cb3-ae0d-04579b4b8845" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5b184889-761b-c580-dd2b-e4c861e28f7c" executionId="dcd644db-4a9d-4db0-b15c-90082f8d410f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4a8231a5-a595-1f7b-b4d7-515b8b6636f2" executionId="898b5514-72e2-495b-ba02-e8c0bab6e436" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="770e5b1d-a34a-8b46-15a1-675bb68ef9ac" executionId="d3c0af0d-6f93-46d8-a13f-65d73ba86dee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b504562f-357e-b024-8fb8-0dfb9b0a1de5" executionId="89fb5753-d179-4099-9c89-cc621ee5f68a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="381842e6-f7b1-b911-bdfb-c556d0f233be" executionId="14b01fab-8082-4982-9059-3d8d7f9058fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="034a8404-9954-b982-af62-72d4165b0d74" executionId="b12ed549-f3d3-4f1e-aef4-9045a476899f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d3a6e8a-2352-06c1-1a11-5ef8d91fa5e5" executionId="6acf3e37-a357-4d6c-9d35-e14bf89e3c0b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="58f84551-5bcd-a0af-75d9-ede06155a6d6" executionId="fb526e38-140d-4e7c-8e2d-361b91846190" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6429e607-b287-e401-afd8-76331487cb8d" executionId="59fceef3-e9ab-4cbb-b600-c4494261d178" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de44f6ac-49ac-03dc-566b-2ec23529bc24" executionId="0ebfe798-3754-4904-8b0d-7bbaa947b27a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d082611-e0c6-3b19-a6a4-042c26790d1d" executionId="620a230c-46e7-41d3-8469-1d0f82beb70e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="081b2c36-f10c-c228-57d4-beaf55249a29" executionId="65fdc34b-f7d7-4440-8a20-7b1167286d00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5cde8396-98ff-d15c-6c9c-1036d81bedc0" executionId="f13b0309-4380-4242-9abd-588bbcac82bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2e187c72-db0d-0dfd-7ab4-3e009990c124" executionId="8eb22263-4b65-4ee9-9ee2-1cbfc5704d55" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="30586c22-ff39-6f16-470f-a4b108f15be3" executionId="7dd88ef9-dbdd-415a-8dea-2ae2ab4b203a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bbbec937-8899-2c0d-854d-329aafe08416" executionId="afab2776-8ec5-4b4a-82a5-8f80b91bfbba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8765edc5-c293-ecb1-7613-384f47c08828" executionId="5b155fbd-cd9d-4a41-81fb-ea6361244beb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93ce17c9-5860-8223-2efc-455575387c3e" executionId="6aa4be02-21e8-4fd1-ba6e-9f0a54c66893" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f027854f-3a8a-d0ba-6f4f-6917dcfff439" executionId="85364c3f-798d-4d6e-8870-a93177cbbbd1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f6a4fde6-c650-807b-792a-e97a2f8cb75b" executionId="bafd771f-9fde-4b9f-ae26-bf88574bcebc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c07dfeb5-4053-0a40-85a9-e98d7399c638" executionId="c2ff8421-8469-40bf-8b0e-dcb6d9becc90" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9dee7936-9678-f8fb-c189-1f0ffc332291" executionId="8fdd5619-577d-488a-81e1-2cd13e68dfbd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="168a7ff9-ab8b-82da-e989-c3e4c19b2e66" executionId="f4e72a87-51f0-46b4-a8ce-3b02353b2c2b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ea6e06a0-e9f2-3286-87dc-8f30c0b51275" executionId="af7abc66-5432-4dd0-a044-2da3ee80866a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48f7790c-757e-de93-0d58-4a37e42dd0f6" executionId="a2e2380c-2987-48a1-8bf6-44e9c6ac900b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d7184df-55e2-2137-aaab-6ccc95ed5d99" executionId="6d181a1e-eeee-4ba7-a446-7a246dcba513" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13823cbf-db0b-d3a2-18bf-0a5e5877d37c" executionId="9fd27fb2-6f08-4715-a852-527ef2e93d10" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4b6eeb05-23cd-dee0-c0ac-e2999609b26f" executionId="1a7da572-1e75-45c1-9689-bd3b832a6289" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f7daa2ad-ac91-cf3d-c3af-ec9f1db05312" executionId="6fb21791-83fc-41c7-ab05-254cd13c2f92" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8eb25a8a-1e5b-c5d1-4080-108636f8fed0" executionId="5102caec-3e04-46cc-848d-6ace03bf8b42" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="61" executed="61" passed="61" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)
+[xUnit.net 00:00:00.33]   Discovering: ViceSharp.Heads.Tests
+[xUnit.net 00:00:00.80]   Discovered:  ViceSharp.Heads.Tests
+[xUnit.net 00:00:01.16]   Starting:    ViceSharp.Heads.Tests
+[xUnit.net 00:00:07.35]   Finished:    ViceSharp.Heads.Tests (ID = '5d5f62ae09807c0daf403081ff3b0348ed758e2d67fdbc21dcc845413871ca6e')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

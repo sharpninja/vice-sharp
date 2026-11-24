@@ -26,6 +26,7 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     /// equal to the native VICE CPU's register file immediately after reset.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Reset_StateMatchesVICE()
     {
         _fixture.ResetBoth();
@@ -43,6 +44,7 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     /// number and offending registers.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void First64Cycles_MatchVICE()
     {
         _fixture.ResetBoth();
@@ -65,6 +67,7 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     /// pre-step, post-step and divergence summary for each failing cycle.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void BootstrapTrace_First12Cycles()
     {
         _fixture.ResetBoth();

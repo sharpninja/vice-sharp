@@ -1,0 +1,7 @@
+Exception: C:\Users\kingd\.claude\plugins\cache\mcpserver-local\mcpserver\1.121.0\lib\Invoke-McpPlugin.ps1:154
+Line |
+ 154 |      throw "Unable to find plugin PowerShell script '$Name' under '$Ro …
+     |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Unable to find plugin PowerShell script 'repl-invoke.ps1' under
+     | 'C:\Users\kingd\.claude\plugins\cache\mcpserver-local'.
+

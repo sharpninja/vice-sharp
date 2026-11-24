@@ -143,6 +143,8 @@ public sealed class SidLiveSamplingTests
     /// Acceptance: running at 200% speed emits fewer samples than 100% for the
     /// same cycle count, and the captured synthesis state after equal cycles is
     /// byte-identical to a 100% run (warp changes cadence, not synthesis).
+    /// 2026-11-23, TEST-SID-001. At 50% and 150%, a controlled sink receives
+    /// the nominal 44,100 samples per second of requested wall time.
     /// </summary>
     [Fact]
     public void Warp_ChangesCadenceNotSynthesis()
@@ -170,6 +172,19 @@ public sealed class SidLiveSamplingTests
         baseline.CaptureState(s0);
         fast.CaptureState(s1);
         Assert.Equal(s0, s1);
+
+        // One second at the requested speed has these source-derived cycle budgets.
+        // VICE sound.c computes cycles/sample = speed * PAL frequency / 44,100.
+        foreach (var (rate, cycleBudget) in new[] { (50.0, 492_624), (150.0, 1_477_872) })
+        {
+            var sink = new CountingBackend();
+            var sid = new Sid6581(new BasicBus(), sink) { BaseAddress = 0xD400 };
+            sid.ConfigureAudioClock(PalClock);
+            sid.SetRelativeSpeed(rate);
+            for (int i = 0; i < cycleBudget; i++) sid.Tick();
+            sid.FlushAudioBuffer();
+            Assert.InRange(sink.Count, 44_099, 44_101);
+        }
     }
 
     /// <summary>

@@ -28,6 +28,7 @@ public sealed class CaptureRunLogUtilityTests
     /// and reports its size; without them it skips.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void CaptureBaselineRunLog_FromEnvironment()
     {
         var vsf = Environment.GetEnvironmentVariable("VICESHARP_CAPTURE_VSF");

@@ -1,0 +1,15 @@
+type: result
+payload:
+  result:
+    code: lost
+    retryable: false
+    persisted: false
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.updateTurn
+    agent: Default
+    sessionId: Default-20261017T130011Z-plugin-session
+    requestId: ""
+    failsafePath: ""
+    message: workflow.sessionlog.updateTurn requires current-turn.yaml in '/home/sharpninja/github/vice-sharp/.mcpServer/default'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.
+    childStderr: workflow.sessionlog.updateTurn requires current-turn.yaml in '/home/sharpninja/github/vice-sharp/.mcpServer/default'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.

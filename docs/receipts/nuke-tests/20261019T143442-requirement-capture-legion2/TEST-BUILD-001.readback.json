@@ -1,0 +1,34 @@
+{
+  "id": "TEST-BUILD-001",
+  "title": "Nuke build tests",
+  "description": "The Nuke build tests in `build.tests/ViceSharp.Build.Tests.csproj` run through `BuildTest` on every host (PLAN-NUKETESTS-001). Traceability: TR-BUILD-001 ac-10, ac-11, ac-12; TR-PLAT-001 ac-8.",
+  "status": "pending",
+  "priority": "high",
+  "area": "BUILD",
+  "testType": "unit",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "The 13 user-local deployment cases pass on Linux through `BuildTest` and prove TR-BUILD-001 ac-10 and ac-11.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-2",
+      "text": "The completion-manifest cases pass on every host through `BuildTest`.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-3",
+      "text": "The placement guards of PLAN-NUKETESTS-001 step 2 pass.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-4",
+      "text": "The Windows `BuildTest` run selects no Linux-host case and reports the excluded count.",
+      "isSatisfied": false
+    }
+  ],
+  "scopeStartLayerKey": "layer-1",
+  "createdAt": "2026-10-19T14:35:40.7135726-05:00",
+  "updatedAt": "2026-10-19T14:35:40.7136943-05:00"
+}

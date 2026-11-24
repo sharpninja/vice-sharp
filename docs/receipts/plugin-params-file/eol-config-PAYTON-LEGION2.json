@@ -1,0 +1,151 @@
+{
+  "host": "PAYTON-LEGION2",
+  "value": "input",
+  "globalAutocrlf": "false",
+  "at": "2026-10-19T16:29:30",
+  "repos": [
+    {
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-codex-plugin",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-cline-plugin",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-cline-v2-plugin",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-grok-plugin",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-opencode-plugin",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-grok-bot-plugin",
+      "before": {
+        "autocrlf": null,
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "F:\\GitHub\\mcpserver-claude-cowork-plugin",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "C:\\Users\\kingd\\.grok\\installed-plugins\\mcpserver-grok-plugin-ba1fb37e",
+      "before": {
+        "autocrlf": null,
+        "trackedDirty": 71,
+        "eolDirty": 71
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 0,
+        "eolDirty": 0
+      }
+    },
+    {
+      "path": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.118.0",
+      "before": {
+        "autocrlf": "false",
+        "trackedDirty": 9,
+        "eolDirty": 9
+      },
+      "after": {
+        "autocrlf": "input",
+        "trackedDirty": 8,
+        "eolDirty": 8
+      }
+    }
+  ]
+}

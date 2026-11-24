@@ -1,0 +1,77 @@
+{
+  "timestampLocal": "2026-10-20T18:21:21",
+  "kind": "Model of the revision-7 selector contract; not execution of unimplemented Nuke targets",
+  "ordinaryFilter": "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration&Category!=ShimLegacy&Category!=VsfSlice1Real",
+  "cumulativeFilter": "Category=VsfSlice1Real",
+  "cases": [
+    {
+      "id": "ordinary-managed",
+      "categories": [],
+      "Test": true,
+      "CiTest": true,
+      "Cumulative": false
+    },
+    {
+      "id": "pure-managed-fake",
+      "categories": [],
+      "Test": true,
+      "CiTest": true,
+      "Cumulative": false
+    },
+    {
+      "id": "contract",
+      "categories": [
+        "VsfSlice1Contract"
+      ],
+      "Test": true,
+      "CiTest": true,
+      "Cumulative": false
+    },
+    {
+      "id": "legacy-direct",
+      "categories": [
+        "ShimLegacy"
+      ],
+      "Test": false,
+      "CiTest": false,
+      "Cumulative": false
+    },
+    {
+      "id": "legacy-provider",
+      "categories": [
+        "ShimLegacy"
+      ],
+      "Test": false,
+      "CiTest": false,
+      "Cumulative": false
+    },
+    {
+      "id": "real-c64",
+      "categories": [
+        "VsfSlice1Real"
+      ],
+      "Test": false,
+      "CiTest": false,
+      "Cumulative": true
+    },
+    {
+      "id": "real-xvic-blocked",
+      "categories": [
+        "VsfSlice1Real"
+      ],
+      "Test": false,
+      "CiTest": false,
+      "Cumulative": true
+    },
+    {
+      "id": "contract-real-double-trait",
+      "categories": [
+        "VsfSlice1Contract",
+        "VsfSlice1Real"
+      ],
+      "Test": false,
+      "CiTest": false,
+      "Cumulative": true
+    }
+  ]
+}

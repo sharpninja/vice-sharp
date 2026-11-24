@@ -179,6 +179,7 @@ public sealed class C64VkmKeyboardTests
     /// </summary>
     [ViceTheory]
     [MemberData(nameof(VkmKeyboardParityCases))]
+    [Trait("Category", "ShimLegacy")]
     public void SelectedVkmMap_CiaMatrixScanMatchesNativeX64Sc(string modelSelector, string key)
     {
         var result = C64VkmParser.Load(FindGtk3PosVkm());

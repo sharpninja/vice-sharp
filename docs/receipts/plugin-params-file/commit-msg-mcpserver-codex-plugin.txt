@@ -1,0 +1,29 @@
+fix: pass repl-invoke params through a file, never the child command line
+
+On Windows a child command line is limited to 32,767 characters, so a large
+params payload (a 194 KB workflow.requirements.updateBatch) failed with
+"The filename or extension is too long"
+(triage-report-821fe2da58284b4ea21604cb2da2fccb).
+
+- Sync plugin core from McpServer fix/plugin-params-file-20261019 at 8768de8a
+  (also carries the back-port f50cf525 of the YAML-from-objects fix, so this
+  repo's lib copies now equal core again). New lib/repl-params-transfer.ps1;
+  repl-invoke.ps1 accepts -ParamsPath; Invoke-McpPlugin.ps1 and plugin-hook.ps1
+  launch with -ParamsPath and remove the file in finally.
+- Host launch sites (hooks/scripts/memory-context.ps1, and the Codex or Copilot
+  entry script where present) use the same transfer.
+- tests/ReplParamsLaunch.Tests.ps1: mock gate for the launch lint, then a
+  binding run over this repo (no -ParamsYaml on any child command line).
+- Version bump so installed caches refresh.
+
+Repo: mcpserver-codex-plugin
+Pester (tests/, PAYTON-LEGION2): mcpserver-codex-plugin [fix] suites=13 Result=Failed Total=77 Passed=71 Failed=6 Skipped=0 NotRun=0 seconds=10
+Every failure also fails on the unchanged default-branch head (base run in
+vice-sharp docs/receipts/plugin-params-file/plugin-tests/), except claude-code
+MemoryInjection "injects explicit None ...", which fails on the base too when
+run alone (it reads a leaked $LASTEXITCODE).
+Core suite: 351 total, 348 passed, 3 failed (pre-existing at f66c39f9).
+
+Signed: claude-opus-5-5@ClaudeCode (effort not exposed to the agent) | Confidence: correctness 93%, accuracy 95%, completeness 90%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

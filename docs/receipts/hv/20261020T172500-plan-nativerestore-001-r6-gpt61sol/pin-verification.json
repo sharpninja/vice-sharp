@@ -1,0 +1,294 @@
+{
+  "timestampLocal": "2026-10-20T17:27:35",
+  "pinCount": 41,
+  "driftCount": 0,
+  "pins": [
+    {
+      "path": "docs/plans/PLAN-NATIVERESTORE-001.md",
+      "expected": "AF56C59034D8164AA0AEC6045B556AE7948623C3D87F182EF85FEC4637DF33FA",
+      "actual": "AF56C59034D8164AA0AEC6045B556AE7948623C3D87F182EF85FEC4637DF33FA",
+      "bytes": 72648,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/verdict.json",
+      "expected": "9B4A31FD2D0D283151CD75C51412FE6113D73FE994EFCC8E3C4BFFE9BBEF5048",
+      "actual": "9B4A31FD2D0D283151CD75C51412FE6113D73FE994EFCC8E3C4BFFE9BBEF5048",
+      "bytes": 53338,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/verdict.md",
+      "expected": "F84C4F7D75F88163F7800EFA23955EF824D05265E0B8DC288296B744CAB437B3",
+      "actual": "F84C4F7D75F88163F7800EFA23955EF824D05265E0B8DC288296B744CAB437B3",
+      "bytes": 45009,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.md",
+      "expected": "7EDAA9A0494831229A84774CC99309E5F2BACBEB2945B5FC6039575284B7C5DD",
+      "actual": "7EDAA9A0494831229A84774CC99309E5F2BACBEB2945B5FC6039575284B7C5DD",
+      "bytes": 37495,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md",
+      "expected": "5FEF016E3F56F7AF4EEA56556E0081D837DE5C9FD4645BFEA6D71596A8B60FCF",
+      "actual": "5FEF016E3F56F7AF4EEA56556E0081D837DE5C9FD4645BFEA6D71596A8B60FCF",
+      "bytes": 133558,
+      "match": true
+    },
+    {
+      "path": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+      "expected": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "actual": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "bytes": 37043,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md",
+      "expected": "CE1BA2F6E34268EDDDD4CE9A27552826258D38F888750F2F1D00F3FD6867F221",
+      "actual": "CE1BA2F6E34268EDDDD4CE9A27552826258D38F888750F2F1D00F3FD6867F221",
+      "bytes": 1700,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch",
+      "expected": "90604E39B827F850A382DC13DD921141290EF2C34E1483CDC6C612A07803E9E2",
+      "actual": "90604E39B827F850A382DC13DD921141290EF2C34E1483CDC6C612A07803E9E2",
+      "bytes": 22404,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-untracked-paths.txt",
+      "expected": "2129844CC74724740C6B6F376D61DD1A3B3952957FF591668968AB68A28E3765",
+      "actual": "2129844CC74724740C6B6F376D61DD1A3B3952957FF591668968AB68A28E3765",
+      "bytes": 92364,
+      "match": true
+    },
+    {
+      "path": "docs/plans/PLAN-OBSERVER-001.md",
+      "expected": "1619F6A77FE658DE984254344731BCD2D5ACC826A4B71AC61277668F1C37D770",
+      "actual": "1619F6A77FE658DE984254344731BCD2D5ACC826A4B71AC61277668F1C37D770",
+      "bytes": 20104,
+      "match": true
+    },
+    {
+      "path": "docs/plans/PLAN-VSFLOCKSTEP-001.md",
+      "expected": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "actual": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "bytes": 56395,
+      "match": true
+    },
+    {
+      "path": "docs/requirements/technical/TR-Native-Vice-Snapshot.md",
+      "expected": "99103EA1E7D8E66A611E9C5F420D6093A37F44094A14A3E9FEECF78CC804C248",
+      "actual": "99103EA1E7D8E66A611E9C5F420D6093A37F44094A14A3E9FEECF78CC804C248",
+      "bytes": 8648,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md",
+      "expected": "7EB0818FDBD1C4E2F67A2AA3B9A22906A0A2EAD5CF75E48F16D43AF5319CC6A1",
+      "actual": "7EB0818FDBD1C4E2F67A2AA3B9A22906A0A2EAD5CF75E48F16D43AF5319CC6A1",
+      "bytes": 7705,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md",
+      "expected": "AF6BA3FF6702BE1C4AC015EDDBF84A7C675AF1A2F70F71FD6D11EB094D36C78B",
+      "actual": "AF6BA3FF6702BE1C4AC015EDDBF84A7C675AF1A2F70F71FD6D11EB094D36C78B",
+      "bytes": 5483,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md",
+      "expected": "A3ABB34250882488F34332885920A2C7F9C30EE68A14DB74BF5D6B4173B7EC74",
+      "actual": "A3ABB34250882488F34332885920A2C7F9C30EE68A14DB74BF5D6B4173B7EC74",
+      "bytes": 6874,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/README.md",
+      "expected": "69B3CBA67D832D3A7E4B08DA77CE0AB2A16B6E796A2C5BBF349DA5F7395FC0D2",
+      "actual": "69B3CBA67D832D3A7E4B08DA77CE0AB2A16B6E796A2C5BBF349DA5F7395FC0D2",
+      "bytes": 3792,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md",
+      "expected": "C3590AE0192853D835B7084091314E6FDB70958B051BE5DA2D95BEF3C687C325",
+      "actual": "C3590AE0192853D835B7084091314E6FDB70958B051BE5DA2D95BEF3C687C325",
+      "bytes": 3386,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj",
+      "expected": "F3F480973F8064234C4151C547C5E6C8E53FCD8001B00966DD5B777381410A56",
+      "actual": "F3F480973F8064234C4151C547C5E6C8E53FCD8001B00966DD5B777381410A56",
+      "bytes": 4122,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+      "expected": "4FDA26CA8F879E946E57FB6B033CDE8B53EDE99CD21EEFC2B32BDCED5396C731",
+      "actual": "4FDA26CA8F879E946E57FB6B033CDE8B53EDE99CD21EEFC2B32BDCED5396C731",
+      "bytes": 494,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs",
+      "expected": "F801DC7CF09E290F41190442404BE928B7B45CE70D685A493B8A3B1BED8BD401",
+      "actual": "F801DC7CF09E290F41190442404BE928B7B45CE70D685A493B8A3B1BED8BD401",
+      "bytes": 545,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs",
+      "expected": "EB97C7DBFFABD086CF39504F496BEC2231BEF2896AADD844D6E0F35D641DF1D1",
+      "actual": "EB97C7DBFFABD086CF39504F496BEC2231BEF2896AADD844D6E0F35D641DF1D1",
+      "bytes": 6479,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+      "expected": "B1EF324968E81634CF37033A1F29FD75C605FB47D771CFDFAF4DF390124C671F",
+      "actual": "B1EF324968E81634CF37033A1F29FD75C605FB47D771CFDFAF4DF390124C671F",
+      "bytes": 80584,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs",
+      "expected": "4E96D5803FAB27D299747210DAEF80DE7BBD9E7157922DB4CE78D5C2B84267A5",
+      "actual": "4E96D5803FAB27D299747210DAEF80DE7BBD9E7157922DB4CE78D5C2B84267A5",
+      "bytes": 3553,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+      "expected": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "actual": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "bytes": 190854,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.2.vsf",
+      "expected": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "actual": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "bytes": 190854,
+      "match": true
+    },
+    {
+      "path": "tests/ViceSharp.VsfCompatibility.Tests/Fixtures/native-maincpu-1.4.vsf",
+      "expected": "1D6A178A1C415FA1B5BCCC30551E5FC210701E363762B05EEDCDF237F88F8EFF",
+      "actual": "1D6A178A1C415FA1B5BCCC30551E5FC210701E363762B05EEDCDF237F88F8EFF",
+      "bytes": 193261,
+      "match": true
+    },
+    {
+      "path": "src/ViceSharp.Core/ViceNative.cs",
+      "expected": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+      "actual": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+      "bytes": 37725,
+      "match": true
+    },
+    {
+      "path": "src/ViceSharp.Abstractions/IViceNative.cs",
+      "expected": "21F45B664479C552D5E66B3C587FB15825312D16FAE7D0A506986C7C395F3FA8",
+      "actual": "21F45B664479C552D5E66B3C587FB15825312D16FAE7D0A506986C7C395F3FA8",
+      "bytes": 12055,
+      "match": true
+    },
+    {
+      "path": "src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs",
+      "expected": "9E8CAA10C968A8FDDE18EF3A3AB666E7CC9E959506902AF8A800C57E8D19E583",
+      "actual": "9E8CAA10C968A8FDDE18EF3A3AB666E7CC9E959506902AF8A800C57E8D19E583",
+      "bytes": 4532,
+      "match": true
+    },
+    {
+      "path": "native/Vice.Native.proj",
+      "expected": "F2B96B77241AB8DFDB284A3B430B9CABD04DD8096D6453072A38C80F0273EE57",
+      "actual": "F2B96B77241AB8DFDB284A3B430B9CABD04DD8096D6453072A38C80F0273EE57",
+      "bytes": 1749,
+      "match": true
+    },
+    {
+      "path": ".gitmodules",
+      "expected": "829DD5B7BC4AB64749108E9F5DBAC06F28F666E916A46E92645EBCEFB1BB2C4A",
+      "actual": "829DD5B7BC4AB64749108E9F5DBAC06F28F666E916A46E92645EBCEFB1BB2C4A",
+      "bytes": 113,
+      "match": true
+    },
+    {
+      "path": "native/build-vice-observer.ps1",
+      "expected": "ADCC40B7EBD3F67BBC7DFAACFF40FC0F06D9EBC27EF3379FB6CFE8BE39B46E84",
+      "actual": "ADCC40B7EBD3F67BBC7DFAACFF40FC0F06D9EBC27EF3379FB6CFE8BE39B46E84",
+      "bytes": 20943,
+      "match": true
+    },
+    {
+      "path": "tools/immutable-vice/Invoke-ObserverEquivalence.ps1",
+      "expected": "D9B96776A88973A592E6154CCD2D81010EEF087BCA44191544C6113BD4CF8315",
+      "actual": "D9B96776A88973A592E6154CCD2D81010EEF087BCA44191544C6113BD4CF8315",
+      "bytes": 15492,
+      "match": true
+    },
+    {
+      "path": "tools/immutable-vice/clock-observer-x64sc.c",
+      "expected": "E54036379CC4C9024D8BF5C7E1272FAD6291A6733252E7B5AEC4DECD8CF659BB",
+      "actual": "E54036379CC4C9024D8BF5C7E1272FAD6291A6733252E7B5AEC4DECD8CF659BB",
+      "bytes": 2167,
+      "match": true
+    },
+    {
+      "path": "tools/immutable-vice/bus-adapter.c",
+      "expected": "92AF37FA28175FCC6B987CDF3A1FCA0031FDFCDFE4B74F31436FC0A4373D4A6F",
+      "actual": "92AF37FA28175FCC6B987CDF3A1FCA0031FDFCDFE4B74F31436FC0A4373D4A6F",
+      "bytes": 4406,
+      "match": true
+    },
+    {
+      "path": "tools/immutable-vice/clock-gate.c",
+      "expected": "673A7E7899FD022BFF5C45AB55D05568E6FB4DECAFBFF88EEF80D0157551BA4C",
+      "actual": "673A7E7899FD022BFF5C45AB55D05568E6FB4DECAFBFF88EEF80D0157551BA4C",
+      "bytes": 599,
+      "match": true
+    },
+    {
+      "path": "tools/immutable-vice/obs-emitter.c",
+      "expected": "B5E7D97B259C2848AE869F18E0083BF8ADDCC4B59684BD53C47EDD1D0AB3B8F9",
+      "actual": "B5E7D97B259C2848AE869F18E0083BF8ADDCC4B59684BD53C47EDD1D0AB3B8F9",
+      "bytes": 2951,
+      "match": true
+    },
+    {
+      "path": "build/Build.cs",
+      "expected": "5C55CB59C0A0371A261DDEDFEC67879F5250F852762DCD924A7D570363DF34D4",
+      "actual": "5C55CB59C0A0371A261DDEDFEC67879F5250F852762DCD924A7D570363DF34D4",
+      "bytes": 103509,
+      "match": true
+    },
+    {
+      "path": "ViceSharp.slnx",
+      "expected": "EB70F73D9300B752D2251D7756ABEA03337AB61C317F10B47B39E287EDE4D900",
+      "actual": "EB70F73D9300B752D2251D7756ABEA03337AB61C317F10B47B39E287EDE4D900",
+      "bytes": 8517,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/prompt.md",
+      "expected": "0EB575F98163F66783A10C89C4696EF45991ED4DAFB8EB0B7DDB87C9FA76FE87",
+      "actual": "0EB575F98163F66783A10C89C4696EF45991ED4DAFB8EB0B7DDB87C9FA76FE87",
+      "bytes": 13609,
+      "match": true
+    },
+    {
+      "path": "docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/SELF-REVIEW.md",
+      "expected": "26F12609BBF1B274BBD32614187AB487FD081C0BEAD4FB34FA69A4AE6C400D29",
+      "actual": "26F12609BBF1B274BBD32614187AB487FD081C0BEAD4FB34FA69A4AE6C400D29",
+      "bytes": 8699,
+      "match": true
+    }
+  ]
+}

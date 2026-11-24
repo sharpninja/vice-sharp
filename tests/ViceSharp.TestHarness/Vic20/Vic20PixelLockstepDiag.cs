@@ -11,6 +11,7 @@ using Xunit;
 public sealed class Vic20PixelLockstepDiag
 {
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Dump_ReadyPal_IndexHistogram()
     {
         XvicOraclePrerequisites.ValidateCurrent();

@@ -1,0 +1,17 @@
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:07.50]     ViceSharp.TestHarness.FrMon005AcceptanceTests.DriveView_ShowsDriveMemory [FAIL]
+  Failed ViceSharp.TestHarness.FrMon005AcceptanceTests.DriveView_ShowsDriveMemory [3 ms]
+  Error Message:
+   System.InvalidOperationException : Required ROM set for Commodore 1541 is missing or invalid.
+  Stack Trace:
+     at ViceSharp.Core.ArchitectureBuilder.BuildC1541Machine(IArchitectureDescriptor descriptor) in /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/ArchitectureBuilder.cs:line 439
+   at ViceSharp.Core.ArchitectureBuilder.Build(IArchitectureDescriptor descriptor) in /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/ArchitectureBuilder.cs:line 43
+   at ViceSharp.TestHarness.FrMon005AcceptanceTests.DriveView_ShowsDriveMemory() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/FrMon005AcceptanceTests.cs:line 116
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261018T031828-phase-a-baseline-linux/harness-acceptance.trx
+
+Failed!  - Failed:     1, Passed:   209, Skipped:     0, Total:   210, Duration: 8 s - ViceSharp.TestHarness.dll (net10.0)

@@ -1,0 +1,62 @@
+Error - failed to open log file '/home/sharpninja/.local/state/vice/vice.log' for writing.
+ 
+*** VICE Version 3.10 ***
+ 
+This is the condensed log, for the full log use --verbose or --debug.
+ 
+Main: random seed was: 0x1
+Main: command line was: /home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/bin-linux/x64sc-observer -default +logcolorize -seed 1 -sounddev dummy -directory /home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data -limitcycles 300054 -model c64c
+Main: VICE system file directory: '/usr/local/share/vice'.
+Main: VICE system file search path: '/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data'.
+Sysfile: Loading `/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data/C64/kernal-901227-03.bin'.
+C64MEM: Kernal rev #3 ($03) Sum: 50954 ($C70A) SHA1: 1d503e56df85a62fee696e7618dc5b4e781df1bb.
+Sysfile: Loading `/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data/C64/basic-901226-01.bin'.
+Sysfile: Loading `/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data/C64/chargen-901225-01.bin'.
+DriveROM: Error - 2000 ROM image not found. Hardware-level 2000 emulation is not available.
+DriveROM: Error - 4000 ROM image not found. Hardware-level 4000 emulation is not available.
+DriveROM: Error - CMDHD ROM image not found. Hardware-level CMDHD emulation is not available.
+Sysfile: Loading `/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data/DRIVES/dos1541ii-251968-03.bin'.
+VIC-II: Initializing chip model "MOS8565" (63 cycles per line, 312 raster lines).
+Sound: Available sound devices: dummy dump fs wav voc iff aiff soundmovie
+Joystick: Warning - Failed to open `/home/sharpninja/.config/vice/headless-joymap-C64SC.vjm'.
+Joystick: Warning - using minimal default mapping.
+
+Main CPU: starting at ($FFFC).
+Main CPU: RESET.
+VIC-II: VSP Bug: safe channels are: 2567. Emulation of memory corruption is disabled.
+Sound: Opened device `dummy', speed 48000Hz, fragment size 2.67ms, buffer size 32.00ms
+Sound: reSID: MOS8580, filter on, sampling rate 48000Hz - resampling, pass to 21600Hz
+VSync: Sync reset
+Sound: Warning - Sound buffer overflow (cycle based)
+Unit 8: RESET.
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Sound buffer overflow (cycle based)
+Sound: Warning - Buffer overflow warning repeated 25 times, will now be ignored
+Warning - Sync is 1000.009 ms behind
+VSync: Sync reset
+Main CPU: Error - cycle limit reached.
+
+Exiting...
+VIC-II: VSP Bug: safe channels are: 157. Emulation of memory corruption is disabled.

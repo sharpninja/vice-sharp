@@ -42,6 +42,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// Acceptance: GetDrivePC(native, 8) returns 0 on a fresh machine.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void GetDrivePc_IsCallable_WithoutCrashing()
     {
         // Singleton native VICE state may persist across tests; we only
@@ -60,6 +61,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     [InlineData(7u)]
     [InlineData(12u)]
     [InlineData(255u)]
+    [Trait("Category", "ShimLegacy")]
     public void DriveAccessors_OutOfRangeUnit_ReturnZero(uint unit)
     {
         var native = _fixture!.NativeMachine;
@@ -83,6 +85,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     [InlineData(9u)]
     [InlineData(10u)]
     [InlineData(11u)]
+    [Trait("Category", "ShimLegacy")]
     public void DriveAccessors_ValidUnit_DoNotThrow(uint unit)
     {
         var native = _fixture!.NativeMachine;
@@ -104,6 +107,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// is greater than 0.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void TrueDriveEmulation_EnabledOnUnit8_DriveCpuAdvances()
     {
         var native = _fixture!.NativeMachine;
@@ -125,6 +129,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// Acceptance: Set 1 -> get returns 1; set 0 -> get returns 0.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void TrueDriveEmulation_RoundTrips_Per_Unit()
     {
         var native = _fixture!.NativeMachine;
@@ -141,6 +146,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// Acceptance: Set on unit 12 returns non-zero; Get on unit 7 returns 0.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void TrueDriveEmulation_RejectsOutOfRangeUnits()
     {
         var native = _fixture!.NativeMachine;

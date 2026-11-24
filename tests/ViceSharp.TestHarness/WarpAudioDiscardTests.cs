@@ -3,6 +3,7 @@ namespace ViceSharp.TestHarness;
 using System.Diagnostics;
 using ViceSharp.Abstractions;
 using ViceSharp.Core.Media;
+using ViceSharp.Host.Audio;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;
 using ViceSharp.Protocol;
@@ -111,12 +112,11 @@ public sealed class WarpAudioDiscardTests : IClassFixture<Audio.WindowsAudioSess
     }
 
     /// <summary>
-    /// FR: FR-Audio-SID, TR: TR-AUDIO-SPEED-001, TEST: TEST-AUDIO-PACE-11.
-    /// Use case: with live audio ON and the limiter inside the live-audio
-    /// band, sound back-pressure must pace to the REQUESTED rate, not wall
-    /// clock: the SID emits samples at speed_percent-scaled cadence (VICE
-    /// sound.c:1067) and the fixed-rate device drains them.
-    /// Acceptance: (diagnostic) a 150 percent limiter measures 135-170
+    /// Use case: pace the application with audio enabled. VICE lets a clocked
+    /// playback device control the rate and uses the host clock for its dummy sink.
+    /// 2026-11-23: assert regulator selection for TR-SNDREG-GATE-001/ac-2
+    /// and measure cycles against elapsed time for TEST-SID-001/ac-linux-dummy-pacing.
+    /// Acceptance: R16 retains this assertion in the ordinary gate. A 150 percent limiter measures 135-170
     /// percent and a 50 percent limiter measures 40-60 percent over 4
     /// seconds each.
     /// </summary>
@@ -124,14 +124,24 @@ public sealed class WarpAudioDiscardTests : IClassFixture<Audio.WindowsAudioSess
     public async Task AppPipeline_LiveAudio_Paces_To_Limiter_Rate()
     {
         var ct = TestContext.Current.CancellationToken;
+        var previousAudio = Environment.GetEnvironmentVariable("VICESHARP_AUDIO");
         Environment.SetEnvironmentVariable("VICESHARP_AUDIO", "1");
         try
         {
             var registry = new EmulatorRuntimeRegistry();
-            var factory = new DefaultEmulatorRuntimeFactory();
+            var backend = AudioBackendFactory.CreateDefault();
+            using var backendLifetime = backend as IDisposable;
+            var factory = new DefaultEmulatorRuntimeFactory(backend);
             var session = factory.Create(new CreateEmulatorSessionRequest("c64", "", false));
             registry.Add(session);
-            using var pump = new EmulationPumpService(registry);
+            var gate = new ViceEmulationGate();
+            using var pump = new EmulationPumpService(registry, gate);
+            if (OperatingSystem.IsLinux())
+            {
+                var linuxBackend = Assert.IsType<LinuxSdlAudioBackend>(backend);
+                Assert.True(linuxBackend.IsAvailable);
+                Assert.False(linuxBackend.IsTimingSource);
+            }
 
             await pump.StartAsync(ct);
             session.RunState = EmulatorRunState.Running;
@@ -140,36 +150,39 @@ public sealed class WarpAudioDiscardTests : IClassFixture<Audio.WindowsAudioSess
             await Task.Delay(1000, ct);
             var fast = await MeasurePaceAsync(session, 4000, ct);
             Assert.True(fast is >= 135.0 and <= 170.0, $"DIAG 150% limiter with audio = {fast:F1}%");
+            if (OperatingSystem.IsLinux())
+                Assert.Equal(ViceEmulationGate.PacingRegulator.Vsync, gate.LastRegulator);
 
             session.SetLimiter(50, enabled: true);
             await Task.Delay(1000, ct);
             var slow = await MeasurePaceAsync(session, 4000, ct);
             Assert.True(slow is >= 40.0 and <= 60.0, $"DIAG 50% limiter with audio = {slow:F1}%");
+            if (OperatingSystem.IsLinux())
+                Assert.Equal(ViceEmulationGate.PacingRegulator.Vsync, gate.LastRegulator);
+            Console.WriteLine($"Audio pacing ({gate.LastRegulator}): 150% measured {fast:F2}%, 50% measured {slow:F2}%.");
 
             session.RunState = EmulatorRunState.Paused;
             await pump.StopAsync(ct);
         }
         finally
         {
-            Environment.SetEnvironmentVariable("VICESHARP_AUDIO", null);
+            Environment.SetEnvironmentVariable("VICESHARP_AUDIO", previousAudio);
         }
     }
 
     private static async Task<double> MeasurePaceAsync(EmulatorRuntimeSession session, int measureMs, CancellationToken ct)
     {
-        long startCycles;
-        lock (session.SyncRoot)
-            startCycles = session.Machine.Clock.TotalCycles;
-
-        var sw = Stopwatch.StartNew();
+        var (startTimestamp, startCycles) = ReadClock(session);
         await Task.Delay(measureMs, ct);
-        sw.Stop();
+        var (endTimestamp, endCycles) = ReadClock(session);
 
-        long endCycles;
+        return (endCycles - startCycles) / Stopwatch.GetElapsedTime(startTimestamp, endTimestamp).TotalSeconds / 985_248.0 * 100.0;
+    }
+
+    private static (long Timestamp, long Cycles) ReadClock(EmulatorRuntimeSession session)
+    {
         lock (session.SyncRoot)
-            endCycles = session.Machine.Clock.TotalCycles;
-
-        return (endCycles - startCycles) / sw.Elapsed.TotalSeconds / 985_248.0 * 100.0;
+            return (Stopwatch.GetTimestamp(), session.Machine.Clock.TotalCycles);
     }
 
     /// <summary>

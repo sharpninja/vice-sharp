@@ -1,0 +1,31 @@
+{
+  "State": "blocked-before-write",
+  "Export": null,
+  "ExportFailed": false,
+  "Journal": [
+    {
+      "Seq": 1,
+      "At": "2026-10-19T16:16:04",
+      "State": "approval-verified",
+      "Detail": "packet 63386E9251185B101F53E9257CDA9270025A68006B83F243314E6E299A55D702, 16 records, 9 rows, window 2026-10-19T16:16:04..2026-10-19T16:46:04",
+      "Data": null,
+      "Persistence": "journal-primary"
+    },
+    {
+      "Seq": 2,
+      "At": "2026-10-19T16:16:05",
+      "State": "blocked-before-write",
+      "Detail": "baseline read failed for FR-RUNTIME-TAPE-002: workflow.requirements.getFr failed (exit 1); response saved to F:\\GitHub\\vice-sharp\\docs\\receipts\\requirements-recovery\\20261019T142329-r1-coordinator\\20261019T161604-apply\\client\\params-cb0713e8544a49d8b16f6147f15212f4.response.txt",
+      "Data": null,
+      "Persistence": "journal-primary"
+    }
+  ],
+  "Calls": [
+    {
+      "Method": "GetRecord",
+      "Kind": "fr",
+      "Id": "FR-RUNTIME-TAPE-002"
+    }
+  ],
+  "FinishedAt": "2026-10-19T16:16:05"
+}

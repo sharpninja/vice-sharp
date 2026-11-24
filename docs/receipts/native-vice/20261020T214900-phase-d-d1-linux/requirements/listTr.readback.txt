@@ -1,0 +1,27 @@
+type: result
+payload:
+  requestId: req-20261021T025002Z-c937
+  result:
+    items:
+    - id: TR-VSFLOCKSTEP-RESUME-001
+      title: Backward-compatible snapshot module read and VIC-II model alignment
+      description: An external compatibility adapter outside `native/vice` shall normalize legacy x64sc `MAINCPU` v1.2 and v1.3 modules for the pinned, unmodified VICE reader while current v1.4 modules remain byte-identical. The wrapper shall align the VIC-II model before `machine_read_snapshot` and normalize wrapper-reported `snapshot_last_error` after a successful read. No part of this compatibility path may edit, patch, generate into, or behaviorally change `native/vice`.
+      status: pending
+      priority: high
+      area: VSFLOCKSTEP
+      subarea: RESUME
+      notes: 'AC1 amended 2026-10-20 under PLAN-NATIVERESTORE-001 R15 (operator, verbatim: "change to v1.2 and v1.4"); AC2 builder reference changed under R2 A (build-vice-shim.ps1 retired; build-vice-observer.ps1 canonical). Applied through workflow.requirements.updateTr in step D1; receipt in docs/receipts/native-vice.'
+      acceptanceCriteria:
+      - id: tr-vsflockstep-resume-001-ac-1
+        text: 'An external compatibility adapter outside `native/vice` loads a validated `MAINCPU` v1.2 module by inserting the absent v1.3 `ane_log_level` and `lxa_log_level` fields and absent v1.4 `maincpu_jammed` field with the pinned immutable VICE defaults before `maincpu_ba_low_flags`, updates the inclusive module length, preserves every following byte and module, handles v1.3 by inserting only `maincpu_jammed`, and passes current v1.4 through byte-for-byte. Malformed or unsupported layouts fail closed. External real inputs are the v1.2 fixture and a current v1.4 native round-trip fixture written by the pinned VICE (amended by the operator on 2026-10-20T17:23, R15 of PLAN-NATIVERESTORE-001: "change to v1.2 and v1.4", because no real v1.3 snapshot exists and the pinned VICE writes v1.4); the v1.3 layout stays covered by the synthetic byte cases. Real resume of the external v1.2 input and the v1.4 round trip prove resume behavior on the pinned, unmodified VICE with zero failed, zero skipped, and zero aborted prerequisites.'
+        isSatisfied: false
+      - id: tr-vsflockstep-resume-001-ac-2
+        text: native/build-vice-observer.ps1 (the canonical native builder since PLAN-NATIVERESTORE-001 R2 A retired native/build-vice-shim.ps1; reference change only, semantics unchanged) materializes the pinned VICE commit into a separate initially clean source root outside native/vice, follows the pinned VICE Team build instructions there (including required in-source build generation, explicitly approved 2026-10-08), and links only external wrapper translation units stored outside the submodule. Pre-build and post-build commit, tracked status and a complete inventory of original upstream source bytes must match exactly. Record all generated/build files separately with paths, hashes and producing commands; those artifacts are permitted only in the separate materialization/output roots and may not replace or modify original upstream source files. Any patch application, generated file or source mutation under native/vice fails the build. native/patches/vice-shim-runtime.patch is diagnostic legacy evidence only and is never applied.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-10-21T02:50:03.5491443+00:00
+      updatedAt: 2026-10-21T02:50:03.5492645+00:00
+    totalCount: 1
+  deprecated: true
+
+---

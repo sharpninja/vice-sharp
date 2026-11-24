@@ -1,0 +1,42 @@
+type: result
+payload:
+  requestId: req-20261021T000607Z-f27d
+  result:
+    id: PLAN-VICEORACLE-001
+    title: Restore immutable VICE oracle boundary and prove all retained real parity gates
+    section: Plans
+    priority: high
+    done: false
+    description:
+    - Execute docs/plans/PLAN-VICE-IMMUTABLE-001.md as a prerequisite within the entire approved Grok handoff completion plan. Remediate original VICE-as-target violations, not a new behavior requirement.
+    - FR-VICE-001 AC1-4; TR-VICE-ORACLE-001 AC1-5; TEST-VICE-001 AC1-4; TR-CYCLE-001 all seven ACs, including actual PHI2/AEC AC4. No requirement is retired or marked satisfied by mocks.
+    technicalDetails:
+    - 'Testing requirement: TEST-VICE-001. Related real snapshot gates: FR-SNP-005, TEST-SNP-002, TR-LOCKSTEP-VSF-001, TR-VSFLOCKSTEP-RESUME-001.'
+    - 'Phase 1: full native-safe tests/ViceSharp.OracleContract.Tests project, all six AC-mapped groups, valid mocks and discriminating incorrect mocks; no product/native build dependency.'
+    - 'Deferred XMLDoc correction: tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs incorrectly cites TR-CYCLE-001 AC4. Correct only after a native-safe harness build exists; retain fixture and single LockstepValidator ownership.'
+    - 'Named real evidence gate REAL-C64-PHI2-AEC-001: after wrapper feasibility and native-safe harness integration, require actual immutable x64sc half-cycle CPU access observations covering PHI1/PHI2, AEC low/high, idle/read/write, fail closed at missing/unknown access kind or first missing half-cycle. Exercise real managed behavior and native provenance; mock results cannot satisfy TR-CYCLE-001 AC4.'
+    - All seven TR-CYCLE-001 ACs and all existing real-emulator/current-plus-prior suites remain mandatory. Every executable exit has zero failed, skipped or aborted tests, unfiltered applicable suite, and local Opus5.5 max HV while Grok is unavailable AGREE >=98/98, zero FAIL/UNKNOWN.
+    implementationTasks:
+    - task: Reconcile Phase 0 preservation, primary requirements/projections and all workspace queues; obtain accepted HV
+      done: true
+    - task: Prove the entire native-safe AC-mapped mock-contract suite green, including deliberate incorrect controls, then HV
+      done: false
+    - task: Prove external-wrapper feasibility and snapshot compatibility on pinned immutable VICE without source mutation
+      done: false
+    - task: Safely migrate preserved native modifications to external wrappers/managed code and establish native-safe harness builds
+      done: false
+    - task: Correct deferred comparator XMLDoc mapping and pass REAL-C64-PHI2-AEC-001 with actual immutable x64sc evidence
+      done: false
+    - task: Complete real xvic half-cycle parity, native VSF resume and all original whole-plan gates with full suites and HV
+      done: false
+    remaining: '2026-10-11T11:40:20-05:00 Phase0 task alone remains accepted; five tasks and whole TODO remain open. Current UNAPPLIED/UNAPPROVED fourteen-record candidate is docs/receipts/requirements-recovery/20261011T080155-0500-capacitor-guard-remediation/proposed-field-delta.json, not the earlier composite version. Current R0 supplements through 20261011T110100-0500-tape-observation-contract cover source/fixture specifications, 63 test dispositions and API/observer limitations; none is a new executed mock/native gate. Canonical handoff reconciled with preserved preimage, still awaits independent review. Remaining: full dependent corpus and loader/firmware/fault cases; real observer reachability/noninterference; adjacent test audit; decision-complete approved guard/writer strategy; whole-packet Opus5.5max HV >=98/98 zeroFAIL/UNKNOWN and explicit exact-delta approval. Then guard mocks before real implementation/application; retain full native-safe mock acceptance, immutable wrapper feasibility/migration, native-safe harness, comparator XMLDoc, REAL-C64-PHI2-AEC-001, real xvic/x64sc/VSF/UI and all original cumulative gates. Last HV remains DISAGREE93/84. See HANDOFF.md and docs/receipts/handoff/20261011T112946-0500-canonical-reconciliation/state-before.json for current context and complete previous fields. No requirement/native/done-state changes.'
+    dependsOn: []
+    functionalRequirements:
+    - FR-VICE-001
+    technicalRequirements:
+    - TR-VICE-ORACLE-001
+    - TR-CYCLE-001
+  deprecated: true
+
+---
+

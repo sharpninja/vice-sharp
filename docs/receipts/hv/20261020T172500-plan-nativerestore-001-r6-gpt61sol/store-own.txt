@@ -1,0 +1,87 @@
+type: result
+payload:
+  requestId: req-20261020T223442Z-5022
+  result:
+    totalCount: 5
+    limit: 1
+    offset: 0
+    items:
+    - sourceType: Codex
+      sessionId: Codex-20261020T222731Z-plugin-session
+      agentSessionId: 01a15b6b-e50d-75b1-880b-e9fd6da7c823
+      agentExecutablePath: /home/sharpninja/.local/share/mise/installs/codex/latest/bin/codex
+      agentExecutableVersion: codex-cli 0.162.1
+      title: Hostile review native restoration plan revision 6
+      model: codex
+      started: 2026-10-20T22:27:34.0000000+00:00
+      lastUpdated: 2026-10-20T22:31:34.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20261020T222756Z-nativerestore-r6
+        timestamp: 2026-10-20T22:27:59.0000000+00:00
+        queryText: >
+          # Hostile validation round 6: PLAN-NATIVERESTORE-001 revision 6 (Phase D plan) before execution
+
+
+          You are the independent hostile reviewer for this round: GPT-6.1-Sol at reasoning effort max through the Codex CLI on LAB-OMARCHY, workspace /home/sharpninja/github/vice-sharp, branch develop (the checkout is recorded in input-pins.json). The implementer is a Claude session (claude-fable-5-1-high@ClaudeCode); you are a different agent family by the operator's rule. This is round 6 of a plan review before any of its steps execute; nothing under native/vice has changed, and nothing may change during your review. This launch passes sandbox_workspace_write.network_access=true, so the supported plugin's health check reaches the McpServer; round 3b persisted its turn this way.
+
+
+          Round 5 (receipt docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/, verdict.json and verdict.md pinned here) returned DISAGREE 97/96 with N12, N14 and N19 failing, N15 to N18 as added ACs, and 40 PASS. The implementer verified every round 5 finding against source (no real v1.3 snapshot exists in the repository; EXPORT_REGISTERS also runs at DMA handling line 451 and BRK line 1012), asked the operator about the v1.3 input, and rewrote the plan as revision 6; section 7 maps each finding of all rounds to its amendment. Your job is to re-verify against the live sources, not to re-read your own round 5 as truth: for every round 5 finding state PASS, FAIL or UNKNOWN with evidence (one entry per round 5 id), then attack the whole revised plan again for anything new that the amendments introduced, in particular: the R15 amendment of TR-VSFLOCKSTEP-RESUME-001 AC1 to external v1.2 and v1.4 (is it an explicit, operator-decided semantic amendment routed through the requirements wrapper in D1 and read back, with Slice 1 line 340 matched, and is nothing else silently reduced?), the explicit BLOCKED nonpassing Phase D end state and the cumulative target denominator (N14), the checkpoint writer and gate interaction controls (N15), the audit interval started before discovery with the attribute-only and provider-only controls (N16), the seam-level allocation test (N17), the clock versus half-cycle budget rules (N18) and the narrowed trap statement (N19).
+
+
+          CREDENTIAL RULE (round 1 R01 was yours): do NOT read, cat, print, copy or quote AGENTS-README-FIRST.yaml or any file holding an API key, in any shell, helper or tool call. The supported plugin reads the marker itself; you only call its wrappers through file-based PowerShell helpers. If any output you produce would contain a credential, stop that command.
+
+
+          TIMESTAMP RULE (round 2 R02 was yours): every progress object and every timestamp you emit is measured at the moment of emission by a command, never estimated or backfilled.
+
+
+          FIRST: run the add-profile skill exactly as its SKILL.md says (read every non-skill *.md under /home/sharpninja/.claude/profile in full; currently PROFILE-MERGED.md). Bootstrap your own supported plugin (mcpserver-codex-plugin, root /home/sharpninja/github/mcpserver-codex-plugin; verify with Invoke-CodexMcpPlugin.ps1 -Command Status) with MCP_FAILSAFE_DRAIN_DISABLED=1 set, and open your own review session-log turn through it, titled with a short summary of this request, linked to the parent ids in this directory's request.jsonl (parentSessionId, parentRequestId). If the plugin reports untrusted, record the exact error and the sandbox arguments from request.jsonl, do not repair hooks, settings or environment, do not replay queues, do not cancel historical turns, attempt the supported triage once, then use the authorized full-content failsafe and label queued versus persisted. Do not invoke nested reviewers, do not substitute the model. There are no time or turn bounds on this review.
+
+
+          MANDATORY live progress: before analysis and at meaningful checkpoints, emit a TEXT JSON object into your output with timestampLocal (measured), numeric completionPercent and etaSeconds (null only if genuinely unknown). These are your own reports, not deadlines.
+
+
+          Operator rulings verbatim (treat as acceptance criteria): D4 (2026-10-19): native restoration approved; "Build artifacts are not code dirt. They should be gitignored."; "restore native/vice means revert the tracked modifications after preserving them, and exclude the build output through git ignore rules instead of deleting it". D3: "No HV until your current scope of work is complete and passes 98/98 holistic self-assessment", clarified "This is a remediation/cleanup phase, not new code"; on 2026-10-20T12:21 the operator stated that plans are hostile-validated under the standing rules, which is why these rounds exist. 10:40: "Wait for the Windows trace results first" (satisfied: Windows 100k, 1M and x64sc 4M equal to Linux, receipt docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/). 10:53: "Before beginning phase D implementation, ensure both omarchy and legion2 have latest desktop build installed via nuke." (done on both). 10:57: R1 "B: .gitmodules ignore = untracked only"; R2 and R3 "A: retire it now"; R4 "Yes, exclude and keep"; R5 "Yes, add in D2". 12:09: "Hold until LEGION2 reports". 13:03: R6 "A: ShimLegacy category (Recommended)"; R7 "A: reject all three (Recommended)"; R8 "A: observer -autostart .vsf (Recommended)"; R9 "A: known-red set of 20 (Recommended)". 14:06: R10 "A: adapter launch precondition (Recommended)"; R11 "B: require a native register observer". 14:14: "sandboxes need network access, at least to loopback." 15:30: R12 "B: exact cycle N required"; R13 "B: implement HalfCycleState in Phase D"; R14 "A: accept as benign dead read (Recommended)". 16:29, asked explicitly whether to approve a pinned boundary checkpoint instead: R12 "B: literal 100,000 only". 17:23, asked how to handle the missing real v1.3 input for AC1: R15, verbatim, "change to v1.2 and v1.4" (the plan treats this as an explicit semantic amendment of AC1 applied through the requirements wrapper in D1). The plan now keeps the literal 100,000 trigger, distinguishes trigger and write clocks, accepts an xvic fixture only at write clock 100,000 on both hosts, and otherwise records BLOCKER-R12-XVIC-CHECKPOINT for the operator while every other Phase D obligation completes; judge whether this honors the ruling exactly and whether the blocker handling is complete and observable. Standing rules: never move a file (copy, verify by hash, retain the original until the operator clears deletion); never force-push; PowerShell only, no Python, no Node; every script analyzer-checked and dry-run with -WhatIf; BDPv4 mocks first for every behavior change; VICE is immutable (never edit, patch, generate into, clean or restore native/vice outside this plan's approved steps).
+
+
+          Read end to end, rehashing every pin in input-pins.json before you start and disclosing any drift: docs/plans/PLAN-NATIVERESTORE-001.md (the subject, revision 4), the round 3b verdict.json and verdict.md, docs/receipts/handoff/HANDOFF.lockstep-plan.md section 4 Phase D (line 115 is the exit) and Phase F (line 130 onward), docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md sections 4 and 11, docs/plans/PLAN-VICE-IMMUTABLE-001.md (Phase 0, Phase 3, Phase 4 field set, task 5 at lines 113 to 119), docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md, its patch (all 20 hunks) and native-vice-untracked-paths.txt, docs/plans/PLAN-OBSERVER-001.md (S5), docs/plans/PLAN-VSFLOCKSTEP-001.md (lines 230 to 243 and Slice 1 lines 321 to 350), docs/requirements/technical/TR-Native-Vice-Snapshot.md (AC1 and AC2), docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md, tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj, tests/ViceSharp.TestHarness/ViceFactAttribute.cs, tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs, tests/ViceSharp.TestHarness/LockstepValidator.cs, tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs, tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf, src/ViceSharp.Core/ViceNative.cs, src/ViceSharp.Abstractions/IViceNative.cs, src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs, native/Vice.Native.proj, .gitmodules, native/build-vice-observer.ps1, tools/immutable-vice/Invoke-ObserverEquivalence.ps1, tools/immutable-vice/clock-observer-x64sc.c and bus-adapter.c (the existing wrapper and sink pattern), build/Build.cs, ViceSharp.slnx, this directory's SELF-REVIEW.md. Verify the plan's state claims yourself: git -C native/vice status --porcelain=v1 -uall, git -C native/vice diff --stat, git submodule status, the semantic native consumers under tests, the callers of Vice.Native.proj, the absence of the two Nuke targets and the generator tool, a focused managed run of Vic20HalfCycleComparatorTests (allowed: dotnet test on the TestHarness with that filter only), and in the pinned materialization under artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source/vice/src (read only): interrupt.h line 305 and 6510core.c lines 482 to 486 (trap with exported registers), machine.h lines 145 and 148, autostart.c lines 884 to 888, 1266 to 1274 and 1552 to 1575, c64-snapshot.c lines 115 to 155, mainc64cpu.c lines 359 to 362, 513 and 934 onward, mainviccpu.c line 756 onward, mos6510.h lines 116 to 136, monitor.c lines 2237 to 2248, mon_parse.y line 265, mon_lex.l lines 183 and 221, initcmdline.c lines 279 to 286, drive-snapshot.c writer 135 to 165 and reader 313 to 339, 368 to 419, 433 and 540 to 550, rotation.c lines 186 to 205, drive-resources.c set_drive_type and line 168, iecbus.c lines 493 to 547, resources.h resources_get_int. Read-only on everything outside this receipt directory; you may run read-only git and grep commands and managed dotnet test commands on the three native-safe projects and the one named TestHarness filter; never build the full solution, never build native code, never touch native/vice or artifacts/immutable-vice.
+
+
+          Mandatory attack surfaces (profile 7.2): (1) every claim in the plan (counts, the 20-hunk classification, the pinned-source facts, the fixture facts, the new D1 and D2 designs); (2) workspace rules (honesty, receipts, MCP-only storage, PowerShell only, no Python, never move a file, VICE immutable, no silent exclusion or AC reduction, zero-allocation hot path for the load detector); (3) requirements: class 1; mapping to TR-VSFLOCKSTEP-RESUME-001 AC1 and AC2, TEST-VICE-001 AC1 and AC2, TR-CYCLE-001 AC4 (managed, left pending), FR-SNP-005 AC3 and TEST-SNP-002 AC4 (the comparator fixture), PLAN-VICEORACLE-001 tasks 4 and 5; the Slice 1 amendment, the R12 checkpoint wording and the AC2 reference change must preserve semantics or state the amendment explicitly; (4) the plan holistically: definition of done, blockers, phase dependencies, rollback (A03), both machines, the trap-based checkpoint writer (does the trap fire at the next instruction boundary with a complete exported register file, can machine_write_snapshot be called from a trap callback safely, is the resulting MAINCPU clock the clock at the boundary, does arming at cycle N through the clock hook interfere with the gate), the snapshot observer's two wraps (are both calls cross-object on both machines; is the load result observable before the next gate line; does an emitted VICE_SNAP line change any equivalence claim), the HalfCycleState design against the fixture's reflection (property names, types, enum, mismatch object members and message), the load detector against the zero-allocation and determinism invariants, the N02 ordering rules against the pinned read and reset paths, the N07 budget against -limitcycles semantics, the obligation map against every Slice 1 line. Run the what-if pass per criterion (a fixture whose pinned checkpoint clock differs between hosts; a trap that fires after a pending interrupt; a checkpoint requested at a cycle inside a stolen-cycle run; a resume whose first access is a stolen cycle; a shim consumer reached only through a data provider; a load-log file that cannot be written; the 20 known-red set changing; a Windows checkout with autocrlf). Chain rules to find deadlocks. Where the plan does not state an observable outcome, propose a valid AC with the step that owns it; adding a valid AC is a finding of kind "add AC", not a FAIL by itself unless the gap makes a step unsafe.
+
+
+          Save verdict.md, verdict.json and verdict.persistence.json in THIS directory (docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/). Required JSON fields: OverallVerdict (AGREE or DISAGREE), accuracyPercent, completenessPercent, passCount, failCount, unknownCount, findings (id, status PASS or FAIL or UNKNOWN or ADD-AC, severity, file and line or section, evidence, rationale, correction; one entry per round 3b finding id stating its disposition in revision 4, plus new ids), reviewerAgent, reviewerModel, reviewerEffort, reviewerSessionId, reviewerRequestId, requestPath, responsePath. Persist the COMPLETE prose and JSON verdict, every finding and both scores, in your own session-log turn (ordered small chunks if the wrapper's argument limits require it; read back, reassemble, compare hashes, disclose any CRLF/LF normalization), complete the turn and prove its completed state with a history query; write that proof into verdict.persistence.json. End with the whole verdict in your output stream. OverallVerdict is AGREE only if every applicable surface passes and both scores are at least 98; do not inflate scores; a sub-98 score is DISAGREE even with zero FAIL. No commit, no push, no edit outside this directory.
+        queryTitle: Hostile review native restoration plan revision 6
+        response: Actions appended.
+        interpretation: Class-1 independent pre-execution review of PLAN-NATIVERESTORE-001 revision 6. Read-only except round 6 receipt. Parent links are explicit tags and context. No nested reviewer. Marker read prohibited. Add-profile fully read.
+        status: in_progress
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'All 41 input SHA256/length pins match; live develop HEAD ff24117d7d756404fad439a3c14c14336709eb8c. Native Git: 8 tracked modifications, 155 untracked entries, 222 insertions/8 deletions, gitlink and HEAD cc67418cba58e71d8e70fd353e9de47199ad2075. Authorized Release comparator test: 1 failed, 0 passed, 0 skipped, missing HalfCycleState at line 23; retained TRX/diagnostic/stdout. D2 R13 explicitly owns implementation. Source recheck identifies residual only-at-traps/JAM/monitor text at plan line 54 despite corrected line 14.'
+          type: validation
+          status: completed
+          filePath: comparator-test.log
+        model: codex
+        tokenCount: 0
+        tags:
+        - PLAN-NATIVERESTORE-001
+        - revision-6
+        - hostile-validation
+        - gpt-6.1-sol
+        - effort-max
+        - parentSessionId:ClaudeCode-20261020T015046Z-plugin-session
+        - parentRequestId:req-20261020T172116Z-prompt-6c6d
+        contextList:
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/request.jsonl
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/prompt.md
+        - /home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T172500-plan-nativerestore-001-r6-gpt61sol/input-pins.json
+        processingDialog:
+        - timestamp: 2026-10-20T22:31:27.2978140+00:00
+          role: model
+          content: 'All 41 input SHA256/length pins match; live develop HEAD ff24117d7d756404fad439a3c14c14336709eb8c. Native Git: 8 tracked modifications, 155 untracked entries, 222 insertions/8 deletions, gitlink and HEAD cc67418cba58e71d8e70fd353e9de47199ad2075. Authorized Release comparator test: 1 failed, 0 passed, 0 skipped, missing HalfCycleState at line 23; retained TRX/diagnostic/stdout. D2 R13 explicitly owns implementation. Source recheck identifies residual only-at-traps/JAM/monitor text at plan line 54 despite corrected line 14.'
+          category: observation
+
+---

@@ -1,0 +1,14 @@
+{
+  "File": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/equivalence-linux/20261021T065500-phase-d-d5-final/x64sc-4000000/x64sc-4000000-keep.stderr",
+  "ObsLines": 7999996,
+  "Records": 5479500,
+  "Phi1": 3999998,
+  "Phi2": 1479502,
+  "IdlePhi2MissingData": 2520496,
+  "OtherErrors": 0,
+  "FirstOtherError": null,
+  "SequenceFaults": 0,
+  "FirstSequenceFault": null,
+  "Stolen": 216430,
+  "MaxHalfCycle": 7999995
+}

@@ -1,0 +1,33 @@
+type: result
+payload:
+  requestId: req-20261019T212002Z-6638
+  result:
+    id: FR-TAP-004
+    title: Tape Write Support
+    description: Write data to tape images using the selected machine native write-line path and accepted datasette RECORD state. C64 uses CPU-port bit 3; VIC-20 uses effective VIA2 PB3. Preserve native timing, image position, existing content, first-write quirks and write failures, not an in-memory pulse-count substitute.
+    status: pending
+    priority: low
+    area: TAP
+    acceptanceCriteria:
+    - id: ac-01
+      text: Capture qualifying native write-line transitions from C64 CPU-port bit 3 and VIC-20 VIA2 PB3, including DDR-only changes, repeated/opposite edges and SX-64 disconnection.
+      isSatisfied: false
+    - id: ac-02
+      text: Store the same bytes, gap/remainder, last-write state, file position/size/dirty state and counters as pinned VICE across short/long/24-bit boundaries and partial/failed output.
+      isSatisfied: false
+    - id: ac-03
+      text: A standard Commodore SAVE workload with pinned firmware, writable tape, resources and initial state produces the same bytes/status and machine-visible effects as immutable VICE, and its corresponding native/managed load results match. Include failure and write-protected cases.
+      isSatisfied: false
+    - id: ac-04
+      text: New-image, existing-image current-position and explicit end-position recordings preserve the same prefix/suffix and file-position/size effects as native VICE. Existing-file writes must not silently become unconditional append or truncate. Retain RECORD accepted while the motor already runs as an in-scope sequence, including after buffered reads; that command does not itself seek. Distinguish the actual C stream cursor from logical image position and compare the bytes and both positions that pinned native execution produces. Include RECORD-before-motor, motor-before-RECORD, read-then-RECORD, intervening START/seek, beginning/interior/end positions and buffer-refill boundaries. Pin the exact native binary, platform/C runtime, file mode, initial bytes and I/O prelude, and retain repeated native observations. Do not invent a platform-independent result, insert a compensating native seek, silently exclude an ordering or treat an unstable/unobservable result as a passing gate.
+      isSatisfied: false
+    - id: ac-05
+      text: Writable-image RECORD acceptance is the native interlock; absent/read-only-image RECORD is ignored. Do not require an additional independent PlayPressed boolean once native RECORD mode is accepted. Motor-running and qualifying-edge conditions still apply.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:20:02.9624978+00:00
+    updatedAt: 2026-10-19T21:20:02.9625855+00:00
+  deprecated: true
+
+---
+

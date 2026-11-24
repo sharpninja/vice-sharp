@@ -1,0 +1,9 @@
+{
+  "timestampLocal": "2026-10-20T14:14:02",
+  "operation": "Begin",
+  "method": "workflow.sessionlog.beginTurn",
+  "output": "",
+  "error": "Plugin command failed with exit code 1.\ntype: result\npayload:\n  result:\n    code: rejected\n    retryable: false\n    persisted: false\n    degraded: false\n    queued: false\n    method: workflow.sessionlog.beginTurn\n    agent: \"\"\n    sessionId: \"\"\n    requestId: req-20261020T191342Z-nativerestore-r3\n    failsafePath: /home/sharpninja/github/vice-sharp/.mcpServer/failsafe/Codex/workspaces/L2hvbWUvc2hhcnBuaW5qYS9naXRodWIvdmljZS1zaGFycA/pending/20261020T191402Z-session_submit-5ffb.yaml\n    message: Session log persistence failed for request 'req-20261020T191342Z-nativerestore-r3'. FailsafePath='/home/sharpninja/github/vice-sharp/.mcpServer/failsafe/Codex/workspaces/L2hvbWUvc2hhcnBuaW5qYS9naXRodWIvdmljZS1zaGFycA/pending/20261020T191402Z-session_submit-5ffb.yaml'.\n    childStderr: ' MCP_UNTRUSTED: marker refresh failed before REPL request'\n\n",
+  "reviewerSessionId": "Codex-20261020T191342Z-nativerestore-r3",
+  "reviewerRequestId": "req-20261020T191342Z-nativerestore-r3"
+}

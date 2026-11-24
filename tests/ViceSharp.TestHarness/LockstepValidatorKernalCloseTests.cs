@@ -13,6 +13,7 @@ public sealed class LockstepValidatorKernalCloseTests
     /// its indirect <c>JMP ($031C)</c> vector to the live close routine target.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void ResolveKernalJumpTarget_FollowsC64CloseIndirectVector()
     {
         var memory = new byte[0x10000];

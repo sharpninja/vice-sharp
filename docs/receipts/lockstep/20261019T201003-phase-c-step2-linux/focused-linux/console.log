@@ -1,0 +1,8 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.NativeClockProbe.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/ViceSharp.NativeClockProbe.Tests.dll
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/ViceSharp.NativeClockProbe.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/sharpninja/codex-dispatch/phase-c-step2-20261019/legion2-harness-focused/stdio-focused-linux.trx
+
+Passed!  - Failed:     0, Passed:    48, Skipped:     0, Total:    48, Duration: 592 ms - ViceSharp.NativeClockProbe.Tests.dll (net10.0)

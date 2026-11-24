@@ -1,0 +1,16 @@
+{
+  "frozenAt": "2026-10-19T14:29:29",
+  "purpose": "BDPv4 mock gate green before coordinator implementation",
+  "mockGate": {
+    "run1": "Failed: 88 total, 78 passed, 10 failed (harness defect: StrictMode scenario lookup), retained",
+    "run2": "Passed: 88 total, 88 passed, 0 failed, 0 skipped"
+  },
+  "files": {
+    "R1FakeClient.psm1": "F5B23ADCC28E2718B81395EC7B8D47F0EEEB71818F7241C16BF1209DFF297F41",
+    "R1Assertions.psm1": "8F1A1DE12C50D59DB9FC7463DA4276B4ECB78B626DD7A8ED71A4B68452A3C6FE",
+    "R1Guard.Tests.ps1": "6D737C9039A3C1FB29FD1F79A0439F96648840CF3DC4A1523ED4B794761753D5",
+    "mockgate-run1.xml": "EDE321C0BA28F69629DF5EBBEF2A7A3C40E5FF6F623489627BF480A8653D0D49",
+    "mockgate-run2.xml": "BF59168BD8260CD3186E31A20AC8412E58886D1145E1E7AA784A25039187C617",
+    "..\\20261013T231703-r0-anchor-remediation\\proposed-field-delta.json": "63386E9251185B101F53E9257CDA9270025A68006B83F243314E6E299A55D702"
+  }
+}

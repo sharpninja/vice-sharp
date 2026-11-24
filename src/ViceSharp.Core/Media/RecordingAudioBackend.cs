@@ -38,8 +38,13 @@ public sealed class RecordingAudioBackend : IAudioBackend
         _scratch = new short[scratchSize];
     }
 
-    /// <summary>Playback pacing is available only while the downstream device is usable.</summary>
+    /// <summary>Reports availability of the downstream playback device.</summary>
     public bool IsAvailable => _downstream?.IsAvailable ?? false;
+
+    /// <summary>
+    /// 2026-11-23, FR-SNDREG-001: a WAV recorder does not provide playback timing.
+    /// </summary>
+    public bool IsTimingSource => _downstream?.IsTimingSource ?? false;
 
     /// <inheritdoc/>
     public int QueuedSampleCount => _downstream?.QueuedSampleCount ?? 0;

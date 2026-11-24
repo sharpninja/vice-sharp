@@ -1,0 +1,10 @@
+{
+  "dialogItems": [
+    {
+      "timestamp": "2026-10-20T18:44:42.3167256-05:00",
+      "role": "model",
+      "category": "decision",
+      "content": "{\"filesModified\":[\"verdict.md\",\"verdict.json\",\"verdict.persistence.json\",\"review-*.ps1 and supporting read-only evidence, only inside this receipt directory\"],\"designDecisions\":[\"N19 is the only FAIL: narrow global export exclusivity to the chosen public trap seam; source feasibility does not prove arbitrary-cycle access.\",\"N20-N23 PASS as future contracts, not executed Phase D gates.\",\"N24-N26 are ADD-AC because existing fail-closed gates prevent unsafe restoration; they do not independently cause DISAGREE.\",\"R15 is an explicit AC1 semantic amendment; synthetic 1.3 and AC2 integrity semantics remain.\",\"Literal R12 permits only 100000 on both hosts or a nonpassing named BLOCKED exit; no approximate acceptance.\"],\"requirementsDiscovered\":[\"N24 D2/D5 successful ordinary-discovery control\",\"N25 D1/D2/D5 absent-candidate evidence control\",\"N26 D1 R15 propagation control\"],\"blockers\":[\"Plan approval held by N19 and accuracy 97; Phase D not executed.\"],\"validation\":[\"41 pins match; native 163 content/status entries match; empty native index; git diff --check exit 0.\",\"Allowed comparator Release test: 0 passed, 1 failed, 0 skipped, allocated to D2.\",\"Complete MD/JSON primary chunk reassembly verified before turn completion.\"]}"
+    }
+  ]
+}

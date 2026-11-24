@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20261019T211950Z-08ec
+  result:
+    id: TEST-TAPE-RAMP-001
+    title: Datasette startup, delayed-stop and fast-wind parity
+    description: Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and TR-TAPE-EDGE-001 ac-01 through ac-05 using shared clock/control/alarm cases. Green correct-mock and expected negative-control evidence precedes production changes. Reuse the same cases and assertions with real managed/native observations; no fixed historical passing total is an acceptance condition.
+    status: pending
+    priority: medium
+    area: TAPE
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-01
+      text: Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert ordered schedules, callback times and events; incorrect early/late/missing/duplicated/reordered events are rejected within a passing mock harness. Start_CommandWhileMotorRunning_NoPendingAlarm and Start_CommandWhileMotorRunning_PendingAlarm cover absent/read-only/writable media, clock zero/nonzero, seek/no-seek, retained write state and a pending stop deadline; reject omission of the command helper path, wrong alarm replacement or absence, wrong seek, wrong write-clock/bit seeding, and clearing a stop deadline that START leaves intact.
+      isSatisfied: false
+    - id: ac-02
+      text: Run all named delayed-stop and cancellation cases in the amendment ledger, retaining deadline and callback boundaries separately. Reject immediate stop, guaranteed-deadline stop despite an existing late alarm, repeated-off deadline extension and unconditional off/on restart. MotorOn_CancelsPendingStop covers deadline-1 and the exact deadline with motor-on ordered before callback dispatch; assert stop-clock clearing, unchanged running/alarm/write state and no startup ramp, and reject wrong mocks that restart only in these earlier cancellation cases.
+      isSatisfied: false
+    - id: ac-03
+      text: Real-provider validation reuses every mock input/assertion and obtains actual native and managed ordered observations. Source inspection, an analytical trace or a duration getter cannot substitute for actual pulse/state evidence. Missing capability fails closed.
+      isSatisfied: false
+    - id: ac-04
+      text: Run every case without skips in full applicable cumulative native-safe and real-emulator suites after native-safe integration. Retain exact commands, counts, TRX/logs, identities, failure history and accepted hostile review before satisfaction.
+      isSatisfied: false
+    - id: ac-05
+      text: Run each named fast-wind case for both FORWARD and REWIND, attached/absent media and stopped/running motor. Assert 1000-cycle command alarms, preservation by motor-on when pending and 32000 startup only when the ordinary helper has no pending alarm; reject unconditional startup timing.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:19:50.8457735+00:00
+    updatedAt: 2026-10-19T21:19:50.8458807+00:00
+  deprecated: true
+
+---
+

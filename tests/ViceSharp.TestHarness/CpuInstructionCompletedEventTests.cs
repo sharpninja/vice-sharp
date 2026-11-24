@@ -16,8 +16,11 @@ public sealed class CpuInstructionCompletedEventTests
     /// FR-CPU-TRACE-001, TR-PUBSUB-CPU-001.
     /// Use case: A debugger/monitor subscribes to per-instruction completion to read the
     ///   opcode and register file at each clean instruction boundary.
-    /// Acceptance: After executing LDA #$42 the CPU publishes a CpuInstructionCompletedEvent
-    ///   whose Opcode is 0xA9 and whose A register is 0x42.
+    /// Acceptance: After LDA #$42, exactly one completion at $1000
+    /// contains opcode $A9, A=$42, and next PC=$1002. That notification
+    /// precedes completion of the following NOP.
+    /// 2026-11-23, TR-PUBSUB-CPU-001 and D6/R18: verify registers after
+    /// VICE's unclocked immediate body.
     /// </summary>
     [Fact]
     public void CompletedInstruction_PublishesOpcodeAndRegisters()
@@ -37,19 +40,29 @@ public sealed class CpuInstructionCompletedEventTests
         var pubSub = new LockFreePubSub();
         cpu.ConnectPubSub(pubSub);
 
-        CpuInstructionCompletedEvent? lda = null;
+        var completions = new List<CpuInstructionCompletedEvent>();
         pubSub.Subscribe<CpuInstructionCompletedEvent>(
             CpuInstructionCompletedEvent.Topic,
-            e => { if (e.Opcode == 0xA9) lda = e; });
+            completions.Add);
 
         cpu.Reset();
-        for (var i = 0; i < 64 && lda is null; i++)
+        for (var i = 0; i < 64 && completions.Count < 2; i++)
             cpu.Tick();
 
-        Assert.NotNull(lda);
-        Assert.Equal(0xA9, lda!.Value.Opcode);
-        Assert.Equal(0x42, lda.Value.A);
-        Assert.Equal(0x1000, lda.Value.InstructionAddress);
+        Assert.Collection(completions,
+            lda =>
+            {
+                Assert.Equal(0x1000, lda.InstructionAddress);
+                Assert.Equal(0xA9, lda.Opcode);
+                Assert.Equal(0x42, lda.A);
+                Assert.Equal(0x1002, lda.Pc);
+            },
+            nop =>
+            {
+                Assert.Equal(0x1002, nop.InstructionAddress);
+                Assert.Equal(0xEA, nop.Opcode);
+                Assert.Equal(0x42, nop.A);
+            });
     }
 
     /// <summary>

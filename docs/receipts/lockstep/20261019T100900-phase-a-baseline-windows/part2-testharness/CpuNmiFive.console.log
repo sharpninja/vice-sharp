@@ -1,0 +1,45 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.24]     ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [FAIL]
+[xUnit.net 00:00:02.25]     ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [FAIL]
+[xUnit.net 00:00:02.25]     ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [FAIL]
+[xUnit.net 00:00:02.26]     ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [FAIL]
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+  Failed ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState [2 ms]
+  Error Message:
+   CPU did not reach PC=$0400 within 64 ticks (PC=$0000).
+  Stack Trace:
+     at ViceSharp.TestHarness.Mos6510NmiTests.StepUntilPcReaches(Mos6502 cpu, UInt16 targetPc, Int32 maxTicks) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Mos6510NmiTests.cs:line 252
+   at ViceSharp.TestHarness.Mos6510NmiTests.Nmi_RtiReturnsCpuToPreNmiState() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Mos6510NmiTests.cs:line 143
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode [5 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 169
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuInterruptTests.RtsThenLdaImm_NextTick_FetchesFollowingOpcode() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs:line 302
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 169
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuInterruptTests.LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs:line 346
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 169
+Actual:   0
+  Stack Trace:
+     at ViceSharp.TestHarness.CpuInterruptTests.Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\CpuInterruptTests.cs:line 263
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T100900-phase-a-baseline-windows\part2-testharness\CpuNmiFive.trx
+
+Failed!  - Failed:     4, Passed:     1, Skipped:     0, Total:     5, Duration: 82 ms - ViceSharp.TestHarness.dll (net10.0)

@@ -5,6 +5,7 @@ using ViceSharp.Chips.Cpu;
 using ViceSharp.Core;
 using Xunit;
 
+[Trait("Category", "Diagnostic")]
 public sealed class BranchCycleCountTests
 {
     private sealed class SimpleRam : IMemory

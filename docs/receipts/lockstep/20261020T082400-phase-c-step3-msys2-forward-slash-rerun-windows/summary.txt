@@ -1,0 +1,15 @@
+MSYS2 fixture rerun, host PAYTON-LEGION2, develop 8c426015, started 2026-10-20T08:23:54; dotnet 10.0.402
+build exit=0
+gate1-busobserver: exit=0 total=58 executed=58 passed=58 failed=0 notExecuted=0 outcome=Completed seconds=5.1
+gate2-busadapter: exit=0 total=8 executed=8 passed=8 failed=0 notExecuted=0 outcome=Completed seconds=4.8
+gate3-full: exit=0 total=232 executed=232 passed=232 failed=0 notExecuted=0 outcome=Completed seconds=5.5
+bus-adapter-real-evidence: ExitCode: 0; resolved /mingw64/bin/gcc=True; MSYSTEM=MINGW64=True; warning/error lines=0; -Werror=True; backslash in Executable=False; backslash in Arguments=False
+bus-probe-evidence: ExitCode: 0; resolved /mingw64/bin/gcc=True; MSYSTEM=MINGW64=True; warning/error lines=0; -Werror=True; backslash in Executable=False; backslash in Arguments=False
+bus-probe-rows-evidence: ExitCode: 0; resolved /mingw64/bin/gcc=True; MSYSTEM=MINGW64=True; warning/error lines=0; -Werror=True; backslash in Executable=False; backslash in Arguments=False
+clock-gate-evidence: ExitCode: 0; resolved /mingw64/bin/gcc=True; MSYSTEM=MINGW64=True; warning/error lines=0; -Werror=True; backslash in Executable=False; backslash in Arguments=False
+clock-probe-evidence: ExitCode: 0; resolved /mingw64/bin/gcc=True; MSYSTEM=MINGW64=True; warning/error lines=0; -Werror=True; backslash in Executable=False; backslash in Arguments=False
+clock-probe-x64sc-evidence: ExitCode: 0; resolved /mingw64/bin/gcc=True; MSYSTEM=MINGW64=True; warning/error lines=0; -Werror=True; backslash in Executable=False; backslash in Arguments=False
+stdio-adapter-real-evidence: ExitCode: 0; resolved /mingw64/bin/gcc=True; MSYSTEM=MINGW64=True; warning/error lines=0; -Werror=True; backslash in Executable=False; backslash in Arguments=False
+stdio-adapter-scripted-evidence: ExitCode: 0; resolved /mingw64/bin/gcc=True; MSYSTEM=MINGW64=True; warning/error lines=0; -Werror=True; backslash in Executable=False; backslash in Arguments=False
+native/vice inventory before=C7848A24 after=C7848A24 unchanged=True
+finished 2026-10-20T08:24:12

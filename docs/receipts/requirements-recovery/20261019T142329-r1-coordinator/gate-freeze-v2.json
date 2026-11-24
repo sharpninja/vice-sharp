@@ -1,0 +1,23 @@
+{
+  "frozenAt": "2026-10-19T14:40:17",
+  "supersedes": "mockgate-freeze.json (retained)",
+  "amendment": "G02 positive branch now applies only once the run passed identity (mutating call or identity-verified). Found by binding run 1; mock gate re-run (run3) green before binding run 2. Binding test imports the fake client -Global (closure scope); fake client unchanged.",
+  "gates": {
+    "mockgateRun3": "88/88 passed, 0 skipped",
+    "bindingRun1": "33 total, 4 passed, 29 failed (harness scope + G02 defect), retained",
+    "bindingRun2": "33/33 passed, 0 skipped",
+    "fullSuiteRun1": "121 total, 121 passed, 0 failed, 0 skipped"
+  },
+  "files": {
+    "R1FakeClient.psm1": "F5B23ADCC28E2718B81395EC7B8D47F0EEEB71818F7241C16BF1209DFF297F41",
+    "R1Assertions.psm1": "5935BE947086649A697968F7C2B46134AE641CBBCF178059BA4E6E84F7AA2D37",
+    "R1Guard.Tests.ps1": "6D737C9039A3C1FB29FD1F79A0439F96648840CF3DC4A1523ED4B794761753D5",
+    "R1Coordinator.psm1": "29A81B47A06C0638E873CB2CADEE622081469FEA430826CEB1AEC79D3B19167A",
+    "R1Guard.Binding.Tests.ps1": "69FF3400B6BC7880E9ABEEFDCFC0463EE6C765F95AC99128516B4A6B8DD0FD5C",
+    "mockgate-run3.xml": "ECCA966F5B95CC63DFB10073C33C190E6790A97D7E997C690BB0A241B5A5318A",
+    "binding-run1.xml": "DE3FF6BE4DCF17958C7863D31E308FE6633D5AAE9D121B47FC3780FAE995522B",
+    "binding-run2.xml": "2B619CF4B78C302B43AB8947DB878677BBE4CD2461373E1A7F6572339954FDA8",
+    "full-suite-run1.xml": "ACB07A8909A139F8D17DFDFE8888B63B3D1FC658BAD906D471ADFB7C555F38FC",
+    "..\\20261013T231703-r0-anchor-remediation\\proposed-field-delta.json": "63386E9251185B101F53E9257CDA9270025A68006B83F243314E6E299A55D702"
+  }
+}

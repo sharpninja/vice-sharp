@@ -51,6 +51,7 @@ public sealed class RasterBarLockstepTests
     /// when the shim or the staged .vsf is absent.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void RasterBarSchedule_Managed_MatchesVice_FromSnapshot()
     {
         if (!ViceNative.IsAvailable)
@@ -163,6 +164,7 @@ public sealed class RasterBarLockstepTests
     /// executed at least one instruction. Skips when the shim or the staged .vsf is absent.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void RasterLoop_PerInstructionCycles_MatchVice_FromSnapshot()
     {
         if (!ViceNative.IsAvailable) { Assert.Skip(ViceNative.AvailabilityMessage); return; }
@@ -265,6 +267,7 @@ public sealed class RasterBarLockstepTests
     /// .vsf is absent.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void StaD020_CycleLevel_StealState_VsVice_FromSnapshot()
     {
         if (!ViceNative.IsAvailable) { Assert.Skip(ViceNative.AvailabilityMessage); return; }

@@ -1,0 +1,42 @@
+type: result
+payload:
+  requestId: req-20261019T212406Z-7790
+  result:
+    id: FR-TAP-002
+    title: TAP File Format Support (v0, v1 and v2 native behavior)
+    description: Read/write TAP behavior shall match pinned VICE at the corresponding file/block decoder and live datasette layer. v0 zero does not consume a three-byte extension. v1/v2 extension, halfwave, header, clock and resource behavior must not be merged into a different invented format. Retain public mount/eject and machine-tag obligations.
+    status: pending
+    priority: medium
+    area: TAP
+    acceptanceCriteria:
+    - id: ac-01
+      text: 'For nonzero TAP bytes, preserve native pulse units and layer-specific conversion: file/block decoding uses pulse units while live datasette gaps use byte times eight before resource adjustments. Do not globally label every v0 byte a half-period.'
+      isSatisfied: false
+    - id: ac-02
+      text: A v0 zero consumes only that byte. The file/block decoder returns 256 pulse units; the live datasette uses DatasetteZeroGapDelay and its adjustments. Adjacent bytes remain separate pulses, not a 24-bit extension.
+      isSatisfied: false
+    - id: ac-03
+      text: For v1/v2 zero, cover three-byte little-endian extensions, truncated extension and all-zero length at each native layer. File/block v2 combines two halfwaves; live behavior depends on selected machine tape behavior and retains its native direction/resource effects.
+      isSatisfied: false
+    - id: ac-04
+      text: Header handling matches native short-read/magic rejection, stored version/system/video values, mismatch warning versus error behavior, declared data handling and clock fallback. Do not reject a mismatch that the corresponding native path only warns about. Test actual payload sizes 0, 1, 2 and 3 independently of declared header length; native tap_open rejects fewer than three actual bytes, and derives size from the physical file rather than the declared length. With at least three valid payload bytes, vary declared length below/equal/above actual length without incorrectly attributing a minimum-size rejection to a length mismatch. Cover every stored version byte 0 through 255 with otherwise valid headers; header acceptance is distinct from decoder outcome.
+      isSatisfied: false
+    - id: ac-05
+      text: Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.
+      isSatisfied: false
+    - id: ac-06
+      text: Writing to TAP preserves native recording eligibility, clocks, byte encoding, first-gap and failure effects from FR-RUNTIME-TAPE-002 ac-05/ac-06, including v0/v1/v2 output behavior and 24-bit truncation.
+      isSatisfied: false
+    - id: ac-07
+      text: Header machine tags distinguish C64, VIC-20 and C16/Plus4 and use the native machine/video clock table. Tests pin selected machine separately from the media header and preserve native mismatch/fallback behavior.
+      isSatisfied: false
+    - id: ac-08
+      text: 'Cover mount/eject, forward/reverse gap access and truncated media without treating file metadata decoding as a live pulse trace. Both layers require independent expected observations; missing native live evidence fails closed. For versions 3 through 255, a zero byte in the block decoder yields zero pulse units without consuming an extension; nonzero bytes remain ordinary pulse units. In regular C64/VIC-20 live tape behavior, a zero for any nonzero version takes the three-byte extension branch. Cover complete/all-zero/truncated extensions, following-byte alignment and EOF, with independent consumed-byte/file-position and timing assertions. Qualify by selected machine tape behavior: C16 live handling has only version-1 and version-2 branches here, so do not generalize the regular-machine unknown-version result to it. For block version 2, include missing/partial second halfwave and retain the distinction between physical stream consumption and pos_advance.'
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:24:06.9326842+00:00
+    updatedAt: 2026-10-19T21:24:06.9327809+00:00
+  deprecated: true
+
+---
+

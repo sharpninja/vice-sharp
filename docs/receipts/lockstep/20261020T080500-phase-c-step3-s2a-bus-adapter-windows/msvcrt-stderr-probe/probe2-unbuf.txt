@@ -1,0 +1,1 @@
+mode=unbuf fprintf=23 ferror=32 fflush=0 detected=1

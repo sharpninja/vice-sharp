@@ -1,0 +1,8 @@
+  Determining projects to restore...
+  Restored F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\ViceSharp.OracleContract.Tests.csproj (in 4.68 sec).
+  ViceSharp.OracleContract.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\bin\Release\net10.0\ViceSharp.OracleContract.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.OracleContract.Tests\bin\Release\net10.0\ViceSharp.OracleContract.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T100900-phase-a-baseline-windows\OracleContract.trx
+
+Passed!  - Failed:     0, Passed:    89, Skipped:     0, Total:    89, Duration: 142 ms - ViceSharp.OracleContract.Tests.dll (net10.0)

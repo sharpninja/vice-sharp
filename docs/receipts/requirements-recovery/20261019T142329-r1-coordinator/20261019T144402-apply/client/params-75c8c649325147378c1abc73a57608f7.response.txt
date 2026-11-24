@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20261019T194413Z-1d05
+  result:
+    id: TEST-TAPE-SENSE-001
+    title: Datasette transport, sense wiring and recording parity
+    description: Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05/ac-06 and every TR-TAP-EDGE-001 criterion with shared media, accepted transport-command, machine-port, and write-line fixtures. Establish correct and discriminating incorrect mocks before product changes, then reuse the same cases and assertions against managed and immutable native providers. Historical seven-test success is not an acceptance condition.
+    status: pending
+    priority: medium
+    area: TAPE
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-01
+      text: TransportSense_MediaCommandMatrix covers the five transport commands from STOP for absent/read-only/writable media and subsequent STOP transitions. Correct mocks assert accepted mode and sense; wrong polarity, ignored-command state changes, and omitted transitions are rejected.
+      isSatisfied: false
+    - id: ac-02
+      text: MachineSense_C64CpuPortAndVic20Via1 covers both machines and input/output masking. TapeRead_PulseInterruptRouting separately verifies CIA1 FLAG and VIA2 CA1. Wrong port, bit, DDR handling, interrupt target, and extra interrupts are rejected by negative controls.
+      isSatisfied: false
+    - id: ac-03
+      text: Recording_EligibilityAndWriteEdges covers attached versus absent media, RECORD accepted versus rejected, running versus stopped motor, and qualifying versus repeated/opposite write levels. Correct mocks assert writes and no-writes plus state changes; the historical no-tape successful-write behavior must be rejected.
+      isSatisfied: false
+    - id: ac-04
+      text: Recording_GapEncodingAndFailures covers elapsed gaps 0,6,7,8,2046,2047, short-gap remainder carry, first-write state, TAP v0/v1/v2 paths supported by the pinned source, and first/partial/failed output writes. Assert emitted bytes, image position, dirty state and STOP side effects against independently pinned expectations.
+      isSatisfied: false
+    - id: ac-05
+      text: Real-provider validation reuses all fixtures and assertions with actual immutable VICE and managed observations, followed by the full cumulative native-safe and real-emulator gates. Preserve historical tests/evidence, explicitly record superseded wrong expectations, and require zero failed, skipped or aborted cases plus accepted hostile validation before satisfaction.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T19:44:14.0544263+00:00
+    updatedAt: 2026-10-19T19:44:14.0545228+00:00
+  deprecated: true
+
+---
+

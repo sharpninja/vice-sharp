@@ -257,52 +257,60 @@ public sealed class VicIiCoreTimingTests
     /// Use case: A conditional steal request that ultimately does NOT
     /// skip the CPU must still allow the CPU to honour an IRQ pulse
     /// from a separate device on the same cycle.
-    /// Acceptance: With a scripted stealer that asks but does not
-    /// preempt, plus an IRQ pulse asserting on tick 2, the second clock
-    /// step arms the CPU's staged IRQ dispatch (VICE's 7-cycle x64sc
-    /// sequence, 6510dtvcore.c DO_INTERRUPT + DO_IRQBRK, with the first
-    /// dummy cycle absorbed by the arming boundary tick); seven further
-    /// steps consume the sequence plus the handler's delayed-fetch cycle,
-    /// leaving PC at the $4000 vector with the pushed return state on the
-    /// stack (S=$FC) and X unchanged from the in-flight DEX's
-    /// already-executed effect.
+    /// Acceptance: A request and IRQ on the STA write phase let the
+    /// write finish. The CPU subsequently enters the $4000 handler
+    /// with the IRQ return state pushed (S=$FC).
+    /// 2026-11-23, D6/R18: test an actual unstealable write phase.
+    /// VICE places the BA check on fetch/read clocks and permits STORE.
     /// </summary>
     [Fact]
     public void SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu()
     {
         var bus = new TestMemoryBus();
-        bus.SetMemory(0x0200, 0xCA);
+        bus.SetMemory(0x0200, 0x8D); // STA $5678
+        bus.SetMemory(0x0201, 0x78);
+        bus.SetMemory(0x0202, 0x56);
+        for (var address = 0x0203; address < 0x0210; address++)
+            bus.SetMemory(address, 0xEA);
         bus.SetMemory(0xFFFE, 0x00);
         bus.SetMemory(0xFFFF, 0x40);
+        bus.SetMemory(0x4000, 0xEA);
         var irq = new InterruptLine(InterruptType.Irq);
         var cpu = new Mos6502(bus)
         {
             PC = 0x0200,
-            X = 0x01,
+            A = 0x42,
             S = 0xFF,
             P = 0x00
         };
-        var stealer = new ScriptedCycleStealer(requestOnTick: 2);
-        var irqPulse = new IrqPulseDevice(irq, assertOnTick: 2);
+        var stealer = new ScriptedCycleStealer();
+        var irqPulse = new IrqPulseDevice(irq);
         var clock = new SystemClock(985_248, cpu, irq);
 
         clock.Register(cpu);
         clock.Register(stealer);
         clock.Register(irqPulse);
 
+        for (var i = 0; i < 8 && !(cpu.DebugOpcode == 0x8D && cpu.DebugCycle == 2); i++)
+            clock.Step();
+        Assert.Equal(0x8D, cpu.DebugOpcode);
+        Assert.Equal(2, cpu.DebugCycle);
+        Assert.False(cpu.CanStealCurrentCycle);
+        Assert.Equal(0x00, bus.Peek(0x5678));
+
+        stealer.RequestNextTick = true;
+        irqPulse.AssertNextTick = true;
         clock.Step();
-        clock.Step(); // boundary after DEX: the asserted line arms the staged sequence
+        Assert.Equal(0x42, bus.Peek(0x5678));
+        Assert.True(irq.IsAsserted);
 
-        Assert.Equal(0x00, cpu.X); // DEX completed before the dispatch
-
-        // Staged dispatch: dummy fetch, PCH/PCL/P pushes, vector lo (I set),
-        // vector hi, then the handler's delayed-fetch cycle makes the JUMP visible.
-        for (var i = 0; i < 7; i++)
+        stealer.RequestNextTick = false;
+        for (var i = 0; i < 20 && cpu.PC != 0x4000; i++)
             clock.Step();
 
         Assert.Equal(0x4000, cpu.PC);
         Assert.Equal(0xFC, cpu.S);
-        Assert.Equal(0x00, cpu.X);
+        Assert.Equal(0x42, bus.Peek(0x5678));
     }
 
     private static void Advance(Mos6569 vic, int cycles)
@@ -373,43 +381,45 @@ public sealed class VicIiCoreTimingTests
         public void Initialize() { }
     }
 
-    private sealed class ScriptedCycleStealer(int requestOnTick) : IClockedDevice, ICpuCycleStealer
+    /// <summary>TR-CYCLE-001, 2026-11-23, D6/R18. Requests a conditional steal on a test-selected phase.</summary>
+    private sealed class ScriptedCycleStealer : IClockedDevice, ICpuCycleStealer
     {
-        private int _ticks;
-
         public DeviceId Id => new(0x9003);
         public string Name => "Scripted cycle stealer";
         public uint ClockDivisor => 1;
         public ClockPhase Phase => ClockPhase.Phi1;
-        public bool IsCpuCycleStolen => _ticks == requestOnTick;
+        public bool RequestNextTick { get; set; }
+        public bool IsCpuCycleStolen => RequestNextTick;
         public bool IsCpuCycleStealMandatory => false;
 
-        public void Tick() => _ticks++;
-        public void Reset() => _ticks = 0;
+        public void Tick() { }
+        public void Reset() => RequestNextTick = false;
         public void Initialize() { }
     }
 
-    private sealed class IrqPulseDevice(IInterruptLine irq, int assertOnTick) : IClockedDevice, IInterruptSource
+    /// <summary>FR-CPU-003, 2026-11-23, D6/R18. Asserts IRQ on a test-selected Phi2 clock.</summary>
+    private sealed class IrqPulseDevice(IInterruptLine irq) : IClockedDevice, IInterruptSource
     {
-        private int _ticks;
-
         public DeviceId Id => SourceId;
         public string Name => "IRQ pulse";
         public uint ClockDivisor => 1;
         public ClockPhase Phase => ClockPhase.Phi2;
         public DeviceId SourceId => new(0x9004);
         public IReadOnlyList<IInterruptLine> ConnectedLines { get; } = [irq];
+        public bool AssertNextTick { get; set; }
 
         public void Tick()
         {
-            _ticks++;
-            if (_ticks == assertOnTick)
+            if (AssertNextTick)
+            {
+                AssertNextTick = false;
                 irq.Assert(this);
+            }
         }
 
         public void Reset()
         {
-            _ticks = 0;
+            AssertNextTick = false;
             irq.Release(this);
         }
 

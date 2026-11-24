@@ -1,0 +1,149 @@
+[
+  {
+    "path": "interrupt.h",
+    "expectedBlob": "e6df6997547820351399446bf6376b1b2d5d7007",
+    "actualBlob": "e6df6997547820351399446bf6376b1b2d5d7007",
+    "matches": true,
+    "sha256": "0B52238FAF1FCCD37793D6C06381CE89F0AF1E06F0C1A0F89A52905061A12BAD"
+  },
+  {
+    "path": "6510core.c",
+    "expectedBlob": "c12238d6d028e37f8346099d010712bdaf87631e",
+    "actualBlob": "c12238d6d028e37f8346099d010712bdaf87631e",
+    "matches": true,
+    "sha256": "E84F2021EFB4DEBA6C7486C7A81D6A64FE741C359F5D310BB58B3C11532A29C7"
+  },
+  {
+    "path": "6510dtvcore.c",
+    "expectedBlob": "d00e6ba2083ceeef17c85b1a324328547b6fc942",
+    "actualBlob": "d00e6ba2083ceeef17c85b1a324328547b6fc942",
+    "matches": true,
+    "sha256": "40B9EEA851DDB2853ABF04C91AE16117A4A92789B18A5C2AE627EC90F9A454F8"
+  },
+  {
+    "path": "machine.h",
+    "expectedBlob": "a49dc61d19d67627450b4161149b2a54edd084c2",
+    "actualBlob": "a49dc61d19d67627450b4161149b2a54edd084c2",
+    "matches": true,
+    "sha256": "9618D960CADCBB55C95CB735940A7B309109C61FB31EE5B6CA958C144E076AAD"
+  },
+  {
+    "path": "autostart.c",
+    "expectedBlob": "92ef3a22368fb23a40e72615e67ed60a2b742867",
+    "actualBlob": "92ef3a22368fb23a40e72615e67ed60a2b742867",
+    "matches": true,
+    "sha256": "BA20012085D953B9E81AEB9E9EAFAB0BDB4A88123D7776FE1937C479D0CAF716"
+  },
+  {
+    "path": "c64/c64-snapshot.c",
+    "expectedBlob": "9a40c3b207edee4d0c6d47bfe5fc11cee424e320",
+    "actualBlob": "9a40c3b207edee4d0c6d47bfe5fc11cee424e320",
+    "matches": true,
+    "sha256": "22F09184364E2E7BF23E8CD68395814F1B6BFA81F16885A58D3369A672DFF1B1"
+  },
+  {
+    "path": "vic20/vic20-snapshot.c",
+    "expectedBlob": "6de763df6c2b671305f7b1ad1d32fa2a2f769407",
+    "actualBlob": "6de763df6c2b671305f7b1ad1d32fa2a2f769407",
+    "matches": true,
+    "sha256": "69D765823C678E6286419D0C023DE4B8C46B54714C66922FDF5A11B404544DCE"
+  },
+  {
+    "path": "mainc64cpu.c",
+    "expectedBlob": "357b27452bd75c59b98edf6327f56752849a0db9",
+    "actualBlob": "357b27452bd75c59b98edf6327f56752849a0db9",
+    "matches": true,
+    "sha256": "2B96DD04A1EAF30F19C3CC5940EC433AC4C454F1A45681F0A04AD0C98F3A7F3B"
+  },
+  {
+    "path": "mainviccpu.c",
+    "expectedBlob": "84131004dab85f1e6988edaea6f84d510403fc3d",
+    "actualBlob": "84131004dab85f1e6988edaea6f84d510403fc3d",
+    "matches": true,
+    "sha256": "B07C104F4C52CDF781BD071C70ECBF706F682CE8521896DF4BFF61D973436C39"
+  },
+  {
+    "path": "mos6510.h",
+    "expectedBlob": "9ab9b819a4755b9dfd0ca1a1e47ab5fe2ab53ba5",
+    "actualBlob": "9ab9b819a4755b9dfd0ca1a1e47ab5fe2ab53ba5",
+    "matches": true,
+    "sha256": "CFBCDFD333A9565424F9B23B9CCD04A2D153C390B802F90352BE16D67C5B5E30"
+  },
+  {
+    "path": "monitor/monitor.c",
+    "expectedBlob": "c34440140899048b50139326fa814b2293e8aa16",
+    "actualBlob": "c34440140899048b50139326fa814b2293e8aa16",
+    "matches": true,
+    "sha256": "2E082451CEB4AEE7E03A562437F763C7666B50BF32BAEEA667052E69E92EB921"
+  },
+  {
+    "path": "monitor/mon_parse.y",
+    "expectedBlob": "8dc323160e479f9d248d276a34345149db8a309a",
+    "actualBlob": "8dc323160e479f9d248d276a34345149db8a309a",
+    "matches": true,
+    "sha256": "7E1B189A6445866C2184E74B4ED5A0F81EE19C80199A7A3CA282DE3DD5354517"
+  },
+  {
+    "path": "monitor/mon_lex.l",
+    "expectedBlob": "a9b9e3caeb7db0ded95a899db2b8ea24422cfa36",
+    "actualBlob": "a9b9e3caeb7db0ded95a899db2b8ea24422cfa36",
+    "matches": true,
+    "sha256": "38B937AA44CA799826097D91FFF07DE7E059F80486D2A76BAE716A900F36C0A7"
+  },
+  {
+    "path": "initcmdline.c",
+    "expectedBlob": "0bcde29310876dee09b73f22265a67e05db3bf34",
+    "actualBlob": "0bcde29310876dee09b73f22265a67e05db3bf34",
+    "matches": true,
+    "sha256": "FD76E145F2C2DC57027816D40BE915829529F263C619B9F5090987E124010D2C"
+  },
+  {
+    "path": "drive/drive-snapshot.c",
+    "expectedBlob": "7417f7e60b0d2ba7d4eb58e80c762c2fd8fcb79d",
+    "actualBlob": "7417f7e60b0d2ba7d4eb58e80c762c2fd8fcb79d",
+    "matches": true,
+    "sha256": "1904CF494AAE10898F3586A6929A9C9910E0DA432B20E6A064D10C644AC184E6"
+  },
+  {
+    "path": "drive/rotation.c",
+    "expectedBlob": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+    "actualBlob": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+    "matches": true,
+    "sha256": "F8B10A8D383294D5357E769BB6FA91393C4EE28AC4F5BF629C1A187364BA55E9"
+  },
+  {
+    "path": "drive/drive-resources.c",
+    "expectedBlob": "8a427dd64b8323e05ee62532a7271044c271c70f",
+    "actualBlob": "8a427dd64b8323e05ee62532a7271044c271c70f",
+    "matches": true,
+    "sha256": "6357E9B670BE9636CEF0F81E015F622ECB9709883BB63CD90D3E8434A51F080B"
+  },
+  {
+    "path": "iecbus/iecbus.c",
+    "expectedBlob": "bcf3c609ac33336a6161012512e6c82320e75499",
+    "actualBlob": "bcf3c609ac33336a6161012512e6c82320e75499",
+    "matches": true,
+    "sha256": "010BC96278C1D99A7EF2AEDFC3170D888DED174D7F174D18618945FCFEEABB25"
+  },
+  {
+    "path": "resources.h",
+    "expectedBlob": "04ad3401a2f9a66ec4ecce57b1030e47a4a38803",
+    "actualBlob": "04ad3401a2f9a66ec4ecce57b1030e47a4a38803",
+    "matches": true,
+    "sha256": "799110FD5A993923314540B35E992F30661E7629CAC25EAACEAA50EE64F53238"
+  },
+  {
+    "path": "c64/c64.c",
+    "expectedBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+    "actualBlob": "d1d58768b710078ced33b0e8cae6279551671605",
+    "matches": true,
+    "sha256": "967A52413C31B43F0B51C793D608C171E34AA31728230B03391327BCCA1A9352"
+  },
+  {
+    "path": "vic20/vic20.c",
+    "expectedBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+    "actualBlob": "b1523203655c6bdb0ee66e8b056349525cc67595",
+    "matches": true,
+    "sha256": "AE776199B6ABD85E5FBFA58F12F575B4893519E19A60035A7E5B7B9EBDF2187F"
+  }
+]

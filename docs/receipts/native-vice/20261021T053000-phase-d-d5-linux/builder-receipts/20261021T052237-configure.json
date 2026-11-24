@@ -1,0 +1,6 @@
+{
+  "Stage": "Configure",
+  "ExitCode": 0,
+  "Command": "\"/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/configure\" --enable-headlessui --disable-pdf-docs --disable-html-docs --without-pulse --without-alsa --without-oss --without-portaudio --without-flac --without-vorbis --without-mpg123 --without-gif --without-lame --disable-ethernet --disable-realdevice --disable-x64 --disable-x64-image",
+  "Log": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/receipts-linux/configure.log"
+}

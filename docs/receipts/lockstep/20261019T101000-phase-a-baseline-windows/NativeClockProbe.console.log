@@ -1,0 +1,8 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.NativeClockProbe.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T101000-phase-a-baseline-windows\NativeClockProbe.trx
+
+Passed!  - Failed:     0, Passed:    69, Skipped:     0, Total:    69, Duration: 618 ms - ViceSharp.NativeClockProbe.Tests.dll (net10.0)

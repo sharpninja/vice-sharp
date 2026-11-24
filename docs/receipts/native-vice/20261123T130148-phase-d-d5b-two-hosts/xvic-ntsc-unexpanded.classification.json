@@ -1,0 +1,51 @@
+{
+  "fixtureId": "xvic-ntsc-unexpanded",
+  "outcome": "accepted",
+  "acceptedSha256": "338A26D1CD576BDED98E7C079E23345B3E82A38AC0A0737FBB41287A5D31AC41",
+  "acceptedLength": 827287,
+  "reasons": [],
+  "clocks": [
+    {
+      "host": "LAB-OMARCHY",
+      "trigger": 100002,
+      "writeClock": 100002,
+      "writerResult": 0,
+      "mainCpuClock": 100002,
+      "candidateSha256": "338A26D1CD576BDED98E7C079E23345B3E82A38AC0A0737FBB41287A5D31AC41",
+      "outcome": "accepted-candidate",
+      "reason": "accepted candidate: write clock and MAINCPU clock equal the trigger"
+    },
+    {
+      "host": "LAB-OMARCHY",
+      "trigger": 100002,
+      "writeClock": 100002,
+      "writerResult": 0,
+      "mainCpuClock": 100002,
+      "candidateSha256": "338A26D1CD576BDED98E7C079E23345B3E82A38AC0A0737FBB41287A5D31AC41",
+      "outcome": "accepted-candidate",
+      "reason": "accepted candidate: write clock and MAINCPU clock equal the trigger"
+    },
+    {
+      "host": "PAYTON-LEGION2",
+      "trigger": 100002,
+      "writeClock": 100002,
+      "writerResult": 0,
+      "mainCpuClock": 100002,
+      "candidateSha256": "BB4F4F19AB54421F8726C04FCE146843475EE453B5043198506363F91A3A6EB5",
+      "outcome": "accepted-candidate",
+      "reason": "accepted candidate: write clock and MAINCPU clock equal the trigger"
+    },
+    {
+      "host": "PAYTON-LEGION2",
+      "trigger": 100002,
+      "writeClock": 100002,
+      "writerResult": 0,
+      "mainCpuClock": 100002,
+      "candidateSha256": "BB4F4F19AB54421F8726C04FCE146843475EE453B5043198506363F91A3A6EB5",
+      "outcome": "accepted-candidate",
+      "reason": "accepted candidate: write clock and MAINCPU clock equal the trigger"
+    }
+  ],
+  "isAccepted": true,
+  "byteComparisonException": "VIA1 v2.2 payload offsets 23 (ILA) and 24 (ILB)"
+}

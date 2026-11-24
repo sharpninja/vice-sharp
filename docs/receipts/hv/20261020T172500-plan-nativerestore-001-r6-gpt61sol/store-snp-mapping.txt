@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20261020T223440Z-ad55
+  result:
+    items:
+    - frId: FR-SNP-005
+      trId: TR-LOCKSTEP-VSF-001
+      createdAt: 2026-10-20T22:34:41.8723332+00:00
+    - frId: FR-SNP-005
+      trId: TR-VSFLOCKSTEP-RESUME-001
+      createdAt: 2026-10-20T22:34:41.8729035+00:00
+    - frId: FR-SNP-005
+      testId: TEST-SNP-002
+      createdAt: 2026-10-20T22:34:41.8730096+00:00
+    - frId: FR-SNP-005
+      testId: TEST-VSFLOCKSTEP-001
+      createdAt: 2026-10-20T22:34:41.8730931+00:00
+    totalCount: 4
+  deprecated: true
+
+---

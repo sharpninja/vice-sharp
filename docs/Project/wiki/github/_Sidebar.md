@@ -24,6 +24,7 @@
   - [VIC-20 vs VICE Implementation Audit](VIC20-vs-VICE-Audit)
   - [AI Code and Project Review (aiUnit)](AI-Review)
   - [Registry of Lore](Registry-of-Lore)
+  - [Native VICE Builds](Native-VICE-Builds)
 - Requirements
   - [Functional Requirements Overview](Functional-Requirements-Overview)
   - [Technical Requirements Overview](Technical-Requirements-Overview)
@@ -45,3 +46,4 @@
 - Current Plans
   - [Immutable Native VICE Remediation Plan](Plan-Immutable-Native-VICE)
   - [Native VICE VSF Lockstep Plan](Plan-Native-VICE-VSF-Lockstep)
+  - [Phase D Native VICE Restoration and Validation](Plan-Phase-D-Native-VICE-Restoration)

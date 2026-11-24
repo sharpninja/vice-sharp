@@ -34,6 +34,7 @@ public sealed class VicIiBootFrameOracleParityTests
     /// (zero mismatches).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Boot_Frame_Indices_Match_Vice_Oracle_Bit_Exact()
     {
         // Managed: boot to READY + 3 settle frames.

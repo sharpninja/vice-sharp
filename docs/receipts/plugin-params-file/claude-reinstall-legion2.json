@@ -1,0 +1,23 @@
+{
+  "startedAt": "2026-10-19T16:15:27",
+  "checkoutBranchBefore": "cursor/qbrain-ai-rebrand-phase2-91dd",
+  "checkoutHeadBefore": "2510cc1b",
+  "backup": {
+    "path": "C:\\Users\\kingd\\.claude\\plugins\\cache-backups\\mcpserver-local-mcpserver-1.119.0-20261019T161527.tar",
+    "sha256": "20D61641585076163A0CE7FBFCB408C67288B7F4F3B782E9E45F8ED2B775F912",
+    "entries": 237,
+    "sourceFiles": 145
+  },
+  "checkoutHeadAfter": "ed3586c0",
+  "marketplaceUpdate": "Updating marketplace: mcpserver-local...Validating local marketplace\r\n✔ Successfully updated marketplace: mcpserver-local",
+  "pluginUpdate": "Checking for updates for plugin \"mcpserver@mcpserver-local\"…\r\n✔ Plugin \"mcpserver\" updated from 1.119.0 to 1.121.0 for scope user. Restart to apply changes.",
+  "pluginUpdateExit": 0,
+  "installedVersion": "1.121.0",
+  "installPath": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.121.0",
+  "installedSha": "ed3586c0f6cd5613bc563c128e1c33eab2561398",
+  "invokeSha": "AF6D1E5B686E88DE53C280EB1D7A9B10711201362614AF08C58B49C9118A0830",
+  "replSha": "93AE956EEECB13D2561621A69C88D86A1CDE32026F81445761D75536BA4EE90E",
+  "hashesMatch": true,
+  "oldCacheRetained": true,
+  "finishedAt": "2026-10-19T16:15:31"
+}

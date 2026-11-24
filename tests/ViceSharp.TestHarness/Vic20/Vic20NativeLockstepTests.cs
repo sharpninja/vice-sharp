@@ -39,6 +39,7 @@ public sealed class Vic20NativeLockstepTests
     /// </summary>
     [Theory]
     [MemberData(nameof(CycleCounts))]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_Managed_CpuRegs_Lockstep(string modelSelector, int cycles)
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -66,6 +67,7 @@ public sealed class Vic20NativeLockstepTests
     /// (includes kernal CMP $A003,X at cycle 25).
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_Managed_PMatches_ThroughCmpAbsX()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -96,6 +98,7 @@ public sealed class Vic20NativeLockstepTests
     [InlineData(64)]
     [InlineData(256)]
     [InlineData(1024)]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_Managed_DualVia_ControlRegs_Lockstep(int cycles)
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -129,6 +132,7 @@ public sealed class Vic20NativeLockstepTests
     [InlineData(256)]
     [InlineData(1024)]
     [InlineData(5000)]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_Managed_VicI_Regs_Lockstep(int cycles)
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -175,6 +179,7 @@ public sealed class Vic20NativeLockstepTests
     /// VIC-I raster advances on native and matches managed $9004 peek (VICE encoding).
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeXvic_VicRasterAdvances_AndMatchesManaged()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -207,6 +212,7 @@ public sealed class Vic20NativeLockstepTests
     /// LockstepValidator constructs a Vic20 pair when oracle present.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void LockstepValidator_AcceptsVic20Model_WhenOraclePresent()
     {
         XvicOraclePrerequisites.ValidateCurrent();

@@ -105,6 +105,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void NoiseSrClocksWithTwoCyclePipelineDelay()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -176,6 +177,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void NoiseSrFreeRunsWithoutNoiseWaveformSelected()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -229,6 +231,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void NoiseSrIsPerVoiceNotShared()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -286,6 +289,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void NoiseOsc3ReadsCorrect12BitTaps()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -348,6 +352,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-09", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void NoNoiseMaskPassesSawtoothThroughUnaltered()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -407,6 +412,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void PowerOnSeedIs0x7FFFFe()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -449,6 +455,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-11", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void ZeroedShiftRegisterStaysLockedWithoutReseed()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -517,6 +524,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-12", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestRising_DoesNotResetShiftRegister()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -571,6 +579,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-13", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestFalling_ClocksShiftRegisterOnceWithNotBit17()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -627,6 +636,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-14", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestHeld_FadesShiftRegisterViaShiftregBitfade()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -674,6 +684,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-15", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void TestBit_ResetFadeConstants6581Are35000And1000()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -723,6 +734,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-16", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveform_WritesOutputBackIntoShiftRegister()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -772,6 +784,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-17", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveform_NoiseOutputAndedWithWaveformOutput()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -824,6 +837,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-18", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void NoisePlusCombinedWaveform_DecaysToZeroLockup()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -887,6 +901,7 @@ public sealed class SidNoiseDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-NOISE-19", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SingleCycleManagedMatchesOracleForTypicalFrequency()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

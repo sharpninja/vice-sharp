@@ -1,0 +1,289 @@
+{
+  "timestampLocal": "2026-10-20T13:20:41",
+  "seedCount": 43,
+  "withCategory": 5,
+  "withoutCategory": 38,
+  "consumerInventory": [
+    {
+      "path": "tests/ViceSharp.TestHarness/CaptureRunLogUtilityTests.cs",
+      "category": false,
+      "viceFactCount": 1,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+      "category": false,
+      "viceFactCount": 0,
+      "viceTheoryCount": 1
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/C64MachineProfileTests.cs",
+      "category": false,
+      "viceFactCount": 1,
+      "viceTheoryCount": 1
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 2
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/CpuValidationTests.cs",
+      "category": false,
+      "viceFactCount": 3,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs",
+      "category": false,
+      "viceFactCount": 1,
+      "viceTheoryCount": 1
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/LockstepValidationTests.cs",
+      "category": false,
+      "viceFactCount": 6,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/HostShells/XboxUwpHeadShellTests.cs",
+      "category": true,
+      "viceFactCount": 1,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Xbox/XboxTestConventionTests.cs",
+      "category": true,
+      "viceFactCount": 11,
+      "viceTheoryCount": 8
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 6,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+      "category": false,
+      "viceFactCount": 0,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 6,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs",
+      "category": false,
+      "viceFactCount": 1,
+      "viceTheoryCount": 1
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+      "category": false,
+      "viceFactCount": 3,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 13,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidEngineParityTests.cs",
+      "category": false,
+      "viceFactCount": 0,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidExactOracleTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 28,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+      "category": false,
+      "viceFactCount": 5,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+      "category": false,
+      "viceFactCount": 2,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+      "category": false,
+      "viceFactCount": 3,
+      "viceTheoryCount": 1
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceNativeBridge.cs",
+      "category": false,
+      "viceFactCount": 0,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/ViceMachineValidationFixture.cs",
+      "category": false,
+      "viceFactCount": 0,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+      "category": false,
+      "viceFactCount": 3,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+      "category": false,
+      "viceFactCount": 1,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 3,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Xbox/XboxAudioBackendFactoryTests.cs",
+      "category": true,
+      "viceFactCount": 1,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 4,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+      "category": false,
+      "viceFactCount": 0,
+      "viceTheoryCount": 2
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Xbox/XAudio2SourceVoiceBackendTests.cs",
+      "category": true,
+      "viceFactCount": 1,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/Xbox/XAudio2AudioMathTests.cs",
+      "category": true,
+      "viceFactCount": 1,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+      "category": false,
+      "viceFactCount": 1,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 15,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+      "category": false,
+      "viceFactCount": 1,
+      "viceTheoryCount": 30
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicIiValidationTests.cs",
+      "category": false,
+      "viceFactCount": 2,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+      "category": false,
+      "viceFactCount": 3,
+      "viceTheoryCount": 0
+    },
+    {
+      "path": "tests/ViceSharp.TestHarness/VicColorDisplayModeDivergentParityTests.cs",
+      "category": false,
+      "viceFactCount": 15,
+      "viceTheoryCount": 0
+    }
+  ],
+  "otherPotentialNativePaths": [
+    "tests/ViceSharp.Benchmarks/NativeViceBaseline.cs",
+    "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+    "tests/ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+    "tests/ViceSharp.TestHarness/RasterBarGroundTruthTests.cs",
+    "tests/ViceSharp.TestHarness/RasterBarRendererTests.cs",
+    "tests/ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+    "tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+    "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs",
+    "tests/ViceSharp.TestHarness/Xbox/XboxManagedFrameGateTests.cs",
+    "tests/ViceSharp.TestHarness/Xbox/XboxSystemButtonsBindingTests.cs",
+    "tests/ViceSharp.TestHarness/Xbox/XboxAotLinkTests.cs"
+  ]
+}

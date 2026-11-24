@@ -1,0 +1,149 @@
+[
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.AvaloniaBoundaryTests",
+    "method": "AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.AvaloniaBoundaryTests",
+    "method": "AvaloniaSources_DoNotReferenceRuntimeInternals",
+    "message": "Assert.DoesNotContain() Failure: Sub-string found"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.BasicBusAndSimpleRamTests",
+    "method": "BasicBus_Unregister_RemovesDeviceFromDispatch",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.BasicBusAndSimpleRamTests",
+    "method": "BasicBus_Write_ToUnmappedAddressIsSilentlyDropped",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.BenchmarksSmokeTests",
+    "method": "RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CiaSerialPortTests",
+    "method": "OutputMode_AssertsIrqWhenSdrMaskEnabled",
+    "message": "Expected irq.IsAsserted to be True because SDR-complete event must assert IRQ when IMR bit 3 is enabled, but found False."
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CiaSerialPortTests",
+    "method": "OutputMode_EightTimerAUnderflows_LatchesSdrIcrBit3",
+    "message": "Expected value to be 8 because after 8 Timer A underflows in SP output mode, ICR bit 3 must latch, but found 0 (difference of -8)."
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Configuration.ViceConfigLocatorTests",
+    "method": "ResolveConfigDirectory_ExpandsEnvironmentVariables",
+    "message": "Assert.DoesNotContain() Failure: Sub-string found"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuInstructionCompletedEventTests",
+    "method": "CompletedInstruction_PublishesOpcodeAndRegisters",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.CpuReadModifyWriteRegressionTests",
+    "method": "BranchNotTaken_StillConsumesTheOffsetByte",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Mos6510BrkTests",
+    "method": "Brk_RtiReturnsToInstructionAfterSignatureByte",
+    "message": "CPU did not reach PC=$C002 within 32 ticks (PC=$0800)."
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.NativeCollectionConventionTests",
+    "method": "NativeBridgeTestClasses_DeclareNativeViceCollection",
+    "message": "Native-bridge test classes missing [Collection(\"NativeVice\")]:"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.ProtocolHostIntegrationTests",
+    "method": "GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient",
+    "message": "Assert.Equal() Failure: Strings differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.ProtocolHostIntegrationTests",
+    "method": "SettingsService_ListsProfilesAndAppliesLiveLimiter",
+    "message": "Assert.Equal() Failure: Strings differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.SidFactoryTests",
+    "method": "Create_ConfiguresAudioClockOnlyWithBackend",
+    "message": "Assert.True() Failure"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.Tape.DatasetteCia1FlagTests",
+    "method": "MotorOnPlayPressed_WithImrEnabled_AssertsIrq",
+    "message": "Expected irq.IsAsserted to be True because with IMR bit 4 enabled, pulse-driven FLAG must assert IRQ, but found False."
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.VicBorderIrqFaithfulParityTests",
+    "method": "Registers_D012Read_ReturnsLiveRasterLowByte",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.VicIiCoreTimingTests",
+    "method": "SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.VicIID011ControlTests",
+    "method": "D011_Bit7Read_ReflectsCurrentRasterLineBit8_NotComparelatch",
+    "message": "Assert.Equal() Failure: Values differ"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.WarpAudioDiscardTests",
+    "method": "AppPipeline_FastForward251_WithLiveAudio_Reaches_Target",
+    "message": "DIAG fast-forward 251% pace = 162.2% of real time"
+  },
+  {
+    "trx": "focused.trx",
+    "outcome": "Failed",
+    "className": "ViceSharp.TestHarness.XmlDocsConventionTests",
+    "method": "TestMethods_HaveRequiredXmlDocs",
+    "message": "QA-XMLDOCS-001: found 74 test method(s) missing required XMLDOCS tokens (FR-/TR-, 'Use case:', 'Acceptance:'); expected at most 0."
+  }
+]

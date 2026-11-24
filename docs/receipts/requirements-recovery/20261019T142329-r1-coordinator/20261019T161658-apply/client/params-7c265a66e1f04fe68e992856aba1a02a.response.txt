@@ -1,0 +1,43 @@
+type: result
+payload:
+  requestId: req-20261019T211952Z-5216
+  result:
+    id: TEST-TAPE-SENSE-001
+    title: Datasette transport, machine wiring, recording and lifecycle parity
+    description: Validate FR-RUNTIME-TAPE-002 ac-01/ac-02/ac-05 through ac-08 and the corresponding TR-TAP-EDGE-001 and TR-TAPE-EDGE-001 criteria. Establish independent correct and discriminating wrong mocks, then bind unchanged inputs/assertions to real providers. Preserve historical evidence without treating old counts or wrong expectations as acceptance.
+    status: pending
+    priority: medium
+    area: TAPE
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-01
+      text: TransportSense_MediaCommandMatrix covers five commands from STOP, absent/read-only/writable images, enabled-state sense gating and later STOP. Reject wrong polarity, ignored-command state changes and missing transitions.
+      isSatisfied: false
+    - id: ac-02
+      text: MachineSense_C64CpuPortAndVic20Via1 covers both machines and DDR/output masking; TapeRead_PulseInterruptRouting separately covers CIA1 FLAG and VIA2 CA1. Reject wrong port/bit/direction/interrupt target and extra or missing pulse events.
+      isSatisfied: false
+    - id: ac-03
+      text: Run all recording eligibility/window/edge cases in the ledger, including startup, pending stop, after nominal deadline before callback and after executed stop. Assert writes/no-writes and retained line state. Reject no-image recording and invented startup inhibits.
+      isSatisfied: false
+    - id: ac-04
+      text: Run both RECORD/motor orderings and gap/error cases including 0/6/7/8/2046/2047, remainder carry, same/future-clock edges, v0/v1/v2, 0xffffff/0x1000000/0x1000001 and zero/one/two/three-byte long-payload writes. Assert bytes, image position/size/dirty state, counters, retained state and STOP side effects against independent native expectations.
+      isSatisfied: false
+    - id: ac-05
+      text: Reuse all fixtures/assertions with actual immutable native and managed providers, then run full cumulative suites. Missing, failed, skipped, aborted or mock-only cases cannot satisfy AC; require independent AGREE, both scores at least 98 and zero FAIL/UNKNOWN.
+      isSatisfied: false
+    - id: ac-06
+      text: Run machine motor/write cases for C64 bit 5/bit 3, input/output DDR and DDR-only changes, VIC-20 PCR raw-byte motor and VIA2 PB3/DDRB transitions, repeated writes and SX-64. Wrong bit, normalized-but-nonnative PCR behavior, omitted DDR edge and connected SX-64 mocks must be rejected.
+      isSatisfied: false
+    - id: ac-07
+      text: Run datasette and tapeport enable/dispatch/attach/detach/reset cases with each reset-resource branch. Reject UI-only internal-state assertions, synthesized motor clears and universal tapeport-active suppression.
+      isSatisfied: false
+    - id: ac-08
+      text: Run sense-dongle lifecycle and CP Clock F83 truth-table cases. Reject datasette-only sense, forced deassertion by the dongle disable callback, wrong SDA inversion, wrong SCL normalization and incorrect RTC sense combinations.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:19:53.2652252+00:00
+    updatedAt: 2026-10-19T21:19:53.2653185+00:00
+  deprecated: true
+
+---
+

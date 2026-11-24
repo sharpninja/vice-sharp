@@ -1,0 +1,6 @@
+actions:
+  - order: 1
+    description: Dense-session smoke action; marker dense-smoke-marker-20261019T201504
+    type: design_decision
+    status: completed
+    filePath: ""

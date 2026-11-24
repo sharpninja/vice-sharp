@@ -1,0 +1,5 @@
+Test run for /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/sharpninja/github/vice-sharp/docs/receipts/lockstep/20261019T103200-phase-a-step2-rom-rerun-linux/harness-acceptance-romroot.trx
+
+Passed!  - Failed:     0, Passed:   210, Skipped:     0, Total:   210, Duration: 10 s - ViceSharp.TestHarness.dll (net10.0)

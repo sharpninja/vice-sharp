@@ -1,0 +1,35 @@
+fix(plugin-core): pass repl-invoke params through a file, never the child command line
+
+On Windows a child command line is limited to 32,767 characters. Invoke-McpPlugin.ps1
+passed the whole params YAML to repl-invoke.ps1 as -ParamsYaml, so a 194 KB
+workflow.requirements.updateBatch failed with "The filename or extension is too long"
+(triage-report-821fe2da58284b4ea21604cb2da2fccb). Linux allows about 2 MB, which hid it.
+
+- New lib-ps/repl-params-transfer.ps1: New-McpReplParamsTransfer writes a private
+  UTF-8 (no BOM) temporary file and returns -ParamsPath arguments (none for empty
+  params); Remove-McpReplParamsTransfer deletes it; Read-McpReplParamsFile reads it.
+- repl-invoke.ps1 accepts -ParamsPath (exclusive with -ParamsYaml; a missing file
+  fails). -ParamsYaml stays for in-process callers.
+- Invoke-McpPlugin.ps1 and plugin-hook.ps1 (OpenSession launch) pass -ParamsPath and
+  remove the file in finally. The REPL hop already uses stdin.
+- cache-manager.ps1: replayed params drop the serializer's trailing line break, so a
+  replay sends the params text as written (TEST-MCP-PLUGIN-PSONLY-001).
+
+Tests (BDPv4): ReplParamsTransfer.Tests.ps1 contracts C1-C7. Mock gate 21/21 green
+before the helper existed; binding 8/8, including the wrapper carrying a 200 KB payload
+above 32,767 characters and a lint that no synced core file launches repl-invoke with
+-ParamsYaml. Test doubles that model repl-invoke's command line (8 stubs in
+PluginPowerShellRuntime.Tests.ps1 and SessionLogWrapperHarness.ps1) accept -ParamsPath;
+fixtures for the object-built cache-manager copy yaml-object-mutation.ps1; the pending
+record test checks the parsed ISO timestamp (operator-accepted 2026-10-19), and
+BackgroundOpenSession dot-sources yaml-object-mutation.ps1.
+
+Full plugins/core/test-fixtures/pester: 351 total, 348 passed, 3 failed, 0 skipped.
+The 3 also fail on the unchanged base f66c39f9 (297 total, 8 failed) and are not
+caused by this change: PSONLY-001 "fails closed without workspace" and two
+SESSIONEND-001 cases. Attribution receipts: vice-sharp
+docs/receipts/plugin-params-file/core-pester-{A-f66c39f9,B-f50cf525,full-run1,full-run2,full-run3}.xml.
+
+Signed: claude-opus-5-5@ClaudeCode (effort not exposed to the agent) | Confidence: correctness 94%, accuracy 96%, completeness 90%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

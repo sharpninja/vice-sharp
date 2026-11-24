@@ -1,0 +1,11 @@
+{
+  "requestId": "req-20261020T192008Z-hv-nativerestore-r3b",
+  "dialogItems": [
+    {
+      "timestamp": "2026-10-20T14:58:00",
+      "role": "model",
+      "category": "observation",
+      "content": "Reviewer proof-check correction: my first verifier incorrectly required the containing session status to be completed. Supported client.SessionLog.QueryAsync already proved this exact turn completed, all 16 full-content chunks exact and the complete response hash exact. The containing session remains in_progress, a distinct lifecycle state. The failed local predicate and original proof are retained as verdict.persistence.initial-session-check.json. No primary persistence failure, trust failure, replay, cancellation or session repair occurred. The corrected proof uses the actual completed turn in the supported history query and retains the active session status separately."
+    }
+  ]
+}

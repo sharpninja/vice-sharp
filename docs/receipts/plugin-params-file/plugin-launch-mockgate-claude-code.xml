@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="5" errors="0" failures="0" not-run="4" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-19" time="15:20:38">
+  <environment platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" user="SYSTEM" nunit-version="2.5.8.0" clr-version="10.0.13" user-domain="" cwd="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\params-file-20261019" os-version="10.0.26200" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="0.5432" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\params-file-20261019\tests\ReplParamsLaunch.Tests.ps1" executed="True" result="Success" success="True" time="0.5432" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\.worktrees\params-file-20261019\tests\ReplParamsLaunch.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Launch lint discriminates (mock gate)" executed="True" result="Success" success="True" time="0.2174" asserts="0" description="Launch lint discriminates (mock gate)">
+            <results>
+              <test-case description="ignores in-process calls and file transfer" name="Launch lint discriminates (mock gate).ignores in-process calls and file transfer" time="0.0063" asserts="0" success="True" result="Success" executed="True" />
+              <test-suite type="ParameterizedTest" name="Launch lint discriminates (mock gate).finds &lt;Name&gt;" executed="True" result="Success" success="True" time="0.1503" asserts="0" description="finds &lt;Name&gt;">
+                <results>
+                  <test-case description="finds wrapper -Arguments" name="Launch lint discriminates (mock gate).finds wrapper -Arguments" time="0.1396" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="finds entry -Arguments" name="Launch lint discriminates (mock gate).finds entry -Arguments" time="0.0044" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="finds ArgumentList loop" name="Launch lint discriminates (mock gate).finds ArgumentList loop" time="0.0036" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="finds ArgumentList.Add" name="Launch lint discriminates (mock gate).finds ArgumentList.Add" time="0.0026" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

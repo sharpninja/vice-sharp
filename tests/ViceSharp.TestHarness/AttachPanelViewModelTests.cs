@@ -24,10 +24,12 @@ using Xunit;
 public sealed class AttachPanelViewModelTests
 {
     /// <summary>
-    /// FR-ROMM-LAUNCH-001 / FR-DRVTRUE-001: a synthetic cached T64 traverses the
-    /// real desktop launcher, panel, gRPC attachment and True Drive recreation.
-    /// Autostart must queue keyboard automation against the recreated rig. The
-    /// test drive firmware only exercises media/session wiring, not DOS execution.
+    /// FR-ROMM-LAUNCH-001 / FR-DRVTRUE-001.
+    /// Use case: Launch a synthetic cached T64 through the desktop panel, gRPC
+    /// attachment, and True Drive recreation.
+    /// Acceptance: The recreated rig opens the converted media. If autostart is
+    /// requested, keyboard automation is queued on that rig. The test firmware exercises
+    /// wiring only.
     /// </summary>
     [Theory]
     [InlineData(false)]
@@ -99,8 +101,10 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
-    /// FR-ROMM-LAUNCH-001 / FR-DRVTRUE-001: recreation uses the host's converted
-    /// D64 path while the user's original T64 remains the recent-file entry.
+    /// FR-ROMM-LAUNCH-001 / FR-DRVTRUE-001.
+    /// Use case: Attach a T64 whose host-side conversion yields a D64.
+    /// Acceptance: Recreation uses the converted path and the recent-file list retains
+    /// the original T64.
     /// </summary>
     [Fact]
     public async Task AttachAsync_ConvertedT64_RecreatesFromD64AndRemembersSource()
@@ -124,9 +128,10 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
-    /// FR-ROMM-LAUNCH-001 / AC-LAUNCH-06: malformed media after a successful
-    /// attachment must report its error instead of starting the previous disk.
-    /// A later valid attachment must clear the error and launch successfully.
+    /// FR-ROMM-LAUNCH-001 / AC-LAUNCH-06.
+    /// Use case: A malformed selection follows a successful media attachment.
+    /// Acceptance: Report the new error without launching the older disk. A later valid
+    /// selection clears the error and launches.
     /// </summary>
     [Theory]
     [InlineData(false)]
@@ -348,9 +353,11 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
-    /// FR-VIC20-002 AC4 / FR-UI-003 / TR-MVVM-001 / TEST-UISET-001: changing
-    /// the picker immediately refreshes the VIC-20 settings visibility binding,
-    /// before Apply/Restart or any host refresh. Unchanged/null picks are ignored.
+    /// FR-VIC20-002 AC4 / FR-UI-003 / TR-MVVM-001 / TEST-UISET-001.
+    /// Use case: Select a VIC-20 model before applying settings or refreshing from the
+    /// host.
+    /// Acceptance: The visibility binding updates immediately. Unchanged and null
+    /// selections do not trigger it.
     /// </summary>
     [Theory]
     [InlineData("vic20")]

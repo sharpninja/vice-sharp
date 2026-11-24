@@ -1,0 +1,74 @@
+[
+  {
+    "name": "requirements-effective",
+    "method": "workflow.requirements.effective",
+    "params": "{}",
+    "timestampLocal": "2026-10-20T21:27:39",
+    "ok": true,
+    "bytes": 785269,
+    "file": "store-readback/requirements-effective.txt"
+  },
+  {
+    "name": "requirements-layers",
+    "method": "workflow.requirements.listLayers",
+    "params": "{}",
+    "timestampLocal": "2026-10-20T21:27:43",
+    "ok": true,
+    "bytes": 867,
+    "file": "store-readback/requirements-layers.txt"
+  },
+  {
+    "name": "mappings-FR-VICE-001",
+    "method": "workflow.requirements.listMappings",
+    "params": "{\"frId\":\"FR-VICE-001\"}",
+    "timestampLocal": "2026-10-20T21:27:45",
+    "ok": true,
+    "bytes": 333,
+    "file": "store-readback/mappings-FR-VICE-001.txt"
+  },
+  {
+    "name": "tr-TR-VICE-ORACLE-001",
+    "method": "workflow.requirements.listTr",
+    "params": "{\"id\":\"TR-VICE-ORACLE-001\"}",
+    "timestampLocal": "2026-10-20T21:27:47",
+    "ok": true,
+    "bytes": 178481,
+    "file": "store-readback/tr-TR-VICE-ORACLE-001.txt"
+  },
+  {
+    "name": "tr-TR-VSFLOCKSTEP-RESUME-001",
+    "method": "workflow.requirements.listTr",
+    "params": "{\"id\":\"TR-VSFLOCKSTEP-RESUME-001\"}",
+    "timestampLocal": "2026-10-20T21:27:50",
+    "ok": true,
+    "bytes": 178481,
+    "file": "store-readback/tr-TR-VSFLOCKSTEP-RESUME-001.txt"
+  },
+  {
+    "name": "tr-TR-CYCLE-001",
+    "method": "workflow.requirements.listTr",
+    "params": "{\"id\":\"TR-CYCLE-001\"}",
+    "timestampLocal": "2026-10-20T21:27:52",
+    "ok": true,
+    "bytes": 178481,
+    "file": "store-readback/tr-TR-CYCLE-001.txt"
+  },
+  {
+    "name": "test-TEST-VICE-001",
+    "method": "workflow.requirements.listTest",
+    "params": "{\"id\":\"TEST-VICE-001\"}",
+    "timestampLocal": "2026-10-20T21:27:55",
+    "ok": true,
+    "bytes": 150481,
+    "file": "store-readback/test-TEST-VICE-001.txt"
+  },
+  {
+    "name": "todo-PLAN-VICEORACLE-001",
+    "method": "workflow.todo.get",
+    "params": "{\"id\":\"PLAN-VICEORACLE-001\"}",
+    "timestampLocal": "2026-10-20T21:27:57",
+    "ok": true,
+    "bytes": 4374,
+    "file": "store-readback/todo-PLAN-VICEORACLE-001.txt"
+  }
+]

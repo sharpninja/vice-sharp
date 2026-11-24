@@ -1,0 +1,7 @@
+2026-10-19T11:54:37 HEAD: 6fb84afcc1ab980c4b40525efe23324183a3c8f4
+2026-10-19T11:54:37 working tree:  M docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md |  M tests/ViceSharp.TestHarness/SettingsRestartLifecycleTests.cs | ?? build.tests/ | ?? docs/plans/PLAN-NUKETESTS-001.md | ?? docs/receipts/lockstep/ | ?? docs/receipts/nuke-tests/
+2026-10-19T11:54:38 dotnet test /home/sharpninja/github/vice-sharp/build.tests/ViceSharp.Build.Tests.csproj -c Release --nologo --logger trx;LogFileName=ViceSharp.Build.Tests.trx --results-directory /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T115437-mock-gate-linux
+2026-10-19T11:54:41 exit 0
+2026-10-19T11:54:41 ViceSharp.Build.Tests: total 15, passed 15, failed 0, skipped 0
+2026-10-19T11:54:41    ViceSharp.Build.Tests.Placement.BuildPlacementMockGateTests: total 15, passed 15, failed 0, skipped 0
+2026-10-19T11:54:41 receipt: /home/sharpninja/github/vice-sharp/docs/receipts/nuke-tests/20261019T115437-mock-gate-linux

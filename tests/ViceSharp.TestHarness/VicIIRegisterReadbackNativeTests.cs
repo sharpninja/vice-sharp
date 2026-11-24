@@ -56,6 +56,7 @@ public sealed class VicIIRegisterReadbackNativeTests
     /// Acceptance: Fixed bits, unused $FF, collision write-ignore, and read-clear all match between managed and native.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeVsManaged_RegisterReadback_FixedBits_Unused_CollisionIgnore_Match()
     {
         var managed = BuildManagedVic();
@@ -163,6 +164,7 @@ public sealed class VicIIRegisterReadbackNativeTests
     /// native leg. Strengthens the visible/checkpoint validation for display-mode effects without new contracts.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeVsManaged_InvalidEcm_PriorityCollision_HiddenBit_Match()
     {
         // Managed baseline (exercises DisplayMode.Invalid + Is* priority helper; always executed for contract).
@@ -491,6 +493,7 @@ public sealed class VicIIRegisterReadbackNativeTests
     /// maps the black interior to a colour distinct from the border.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeVsManaged_VisibleFrame_DisplayMode_InvalidEcm_Checkpoint_Match()
     {
         // Managed contract: the same register pair selects the Invalid mode.
@@ -625,6 +628,7 @@ public sealed class VicIIRegisterReadbackNativeTests
     /// Byrd: Requirements (BACKFILL-VIDEO-001 primary + FR-VIC-008 + TR-VIC-EDGE-003 + TEST-VIC-001) + VICE evidence from the explore report drive the test + citations. One narrow coherent slice.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeVsManaged_FliAFLI_BadlineTiming_ForcedEveryLine_FliBugWindow_Checkpoint_Match()
     {
         // BDP: tests-first (this fact is the new contract surface for FLI/AFLI timing depth checkpoint). Mocks/stubs path (current model + native state) exercised first; validate green before any potential real adjustment.
@@ -695,6 +699,7 @@ public sealed class VicIIRegisterReadbackNativeTests
     /// Acceptance: Mock returns captured=true, width=320; pri bytes match InvalidEcmNativeSimulator for each px position.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeVsManaged_InvalidEcm_PriorityBufferAtRaster_MockContractValidated()
     {
         // BDP: mocks/stubs first for new contract surface. This fact (red for real native) validated green on mock path before any shim/P/Invoke/bridge real wiring.
@@ -749,6 +754,7 @@ public sealed class VicIIRegisterReadbackNativeTests
     /// Mocks/stubs (Bridge + simulator) proven green before real logic (phase 3 shim minimal full copy).
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void NativeVsManaged_VisibleFrame_FullBuffer_DisplayMode_InvalidEcm_Match()
     {
         // BDP: mocks/stubs first (Bridge full size mock + extended simulator). Always executes for contract.

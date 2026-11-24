@@ -1,0 +1,8 @@
+2026-10-20T08:12:25.7970489-05:00
+Executable: C:\msys64\mingw64\bin\gcc.exe
+Arguments: -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | -include | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\stdio-probe-io.h | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\stdio-probe-driver.c | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\gate-observer.c | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\Fixtures\clock-gate.c | -o | F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\stdio-adapter-scripted-evidence\stdio-adapter-scripted.exe
+ExitCode: 0
+TimedOut: False
+STDOUT:
+
+STDERR:

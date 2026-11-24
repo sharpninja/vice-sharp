@@ -87,6 +87,7 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// in the class XMLDOCS.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Voice1_Triangle_GateOn_AgreesWithNative()
     {
         EnsureNativeAvailable();
@@ -111,6 +112,7 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// tolerant gate.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Voice1_TriangleSaw_AgreesWithNative()
     {
         EnsureNativeAvailable();
@@ -135,6 +137,7 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// tolerant gate.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Voice1_AdsrSweep_AgreesWithNative()
     {
         EnsureNativeAvailable();
@@ -161,6 +164,7 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// tolerant gate.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Voice1_HardSync_AgreesWithNative()
     {
         EnsureNativeAvailable();
@@ -189,6 +193,7 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     /// tolerant gate.
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void Volume_DigiPlayback_AgreesWithNative()
     {
         EnsureNativeAvailable();

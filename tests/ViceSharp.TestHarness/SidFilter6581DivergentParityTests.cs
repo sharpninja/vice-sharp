@@ -579,6 +579,7 @@ public sealed class SidFilter6581DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-6581-27", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void FilterSubStepping_DeltaTFlt3_BatchedLockstep()
         => AssertFastBatchedLockstep(new (ushort, byte)[]
         {
@@ -837,6 +838,7 @@ public sealed class SidFilter6581DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void FilterClockedPerPhi2_StateEvolvesEachTick()
     {
         AssertFilterLockstepVsOracle(
@@ -859,6 +861,7 @@ public sealed class SidFilter6581DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void ExtFiltClockedPerPhi2_VlpEvolves()
     {
         // The final chip output (external filter consuming this cycle's filter
@@ -973,6 +976,7 @@ public sealed class SidFilter6581DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-03", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void FilterClockSubStepping_DeltaTFlt3_BatchedLockstep()
         => AssertFastBatchedLockstep(new (ushort, byte)[]
         {
@@ -993,6 +997,7 @@ public sealed class SidFilter6581DivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void ExtFiltSubStepping_DeltaTFlt8_BatchedLockstep()
         => AssertFastBatchedLockstep(new (ushort, byte)[]
         {

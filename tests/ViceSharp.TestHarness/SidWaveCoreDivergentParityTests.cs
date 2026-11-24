@@ -217,6 +217,7 @@ public sealed class SidWaveCoreDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-ACC-02", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Accumulator_StoredValueIsMaskedTo24Bits()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -268,6 +269,7 @@ public sealed class SidWaveCoreDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-ACC-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Accumulator_PowersUpWithEvenBitsHigh0x555555()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -315,6 +317,7 @@ public sealed class SidWaveCoreDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-WAVE-ACC-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Reset_PreservesAccumulatorExactly()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -382,6 +385,7 @@ public sealed class SidWaveCoreDivergentParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-OSC3ENV3-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Osc3_Waveform0ReadsFloatingDacFadeOfLastSelectedOutput()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

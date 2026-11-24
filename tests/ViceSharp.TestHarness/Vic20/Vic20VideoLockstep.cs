@@ -18,6 +18,7 @@ public sealed class Vic20VideoLockstep
     public const int FocusedBudgetCycles = 500_000;
 
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void EveryCycle_VicI_VideoState_Match_FocusedWindow()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -31,6 +32,7 @@ public sealed class Vic20VideoLockstep
     /// Short smoke: video state advances and stays bit-equal for 2k cycles.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void EveryCycle_VicI_VideoState_Match_2k()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -41,6 +43,7 @@ public sealed class Vic20VideoLockstep
 
     /// <summary>TEST-VIC20-VS-04 / AC-VS-04: NTSC every-cycle video state 2k.</summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void EveryCycle_VicI_VideoState_Match_2k_Ntsc()
     {
         XvicOraclePrerequisites.ValidateCurrent();
@@ -51,6 +54,7 @@ public sealed class Vic20VideoLockstep
 
     /// <summary>AC-VS-04: NTSC focused window (500k) every-cycle video state.</summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void EveryCycle_VicI_VideoState_Match_FocusedWindow_Ntsc()
     {
         XvicOraclePrerequisites.ValidateCurrent();

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3c4e684f-aaf7-4a34-95dd-4a07d80d0592" name="SYSTEM@PAYTON-LEGION2 2026-10-19 10:32:27" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-19T10:32:27.9470276-05:00" queuing="2026-10-19T10:32:27.9470279-05:00" start="2026-10-19T10:32:23.8112125-05:00" finish="2026-10-19T10:32:30.2663601-05:00" />
+  <TestSettings name="default" id="5ff899be-4652-42e4-b18e-b8827ac73151">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-10-19_10_32_27" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="31680ba9-0c28-41e4-9b46-ff5af4395775" testId="7cfaac02-b3ed-60b8-88b2-b8b3a7d072be" testName="ViceSharp.TestHarness.LockstepValidationTests.First100CyclesMatch" computerName="PAYTON-LEGION2" duration="00:00:00.0099673" startTime="2026-10-19T10:32:30.1489559-05:00" endTime="2026-10-19T10:32:30.1589842-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31680ba9-0c28-41e4-9b46-ff5af4395775" />
+    <UnitTestResult executionId="1e48ff10-9e20-49c2-92b1-14f079449e3a" testId="3821919d-e945-8d0f-34dd-dad9397b4bfa" testName="ViceSharp.TestHarness.LockstepValidationTests.First10000_Cia1TimerA_MatchesNative" computerName="PAYTON-LEGION2" duration="00:00:01.3254902" startTime="2026-10-19T10:32:26.6604088-05:00" endTime="2026-10-19T10:32:27.9860106-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e48ff10-9e20-49c2-92b1-14f079449e3a" />
+    <UnitTestResult executionId="ff9cf314-fb98-4ad0-b0b1-5faa77fbe1eb" testId="3ccc0416-3882-0535-f15c-005ca4760f67" testName="ViceSharp.TestHarness.LockstepValidationTests.First10000CyclesMatch" computerName="PAYTON-LEGION2" duration="00:00:00.0679538" startTime="2026-10-19T10:32:30.0802262-05:00" endTime="2026-10-19T10:32:30.1482453-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff9cf314-fb98-4ad0-b0b1-5faa77fbe1eb" />
+    <UnitTestResult executionId="fc5f65c8-f662-4a39-8f7f-53adde1f4e07" testId="02e59d03-9c4c-17e7-ec25-e31510ecf708" testName="ViceSharp.TestHarness.LockstepValidationTests.ResetStateMatches" computerName="PAYTON-LEGION2" duration="00:00:00.2438891" startTime="2026-10-19T10:32:26.4016087-05:00" endTime="2026-10-19T10:32:26.6537707-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc5f65c8-f662-4a39-8f7f-53adde1f4e07" />
+    <UnitTestResult executionId="49d52a68-393d-4efd-a240-f7cfa791ddb5" testId="e714b024-a7b4-97d5-3de4-9260f8130684" testName="ViceSharp.TestHarness.LockstepValidationTests.First100000_Cia1TimerA_MatchesNative" computerName="PAYTON-LEGION2" duration="00:00:00.7948447" startTime="2026-10-19T10:32:29.2838428-05:00" endTime="2026-10-19T10:32:30.0787765-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="49d52a68-393d-4efd-a240-f7cfa791ddb5" />
+    <UnitTestResult executionId="6e44dd10-dc57-4375-98d7-fa1b09213f6e" testId="c66be2f7-19ee-3409-f961-d1b5ac4b2ee7" testName="ViceSharp.TestHarness.LockstepValidationTests.First100000CyclesMatch" computerName="PAYTON-LEGION2" duration="00:00:01.2953613" startTime="2026-10-19T10:32:27.9874994-05:00" endTime="2026-10-19T10:32:29.2829398-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e44dd10-dc57-4375-98d7-fa1b09213f6e" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.TestHarness.LockstepValidationTests.ResetStateMatches" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="02e59d03-9c4c-17e7-ec25-e31510ecf708">
+      <Execution id="fc5f65c8-f662-4a39-8f7f-53adde1f4e07" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.LockstepValidationTests" name="ResetStateMatches" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.LockstepValidationTests.First100000CyclesMatch" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="c66be2f7-19ee-3409-f961-d1b5ac4b2ee7">
+      <Execution id="6e44dd10-dc57-4375-98d7-fa1b09213f6e" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.LockstepValidationTests" name="First100000CyclesMatch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.LockstepValidationTests.First100CyclesMatch" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="7cfaac02-b3ed-60b8-88b2-b8b3a7d072be">
+      <Execution id="31680ba9-0c28-41e4-9b46-ff5af4395775" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.LockstepValidationTests" name="First100CyclesMatch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.LockstepValidationTests.First10000_Cia1TimerA_MatchesNative" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="3821919d-e945-8d0f-34dd-dad9397b4bfa">
+      <Execution id="1e48ff10-9e20-49c2-92b1-14f079449e3a" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.LockstepValidationTests" name="First10000_Cia1TimerA_MatchesNative" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.LockstepValidationTests.First10000CyclesMatch" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="3ccc0416-3882-0535-f15c-005ca4760f67">
+      <Execution id="ff9cf314-fb98-4ad0-b0b1-5faa77fbe1eb" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.LockstepValidationTests" name="First10000CyclesMatch" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.LockstepValidationTests.First100000_Cia1TimerA_MatchesNative" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="e714b024-a7b4-97d5-3de4-9260f8130684">
+      <Execution id="49d52a68-393d-4efd-a240-f7cfa791ddb5" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.LockstepValidationTests" name="First100000_Cia1TimerA_MatchesNative" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="7cfaac02-b3ed-60b8-88b2-b8b3a7d072be" executionId="31680ba9-0c28-41e4-9b46-ff5af4395775" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3821919d-e945-8d0f-34dd-dad9397b4bfa" executionId="1e48ff10-9e20-49c2-92b1-14f079449e3a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3ccc0416-3882-0535-f15c-005ca4760f67" executionId="ff9cf314-fb98-4ad0-b0b1-5faa77fbe1eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="02e59d03-9c4c-17e7-ec25-e31510ecf708" executionId="fc5f65c8-f662-4a39-8f7f-53adde1f4e07" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e714b024-a7b4-97d5-3de4-9260f8130684" executionId="49d52a68-393d-4efd-a240-f7cfa791ddb5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c66be2f7-19ee-3409-f961-d1b5ac4b2ee7" executionId="6e44dd10-dc57-4375-98d7-fa1b09213f6e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.25]   Discovering: ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.68]   Discovered:  ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.89]   Starting:    ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:05.73]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')&#xD;
+vice_machine_create call=1 model=c64\nvice_machine_create returns=000001f49e940440\nvice_machine_reset call=1 machine=000001f49e940440\nvice_machine_destroy machine=000001f49e940440\nvice_machine_create call=2 model=c64\nvice_machine_create returns=000001f49e940440\nvice_machine_reset call=2 machine=000001f49e940440\nvice_machine_step_cycle call=1 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=2 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=3 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=4 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=5 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=6 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=7 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=8 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=9 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=10 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=11 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=12 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=13 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=14 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=15 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_step_cycle call=16 machine=000001f49e940440\ncycle_checkpoint: granted=1 running=1 paused=0 stop=0\nvice_machine_destroy machine=000001f49e940440\nvice_machine_create call=3 model=c64\nvice_machine_create returns=000001f49e940440\nvice_machine_reset call=3 machine=000001f49e940440\nvice_machine_destroy machine=000001f49e940440\nvice_machine_create call=4 model=c64\nvice_machine_create returns=000001f49e940440\nvice_machine_reset call=4 machine=000001f49e940440\nvice_machine_destroy machine=000001f49e940440\nvice_machine_create call=5 model=c64\nvice_machine_create returns=000001f49e940440\nvice_machine_reset call=5 machine=000001f49e940440\nvice_machine_destroy machine=000001f49e940440\nvice_machine_create call=6 model=c64\nvice_machine_create returns=000001f49e940440\nvice_machine_reset call=6 machine=000001f49e940440\nvice_machine_destroy machine=000001f49e940440\n&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Warning" timestamp="2026-10-19T10:32:30.2281028-05:00">
+        <Text>Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

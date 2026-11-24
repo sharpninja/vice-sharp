@@ -1,5 +1,9 @@
 # ViceSharp handoff
 
+## 2026-10-21T11:22 current handoff pointer
+
+The [forward handoff](docs/receipts/handoff/HANDOFF.lockstep-plan.v3.md) records Phase D acceptance at `c6b71cb8` and the remaining Phase E work. `HANDOFF.lockstep-plan.v2.md` is retired and kept as the chronological record. Every entry below this one is historical.
+
 ## 2026-10-16T12:36:10 documentation refresh
 
 The operator requested refresh-docs followed by wrap-up. Current RomM desktop

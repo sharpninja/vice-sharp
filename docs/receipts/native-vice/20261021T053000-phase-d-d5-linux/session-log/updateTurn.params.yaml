@@ -1,0 +1,7 @@
+title: 'Phase D D5 part 1 on LAB-OMARCHY: real resume and round trip green, xvic fixtures BLOCKED, manifest and trace test'
+response: 'D5 part 1 committed as bae513bc. Observers rebuilt and relinked (bus-adapter preload rule at the snapshot resume record); two crash causes pinned (log.c 615, options that log while parsed); xvic fixtures BLOCKED at write clock 100,002 (BLOCKER-R12-XVIC-CHECKPOINT) with candidates retained; real v1.2 resume and v1.4 round trip green; state-transfer manifest schema 1; REAL-C64-PHI2-AEC-001 trace test; cumulative target total 10 passed 8 failed 0 BLOCKED 2; F08 bracket equal. Pending: equivalence matrix on final binaries, A05 Test gate, LEGION2 measurements, exit receipt.'
+tags:
+  - phase-d
+  - d5
+  - blocker-r12
+  - lab-omarchy

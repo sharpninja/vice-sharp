@@ -1,0 +1,13 @@
+2026-10-19T14:32:11 HEAD fa303b4448791489c8f1e7e920a1638d906a4a1b branch develop
+2026-10-19T14:32:11 dotnet 10.0.402
+2026-10-19T14:32:11 native-inventory-before.txt: 2539 entries, sha256 C7848A24867CD60C49FE6088692A6E4565240868C89D811F806B429CDB3CBFC5
+2026-10-19T14:32:11 BuildTest: pwsh.exe -NoProfile -NonInteractive -File F:\GitHub\vice-sharp\build.ps1 BuildTest
+2026-10-19T14:32:23 BuildTest: exit 0; BuildTest-ViceSharp.Build.Tests.trx total 96 executed 96 passed 96 failed 0 notExecuted 0
+2026-10-19T14:32:23 LibraryTests: dotnet test F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\ViceSharp.Library.Tests.csproj -c Release --nologo --logger trx;LogFileName=ViceSharp.Library.Tests.trx --results-directory F:\GitHub\vice-sharp\docs\receipts\nuke-tests\20261019T143210-targets-windows
+2026-10-19T14:32:31 LibraryTests: exit 0; ViceSharp.Library.Tests.trx total 124 executed 124 passed 124 failed 0 notExecuted 0
+2026-10-19T14:32:31 RommDesktopTest: pwsh.exe -NoProfile -NonInteractive -File F:\GitHub\vice-sharp\build.ps1 RommDesktopTest
+2026-10-19T14:32:59 RommDesktopTest: exit 0; RommDesktopTest-ViceSharp.Heads.Tests.trx total 61 executed 61 passed 61 failed 0 notExecuted 0
+2026-10-19T14:32:59 RommDesktopTest: exit 0; RommDesktopTest-ViceSharp.Library.Tests.trx total 124 executed 124 passed 124 failed 0 notExecuted 0
+2026-10-19T14:32:59 native-inventory-after.txt: 2539 entries, sha256 C7848A24867CD60C49FE6088692A6E4565240868C89D811F806B429CDB3CBFC5
+2026-10-19T14:32:59 native inventory unchanged: True
+2026-10-19T14:32:59 receipt F:\GitHub\vice-sharp\docs\receipts\nuke-tests\20261019T143210-targets-windows

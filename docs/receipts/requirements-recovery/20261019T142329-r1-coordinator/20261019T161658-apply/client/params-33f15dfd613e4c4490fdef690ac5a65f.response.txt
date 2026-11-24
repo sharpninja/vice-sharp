@@ -1,0 +1,33 @@
+type: result
+payload:
+  requestId: req-20261019T212126Z-51a3
+  result:
+    id: FR-BACKFILL-MEDIA-001
+    title: D64, tape and IEC media behavior matches immutable native VICE
+    description: 'Managed media behavior shall reproduce the pinned native VICE reference at the corresponding layer: D64 image-sector data/status/persistence, true-drive IEC and motor behavior, and machine-specific datasette timing/sense/record behavior. Image-buffer success, synthetic motor counters and historical test totals cannot substitute for real-emulator parity. Preserve the separate buffered and true-drive modes and all legacy evidence.'
+    status: pending
+    priority: medium
+    area: BACKFILL
+    acceptanceCriteria:
+    - id: ac-01
+      text: For the same pinned D64 fixtures and operation sequence, sector reads/writes, returned semantic status, error-map effects and persisted bytes match native VICE; cover valid sectors, geometry boundaries, malformed/truncated input, read-only input, read errors and failed writes without treating success-only BAM reads as complete coverage.
+      isSatisfied: false
+    - id: ac-02
+      text: True-drive IEC line contributions, both ATN edges, enabled/disabled drive cases, contention, drive motor/rotation progression and DOS-mediated BAM-read bytes/status/effects must match pinned native VICE for identical initial conditions; direct image access cannot satisfy true-drive acceptance. FR-ARCH-TRUEDRIVE-1541-002 is an existing live record, but its zero-AC state is not acceptance evidence. Its exact true-drive AC expansion belongs to the separate unapproved drive proposal and must receive independent HV and explicit operator approval before drive implementation or satisfaction. This tape amendment does not approve that dependency or waive these media obligations.
+      isSatisfied: false
+    - id: ac-03
+      text: Datasette motor startup, delayed stop/cancellation, pulse delivery, sense-line wiring and recording on writable media must satisfy the existing live FR-RUNTIME-TAPE-002 contract as amended only after explicit approval of this exact packet, for C64 and VIC-20. A metadata pulse read or in-memory recording count alone is insufficient. The earlier application of FR-RUNTIME-TAPE-002 does not approve the new text in this amendment.
+      isSatisfied: false
+    - id: ac-04
+      text: Each accepted media scenario retains fixture/firmware/resource hashes, mode, initial state, clock domain, operation sequence, ordered observations and first mismatch. Reusing a host-cycle deadline as a drive/tape clock assertion or comparing different media modes is rejected.
+      isSatisfied: false
+    - id: ac-05
+      text: All preceding assertions first pass with independent discriminating mocks and expected negative controls, then the same inputs/assertions pass with real providers and the full applicable suites. Missing, skipped, failing or mock-only evidence leaves the criterion unsatisfied.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:21:26.6841897+00:00
+    updatedAt: 2026-10-19T21:21:26.6842768+00:00
+  deprecated: true
+
+---
+

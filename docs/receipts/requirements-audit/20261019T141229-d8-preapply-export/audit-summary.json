@@ -1,0 +1,36 @@
+{
+  "auditedAt": "2026-10-19T14:12:43",
+  "mode": "dry-run (no store writes)",
+  "counts": {
+    "fr": {
+      "records": 235,
+      "criteria": 1028,
+      "satisfiedFlags": 32
+    },
+    "tr": {
+      "records": 139,
+      "criteria": 202,
+      "satisfiedFlags": 39
+    },
+    "test": {
+      "records": 143,
+      "criteria": 119,
+      "satisfiedFlags": 29
+    }
+  },
+  "findingsByRule": {
+    "R1": 3,
+    "R2": 22,
+    "R3": 6,
+    "R5": 17
+  },
+  "distinctRecordsWithFindings": 31,
+  "satisfiedFlagsTotal": 100,
+  "recordsWithSatisfiedFlags": 36,
+  "satisfiedFlagsWithDescriptionCitation": 0,
+  "satisfiedFlagsByEvidenceClass": {
+    "none": 52,
+    "receiptPath": 0,
+    "referenceOnly": 48
+  }
+}

@@ -141,6 +141,7 @@ public sealed class Sid8580VariantParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-8580-06", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void SampleFast_1CycleWriteDelay_LockstepVsOracle()
     {
         var program = new (ushort reg, byte val)[]
@@ -249,6 +250,7 @@ public sealed class Sid8580VariantParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-8580-10", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void CombinedWaveforms_8580_OutputLockstep()
     {
         var program = new (ushort reg, byte val)[]

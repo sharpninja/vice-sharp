@@ -1,0 +1,21 @@
+STARTED-BY: Invoke-EquivalenceCleanEnv.ps1
+CHILD PATH first entry: C:/msys64/mingw64/bin (then registry machine+user PATH)
+ARGS: -NoProfile -NonInteractive -File F:/GitHub/vice-sharp/tools/immutable-vice/Invoke-ObserverEquivalence.ps1 -Machine both -OutDir F:/GitHub/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/equivalence-windows/20261020T102600-100k -Cycles 100000
+EXIT: 0
+SECONDS: 205.7
+--- STDOUT
+=== xvic 100000 cycles (10:26:09) ===
+stock     exit 1 gate 0 access 0 missingKind 0 missing/foreign 0 translate 0 stop 0 obs 0 extra 0 png EC7D9617BAF8D007DD78BB67FED8F599AFFDE6D5B9629EA7161F7DFCA5E25AE1
+withheld  exit 1 gate 99998 access 100002 missingKind 0 missing/foreign 0 translate 9465 stop 0 obs 199996 extra 4 png EC7D9617BAF8D007DD78BB67FED8F599AFFDE6D5B9629EA7161F7DFCA5E25AE1
+keep      exit 1 gate 99998 access 47815 missingKind 0 missing/foreign 0 translate 14 stop 0 obs 199996 extra 2 png EC7D9617BAF8D007DD78BB67FED8F599AFFDE6D5B9629EA7161F7DFCA5E25AE1
+compare   keep access 47815 absent-from-withheld 0 gate-identical True clock-gaps 0 resets 1
+=== x64sc 100000 cycles (10:27:55) ===
+stock     exit 1 gate 0 access 0 missingKind 0 missing/foreign 0 translate 0 stop 0 obs 0 extra 0 png 5283DAEF3E770A05C35725A67FD2A2AE318B5A37D1C64A556357473CC8D9E794
+withheld  exit 1 gate 99999 access 100001 missingKind 0 missing/foreign 0 translate 2164 stop 0 obs 199998 extra 2 png 5283DAEF3E770A05C35725A67FD2A2AE318B5A37D1C64A556357473CC8D9E794
+keep      exit 1 gate 99999 access 43503 missingKind 0 missing/foreign 0 translate 7 stop 0 obs 199998 extra 1 png 5283DAEF3E770A05C35725A67FD2A2AE318B5A37D1C64A556357473CC8D9E794
+compare   keep access 43503 absent-from-withheld 0 gate-identical True clock-gaps 0 resets 0
+obs validation: exit 0; Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 970 ms - ViceSharp.NativeClockProbe.Tests.dll (net10.0)
+summary: F:\GitHub\vice-sharp\artifacts\immutable-vice\cc67418cba58e71d8e70fd353e9de47199ad2075\equivalence-windows\20261020T102600-100k\equivalence.json
+equivalent: every check passed
+
+--- STDERR

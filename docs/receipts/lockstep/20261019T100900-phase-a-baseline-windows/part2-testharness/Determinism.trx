@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="40cbf671-ad8c-4bb1-994f-70ea0f2bbb22" name="SYSTEM@PAYTON-LEGION2 2026-10-19 10:32:04" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-19T10:32:04.9102584-05:00" queuing="2026-10-19T10:32:04.9102587-05:00" start="2026-10-19T10:32:01.8509771-05:00" finish="2026-10-19T10:32:04.9151823-05:00" />
+  <TestSettings name="default" id="f188e1e0-dd77-407b-80d4-f136242d19d7">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-10-19_10_32_04" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="aeda56c2-fd3d-47ed-b6c0-4b664ccde210" testId="312caf2d-bd1f-e738-eaec-8eead59ab2cb" testName="ViceSharp.TestHarness.SidDeterminismTests.ResetClearsAllState_SecondRunMatchesFresh" computerName="PAYTON-LEGION2" duration="00:00:00.0092757" startTime="2026-10-19T10:32:04.7746609-05:00" endTime="2026-10-19T10:32:04.7839683-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aeda56c2-fd3d-47ed-b6c0-4b664ccde210" />
+    <UnitTestResult executionId="198a9c19-4165-467d-a0c8-e3496d289b2b" testId="b2e22721-a0f0-37d5-28d8-0ac4f25f6d67" testName="ViceSharp.TestHarness.SidDeterminismTests.HardSyncStimulus_IsDeterministicAcrossRuns" computerName="PAYTON-LEGION2" duration="00:00:00.0053767" startTime="2026-10-19T10:32:04.7842716-05:00" endTime="2026-10-19T10:32:04.7896942-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="198a9c19-4165-467d-a0c8-e3496d289b2b" />
+    <UnitTestResult executionId="3fd81014-b253-4821-981f-ba830204ff9a" testId="85b25a0c-7896-8b0d-4eb8-c6e967565e8d" testName="ViceSharp.TestHarness.SidDeterminismTests.CombinedWaveformsAndAdsrChanges_AreDeterministicAcrossRuns" computerName="PAYTON-LEGION2" duration="00:00:00.0195606" startTime="2026-10-19T10:32:04.7546381-05:00" endTime="2026-10-19T10:32:04.7742438-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3fd81014-b253-4821-981f-ba830204ff9a" />
+    <UnitTestResult executionId="948c8708-196b-494a-87c0-71239fb38c1d" testId="d7c18584-aba0-6817-e9f7-13d6c2b13898" testName="ViceSharp.TestHarness.SidDeterminismTests.TwoInstances_IdenticalStimulus_ProduceIdenticalSampleStreams" computerName="PAYTON-LEGION2" duration="00:00:00.0182700" startTime="2026-10-19T10:32:04.7360066-05:00" endTime="2026-10-19T10:32:04.7543484-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="948c8708-196b-494a-87c0-71239fb38c1d" />
+    <UnitTestResult executionId="205e6f52-4f26-498b-a37e-789414f43d89" testId="2c894642-794d-e99a-4646-e58fcc6dfc7e" testName="ViceSharp.TestHarness.SidDeterminismTests.DifferentStimulus_ProducesDifferentSampleStreams" computerName="PAYTON-LEGION2" duration="00:00:00.1455529" startTime="2026-10-19T10:32:04.5752627-05:00" endTime="2026-10-19T10:32:04.7295869-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="205e6f52-4f26-498b-a37e-789414f43d89" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.TestHarness.SidDeterminismTests.HardSyncStimulus_IsDeterministicAcrossRuns" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="b2e22721-a0f0-37d5-28d8-0ac4f25f6d67">
+      <Execution id="198a9c19-4165-467d-a0c8-e3496d289b2b" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.SidDeterminismTests" name="HardSyncStimulus_IsDeterministicAcrossRuns" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.SidDeterminismTests.CombinedWaveformsAndAdsrChanges_AreDeterministicAcrossRuns" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="85b25a0c-7896-8b0d-4eb8-c6e967565e8d">
+      <Execution id="3fd81014-b253-4821-981f-ba830204ff9a" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.SidDeterminismTests" name="CombinedWaveformsAndAdsrChanges_AreDeterministicAcrossRuns" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.SidDeterminismTests.DifferentStimulus_ProducesDifferentSampleStreams" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="2c894642-794d-e99a-4646-e58fcc6dfc7e">
+      <Execution id="205e6f52-4f26-498b-a37e-789414f43d89" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.SidDeterminismTests" name="DifferentStimulus_ProducesDifferentSampleStreams" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.SidDeterminismTests.TwoInstances_IdenticalStimulus_ProduceIdenticalSampleStreams" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="d7c18584-aba0-6817-e9f7-13d6c2b13898">
+      <Execution id="948c8708-196b-494a-87c0-71239fb38c1d" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.SidDeterminismTests" name="TwoInstances_IdenticalStimulus_ProduceIdenticalSampleStreams" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.TestHarness.SidDeterminismTests.ResetClearsAllState_SecondRunMatchesFresh" storage="f:\github\vice-sharp\tests\vicesharp.testharness\bin\release\net10.0\vicesharp.testharness.dll" id="312caf2d-bd1f-e738-eaec-8eead59ab2cb">
+      <Execution id="aeda56c2-fd3d-47ed-b6c0-4b664ccde210" />
+      <TestMethod codeBase="F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.TestHarness.SidDeterminismTests" name="ResetClearsAllState_SecondRunMatchesFresh" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="312caf2d-bd1f-e738-eaec-8eead59ab2cb" executionId="aeda56c2-fd3d-47ed-b6c0-4b664ccde210" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2e22721-a0f0-37d5-28d8-0ac4f25f6d67" executionId="198a9c19-4165-467d-a0c8-e3496d289b2b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="85b25a0c-7896-8b0d-4eb8-c6e967565e8d" executionId="3fd81014-b253-4821-981f-ba830204ff9a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d7c18584-aba0-6817-e9f7-13d6c2b13898" executionId="948c8708-196b-494a-87c0-71239fb38c1d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2c894642-794d-e99a-4646-e58fcc6dfc7e" executionId="205e6f52-4f26-498b-a37e-789414f43d89" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="5" executed="5" passed="5" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.26]   Discovering: ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.75]   Discovered:  ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:01.97]   Starting:    ViceSharp.TestHarness&#xD;
+[xUnit.net 00:00:02.27]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Warning" timestamp="2026-10-19T10:32:04.8564496-05:00">
+        <Text>Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

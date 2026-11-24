@@ -1,0 +1,52 @@
+type: result
+payload:
+  requestId: req-20261019T212420Z-aacf
+  result:
+    id: FR-PRF-003
+    title: Commodore SX-64 Machine Profile
+    description: >-
+      The SX-64 is a portable C64 with a built-in 1541 disk drive and a 5" color monitor. It lacks a cassette port and has a different KERNAL ROM (no tape routines, different screen colors on startup).
+
+
+      ## Acceptance Criteria
+
+      - KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).
+
+      - The SX-64 board has no connected cassette port. Match pinned VICE's board-specific PLA inputs and suppress forwarding of motor, write and sense-out changes to tapeport devices. CPU-visible reads of bits 3-5 must still follow the native data, DDR and retained floating-capacitor state; neither permanently-high nor permanently-low input values are a valid universal substitute.
+
+      - Built-in 1541 drive: device 8 is always present.
+
+      - For SX-64 CPU reads of $0001, each input-configured bit 3, 4 and 5 is replaced by its retained native data_set_bit value after native falloff processing. Reset clears those retained values. Output writes and output-to-input transitions seed the corresponding retained data bit, falloff flag and deadline as pinned VICE does. A flagged retained value clears on a read only when its stored deadline is strictly less than maincpu_clk: a charged input therefore remains charged at the exact deadline and clears on the first later read. Output-configured bits retain normal port readback. Match each bit independently, native RNG-dependent deadline selection, repeated writes, direction transitions, reset and read side effects; do not impose an always-high or always-zero sense bit.
+
+      - All other hardware is identical to the C64 NMOS profile.
+
+      - Selectable via `IMachineProfile.LoadProfile("sx64")`.
+    status: pending
+    priority: medium
+    area: PRF
+    acceptanceCriteria:
+    - id: ac-01
+      text: 'KERNAL: SX-64 variant KERNAL ROM with different default colors (blue screen instead of light blue).'
+      isSatisfied: false
+    - id: ac-02
+      text: The SX-64 board has no connected cassette port. Match pinned VICE's board-specific PLA inputs and suppress forwarding of motor, write and sense-out changes to tapeport devices. CPU-visible reads of bits 3-5 must still follow the native data, DDR and retained floating-capacitor state; neither permanently-high nor permanently-low input values are a valid universal substitute.
+      isSatisfied: false
+    - id: ac-03
+      text: 'Built-in 1541 drive: device 8 is always present.'
+      isSatisfied: false
+    - id: ac-04
+      text: 'For SX-64 CPU reads of $0001, each input-configured bit 3, 4 and 5 is replaced by its retained native data_set_bit value after native falloff processing. Reset clears those retained values. Output writes and output-to-input transitions seed the corresponding retained data bit, falloff flag and deadline as pinned VICE does. A flagged retained value clears on a read only when its stored deadline is strictly less than maincpu_clk: a charged input therefore remains charged at the exact deadline and clears on the first later read. Output-configured bits retain normal port readback. Match each bit independently, native RNG-dependent deadline selection, repeated writes, direction transitions, reset and read side effects; do not impose an always-high or always-zero sense bit.'
+      isSatisfied: false
+    - id: ac-05
+      text: All other hardware is identical to the C64 NMOS profile.
+      isSatisfied: false
+    - id: ac-06
+      text: Selectable via `IMachineProfile.LoadProfile("sx64")`.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:24:20.7670818+00:00
+    updatedAt: 2026-10-19T21:24:20.7671740+00:00
+  deprecated: true
+
+---
+

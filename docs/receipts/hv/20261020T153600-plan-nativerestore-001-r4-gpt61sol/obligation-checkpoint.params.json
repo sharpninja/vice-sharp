@@ -1,0 +1,12 @@
+{
+  "requestId": "req-20261020T203943Z-hv-nativerestore-r4",
+  "actions": [
+    {
+      "order": 1792529661,
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "docs/plans/PLAN-NATIVERESTORE-001.md",
+      "description": "Holistic review conclusion: revision 4 resolves the former missing-detector ownership, comparator ownership/XMLDoc target, ordered MAINCPU/full-load distinction and approved dead-read disposition. F05 remains failing because exact 100000 is replaced with a later discovered boundary without a new operator amendment; active 6510dtvcore services interrupts before trap, and arming at the discovered callback clock is not generally equivalent to arming at the original target. Two further plan defects: D1 writes Slice 1 receipt/fixture tests before builder changes but D2 full-selection gate precedes D5 real wrapper rebuild, manifest and fixture generation without a binding/activation allocation; D5 Exit requires task 4 marked while section 5 and D3 keep status pending until step 12, whose prerequisites include Phase E after D. New additive ACs will cover observation-history/window origin after load, fresh-process/unwritable/zero-allocation detector controls, complete manifest-field and legacy fixture provenance validation, and small-clock prelude/budget/limit overshoot outcomes. No implementation, restoration, commit or push has occurred."
+    }
+  ]
+}

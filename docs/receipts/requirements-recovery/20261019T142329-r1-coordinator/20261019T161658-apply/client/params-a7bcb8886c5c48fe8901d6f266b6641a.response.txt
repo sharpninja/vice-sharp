@@ -1,0 +1,31 @@
+type: result
+payload:
+  requestId: req-20261019T211708Z-0a95
+  result:
+    id: TEST-TAPE-RAMP-001
+    title: Datasette motor startup and delayed-stop parity
+    description: Validate FR-RUNTIME-TAPE-002 ac-03/ac-04 and every TR-TAPE-EDGE-001 criterion using shared clock/control/alarm fixtures. First prove correct and deliberately incorrect mock traces discriminate in an entirely passing native-safe suite. Then bind unchanged fixtures and assertions to managed behavior and immutable native VICE observations. Preserve historical results but remove fixed historical pass-count claims from the acceptance condition.
+    status: pending
+    priority: medium
+    area: TAPE
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-01
+      text: Named cases Startup_NoPendingAlarm_DeadlineBoundaries and Startup_PendingAlarm_NotOverwritten assert complete ordered event traces; incorrect early, late, missing, duplicated, and reordered events are rejected within a passing mock harness.
+      isSatisfied: false
+    - id: ac-02
+      text: Named cases MotorOff_DelayedStop, MotorOff_RepeatedDoesNotExtend, MotorOn_CancelsPendingStop, and MotorOn_AfterExecutedStop_Restarts assert state and event order at deadline-1, deadline, and deadline+1. A mock implementing immediate stop or unconditional off/on restart must be rejected.
+      isSatisfied: false
+    - id: ac-03
+      text: The real-provider run reuses every mock-case input and assertion and compares actual native and managed clocked observations. A pure pulse-duration getter or source inspection is not accepted as a machine-visible pulse trace.
+      isSatisfied: false
+    - id: ac-04
+      text: All cases execute without skips in the full applicable cumulative suite after native-safe harness integration. Retain exact commands, counts, TRX/logs, native input identities, failure history, and hostile validation; no count-only or mock-only result marks these criteria satisfied.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:17:08.7025984+00:00
+    updatedAt: 2026-10-19T21:17:08.7026983+00:00
+  deprecated: true
+
+---
+

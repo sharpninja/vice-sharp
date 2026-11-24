@@ -48,6 +48,11 @@ public sealed class CaptureAudioTap : IAudioBackend
     /// <summary>Playback pacing is available only while the downstream device is usable.</summary>
     public bool IsAvailable => _downstream?.IsAvailable ?? false;
 
+    /// <summary>
+    /// 2026-11-23, FR-SNDREG-001: playback timing comes from the live output device.
+    /// </summary>
+    public bool IsTimingSource => _downstream?.IsTimingSource ?? false;
+
     /// <inheritdoc/>
     public int QueuedSampleCount => _downstream?.QueuedSampleCount ?? 0;
 

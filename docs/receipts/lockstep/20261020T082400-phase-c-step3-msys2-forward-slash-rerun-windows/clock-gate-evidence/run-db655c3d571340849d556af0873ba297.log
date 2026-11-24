@@ -1,0 +1,14 @@
+2026-10-20T08:24:09.6361720-05:00
+Toolchain: F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-gate-evidence\clock-gate.exe
+Executable: F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\clock-gate-evidence\clock-gate.exe
+Arguments: 7 | 0 | 0 | -1 | 0
+Environment: 
+ExitCode: 0
+TimedOut: False
+STDOUT:
+publish,7
+flush,0
+receive,0
+status,66
+
+STDERR:

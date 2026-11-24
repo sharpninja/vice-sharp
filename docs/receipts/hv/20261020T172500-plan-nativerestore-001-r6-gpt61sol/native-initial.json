@@ -1,0 +1,1145 @@
+{
+  "timestampLocal": "2026-10-20T17:33:52",
+  "branch": "develop",
+  "head": "ff24117d7d756404fad439a3c14c14336709eb8c",
+  "nativeHead": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "gitlink": "160000 commit cc67418cba58e71d8e70fd353e9de47199ad2075\tnative/vice",
+  "nativeDiffStat": [
+    " vice/src/c64/c64cpusc.c         |  25 +++++++++",
+    " vice/src/drive/drive-snapshot.c |  10 ++--",
+    " vice/src/drive/drivecpu.c       |   4 ++",
+    " vice/src/drive/drivecpu65c02.c  |   4 ++",
+    " vice/src/mainc64cpu.c           |  64 +++++++++++++++++++++--",
+    " vice/src/resid/filter8580new.h  |  10 ++++",
+    " vice/src/resid/sid.h            |   4 ++",
+    " vice/src/sid/resid.cc           | 109 ++++++++++++++++++++++++++++++++++++++++",
+    " 8 files changed, 222 insertions(+), 8 deletions(-)"
+  ],
+  "nativeIndexDiff": [],
+  "porcelain": [
+    " M vice/src/c64/c64cpusc.c",
+    " M vice/src/drive/drive-snapshot.c",
+    " M vice/src/drive/drivecpu.c",
+    " M vice/src/drive/drivecpu65c02.c",
+    " M vice/src/mainc64cpu.c",
+    " M vice/src/resid/filter8580new.h",
+    " M vice/src/resid/sid.h",
+    " M vice/src/sid/resid.cc",
+    "?? vice/.aclocal.out",
+    "?? vice/.autoconf.out",
+    "?? vice/.autoheader.out",
+    "?? vice/.automake.out",
+    "?? vice/Makefile.in",
+    "?? vice/aclocal.m4",
+    "?? vice/autom4te.cache/output.0",
+    "?? vice/autom4te.cache/output.1",
+    "?? vice/autom4te.cache/output.2",
+    "?? vice/autom4te.cache/output.3",
+    "?? vice/autom4te.cache/requests",
+    "?? vice/autom4te.cache/traces.0",
+    "?? vice/autom4te.cache/traces.1",
+    "?? vice/autom4te.cache/traces.2",
+    "?? vice/autom4te.cache/traces.3",
+    "?? vice/build/Makefile.in",
+    "?? vice/build/beos/Makefile.in",
+    "?? vice/build/macOS/Makefile.in",
+    "?? vice/compile",
+    "?? vice/config.log",
+    "?? vice/configure",
+    "?? vice/data/C128/Makefile.in",
+    "?? vice/data/C64/Makefile.in",
+    "?? vice/data/C64DTV/Makefile.in",
+    "?? vice/data/CBM-II/Makefile.in",
+    "?? vice/data/DRIVES/Makefile.in",
+    "?? vice/data/GLSL/Makefile.in",
+    "?? vice/data/Makefile.in",
+    "?? vice/data/PET/Makefile.in",
+    "?? vice/data/PLUS4/Makefile.in",
+    "?? vice/data/PRINTER/Makefile.in",
+    "?? vice/data/SCPU64/Makefile.in",
+    "?? vice/data/VIC20/Makefile.in",
+    "?? vice/data/common/Makefile.in",
+    "?? vice/data/hotkeys/Makefile.in",
+    "?? vice/data/joymaps/Makefile.in",
+    "?? vice/depcomp",
+    "?? vice/doc/Makefile.in",
+    "?? vice/doc/building/Makefile.in",
+    "?? vice/doc/html/Makefile.in",
+    "?? vice/doc/readmes/Makefile.in",
+    "?? vice/doc/vim/Makefile.in",
+    "?? vice/doc/vim/ftdetect/Makefile.in",
+    "?? vice/doc/vim/syntax/Makefile.in",
+    "?? vice/missing",
+    "?? vice/src/Makefile.in",
+    "?? vice/src/arch/Makefile.in",
+    "?? vice/src/arch/gtk3/Makefile.in",
+    "?? vice/src/arch/gtk3/data/Makefile.in",
+    "?? vice/src/arch/gtk3/data/macos/Makefile.in",
+    "?? vice/src/arch/gtk3/data/win32/Makefile.in",
+    "?? vice/src/arch/gtk3/joystickdrv/Makefile.in",
+    "?? vice/src/arch/gtk3/novte/Makefile.in",
+    "?? vice/src/arch/gtk3/widgets/Makefile.in",
+    "?? vice/src/arch/gtk3/widgets/base/Makefile.in",
+    "?? vice/src/arch/headless/Makefile.in",
+    "?? vice/src/arch/sdl/Makefile.in",
+    "?? vice/src/arch/shared/Makefile.in",
+    "?? vice/src/arch/shared/hotkeys/Makefile.in",
+    "?? vice/src/arch/shared/hwsiddrv/Makefile.in",
+    "?? vice/src/arch/shared/mididrv/Makefile.in",
+    "?? vice/src/arch/shared/socketdrv/Makefile.in",
+    "?? vice/src/arch/shared/sounddrv/Makefile.in",
+    "?? vice/src/buildtools/Makefile.in",
+    "?? vice/src/c128/Makefile.in",
+    "?? vice/src/c128/cart/Makefile.in",
+    "?? vice/src/c64/Makefile.in",
+    "?? vice/src/c64/cart/Makefile.in",
+    "?? vice/src/c64dtv/Makefile.in",
+    "?? vice/src/cbm2/Makefile.in",
+    "?? vice/src/cbm2/cart/Makefile.in",
+    "?? vice/src/config.h.in",
+    "?? vice/src/core/Makefile.in",
+    "?? vice/src/core/rtc/Makefile.in",
+    "?? vice/src/crtc/Makefile.in",
+    "?? vice/src/datasette/Makefile.in",
+    "?? vice/src/diag/Makefile.in",
+    "?? vice/src/diskimage/Makefile.in",
+    "?? vice/src/drive/Makefile.in",
+    "?? vice/src/drive/iec/Makefile.in",
+    "?? vice/src/drive/iec/c64exp/Makefile.in",
+    "?? vice/src/drive/iec/plus4exp/Makefile.in",
+    "?? vice/src/drive/iec128dcr/Makefile.in",
+    "?? vice/src/drive/iecieee/Makefile.in",
+    "?? vice/src/drive/ieee/Makefile.in",
+    "?? vice/src/drive/tcbm/Makefile.in",
+    "?? vice/src/fileio/Makefile.in",
+    "?? vice/src/fsdevice/Makefile.in",
+    "?? vice/src/gfxoutputdrv/Makefile.in",
+    "?? vice/src/hvsc/Makefile.in",
+    "?? vice/src/iecbus/Makefile.in",
+    "?? vice/src/imagecontents/Makefile.in",
+    "?? vice/src/joyport/Makefile.in",
+    "?? vice/src/lib/Makefile.in",
+    "?? vice/src/lib/libusbsiddrv/Makefile.in",
+    "?? vice/src/lib/libzmbv/Makefile.in",
+    "?? vice/src/lib/linenoise-ng/Makefile.in",
+    "?? vice/src/lib/md5/Makefile.in",
+    "?? vice/src/lib/p64/Makefile.in",
+    "?? vice/src/monitor/Makefile.in",
+    "?? vice/src/parallel/Makefile.in",
+    "?? vice/src/pet/Makefile.in",
+    "?? vice/src/plus4/Makefile.in",
+    "?? vice/src/plus4/cart/Makefile.in",
+    "?? vice/src/printerdrv/Makefile.in",
+    "?? vice/src/raster/Makefile.in",
+    "?? vice/src/resid-dtv/.aclocal.out",
+    "?? vice/src/resid-dtv/.autoconf.out",
+    "?? vice/src/resid-dtv/.automake.out",
+    "?? vice/src/resid-dtv/COPYING",
+    "?? vice/src/resid-dtv/INSTALL",
+    "?? vice/src/resid-dtv/Makefile.in",
+    "?? vice/src/resid-dtv/aclocal.m4",
+    "?? vice/src/resid-dtv/autom4te.cache/output.0",
+    "?? vice/src/resid-dtv/autom4te.cache/output.1",
+    "?? vice/src/resid-dtv/autom4te.cache/output.2",
+    "?? vice/src/resid-dtv/autom4te.cache/requests",
+    "?? vice/src/resid-dtv/autom4te.cache/traces.0",
+    "?? vice/src/resid-dtv/autom4te.cache/traces.1",
+    "?? vice/src/resid-dtv/autom4te.cache/traces.2",
+    "?? vice/src/resid-dtv/configure",
+    "?? vice/src/resid/.aclocal.out",
+    "?? vice/src/resid/.autoconf.out",
+    "?? vice/src/resid/.automake.out",
+    "?? vice/src/resid/COPYING",
+    "?? vice/src/resid/INSTALL",
+    "?? vice/src/resid/Makefile.in",
+    "?? vice/src/resid/aclocal.m4",
+    "?? vice/src/resid/autom4te.cache/output.0",
+    "?? vice/src/resid/autom4te.cache/output.1",
+    "?? vice/src/resid/autom4te.cache/output.2",
+    "?? vice/src/resid/autom4te.cache/requests",
+    "?? vice/src/resid/autom4te.cache/traces.0",
+    "?? vice/src/resid/autom4te.cache/traces.1",
+    "?? vice/src/resid/autom4te.cache/traces.2",
+    "?? vice/src/resid/configure",
+    "?? vice/src/rs232drv/Makefile.in",
+    "?? vice/src/samplerdrv/Makefile.in",
+    "?? vice/src/scpu64/Makefile.in",
+    "?? vice/src/serial/Makefile.in",
+    "?? vice/src/sid/Makefile.in",
+    "?? vice/src/tape/Makefile.in",
+    "?? vice/src/tapeport/Makefile.in",
+    "?? vice/src/tools/Makefile.in",
+    "?? vice/src/tools/cartconv/Makefile.in",
+    "?? vice/src/tools/petcat/Makefile.in",
+    "?? vice/src/userport/Makefile.in",
+    "?? vice/src/vdc/Makefile.in",
+    "?? vice/src/vdrive/Makefile.in",
+    "?? vice/src/vic20/Makefile.in",
+    "?? vice/src/vic20/cart/Makefile.in",
+    "?? vice/src/vicii/Makefile.in",
+    "?? vice/src/viciisc/Makefile.in",
+    "?? vice/src/video/Makefile.in",
+    "?? vice/ylwrap"
+  ],
+  "trackedCount": 8,
+  "untrackedCount": 155,
+  "inventory": [
+    {
+      "path": "vice/src/c64/c64cpusc.c",
+      "length": 8422,
+      "sha256": "343C90E82B2713D51CCD77CE9A9DA4F4BDDEF92807966F6A90993A6E7628FAB1"
+    },
+    {
+      "path": "vice/src/drive/drive-snapshot.c",
+      "length": 38030,
+      "sha256": "2001B723AA495C387EFF430375ADE5BE630B658B0F17C3C3B74D5EDC9D5D58C0"
+    },
+    {
+      "path": "vice/src/drive/drivecpu.c",
+      "length": 21898,
+      "sha256": "E73C664EB61A981F851274FADD90B74612F948BA5DCFE028EFABCD197A2C5D8A"
+    },
+    {
+      "path": "vice/src/drive/drivecpu65c02.c",
+      "length": 17835,
+      "sha256": "7E07F563AF9644BE9C618D528525DE587948C4A703719AD8A71D591CA09D0195"
+    },
+    {
+      "path": "vice/src/mainc64cpu.c",
+      "length": 30708,
+      "sha256": "B69E3BCD9F2CE674A65B75D7E68195F89A735B8EEBE45F46F655FB2E8E04499D"
+    },
+    {
+      "path": "vice/src/resid/filter8580new.h",
+      "length": 60911,
+      "sha256": "CE939EF42EEB6475760B27EABB8A819B199665CC3077E94802F74C41E065B5E0"
+    },
+    {
+      "path": "vice/src/resid/sid.h",
+      "length": 6754,
+      "sha256": "42D8703EB51F62357F1C10983E7F206A5C9ED41254C2A55D71681A5AE4F821A2"
+    },
+    {
+      "path": "vice/src/sid/resid.cc",
+      "length": 17913,
+      "sha256": "0466F2232AF8CAC5B54747EBFB09A313932BDBC17A9FB4081506CD0B43433D33"
+    },
+    {
+      "path": "vice/.aclocal.out",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "vice/.autoconf.out",
+      "length": 10324,
+      "sha256": "614BBA96388F18FA861E98D97DF46E02710C57A514A6B921E3F31CBCFDC23306"
+    },
+    {
+      "path": "vice/.autoheader.out",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "vice/.automake.out",
+      "length": 3365,
+      "sha256": "23D739F740B17CC6589B41A569C7DD1AF8082B539E3937305DC21674DA905390"
+    },
+    {
+      "path": "vice/Makefile.in",
+      "length": 40259,
+      "sha256": "4B3FEC6E5C5E49D4829F69722C1D74C172A75A25C16898AAF52B31330563598D"
+    },
+    {
+      "path": "vice/aclocal.m4",
+      "length": 50173,
+      "sha256": "401A095982DFC796E1B16C3348AC32A36F290095A2EA10D186206678F8E73441"
+    },
+    {
+      "path": "vice/autom4te.cache/output.0",
+      "length": 680036,
+      "sha256": "DAC2CD93FF08ED4F45F2BCCC72F35660DAF07EFE5E4E098D830DC05B3DE9022D"
+    },
+    {
+      "path": "vice/autom4te.cache/output.1",
+      "length": 778413,
+      "sha256": "2802EA9248E253848765D5458092374750596CAE1185BDBC0CE547E446C709F4"
+    },
+    {
+      "path": "vice/autom4te.cache/output.2",
+      "length": 778416,
+      "sha256": "10B625224DD21D857C7045ED57B8E4C38DD904FBB96C2DC3710CEB5D869DF04F"
+    },
+    {
+      "path": "vice/autom4te.cache/output.3",
+      "length": 778413,
+      "sha256": "2802EA9248E253848765D5458092374750596CAE1185BDBC0CE547E446C709F4"
+    },
+    {
+      "path": "vice/autom4te.cache/requests",
+      "length": 18066,
+      "sha256": "D620CAF5442ADBC289A0DA39D4F487CEAD96F1D24AB73F77AC35F2707E34F3A1"
+    },
+    {
+      "path": "vice/autom4te.cache/traces.0",
+      "length": 149010,
+      "sha256": "123BC1E795CBA7813EA92E037615E59951A276B5BF0276C4A5EEE8D01035AB4B"
+    },
+    {
+      "path": "vice/autom4te.cache/traces.1",
+      "length": 187562,
+      "sha256": "7B1E68271A8981911E8B8D640475C68EC0EF7FACF518F461CE545AABC549C227"
+    },
+    {
+      "path": "vice/autom4te.cache/traces.2",
+      "length": 243974,
+      "sha256": "63F7C23FC4BD4BE6C749105716B4B557AF4066B833B2110366C6284154B73F1C"
+    },
+    {
+      "path": "vice/autom4te.cache/traces.3",
+      "length": 243974,
+      "sha256": "63F7C23FC4BD4BE6C749105716B4B557AF4066B833B2110366C6284154B73F1C"
+    },
+    {
+      "path": "vice/build/Makefile.in",
+      "length": 21974,
+      "sha256": "66911C1A765FC36FD279BAFE368C09D1426F8148EEBF075EA9912F37B6179250"
+    },
+    {
+      "path": "vice/build/beos/Makefile.in",
+      "length": 15653,
+      "sha256": "097E9E34FD240F6D7980E72076D439E3B1048729B7B1DF5E56F231155E6EE105"
+    },
+    {
+      "path": "vice/build/macOS/Makefile.in",
+      "length": 15628,
+      "sha256": "4A40C2F04CAD76EC8554D471CFA49B4F2499D415B70A033013B08331EF6FBD63"
+    },
+    {
+      "path": "vice/compile",
+      "length": 8064,
+      "sha256": "92ED7FEEDA61AD958DC3C4CC4EFD724E1414482F1CAD60B74B09E0633A93DFD6"
+    },
+    {
+      "path": "vice/config.log",
+      "length": 66193,
+      "sha256": "598B546F16809FA7CC3104FD32D0C03990842C24E4EC4FFC58D0933423822281"
+    },
+    {
+      "path": "vice/configure",
+      "length": 771367,
+      "sha256": "B957019A47404040C51C14BB62158F1777157E9FFE74B1C2B39289FF18291C69"
+    },
+    {
+      "path": "vice/data/C128/Makefile.in",
+      "length": 19664,
+      "sha256": "30B16EAEAC082A306A1586239CF8C5938FB6ADC1B3C9CEEAAE07A20A2D35221B"
+    },
+    {
+      "path": "vice/data/C64/Makefile.in",
+      "length": 20098,
+      "sha256": "2B9D8A6A6963FA7F4B2FE5D88D8FF3D9181F91EF88ADBAFBBA57493D98BF4AFE"
+    },
+    {
+      "path": "vice/data/C64DTV/Makefile.in",
+      "length": 19596,
+      "sha256": "BAC36A850508D762B4F3C5F2318DAD343F1182F19A7029AEDCC31B401337C393"
+    },
+    {
+      "path": "vice/data/CBM-II/Makefile.in",
+      "length": 19304,
+      "sha256": "635B340863B6DD469B32B59B189542D31EBF1C89C0E0FEA16B16FFBEBCA7C144"
+    },
+    {
+      "path": "vice/data/DRIVES/Makefile.in",
+      "length": 18219,
+      "sha256": "844B1143188CD45D28DA87A1F5EB0CDF95CA76CF2A1F4A90A0AFCF797F296E8B"
+    },
+    {
+      "path": "vice/data/GLSL/Makefile.in",
+      "length": 17965,
+      "sha256": "38D5EB53AEF7493A2FBA7F934049F785422FB2611CE73C283FCC2979A24ECF51"
+    },
+    {
+      "path": "vice/data/Makefile.in",
+      "length": 22042,
+      "sha256": "A93D50A56BD42C7AB35167432403943D528E42435EDC38EEE1404D8B384A90D0"
+    },
+    {
+      "path": "vice/data/PET/Makefile.in",
+      "length": 19909,
+      "sha256": "6B9D6B978DA21A307D902EF658623C82DCAE9D42A632D8A62ED8B47D0F8F9654"
+    },
+    {
+      "path": "vice/data/PLUS4/Makefile.in",
+      "length": 19017,
+      "sha256": "19C8C39A3A7C705951A0A02C9A088B16745978618711121A8F2185B3B5728A70"
+    },
+    {
+      "path": "vice/data/PRINTER/Makefile.in",
+      "length": 18049,
+      "sha256": "D434D32B714229B810057412572A84798E1C9792FAE6B1D96418B98888D4DC3E"
+    },
+    {
+      "path": "vice/data/SCPU64/Makefile.in",
+      "length": 20026,
+      "sha256": "E520DDC40D27895DA32220451C9B855951F8F4858411D2048EEEE7A95C2353B1"
+    },
+    {
+      "path": "vice/data/VIC20/Makefile.in",
+      "length": 18951,
+      "sha256": "66A04DC264D149AC25C70BB4D461868771282E5E9AC7301B3D63A39F010E2681"
+    },
+    {
+      "path": "vice/data/common/Makefile.in",
+      "length": 41874,
+      "sha256": "E8EDAB91DB198D750128C8F5D64FB01C8B6A25B2EBA33B90CA77866C4687BAB6"
+    },
+    {
+      "path": "vice/data/hotkeys/Makefile.in",
+      "length": 18317,
+      "sha256": "F2E97D4B4DE1EFDF7A78F49B2FEFD748E0A54DE0C25ABDBA9EEEAA5B691E60BF"
+    },
+    {
+      "path": "vice/data/joymaps/Makefile.in",
+      "length": 18758,
+      "sha256": "1EEA15372A0D8EA54B669EEC68E6226078797BD73F56DACBF16BB7BE97B99C77"
+    },
+    {
+      "path": "vice/depcomp",
+      "length": 23700,
+      "sha256": "AC3AE010382A83144FF6EC1A4C368A3F16A14EA2B12751AA73DDFB548D931574"
+    },
+    {
+      "path": "vice/doc/Makefile.in",
+      "length": 26592,
+      "sha256": "965BAF1EE8E710CFE0D9F41F665EF28469EB02D5058BFF2B2F2312328D5B7FD4"
+    },
+    {
+      "path": "vice/doc/building/Makefile.in",
+      "length": 18183,
+      "sha256": "4BE48B35399A20F920FDF6FCA2E7AF459A098598F1C998E2FA2C0AB363684CBF"
+    },
+    {
+      "path": "vice/doc/html/Makefile.in",
+      "length": 20388,
+      "sha256": "358A4455553BDBED38CA495293CD2FCA1061FD33A8E75595538503AF63D482E4"
+    },
+    {
+      "path": "vice/doc/readmes/Makefile.in",
+      "length": 18135,
+      "sha256": "8B2616EC4DAF35E131B5463CF946ED17771257CD0406804E919C244441AB28BB"
+    },
+    {
+      "path": "vice/doc/vim/Makefile.in",
+      "length": 21991,
+      "sha256": "DA22B746566A4503DC74D846638ADDBDC405FB32E0AE53B7BC2BCB60FC2E3D0B"
+    },
+    {
+      "path": "vice/doc/vim/ftdetect/Makefile.in",
+      "length": 15644,
+      "sha256": "F536F2CB2C2CFBFB80BD2089E16049D60A4E265E0579664CAFA224080DD4E2FC"
+    },
+    {
+      "path": "vice/doc/vim/syntax/Makefile.in",
+      "length": 15638,
+      "sha256": "75CD4F9C028F4A65537B37A98764C1544C01A69BBE995F16F12F968577042E7C"
+    },
+    {
+      "path": "vice/missing",
+      "length": 7733,
+      "sha256": "4F17C4A66EC5B8000D44573A576F6B5D9C0C84848E8FD1286F84A52F439DB4E9"
+    },
+    {
+      "path": "vice/src/Makefile.in",
+      "length": 89904,
+      "sha256": "5EC0655C29BA8CA2B163738CC96E23ADCF781EAF26D54DDCACBBCA0F05C6A5CC"
+    },
+    {
+      "path": "vice/src/arch/Makefile.in",
+      "length": 22483,
+      "sha256": "B4D3CD720AC41D4F9D22A92FDECBA4DDC5AB8292792EC5CEF3B0F6311BCBF889"
+    },
+    {
+      "path": "vice/src/arch/gtk3/Makefile.in",
+      "length": 49609,
+      "sha256": "DDC8C50852A295AABC5C83EA7BE16822094A5D6469253DCFDAF8CE5B89B77385"
+    },
+    {
+      "path": "vice/src/arch/gtk3/data/Makefile.in",
+      "length": 22155,
+      "sha256": "64BED0FAF12E66700A602153867BFBCE864000C7019776EAE0CA4B4665031A78"
+    },
+    {
+      "path": "vice/src/arch/gtk3/data/macos/Makefile.in",
+      "length": 15662,
+      "sha256": "2E694CEC4A8847AA1861176BF5CC4BA59EFB4CFAAA99DBC7E64E70F6742319E6"
+    },
+    {
+      "path": "vice/src/arch/gtk3/data/win32/Makefile.in",
+      "length": 16120,
+      "sha256": "8A4B2BBC1E9C4DA3A10BCD01CC541B01DAA72E5C4843CF14AACE334CB07637CF"
+    },
+    {
+      "path": "vice/src/arch/gtk3/joystickdrv/Makefile.in",
+      "length": 23403,
+      "sha256": "C242075CD110C5ADA912C8E38675E98D025C28DAA556C3552664C2D161C6E48D"
+    },
+    {
+      "path": "vice/src/arch/gtk3/novte/Makefile.in",
+      "length": 26071,
+      "sha256": "34C30667286283752C71E378C81642817905AE3AF69DA31CE177A801DF735ACA"
+    },
+    {
+      "path": "vice/src/arch/gtk3/widgets/Makefile.in",
+      "length": 77880,
+      "sha256": "43041EA30959C547DDECE58E6A13A2FDF6C0188CBDF8E6731E2E9D3117DE0E0F"
+    },
+    {
+      "path": "vice/src/arch/gtk3/widgets/base/Makefile.in",
+      "length": 28858,
+      "sha256": "B736E283CBC5016F7F03094A14BC525AF5E930CB0604F84D490237C6EC89A88D"
+    },
+    {
+      "path": "vice/src/arch/headless/Makefile.in",
+      "length": 26236,
+      "sha256": "7940C19FE466E16DB9CDFAD8F1239B9078DCAAA1E6B4517E103C5F0D856CB7C2"
+    },
+    {
+      "path": "vice/src/arch/sdl/Makefile.in",
+      "length": 50245,
+      "sha256": "16F7FE9A40DB60E64E74D83A720B51B1F3382601222B3112444F7B8FB930C924"
+    },
+    {
+      "path": "vice/src/arch/shared/Makefile.in",
+      "length": 61023,
+      "sha256": "F16BB2D88BCF89836E19B41DB8B3EA8E5D27A25138948BFC78C9D87AA2C1A7CE"
+    },
+    {
+      "path": "vice/src/arch/shared/hotkeys/Makefile.in",
+      "length": 23213,
+      "sha256": "6C0A0F78109E1B91CF557B39FCD5654438F7EA816DA9973D98FF2617D76F2442"
+    },
+    {
+      "path": "vice/src/arch/shared/hwsiddrv/Makefile.in",
+      "length": 26594,
+      "sha256": "3AE7FECB884F387C23FA43ED7392333828FEC1F12297C598414AE8D1E9545AA7"
+    },
+    {
+      "path": "vice/src/arch/shared/mididrv/Makefile.in",
+      "length": 21233,
+      "sha256": "5A452256C834D050BFA993CC5F513925F059778462C7283F03D1DC4C4D51848D"
+    },
+    {
+      "path": "vice/src/arch/shared/socketdrv/Makefile.in",
+      "length": 20884,
+      "sha256": "ECE81E3876B8667C8F0A97279245DBDEF80973A89CA57B69A179F86F875DCB50"
+    },
+    {
+      "path": "vice/src/arch/shared/sounddrv/Makefile.in",
+      "length": 26800,
+      "sha256": "54D6DF585199E99AEDAE35E92B98A772CC3CE62E3C0E12651A931419D701C021"
+    },
+    {
+      "path": "vice/src/buildtools/Makefile.in",
+      "length": 15848,
+      "sha256": "D5B649EED2E2CB15EE38E927563838E3476337675FCE3FBDEE3D71265432F2DB"
+    },
+    {
+      "path": "vice/src/c128/Makefile.in",
+      "length": 31249,
+      "sha256": "2D4FCBCB506A423E91D67922AD2A9FBC47219259629AF9204396DB4D2055320C"
+    },
+    {
+      "path": "vice/src/c128/cart/Makefile.in",
+      "length": 22511,
+      "sha256": "1DD9C8C2E0C683341FC75F26F6EE58959434D6A52E01F9AD19E86940CC267B22"
+    },
+    {
+      "path": "vice/src/c64/Makefile.in",
+      "length": 46900,
+      "sha256": "07041954582733F1F36E93F19A342E90A2409AB451461E6BAAA299B4AB84A651"
+    },
+    {
+      "path": "vice/src/c64/cart/Makefile.in",
+      "length": 47993,
+      "sha256": "8BFF7DE20257E2EB2D374EA486C61FB909DD34F0FA836BEDFE21A073BC1C3738"
+    },
+    {
+      "path": "vice/src/c64dtv/Makefile.in",
+      "length": 27257,
+      "sha256": "788C9366BB89FD339770437CE5C3F978D9675F780DD275F00A5677CCF6D88535"
+    },
+    {
+      "path": "vice/src/cbm2/Makefile.in",
+      "length": 35495,
+      "sha256": "E0B0281430A31C9F446E281752DB862638AA1830C488BA8CB1A6A9F9CF571FD3"
+    },
+    {
+      "path": "vice/src/cbm2/cart/Makefile.in",
+      "length": 21239,
+      "sha256": "A184B38F9BD231D3C42F800ACDC1C00B015137A753BFEC250A9129503AB5E325"
+    },
+    {
+      "path": "vice/src/config.h.in",
+      "length": 20946,
+      "sha256": "67A5086C2BB21B7E1EBA1CD1D2836044CF610595043534A8FB7F07D334D58528"
+    },
+    {
+      "path": "vice/src/core/Makefile.in",
+      "length": 28702,
+      "sha256": "F325036F23C9AD352CE0AA003D591416427FFE731072048598CBAB6963D26005"
+    },
+    {
+      "path": "vice/src/core/rtc/Makefile.in",
+      "length": 22605,
+      "sha256": "ABE25718F60B765DD787C80E70C0A4948709E9D094FB3851B6ADC456F1AC35DD"
+    },
+    {
+      "path": "vice/src/crtc/Makefile.in",
+      "length": 22146,
+      "sha256": "DC0BFD9EE3FEFC41B3E3BBDA1A973AB0FF9641356899BB55D073FB5BD6C75716"
+    },
+    {
+      "path": "vice/src/datasette/Makefile.in",
+      "length": 21025,
+      "sha256": "1F82448CB101D0D7D8FD79FA3669DFCECD827ABD2CABAAE2FEA321799F533BE3"
+    },
+    {
+      "path": "vice/src/diag/Makefile.in",
+      "length": 20808,
+      "sha256": "823D9218C39CDDF0F90CF933F24C8E95ABC54082C5CFF7C2591F886FA0D086CF"
+    },
+    {
+      "path": "vice/src/diskimage/Makefile.in",
+      "length": 23095,
+      "sha256": "555AB0AE2631AE8903B2895107196308CD2BE6750F71419F1A62CDA0D9E94197"
+    },
+    {
+      "path": "vice/src/drive/Makefile.in",
+      "length": 28972,
+      "sha256": "62CFDF22F9E86EC06B4F8ABFE12505B54CEBD8A9C36A69D4D6C2918AA0BAAAF7"
+    },
+    {
+      "path": "vice/src/drive/iec/Makefile.in",
+      "length": 28243,
+      "sha256": "D5A42006531A00C68A7BCAB0B03A9B42C8C3FB88696F1BB93855CC347231B340"
+    },
+    {
+      "path": "vice/src/drive/iec/c64exp/Makefile.in",
+      "length": 22591,
+      "sha256": "6D0262B229B365DF9A31F503D7A9F15FE569C29622FC3841AC48EF024CF3FACF"
+    },
+    {
+      "path": "vice/src/drive/iec/plus4exp/Makefile.in",
+      "length": 21691,
+      "sha256": "66970A58140FC3ECF127EEF56F5C9A38580F33802020D283A12AF7E39E227ABC"
+    },
+    {
+      "path": "vice/src/drive/iec128dcr/Makefile.in",
+      "length": 21827,
+      "sha256": "D6A1FF05D57E13D8D2329BD4307411890FED7540AED4AFA0EEC8113E75C5519C"
+    },
+    {
+      "path": "vice/src/drive/iecieee/Makefile.in",
+      "length": 21043,
+      "sha256": "8FD1E6970707EDC3D35D4F085548E0802FEAE3ED31EF5DA3FCF54DB90066FFDD"
+    },
+    {
+      "path": "vice/src/drive/ieee/Makefile.in",
+      "length": 22648,
+      "sha256": "CADF1B997CD089A64D9728D30C4F0A434D1099A98D3DDEF029127A9EE52ABCF8"
+    },
+    {
+      "path": "vice/src/drive/tcbm/Makefile.in",
+      "length": 22224,
+      "sha256": "95D65E113B56A9579C89DCFA66FECA577ED6F7694512DE87159ED46A0B086616"
+    },
+    {
+      "path": "vice/src/fileio/Makefile.in",
+      "length": 21022,
+      "sha256": "9117A4968DEC366ADE9C1DA76E60FDED275C98BAC97DF77B6D1D2F9E4ADD55B9"
+    },
+    {
+      "path": "vice/src/fsdevice/Makefile.in",
+      "length": 23034,
+      "sha256": "3D9DDBCB8CCABF659A6EBAC9E7C446EFAAE5C4615A22C957D13FFBB499341B8A"
+    },
+    {
+      "path": "vice/src/gfxoutputdrv/Makefile.in",
+      "length": 24122,
+      "sha256": "15FA9A84D848085C609B62666F014BD07E9527F72DACA887318C64B4420A1BA5"
+    },
+    {
+      "path": "vice/src/hvsc/Makefile.in",
+      "length": 21629,
+      "sha256": "6689BF0FCE70506384557097F82DD200FE6DEB153EA70E5373D26BB5A628C4C0"
+    },
+    {
+      "path": "vice/src/iecbus/Makefile.in",
+      "length": 20756,
+      "sha256": "6C037C64F5DB4E4960544EBE68378057DE7227037AA51B3B525E2F18B667F3E6"
+    },
+    {
+      "path": "vice/src/imagecontents/Makefile.in",
+      "length": 21979,
+      "sha256": "86785DDBF22BB8E89ECBC78C02028BE6FC4049161AB5DB7F2F1370E8A98BB8C2"
+    },
+    {
+      "path": "vice/src/joyport/Makefile.in",
+      "length": 28983,
+      "sha256": "321BC672B15481E55E7DCB1C4F26A71C43211E0C4257A81302EC20BEBFC5C070"
+    },
+    {
+      "path": "vice/src/lib/Makefile.in",
+      "length": 22426,
+      "sha256": "1A13D825D3C193105C2885109513D20B3AB74A0F5F4FDB55FBE349D295A43CB1"
+    },
+    {
+      "path": "vice/src/lib/libusbsiddrv/Makefile.in",
+      "length": 21776,
+      "sha256": "8D062FB249EA1766FA9FFB59DEE4C7DC376ACA36BD4E7EED73E9665AB883F414"
+    },
+    {
+      "path": "vice/src/lib/libzmbv/Makefile.in",
+      "length": 20823,
+      "sha256": "B354249DFBD0271E01C852987E112A205ECB238D0363D31F04D8E7021006C01D"
+    },
+    {
+      "path": "vice/src/lib/linenoise-ng/Makefile.in",
+      "length": 21369,
+      "sha256": "6B2C306700323D41AF7A0074E282E2FBB51C6D80E20F4CF58455D0FA5DE18202"
+    },
+    {
+      "path": "vice/src/lib/md5/Makefile.in",
+      "length": 20529,
+      "sha256": "BE40FFDED35F6636F7E3CA00BED8E3E31D4C81EC6B47A8EFFC958BD0D88A3A0D"
+    },
+    {
+      "path": "vice/src/lib/p64/Makefile.in",
+      "length": 20616,
+      "sha256": "2C37A0755BB97A3EE833482342878997650D04E686956663FB1EC4D3AFD44E49"
+    },
+    {
+      "path": "vice/src/monitor/Makefile.in",
+      "length": 29957,
+      "sha256": "A27B181C8D20DEAEC9C5A7417A35592EFB225DE86654127C07B2B6B85D0DBC0E"
+    },
+    {
+      "path": "vice/src/parallel/Makefile.in",
+      "length": 21020,
+      "sha256": "0D445672D4D15BF5753FACD8E9DB5EC103EE0ED646217516327642D6B68534ED"
+    },
+    {
+      "path": "vice/src/pet/Makefile.in",
+      "length": 28148,
+      "sha256": "13875742C28E2E3E25A234BB9F6694615D462FBC5DD10F563AC8944231451D68"
+    },
+    {
+      "path": "vice/src/plus4/Makefile.in",
+      "length": 36519,
+      "sha256": "6EAF9410805AEB2F3F4149F968A5751AE15BB839CFBBCD5C987622F719E33230"
+    },
+    {
+      "path": "vice/src/plus4/cart/Makefile.in",
+      "length": 22797,
+      "sha256": "07742351A88C55E3B45AC2B9604997F5A8528FE85E8565F72D4A89C6C7B723E0"
+    },
+    {
+      "path": "vice/src/printerdrv/Makefile.in",
+      "length": 24161,
+      "sha256": "309257C33B5D62E75DEEA8EBF3E5443B96FEBDB955E491B1826099727B046A60"
+    },
+    {
+      "path": "vice/src/raster/Makefile.in",
+      "length": 24542,
+      "sha256": "58198084C75DFE7414E5194D4FBF1DC57918E72E921F9128307E68B0F9E91997"
+    },
+    {
+      "path": "vice/src/resid-dtv/.aclocal.out",
+      "length": 84,
+      "sha256": "F5A7688239D9907CDC37B3D90696ADA907158D0265255F3060BDA54A0E33ABEF"
+    },
+    {
+      "path": "vice/src/resid-dtv/.autoconf.out",
+      "length": 1913,
+      "sha256": "B28A491B8F989A1C5C98F60B4917AB42DE77BEF34664625CDA4773577B4851C5"
+    },
+    {
+      "path": "vice/src/resid-dtv/.automake.out",
+      "length": 686,
+      "sha256": "04EC54F7CD4BFAB7C14874577BC5EB9AB02B3ADE2BD346329115097778AAD5F2"
+    },
+    {
+      "path": "vice/src/resid-dtv/COPYING",
+      "length": 35149,
+      "sha256": "3972DC9744F6499F0F9B2DBF76696F2AE7AD8AF9B23DDE66D6AF86C9DFB36986"
+    },
+    {
+      "path": "vice/src/resid-dtv/INSTALL",
+      "length": 17015,
+      "sha256": "8269293B2738175F54354957D64F691EA9A55FFACB9D8912C79060A9B9BF769B"
+    },
+    {
+      "path": "vice/src/resid-dtv/Makefile.in",
+      "length": 25310,
+      "sha256": "A0276D5906F65A2DE70079BF88A22C1A8B9E8A6E7309A7A15F4313B3667CD1E5"
+    },
+    {
+      "path": "vice/src/resid-dtv/aclocal.m4",
+      "length": 47340,
+      "sha256": "FECDAAB61E94095324DC38C254AE6A4D9B77EB2505D71B9B8A59BE4FF008B684"
+    },
+    {
+      "path": "vice/src/resid-dtv/autom4te.cache/output.0",
+      "length": 166870,
+      "sha256": "5F793A5B25A1DEC5C75E6BBE5D68BF78EB796B66A2E7DD69754D45A09E33C792"
+    },
+    {
+      "path": "vice/src/resid-dtv/autom4te.cache/output.1",
+      "length": 166873,
+      "sha256": "C7D19B38F03932C5F84A1B9CEAE4B4814771C658035E223844C50A5687DBEB16"
+    },
+    {
+      "path": "vice/src/resid-dtv/autom4te.cache/output.2",
+      "length": 166870,
+      "sha256": "5F793A5B25A1DEC5C75E6BBE5D68BF78EB796B66A2E7DD69754D45A09E33C792"
+    },
+    {
+      "path": "vice/src/resid-dtv/autom4te.cache/requests",
+      "length": 12043,
+      "sha256": "23D149BF2E7FCD37E163E1AFB18A5E0C7CEB98A89CE945BA45B6F30C2E4CB453"
+    },
+    {
+      "path": "vice/src/resid-dtv/autom4te.cache/traces.0",
+      "length": 51894,
+      "sha256": "D4DA30A7004A57213F5170EE25E0FF990A4B1AD11E82B7DA31ACB704AE82674F"
+    },
+    {
+      "path": "vice/src/resid-dtv/autom4te.cache/traces.1",
+      "length": 28881,
+      "sha256": "22E7100E60ABB55020749155B0AB83CDF773C719F3D82663A4EDF50BAE3EC88A"
+    },
+    {
+      "path": "vice/src/resid-dtv/autom4te.cache/traces.2",
+      "length": 28881,
+      "sha256": "22E7100E60ABB55020749155B0AB83CDF773C719F3D82663A4EDF50BAE3EC88A"
+    },
+    {
+      "path": "vice/src/resid-dtv/configure",
+      "length": 165881,
+      "sha256": "4033843400498CDF9812FB345502F72B743C42DE8A2A63FC6AE6FBE2837D4CC0"
+    },
+    {
+      "path": "vice/src/resid/.aclocal.out",
+      "length": 84,
+      "sha256": "F5A7688239D9907CDC37B3D90696ADA907158D0265255F3060BDA54A0E33ABEF"
+    },
+    {
+      "path": "vice/src/resid/.autoconf.out",
+      "length": 4088,
+      "sha256": "89D0357AB0A9305676E43E883543BF50C31DE9AD157A4DA04E85E63A1EB7D5C5"
+    },
+    {
+      "path": "vice/src/resid/.automake.out",
+      "length": 536,
+      "sha256": "98ECB93A5DE1B81DB8BCB48EC919DD62EAB960BBD399D023C0C06ABB2A02C884"
+    },
+    {
+      "path": "vice/src/resid/COPYING",
+      "length": 35149,
+      "sha256": "3972DC9744F6499F0F9B2DBF76696F2AE7AD8AF9B23DDE66D6AF86C9DFB36986"
+    },
+    {
+      "path": "vice/src/resid/INSTALL",
+      "length": 17015,
+      "sha256": "8269293B2738175F54354957D64F691EA9A55FFACB9D8912C79060A9B9BF769B"
+    },
+    {
+      "path": "vice/src/resid/Makefile.in",
+      "length": 26961,
+      "sha256": "BBFFE67EBE6A6E1DCA5A385B4CFF7FA186A08C48DAC4013DEED43E5EB87F7117"
+    },
+    {
+      "path": "vice/src/resid/aclocal.m4",
+      "length": 47340,
+      "sha256": "FECDAAB61E94095324DC38C254AE6A4D9B77EB2505D71B9B8A59BE4FF008B684"
+    },
+    {
+      "path": "vice/src/resid/autom4te.cache/output.0",
+      "length": 173179,
+      "sha256": "95ECBFD8CB9434A7E6D827A52E6370B729366F0809C929F7475EA40698C0E1AF"
+    },
+    {
+      "path": "vice/src/resid/autom4te.cache/output.1",
+      "length": 173182,
+      "sha256": "C5B386E13822C074529CA40E8133AB50C42B2ABF557AD0CACF57D855045729E8"
+    },
+    {
+      "path": "vice/src/resid/autom4te.cache/output.2",
+      "length": 173179,
+      "sha256": "95ECBFD8CB9434A7E6D827A52E6370B729366F0809C929F7475EA40698C0E1AF"
+    },
+    {
+      "path": "vice/src/resid/autom4te.cache/requests",
+      "length": 12043,
+      "sha256": "23D149BF2E7FCD37E163E1AFB18A5E0C7CEB98A89CE945BA45B6F30C2E4CB453"
+    },
+    {
+      "path": "vice/src/resid/autom4te.cache/traces.0",
+      "length": 55473,
+      "sha256": "E8CF090D43EE1B1E113B724DB0F7D68449BED6AF396079BC528F57E7C2ED4229"
+    },
+    {
+      "path": "vice/src/resid/autom4te.cache/traces.1",
+      "length": 34120,
+      "sha256": "212633417D6A355CFA92CF409A74D8BC59E0CB1C41DC7BEAD8BADD0D740F8DB2"
+    },
+    {
+      "path": "vice/src/resid/autom4te.cache/traces.2",
+      "length": 34120,
+      "sha256": "212633417D6A355CFA92CF409A74D8BC59E0CB1C41DC7BEAD8BADD0D740F8DB2"
+    },
+    {
+      "path": "vice/src/resid/configure",
+      "length": 172119,
+      "sha256": "4FA0709CCD421193CADBD61C18E760B5371AB1AA4F6DF15A112CFB00C455B79F"
+    },
+    {
+      "path": "vice/src/rs232drv/Makefile.in",
+      "length": 22417,
+      "sha256": "F892F2CE22C3886D214D4665D3B112E940CDEF70648EF5BCB4D624FFAF49CCD8"
+    },
+    {
+      "path": "vice/src/samplerdrv/Makefile.in",
+      "length": 21310,
+      "sha256": "DDA8887C9ED9302BC81220A1B2D9C769D50C38098663DB95F967C0BD817F958A"
+    },
+    {
+      "path": "vice/src/scpu64/Makefile.in",
+      "length": 24711,
+      "sha256": "1E8AE4726E4E8455A2230B3B4CD5C4B408F1136C4DA78DBD3AAF59F14F0AF94A"
+    },
+    {
+      "path": "vice/src/serial/Makefile.in",
+      "length": 23588,
+      "sha256": "F31588DD86DD1005348741AEC685AD189522469BB0847625874A5A3819D14EB7"
+    },
+    {
+      "path": "vice/src/sid/Makefile.in",
+      "length": 25771,
+      "sha256": "D454072E6894280EE00AC1AF0246ECB625A03E41234D4C7E969B0E20E3B25FF4"
+    },
+    {
+      "path": "vice/src/tape/Makefile.in",
+      "length": 21757,
+      "sha256": "28303D4AB64EC31A74987EA4CC7AAECA27CF8E087CA2DB331D2F3FBCD6C86F32"
+    },
+    {
+      "path": "vice/src/tapeport/Makefile.in",
+      "length": 22452,
+      "sha256": "B38536F4BCBEB3B1AC5BC56AA9B1DC884840427AA976DD19D771BE0540931F12"
+    },
+    {
+      "path": "vice/src/tools/Makefile.in",
+      "length": 22089,
+      "sha256": "C9B4253372086F12568F5FF96C601329F703D11F085092275FEC63805EFBDEF4"
+    },
+    {
+      "path": "vice/src/tools/cartconv/Makefile.in",
+      "length": 25765,
+      "sha256": "AC4CCB95482516EAA7E8B74D34E8FF2021143556C4E0D8493D30DA0E6DC61CE5"
+    },
+    {
+      "path": "vice/src/tools/petcat/Makefile.in",
+      "length": 22855,
+      "sha256": "3411B779FC7801813883F6AAD3B556649FB161D1CF5AE85EA9B91FE850C1B59E"
+    },
+    {
+      "path": "vice/src/userport/Makefile.in",
+      "length": 27506,
+      "sha256": "CAF661549663B465ABDAA538D5FBFD3B588D0CF24F4E93E76644090BABB996C1"
+    },
+    {
+      "path": "vice/src/vdc/Makefile.in",
+      "length": 22088,
+      "sha256": "C4D7B4DE8E4CEC14082C9687B6FA7B8884823BED6A10678D3548B794B97B9E63"
+    },
+    {
+      "path": "vice/src/vdrive/Makefile.in",
+      "length": 22519,
+      "sha256": "8AAAA8D4EDA1CC3012260FC49EF520B2DD84D6CA8DB8B54731CD1B1302ED0C45"
+    },
+    {
+      "path": "vice/src/vic20/Makefile.in",
+      "length": 34491,
+      "sha256": "D37EB7EACBA3137815C366F4E54592B3F38BBC6328942AF68335BB5EB46E9B1F"
+    },
+    {
+      "path": "vice/src/vic20/cart/Makefile.in",
+      "length": 25871,
+      "sha256": "B4C13B871E80F377FE2C16FFDED0B8786CC50FC047714CD8C371C62FE025BBE2"
+    },
+    {
+      "path": "vice/src/vicii/Makefile.in",
+      "length": 26391,
+      "sha256": "D71821A2E4534088C7347750F68D7FA6F49AD06385EED4ABFCEC7773FE96FB78"
+    },
+    {
+      "path": "vice/src/viciisc/Makefile.in",
+      "length": 24493,
+      "sha256": "C3D5A4591CA205CBDCBD9DE36E7ABC969992630D871885E1B13CF5BBE931925A"
+    },
+    {
+      "path": "vice/src/video/Makefile.in",
+      "length": 26782,
+      "sha256": "755BA111FC794341AD6FA6090EA6CD511024E1BF6FE3585515D8B8A0E2DA555D"
+    },
+    {
+      "path": "vice/ylwrap",
+      "length": 6964,
+      "sha256": "2429C34E7F0E95B15FA7AE944C42DE4454447AF7302586B123B7DFF2D4E01CDC"
+    }
+  ],
+  "pinnedSourceHashes": [
+    {
+      "path": "interrupt.h",
+      "actual": "e6df6997547820351399446bf6376b1b2d5d7007",
+      "expected": "e6df6997547820351399446bf6376b1b2d5d7007",
+      "match": true,
+      "sha256": "0B52238FAF1FCCD37793D6C06381CE89F0AF1E06F0C1A0F89A52905061A12BAD"
+    },
+    {
+      "path": "interrupt.c",
+      "actual": "ff1370cc73ef0f8d25c82bb73a81112dae6977be",
+      "expected": "ff1370cc73ef0f8d25c82bb73a81112dae6977be",
+      "match": true,
+      "sha256": "1C044ECF6ACA0D382880FD8003E5230EF54C8FDEB1F7746E76BEC759C43EA9FC"
+    },
+    {
+      "path": "6510core.c",
+      "actual": "c12238d6d028e37f8346099d010712bdaf87631e",
+      "expected": "c12238d6d028e37f8346099d010712bdaf87631e",
+      "match": true,
+      "sha256": "E84F2021EFB4DEBA6C7486C7A81D6A64FE741C359F5D310BB58B3C11532A29C7"
+    },
+    {
+      "path": "6510dtvcore.c",
+      "actual": "d00e6ba2083ceeef17c85b1a324328547b6fc942",
+      "expected": "d00e6ba2083ceeef17c85b1a324328547b6fc942",
+      "match": true,
+      "sha256": "40B9EEA851DDB2853ABF04C91AE16117A4A92789B18A5C2AE627EC90F9A454F8"
+    },
+    {
+      "path": "machine.h",
+      "actual": "a49dc61d19d67627450b4161149b2a54edd084c2",
+      "expected": "a49dc61d19d67627450b4161149b2a54edd084c2",
+      "match": true,
+      "sha256": "9618D960CADCBB55C95CB735940A7B309109C61FB31EE5B6CA958C144E076AAD"
+    },
+    {
+      "path": "autostart.c",
+      "actual": "92ef3a22368fb23a40e72615e67ed60a2b742867",
+      "expected": "92ef3a22368fb23a40e72615e67ed60a2b742867",
+      "match": true,
+      "sha256": "BA20012085D953B9E81AEB9E9EAFAB0BDB4A88123D7776FE1937C479D0CAF716"
+    },
+    {
+      "path": "c64/c64-snapshot.c",
+      "actual": "9a40c3b207edee4d0c6d47bfe5fc11cee424e320",
+      "expected": "9a40c3b207edee4d0c6d47bfe5fc11cee424e320",
+      "match": true,
+      "sha256": "22F09184364E2E7BF23E8CD68395814F1B6BFA81F16885A58D3369A672DFF1B1"
+    },
+    {
+      "path": "vic20/vic20-snapshot.c",
+      "actual": "6de763df6c2b671305f7b1ad1d32fa2a2f769407",
+      "expected": "6de763df6c2b671305f7b1ad1d32fa2a2f769407",
+      "match": true,
+      "sha256": "69D765823C678E6286419D0C023DE4B8C46B54714C66922FDF5A11B404544DCE"
+    },
+    {
+      "path": "mainc64cpu.c",
+      "actual": "357b27452bd75c59b98edf6327f56752849a0db9",
+      "expected": "357b27452bd75c59b98edf6327f56752849a0db9",
+      "match": true,
+      "sha256": "2B96DD04A1EAF30F19C3CC5940EC433AC4C454F1A45681F0A04AD0C98F3A7F3B"
+    },
+    {
+      "path": "mainviccpu.c",
+      "actual": "84131004dab85f1e6988edaea6f84d510403fc3d",
+      "expected": "84131004dab85f1e6988edaea6f84d510403fc3d",
+      "match": true,
+      "sha256": "B07C104F4C52CDF781BD071C70ECBF706F682CE8521896DF4BFF61D973436C39"
+    },
+    {
+      "path": "mos6510.h",
+      "actual": "9ab9b819a4755b9dfd0ca1a1e47ab5fe2ab53ba5",
+      "expected": "9ab9b819a4755b9dfd0ca1a1e47ab5fe2ab53ba5",
+      "match": true,
+      "sha256": "CFBCDFD333A9565424F9B23B9CCD04A2D153C390B802F90352BE16D67C5B5E30"
+    },
+    {
+      "path": "monitor/monitor.c",
+      "actual": "c34440140899048b50139326fa814b2293e8aa16",
+      "expected": "c34440140899048b50139326fa814b2293e8aa16",
+      "match": true,
+      "sha256": "2E082451CEB4AEE7E03A562437F763C7666B50BF32BAEEA667052E69E92EB921"
+    },
+    {
+      "path": "monitor/mon_parse.y",
+      "actual": "8dc323160e479f9d248d276a34345149db8a309a",
+      "expected": "8dc323160e479f9d248d276a34345149db8a309a",
+      "match": true,
+      "sha256": "7E1B189A6445866C2184E74B4ED5A0F81EE19C80199A7A3CA282DE3DD5354517"
+    },
+    {
+      "path": "monitor/mon_lex.l",
+      "actual": "a9b9e3caeb7db0ded95a899db2b8ea24422cfa36",
+      "expected": "a9b9e3caeb7db0ded95a899db2b8ea24422cfa36",
+      "match": true,
+      "sha256": "38B937AA44CA799826097D91FFF07DE7E059F80486D2A76BAE716A900F36C0A7"
+    },
+    {
+      "path": "initcmdline.c",
+      "actual": "0bcde29310876dee09b73f22265a67e05db3bf34",
+      "expected": "0bcde29310876dee09b73f22265a67e05db3bf34",
+      "match": true,
+      "sha256": "FD76E145F2C2DC57027816D40BE915829529F263C619B9F5090987E124010D2C"
+    },
+    {
+      "path": "drive/drive-snapshot.c",
+      "actual": "7417f7e60b0d2ba7d4eb58e80c762c2fd8fcb79d",
+      "expected": "7417f7e60b0d2ba7d4eb58e80c762c2fd8fcb79d",
+      "match": true,
+      "sha256": "1904CF494AAE10898F3586A6929A9C9910E0DA432B20E6A064D10C644AC184E6"
+    },
+    {
+      "path": "drive/rotation.c",
+      "actual": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+      "expected": "61129de4b0b01d254462c0f7529ab36cac930cf0",
+      "match": true,
+      "sha256": "F8B10A8D383294D5357E769BB6FA91393C4EE28AC4F5BF629C1A187364BA55E9"
+    },
+    {
+      "path": "drive/drive-resources.c",
+      "actual": "8a427dd64b8323e05ee62532a7271044c271c70f",
+      "expected": "8a427dd64b8323e05ee62532a7271044c271c70f",
+      "match": true,
+      "sha256": "6357E9B670BE9636CEF0F81E015F622ECB9709883BB63CD90D3E8434A51F080B"
+    },
+    {
+      "path": "iecbus/iecbus.c",
+      "actual": "bcf3c609ac33336a6161012512e6c82320e75499",
+      "expected": "bcf3c609ac33336a6161012512e6c82320e75499",
+      "match": true,
+      "sha256": "010BC96278C1D99A7EF2AEDFC3170D888DED174D7F174D18618945FCFEEABB25"
+    },
+    {
+      "path": "resources.h",
+      "actual": "04ad3401a2f9a66ec4ecce57b1030e47a4a38803",
+      "expected": "04ad3401a2f9a66ec4ecce57b1030e47a4a38803",
+      "match": true,
+      "sha256": "799110FD5A993923314540B35E992F30661E7629CAC25EAACEAA50EE64F53238"
+    }
+  ]
+}

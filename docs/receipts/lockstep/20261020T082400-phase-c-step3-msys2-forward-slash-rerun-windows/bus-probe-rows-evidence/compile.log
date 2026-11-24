@@ -1,0 +1,12 @@
+2026-10-20T08:24:11.6000352-05:00
+Toolchain: MSYS2 MINGW64 gcc
+Executable: C:/msys64/usr/bin/bash.exe
+Arguments: -lc | printf 'resolved compiler: %s\nMSYSTEM=%s\n' "$(command -v gcc)" "$MSYSTEM"; exec gcc "$@" | bash | -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | -DVICE_SHARP_ROWS=32 | -Wl,--wrap=vic_cycle | -Wl,--wrap=mem_initialize_memory | -Wl,--wrap=mem_mmu_translate | -Wl,--wrap=mem_toggle_watchpoints | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/bus-driver.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/native-bus-double.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/clock-observer.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/bus-observer.c | -o | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/bus-probe-rows-evidence/bus-probe-rows.exe
+Environment: MSYSTEM=MINGW64 CHERE_INVOKING=1 MSYS2_PATH_TYPE=minimal
+ExitCode: 0
+TimedOut: False
+STDOUT:
+resolved compiler: /mingw64/bin/gcc
+MSYSTEM=MINGW64
+
+STDERR:

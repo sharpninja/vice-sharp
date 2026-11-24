@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 1,
+      "description": "Class 1 plan review. Profile loaded in full. All 41 supplied input pins match before analysis. Subject is revision 7; references in the brief to revision 4 and round 3b are stale. Current review reconciles all round 6 IDs and inherited IDs. Credential marker was not read or emitted. Own turn primary-persisted; queue drain disabled.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol"
+    }
+  ]
+}

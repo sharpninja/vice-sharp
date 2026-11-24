@@ -1,0 +1,57 @@
+type: result
+payload:
+  requestId: req-20261019T211715Z-ea51
+  result:
+    id: FR-TAP-002
+    title: TAP File Format Support (v0 and v1)
+    description: >-
+      The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengths as single bytes (with 0 indicating an overflow requiring 3 additional bytes). TAP v1 extends the overflow encoding. The emulator shall read and write both TAP format versions.
+
+
+      ## Acceptance Criteria
+
+      - TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.
+
+      - A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.
+
+      - TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.
+
+      - The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.
+
+      - Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.
+
+      - Writing to TAP format captures the pulse timing from emulated writes.
+
+      - The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.
+    status: pending
+    priority: medium
+    area: TAP
+    acceptanceCriteria:
+    - id: ac-01
+      text: 'TAP v0 files are correctly parsed: each byte represents a pulse half-period in units of 8 system clock cycles.'
+      isSatisfied: false
+    - id: ac-02
+      text: A byte value of 0 in TAP v0 indicates the next 3 bytes form a 24-bit little-endian overflow value.
+      isSatisfied: false
+    - id: ac-03
+      text: TAP v1 files use an extended header and the same pulse encoding with improved overflow handling.
+      isSatisfied: false
+    - id: ac-04
+      text: The TAP header (magic bytes, version, platform, video standard, data length) is validated on load.
+      isSatisfied: false
+    - id: ac-05
+      text: Tape images can be mounted and unmounted at runtime via `ITapeUnit.Mount()`/`ITapeUnit.Eject()`.
+      isSatisfied: false
+    - id: ac-06
+      text: Writing to TAP format captures the pulse timing from emulated writes.
+      isSatisfied: false
+    - id: ac-07
+      text: The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-19T21:17:15.8005869+00:00
+    updatedAt: 2026-10-19T21:17:15.8006753+00:00
+  deprecated: true
+
+---
+

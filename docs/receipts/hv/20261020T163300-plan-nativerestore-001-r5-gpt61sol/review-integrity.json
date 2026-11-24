@@ -1,0 +1,388 @@
+{
+  "timestampLocal": "2026-10-20T17:06:27",
+  "pinCount": 37,
+  "pinMatches": 37,
+  "pins": [
+    {
+      "relativePath": "docs/plans/PLAN-NATIVERESTORE-001.md",
+      "actualSha256": "657CC791953BA971164AE53CAD10803FF2ABB7996F721AB0315CEC920C2C9682",
+      "expectedSha256": "657CC791953BA971164AE53CAD10803FF2ABB7996F721AB0315CEC920C2C9682",
+      "actualBytes": 66724,
+      "expectedBytes": 66724,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/verdict.json",
+      "actualSha256": "D108CBA76A50D87CAB084D4A044E042A5D4896986AE1F6583AC8A036BB4D4D23",
+      "expectedSha256": "D108CBA76A50D87CAB084D4A044E042A5D4896986AE1F6583AC8A036BB4D4D23",
+      "actualBytes": 38239,
+      "expectedBytes": 38239,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/hv/20261020T153600-plan-nativerestore-001-r4-gpt61sol/verdict.md",
+      "actualSha256": "0131157664812BCE2E7B08E0440F0A6C6E8368A24595CE8C67B7F42E79C98AC2",
+      "expectedSha256": "0131157664812BCE2E7B08E0440F0A6C6E8368A24595CE8C67B7F42E79C98AC2",
+      "actualBytes": 35176,
+      "expectedBytes": 35176,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/handoff/HANDOFF.lockstep-plan.md",
+      "actualSha256": "7EDAA9A0494831229A84774CC99309E5F2BACBEB2945B5FC6039575284B7C5DD",
+      "expectedSha256": "7EDAA9A0494831229A84774CC99309E5F2BACBEB2945B5FC6039575284B7C5DD",
+      "actualBytes": 37495,
+      "expectedBytes": 37495,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/handoff/HANDOFF.lockstep-plan.v2.md",
+      "actualSha256": "5FEF016E3F56F7AF4EEA56556E0081D837DE5C9FD4645BFEA6D71596A8B60FCF",
+      "expectedSha256": "5FEF016E3F56F7AF4EEA56556E0081D837DE5C9FD4645BFEA6D71596A8B60FCF",
+      "actualBytes": 133558,
+      "expectedBytes": 133558,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/plans/PLAN-VICE-IMMUTABLE-001.md",
+      "actualSha256": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "expectedSha256": "25A0307D95BD80B303ACF6FC7E51584F497DFF1547DBBA05B94A8A0882BBF09F",
+      "actualBytes": 37043,
+      "expectedBytes": 37043,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/README.md",
+      "actualSha256": "CE1BA2F6E34268EDDDD4CE9A27552826258D38F888750F2F1D00F3FD6867F221",
+      "expectedSha256": "CE1BA2F6E34268EDDDD4CE9A27552826258D38F888750F2F1D00F3FD6867F221",
+      "actualBytes": 1700,
+      "expectedBytes": 1700,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-tracked.patch",
+      "actualSha256": "90604E39B827F850A382DC13DD921141290EF2C34E1483CDC6C612A07803E9E2",
+      "expectedSha256": "90604E39B827F850A382DC13DD921141290EF2C34E1483CDC6C612A07803E9E2",
+      "actualBytes": 22404,
+      "expectedBytes": 22404,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/native-vice/20261004T090000-0500-preexisting-delta/native-vice-untracked-paths.txt",
+      "actualSha256": "2129844CC74724740C6B6F376D61DD1A3B3952957FF591668968AB68A28E3765",
+      "expectedSha256": "2129844CC74724740C6B6F376D61DD1A3B3952957FF591668968AB68A28E3765",
+      "actualBytes": 92364,
+      "expectedBytes": 92364,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/plans/PLAN-OBSERVER-001.md",
+      "actualSha256": "1619F6A77FE658DE984254344731BCD2D5ACC826A4B71AC61277668F1C37D770",
+      "expectedSha256": "1619F6A77FE658DE984254344731BCD2D5ACC826A4B71AC61277668F1C37D770",
+      "actualBytes": 20104,
+      "expectedBytes": 20104,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/plans/PLAN-VSFLOCKSTEP-001.md",
+      "actualSha256": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "expectedSha256": "42C50E4EBCF5BB30A986C8124AFE101D37B160D1EB89AA023F970C8B6F41716E",
+      "actualBytes": 56395,
+      "expectedBytes": 56395,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/requirements/technical/TR-Native-Vice-Snapshot.md",
+      "actualSha256": "99103EA1E7D8E66A611E9C5F420D6093A37F44094A14A3E9FEECF78CC804C248",
+      "expectedSha256": "99103EA1E7D8E66A611E9C5F420D6093A37F44094A14A3E9FEECF78CC804C248",
+      "actualBytes": 8648,
+      "expectedBytes": 8648,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/lockstep/20261019T202802-phase-e-step2-diagnostic-linux/README.md",
+      "actualSha256": "7EB0818FDBD1C4E2F67A2AA3B9A22906A0A2EAD5CF75E48F16D43AF5319CC6A1",
+      "expectedSha256": "7EB0818FDBD1C4E2F67A2AA3B9A22906A0A2EAD5CF75E48F16D43AF5319CC6A1",
+      "actualBytes": 7705,
+      "expectedBytes": 7705,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/lockstep/20261020T081800-phase-c-step3-s2b-observer-build-linux/README.md",
+      "actualSha256": "AF6BA3FF6702BE1C4AC015EDDBF84A7C675AF1A2F70F71FD6D11EB094D36C78B",
+      "expectedSha256": "AF6BA3FF6702BE1C4AC015EDDBF84A7C675AF1A2F70F71FD6D11EB094D36C78B",
+      "actualBytes": 5483,
+      "expectedBytes": 5483,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/lockstep/20261020T094000-phase-c-step3-s4-observations-linux/README.md",
+      "actualSha256": "A3ABB34250882488F34332885920A2C7F9C30EE68A14DB74BF5D6B4173B7EC74",
+      "expectedSha256": "A3ABB34250882488F34332885920A2C7F9C30EE68A14DB74BF5D6B4173B7EC74",
+      "actualBytes": 6874,
+      "expectedBytes": 6874,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/lockstep/20261020T102600-phase-c-step3-s3-s4c-equivalence-windows/README.md",
+      "actualSha256": "69B3CBA67D832D3A7E4B08DA77CE0AB2A16B6E796A2C5BBF349DA5F7395FC0D2",
+      "expectedSha256": "69B3CBA67D832D3A7E4B08DA77CE0AB2A16B6E796A2C5BBF349DA5F7395FC0D2",
+      "actualBytes": 3792,
+      "expectedBytes": 3792,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/lockstep/20261020T105400-phase-d-pre-desktop-install-linux/README.md",
+      "actualSha256": "C3590AE0192853D835B7084091314E6FDB70958B051BE5DA2D95BEF3C687C325",
+      "expectedSha256": "C3590AE0192853D835B7084091314E6FDB70958B051BE5DA2D95BEF3C687C325",
+      "actualBytes": 3386,
+      "expectedBytes": 3386,
+      "matches": true
+    },
+    {
+      "relativePath": "tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj",
+      "actualSha256": "F3F480973F8064234C4151C547C5E6C8E53FCD8001B00966DD5B777381410A56",
+      "expectedSha256": "F3F480973F8064234C4151C547C5E6C8E53FCD8001B00966DD5B777381410A56",
+      "actualBytes": 4122,
+      "expectedBytes": 4122,
+      "matches": true
+    },
+    {
+      "relativePath": "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+      "actualSha256": "4FDA26CA8F879E946E57FB6B033CDE8B53EDE99CD21EEFC2B32BDCED5396C731",
+      "expectedSha256": "4FDA26CA8F879E946E57FB6B033CDE8B53EDE99CD21EEFC2B32BDCED5396C731",
+      "actualBytes": 494,
+      "expectedBytes": 494,
+      "matches": true
+    },
+    {
+      "relativePath": "tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs",
+      "actualSha256": "EB97C7DBFFABD086CF39504F496BEC2231BEF2896AADD844D6E0F35D641DF1D1",
+      "expectedSha256": "EB97C7DBFFABD086CF39504F496BEC2231BEF2896AADD844D6E0F35D641DF1D1",
+      "actualBytes": 6479,
+      "expectedBytes": 6479,
+      "matches": true
+    },
+    {
+      "relativePath": "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+      "actualSha256": "B1EF324968E81634CF37033A1F29FD75C605FB47D771CFDFAF4DF390124C671F",
+      "expectedSha256": "B1EF324968E81634CF37033A1F29FD75C605FB47D771CFDFAF4DF390124C671F",
+      "actualBytes": 80584,
+      "expectedBytes": 80584,
+      "matches": true
+    },
+    {
+      "relativePath": "tests/ViceSharp.TestHarness/Vic20/Vic20HalfCycleComparatorTests.cs",
+      "actualSha256": "4E96D5803FAB27D299747210DAEF80DE7BBD9E7157922DB4CE78D5C2B84267A5",
+      "expectedSha256": "4E96D5803FAB27D299747210DAEF80DE7BBD9E7157922DB4CE78D5C2B84267A5",
+      "actualBytes": 3553,
+      "expectedBytes": 3553,
+      "matches": true
+    },
+    {
+      "relativePath": "tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf",
+      "actualSha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "expectedSha256": "5C284F5CF0A1BC7E01A2E4117A74158B7A9D60485F5626448F4B7655C0E23C19",
+      "actualBytes": 190854,
+      "expectedBytes": 190854,
+      "matches": true
+    },
+    {
+      "relativePath": "src/ViceSharp.Core/ViceNative.cs",
+      "actualSha256": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+      "expectedSha256": "5414DF3F346E8E7F68CE38D850E409CE01C4F05ECB57E4B0D21FDDAD49263493",
+      "actualBytes": 37725,
+      "expectedBytes": 37725,
+      "matches": true
+    },
+    {
+      "relativePath": "src/ViceSharp.Abstractions/IViceNative.cs",
+      "actualSha256": "21F45B664479C552D5E66B3C587FB15825312D16FAE7D0A506986C7C395F3FA8",
+      "expectedSha256": "21F45B664479C552D5E66B3C587FB15825312D16FAE7D0A506986C7C395F3FA8",
+      "actualBytes": 12055,
+      "expectedBytes": 12055,
+      "matches": true
+    },
+    {
+      "relativePath": "src/ViceSharp.ViceCompatibility/X64ScSnapshotCompatibility.cs",
+      "actualSha256": "9E8CAA10C968A8FDDE18EF3A3AB666E7CC9E959506902AF8A800C57E8D19E583",
+      "expectedSha256": "9E8CAA10C968A8FDDE18EF3A3AB666E7CC9E959506902AF8A800C57E8D19E583",
+      "actualBytes": 4532,
+      "expectedBytes": 4532,
+      "matches": true
+    },
+    {
+      "relativePath": "native/Vice.Native.proj",
+      "actualSha256": "F2B96B77241AB8DFDB284A3B430B9CABD04DD8096D6453072A38C80F0273EE57",
+      "expectedSha256": "F2B96B77241AB8DFDB284A3B430B9CABD04DD8096D6453072A38C80F0273EE57",
+      "actualBytes": 1749,
+      "expectedBytes": 1749,
+      "matches": true
+    },
+    {
+      "relativePath": ".gitmodules",
+      "actualSha256": "829DD5B7BC4AB64749108E9F5DBAC06F28F666E916A46E92645EBCEFB1BB2C4A",
+      "expectedSha256": "829DD5B7BC4AB64749108E9F5DBAC06F28F666E916A46E92645EBCEFB1BB2C4A",
+      "actualBytes": 113,
+      "expectedBytes": 113,
+      "matches": true
+    },
+    {
+      "relativePath": "native/build-vice-observer.ps1",
+      "actualSha256": "ADCC40B7EBD3F67BBC7DFAACFF40FC0F06D9EBC27EF3379FB6CFE8BE39B46E84",
+      "expectedSha256": "ADCC40B7EBD3F67BBC7DFAACFF40FC0F06D9EBC27EF3379FB6CFE8BE39B46E84",
+      "actualBytes": 20943,
+      "expectedBytes": 20943,
+      "matches": true
+    },
+    {
+      "relativePath": "tools/immutable-vice/Invoke-ObserverEquivalence.ps1",
+      "actualSha256": "D9B96776A88973A592E6154CCD2D81010EEF087BCA44191544C6113BD4CF8315",
+      "expectedSha256": "D9B96776A88973A592E6154CCD2D81010EEF087BCA44191544C6113BD4CF8315",
+      "actualBytes": 15492,
+      "expectedBytes": 15492,
+      "matches": true
+    },
+    {
+      "relativePath": "tools/immutable-vice/clock-observer-x64sc.c",
+      "actualSha256": "E54036379CC4C9024D8BF5C7E1272FAD6291A6733252E7B5AEC4DECD8CF659BB",
+      "expectedSha256": "E54036379CC4C9024D8BF5C7E1272FAD6291A6733252E7B5AEC4DECD8CF659BB",
+      "actualBytes": 2167,
+      "expectedBytes": 2167,
+      "matches": true
+    },
+    {
+      "relativePath": "tools/immutable-vice/bus-adapter.c",
+      "actualSha256": "92AF37FA28175FCC6B987CDF3A1FCA0031FDFCDFE4B74F31436FC0A4373D4A6F",
+      "expectedSha256": "92AF37FA28175FCC6B987CDF3A1FCA0031FDFCDFE4B74F31436FC0A4373D4A6F",
+      "actualBytes": 4406,
+      "expectedBytes": 4406,
+      "matches": true
+    },
+    {
+      "relativePath": "tools/immutable-vice/obs-emitter.c",
+      "actualSha256": "B5E7D97B259C2848AE869F18E0083BF8ADDCC4B59684BD53C47EDD1D0AB3B8F9",
+      "expectedSha256": "B5E7D97B259C2848AE869F18E0083BF8ADDCC4B59684BD53C47EDD1D0AB3B8F9",
+      "actualBytes": 2951,
+      "expectedBytes": 2951,
+      "matches": true
+    },
+    {
+      "relativePath": "build/Build.cs",
+      "actualSha256": "5C55CB59C0A0371A261DDEDFEC67879F5250F852762DCD924A7D570363DF34D4",
+      "expectedSha256": "5C55CB59C0A0371A261DDEDFEC67879F5250F852762DCD924A7D570363DF34D4",
+      "actualBytes": 103509,
+      "expectedBytes": 103509,
+      "matches": true
+    },
+    {
+      "relativePath": "ViceSharp.slnx",
+      "actualSha256": "EB70F73D9300B752D2251D7756ABEA03337AB61C317F10B47B39E287EDE4D900",
+      "expectedSha256": "EB70F73D9300B752D2251D7756ABEA03337AB61C317F10B47B39E287EDE4D900",
+      "actualBytes": 8517,
+      "expectedBytes": 8517,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/prompt.md",
+      "actualSha256": "49B8FB7217C9988D949DD7CD0BD0FCFF394E7C4ACEFD991A55956446020F1B54",
+      "expectedSha256": "49B8FB7217C9988D949DD7CD0BD0FCFF394E7C4ACEFD991A55956446020F1B54",
+      "actualBytes": 13094,
+      "expectedBytes": 13094,
+      "matches": true
+    },
+    {
+      "relativePath": "docs/receipts/hv/20261020T163300-plan-nativerestore-001-r5-gpt61sol/SELF-REVIEW.md",
+      "actualSha256": "04AA61E14B05077E297E773CB16C2B7DF1B010F411C1FEFBD92B5C2014067173",
+      "expectedSha256": "04AA61E14B05077E297E773CB16C2B7DF1B010F411C1FEFBD92B5C2014067173",
+      "actualBytes": 7581,
+      "expectedBytes": 7581,
+      "matches": true
+    }
+  ],
+  "checkoutHead": "72435f1acddd5c1c33ed3a721a9ba9da52a23082",
+  "checkoutUnchanged": true,
+  "nativeHead": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "nativeStatusUnchanged": true,
+  "nativeStatusCount": 163,
+  "nativeDiffStat": [
+    " vice/src/c64/c64cpusc.c         |  25 +++++++++",
+    " vice/src/drive/drive-snapshot.c |  10 ++--",
+    " vice/src/drive/drivecpu.c       |   4 ++",
+    " vice/src/drive/drivecpu65c02.c  |   4 ++",
+    " vice/src/mainc64cpu.c           |  64 +++++++++++++++++++++--",
+    " vice/src/resid/filter8580new.h  |  10 ++++",
+    " vice/src/resid/sid.h            |   4 ++",
+    " vice/src/sid/resid.cc           | 109 ++++++++++++++++++++++++++++++++++++++++",
+    " 8 files changed, 222 insertions(+), 8 deletions(-)"
+  ],
+  "nativeIndexEmpty": true,
+  "nativeComparedEntries": 163,
+  "nativeContentBaselineMeasuredAt": "2026-10-20T16:45:48",
+  "changedNativeEntries": [],
+  "deletedNativeEntries": [],
+  "statusOutsideReceiptUnchanged": true,
+  "semanticHarnessEscapedDotCandidateCount": 55,
+  "semanticAllTestsUnescapedDotCandidateCount": 57,
+  "semanticAllTestsCandidates": [
+    "tests/ViceSharp.Benchmarks/NativeViceBaseline.cs",
+    "tests/ViceSharp.TestHarness/CpuValidationTests.cs",
+    "tests/ViceSharp.TestHarness/C64VkmKeyboardTests.cs",
+    "tests/ViceSharp.TestHarness/C64MachineProfileTests.cs",
+    "tests/ViceSharp.TestHarness/C1541/LockstepDriveValidationTests.cs",
+    "tests/ViceSharp.TestHarness/RasterBarGroundTruthTests.cs",
+    "tests/ViceSharp.TestHarness/SidCombinedDacresDivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/C1541/Iec1541BootTickTests.cs",
+    "tests/ViceSharp.TestHarness/NativeResidueDiagTests.cs",
+    "tests/ViceSharp.TestHarness/RasterBarRendererTests.cs",
+    "tests/ViceSharp.TestHarness/SidBatchedClockParityTests.cs",
+    "tests/ViceSharp.TestHarness/NativeCollectionConventionTests.cs",
+    "tests/ViceSharp.TestHarness/RasterBarLockstepTests.cs",
+    "tests/ViceSharp.TestHarness/SidEnvDivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/SidEngineClockingProbeTests.cs",
+    "tests/ViceSharp.TestHarness/Sid8580VariantParityTests.cs",
+    "tests/ViceSharp.TestHarness/SidEngineParityTests.cs",
+    "tests/ViceSharp.TestHarness/SidDatabusPotDivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/SidFilter8580DivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/SidNoiseDivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/VicIiCheckpointTests.cs",
+    "tests/ViceSharp.TestHarness/SidOutputAmplifyParityTests.cs",
+    "tests/ViceSharp.TestHarness/SnapshotResumeSpikeTests.cs",
+    "tests/ViceSharp.TestHarness/VicIiBootFrameOracleParityTests.cs",
+    "tests/ViceSharp.TestHarness/SidFilter6581DivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/ViceNativeBridge.cs",
+    "tests/ViceSharp.TestHarness/ViceFactAttribute.cs",
+    "tests/ViceSharp.TestHarness/VicExactFrameOracleTests.cs",
+    "tests/ViceSharp.TestHarness/SidExactOracleTests.cs",
+    "tests/ViceSharp.TestHarness/ViceMachineValidationFixture.cs",
+    "tests/ViceSharp.TestHarness/SidWaveOsc3DivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/SnapshotRunLogParityTests.cs",
+    "tests/ViceSharp.TestHarness/VicIISpriteDmaNativeCheckpointTests.cs",
+    "tests/ViceSharp.TestHarness/SidWaveCoreDivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/VicIiValidationTests.cs",
+    "tests/ViceSharp.TestHarness/VicIIRegisterReadbackNativeTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisites.cs",
+    "tests/ViceSharp.TestHarness/ViceTheoryAttribute.cs",
+    "tests/ViceSharp.TestHarness/SidSyncRingTestbitDivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/XvicOraclePrerequisiteTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20WorkloadLockstep.cs",
+    "tests/ViceSharp.TestHarness/SidResampleDivergentParityTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs",
+    "tests/ViceSharp.TestHarness/SidPcmEquivalencyTests.cs",
+    "tests/ViceSharp.TestHarness/X64ScVariantLockstepTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20NativeAudioExportTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20SoundLockstep.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20LockstepScaffoldTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20SnapshotRoundTripTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstepDiag.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs",
+    "tests/ViceSharp.TestHarness/LockstepValidator.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs",
+    "tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs",
+    "tests/ViceSharp.TestHarness/Xbox/XboxTestConventionTests.cs",
+    "tests/ViceSharp.TestHarness/Xbox/XboxAotLinkTests.cs"
+  ],
+  "gitDiffCheckExitCode": 0,
+  "gitDiffCheckOutput": []
+}

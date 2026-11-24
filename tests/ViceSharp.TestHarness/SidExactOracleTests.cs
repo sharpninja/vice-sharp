@@ -36,6 +36,7 @@ public sealed class SidExactOracleTests
     /// (bit-exact, no tolerance).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void ExactClock_AccumulatorFollowsClosedForm()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -75,6 +76,7 @@ public sealed class SidExactOracleTests
     /// cycle, two envelope_pipeline cycles overlapping the next count).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void ExactClock_AttackStepSpacing_MatchesSingleCyclePipeline()
     {
         var native = ViceNativeBridge.CreateMachine("c64");
@@ -123,6 +125,7 @@ public sealed class SidExactOracleTests
     /// structs (full struct memory compare, delta 0).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void ExactClock_IsDeterministicAcrossInstances()
     {
         static ViceNative.ViceSidExactState RunProgram()
@@ -163,6 +166,7 @@ public sealed class SidExactOracleTests
     /// (a quiet plateau, so the ENV3 sample latch and the live counter agree).
     /// </summary>
     [ViceFact]
+    [Trait("Category", "ShimLegacy")]
     public void ExactRead_Env3MatchesExportedEnvelopeCounter()
     {
         var native = ViceNativeBridge.CreateMachine("c64");

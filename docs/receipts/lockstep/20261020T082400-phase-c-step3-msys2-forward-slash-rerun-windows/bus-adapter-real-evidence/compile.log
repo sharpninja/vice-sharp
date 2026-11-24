@@ -1,0 +1,12 @@
+2026-10-20T08:24:11.7567322-05:00
+Toolchain: MSYS2 MINGW64 gcc
+Executable: C:/msys64/usr/bin/bash.exe
+Arguments: -lc | printf 'resolved compiler: %s\nMSYSTEM=%s\n' "$(command -v gcc)" "$MSYSTEM"; exec gcc "$@" | bash | -std=c11 | -Wall | -Wextra | -Werror | -O0 | -g | -Wl,--wrap=vic_cycle | -Wl,--wrap=mem_initialize_memory | -Wl,--wrap=mem_mmu_translate | -Wl,--wrap=mem_toggle_watchpoints | -Wl,--wrap=vice_sharp_observe_clock | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/bus-real-driver.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/native-bus-double.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/clock-observer.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/bus-observer.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/bus-adapter.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/gate-observer.c | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/Fixtures/clock-gate.c | -o | F:/GitHub/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/bus-adapter-real-evidence/bus-adapter-real.exe
+Environment: MSYSTEM=MINGW64 CHERE_INVOKING=1 MSYS2_PATH_TYPE=minimal
+ExitCode: 0
+TimedOut: False
+STDOUT:
+resolved compiler: /mingw64/bin/gcc
+MSYSTEM=MINGW64
+
+STDERR:

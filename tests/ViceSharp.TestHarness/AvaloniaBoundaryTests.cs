@@ -51,13 +51,37 @@ public sealed class AvaloniaBoundaryTests
     public void AvaloniaSources_DoNotReferenceRuntimeInternals()
     {
         var sourceRoot = Path.Combine(RepoRoot, "src", "ViceSharp.Avalonia");
-        var source = string.Join(
-            Environment.NewLine,
-            Directory.EnumerateFiles(sourceRoot, "*.cs", SearchOption.AllDirectories)
-                .OrderBy(path => path)
-                .Select(File.ReadAllText));
+        var sourceFiles = Directory.EnumerateFiles(sourceRoot, "*", SearchOption.AllDirectories)
+            .Where(path => Path.GetExtension(path) is ".cs" or ".axaml")
+            .OrderBy(path => path);
+        foreach (var path in sourceFiles)
+        {
+            var dependency = FindRuntimeDependency(File.ReadAllText(path));
+            Assert.True(dependency is null, $"{Path.GetRelativePath(sourceRoot, path)} references {dependency}.");
+        }
+    }
 
-        foreach (var forbidden in new[]
+    /// <summary>
+    /// TR-MVVM-001 and D6/R18, 2026-11-23.
+    /// Use case: A desktop head imports the flash cart builder's view
+    /// model through a composition boundary.
+    /// Acceptance: The source scanner accepts the host and abstraction
+    /// namespaces and rejects Core from C# and compiled XAML bindings.
+    /// </summary>
+    [Theory]
+    [InlineData("using ViceSharp.Abstractions;", null)]
+    [InlineData("using ViceSharp.Host;", null)]
+    [InlineData("using ViceSharp.Core.FlashCarts;", "ViceSharp.Core")]
+    [InlineData("xmlns:fc=\"using:ViceSharp.Core.FlashCarts\"", "ViceSharp.Core")]
+    public void RuntimeBoundaryScan_RecognizesFlashCartDependencies(string source, string? expected)
+    {
+        Assert.Equal(expected, FindRuntimeDependency(source));
+    }
+
+    /// <summary>TR-MVVM-001, 2026-11-23. Finds a forbidden runtime symbol in desktop source.</summary>
+    private static string? FindRuntimeDependency(string source)
+    {
+        string[] forbidden =
         {
             "ViceSharp.Architectures",
             "ViceSharp.Core",
@@ -66,10 +90,8 @@ public sealed class AvaloniaBoundaryTests
             "IMachine",
             "IVideoChip",
             "ArchitectureBuilder"
-        })
-        {
-            Assert.DoesNotContain(forbidden, source);
-        }
+        };
+        return forbidden.FirstOrDefault(symbol => source.Contains(symbol, StringComparison.Ordinal));
     }
 
     /// <summary>
@@ -244,6 +266,8 @@ public sealed class AvaloniaBoundaryTests
     /// dirty, ApplySettingsAsync forwards the canonical values to the
     /// host, RestartSession flag is honoured, and RevertSettings rolls
     /// the dirty changes back to the last applied values.
+    /// 2026-11-23, FR-WARP-001 and PLAN-NATIVERESTORE-001 D6/R18:
+    /// disabling the limiter sends the canonical zero rate for warp.
     /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly()
@@ -271,7 +295,7 @@ public sealed class AvaloniaBoundaryTests
 
         await viewModel.ApplySettingsAsync(restartRequired: false, TestContext.Current.CancellationToken);
 
-        Assert.Equal(AttachPanelViewModel.LimiterMaximumPercent, client.LimiterRatePercent);
+        Assert.Equal(0, client.LimiterRatePercent);
         Assert.True(client.LimiterEnabled.HasValue);
         Assert.False(client.LimiterEnabled.Value);
         Assert.NotNull(client.LastDisplaySettings);
@@ -290,6 +314,7 @@ public sealed class AvaloniaBoundaryTests
         Assert.False(viewModel.RequiresRestart);
         Assert.Contains("applied", viewModel.SettingsStatusText, StringComparison.OrdinalIgnoreCase);
 
+        viewModel.LimiterEnabled = true;
         viewModel.LimiterRatePercent = 25;
         Assert.True(viewModel.HasPendingSettingsChanges);
         await viewModel.ApplySettingsAsync(restartRequired: true, TestContext.Current.CancellationToken);

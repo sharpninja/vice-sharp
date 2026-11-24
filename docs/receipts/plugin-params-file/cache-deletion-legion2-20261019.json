@@ -1,0 +1,257 @@
+{
+  "approvedBy": "Payton: \"Yes\" (2026-10-19 19:15) to deleting the 35 old Codex caches and the Claude 1.119.0 cache",
+  "items": [
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.100.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.100.0-20261019T164922.tar",
+      "sha256": "81C5A7ED6EFAF6E47F7B7DA378F3EFE6DFB49E2B58C3B0BB5C054CA7D9DD54EC",
+      "deletedAt": "2026-10-19T19:16:13",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.101.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.101.0-20261019T164922.tar",
+      "sha256": "D2DBABB40FFD1C26D07AB416B287799CCE424A5B9A427FF0826B5D1FFD8A1825",
+      "deletedAt": "2026-10-19T19:16:13",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.102.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.102.0-20261019T164922.tar",
+      "sha256": "F0B9D04B01B27CF61231722C0A0A7D6C2329BCFF77DF6D9E1CABE989A5DD1835",
+      "deletedAt": "2026-10-19T19:16:13",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.103.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.103.0-20261019T164922.tar",
+      "sha256": "1F536710F1F8531EBE4AF778597D23BA360B7C679E3955AC3CF01359414D5B67",
+      "deletedAt": "2026-10-19T19:16:13",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.104.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.104.0-20261019T164922.tar",
+      "sha256": "9B37F4245736795C40D0EC5DFB2E3A799CC87A81A411C5383DFEA329F14C4E80",
+      "deletedAt": "2026-10-19T19:16:13",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.105.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.105.0-20261019T164922.tar",
+      "sha256": "C2600D2E913210B0399AB96834EF96BB859273AB4C84C0DE3FBC64157F7DF10D",
+      "deletedAt": "2026-10-19T19:16:13",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.106.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.106.0-20261019T164922.tar",
+      "sha256": "25A8B01463A93F4D7985681F4B52A4CBC60BAFA301850DC331E619ECB1320F5D",
+      "deletedAt": "2026-10-19T19:16:13",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.107.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.107.0-20261019T164922.tar",
+      "sha256": "54830C1A50228B722E88D819CD2BEB748E6476AD5441B6043D919BAFB3594E50",
+      "deletedAt": "2026-10-19T19:16:13",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.108.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.108.0-20261019T164922.tar",
+      "sha256": "9BA37F9A5B08464D9E427E4B5D1F3361C103AEBA441375143C60226614A38662",
+      "deletedAt": "2026-10-19T19:16:14",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.109.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.109.0-20261019T164922.tar",
+      "sha256": "BC35D983F62C1C5DF525DF378D7A6682FB5E14D2C02B7FBBE3F09C6B328ED1F6",
+      "deletedAt": "2026-10-19T19:16:14",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.110.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.110.0-20261019T164922.tar",
+      "sha256": "690F5CC2FA8ACCCF9CE60167861DBF77092BB05BCE1310F1EF93534B06818F84",
+      "deletedAt": "2026-10-19T19:16:15",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.111.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.111.0-20261019T164922.tar",
+      "sha256": "793DE54F69913B40D6B982C6B5D95376C1D8E5A12D99700871179EB279E758BD",
+      "deletedAt": "2026-10-19T19:16:15",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.112.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.112.0-20261019T164922.tar",
+      "sha256": "482F64391FB811A9CD29654D6040984514A439350667F53014CB7315796BA729",
+      "deletedAt": "2026-10-19T19:16:16",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.113.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.113.0-20261019T164922.tar",
+      "sha256": "5FD1C8F97FB13C76D643AA04F4ED22C04DC5A3769965F7747A0C407BD299C4EC",
+      "deletedAt": "2026-10-19T19:16:16",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.114.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.114.0-20261019T164922.tar",
+      "sha256": "295CF98E09B9EB9D0A4856FD5CA71F427C77813593555BD949B0FFD54377582D",
+      "deletedAt": "2026-10-19T19:16:17",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.115.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.115.0-20261019T164922.tar",
+      "sha256": "73080B4320C44BD3AEC83FF0301CCD740F8D10AA2A5DC8E5E198E08E522E2298",
+      "deletedAt": "2026-10-19T19:16:17",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.116.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.116.0-20261019T164922.tar",
+      "sha256": "858DF82004795621756469F6C99276AD9F91A0791C9D4B0CB6880015C2B53F61",
+      "deletedAt": "2026-10-19T19:16:18",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.117.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.117.0-20261019T164922.tar",
+      "sha256": "1175636B7BF031BDD9D2DA0C439405F14E4A1CAE2B88C7193E67FDC27EB68A8B",
+      "deletedAt": "2026-10-19T19:16:18",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.118.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.118.0-20261019T164922.tar",
+      "sha256": "A6C4CC80D2416D694E9C16C9917E638207F21614BF4D6662AC965626E3A5DC6C",
+      "deletedAt": "2026-10-19T19:16:19",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.119.0-20261019T164922.tar",
+      "sha256": "CE9BF6AC4F76984994B082F5C141C757D30712A44A6DA31AAD319411AAB49BFE",
+      "deletedAt": "2026-10-19T19:16:19",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.85.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.85.0-20261019T164922.tar",
+      "sha256": "5ACF02CDCAF53ADB9C3594AB04DD1CF9BCA457C6027270A24205A2113643A3E3",
+      "deletedAt": "2026-10-19T19:16:19",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.86.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.86.0-20261019T164922.tar",
+      "sha256": "B6663185B495B561DBA5F873971FD430B4E5CA9121BB6AC9F68D760ABFD54309",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.87.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.87.0-20261019T164922.tar",
+      "sha256": "61D2F28FB51FADAACEC40866D2083EA6F9C88B4D23714B1B5B6FA2B6C8CD3952",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.88.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.88.0-20261019T164922.tar",
+      "sha256": "EE40AEBA607424E7D5E3EF38B158BD9094781DC35BF4EF04B5EF0571AACDA191",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.89.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.89.0-20261019T164922.tar",
+      "sha256": "93CA067953B425ADD2AC2210AFDE4E9D864B4E08F71F6662E15522119B33F856",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.90.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.90.0-20261019T164922.tar",
+      "sha256": "76A0A674D05BF1B90158BCD888C6F24EF7953D66E5DAD92DD23E986C65F5DE29",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.91.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.91.0-20261019T164922.tar",
+      "sha256": "9AA975BC22C4DA0A6D38B31B1E07BF5528F0E5640184AEBF831923CFB6BE84A8",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.92.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.92.0-20261019T164922.tar",
+      "sha256": "913D549569B9AED9A5CA85AD594B72C0B6622DB253E02D3878160C8EC565E39F",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.93.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.93.0-20261019T164922.tar",
+      "sha256": "D0EB96A077407A195B4DF3DEA93675A64337B7E4E689812A4982DBACB9A43592",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.94.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.94.0-20261019T164922.tar",
+      "sha256": "B16394F9328AB50CDFC3B8E831454828194C46F403BF867C81066C5AA12032BD",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.95.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.95.0-20261019T164922.tar",
+      "sha256": "ADC1BA98FCE6102757B5638C45607B2F23F924B40018D5F69B59A8E7E0C7C5E8",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.96.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.96.0-20261019T164922.tar",
+      "sha256": "85296AAA21CDFE7BC5D5F4049DAF982D8CA3FC7F80E54A7C4906F3979140D836",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.97.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.97.0-20261019T164922.tar",
+      "sha256": "D96716B36A84D80F8133BAC4B8EAF7B099B10766F4E44B7EFBAEF871CBAA1ACF",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.98.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.98.0-20261019T164922.tar",
+      "sha256": "0A692CDE4D2B4D5B42BF222A9243AD9D064BB743BBC3CA43D53B07979E668759",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-local\\mcpserver\\1.99.0",
+      "tar": "C:\\Users\\kingd\\.codex\\plugins\\cache-backups\\mcpserver-local\\mcpserver-local-mcpserver-1.99.0-20261019T164922.tar",
+      "sha256": "ED8F36AB5400E1A1973273328D88CEA6D8B9ACC5FB21E5104583D8758E5A8E20",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    },
+    {
+      "source": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0",
+      "tar": "C:\\Users\\kingd\\.claude\\plugins\\cache-backups\\mcpserver-local-mcpserver-1.119.0-20261019T161527.tar",
+      "sha256": "20D61641585076163A0CE7FBFCB408C67288B7F4F3B782E9E45F8ED2B775F912",
+      "deletedAt": "2026-10-19T19:16:20",
+      "goneAfter": true
+    }
+  ]
+}

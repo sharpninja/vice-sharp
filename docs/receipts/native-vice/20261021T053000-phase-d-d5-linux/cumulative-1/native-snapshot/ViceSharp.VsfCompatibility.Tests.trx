@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="b7e40120-5298-4cc6-bcc2-13d89a721bee" name="@LAB-OMARCHY 2026-10-21 05:41:39" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-21T05:41:39.2975077-05:00" queuing="2026-10-21T05:41:39.2975078-05:00" start="2026-10-21T05:41:37.1663697-05:00" finish="2026-10-21T05:42:04.3333775-05:00" />
+  <TestSettings name="default" id="ae8151b4-7673-4e27-86b2-9178cd3e1918">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-10-21_05_41_39" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="92b345bb-67e1-4c22-ae33-7fc500673f36" testId="38371a74-205f-c572-d448-7b7520573be3" testName="ViceSharp.VsfCompatibility.Tests.ImmutableViceBuildTests.PinnedSourceTree_IsIdenticalBeforeAndAfterBuild" computerName="LAB-OMARCHY" duration="00:00:00.0333446" startTime="2026-10-21T05:41:38.8785372-05:00" endTime="2026-10-21T05:41:38.9195871-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="92b345bb-67e1-4c22-ae33-7fc500673f36" />
+    <UnitTestResult executionId="6c0e1d89-c307-4d9b-ba22-9b75a569fbdb" testId="b765b6d6-c7d7-d6c8-2275-ab4706b604a6" testName="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.SnapshotResume_ObserverClockAndPcMatchVsfMainCpu" computerName="LAB-OMARCHY" duration="00:00:24.7808740" startTime="2026-10-21T05:41:38.8785314-05:00" endTime="2026-10-21T05:42:03.6673940-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6c0e1d89-c307-4d9b-ba22-9b75a569fbdb">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "22377"
+Actual:   "198"
+           ↑ (pos 0)</Message>
+          <StackTrace>   at ViceSharp.VsfCompatibility.Tests.VsfSlice1ManifestAndResumeContractTests.AssertResume(ResumeTrace t, ResumeInput i) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/VsfSlice1ManifestAndResumeContractTests.cs:line 198
+   at ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.SnapshotResume_ObserverClockAndPcMatchVsfMainCpu() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/NativeViceSnapshotResumeTests.cs:line 115
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5cf0922c-d670-4a1a-ac81-6c71df95666c" testId="f901096d-b74c-67ef-fac0-f7a2db854d36" testName="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.Msys2Toolchain_HasEveryRequiredCommand" computerName="LAB-OMARCHY" duration="00:00:00.0015938" startTime="2026-10-21T05:41:38.9229500-05:00" endTime="2026-10-21T05:41:38.9246134-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5cf0922c-d670-4a1a-ac81-6c71df95666c" />
+    <UnitTestResult executionId="9c555ee3-e6dc-47b9-9f4b-50db892ce1ca" testId="d9d05cf1-2b7d-47e7-c6c4-4ca8db0b6bba" testName="ViceSharp.VsfCompatibility.Tests.ImmutableViceBuildTests.BuildInputsOutputsAndGeneratedFiles_StayOutsideNativeVice" computerName="LAB-OMARCHY" duration="00:00:00.0006511" startTime="2026-10-21T05:41:38.9229433-05:00" endTime="2026-10-21T05:41:38.9236768-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c555ee3-e6dc-47b9-9f4b-50db892ce1ca" />
+    <UnitTestResult executionId="97504e94-f004-4e46-8777-c0c13b35b422" testId="2f4b4ba8-841f-cd80-8894-f10ffbe88699" testName="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.RequiredFixtures_ArePresentAndHashPinned" computerName="LAB-OMARCHY" duration="00:00:00.0508063" startTime="2026-10-21T05:41:38.9704220-05:00" endTime="2026-10-21T05:41:39.0376254-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="97504e94-f004-4e46-8777-c0c13b35b422">
+      <Output>
+        <ErrorInfo>
+          <Message>BLOCKED: BLOCKER-R12-XVIC-CHECKPOINT (xvic-pal-unexpanded, recorded 2026-10-21T05:39:58): host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed; host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed; clocks: LAB-OMARCHY: trigger 100000, write clock 100002, writer result 0, MAINCPU clock none; LAB-OMARCHY: trigger 100000, write clock 100002, writer result 0, MAINCPU clock none</Message>
+          <StackTrace>   at ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.FailIfBlocked(String model) in /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/NativeViceSnapshotPrerequisiteTests.cs:line 109
+   at ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.RequiredFixtures_ArePresentAndHashPinned() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/NativeViceSnapshotPrerequisiteTests.cs:line 118
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3b51a3b6-88ab-4acc-b87b-22b56c7f9b91" testId="4ec6b4fb-0e0c-9051-78e4-67f70ca26d99" testName="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.RoundTrip_PinnedWriterThenResume_PostResumeSequenceMatchesWriter" computerName="LAB-OMARCHY" duration="00:00:00.5625105" startTime="2026-10-21T05:42:03.6693817-05:00" endTime="2026-10-21T05:42:04.2323151-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3b51a3b6-88ab-4acc-b87b-22b56c7f9b91">
+      <Output>
+        <ErrorInfo>
+          <Message>writer: no VICE_SNAP checkpoint record: the limit was reached before the trap, or the observer is not the checkpoint build</Message>
+          <StackTrace>   at ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.RoundTrip_PinnedWriterThenResume_PostResumeSequenceMatchesWriter() in /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/NativeViceSnapshotResumeTests.cs:line 142
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="077c69e5-eb8c-4dff-8fc9-db76091feb5d" testId="3104f153-4790-ef3f-7409-2c14cec1634b" testName="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.LegacyNormalizationCapability_IsRequired" computerName="LAB-OMARCHY" duration="00:00:00.0216669" startTime="2026-10-21T05:41:38.8785322-05:00" endTime="2026-10-21T05:41:38.9122510-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="077c69e5-eb8c-4dff-8fc9-db76091feb5d" />
+    <UnitTestResult executionId="0927a69e-e8c2-47a7-82ae-eec09c0ee965" testId="c35e7fcd-707c-c055-bebe-075de0c20149" testName="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.C64AndVic20Libraries_AreBuiltFromPinnedViceCommit" computerName="LAB-OMARCHY" duration="00:00:00.0437578" startTime="2026-10-21T05:41:38.9253936-05:00" endTime="2026-10-21T05:41:38.9692440-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0927a69e-e8c2-47a7-82ae-eec09c0ee965" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.LegacyNormalizationCapability_IsRequired" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.vsfcompatibility.tests/bin/release/net10.0/vicesharp.vsfcompatibility.tests.dll" id="3104f153-4790-ef3f-7409-2c14cec1634b">
+      <Execution id="077c69e5-eb8c-4dff-8fc9-db76091feb5d" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests" name="LegacyNormalizationCapability_IsRequired" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.VsfCompatibility.Tests.ImmutableViceBuildTests.PinnedSourceTree_IsIdenticalBeforeAndAfterBuild" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.vsfcompatibility.tests/bin/release/net10.0/vicesharp.vsfcompatibility.tests.dll" id="38371a74-205f-c572-d448-7b7520573be3">
+      <Execution id="92b345bb-67e1-4c22-ae33-7fc500673f36" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.VsfCompatibility.Tests.ImmutableViceBuildTests" name="PinnedSourceTree_IsIdenticalBeforeAndAfterBuild" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.C64AndVic20Libraries_AreBuiltFromPinnedViceCommit" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.vsfcompatibility.tests/bin/release/net10.0/vicesharp.vsfcompatibility.tests.dll" id="c35e7fcd-707c-c055-bebe-075de0c20149">
+      <Execution id="0927a69e-e8c2-47a7-82ae-eec09c0ee965" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests" name="C64AndVic20Libraries_AreBuiltFromPinnedViceCommit" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.SnapshotResume_ObserverClockAndPcMatchVsfMainCpu" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.vsfcompatibility.tests/bin/release/net10.0/vicesharp.vsfcompatibility.tests.dll" id="b765b6d6-c7d7-d6c8-2275-ab4706b604a6">
+      <Execution id="6c0e1d89-c307-4d9b-ba22-9b75a569fbdb" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests" name="SnapshotResume_ObserverClockAndPcMatchVsfMainCpu" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.VsfCompatibility.Tests.ImmutableViceBuildTests.BuildInputsOutputsAndGeneratedFiles_StayOutsideNativeVice" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.vsfcompatibility.tests/bin/release/net10.0/vicesharp.vsfcompatibility.tests.dll" id="d9d05cf1-2b7d-47e7-c6c4-4ca8db0b6bba">
+      <Execution id="9c555ee3-e6dc-47b9-9f4b-50db892ce1ca" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.VsfCompatibility.Tests.ImmutableViceBuildTests" name="BuildInputsOutputsAndGeneratedFiles_StayOutsideNativeVice" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.Msys2Toolchain_HasEveryRequiredCommand" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.vsfcompatibility.tests/bin/release/net10.0/vicesharp.vsfcompatibility.tests.dll" id="f901096d-b74c-67ef-fac0-f7a2db854d36">
+      <Execution id="5cf0922c-d670-4a1a-ac81-6c71df95666c" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests" name="Msys2Toolchain_HasEveryRequiredCommand" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.RoundTrip_PinnedWriterThenResume_PostResumeSequenceMatchesWriter" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.vsfcompatibility.tests/bin/release/net10.0/vicesharp.vsfcompatibility.tests.dll" id="4ec6b4fb-0e0c-9051-78e4-67f70ca26d99">
+      <Execution id="3b51a3b6-88ab-4acc-b87b-22b56c7f9b91" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests" name="RoundTrip_PinnedWriterThenResume_PostResumeSequenceMatchesWriter" />
+    </UnitTest>
+    <UnitTest name="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.RequiredFixtures_ArePresentAndHashPinned" storage="/home/sharpninja/github/vice-sharp/tests/vicesharp.vsfcompatibility.tests/bin/release/net10.0/vicesharp.vsfcompatibility.tests.dll" id="2f4b4ba8-841f-cd80-8894-f10ffbe88699">
+      <Execution id="97504e94-f004-4e46-8777-c0c13b35b422" />
+      <TestMethod codeBase="/home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests" name="RequiredFixtures_ArePresentAndHashPinned" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="38371a74-205f-c572-d448-7b7520573be3" executionId="92b345bb-67e1-4c22-ae33-7fc500673f36" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b765b6d6-c7d7-d6c8-2275-ab4706b604a6" executionId="6c0e1d89-c307-4d9b-ba22-9b75a569fbdb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f901096d-b74c-67ef-fac0-f7a2db854d36" executionId="5cf0922c-d670-4a1a-ac81-6c71df95666c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9d05cf1-2b7d-47e7-c6c4-4ca8db0b6bba" executionId="9c555ee3-e6dc-47b9-9f4b-50db892ce1ca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2f4b4ba8-841f-cd80-8894-f10ffbe88699" executionId="97504e94-f004-4e46-8777-c0c13b35b422" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ec6b4fb-0e0c-9051-78e4-67f70ca26d99" executionId="3b51a3b6-88ab-4acc-b87b-22b56c7f9b91" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3104f153-4790-ef3f-7409-2c14cec1634b" executionId="077c69e5-eb8c-4dff-8fc9-db76091feb5d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c35e7fcd-707c-c055-bebe-075de0c20149" executionId="0927a69e-e8c2-47a7-82ae-eec09c0ee965" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="8" executed="8" passed="5" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)
+[xUnit.net 00:00:00.24]   Discovering: ViceSharp.VsfCompatibility.Tests
+[xUnit.net 00:00:00.78]   Discovered:  ViceSharp.VsfCompatibility.Tests
+[xUnit.net 00:00:01.06]   Starting:    ViceSharp.VsfCompatibility.Tests
+[xUnit.net 00:00:01.31]       BLOCKED: BLOCKER-R12-XVIC-CHECKPOINT (xvic-pal-unexpanded, recorded 2026-10-21T05:39:58): host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed; host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed; clocks: LAB-OMARCHY: trigger 100000, write clock 100002, writer result 0, MAINCPU clock none; LAB-OMARCHY: trigger 100000, write clock 100002, writer result 0, MAINCPU clock none
+[xUnit.net 00:00:01.31]       Stack Trace:
+[xUnit.net 00:00:01.31]         /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/NativeViceSnapshotPrerequisiteTests.cs(109,0): at ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.FailIfBlocked(String model)
+[xUnit.net 00:00:01.31]         /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/NativeViceSnapshotPrerequisiteTests.cs(118,0): at ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.RequiredFixtures_ArePresentAndHashPinned()
+[xUnit.net 00:00:01.31]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:01.31]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:25.93]       Assert.Equal() Failure: Strings differ
+[xUnit.net 00:00:25.93]                  ↓ (pos 0)
+[xUnit.net 00:00:25.93]       Expected: "22377"
+[xUnit.net 00:00:25.93]       Actual:   "198"
+[xUnit.net 00:00:25.93]                  ↑ (pos 0)
+[xUnit.net 00:00:25.93]       Stack Trace:
+[xUnit.net 00:00:25.93]         /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/VsfSlice1ManifestAndResumeContractTests.cs(198,0): at ViceSharp.VsfCompatibility.Tests.VsfSlice1ManifestAndResumeContractTests.AssertResume(ResumeTrace t, ResumeInput i)
+[xUnit.net 00:00:25.93]         /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/NativeViceSnapshotResumeTests.cs(115,0): at ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.SnapshotResume_ObserverClockAndPcMatchVsfMainCpu()
+[xUnit.net 00:00:25.93]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:25.94]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:26.50]       writer: no VICE_SNAP checkpoint record: the limit was reached before the trap, or the observer is not the checkpoint build
+[xUnit.net 00:00:26.50]       Stack Trace:
+[xUnit.net 00:00:26.50]         /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/NativeViceSnapshotResumeTests.cs(142,0): at ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.RoundTrip_PinnedWriterThenResume_PostResumeSequenceMatchesWriter()
+[xUnit.net 00:00:26.50]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:26.50]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:26.51]   Finished:    ViceSharp.VsfCompatibility.Tests (ID = 'ae8c856288d585366c6350d1f7add6216f2b7d52131e6449cb53ae57fd332a29')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-10-21T05:41:39.0448478-05:00">
+        <Text>[xUnit.net 00:00:01.31]     ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotPrerequisiteTests.RequiredFixtures_ArePresentAndHashPinned [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-10-21T05:42:03.6690240-05:00">
+        <Text>[xUnit.net 00:00:25.93]     ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.SnapshotResume_ObserverClockAndPcMatchVsfMainCpu [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-10-21T05:42:04.2337108-05:00">
+        <Text>[xUnit.net 00:00:26.50]     ViceSharp.VsfCompatibility.Tests.NativeViceSnapshotResumeTests.RoundTrip_PinnedWriterThenResume_PostResumeSequenceMatchesWriter [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

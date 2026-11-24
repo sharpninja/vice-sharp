@@ -1,0 +1,6 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.NativeClockProbe.Tests\bin\Release\net10.0\ViceSharp.NativeClockProbe.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+WARNING: Overwriting results file: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261020T075600-phase-c-step3-s1b-bus-observer-rows-windows\gate1-busobserver.trx
+Results File: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261020T075600-phase-c-step3-s1b-bus-observer-rows-windows\gate1-busobserver.trx
+
+Passed!  - Failed:     0, Passed:    50, Skipped:     0, Total:    50, Duration: 1 s - ViceSharp.NativeClockProbe.Tests.dll (net10.0)

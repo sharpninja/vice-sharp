@@ -97,6 +97,7 @@ public sealed class SidBatchedClockParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-EXTFILT-04", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void ExtFilterClockDeltaT_DeltaTFlt8_BatchedLockstep()
         => AssertFastBatchedLockstep("c64", MakeSid6581, SawLp, 8000);
 
@@ -152,6 +153,7 @@ public sealed class SidBatchedClockParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-EXTFILT-07", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void ExtFilterWiring_PerCycleOutputLockstep()
     {
         var sid = MakeSid6581();
@@ -191,6 +193,7 @@ public sealed class SidBatchedClockParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-CLOCK-05", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void OscMsbToggleSubStepping_BatchedLockstep()
         => AssertFastBatchedLockstep("c64", MakeSid6581, new (ushort, byte)[]
         {
@@ -212,6 +215,7 @@ public sealed class SidBatchedClockParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-CLOCK-08", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void WritePipelinePrologue_BatchedLockstep()
     {
         var program = new (ushort reg, byte val)[]

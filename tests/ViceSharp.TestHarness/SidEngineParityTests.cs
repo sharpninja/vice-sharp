@@ -53,6 +53,7 @@ public sealed class SidEngineParityTests
     /// Skips when the native shim is unavailable.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void ManagedOscillatorMatchesNativeReSid_CycleExact()
     {
         if (!ViceNative.IsAvailable)
@@ -104,6 +105,7 @@ public sealed class SidEngineParityTests
     /// per-checkpoint deltas are logged. Skips when the native shim is unavailable.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void ManagedEnvelopeMatchesNativeReSid_CycleExact()
     {
         if (!ViceNative.IsAvailable)

@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 1,
+      "description": "Scoped primary reads of seven requirements, FR-VICE-001 and FR-SNP-005 mappings, and PLAN-VICEORACLE-001 succeeded. AC1 remains external v1.2/v1.3 before the planned R15 wrapper amendment; AC2 names the old builder before its reference update; all selected criteria and oracle tasks 4/5 remain pending. Diagnostic repeat of the permitted comparator filter with scoped DOTNET_JitDisasm reached ViceNative.FindLibraryPath although the selected comparator does not call that binding. This establishes a discovery/metadata resolution path, not a DLL-load proof. Assessing whether the new audit contract and ordinary selector have an accepted zero-attempt path. Literal R12 BLOCKED lifecycle and N21/N22/N23 amendments have explicit safe outcomes.",
+      "type": "validation",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/vice-sharp/docs/receipts/hv/20261020T180300-plan-nativerestore-001-r7-gpt61sol"
+    }
+  ]
+}

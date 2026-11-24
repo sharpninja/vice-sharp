@@ -1,6 +1,8 @@
 namespace ViceSharp.TestHarness.FlashCart;
 
+using System.Collections.Specialized;
 using ViceSharp.Core.FlashCarts;
+using ViceSharp.Host.Services;
 using Xunit;
 
 /// <summary>
@@ -30,16 +32,29 @@ public sealed class FlashCartImageBuilderViewModelTests
         Assert.Null(vm.LastError);
     }
 
+    /// <summary>
+    /// FR-FLASHCART-001 and TR-MVVM-001, D6/R18, 2026-11-23.
+    /// Use case: The desktop imports bank data through its host-composed view model.
+    /// Acceptance: Profile entries remain stable for selector bindings, the bank
+    /// collection notifies observers, and the built bytes match the core image.
+    /// </summary>
     [Fact]
     public void Build_MatchesCoreBuilderBytes()
     {
-        var vm = new FlashCartImageBuilderViewModel();
+        var vm = FlashCartBuilderComposition.Create();
+        Assert.Contains(vm.Profiles, profile => profile.Id == vm.SelectedProfileId);
+        Assert.Same(vm.Profiles[0], vm.Profiles[0]);
+        var banks = Assert.IsAssignableFrom<INotifyCollectionChanged>(vm.Banks);
+        var bankChanged = false;
+        banks.CollectionChanged += (_, args) => bankChanged = args.Action == NotifyCollectionChangedAction.Replace;
         vm.TreatAsPrg = false;
         var data = new byte[16];
         data[0] = 0x60;
         vm.ImportBank(data, "a.bin");
         var fromVm = vm.Build();
 
+        Assert.True(bankChanged);
+        Assert.Equal("a.bin", vm.Banks[0].SourceName);
         var core = new FlashImageBuilder(FlashCartProfiles.Fe3);
         core.WriteRaw(0, data, sourceName: "a.bin");
         var fromCore = core.Build();

@@ -1,0 +1,59 @@
+{
+  "fixtureId": "x64sc-roundtrip",
+  "host": "LAB-OMARCHY",
+  "machine": "x64sc",
+  "model": "c64c",
+  "trigger": 300000,
+  "writeClock": 300002,
+  "writerResult": 0,
+  "mainCpuClock": null,
+  "candidatePath": "/home/sharpninja/github/vice-sharp/artifacts/native-snapshot-resume/20261021T065431/roundtrip-candidate.vsf",
+  "candidateSha256": "46E7E0B92D29B2C1E18667CAF58FF6984959A4546B66185CFBAF68844335CF28",
+  "candidateLength": 193261,
+  "command": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/bin-linux/x64sc-observer -default \u002Blogcolorize -seed 1 -sounddev dummy -directory /home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/work-linux/vice/data -limitcycles 300054 -model c64c",
+  "roms": [
+    {
+      "relativePath": "C64/basic-901226-01.bin",
+      "sha256": "89878CEA0A268734696DE11C4BAE593EAAA506465D2029D619C0E0CBCCDFA62D",
+      "expected": "89878CEA0A268734696DE11C4BAE593EAAA506465D2029D619C0E0CBCCDFA62D",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "relativePath": "C64/kernal-901227-03.bin",
+      "sha256": "83C60D47047D7BEAB8E5B7BF6F67F80DAA088B7A6A27DE0D7E016F6484042721",
+      "expected": "83C60D47047D7BEAB8E5B7BF6F67F80DAA088B7A6A27DE0D7E016F6484042721",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "relativePath": "C64/chargen-901225-01.bin",
+      "sha256": "FD0D53B8480E86163AC98998976C72CC58D5DD8EB824ED7B829774E74213B420",
+      "expected": "FD0D53B8480E86163AC98998976C72CC58D5DD8EB824ED7B829774E74213B420",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "relativePath": "DRIVES/dos1541-325302-01\u002B901229-05.bin",
+      "sha256": "D1D45AFB46FD4E2B48D93CA367B889D75654A3B7ACF73044E51F6D880C09369E",
+      "expected": "D1D45AFB46FD4E2B48D93CA367B889D75654A3B7ACF73044E51F6D880C09369E",
+      "ok": true,
+      "reason": "ok"
+    }
+  ],
+  "observerSha256": "BCA41CA739FF250AF2CB1387BA8E8EB83ACCE54C15AC91DF3ADDB5CAB806008D",
+  "processExitCode": 1,
+  "timedOut": false,
+  "limitReached": true,
+  "snapshotLines": [
+    "VICE_SNAP,checkpoint,300000,300002"
+  ],
+  "exitCode": 3,
+  "blockedIds": [
+    "x64sc-roundtrip"
+  ],
+  "reason": "BLOCKER-R12-XVIC-CHECKPOINT: trigger 300000, measured write clock 300002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed",
+  "acceptedFixtureChanged": false,
+  "manifestChanged": false,
+  "outcome": "blocked"
+}

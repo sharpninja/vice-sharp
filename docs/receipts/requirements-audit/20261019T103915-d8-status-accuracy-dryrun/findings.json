@@ -1,0 +1,492 @@
+[
+  {
+    "type": "fr",
+    "id": "FR-ARCH-TRUEDRIVE-1541-002",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "fr",
+    "id": "FR-ARCH-TRUEDRIVE-1541-002",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "fr",
+    "id": "FR-BACKFILL-MEDIA-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "fr",
+    "id": "FR-BACKFILL-MEDIA-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "fr",
+    "id": "FR-BACKFILL-VIDEO-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "fr",
+    "id": "FR-BACKFILL-VIDEO-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "fr",
+    "id": "FR-SID-014",
+    "status": "completed",
+    "criteria": 4,
+    "satisfied": 0,
+    "rule": "R1",
+    "detail": "status completed with 4 of 4 criteria unsatisfied",
+    "proposed": "set status pending"
+  },
+  {
+    "type": "fr",
+    "id": "FR-SIDEBARUI-001",
+    "status": "pending",
+    "criteria": 3,
+    "satisfied": 3,
+    "rule": "R3",
+    "detail": "status pending while all 3 criteria are flagged satisfied",
+    "proposed": "keep status; clear uncited flags (R4); re-prove before any raise"
+  },
+  {
+    "type": "fr",
+    "id": "FR-VIC-001",
+    "status": "closed",
+    "criteria": 8,
+    "satisfied": 0,
+    "rule": "R1",
+    "detail": "status closed with 8 of 8 criteria unsatisfied",
+    "proposed": "set status pending"
+  },
+  {
+    "type": "fr",
+    "id": "FR-VIC-001",
+    "status": "closed",
+    "criteria": 8,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "fr",
+    "id": "FR-VIC-008",
+    "status": "closed",
+    "criteria": 5,
+    "satisfied": 0,
+    "rule": "R1",
+    "detail": "status closed with 5 of 5 criteria unsatisfied",
+    "proposed": "set status pending"
+  },
+  {
+    "type": "fr",
+    "id": "FR-VIC-008",
+    "status": "closed",
+    "criteria": 5,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "fr",
+    "id": "FR-VIC20-001",
+    "status": "pending",
+    "criteria": 6,
+    "satisfied": 6,
+    "rule": "R3",
+    "detail": "status pending while all 6 criteria are flagged satisfied",
+    "proposed": "keep status; clear uncited flags (R4); re-prove before any raise"
+  },
+  {
+    "type": "tr",
+    "id": "TR-DEPS-202607-001",
+    "status": "completed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status completed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-DRV-EDGE-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-DRV-EDGE-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "tr",
+    "id": "TR-IEC-EDGE-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-IEC-EDGE-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "tr",
+    "id": "TR-SIDEBARUI-LAYOUT-001",
+    "status": "pending",
+    "criteria": 2,
+    "satisfied": 2,
+    "rule": "R3",
+    "detail": "status pending while all 2 criteria are flagged satisfied",
+    "proposed": "keep status; clear uncited flags (R4); re-prove before any raise"
+  },
+  {
+    "type": "tr",
+    "id": "TR-SID-EDGE-004",
+    "status": "completed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status completed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-SID-ORACLE-002",
+    "status": "completed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status completed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-SID-RESAMPLE-001",
+    "status": "completed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status completed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC20-PIXEL-001",
+    "status": "pending",
+    "criteria": 3,
+    "satisfied": 3,
+    "rule": "R3",
+    "detail": "status pending while all 3 criteria are flagged satisfied",
+    "proposed": "keep status; clear uncited flags (R4); re-prove before any raise"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-002",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-002",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-003",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-003",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-004",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-004",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-005",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-005",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-006",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "tr",
+    "id": "TR-VIC-EDGE-006",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "tr",
+    "id": "TR-XBOXGPL-BRAND-001",
+    "status": "completed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status completed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "test",
+    "id": "TEST-DRV-MOTOR-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "test",
+    "id": "TEST-DRV-MOTOR-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "test",
+    "id": "TEST-IEC-TIMING-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "test",
+    "id": "TEST-IEC-TIMING-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "test",
+    "id": "TEST-NATIVERESIDUE-001",
+    "status": "pending",
+    "criteria": 2,
+    "satisfied": 2,
+    "rule": "R3",
+    "detail": "status pending while all 2 criteria are flagged satisfied",
+    "proposed": "keep status; clear uncited flags (R4); re-prove before any raise"
+  },
+  {
+    "type": "test",
+    "id": "TEST-SID-002",
+    "status": "completed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status completed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "test",
+    "id": "TEST-SIDEBARUI-001",
+    "status": "pending",
+    "criteria": 2,
+    "satisfied": 2,
+    "rule": "R3",
+    "detail": "status pending while all 2 criteria are flagged satisfied",
+    "proposed": "keep status; clear uncited flags (R4); re-prove before any raise"
+  },
+  {
+    "type": "test",
+    "id": "TEST-VIC20-001",
+    "status": "pending",
+    "criteria": 5,
+    "satisfied": 5,
+    "rule": "R3",
+    "detail": "status pending while all 5 criteria are flagged satisfied",
+    "proposed": "keep status; clear uncited flags (R4); re-prove before any raise"
+  },
+  {
+    "type": "test",
+    "id": "TEST-VIC-CHECKPOINT-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "test",
+    "id": "TEST-VIC-CHECKPOINT-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "test",
+    "id": "TEST-VIC-RC-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status closed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  },
+  {
+    "type": "test",
+    "id": "TEST-VIC-RC-001",
+    "status": "closed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R5",
+    "detail": "status closed is not a value the plugin write schema accepts",
+    "proposed": "covered by R1 or R2 action (pending)"
+  },
+  {
+    "type": "test",
+    "id": "TEST-XBOXGPL-002",
+    "status": "completed",
+    "criteria": 0,
+    "satisfied": 0,
+    "rule": "R2",
+    "detail": "status completed with zero acceptance criteria",
+    "proposed": "set status pending; criteria to be authored before any done claim"
+  }
+]

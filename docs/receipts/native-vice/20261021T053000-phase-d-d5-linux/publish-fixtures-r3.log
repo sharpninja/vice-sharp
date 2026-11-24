@@ -1,0 +1,135 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Linux,.NETCoreApp,Version=v10.0)
+​
+06:56:59 [WRN] Exception was suppressed
+Microsoft.Build.Exceptions.InvalidProjectFileException: The expression "[MSBuild]::GetTargetFrameworkIdentifier(net10.0)" cannot be evaluated. Could not load file or assembly 'NuGet.Frameworks, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'. The located assembly's manifest definition does not match the assembly reference. (0x80131040)  /home/sharpninja/.dotnet/sdk/10.0.402/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets
+   at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject(String errorSubCategoryResourceName, IElementLocation elementLocation, String resourceName, Object[] args)
+   at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject[T1,T2](IElementLocation elementLocation, String resourceName, T1 arg0, T2 arg1)
+   at Microsoft.Build.Evaluation.Expander`2.Function.Execute(Object objectInstance, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation)
+   at Microsoft.Build.Evaluation.Expander`2.PropertyExpander.ExpandPropertyBody(String propertyBody, Object propertyValue, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation, PropertiesUseTracker propertiesUseTracker, IFileSystem fileSystem)
+   at Microsoft.Build.Evaluation.Expander`2.PropertyExpander.ExpandPropertiesLeaveTypedAndEscaped(String expression, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation, PropertiesUseTracker propertiesUseTracker, IFileSystem fileSystem)
+   at Microsoft.Build.Evaluation.Expander`2.ExpandIntoStringLeaveEscaped(String expression, ExpanderOptions options, IElementLocation elementLocation)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluatePropertyElement(ProjectPropertyElement propertyElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluatePropertyGroupElement(ProjectPropertyGroupElement propertyGroupElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.Evaluate()
+   at Microsoft.Build.Evaluation.Evaluator`4.Evaluate(IEvaluatorData`4 data, Project project, ProjectRootElement root, ProjectLoadSettings loadSettings, Int32 maxNodeCount, PropertyDictionary`1 environmentProperties, ICollection`1 propertiesFromCommandLine, ILoggingService loggingService, IItemFactory`2 itemFactory, IToolsetProvider toolsetProvider, IDirectoryCacheFactory directoryCacheFactory, ProjectRootElementCacheBase projectRootElementCache, BuildEventContext buildEventContext, ISdkResolverService sdkResolverService, Int32 submissionId, EvaluationContext evaluationContext, Boolean interactive)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.Reevaluate(ILoggingService loggingServiceForEvaluation, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.ReevaluateIfNecessary(ILoggingService loggingServiceForEvaluation, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.Initialize(IDictionary`2 globalProperties, String toolsVersion, String subToolsetVersion, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext, Boolean interactive)
+   at Microsoft.Build.Evaluation.Project.FromProjectRootElement(ProjectRootElement rootElement, ProjectOptions options)
+   at Nuke.Common.ProjectModel.ProjectModelTasks.ParseProject(String projectFile, String configuration, String targetFramework) in /_/source/Nuke.ProjectModel/ProjectModelTasks.cs:line 97
+   at Nuke.Common.Execution.Telemetry.CheckAwareness() in /_/source/Nuke.Build/Telemetry/Telemetry.cs:line 73
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+​
+╬════════════
+║ Restore
+╬═══
+​
+06:56:59 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/vice-sharp/ViceSharp.slnx
+06:57:01 [DBG]   Determining projects to restore...
+06:57:03 [DBG]   All projects are up-to-date for restore.
+​
+╬════════════
+║ Compile
+╬═══
+​
+06:57:04 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/vice-sharp/ViceSharp.slnx --configuration Release --no-restore
+06:57:05 [DBG]   ViceSharp.SourceGen -> /home/sharpninja/github/vice-sharp/src/ViceSharp.SourceGen/bin/Release/netstandard2.0/ViceSharp.SourceGen.dll
+06:57:06 [DBG]   ViceSharp.Protocol -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Protocol/bin/Release/net10.0/ViceSharp.Protocol.dll
+06:57:06 [DBG]   ViceSharp.OracleContract.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.OracleContract.Tests/bin/Release/net10.0/ViceSharp.OracleContract.Tests.dll
+06:57:06 [DBG]   ViceSharp.Abstractions -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Abstractions/bin/Release/net10.0/ViceSharp.Abstractions.dll
+06:57:06 [DBG]   ViceSharp.NativeClockProbe.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.NativeClockProbe.Tests/bin/Release/net10.0/ViceSharp.NativeClockProbe.Tests.dll
+06:57:06 [DBG]   ViceSharp.AiReview.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.AiReview.Tests/bin/Release/net10.0/ViceSharp.AiReview.Tests.dll
+06:57:06 [DBG]   ViceSharp.Library.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Library.ViewModels/bin/Release/net10.0/ViceSharp.Library.ViewModels.dll
+06:57:06 [DBG]   ViceSharp.ViceCompatibility -> /home/sharpninja/github/vice-sharp/src/ViceSharp.ViceCompatibility/bin/Debug/net10.0/ViceSharp.ViceCompatibility.dll
+06:57:06 [DBG]   ViceSharp.Chips -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Chips/bin/Release/net10.0/ViceSharp.Chips.dll
+06:57:06 [DBG]   ViceSharp.Xbox.Input -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.Input/bin/Release/net10.0/ViceSharp.Xbox.Input.dll
+06:57:06 [DBG]   ViceSharp.RomFetch -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomFetch/bin/Release/net10.0/ViceSharp.RomFetch.dll
+06:57:06 [DBG]   ViceSharp.RomM -> /home/sharpninja/github/vice-sharp/src/ViceSharp.RomM/bin/Release/net10.0/ViceSharp.RomM.dll
+06:57:06 [DBG]   ViceSharp.SnapshotFixtureGenerator -> /home/sharpninja/github/vice-sharp/tools/ViceSharp.SnapshotFixtureGenerator/bin/Release/net10.0/ViceSharp.SnapshotFixtureGenerator.dll
+06:57:07 [DBG]   ViceSharp.Library.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.Tests/bin/Release/net10.0/ViceSharp.Library.Tests.dll
+06:57:07 [DBG]   ViceSharp.Xbox.ViewModels -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox.ViewModels/bin/Release/net10.0/ViceSharp.Xbox.ViewModels.dll
+06:57:07 [DBG]   ViceSharp.Library.IntegrationTests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Library.IntegrationTests/bin/Release/net10.0/ViceSharp.Library.IntegrationTests.dll
+06:57:08 [DBG]   ViceSharp.VsfCompatibility.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.VsfCompatibility.Tests/bin/Release/net10.0/ViceSharp.VsfCompatibility.Tests.dll
+06:57:08 [DBG]   ViceSharp.Core -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Core/bin/Release/net10.0/ViceSharp.Core.dll
+06:57:08 [DBG]   ViceSharp.Architectures -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Architectures/bin/Release/net10.0/ViceSharp.Architectures.dll
+06:57:08 [DBG]   ViceSharp.NativeLoadProbe -> /home/sharpninja/github/vice-sharp/tools/ViceSharp.NativeLoadProbe/bin/Release/net10.0/ViceSharp.NativeLoadProbe.dll
+06:57:08 [DBG]   ViceSharp.Monitor -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Monitor/bin/Release/net10.0/ViceSharp.Monitor.dll
+06:57:08 [DBG]   ViceSharp.Core.Package -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Core.Package/bin/Release/net10.0/ViceSharp.Core.Package.dll
+06:57:09 [DBG]   ViceSharp.AdhocHelper -> /home/sharpninja/github/vice-sharp/src/ViceSharp.AdhocHelper/bin/Release/net10.0/ViceSharp.AdhocHelper.dll
+06:57:09 [DBG]   ViceSharp.Launcher -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Launcher/bin/Release/net10.0/ViceSharp.Launcher.dll
+06:57:09 [DBG]   ViceSharp.Benchmarks -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Benchmarks/bin/Release/net10.0/ViceSharp.Benchmarks.dll
+06:57:09 [DBG]   ViceSharp.Host.InProcess -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.InProcess/bin/Release/net10.0/ViceSharp.Host.InProcess.dll
+06:57:09 [DBG]   ViceSharp.Console -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Console/bin/Release/net10.0/ViceSharp.Console.dll
+06:57:09 [DBG]   ViceSharp.Xbox -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Xbox/bin/Release/net10.0/ViceSharp.Xbox.dll
+06:57:09 [DBG]   ViceSharp.Host -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host/bin/Release/net10.0/ViceSharp.Host.dll
+06:57:10 [DBG]   ViceSharp.Avalonia -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Avalonia/bin/Release/net10.0/ViceSharp.Avalonia.dll
+06:57:10 [DBG]   ViceSharp.Host.Android -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.Android/bin/Release/net10.0/ViceSharp.Host.Android.dll
+06:57:10 [DBG]   ViceSharp.Host.iOS -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.iOS/bin/Release/net10.0/ViceSharp.Host.iOS.dll
+06:57:10 [DBG]   ViceSharp.Host.MacOS -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.MacOS/bin/Release/net10.0/ViceSharp.Host.MacOS.dll
+06:57:10 [DBG]   ViceSharp.Host.Xbox -> /home/sharpninja/github/vice-sharp/src/ViceSharp.Host.Xbox/bin/Release/net10.0/ViceSharp.Host.Xbox.dll
+06:57:10 [DBG]   ViceSharp.Heads.Tests -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.Heads.Tests/bin/Release/net10.0/ViceSharp.Heads.Tests.dll
+06:57:11 [DBG]   ViceSharp.TestHarness -> /home/sharpninja/github/vice-sharp/tests/ViceSharp.TestHarness/bin/Release/net10.0/ViceSharp.TestHarness.dll
+06:57:11 [DBG] 
+06:57:11 [DBG] Build succeeded.
+06:57:11 [DBG]     0 Warning(s)
+06:57:11 [DBG]     0 Error(s)
+06:57:11 [DBG] 
+06:57:11 [DBG] Time Elapsed 00:00:06.90
+​
+╬══════════════════════════════════
+║ PublishNativeSnapshotFixtures
+╬═════════════════════════
+​
+06:57:11 [INF] > /home/sharpninja/.local/bin/dotnet run --project /home/sharpninja/github/vice-sharp/tools/ViceSharp.SnapshotFixtureGenerator/ViceSharp.SnapshotFixtureGenerator.csproj --configuration Release --no-build -- classify --fixture-id xvic-pal-unexpanded --trigger 100000 --out /home/sharpninja/github/vice-sharp/artifacts/native-snapshot-fixtures/20261021T065658/xvic-pal-unexpanded.classification.json --blockers /home/sharpninja/github/vice-sharp/docs/requirements/oracles/vice-vsf-fixture-blockers.json --receipt /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/fixture-candidates/xvic-pal-unexpanded-LAB-OMARCHY-1.candidate.json --receipt /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/fixture-candidates/xvic-pal-unexpanded-LAB-OMARCHY-2.candidate.json --host LAB-OMARCHY
+06:57:13 [DBG] xvic-pal-unexpanded: blocked
+06:57:13 [DBG]   LAB-OMARCHY: trigger 100000, write clock 100002, writer result 0, MAINCPU clock none, blocked
+06:57:13 [DBG]   LAB-OMARCHY: trigger 100000, write clock 100002, writer result 0, MAINCPU clock none, blocked
+06:57:13 [DBG]   host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed
+06:57:13 [DBG]   host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed
+06:57:13 [INF] > /home/sharpninja/.local/bin/dotnet run --project /home/sharpninja/github/vice-sharp/tools/ViceSharp.SnapshotFixtureGenerator/ViceSharp.SnapshotFixtureGenerator.csproj --configuration Release --no-build -- classify --fixture-id xvic-ntsc-unexpanded --trigger 100000 --out /home/sharpninja/github/vice-sharp/artifacts/native-snapshot-fixtures/20261021T065658/xvic-ntsc-unexpanded.classification.json --blockers /home/sharpninja/github/vice-sharp/docs/requirements/oracles/vice-vsf-fixture-blockers.json --receipt /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/fixture-candidates/xvic-ntsc-unexpanded-LAB-OMARCHY-1.candidate.json --receipt /home/sharpninja/github/vice-sharp/docs/receipts/native-vice/20261021T053000-phase-d-d5-linux/fixture-candidates/xvic-ntsc-unexpanded-LAB-OMARCHY-2.candidate.json --host LAB-OMARCHY
+06:57:14 [DBG] xvic-ntsc-unexpanded: blocked
+06:57:14 [DBG]   LAB-OMARCHY: trigger 100000, write clock 100002, writer result 0, MAINCPU clock none, blocked
+06:57:14 [DBG]   LAB-OMARCHY: trigger 100000, write clock 100002, writer result 0, MAINCPU clock none, blocked
+06:57:14 [DBG]   host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed
+06:57:14 [DBG]   host LAB-OMARCHY: blocked: BLOCKER-R12-XVIC-CHECKPOINT: trigger 100000, measured write clock 100002 (delta 2 cycles); the trap ran at the next instruction boundary, nothing re-armed
+06:57:14 [ERR] Target PublishNativeSnapshotFixtures has thrown an exception
+System.InvalidOperationException: BLOCKER-R12-XVIC-CHECKPOINT: not published: xvic-pal-unexpanded, xvic-ntsc-unexpanded (hosts LAB-OMARCHY)
+   at Build.<get_PublishNativeSnapshotFixtures>b__175_2() in /home/sharpninja/github/vice-sharp/build/Build.NativeRestore.cs:line 173
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[WRN] : Exception was suppressed
+[ERR] PublishNativeSnapsho: Target PublishNativeSnapshotFixtures has thrown an exception
+​
+═════════════════════════════════════════════════════
+Target                           Status      Duration
+─────────────────────────────────────────────────────
+Restore                          Succeeded       0:04
+Compile                          Succeeded       0:07
+PublishNativeSnapshotFixtures    Failed          0:03   // InvalidOperationException: BLOCKER-R12-XVIC-CHECKPOINT: not published: xvic-pal-unexpanded, xvic-ntsc-unexpanded (hosts LAB-OMARCHY)
+─────────────────────────────────────────────────────
+Total                                            0:15
+═════════════════════════════════════════════════════
+​
+Build failed on 10/21/2026 6:57:14 AM. (╯°□°）╯︵ ┻━┻

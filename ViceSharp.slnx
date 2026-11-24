@@ -159,5 +159,30 @@
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
+    <!-- PLAN-NATIVERESTORE-001 D2 (R5): the three native-safe projects join the solution and every ordinary gate. -->
+    <Project Path="tests/ViceSharp.NativeClockProbe.Tests/ViceSharp.NativeClockProbe.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.OracleContract.Tests/ViceSharp.OracleContract.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.VsfCompatibility.Tests/ViceSharp.VsfCompatibility.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/tools/">
+    <!-- PLAN-NATIVERESTORE-001 D2 and D5: the fixture generator console the Nuke targets run (without rebuilding) after
+         Compile, and the load-detector probe the harness launches. Neither references a native library. -->
+    <Project Path="tools/ViceSharp.SnapshotFixtureGenerator/ViceSharp.SnapshotFixtureGenerator.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tools/ViceSharp.NativeLoadProbe/ViceSharp.NativeLoadProbe.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
   </Folder>
 </Solution>

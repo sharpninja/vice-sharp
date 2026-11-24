@@ -7,12 +7,19 @@ namespace ViceSharp.Abstractions;
 public interface IAudioBackend
 {
     /// <summary>
-    /// Whether a usable playback device is attached and can provide emulation pacing.
+    /// Whether a usable output device is attached.
     /// This does not indicate whether recording or sample submission remains supported.
     /// Existing backends default to available; device-aware backends and wrappers report
     /// false when no playback device is present or it has failed or been disposed.
     /// </summary>
     bool IsAvailable => true;
+
+    /// <summary>
+    /// Whether the backend is available and its playback back-pressure can regulate emulation.
+    /// 2026-11-23, FR-SID-013 / FR-SNDREG-001: a silent sink can be available without
+    /// providing a timing source, as in VICE's dummy driver.
+    /// </summary>
+    bool IsTimingSource => IsAvailable;
 
     /// <summary>Submits a buffer of PCM samples for playback.</summary>
     void SubmitSamples(ReadOnlySpan<float> samples);

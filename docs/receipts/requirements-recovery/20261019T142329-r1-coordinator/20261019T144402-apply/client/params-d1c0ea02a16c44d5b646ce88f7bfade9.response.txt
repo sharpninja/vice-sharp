@@ -1,0 +1,8 @@
+Invoke-PluginPowerShellScript: C:\Users\kingd\.claude\plugins\cache\mcpserver-local\mcpserver\1.119.0\lib\Invoke-McpPlugin.ps1:334
+Line |
+ 334 |          Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowe …
+     |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Exception calling "Start" with "0" argument(s): "An error occurred trying to start process
+     | 'C:\Users\kingd\AppData\Local\Microsoft\WindowsApps\Microsoft.PowerShell_8wekyb3d8bbwe\pwsh.exe' with working directory 'F:\GitHub\vice-sharp'. The filename
+     | or extension is too long."
+

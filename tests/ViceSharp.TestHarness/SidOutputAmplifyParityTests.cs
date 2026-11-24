@@ -40,6 +40,7 @@ public sealed class SidOutputAmplifyParityTests
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-OUTPUT-01", ParityTag.Divergent, pending: false)]
+    [Trait("Category", "ShimLegacy")]
     public void Output_CompositeLockstepAndAmplifiedFloat()
     {
         var program = new (ushort reg, byte val)[]

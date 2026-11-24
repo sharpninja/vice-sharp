@@ -1,0 +1,21 @@
+{
+  "copiedAt": "2026-10-19T19:57:30",
+  "sourceRoot": "/home/sharpninja/codex-dispatch/dense-smoke-20261019",
+  "files": [
+    {
+      "path": "apply/dense-session-smoke.json",
+      "sha256": "9F53F1DA0273793D8BED1D47E889F811187B1068763D71C6864BFA1621951C58",
+      "bytes": 4595
+    },
+    {
+      "path": "apply-2/dense-session-smoke.json",
+      "sha256": "A25173BC739D3508EBA9B3FFFA6CA2ECC4D9311AE9B6804A3E2BF5CBA74A0D28",
+      "bytes": 4597
+    },
+    {
+      "path": "apply-3/dense-session-smoke.json",
+      "sha256": "D81ADFD763DCB49DC459F1D4B2894CCFE15A14089E13E9D3F4EBAE8A6416522E",
+      "bytes": 4596
+    }
+  ]
+}

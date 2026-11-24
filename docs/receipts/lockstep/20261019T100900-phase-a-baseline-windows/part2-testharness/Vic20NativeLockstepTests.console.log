@@ -1,0 +1,69 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:20:58.18]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [5 m 24 s]
+  Error Message:
+   CPU mismatch after 64 cycles model=vic20: native PC=$FD22 A=$00 X=$00 Y=$00 S=$00 P=$26; managed PC=$FD99 A=$00 X=$01 Y=$00 S=$FD P=$25
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 59
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+The active test run was aborted. Reason: Test host process crashed : xvic vice_machine_create call=1 model=vic20
+xvic vice_machine_reset call=1 machine=00000226e25d0280
+xvic vice_machine_step_cycle call=1 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=00000226e25d0280
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_create call=2 model=vic20
+xvic vice_machine_reset call=2 machine=00000226e25d0590
+xvic vice_machine_create call=3 model=vic20
+xvic vice_machine_reset call=3 machine=00000226e25d0310
+xvic vice_machine_create call=4 model=vic20
+xvic vice_machine_reset call=4 machine=00000226e25d0350
+xvic vice_machine_create call=5 model=vic20ntsc
+xvic vice_machine_reset call=5 machine=00000226e25d03d0
+
+Data collector 'Blame' message: The specified inactivity time of 30 minutes has elapsed. Collecting hang dumps from testhost and its child processes.
+Results File: F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T100900-phase-a-baseline-windows\part2-testharness\Vic20NativeLockstepTests.trx
+
+Failed!  - Failed:     1, Passed:     3, Skipped:     0, Total:     4, Duration: 20 m 56 s - ViceSharp.TestHarness.dll (net10.0)
+Test Run Aborted.
+
+The active Test Run was aborted because the host process exited unexpectedly. Please inspect the call stack above, if available, to get more information about where the exception originated from.
+The test running when the crash occurred: 
+ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep
+
+This test may, or may not be the source of the crash.
+
+Attachments:
+  F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T100900-phase-a-baseline-windows\part2-testharness\0126623a-0ac0-4490-bed7-fe0871a75d15\testhost_22084_20261019T112329_hangdump.dmp
+  F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T100900-phase-a-baseline-windows\part2-testharness\0126623a-0ac0-4490-bed7-fe0871a75d15\ViceSharp.TestHarness_25876_20261019T112329_hangdump.dmp
+  F:\GitHub\vice-sharp\docs\receipts\lockstep\20261019T100900-phase-a-baseline-windows\part2-testharness\0126623a-0ac0-4490-bed7-fe0871a75d15\Sequence_58456923f54540989f5b2ad43bbe4d5e.xml

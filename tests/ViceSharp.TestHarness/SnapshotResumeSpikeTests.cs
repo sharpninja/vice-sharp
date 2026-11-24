@@ -45,6 +45,7 @@ public sealed class SnapshotResumeSpikeTests
     /// fixture is absent.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Spike_ExternalX64ScVsf_LoadDiagnostic()
     {
         if (!ViceNative.IsAvailable)
@@ -85,6 +86,7 @@ public sealed class SnapshotResumeSpikeTests
     /// the .vsf fixture is absent.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot()
     {
         if (!ViceNative.IsAvailable)
@@ -134,6 +136,7 @@ public sealed class SnapshotResumeSpikeTests
     /// native shim is unavailable.
     /// </summary>
     [Fact]
+    [Trait("Category", "ShimLegacy")]
     public void Spike_ShimRoundTripResume_MeasuresLockstepDepth()
     {
         if (!ViceNative.IsAvailable)

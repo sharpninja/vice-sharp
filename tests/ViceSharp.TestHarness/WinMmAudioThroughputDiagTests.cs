@@ -12,10 +12,13 @@ using Xunit;
 /// 44100 samples per emulated second, so the backend's accept rate IS the
 /// emulation speed ceiling whenever audio back-pressure engages.
 /// </summary>
+[Trait("Category", "Integration")]
+[Trait("Host", "Windows")]
 public sealed class WinMmAudioThroughputDiagTests : IClassFixture<Audio.WindowsAudioSessionMute>
 {
     /// <summary>
-    /// FR: FR-Audio-SID, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-01.
+    /// 2026-11-23: supply Windows device-rate evidence for TR-PLAT-001/ac-4
+    /// and FR-SID-013/ac-1 in the PLAN-NATIVERESTORE-001 R16 host lane.
     /// Use case: the audio ring must accept samples at the device drain rate
     /// (44100/s) so audio back-pressure paces emulation at 100 percent, not
     /// below. Acceptance: sustained accept rate over 3 seconds is at least
@@ -25,8 +28,6 @@ public sealed class WinMmAudioThroughputDiagTests : IClassFixture<Audio.WindowsA
     [SupportedOSPlatform("windows")]
     public void WinMm_Backend_Accepts_Samples_At_Device_Rate()
     {
-        Assert.SkipUnless(OperatingSystem.IsWindows(), "WinMM is Windows-only.");
-
         using var backend = new WinMmAudioBackend();
         var fragment = new float[256];
         for (int i = 0; i < fragment.Length; i++)

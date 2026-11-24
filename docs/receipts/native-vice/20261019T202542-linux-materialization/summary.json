@@ -1,0 +1,14 @@
+{
+  "measuredAt": "2026-10-19T20:25:44",
+  "machine": "LAB-OMARCHY",
+  "commit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "gitlink": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "target": "/home/sharpninja/github/vice-sharp/artifacts/immutable-vice/cc67418cba58e71d8e70fd353e9de47199ad2075/source",
+  "files": 3842,
+  "bytes": 48919088.0,
+  "tar": "/home/sharpninja/codex-dispatch/materialization-20261019/apply/vice-cc67418c.tar",
+  "tarSha256": "AA418D5BA0F4BD2081B8A0373F6A68C7175D0E5C386A59792602FDE00220C07B",
+  "hashListSha256": "D22FDBF8A015C6F78BF7EE7B8861492AEA390A731038A2BA25E93D128DFD1671",
+  "nativeInventoryEntries": 163,
+  "nativeInventoryUnchanged": true
+}
