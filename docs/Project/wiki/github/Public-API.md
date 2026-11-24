@@ -397,11 +397,17 @@ public interface IRomSet
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Platform-specific audio output. Receives PCM samples from the emulation engine and delivers them to the host audio system. Backends are constructed pre-configured (e.g., the desktop `WinMmAudioBackend` via `AudioBackendFactory` in `ViceSharp.Host`); there is no separate initialize step.
+Platform-specific audio output. Receives PCM samples from the emulation engine and delivers them to the host audio system. `AudioBackendFactory` in `ViceSharp.Host.InProcess` constructs ready-to-use desktop backends. A sink which discards playback can remain available and set `IsTimingSource` to false so the emulator uses the host clock. Capture and recording wrappers pass through the downstream timing decision.
 
 ```csharp
 public interface IAudioBackend
 {
+    /// <summary>Whether a usable output device is attached.</summary>
+    bool IsAvailable => true;
+
+    /// <summary>Whether device back-pressure can pace the emulator.</summary>
+    bool IsTimingSource => IsAvailable;
+
     /// <summary>Submits a buffer of PCM samples for playback.</summary>
     void SubmitSamples(ReadOnlySpan<float> samples);
 

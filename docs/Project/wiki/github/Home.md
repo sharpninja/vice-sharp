@@ -47,3 +47,4 @@
 - Current Plans
   - [Immutable Native VICE Remediation Plan](Plan-Immutable-Native-VICE)
   - [Native VICE VSF Lockstep Plan](Plan-Native-VICE-VSF-Lockstep)
+  - [Phase D Native VICE Restoration and Validation](Plan-Phase-D-Native-VICE-Restoration)

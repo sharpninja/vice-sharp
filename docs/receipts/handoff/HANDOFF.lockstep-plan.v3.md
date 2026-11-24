@@ -1,6 +1,10 @@
-# ViceSharp handoff v3: Phase D of PLAN-NATIVERESTORE-001 at its exit, state BLOCKED with the resolution ruled
+# ViceSharp handoff v3 for the Phase D exit
 
-## 2026-11-23 checkpoint
+## 2026-11-23 Phase D acceptance
+
+Phase D step 12 accepted `c6b71cb8` after LAB-OMARCHY and PAYTON-LEGION2 passed the approved exit gates. The independent LEGION2 review returned AGREE, 99 accuracy, 99 completeness, 23 PASS, zero FAIL, and zero UNKNOWN. `PLAN-VICEORACLE-001` task 4 cleared its own AGREE at 99/99. Task 5 and the 20 R9 CPU parity cases remain open for Phase E. [Final exit and review receipts](../native-vice/20261021T075500-phase-d-exit-linux/README.md#2026-11-23-phase-d-acceptance)
+
+## Earlier 2026-11-23 checkpoint
 
 Both hosts validated `0ad940d0` on `codex/vice-sharp-phase-d5b-legion2`. Each passed all 11 cumulative Slice 1 cases, including stock MOS6569 and MOS8565 round trips, and all 21 named D6 regression cases in the ordinary run. LEGION2 used SSH. The published VIC-20 fixtures and all eight original candidates retain their raw hashes, and the comparison excludes only the two unused VIA1 input-latch bytes for the pinned R17 cohorts.
 

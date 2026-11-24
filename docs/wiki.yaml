@@ -57,6 +57,7 @@ navigation:
 - children:
   - document: plan-vice-immutable
   - document: plan-vsf-lockstep
+  - document: plan-native-restore
   title: Current Plans
   path: Current-Plans
 documents:
@@ -282,6 +283,12 @@ documents:
   platforms:
   - github
   id: plan-vsf-lockstep
+- title: Phase D Native VICE Restoration and Validation
+  source: docs/plans/PLAN-NATIVERESTORE-001.md
+  target: Plan-Phase-D-Native-VICE-Restoration.md
+  platforms:
+  - github
+  id: plan-native-restore
 - title: RomM Library
   source: src/ViceSharp.RomM/README.md
   target: RomM-Library.md
