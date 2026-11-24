@@ -26,7 +26,7 @@ Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compati
 
 ## Install
 
-The current line is **v1.3.3** (GitVersion `next-version`; NuGet + MSI / winget packaging). Published nuget.org / winget packages may lag until the next release tag.
+The current line is **v1.4.0** (GitVersion `next-version`; NuGet + MSI / winget packaging). Published nuget.org / winget packages may lag until the next release tag.
 
 ```pwsh
 # Desktop UI as a dotnet global tool (command: vicesharp)
