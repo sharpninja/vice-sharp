@@ -1,21 +1,5 @@
 # Functional Requirements (QBrain.AI)
 
-## FR-AIREVIEW-ROUTING-001 Auditable Astra xhigh AI review routing
-
-Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.
-An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.
-Critical and high findings are resolved and affected reviews rerun before completion.
-
-## Acceptance Criteria
-- **ac-01**: Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.
-- **ac-02**: An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.
-- **ac-03**: Critical and high findings are resolved and affected reviews rerun before completion.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.
-- [ ] An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.
-- [ ] Critical and high findings are resolved and affected reviews rerun before completion.
-
 ## FR-ARCH-TRUEDRIVE-1541-002 True-Drive 1541 IEC timing and motor ramp
 
 IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.

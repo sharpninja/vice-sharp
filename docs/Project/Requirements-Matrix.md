@@ -174,7 +174,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-VIC-EDGE-005 | Tracked | Technical-Requirements.md |
 | TR-VIC-EDGE-006 | Tracked | Technical-Requirements.md |
 | TR-VIC-EDGE-007 | Tracked | Technical-Requirements.md |
-| FR-AIREVIEW-ROUTING-001 | Tracked | Functional-Requirements.md |
 | FR-ARCH-TRUEDRIVE-1541-002 | Tracked | Functional-Requirements.md |
 | FR-BACKFILL-MEDIA-001 | Tracked | Functional-Requirements.md |
 | FR-BACKFILL-VIDEO-001 | Tracked | Functional-Requirements.md |
@@ -301,7 +300,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-XSET-005 | Tracked | Functional-Requirements.md |
 | FR-XVIDEO-001 | Tracked | Functional-Requirements.md |
 | FR-XVIDEO-002 | Tracked | Functional-Requirements.md |
-| TR-AIREVIEW-ROUTING-001 | Tracked | Technical-Requirements.md |
 | TR-AOT-001 | Tracked | Technical-Requirements.md |
 | TR-BASELINE-CORRECTNESS-001 | Tracked | Technical-Requirements.md |
 | TR-CHIPSTATE-CAPTURE-001 | Tracked | Technical-Requirements.md |
@@ -415,7 +413,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-XPERSIST-001 | Tracked | Technical-Requirements.md |
 | TR-XSET-002 | Tracked | Technical-Requirements.md |
 | TR-XVIDEO-001 | Tracked | Technical-Requirements.md |
-| TEST-AIREVIEW-ROUTING-001 | Tracked | Testing-Requirements.md |
 | TEST-ARCH-CHIPGLUE-001 | Tracked | Testing-Requirements.md |
 | TEST-BASELINE-CORRECTNESS-001 | Tracked | Testing-Requirements.md |
 | TEST-CHIPSTATE-001 | Tracked | Testing-Requirements.md |

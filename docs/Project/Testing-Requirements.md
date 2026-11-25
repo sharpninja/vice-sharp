@@ -1,27 +1,5 @@
 # Testing Requirements (QBrain.AI)
 
-## TEST-AIREVIEW-ROUTING
-
-### TEST-AIREVIEW-ROUTING-001
-
-Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
-Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
-Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
-Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
-
-## Acceptance Criteria
-- **ac-01**: Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
-- **ac-02**: Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
-- **ac-03**: Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
-- **ac-04**: Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
-
-**Acceptance Criteria:**
-- [ ] Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
-- [ ] Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
-- [ ] Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
-- [ ] Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
-
-
 ## TEST-ARCH-CHIPGLUE
 
 ### TEST-ARCH-CHIPGLUE-001
@@ -170,6 +148,7 @@ CPU instruction, timing, interrupt, and port behavior is verified with unit test
 - [ ] These added criteria cover only FR-CPU-004/ac-03, ac-05 and ac-06. Other obligations under this TEST condition, including FR-CPU-001, FR-CPU-002, FR-CPU-003 and FR-CPU-005, are not covered by these criteria and remain unsatisfied until their own required evidence is accepted. Validate assertions first against independent correct mocks and deliberately corrupt mock responses rejected inside a green harness; then bind the same inputs, expected results and assertions to real managed and immutable native providers. Unknown native observations block real acceptance. Retain input, seed/history, source/binary/ROM/resource hashes and full receipts. For FR-CPU-004/ac-06, C64_Capacitor_ResetAndClockWrap: reset after charge must clear charges/flags and leave the observed deadline fields as native does. A later input read must not resurrect charge. With clock `UINT64_MAX-10`, base350000 and draw0, deadline wraps to349989; an immediate DATA read at that high clock sees deadline<clock and expires. Reject saturating/signed arithmetic, invented wrap-aware expiration, or preserving active flags on reset. Full native reset/prelude effects remain part of the fixture, not inferred from this function alone.
 - [ ] These added criteria cover only FR-CPU-004/ac-03, ac-05 and ac-06. Other obligations under this TEST condition, including FR-CPU-001, FR-CPU-002, FR-CPU-003 and FR-CPU-005, are not covered by these criteria and remain unsatisfied until their own required evidence is accepted. Validate assertions first against independent correct mocks and deliberately corrupt mock responses rejected inside a green harness; then bind the same inputs, expected results and assertions to real managed and immutable native providers. Unknown native observations block real acceptance. Retain input, seed/history, source/binary/ROM/resource hashes and full receipts. For FR-CPU-004/ac-06, C64_Capacitor_PalNtscAndConfiguredModel: repeat board/pin cases for accepted PAL/NTSC and configured C64/SX model variants. Constants remain in CPU-cycle units; wall-clock duration can differ with clock rate. In these pinned paths a configured 8500 model does not select the unused 8500 constant. Reject host-frequency scaling of deadlines, a hardware-intent replacement, or omission of a required board/model/resource combination. Pin the actually supported model/resource values before building executable fixtures.
 - [ ] At VICE cc67418cba58e71d8e70fd353e9de47199ad2075, x64sc uses mainc64cpu.c with 6510dtvcore.c DO_INTERRUPT and RTI. With an uncontended NMI serviced at PC $0400 and S $FF, RAM visible at the vectors (HIRAM low), vector bytes at $FFFA/$FFFB equal to $00/$08, and only RTI ($40) at $0800, the instruction boundary at the NMI handler has PC $0800 and S $FC. At the next instruction boundary after that RTI, PC is $0400 and S is $FF. Exercise the same assertion against independent expected checkpoints and reject correct-PC/wrong-stack and correct-stack/wrong-PC checkpoints at both boundaries.
+- [ ] At pinned VICE cc67418cba58e71d8e70fd353e9de47199ad2075, C64 PAL with seed 1, I clear after CLI, S=$FF, no VIC-II or CIA2 interrupt, and RAM vectors pointing to $9000, execute LDA #$20 at $803B followed by NOP at $803D. Use the identical program and differentiate the CIA1 Timer A one-shot latches 3 and 1. With latch 3, observe the first IRQ bit on the operand read $803C=$20 at clock 82 (half-cycle 151). Clock 83 reads the NOP opcode $803D=$EA as a real fetch, clock 84 reads $803E, and clocks 85 and 86 perform IRQ dummy reads at $803E. The first stack write is $01FF=$80 at clock 87, followed by $01FE=$3E and $01FD=$20 at clocks 88 and 89. The handler writes $20 to $C000 at clock 95, proving the interrupted accumulator value. With latch 1, observe the first IRQ bit at clock 80, dummy reads at $803D on clocks 83 and 84, stack writes $01FF=$80, $01FE=$3D, and $01FD=$20 on clocks 85 through 87, and the $C000=$20 witness at clock 93. Verify access kind, address, data and clock. Prove the same assertions against independent correct fixtures and reject swapped timing, a premature stack write, a wrong fetch kind and a wrong accumulator witness. Retain the native and managed execution evidence under FR-CPU-003, TR-CYCLE-001 and this criterion. (evidence: TestResults/phase-e-entry-20261124T141258/r9-irq-native-accumulator-witness/runs.json)
 
 
 ## TEST-CPUTICK

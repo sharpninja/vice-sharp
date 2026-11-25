@@ -612,34 +612,6 @@ Two fresh final-binary RemoteControl passes exercise every applicable VIC-20 Set
 - **Related TR:** TR-ROMM-SEC-001
 
 
-## TEST-AIREVIEW-ROUTING-001: Auditable Astra xhigh AI review routing
-
-**ID:** TEST-AIREVIEW-ROUTING-001
-**Priority:** high
-**Status:** pending; no completion claim.
-
-### Description
-
-Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
-Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
-Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
-Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
-
-### Acceptance Criteria
-
-- **ac-01**: Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
-- **ac-02**: Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
-- **ac-03**: Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
-- **ac-04**: Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
-
-### Traceability
-
-- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
-- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
-- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
-
----
-
 ## TEST-BASELINE-CORRECTNESS-001: Approved baseline regression repairs
 
 **ID:** TEST-BASELINE-CORRECTNESS-001

@@ -1,29 +1,5 @@
 # Technical Requirements (QBrain.AI)
 
-## TR-AIREVIEW-ROUTING-001
-
-**Auditable Astra xhigh AI review routing** — Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.
-Support AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.
-Remove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.
-Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.
-Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.
-
-## Acceptance Criteria
-- **ac-01**: Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.
-- **ac-02**: Support AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.
-- **ac-03**: Remove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.
-- **ac-04**: Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.
-- **ac-05**: Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.
-**Covered by:** FR: FR-AIREVIEW-ROUTING-001; TEST: TEST-AIREVIEW-ROUTING-001
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.
-- [ ] Support AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.
-- [ ] Remove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.
-- [ ] Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.
-- [ ] Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.
-
 ## TR-BASELINE-CORRECTNESS-001
 
 **Approved baseline regression repairs** — BasicBus unregister and unmapped-write tests preserve the intentional open-bus latch values 0x55 and 0xBB. Native-shim users follow the NativeVice collection convention.

@@ -2,6 +2,8 @@
 
 Status: requirements phase preparation. No test, slice, or goal completion is claimed.
 
+This matrix records the September 2026 plan. The AI review routing FR, TR, and TEST below were removed from the current requirements on November 24, 2026.
+
 Authority: [approved plan](../../plans/PLAN-GROK-COMPLETION-20260906.md); effective MCP workspace layer `layer-1`; [Sol inventory](../../../validation-output/codex-grok-completion-20260906/sol-slice0-inventory.md).
 
 Test additions are planned until source and retained execution receipts exist. Final discovery counts determine execution scope.

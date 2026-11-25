@@ -100,8 +100,8 @@ The parser recognises this flag set (transcribed from [ViceArgsParser.cs](../src
 | `--cycles <N>` | Host-cycle budget. |
 | `-debugcart` / `+debugcart` | Enable / disable the debug cartridge ($D7FF exit signaling for regression harnesses). Note the VICE polarity: `-debugcart` enables, `+debugcart` disables. |
 | `--limitcycles <N>` / `-limitcycles <N>` | Bounded execution cycle limit (testbench style); overrides the run's cycle budget. |
-| `-autostart <path>` | Autostart a PRG file. |
-| `program.prg` (positional) | Any bare `*.prg` argument is treated as an autostart PRG (classic VICE testbench style). |
+| `-autostart <path>` | Load a machine-code PRG and start execution at its load address. |
+| `program.prg` (positional) | Shorthand for the same direct PRG launch. |
 | `-v` / `--verbose` | Verbose output. |
 | `--help` / `-h` / `-?` | Show help. |
 
@@ -117,11 +117,13 @@ The console entry point currently consumes `--help`, `-debugcart` / `+debugcart`
 | `xvic` | Launcher-library topology generation exists and emits `kind: Vic20`. It is not an end-to-end console path yet: the console hardcodes `x64sc`, and the generic multi-system kind dispatcher currently recognizes only `C64` and `C1541`. |
 | `x128`, `xpet`, `xplus4`, `xcbm2`, `xcbm5x0`, `vsid`, `petcat`, `cartconv` | Reserved. Throws `NotSupportedException` for now. |
 
-Example: VICE testbench style "run a PRG with the debug cartridge and a bounded cycle budget":
+Run a machine-code PRG with the debug cartridge and a bounded cycle budget.
 
 ```pwsh
 dotnet run --project src/ViceSharp.Console -- --roms $env:VICESHARP_ROM_PATH -debugcart -limitcycles 5000000 testcase.prg
 ```
+
+The example requires executable code at the PRG load address. A BASIC-wrapped test starts with BASIC metadata and a `SYS` line. With a direct console launch, the CPU can execute those bytes and signal the debug cartridge without running the intended test. To launch a BASIC PRG, drop it on the desktop emulator screen after the session reaches `READY.`.
 
 Unknown flags are not fatal: the parser collects them in `ViceArgs.Unknown` and proceeds. That is current ViceSharp behavior; it is not a claim that every classic VICE binary handles unknown options identically. See [VICE-MIGRATION.md](VICE-MIGRATION.md) for which flags are currently in this bucket.
 

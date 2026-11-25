@@ -24,6 +24,8 @@ dotnet run --project src/ViceSharp.Console -- `
 
 Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compatible argument parsing and topology generation for `x64`, `x64sc`, `xvic`, and `c1541`, including `-8`, `-9`, `-cart`, `+truedrive` / `-truedrive`. `ViceSharp.Console` still parses its process arguments as `x64sc`; use `--machine-yaml` for drive topologies because parsed disk/cartridge dispatch is not yet wired into the console. Standalone VICE-named binaries are not shipped. The generated `xvic` topology is not yet an end-to-end console path because the generic multi-system kind dispatcher recognizes only `C64` and `C1541`. See [docs/USER-GUIDE.md](docs/USER-GUIDE.md) and [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md).
 
+The console starts PRGs at their load address. For a BASIC PRG, let the desktop session reach `READY.`, then drop the file on the emulator screen so the host can queue BASIC `RUN`. When validating a BASIC test, verify execution reaches the intended entry point before using the debug-cartridge result.
+
 ## Install
 
 The current release is **v1.4.0**. The [GitHub release](https://github.com/sharpninja/vice-sharp/releases/tag/v1.4.0) includes the Windows MSI and NuGet packages.

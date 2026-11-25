@@ -35,8 +35,8 @@ The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/Vice
 | `-truedrive` | `-truedrive` | Disable true-drive emulation. |
 | `-config <path>` (closest analogue) | `--machine-yaml <path>` / `-m <path>` | Explicit machine topology YAML. ViceSharp uses YAML topologies instead of a flat `vicerc`. |
 | (n/a in classic) | `--cycles <N>` | Host-cycle budget. Classic VICE runs until you quit; ViceSharp's console host needs a budget for deterministic batch runs. |
-| `-autostart <path>` | `-autostart <path>` | Autostart a PRG. Parsed and consumed by the console entry point (FR-CFG-005 AC8). |
-| `x64sc ... testcase.prg` (positional) | `program.prg` (positional) | Any bare `*.prg` argument is treated as an autostart PRG, matching the classic testbench invocation style. |
+| `-autostart <path>` | `-autostart <path>` | Console loads the PRG and starts the CPU at its load address. Use a machine-code PRG with an entry point at that address. |
+| `x64sc ... testcase.prg` (positional) | `program.prg` (positional) | Shorthand for the same direct PRG launch. |
 | `-debugcart` | `-debugcart` / `+debugcart` | Debug cartridge ($D7FF exit signaling for regression harnesses, per VICE `debugcart.c`). `-debugcart` enables, `+debugcart` disables; consumed by the console entry point. |
 | `-limitcycles <N>` | `--limitcycles <N>` / `-limitcycles <N>` | Bounded execution cycle limit (testbench); overrides the run's cycle budget in the console entry point. |
 | `-verbose` / `-v` | `-v` / `--verbose` | Same intent. |
@@ -47,7 +47,7 @@ The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/Vice
 | Classic VICE flag | ViceSharp behaviour |
 |-------------------|---------------------|
 | `-cart <path>` | Standard raw/CRT images load, normalise to 8K / 16K ROML+ROMH banks, and drive the C64 memory map through `GAME` / `EXROM`. Broader mapper families and cart-converter workflows are post-MVP. |
-| `-autostart <path>` | Console: PRG autostart is parsed and dispatched by the console entry point; disk-image autostart (`LOAD"*",8,1: RUN` injection from a D64) is not wired, so for disks use `-8 <disk.d64>` plus a topology where the drive image is mounted at boot. Avalonia desktop: drop a `*.prg` on the video surface to load it into the current session (RUN when the load address equals live TXTTAB); drop a disk image to attach drive 8 and autostart. |
+| `-autostart <path>` | Console PRG launch starts at the load address. Use `--machine-yaml` for a console topology with a disk mounted. For a BASIC PRG, wait for `READY.` in the desktop and drop the file on the video surface. The host queues `RUN` when the load address equals live TXTTAB. Dropping a disk image requests drive-8 attachment and autostart. |
 
 ### Not yet (collected as unknown)
 

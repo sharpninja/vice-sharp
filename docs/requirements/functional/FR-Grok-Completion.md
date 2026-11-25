@@ -1,31 +1,5 @@
 # Approved Grok completion functional requirements
 
-## FR-AIREVIEW-ROUTING-001: Auditable Astra xhigh AI review routing
-
-**ID:** FR-AIREVIEW-ROUTING-001
-**Priority:** high
-**Status:** pending; no completion claim.
-
-### Description
-
-Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.
-An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.
-Critical and high findings are resolved and affected reviews rerun before completion.
-
-### Acceptance Criteria
-
-- **ac-01**: Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.
-- **ac-02**: An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.
-- **ac-03**: Critical and high findings are resolved and affected reviews rerun before completion.
-
-### Traceability
-
-- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
-- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
-- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
-
----
-
 ## FR-COMPLETION-001: Exhaustive approved-work completion evidence
 
 **ID:** FR-COMPLETION-001
